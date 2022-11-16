@@ -1385,6 +1385,34 @@ class RoseSimilarityChecker():
           if Op.getSignID() == Arg:
             Op.setOperand(Op.getSignIDPos(), NewVal)
           continue
+        if isinstance(Op, RoseGeneralComparisonBitVectorOp):
+          for Idx, Operand in enumerate(Op.getOperands()[:-1]):
+            if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
+              and Operand.getType().getBitwidth() == Arg:
+              if isinstance(Operand.getType(), RoseBitVectorType):
+                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
+              else:
+                assert isinstance(Operand.getType(), RoseIntegerType)
+                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+              BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+              continue
+            if Operand == Arg:
+              Op.setOperand(Idx, NewVal)
+              BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+              continue
+          print("PROPAGATE TYPE INFO HORIZONTALLY")
+          Type = RoseUndefinedType()
+          for Operand in Op.getOperands()[:-1]:
+            if Operand in BitvectorToBitwidth:
+              Type = Operand.getType()
+              break
+          if not isinstance(Type, RoseUndefinedType):
+            for Operand in Op.getOperands()[:-1]:
+              Operand.setType(Type)
+              BitvectorToBitwidth[Operand] = Type.getBitwidth()
+          if Op.getSignID() == Arg:
+            Op.setOperand(Op.getSignIDPos(), NewVal)
+          continue
         if Op.getOpcode().typesOfInputsAndOutputEqual():
           for Idx, Operand in enumerate(Op.getOperands()):
             if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
@@ -1555,6 +1583,18 @@ class RoseSimilarityChecker():
                   Op.getThenValue().setType(Op.getElseValue().getType())
                   Op.setType(Op.getElseValue().getType())
               continue
+        if isinstance(Op, RoseGeneralComparisonBitVectorOp):
+          Type = RoseUndefinedType()
+          for Operand in Op.getOperands()[:-1]:
+            if isinstance(Operand.getType().getBitwidth(), int):
+              Type = Operand.getType()
+              break
+          if not isinstance(Type, RoseUndefinedType):
+            # Propagate type info to other operands if necessary
+            for Operand in Op.getOperands()[:-1]:
+              if not isinstance(Operand.getType().getBitwidth(), int):
+                Operand.setType(Type)
+          continue
         if Op.getOpcode().typesOfOperandsAreEqual():
           Type = RoseUndefinedType()
           for Operand in Op.getOperands():
@@ -2391,6 +2431,7 @@ class RoseSimilarityChecker():
 
 if __name__ == '__main__':
   SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
+  #SimilarityChecker = RoseSimilarityChecker(["Hexagon", "x86"])
   #SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.performSimilarityChecking()
   #SimilarityChecker.parallelizeSimilarityChecking()
