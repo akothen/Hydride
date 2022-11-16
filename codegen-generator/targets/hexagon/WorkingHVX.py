@@ -1796,5 +1796,35 @@ HVXInsts = {
                       'spec': 'for (i = 0; i < VELEM(8); i++) {'
                                 ' VdV.b[i] = VuV.ub[i] >> (RtV & 0x7) ; }',
                     },
+ 'hexagon_V6_vlsrwv_128B': {
+                      'hvx_intrinsic': 'Vd32.w=vlsr(Vu32.w,Vv32.w)',
+                      'spec': 'for (i = 0; i < VELEM(32); i++) {'
+                              'VdV.uw[i] = (VvV.w[i] > 0) ? (VuV.uw[i] >> VvV.w[i]) : (VuV.uw[i] << VvV.w[i]);}'
+                    },
+ 'hexagon_V6_vlsrhv_128B': {
+                      'hvx_intrinsic': 'Vd32.h=vlsr(Vu32.h,Vv32.h)',
+                      'spec': 'for (i = 0; i < VELEM(16); i++) {'
+                              'VdV.uh[i] = (VvV.h[i] > 0) ? (VuV.uh[i] >> VvV.h[i]) : (VuV.uh[i] << VvV.h[i]);}'
+                    },
+ 'hexagon_V6_vaslwv_128B': {
+                      'hvx_intrinsic': 'Vd32.w=vasl(Vu32.w,Vv32.w)',
+                      'spec': 'for (i = 0; i < VELEM(32); i++) {'
+                              'VdV.w[i] = (VvV.w[i] > 0) ? (VuV.w[i] << VvV.w[i]) : (VuV.w[i] >>> VvV.w[i]);}'
+                    },
+ 'hexagon_V6_vaslhv_128B': {
+                      'hvx_intrinsic': 'Vd32.h=vasl(Vu32.h,Vv32.h)',
+                      'spec': 'for (i = 0; i < VELEM(16); i++) {'
+                              'VdV.h[i] = (VvV.h[i] > 0) ? (VuV.h[i] << VvV.h[i]) : (VuV.h[i] >>> VvV.h[i]);}'
+                    },
+ 'hexagon_V6_vasrwv_128B': {
+                      'hvx_intrinsic': 'Vd32.w=vasr(Vu32.w,Vv32.w)',
+                      'spec': 'for (i = 0; i < VELEM(32); i++) {'
+                              'VdV.w[i] = (VvV.w[i] > 0) ? (VuV.w[i] >>> VvV.w[i]) : (VuV.w[i] << VvV.w[i]);}'
+                    },
+ 'hexagon_V6_vasrhv_128B': {
+                      'hvx_intrinsic': 'Vd32.h=vasr(Vu32.h,Vv32.h)',
+                      'spec': 'for (i = 0; i < VELEM(16); i++) {'
+                              'VdV.h[i] = (VvV.h[i] > 0) ? (VuV.h[i] >>> VvV.h[i]) : (VuV.h[i] << VvV.h[i]);}'
+                    },
 }
 
