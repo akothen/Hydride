@@ -1,0 +1,45 @@
+This file is a partial list of people who have contributed to the Hydride
+project. If you have contributed a patch or made some other contribution to
+Hydride, please submit a patch to this file to add yourself, and it will be
+done!
+
+The list is sorted by surname and formatted to allow easy grepping and
+beautification by scripts.  The fields are: name (N), email (E), web-address
+(W), PGP key ID and fingerprint (P), description (D), snail-mail address
+(S), and (I) IRC handle.
+
+
+N: Akash Kothari
+E: akashk4@illinois.edu
+W: https://www.linkedin.com/in/akash-kothari-007/
+
+N: Abdul Rafae Noor
+E: arnoor2@illinois.edu
+
+N: Hassam Uddin
+E: hassamu2@illinois.edu
+
+N: Dhruv Baronia
+E: baronia3@illinois.edu
+
+N: Kunal Sheth
+E: kunal4@illinois.edu
+
+N: Kunal Sheth
+E: kunal4@illinois.edu
+
+N: Vikram Adve
+E: vadve@cs.uiuc.edu
+W: http://www.cs.uiuc.edu/~vadve/
+
+N: Charith Mendis
+E: charithm@illinois.edu
+W: https://charithmendis.com/
+
+N: Sudipta Sengupta
+E: sudipta@amazon.com
+W: https://people.csail.mit.edu/sudipta/
+
+N: Stefanos Baziotis
+E: sb54@illinois.edu
+
