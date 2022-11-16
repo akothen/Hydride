@@ -31,7 +31,7 @@
 (struct interleave-vectors_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct interleave-vector_dsl (v0 size_i_o prec_i_o) #:transparent #:mutable)
 (struct deinterleave-vector_dsl (v0 size_i_o prec_i_o) #:transparent #:mutable)
-(struct llvm:shuffle-vectors_dsl (v0 v1 num_2 prec_i_o v4 num_5) #:transparent #:mutable)
+(struct llvm_shuffle_vectors_dsl (v0 v1 num_2 prec_i_o v4 num_5) #:transparent #:mutable)
 (struct _mm_sub_pi16_dsl (v0 v1 num_2 prec_i_o) #:transparent #:mutable)
 (struct _mm512_mask_extracti32x4_epi32_dsl (v0 v1 v2 v3 prec_i_o) #:transparent #:mutable)
 (struct _mm_maskz_sllv_epi16_dsl (v0 vc_1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8 num_9) #:transparent #:mutable)

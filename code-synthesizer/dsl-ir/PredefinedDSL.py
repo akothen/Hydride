@@ -333,7 +333,7 @@ def create_llvm_shufflevector_dsl(input_vector_sizes = [],
                                   precisions = [],
                                   mask_sizes = []
                                   ):
-    vec_llvm_shuffle_dsl = DSLInstruction(name = "llvm:shuffle-vectors", simd = False,
+    vec_llvm_shuffle_dsl = DSLInstruction(name = "llvm_shuffle_vectors", simd = False,
                                           operation = False, semantics = llvm_shufflevector_sema)
 
 

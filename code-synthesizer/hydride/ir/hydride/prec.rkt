@@ -27,7 +27,7 @@
 	[(interleave-vectors_dsl v0 v1 size_i_o prec_i_o) prec_i_o]
 	[(interleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
 	[(deinterleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
-	[(llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5) prec_i_o]
+	[(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5) prec_i_o]
 	[(_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)
 		(cond 
 		[(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]

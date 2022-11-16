@@ -37,6 +37,8 @@ namespace Halide {
     bool SIMPLIFY_RAMP = true;
     bool HVX_TARGET = true;
 
+    std::string target_str = "";
+
     namespace Internal {
 
         namespace {
@@ -1519,9 +1521,11 @@ namespace Halide {
                             switch(arch){
                                 case IROptimizer::X86:
                                     // std::cout << "Using X86 Optimizer" <<"\n";
+                                    target_str = "x86";
                                     break;
                                 case IROptimizer::HVX:
                                     // std::cout << "Using Hexagon Optimizer" <<"\n";
+                                    target_str = "hvx";
                                     break;
                                 default:
                                     break;
@@ -1630,11 +1634,18 @@ namespace Halide {
                             std::cout << "Expression after lower intrinsic: "<< spec_expr <<"\n";
 
                             // Simplify constants
-                            if(arch != IROptimizer::HVX){
-                                spec_expr = simplify(spec_expr);
-                            }
+                            //if(arch != IROptimizer::HVX){
+                            spec_expr = simplify(spec_expr);
+                            //}
+
 
                             std::cout << "Expression after simplification: "<< spec_expr <<"\n";
+
+                            if(arch == IROptimizer::HVX){
+                                spec_expr = ReplaceDiv().mutate(spec_expr);
+                            }
+
+                            std::cout << "Expression after legalizing division operations to target: "<< spec_expr <<"\n";
 
                             std::cout << "Expression before InlineLets: "<< spec_expr <<"\n";
 
@@ -2569,6 +2580,31 @@ namespace Halide {
                     InlineLets(){}
                 };
 
+
+                // Targets such as HVX do not have division
+                // operations, so we must replace operations
+                // using division to instead use shifts
+                class ReplaceDiv : public IRMutator {
+                    using IRMutator::visit;
+
+
+
+                    Expr visit(const Div *op) override{
+
+                        if(!op->type.is_float() && op->type.is_vector() ){
+                            auto lowered_div =  lower_int_uint_div(op->a, op->b);
+                            debug(0) << "Halide Lowered Div to: "<<lowered_div <<"\n";
+                            return mutate(lowered_div);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    public:
+                    ReplaceDiv(){}
+                };
+
                 bool containsFloat(const Expr &e) {
                     FloatFinder ff;
                     e.accept(&ff);
@@ -2804,7 +2840,7 @@ namespace Halide {
                         return "(custodian-limit-memory (current-custodian) (* " +std::to_string(MB)+" 1024 1024))";
                     }
 
-                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name, std::string synth_log_path, std::string synth_log_name){
+                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name, std::string synth_log_path, std::string synth_log_name, std::string target){
 
                         std::string solver = "'z3";
                         const char* hydride_solver = getenv("HYDRIDE_SOLVER");
@@ -2813,7 +2849,7 @@ namespace Halide {
                             solver = hydride_solver;
                         }
 
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + "  \"" + synth_log_path + "\"  \"" + synth_log_name + "\" )";
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " #t    \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
@@ -2904,7 +2940,8 @@ namespace Halide {
 
                 rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",
                             /* Previous hash file path */ prev_hash_path,
-                            /* Previous hash  name */ prev_hash_name 
+                            /* Previous hash  name */ prev_hash_name ,
+                            /* target id */ target_str
                             ) << ")" <<"\n";
                 rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
 

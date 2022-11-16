@@ -9,6 +9,7 @@
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
+(require hydride/utils/target)
 (require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
 
@@ -40,7 +41,6 @@
   (set! synthesize-by-lane #t)
   )
 
-(define target 'hvx)
 
 
 
@@ -506,18 +506,19 @@
     )
 
 
-  (define failing-ls
-    (if
-      (equal? (length failing-lanes) 0)
-      (list 0 0)
-      failing-lanes
-      )
-    )
-
   (define output-size (bvlength (invoke_ref (list-ref cex-ls 0))))
   (define lane-sol (invoke_ref_lane 0 (list-ref cex-ls 0)))
   (define word-size (bvlength lane-sol ))
   (define num-lanes (/ output-size word-size))
+
+  (define failing-ls
+    (if
+      (equal? (length failing-lanes) 0)
+      (list 0 (- num-lanes 1))
+      failing-lanes
+      )
+    )
+
 
   (debug-log "Concrete counter examples:")
   (debug-log cex-ls)

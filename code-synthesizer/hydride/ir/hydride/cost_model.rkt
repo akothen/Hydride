@@ -224,7 +224,7 @@
 		[ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
 		(+ 3 (hydride:cost  v0) )
 	]
-		[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+		[ (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
 		(+ 5 (hydride:cost  v0)  (hydride:cost  v1)  
 		 (hydride:cost  v4) )
 	]

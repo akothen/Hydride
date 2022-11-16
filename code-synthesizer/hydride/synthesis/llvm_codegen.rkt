@@ -9,6 +9,7 @@
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
 (require hydride/utils/misc)
+(require hydride/utils/target)
 (require hydride/ir/hydride/interpreter)
 (require hydride/halide)
 (require hydride/synthesis/python)
@@ -23,7 +24,6 @@
 
 (provide (all-defined-out))
 
-(define llvm-target 'hvx)
 
 ;; Convert hydride expression with into string
 ;; with type information for inputs and intermediate
@@ -40,10 +40,10 @@
 
   (define printer-functor
     (cond
-      [(equal? llvm-target 'hvx)
+      [(equal? target 'hvx)
        hvx:hydride-printer
        ]
-      [(equal? llvm-target 'x86)
+      [(equal? target 'x86)
        hydride-printer
        ]
       )

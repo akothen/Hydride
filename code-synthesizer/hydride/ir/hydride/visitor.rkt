@@ -36,11 +36,11 @@
 		(define v0-visited (hydride:visitor v0 fn))
 		(fn ( deinterleave-vector_dsl v0-visited size_i_o prec_i_o ))
 	]
-	[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+	[ (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
 		(define v0-visited (hydride:visitor v0 fn))
 		(define v1-visited (hydride:visitor v1 fn))
 		(define v4-visited (hydride:visitor v4 fn))
-		(fn ( llvm:shuffle-vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
+		(fn ( llvm_shuffle_vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
 	]
 	[ (_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)
 		(define v0-visited (hydride:visitor v0 fn))

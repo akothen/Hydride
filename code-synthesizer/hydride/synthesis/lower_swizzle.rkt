@@ -9,6 +9,7 @@
 (require hydride/utils/bvops)
 (require hydride/utils/misc)
 (require hydride/utils/debug)
+(require hydride/utils/target)
 
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/visitor)
@@ -32,7 +33,6 @@
 (provide (all-defined-out))
 
 
-(define swizzle-target 'hvx)
 
 
 (define (legalize-expr-swizzles hydride-expr solver swizzle-synth-log cost-fn optimize? symbolic?)
@@ -62,10 +62,10 @@
 
   (define visitor-functor
     (cond
-      [(equal? swizzle-target 'hvx)
+      [(equal? target 'hvx)
        hvx:visitor
        ]
-      [(equal? swizzle-target 'x86)
+      [(equal? target 'x86)
        hydride:visitor
        ]
     
@@ -117,16 +117,16 @@
   (define llvm-shuffled
     (destruct swizzle
               [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-               (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o (lit mask) num-mask-elems)
+               (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o (lit mask) num-mask-elems)
                ]
               [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-               (llvm:shuffle-vectors_dsl v0 v1 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               (llvm_shuffle_vectors_dsl v0 v1 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
                ]
               [ (interleave-vector_dsl v0 size_i_o prec_i_o)
-               (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               (llvm_shuffle_vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
                ]
               [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-               (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               (llvm_shuffle_vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
                ]
               [_ (error "unrecognized reference for swizzle")]
               )
@@ -271,10 +271,10 @@
 
   (define interpret-functor
     (cond
-      [(equal? swizzle-target 'hvx)
+      [(equal? target 'hvx)
        hvx:interpret
        ]
-      [(equal? swizzle-target 'x86)
+      [(equal? target 'x86)
        hydride:interpret
        ]
     
@@ -315,10 +315,10 @@
 
   (define bind-functor
     (cond
-      [(equal? swizzle-target 'hvx)
+      [(equal? target 'hvx)
        hvx:bind-expr
        ]
-      [(equal? swizzle-target 'x86)
+      [(equal? target 'x86)
        bind-expr
        ]
       )
@@ -326,8 +326,8 @@
 
   (define bound-expr
     (destruct lowered-expression
-              [(llvm:shuffle-vectors_dsl v0 v1 len prec_i_o mask num-mask-elems)  
-               (llvm:shuffle-vectors_dsl (vector-ref original-args 0) (vector-ref original-args 1) len prec_i_o mask num-mask-elems)
+              [(llvm_shuffle_vectors_dsl v0 v1 len prec_i_o mask num-mask-elems)  
+               (llvm_shuffle_vectors_dsl (vector-ref original-args 0) (vector-ref original-args 1) len prec_i_o mask num-mask-elems)
                ]
                
               [v 

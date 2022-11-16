@@ -565,6 +565,9 @@
 
 (define empty-list (list ))
 
+(define signed-casting-list (list extract sign-extend bvssat))
+(define unsigned-casting-list (list extract zero-extend bvusat))
+
 (define (get-bv-ops p)
   (destruct p
     ;; Abstract expressions
@@ -608,78 +611,78 @@
     ;[(uint1x256 vec) NYI: Not sure what would be casted into uint1?]    
 
 
-    [(uint8x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint8x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint8x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint8x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint8x128 vec) (append (list  extract zero-extend) (get-bv-ops vec))]
-    [(uint8x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint8x512 vec) (append (list  extract zero-extend) (get-bv-ops vec))]
+    [(uint8x8 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x16 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x32 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
 
 
-    [(int8x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int8x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int8x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int8x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int8x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int8x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int8x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int8x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int8x32 vec) (append  signed-casting-list (get-bv-ops vec))]
+    [(int8x64 vec) (append  signed-casting-list (get-bv-ops vec))]
+    [(int8x128 vec) (append  signed-casting-list (get-bv-ops vec))]
+    [(int8x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int8x512 vec) (append signed-casting-list (get-bv-ops vec))]
 
 
-    [(uint16x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint16x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint16x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint16x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint16x128 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint16x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint16x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x8 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x16 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x32 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
 
 
 
-    [(int16x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x16 vec) (append (list  extract sign-extend  ) (get-bv-ops vec))]
-    [(int16x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x32 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x64 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x128 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x512 vec) (append signed-casting-list (get-bv-ops vec))]
     
 
-    [(uint32x8 vec) (append (list  extract  zero-extend ) (get-bv-ops vec))]
-    [(uint32x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint32x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint32x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint32x128 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint32x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint32x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x8 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x16 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x32 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
 
 
-    [(int32x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x32 vec) (append (list  extract sign-extend  bvsizeext bvsaturate) (get-bv-ops vec))]
-    [(int32x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x32 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x64 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x128 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x512 vec) (append signed-casting-list (get-bv-ops vec))]
     
 
-    [(uint64x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint64x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint64x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint64x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint64x128 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint64x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
-    [(uint64x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x8 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x16 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x32 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
 
 
 
-    [(int64x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int64x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int64x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int64x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int64x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int64x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int64x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x32 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x64 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x128 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x512 vec) (append signed-casting-list (get-bv-ops vec))]
     
     ;; Operations
     [(sca-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
@@ -1047,7 +1050,7 @@
      (mk-cpp-expr (if eval-condition (cpp:eval lhs) (cpp:eval rhs)) outT)]))
 
 (define (do-eq lhs rhs)
-  (printf "do-eq\n")
+  ;(printf "do-eq\n")
   (cond
     [(and (integer? lhs) (integer? rhs))
      (eq? lhs rhs)]

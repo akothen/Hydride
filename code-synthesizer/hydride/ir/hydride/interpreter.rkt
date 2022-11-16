@@ -41,8 +41,8 @@
 	[ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
 		(deinterleave-vector (hydride:interpret v0 env) size_i_o prec_i_o)
 	]
-	[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
-		(llvm:shuffle-vectors (hydride:interpret v0 env) (hydride:interpret v1 env) num_2 
+	[ (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+		(llvm_shuffle_vectors (hydride:interpret v0 env) (hydride:interpret v1 env) num_2 
 		 prec_i_o (hydride:interpret v4 env) num_5)
 	]
 	[ (_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)

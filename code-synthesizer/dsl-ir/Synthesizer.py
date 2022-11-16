@@ -5,10 +5,16 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["hexagon_V6_lo_128B", "hexagon_V6_vassign_128B"]
-SKIP_LIST = ["vasl", "vlsr", "vasr"]
+DEBUG_LIST = [#"hexagon_V6_vsh_128B", "hexagon_V6_hi_128B", "hexagon_V6_lo_128B",
+    #"hexagon_V6_vaddububb_sat_128B",
+    #"hexagon_V6_vasrwv_128B"
+    #"hexagon_V6_vsh_128B",
+    #"hexagon_V6_vsh_128B",
+    "hexagon_V6_vdealb_128B"
+              ]
+SKIP_LIST = []
 
-MUST_INCLUDE = [ "hexagon_V6_lvsplatw_128B" , "hexagon_V6_lvsplatw_128B"]
+MUST_INCLUDE = [ ]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
@@ -44,6 +50,7 @@ class Synthesizer:
                  legal_map = {}
                  ):
 
+        print("Creating Synthesizer with target:", target)
         self.spec = spec
         self.target = target
         self.dsl_operators = dsl_operators
@@ -67,6 +74,28 @@ class Synthesizer:
 
         self.output_size = self.spec.get_output_size()
         self.legal_map = legal_map
+
+        self.set_target_settings()
+
+    def set_target_settings(self):
+
+        global_var = globals()
+        if self.target == 'x86':
+            global_var['FLEXIBLE_CASTING'] = False
+            global_var['ENABLE_PRUNING'] = True
+            global_var['MAX_BW_SIZE'] = 1024
+            global_var['BASE_VECT_SIZE'] = None
+            global_var['SWIZZLE_BOUND'] = 5
+        elif self.target == "hvx":
+            print("Setting hvx target settings")
+            global_var['FLEXIBLE_CASTING'] = True
+            global_var['ENABLE_PRUNING'] = True
+            global_var['MAX_BW_SIZE'] = 2048
+            global_var['BASE_VECT_SIZE'] = 1024
+            global_var['SWIZZLE_BOUND'] = 6
+
+
+
 
 
     def is_instruction_legal(self, name):
@@ -557,7 +586,12 @@ class Synthesizer:
 
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_variant_bvops(operation_dsl_insts, operation_dsl_args_list)
 
+
+
         BOUND = 15
+
+        if self.target == 'hvx':
+            BOUND = 20
         if self.spec.contains_conditional():
             BOUND = 25
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
@@ -659,6 +693,8 @@ class Synthesizer:
 
 
     def prune_low_score_ops(self, ops, ctxs, score = 2):
+        if self.target == 'hvx':
+            return (ops, ctxs)
         indices = [i for i in range(len(ops)) if self.score_context(ops[i], ctxs[i]) > score ]
         pruned_ops = [ops[i] for i in indices]
         pruned_ctxs = [ctxs[i] for i in indices]
@@ -730,6 +766,9 @@ class Synthesizer:
 
         smallest_bv_size = min(smallest_input, smallest_output, smallest_imm)
 
+        if BASE_VECT_SIZE != None:
+            smallest_bv_size = min(smallest_bv_size, BASE_VECT_SIZE)
+
         pruned_ops = []
         pruned_ctxs = []
 
@@ -741,6 +780,7 @@ class Synthesizer:
 
             if min_ctx_bvs < smallest_bv_size:
                 if DEBUG:
+                    print("Smallest output", ctx_i.get_output_size(), "Smallest input:", ctx_i.get_min_arg_size())
                     print("Pruning", ctx_i.name, "as it has an argument of size",min_ctx_bvs, "which is smaller than", smallest_bv_size)
                 continue
             else:
@@ -759,6 +799,7 @@ class Synthesizer:
     def prune_ops_relying_on_precision(self, ops, ctxs):
 
         spec_ops = self.spec.get_semantics_ops_list()
+
 
         """
         if "bvssat" in spec_ops:
@@ -783,6 +824,16 @@ class Synthesizer:
         for i in range(len(ops)):
             op_i = ops[i]
             ctx_i = ctxs[i]
+
+
+            dsl_ops = op_i.get_semantics_ops_list()
+
+            # If operations are just byte rearrangements allow them
+            if all([op in ["extract", "concat"] for op in dsl_ops]):
+                pruned_ops.append(op_i)
+                pruned_ctxs.append(ctx_i)
+                continue
+
 
             min_ctx_bvs = min(ctx_i.out_precision, ctx_i.in_precision)
 
@@ -860,7 +911,8 @@ class Synthesizer:
         # ops
         if num_computes > len(compute_ops):
             num_broadcasts = bound - len(compute_ops)
-            num_compute_ops = len(compute_ops)
+            num_computes = len(compute_ops)
+
 
 
         print("Num Broadcasts:", num_broadcasts)
@@ -1177,11 +1229,19 @@ class Synthesizer:
             for c_op in ctx_ops:
                 variants = get_op_variant(c_op)
 
+                # Check if the spec contains operations belonging to these class
+                # of variants
+                spec_variant_ops = [op for op in spec_ops if op in variants]
+
+                if len(spec_variant_ops) == 0:
+                    continue
+
                 for v in variants:
 
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
                     if v in ctx_ops and v not in spec_ops:
+                        print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
                         skip = True
 
 
@@ -1244,6 +1304,7 @@ class Synthesizer:
 
             # Hexagon condition for distribution:
             hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length)
+            hexagon_cond = hexagon_cond and (self.target == "hvx")
 
             if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:
                 if check:
@@ -1334,8 +1395,12 @@ class Synthesizer:
             # For targets which prefer distributing computation
             # over a base vector size
             if BASE_VECT_SIZE != None :
-                score += int(ctx.supports_output_size(BASE_VECT_SIZE)) * 2
-                score +=  int(([ctx.supports_input_size(input_size) for input_size in [BASE_VECT_SIZE]].count(True)))
+                score += int(ctx.supports_output_size(BASE_VECT_SIZE)) * 3
+
+                score +=  int(([ctx.supports_input_size(input_size) for input_size in [MAX_BW_SIZE]].count(True)))
+
+                if ctx.name == "hexagon_V6_hi_128B":
+                    print(ctx.name, "score" ,score)
 
 
             # In the case where we have inputs of varying sizes, we want also want
@@ -1371,7 +1436,12 @@ class Synthesizer:
 
             ops_list.append(op)
 
-        return list(set(ops_list))
+        linear = list(set(ops_list))
+
+        abstract_sign_ops = [op for op in SIGN_VARIANTS]
+
+
+        return [op for op in linear if op not in abstract_sign_ops]
 
 
 
@@ -1413,7 +1483,7 @@ class Synthesizer:
             ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            EXPENSIVE_OPS = ["bvmul", "bvsdiv", "bvudiv", "bvssat", "bvusat", "sign-extend", "zero-extend", "bvaddnsw", "bvaddnuw", "abs"]
+            EXPENSIVE_OPS = [] #["bvmul", "bvsdiv", "bvudiv",  "sign-extend", "zero-extend", "abs", ]
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
@@ -1423,7 +1493,8 @@ class Synthesizer:
 
             for expensive_op in EXPENSIVE_OPS:
                 if expensive_op in dsl_ops and expensive_op not in spec_ops:
-                    pass
+                    return False
+
 
 
 
@@ -1487,7 +1558,14 @@ class Synthesizer:
             is_broadcast_like = self.is_broadcast_like_operation(dsl_inst) and supports_input_length and supports_output_length
 
 
-            return new_condition or is_elem_logical or is_broadcast_like #new_condition
+            # Hexagon condition for distribution:
+            hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length)
+            hexagon_cond = hexagon_cond and (self.target == "hvx")
+
+
+
+
+            return hexagon_cond or new_condition or is_elem_logical or is_broadcast_like #new_condition
 
 
     def is_elementwise_logical_like_operation(self, dsl_inst):

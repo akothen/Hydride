@@ -8,6 +8,7 @@
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
+(require hydride/utils/target)
 (require hydride/ir/hydride/interpreter)
 (require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
@@ -28,9 +29,19 @@
 (define PYTHON "python3")
 
 (define (generate-grammar-file grammar-spec grammar-file-name base_name VF is_shuffle)
+  (define target-str
+    (cond 
+      [(equal? target 'x86)
+       "x86"
+       ]
+      [(equal? target 'hvx)
+       "hvx"
+       ]
+      )
+    )
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)
-  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF) " " (~s is_shuffle)))
+  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF) " " (~s is_shuffle) " " target-str))
   (debug-log gen-grammar-cmd)
   (system gen-grammar-cmd)
   )

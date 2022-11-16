@@ -57,15 +57,15 @@
 		[else ( deinterleave-vector_dsl v0-folded size_i_o prec_i_o )]
 		)
 	]
-	[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+	[ (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
 		(define v0-folded (hydride:const-fold v0))
 		(define v1-folded (hydride:const-fold v1))
 		(define v4-folded (hydride:const-fold v4))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded) (lit? v4-folded))
-(lit (hydride:interpret ( llvm:shuffle-vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 ) (vector)))
+(lit (hydride:interpret ( llvm_shuffle_vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 ) (vector)))
 ]
-		[else ( llvm:shuffle-vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 )]
+		[else ( llvm_shuffle_vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 )]
 		)
 	]
 	[ (_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)

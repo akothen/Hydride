@@ -8,6 +8,7 @@
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
 (require hydride/utils/misc)
+(require hydride/utils/target)
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/binder)
 (require hydride/synthesis/symbolic_synthesis)
@@ -35,7 +36,6 @@
 (provide (all-defined-out))
 
 
-(define halide-target 'hvx)
 
 
 ;; Defines the utilities to perform synthesis on Halide IR expressions
@@ -63,10 +63,10 @@
 
   (define printer-functor
     (cond
-      [(equal? halide-target 'hvx)
+      [(equal? target 'hvx)
        hvx:hydride-printer
        ]
-      [(equal? halide-target 'x86)
+      [(equal? target 'x86)
        hydride-printer
        ]
       )
@@ -77,7 +77,7 @@
   )
 
 
-(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver prev-hash-file prev-hash-name)
+(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver opt? prev-hash-file prev-hash-name arch)
   (debug-log id-map)
   (if (equal? prev-hash-file "")
     '()
@@ -89,6 +89,16 @@
 
       )
 
+    )
+
+  (cond
+    [(equal? arch "x86" )
+     (set-target-x86)
+     ]
+
+    [(equal? arch "hvx" )
+     (set-target-hvx)
+     ]
     )
 
   (cond 
@@ -103,7 +113,7 @@
 
   (printf "Number of instructions: ~a\n" (halide:count-number-instructions halide-expr))
 
-  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver))
+  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt?))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
@@ -118,10 +128,10 @@
 
   (define const-fold-functor
     (cond
-      [(equal? halide-target 'hvx)
+      [(equal? target 'hvx)
        hvx:const-fold
        ]
-      [(equal? halide-target 'x86)
+      [(equal? target 'x86)
        hydride:const-fold
        ]
       )
@@ -130,10 +140,10 @@
 
   (define cost-functor
     (cond
-      [(equal? halide-target 'hvx)
+      [(equal? target 'hvx)
        hvx:cost
        ]
-      [(equal? halide-target 'x86)
+      [(equal? target 'x86)
        hydride:cost
        ]
       )
@@ -155,7 +165,7 @@
   )
 
 
-(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver)
+(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt?)
 
 
   (define actual-expr-depth 
@@ -256,8 +266,18 @@
                     )
 
 
-                  (define depth-limit 5)
-                  (define optimize? #t)
+                  (define depth-limit 
+                    (cond
+                      [(equal? target 'hvx)
+                       5
+                       ]
+                      [(equal? target 'x86)
+                       3
+                       ]
+                      )
+                    
+                    )
+                  (define optimize? opt?)
                   (define symbolic? #f)
 
                   (displayln (format "Synthesizing sub-expression using expression-depth ~a \n" actual-expr-depth))
@@ -339,7 +359,7 @@
 
                         (define-values (sat? mat el) 
                                        (synthesize-sol-with-depth 
-                                         (max (+ 0 actual-expr-depth) 1) 
+                                         (max (+ -1 actual-expr-depth) 1) 
                                                                   depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
                                                                   optimize? interpreter cost-model  symbolic? cost-bound solver) 
                                        )
@@ -401,7 +421,7 @@
                           )
                         '()
                         )
-                      (define recalculate (synthesize-halide-expr-step expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver))
+                      (define recalculate (synthesize-halide-expr-step expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt?))
                       (debug-log "Smaller window synthesis returned:")
                       (debug-log recalculate)
                       (set! satisfiable? #t)
@@ -418,10 +438,10 @@
 
                   (define cost-functor
                     (cond
-                      [(equal? halide-target 'hvx)
+                      [(equal? target 'hvx)
                        hvx:cost
                        ]
-                      [(equal? halide-target 'x86)
+                      [(equal? target 'x86)
                        hydride:cost
                        ]
                       )
@@ -437,7 +457,7 @@
                   (define synthesized-leaves 
 
                     (for/list  ([leaf leaves])
-                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver)
+                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver opt?)
                                )
                     ;)
                     )
@@ -446,10 +466,10 @@
 
                   (define bind-functor
                     (cond
-                      [(equal? halide-target 'hvx)
+                      [(equal? target 'hvx)
                        hvx:bind-expr
                        ]
-                      [(equal? halide-target 'x86)
+                      [(equal? target 'x86)
                        bind-expr
                        ]
                       )

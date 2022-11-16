@@ -40,8 +40,8 @@
 	[ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
 		(deinterleave-vector_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr prec_i_o env))
 	]
-	[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
-		(llvm:shuffle-vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+	[ (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+		(llvm_shuffle_vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
 		 (bind-expr prec_i_o env) (bind-expr v4 env) (bind-expr num_5 env))
 	]
 	[ (_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)
