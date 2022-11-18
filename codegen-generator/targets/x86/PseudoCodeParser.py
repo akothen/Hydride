@@ -3,8 +3,8 @@
 # Pseudocode Parser for x86 ISA semantics.
 #
 ###################################################################
-
-
+import re
+import sys
 import xml.etree.ElementTree as ET
 from x86AST import *
 from x86Types import *
@@ -71,7 +71,7 @@ def GetSemaFromXML(node, InstName : str = None):
     if '/' in CPUID:
         return CPUID.split('/')[0]
     return CPUID
-  
+
   CheckInstName = node.attrib['name']
   if InstName != None:
     if CheckInstName == None:
@@ -83,6 +83,7 @@ def GetSemaFromXML(node, InstName : str = None):
   inst = node.find('instruction')
   operation = node.find('operation')
   assert (operation is not None)
+  print(node.attrib['name'], file=sys.stderr)
   spec = Parse(operation.text)
   output = node.find('return')
   assert (output is not None)
@@ -133,7 +134,7 @@ def InitX86Parser():
     # pseudo token
     'NEG'
     ] + list(x86BinaryOps.values()) + list(x86Reserved)
-  binary_regexp = r'|'.join(x86BinaryOps)
+  binary_regexp = r'|'.join(re.escape(op) for op in x86BinaryOps)
   # in increasing order
   precedence = (
       ('left', 'BITWISE_OR'),
