@@ -515,7 +515,7 @@ def p_expr_not(p):
   parse_unary('NOT', p)
 
 def p_expr_neg(p):
-  'expr : MINUS expr %prec NEG'
+  'expr : NEG expr'
   parse_unary('-', p)
 
 def p_expr_bitwise_not(p):
