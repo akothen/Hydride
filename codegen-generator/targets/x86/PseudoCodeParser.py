@@ -3,8 +3,8 @@
 # Pseudocode Parser for x86 ISA semantics.
 #
 ###################################################################
-import re
-import sys
+
+
 import xml.etree.ElementTree as ET
 from x86AST import *
 from x86Types import *
@@ -71,7 +71,7 @@ def GetSemaFromXML(node, InstName : str = None):
     if '/' in CPUID:
         return CPUID.split('/')[0]
     return CPUID
-
+  
   CheckInstName = node.attrib['name']
   if InstName != None:
     if CheckInstName == None:
@@ -83,7 +83,6 @@ def GetSemaFromXML(node, InstName : str = None):
   inst = node.find('instruction')
   operation = node.find('operation')
   assert (operation is not None)
-  print(node.attrib['name'], file=sys.stderr)
   spec = Parse(operation.text)
   output = node.find('return')
   assert (output is not None)
@@ -131,10 +130,9 @@ def InitX86Parser():
     'LBRACKET', 'RBRACKET',
     'QUEST',
     'CASE_HEADER',
-    # pseudo token
     'NEG'
     ] + list(x86BinaryOps.values()) + list(x86Reserved)
-  binary_regexp = r'|'.join(re.escape(op) for op in x86BinaryOps)
+  binary_regexp = r'|'.join(x86BinaryOps)
   # in increasing order
   precedence = (
       ('left', 'BITWISE_OR'),
@@ -347,7 +345,9 @@ def parse_binary(op, p):
 
 def parse_unary(op, p):
   expr_id = "unaryexpr." + GenUniqueID(Parser)
+  print("PARSING UNARY")
   p[0] = UnaryExpr(op, p[2], expr_id)
+  print(p[0])
 
 if __name__ != '__main__':
   def p_error(p):
@@ -425,7 +425,9 @@ def p_stmt_for(p):
   'stmt : FOR ID UPDATE expr TO expr stmts ENDFOR'
   it_id = "iterator." + GenUniqueID(Parser)
   expr_id = "for." + GenUniqueID(Parser)
+  print("PARSING LOOP")
   p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], True, expr_id)
+  print(p[0])
 
 def p_stmt_for_dec(p):
   'stmt : FOR ID UPDATE expr DOWNTO expr stmts ENDFOR'
@@ -480,10 +482,12 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
+  print("PARSING LOOKUP")
   if p[3] in x86Types:
     p[0] = TypeLookup(p[1], p[3])
   else:
     p[0] = DimLookup(p[1], p[3])
+  print(p[0])
 
 def p_args(p):
   '''args : expr
@@ -515,8 +519,16 @@ def p_expr_not(p):
   parse_unary('NOT', p)
 
 def p_expr_neg(p):
-  'expr : NEG expr'
+  'expr : MINUS expr %prec NEG'
+  print("PARSING NEG")
   parse_unary('-', p)
+  
+def p_expr_loop_bound(p):
+  'expr : expr DOT ID MINUS expr'
+  print("PARSING LOOP BOUND")
+  PartialLoopBound = DimLookup(p[1], p[3])
+  p[0] = new_binary_expr(Parser, '-', PartialLoopBound, p[5])
+  print(p[0])
 
 def p_expr_bitwise_not(p):
   'expr : BITWISE_NOT expr'
@@ -619,6 +631,5 @@ def p_expr_var(p):
 def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
-
 
 
