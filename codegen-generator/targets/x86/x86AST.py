@@ -35,7 +35,10 @@ Select = namedtuple('Select', ['cond', 'then', 'otherwise', 'id'])
 Match = namedtuple('Match', ['val', 'cases', 'id'])
 Case = namedtuple('Case', ['val', 'stmts', 'id'])
 
-Lookup = namedtuple('Lookup', ['obj', 'key'])
+TypeLookup = namedtuple('TypeLookup', ['obj', 'key'])
+
+DimLookup = namedtuple('DimLookup', ['obj', 'key'])
+
 
 Break = namedtuple('Break', [])
 
@@ -50,4 +53,5 @@ Sema = namedtuple('Sema', [
   'xed',
   'elem_type',
   ])
+
 

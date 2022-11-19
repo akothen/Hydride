@@ -16,6 +16,7 @@ from RoseContext import *
 
 from x86AST import *
 from x86Types import x86Types
+from x86Dims import x86Dims
 
 import math
 
@@ -1271,8 +1272,16 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     return
 
   # Compile the loop bounds and step
+  print("COMPILING FOR LOOP")
+  print(ForStmt)
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
+  print("Begin:")
+  Begin.print()
+  Begin.getType().print()
+  print("End:")
+  End.print()
+  End.getType().print()
   assert Begin.getType() == End.getType()
   One = RoseConstant.create(1, Begin.getType())
   MinusOne = RoseConstant.create(-1, Begin.getType())
@@ -1464,7 +1473,7 @@ def CompileIfElseIfElse(IfStmt, Context : x86RoseContext):
   Context.destroyContext(IfStmt.id)
 
 
-def CompileLookup(LookupExpr, Context : x86RoseContext):
+def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
   # LookupExpr tracks types of variables
   if type(LookupExpr.obj) == Var:
     # Check if the variable is already defined and cached. If yes, just return that.
@@ -1489,6 +1498,29 @@ def CompileLookup(LookupExpr, Context : x86RoseContext):
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
       Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
   
+  # Add the typelookup to context
+  Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
+  return CompiledValue
+
+
+def CompileDimLookup(LookupExpr, Context : x86RoseContext):
+  # LookupExpr tracks types of variables
+  assert type(LookupExpr.obj) == Var
+  # Check if the variable is already defined and cached. If yes, just return that.
+  if Context.isVariableDefined(LookupExpr.obj.name):
+    ID = Context.getVariableID(LookupExpr.obj.name)
+    FoundValue = Context.getCompiledAbstractionForID(ID)
+    # See if the element type of this variable is known, if not add it.
+    if Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False:
+      Context.addElemTypeOfVariable(FoundValue.getName(), x86Dims[LookupExpr.key])
+    return FoundValue
+  # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+  CompiledValue = RoseValue.create(LookupExpr.obj.name, Context.getMaxVectorLength())
+  # Add the element type info to the context
+  assert Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False
+  Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
+  # Add the variable info to the context
+  Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
   # Add the typelookup to context
   Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
   return CompiledValue
@@ -1696,7 +1728,8 @@ CompileAbstractions = {
   IfElseIfElse: CompileIfElseIfElse,
   BinaryExpr: CompileBinaryExpr,
   BitIndex: CompileBitIndex,
-  Lookup: CompileLookup,
+  TypeLookup: CompileTypeLookup,
+  DimLookup: CompileDimLookup,
   Match: CompileMatch,
 }
 
@@ -2206,6 +2239,7 @@ def NeedToExtendOperandSize(Op):
 # These are binary ops whose output type is not the same
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
+
 
 
 
