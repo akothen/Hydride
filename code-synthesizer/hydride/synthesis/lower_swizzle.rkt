@@ -307,8 +307,13 @@
   ;; to original value
   (set-synthesize-by-lane)
 
+
   ;; Add entry to hash
-  (hash-set! swizzle-synth-log swizzle-hash (vector satisfiable? lowered-expression elapsed))
+  (if satisfiable?
+        (hash-set! swizzle-synth-log swizzle-hash (vector satisfiable? lowered-expression elapsed)      )
+        '()
+    )
+  
 
   ;; Bind the original operands of the shuffle back
   ;; into the synthesized shuffle

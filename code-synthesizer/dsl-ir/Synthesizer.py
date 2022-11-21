@@ -10,7 +10,8 @@ DEBUG_LIST = [#"hexagon_V6_vsh_128B", "hexagon_V6_hi_128B", "hexagon_V6_lo_128B"
     #"hexagon_V6_vasrwv_128B"
     #"hexagon_V6_vsh_128B",
     #"hexagon_V6_vsh_128B",
-    "hexagon_V6_vdealb_128B"
+    "hexagon_V6_vdealb_128B",
+    "hexagon_V6_vmpybusv_128B"
               ]
 SKIP_LIST = []
 
@@ -591,7 +592,7 @@ class Synthesizer:
         BOUND = 15
 
         if self.target == 'hvx':
-            BOUND = 20
+            BOUND = 15
         if self.spec.contains_conditional():
             BOUND = 25
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
@@ -1267,6 +1268,14 @@ class Synthesizer:
                 continue
 
             supports_inputs_prec = any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
+            lane_size_cond = False
+
+            if BASE_VECT_SIZE != None:
+                lane_size_cond = (ctx.lane_size == BASE_VECT_SIZE) or (ctx.lane_size == MAX_BW_SIZE) or any([ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
+                supports_inputs_prec = supports_inputs_prec and lane_size_cond
+
+
+
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
             supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
@@ -1289,6 +1298,7 @@ class Synthesizer:
                 print(ctx.name, "Supports Input Length:",supports_input_length)
                 print(ctx.name,"Supports Output prec", supports_outputs_prec)
                 print(ctx.name, "Supports Output Length:", supports_output_length)
+                print(ctx.name, "LaneSize Cond:", lane_size_cond)
                 print("-"*50)
 
 
@@ -1303,7 +1313,7 @@ class Synthesizer:
 
 
             # Hexagon condition for distribution:
-            hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length)
+            hexagon_cond = ((supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length) ) and lane_size_cond
             hexagon_cond = hexagon_cond and (self.target == "hvx")
 
             if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:

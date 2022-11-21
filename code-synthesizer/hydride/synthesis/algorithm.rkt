@@ -77,7 +77,7 @@
   )
 
 
-(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver opt? prev-hash-file prev-hash-name arch)
+(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver opt? sym? prev-hash-file prev-hash-name arch)
   (debug-log id-map)
   (if (equal? prev-hash-file "")
     '()
@@ -113,7 +113,7 @@
 
   (printf "Number of instructions: ~a\n" (halide:count-number-instructions halide-expr))
 
-  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt?))
+  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt? sym?))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
@@ -165,7 +165,7 @@
   )
 
 
-(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt?)
+(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt? sym?)
 
 
   (define actual-expr-depth 
@@ -278,7 +278,7 @@
                     
                     )
                   (define optimize? opt?)
-                  (define symbolic? #f)
+                  (define symbolic? sym?)
 
                   (displayln (format "Synthesizing sub-expression using expression-depth ~a \n" actual-expr-depth))
                   (pretty-print expr-extract)
@@ -421,7 +421,7 @@
                           )
                         '()
                         )
-                      (define recalculate (synthesize-halide-expr-step expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt?))
+                      (define recalculate (synthesize-halide-expr-step expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt? sym?))
                       (debug-log "Smaller window synthesis returned:")
                       (debug-log recalculate)
                       (set! satisfiable? #t)
@@ -457,7 +457,7 @@
                   (define synthesized-leaves 
 
                     (for/list  ([leaf leaves])
-                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver opt?)
+                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver opt? sym?)
                                )
                     ;)
                     )

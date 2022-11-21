@@ -203,6 +203,8 @@
 )
 
 
+
+
 (define (bvmulnsw a b bitwidth)
   (define minusonebv (bv -1 (bitvector bitwidth)))
   (define result
@@ -221,7 +223,6 @@
   result
 )
 
-
 (define (bvmulnuw a b bitwidth)
   (define result 
   (if (bvugt a (bvudiv (bvumaxval bitwidth) b))
@@ -237,9 +238,11 @@
 )
 
 
+
+
 (define (bvsizeext vect ext_size is_signed)
-  (define result 
-    (if (equal? is_signed #t)
+  (define result
+    (if (equal? is_signed 1)
       (begin
         (sign-extend vect (bitvector ext_size))
       )

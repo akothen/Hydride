@@ -27,8 +27,20 @@ INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
 IS_SHUFFLE = int(sys.argv[4]) == 1
+TARGET = sys.argv[5]
 
-dsl_list = parse_dict(hvx_semantics)
+
+
+print("TARGET:", TARGET)
+
+
+
+
+if TARGET == 'x86':
+    dsl_list = parse_dict(semantcs)
+else:
+    dsl_list = parse_dict(hvx_semantics)
+
 
 #print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
 #print("Number of Target Specific Instructions:\t",sum([len(inst.contexts) for inst in dsl_list]))
@@ -89,11 +101,12 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 1,
+                  contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
                   depth = 3,
                   is_shuffle = IS_SHUFFLE,
-                  legal_map = legal_map
+                  legal_map = legal_map,
+                  target = TARGET,
                   )
 
 

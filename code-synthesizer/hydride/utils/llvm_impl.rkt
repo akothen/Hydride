@@ -15,7 +15,7 @@
 ;; Implementation of the LLVM shufflevector operation. v1 and v2
 ;; are vectors of type <len x prec> and permute-mask is a 
 ;; vector of type <mask-len x i32>.
-(define (llvm:shuffle-vectors  v1 v2 len prec  permute-mask mask-len)
+(define (llvm_shuffle_vectors  v1 v2 len prec  permute-mask mask-len)
   (define result
     (apply 
       concat 

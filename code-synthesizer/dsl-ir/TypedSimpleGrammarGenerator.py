@@ -121,7 +121,7 @@ class TypedSimpleGrammarGenerator:
         zero_clause = "{}".format(zero)
 
 
-        one_clause ="{}".format(one)
+        one_clause = " " #"{}".format(one)
         neg_one_clause = " " #"{}".format(neg_one)
 
         ramp_clause = "{}".format(ramp)

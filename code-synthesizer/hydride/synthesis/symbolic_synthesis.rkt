@@ -1,6 +1,10 @@
 #lang rosette (require rosette/lib/synthax) (require rosette/lib/angelic) (require racket/pretty) (require data/bit-vector) (require rosette/lib/destruct) (require rosette/solver/smt/boolector) (require rosette/solver/smt/z3) (require hydride/utils/bvops) (require hydride/utils/debug) (require hydride/ir/hydride/interpreter)
 
 
+(require hydride/utils/target)
+(require hydride/ir/hvx/interpreter)
+
+
 
 (require (only-in racket build-vector))
 

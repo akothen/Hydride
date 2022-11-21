@@ -39,6 +39,12 @@ class CostDef:
         if dsl_cost == None or dsl_cost == "":
             dsl_cost = DEFAULT_COST
 
+        # HVX has no latencies for operations
+        # but we still want to prefer shifts over
+        # multiplications/ divisions
+        if "mpy" in dsl_inst.name:
+            dsl_cost = DEFAULT_COST * 2
+
         cost_label = "cost_{}".format(dsl_inst.get_dsl_name())
 
         def_cost = "(define {} {})".format(cost_label, dsl_cost)
