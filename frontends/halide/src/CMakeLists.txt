@@ -130,6 +130,7 @@ set(HEADER_FILES
     RemoveDeadAllocations.h
     RemoveExternLoops.h
     RemoveUndef.h
+    Rosette.h
     runtime/HalideBuffer.h
     runtime/HalideRuntime.h
     Schedule.h
@@ -290,6 +291,7 @@ set(SOURCE_FILES
     RemoveDeadAllocations.cpp
     RemoveExternLoops.cpp
     RemoveUndef.cpp
+    Rosette.cpp
     Schedule.cpp
     ScheduleFunctions.cpp
     SelectGPUAPI.cpp

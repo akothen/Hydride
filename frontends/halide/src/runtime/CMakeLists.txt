@@ -329,16 +329,16 @@ foreach (i IN LISTS RUNTIME_LL)
     target_sources(Halide_initmod PRIVATE ${INITMOD})
 endforeach ()
 
-foreach (i IN LISTS RUNTIME_BC)
-    set(INITMOD "_initmod_ptx_${i}.cpp")
-    set(RT_BC "${CMAKE_CURRENT_SOURCE_DIR}/nvidia_libdevice_bitcode/libdevice.${i}.10.bc")
-
-    add_custom_command(OUTPUT "${INITMOD}"
-                       COMMAND binary2cpp "halide_internal_initmod_ptx_${i}_ll" < "$<SHELL_PATH:${RT_BC}>" > "${INITMOD}"
-                       DEPENDS binary2cpp "${RT_BC}"
-                       VERBATIM)
-    target_sources(Halide_initmod PRIVATE ${INITMOD})
-endforeach ()
+#foreach (i IN LISTS RUNTIME_BC)
+#    set(INITMOD "_initmod_ptx_${i}.cpp")
+#    set(RT_BC "${CMAKE_CURRENT_SOURCE_DIR}/nvidia_libdevice_bitcode/libdevice.${i}.10.bc")
+#
+#    add_custom_command(OUTPUT "${INITMOD}"
+#                       COMMAND binary2cpp "halide_internal_initmod_ptx_${i}_ll" < "$<SHELL_PATH:${RT_BC}>" > "${INITMOD}"
+#                       DEPENDS binary2cpp "${RT_BC}"
+#                       VERBATIM)
+#    target_sources(Halide_initmod PRIVATE ${INITMOD})
+#endforeach ()
 
 add_custom_command(OUTPUT "_initmod_inlined_c.cpp"
                    COMMAND binary2cpp "halide_internal_initmod_inlined_c" < "$<SHELL_PATH:${CMAKE_CURRENT_SOURCE_DIR}/halide_buffer_t.cpp>" > "_initmod_inlined_c.cpp"

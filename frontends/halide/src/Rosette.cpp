@@ -1,5 +1,5 @@
 #include "Rosette.h"
-#include "DistributeVec.h"
+//#include "DistributeVec.h"
 
 #include "ExprUsesVar.h"
 #include "CodeGen_Internal.h"

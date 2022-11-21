@@ -143,9 +143,9 @@ MIPS_LLVM_CONFIG_LIB=$(if $(WITH_MIPS), mips, )
 POWERPC_CXX_FLAGS=$(if $(WITH_POWERPC), -DWITH_POWERPC, )
 POWERPC_LLVM_CONFIG_LIB=$(if $(WITH_POWERPC), powerpc, )
 
-PTX_CXX_FLAGS=$(if $(WITH_NVPTX), -DWITH_NVPTX, )
-PTX_LLVM_CONFIG_LIB=$(if $(WITH_NVPTX), nvptx, )
-PTX_DEVICE_INITIAL_MODULES=$(if $(WITH_NVPTX), libdevice.compute_20.10.bc libdevice.compute_30.10.bc libdevice.compute_35.10.bc, )
+#PTX_CXX_FLAGS=$(if $(WITH_NVPTX), -DWITH_NVPTX, )
+#PTX_LLVM_CONFIG_LIB=$(if $(WITH_NVPTX), nvptx, )
+#PTX_DEVICE_INITIAL_MODULES=$(if $(WITH_NVPTX), libdevice.compute_20.10.bc libdevice.compute_30.10.bc libdevice.compute_35.10.bc, )
 
 AMDGPU_CXX_FLAGS=$(if $(WITH_AMDGPU), -DWITH_AMDGPU, )
 AMDGPU_LLVM_CONFIG_LIB=$(if $(WITH_AMDGPU), amdgpu, )
@@ -280,14 +280,14 @@ ifeq ($(WITH_LLVM_INSIDE_SHARED_LIBHALIDE), )
 TEST_LD_FLAGS += -Wl,--rpath=$(LLVM_LIBDIR)
 endif
 
-ifneq ($(WITH_NVPTX), )
-ifneq (,$(findstring ptx,$(HL_TARGET)))
-TEST_CUDA = 1
-endif
-ifneq (,$(findstring cuda,$(HL_TARGET)))
-TEST_CUDA = 1
-endif
-endif
+#ifneq ($(WITH_NVPTX), )
+#ifneq (,$(findstring ptx,$(HL_TARGET)))
+#TEST_CUDA = 1
+#endif
+#ifneq (,$(findstring cuda,$(HL_TARGET)))
+#TEST_CUDA = 1
+#endif
+#endif
 
 ifneq ($(WITH_OPENCL), )
 ifneq (,$(findstring opencl,$(HL_TARGET)))
@@ -844,7 +844,7 @@ RUNTIME_LL_COMPONENTS = \
   mips \
   posix_math \
   powerpc \
-  ptx_dev \
+  #ptx_dev 
   wasm_math \
   win32_math \
   x86 \
@@ -1106,8 +1106,8 @@ $(BUILD_DIR)/initmod.%_h.cpp: $(BIN_DIR)/binary2cpp $(SRC_DIR)/runtime/%.h
 $(BUILD_DIR)/initmod.inlined_c.cpp: $(BIN_DIR)/binary2cpp $(SRC_DIR)/runtime/halide_buffer_t.cpp
 	./$(BIN_DIR)/binary2cpp halide_internal_initmod_inlined_c < $(SRC_DIR)/runtime/halide_buffer_t.cpp > $@
 
-$(BUILD_DIR)/initmod_ptx.%_ll.cpp: $(BIN_DIR)/binary2cpp $(SRC_DIR)/runtime/nvidia_libdevice_bitcode/libdevice.%.bc
-	./$(BIN_DIR)/binary2cpp halide_internal_initmod_ptx_$(basename $*)_ll < $(SRC_DIR)/runtime/nvidia_libdevice_bitcode/libdevice.$*.bc > $@
+#$(BUILD_DIR)/initmod_ptx.%_ll.cpp: $(BIN_DIR)/binary2cpp $(SRC_DIR)/runtime/nvidia_libdevice_bitcode/libdevice.%.bc
+#	./$(BIN_DIR)/binary2cpp halide_internal_initmod_ptx_$(basename $*)_ll < $(SRC_DIR)/runtime/nvidia_libdevice_bitcode/libdevice.$*.bc > $@
 
 $(BIN_DIR)/binary2cpp: $(ROOT_DIR)/tools/binary2cpp.cpp
 	@mkdir -p $(@D)
@@ -1117,8 +1117,8 @@ $(BIN_DIR)/regexp_replace: $(ROOT_DIR)/tools/regexp_replace.cpp
 	@mkdir -p $(@D)
 	$(CXX) -std=c++11 $< -o $@
 
-$(BUILD_DIR)/initmod_ptx.%_ll.o: $(BUILD_DIR)/initmod_ptx.%_ll.cpp
-	$(CXX) -c $< -o $@ -MMD -MP -MF $(BUILD_DIR)/$*.d -MT $(BUILD_DIR)/$*.o
+#$(BUILD_DIR)/initmod_ptx.%_ll.o: $(BUILD_DIR)/initmod_ptx.%_ll.cpp
+#	$(CXX) -c $< -o $@ -MMD -MP -MF $(BUILD_DIR)/$*.d -MT $(BUILD_DIR)/$*.o
 
 $(BUILD_DIR)/initmod.%.o: $(BUILD_DIR)/initmod.%.cpp
 	$(CXX) -c $< -o $@ -MMD -MP -MF $(BUILD_DIR)/$*.d -MT $(BUILD_DIR)/$*.o
