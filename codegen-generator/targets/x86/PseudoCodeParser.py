@@ -7,7 +7,7 @@
 
 import xml.etree.ElementTree as ET
 from x86AST import *
-
+from x86Types import *
 
 
 def ParseX86Intructions(XMLFileName : str):
@@ -96,7 +96,7 @@ def GetSemaFromXML(node, InstName : str = None):
       cpuids=CPUIDs,
       inst_form = None if inst is None else inst.attrib.get('form', ''),
       imm_width=imm_width,
-      elem_type=output.attrib['etype'],
+      elem_type=output.find('etype'), #output.attrib['etype'],
       xed = None if inst is None else inst.attrib.get('xed')
     )
 
@@ -130,7 +130,6 @@ def InitX86Parser():
     'LBRACKET', 'RBRACKET',
     'QUEST',
     'CASE_HEADER',
-    # pseudo token
     'NEG'
     ] + list(x86BinaryOps.values()) + list(x86Reserved)
   binary_regexp = r'|'.join(x86BinaryOps)
@@ -346,7 +345,9 @@ def parse_binary(op, p):
 
 def parse_unary(op, p):
   expr_id = "unaryexpr." + GenUniqueID(Parser)
+  print("PARSING UNARY")
   p[0] = UnaryExpr(op, p[2], expr_id)
+  print(p[0])
 
 if __name__ != '__main__':
   def p_error(p):
@@ -424,7 +425,9 @@ def p_stmt_for(p):
   'stmt : FOR ID UPDATE expr TO expr stmts ENDFOR'
   it_id = "iterator." + GenUniqueID(Parser)
   expr_id = "for." + GenUniqueID(Parser)
+  print("PARSING LOOP")
   p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], True, expr_id)
+  print(p[0])
 
 def p_stmt_for_dec(p):
   'stmt : FOR ID UPDATE expr DOWNTO expr stmts ENDFOR'
@@ -479,7 +482,12 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
-  p[0] = Lookup(p[1], p[3])
+  print("PARSING LOOKUP")
+  if p[3] in x86Types:
+    p[0] = TypeLookup(p[1], p[3])
+  else:
+    p[0] = DimLookup(p[1], p[3])
+  print(p[0])
 
 def p_args(p):
   '''args : expr
@@ -512,7 +520,15 @@ def p_expr_not(p):
 
 def p_expr_neg(p):
   'expr : MINUS expr %prec NEG'
+  print("PARSING NEG")
   parse_unary('-', p)
+  
+def p_expr_loop_bound(p):
+  'expr : expr DOT ID MINUS expr'
+  print("PARSING LOOP BOUND")
+  PartialLoopBound = DimLookup(p[1], p[3])
+  p[0] = new_binary_expr(Parser, '-', PartialLoopBound, p[5])
+  print(p[0])
 
 def p_expr_bitwise_not(p):
   'expr : BITWISE_NOT expr'
