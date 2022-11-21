@@ -522,6 +522,7 @@ SOURCE_FILES = \
   RemoveDeadAllocations.cpp \
   RemoveExternLoops.cpp \
   RemoveUndef.cpp \
+  DistributeVec.cpp \
   Rosette.cpp \
   Schedule.cpp \
   ScheduleFunctions.cpp \
@@ -705,6 +706,7 @@ HEADER_FILES = \
   RemoveUndef.h \
   runtime/HalideBuffer.h \
   runtime/HalideRuntime.h \
+  DistributeVec.h \
   Rosette.h \
   Schedule.h \
   ScheduleFunctions.h \
@@ -885,7 +887,10 @@ endif
 endif
 
 .PHONY: all
-all: distrib test_internal
+all: distrib 
+
+# TEMP DISABLED test_internals
+#test_internal
 
 # Depending on which linker we're using,
 # we need a different invocation to get the
