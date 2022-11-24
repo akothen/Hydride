@@ -285,9 +285,16 @@ public:
       errs() << "CheckHexVal != ActualHexVal\n";
       return false;
     }
-    if (dyn_cast<ConstantInt>(OriginalInst->getOperand(Idx))->getZExtValue() == OperandValue) {
-      errs() << "MATCH FOUND\n";
-      return true;
+    if (OperandValue >= 0) {
+      if (dyn_cast<ConstantInt>(OriginalInst->getOperand(Idx))->getZExtValue() == OperandValue) {
+        errs() << "MATCH FOUND\n";
+        return true;
+      }
+    } else {
+      if (dyn_cast<ConstantInt>(OriginalInst->getOperand(Idx))->getSExtValue() == OperandValue) {
+        errs() << "MATCH FOUND\n";
+        return true;
+      }
     }
     return false;
   }
@@ -297,5 +304,4 @@ public:
 }   // end of namespace llvm
 
 #endif  // HYDRIDE_LEGALIZER_H
-
 
