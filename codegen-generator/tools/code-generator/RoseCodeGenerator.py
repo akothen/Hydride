@@ -22,6 +22,7 @@ import RosetteGen
 import RoseReg2Reg
 import RoseAssignDestination
 import RoseAbstractSignedness
+import RoseSinkBVInsertOps
 
 import multiprocessing
 
@@ -48,6 +49,10 @@ class RoseCodeGenerator:
     print("EXTERACTED CONTEXT FROM FUNCTIONINFO")
     Context.print()
     if self.JustGenRosette == False:
+      Function = Function.clone()
+      Context.print()
+      RoseSinkBVInsertOps.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseReg2Reg.Run(Function, Context)
       Context.print()
