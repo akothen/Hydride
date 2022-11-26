@@ -1,5 +1,5 @@
-HALIDE_DISTRIB ?= /home/sb54/halide-12/distrib
-LLVM_ROOT ?= /home/sb54/llvm-12
+HALIDE_DISTRIB ?= /home/arnoor2/Racket/TensorSynth/Rosette-experiments/frontends/halide/distrib/
+LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
@@ -48,7 +48,7 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) ./$@/bin/$@_generator \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
