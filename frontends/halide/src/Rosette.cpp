@@ -1,5 +1,5 @@
 #include "Rosette.h"
-//#include "DistributeVec.h"
+#include "DistributeVec.h"
 
 #include "ExprUsesVar.h"
 #include "CodeGen_Internal.h"
@@ -3082,8 +3082,15 @@ namespace Halide {
             debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(1) << "Printing Pruned Stmt:\n";
-            debug(1) << pruned <<"\n";
+            debug(0) << "Printing Pruned Stmt:\n";
+            debug(0) << pruned <<"\n";
+
+            /*
+            auto distributed = distribute_vector_exprs(pruned, 512);
+            debug(0) << "Distributed Stmt:\n";
+            debug(0) << distributed <<"\n";
+            */
+
             auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
 
             if(mutated_exprs.size()){
