@@ -32,6 +32,7 @@ hannk = hannk/common_halide.cpp
 
 ENABLE_HYDRIDE ?= 1
 EXPR_DEPTH ?=2
+INT_BW ?= 16
 
 .PHONY: clean all $(benchmarks)
 
@@ -48,7 +49,7 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_SYNTH_BW=$(INT_BW) ./$@/bin/$@_generator \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \

@@ -75,6 +75,8 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const Load* op, unsigned num_chunks){
 
+            debug(0) << "Distribute Load!\n";
+
             if(DistribMap.find(op) != DistribMap.end()){
                 return  DistribMap[op]->distributed_expressions;
             }
@@ -134,406 +136,11 @@ namespace Halide {
         }
 
 
-        std::vector<Expr> DistributeVec::visit(const Add* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Add::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-
-
-
-
-                // Distribute add over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_add = Add::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_add);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-
-
-            return exprs;
-        }
-
-
-        std::vector<Expr> DistributeVec::visit(const Sub* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Sub::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-
-
-
-
-                // Distribute sub over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_sub = Sub::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_sub);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-
-
-            return exprs;
-        }
-
-
-
-        std::vector<Expr> DistributeVec::visit(const Mul* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Mul::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-                // Distribute mul over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_sub = Mul::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_sub);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-
-
-            return exprs;
-        }
-
-
-        std::vector<Expr> DistributeVec::visit(const Div* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Div::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-                // Distribute div over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_div = Div::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_div);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-
-
-            return exprs;
-        }
-
-
-        std::vector<Expr> DistributeVec::visit(const Max* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Max::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-                // Distribute max over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_max = Max::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_max);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-
-
-            return exprs;
-        }
-
-
-        std::vector<Expr> DistributeVec::visit(const Mod* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Mod::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-                // Distribute mod over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_mod = Mod::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_mod);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-            return exprs;
-        }
-
-
-        std::vector<Expr> DistributeVec::visit(const Min* op, unsigned num_chunks){
-
-
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
-
-            std::vector<Expr> exprs;
-
-
-            if(op->type.is_scalar() || num_chunks <= 1){
-                exprs.push_back(Min::make(op->a, op->b));
-                return exprs;
-            }
-
-
-            unsigned num_bits = op->type.bits() * op->type.lanes();
-
-
-            if(num_chunks > 1){
-
-                bool divisible = (bitvector_size % num_bits) == 0;
-
-
-                std::vector<Expr> distributed_a = dispatch(op->a, num_chunks);
-                std::vector<Expr> distributed_b = dispatch(op->b, num_chunks);
-
-                // Distribute min over 'chunks' number of equally sized
-                // expressions.
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Expr new_min = Min::make(distributed_a[i], distributed_b[i]);
-                    exprs.push_back(new_min);
-
-                }
-
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                }
-
-                // Add new DistributeInfo entry to avoid re-calculation
-                DistributeInfo* DI = new DistributeInfo;
-                DI->expr_node = op;
-                DI->distributed_expressions = exprs;
-                DI->distributed_size = bitvector_size;
-                DI->equally_distributed = !divisible;
-
-                DistribMap[op] = DI;
-
-
-            }
-            return exprs;
-        }
 
 
 #define DISTRIBUTE_BINARY_OP(OP_NAME) \
         std::vector<Expr> DistributeVec::visit(const OP_NAME* op, unsigned num_chunks){ \
-            debug(0) << "Distributing OP_NAME !\n";\
+            debug(0) << "Distributing Binary Op! \n";\
             if(DistribMap.find(op) != DistribMap.end()){ \
                 return  DistribMap[op]->distributed_expressions; \
             } \
@@ -541,7 +148,7 @@ namespace Halide {
             \
             \
             if(op->type.is_scalar() || num_chunks <= 1){\
-                exprs.push_back(Min::make(op->a, op->b));\
+                exprs.push_back(OP_NAME::make(op->a, op->b));\
                 return exprs;\
             }\
             \
@@ -557,8 +164,8 @@ namespace Halide {
                 internal_assert(distributed_a.size() == num_chunks) << "Distributed arguments must have required  number of operands\n"; \
                 \
                 for(unsigned i = 0; i < num_chunks; i++){ \
-                    Expr new_min = Min::make(distributed_a[i], distributed_b[i]); \
-                    exprs.push_back(new_min); \
+                    Expr new_bop = OP_NAME::make(distributed_a[i], distributed_b[i]); \
+                    exprs.push_back(new_bop); \
                 } \
                 DistributeInfo* DI = new DistributeInfo; \
                 DI->expr_node = op; \
@@ -572,6 +179,8 @@ namespace Halide {
 
 
         
+
+        DISTRIBUTE_BINARY_OP(Mod)
         DISTRIBUTE_BINARY_OP(Div)
         DISTRIBUTE_BINARY_OP(Mul)
         DISTRIBUTE_BINARY_OP(Sub)
@@ -642,6 +251,7 @@ namespace Halide {
 
 
         std::vector<Expr> DistributeVec::visit(const Cast* op, unsigned num_chunks){
+            debug(0) << "Distribute Cast!\n";
 
             if(DistribMap.find(op) != DistribMap.end()){
                 return  DistribMap[op]->distributed_expressions;
@@ -701,6 +311,10 @@ namespace Halide {
             }
 
             std::vector<Expr> exprs;
+
+            if(VariableNameToExpr.count(op->name) != 0){
+                return dispatch(VariableNameToExpr[op->name], num_chunks);
+            }
 
 
             if(op->type.is_scalar() || num_chunks <= 1){
@@ -934,7 +548,12 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const Let* op, unsigned num_chunks){
             std::vector<Expr> exprs;
+
+            VariableNameToExpr[op->name] = op->value;
             exprs.push_back(Let::make(op->name, op->value, op->body));
+
+
+
             return exprs;
         }
 
@@ -1012,7 +631,11 @@ namespace Halide {
 
 
 
+
             Stmt OrigStore =  Store::make(op->name, op->value, op->index, op->param, op->predicate, op->alignment);
+            OrigStore = substitute_in_all_lets(OrigStore);
+
+
 
 
             debug(0) << "DistributeVec on store "<<OrigStore  << "producing bitvectors of size "<< expr_bitwidth <<" \n";
@@ -1055,6 +678,10 @@ namespace Halide {
         }
 
         Stmt DistributeVec::visit(const LetStmt* op){
+
+            if(is_pure(op->value)){
+                VariableNameToExpr[op->name] = op->value;
+            }
             return LetStmt::make(op->name, op->value, dispatch(op->body));
         }
 
@@ -1067,6 +694,7 @@ namespace Halide {
         Stmt DistributeVec::visit(const For* op){
 
             debug(0) << "Distributing For\n";
+
             Stmt new_for =  For::make(op->name, op->min, op->extent, op->for_type, op->device_api, dispatch(op->body));
             debug(0) << "Completed Distributing For\n";
             return new_for;

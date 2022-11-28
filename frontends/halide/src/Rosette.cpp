@@ -286,7 +286,15 @@ namespace Halide {
                             SkipNodes.insert(op->b.get());
                             return "";
                         }
-                        return print_binary_op("add", "+", op->a, op->b, op->type.is_vector());
+
+
+                        debug(0) << "Emitting add to rosette\n";
+
+
+                        std::string add_str = print_binary_op("add", "+", op->a, op->b, op->type.is_vector());
+                        debug(0) << "add_str: "<<add_str <<"\n";
+
+                        return add_str;
                     }
 
                     std::string visit(const Sub *op) {
@@ -332,12 +340,17 @@ namespace Halide {
 
                     std::string visit(const Min *op) {
 
+                        debug(0) << "Emitting min to rosette\n";
+
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             SkipNodes.insert(op->a.get());
                             SkipNodes.insert(op->b.get());
                             return "";
                         }
-                        return print_binary_op("min", "min", op->a, op->b, op->type.is_vector());
+                        std::string min_emit =  print_binary_op("min", "min", op->a, op->b, op->type.is_vector());
+                        debug(0) << min_emit << "\n";
+
+                        return min_emit;                    
                     }
 
                     std::string visit(const Max *op) {
@@ -595,6 +608,7 @@ namespace Halide {
 
                     std::string visit(const Load *op) {
                         indent.push(0);
+                        debug(0) << "Emitting load \n";
 
 
 
@@ -2800,6 +2814,7 @@ namespace Halide {
                     }
 
                     std::string emit_racket_imports(){
+                        debug(0) << "emit racket imports \n";
                         return "#lang rosette\n \
                             (require rosette/lib/synthax)\n \
                             (require rosette/lib/angelic)\n \
@@ -2820,6 +2835,7 @@ namespace Halide {
                     }
 
                     std::string emit_racket_debug(){
+                        debug(0) << "emit racket debug \n";
                         return "\n \
                             ;; Uncomment the line below to enable verbose logging\n \
                             (enable-debug)\n"; 
@@ -2827,8 +2843,8 @@ namespace Halide {
 
                     std::string emit_set_current_bitwidth(){
                         const char* bitwidth = getenv("HL_SYNTH_BW");
-                        std::string str = bitwidth;
                         if(bitwidth){
+                            std::string str = bitwidth;
                             int bw = stoi(str);
 
                             if(bw > 0){
@@ -2898,6 +2914,8 @@ namespace Halide {
                 auto spec_dispatch = get_expr_racket_dispatch(spec_expr, encoding, let_vars);
                 std::string expr = spec_dispatch(spec_expr, false /* set_mode */, false /* int_mode */);
 
+                debug(0) << "Rosette expr:" <<expr <<"\n";
+
 
 
                 std::ofstream rkt;
@@ -2930,6 +2948,8 @@ namespace Halide {
                 std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
                 std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
 
+
+
                 const char* expr_depth_var = getenv("HL_EXPR_DEPTH");
 
                 int expr_depth = 2;
@@ -2958,6 +2978,7 @@ namespace Halide {
                 rkt << HSE.emit_write_synth_log_to_file( "/tmp/"+cur_hash_path, cur_hash_name);
 
                 rkt.close();
+
 
                 std::string cmd = "racket " + file_name;
 

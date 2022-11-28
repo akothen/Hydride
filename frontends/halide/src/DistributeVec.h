@@ -58,6 +58,8 @@ namespace Halide {
                 std::map<const IRNode*, DistributeInfo*> DistribMap;
 
 
+                std::map<std::string, Expr> VariableNameToExpr;
+
                 // Expressions
                 std::vector<Expr> visit(const Load *op, unsigned num_chunks);
                 std::vector<Expr> visit(const Add *op, unsigned num_chunks);

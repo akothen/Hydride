@@ -844,7 +844,6 @@ RUNTIME_LL_COMPONENTS = \
   mips \
   posix_math \
   powerpc \
-  #ptx_dev 
   wasm_math \
   win32_math \
   x86 \
