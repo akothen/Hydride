@@ -30,49 +30,48 @@ entry:
   %ex2 = alloca ptr, align 8
   invoke void @opaque() to label %invoke.cont unwind label %catch.dispatch
 
-catch.dispatch:                                   ; preds = %entry
+catch.dispatch:
   %0 = catchswitch within none [label %catch] unwind to caller
 
-invoke.cont:                                      ; preds = %entry
+invoke.cont:
   unreachable
 
-catch:                                            ; preds = %catch.dispatch
+catch:
   %1 = catchpad within %0 [ptr null, i32 64, ptr %exn.slot]
-  %exn = load ptr, ptr %exn.slot, align 8
-  %2 = call ptr @llvm.objc.retain(ptr %exn) [ "funclet"(token %1) ]
-  store ptr %2, ptr %ex2, align 8
+  call void @llvm.objc.storeStrong(ptr %ex2, ptr null) [ "funclet"(token %1) ]
   catchret from %1 to label %catchret.dest
 
-catchret.dest:                                    ; preds = %catch
+catchret.dest:
   ret void
 }
 
 declare void @opaque()
-declare ptr @llvm.objc.retain(ptr) #0
+declare void @llvm.objc.storeStrong(ptr, ptr) #0
 declare i32 @__CxxFrameHandler3(...)
 
 attributes #0 = { nounwind }
 
 ; EH catchpad with SEH prologue:
-;     CHECK-LABEL:  # %catch
-;     CHECK:          pushq   %rbp
-;     CHECK:          .seh_pushreg %rbp
-;                     ...
-;     CHECK:          .seh_endprologue
+;     CHECK: # %catch
+;     CHECK: pushq   %rbp
+;     CHECK: .seh_pushreg %rbp
+;            ...
+;     CHECK: .seh_endprologue
 ;
 ; At this point the code used to be truncated (and sometimes terminated with an
 ; int3 opcode):
-;     CHECK-NOT:      int3
+;     CHECK-NOT: int3
 ;
-; Instead, the runtime call to retain should be emitted:
-;     CHECK:          movq    -8(%rbp), %rcx
-;     CHECK:          callq   objc_retain
-;                     ...
+; Instead, the call to objc_storeStrong should be emitted:
+;     CHECK: leaq	-24(%rbp), %rcx
+;     CHECK: xorl	%edx, %edx
+;     CHECK: callq	objc_storeStrong
+;        ...
 ;
 ; This is the end of the funclet:
-;     CHECK:          popq	%rbp
-;     CHECK:          retq                                    # CATCHRET
-;                     ...
-;     CHECK:          .seh_handlerdata
-;                     ...
-;     CHECK:          .seh_endproc
+;     CHECK: popq	%rbp
+;     CHECK: retq                                    # CATCHRET
+;            ...
+;     CHECK: .seh_handlerdata
+;            ...
+;     CHECK: .seh_endproc

@@ -176,15 +176,14 @@ struct RemoveConstantIfCondition : public OpRewritePattern<OpTy> {
   LogicalResult matchAndRewrite(OpTy op,
                                 PatternRewriter &rewriter) const override {
     // Early return if there is no condition.
-    Value ifCond = op.getIfCond();
+    Value ifCond = op.ifCond();
     if (!ifCond)
       return success();
 
     IntegerAttr constAttr;
     if (matchPattern(ifCond, m_Constant(&constAttr))) {
       if (constAttr.getInt())
-        rewriter.updateRootInPlace(op,
-                                   [&]() { op.getIfCondMutable().erase(0); });
+        rewriter.updateRootInPlace(op, [&]() { op.ifCondMutable().erase(0); });
       else
         rewriter.eraseOp(op);
     }
@@ -241,13 +240,13 @@ ParseResult ParallelOp::parse(OpAsmParser &parser, OperationState &result) {
   OptionalParseResult async, numGangs, numWorkers, vectorLength;
   Type i1Type = builder.getI1Type();
 
-  // getAsync()?
+  // async()?
   async = parseOptionalOperandAndType(parser, ParallelOp::getAsyncKeyword(),
                                       result);
-  if (async.has_value() && failed(*async))
+  if (async.hasValue() && failed(*async))
     return failure();
 
-  // getWait()?
+  // wait()?
   if (failed(parseOperandList(parser, ParallelOp::getWaitKeyword(),
                               waitOperands, waitOperandTypes, result)))
     return failure();
@@ -255,19 +254,19 @@ ParseResult ParallelOp::parse(OpAsmParser &parser, OperationState &result) {
   // num_gangs(value)?
   numGangs = parseOptionalOperandAndType(
       parser, ParallelOp::getNumGangsKeyword(), result);
-  if (numGangs.has_value() && failed(*numGangs))
+  if (numGangs.hasValue() && failed(*numGangs))
     return failure();
 
   // num_workers(value)?
   numWorkers = parseOptionalOperandAndType(
       parser, ParallelOp::getNumWorkersKeyword(), result);
-  if (numWorkers.has_value() && failed(*numWorkers))
+  if (numWorkers.hasValue() && failed(*numWorkers))
     return failure();
 
   // vector_length(value)?
   vectorLength = parseOptionalOperandAndType(
       parser, ParallelOp::getVectorLengthKeyword(), result);
-  if (vectorLength.has_value() && failed(*vectorLength))
+  if (vectorLength.hasValue() && failed(*vectorLength))
     return failure();
 
   // if()?
@@ -362,12 +361,12 @@ ParseResult ParallelOp::parse(OpAsmParser &parser, OperationState &result) {
 
   result.addAttribute(
       ParallelOp::getOperandSegmentSizeAttr(),
-      builder.getDenseI32ArrayAttr(
-          {static_cast<int32_t>(async.has_value() ? 1 : 0),
+      builder.getI32VectorAttr(
+          {static_cast<int32_t>(async.hasValue() ? 1 : 0),
            static_cast<int32_t>(waitOperands.size()),
-           static_cast<int32_t>(numGangs.has_value() ? 1 : 0),
-           static_cast<int32_t>(numWorkers.has_value() ? 1 : 0),
-           static_cast<int32_t>(vectorLength.has_value() ? 1 : 0),
+           static_cast<int32_t>(numGangs.hasValue() ? 1 : 0),
+           static_cast<int32_t>(numWorkers.hasValue() ? 1 : 0),
+           static_cast<int32_t>(vectorLength.hasValue() ? 1 : 0),
            static_cast<int32_t>(hasIfCond ? 1 : 0),
            static_cast<int32_t>(hasSelfCond ? 1 : 0),
            static_cast<int32_t>(reductionOperands.size()),
@@ -393,94 +392,89 @@ ParseResult ParallelOp::parse(OpAsmParser &parser, OperationState &result) {
 }
 
 void ParallelOp::print(OpAsmPrinter &printer) {
-  // getAsync()?
-  if (Value async = getAsync())
+  // async()?
+  if (Value async = this->async())
     printer << " " << ParallelOp::getAsyncKeyword() << "(" << async << ": "
             << async.getType() << ")";
 
-  // getWait()?
-  printOperandList(getWaitOperands(), ParallelOp::getWaitKeyword(), printer);
+  // wait()?
+  printOperandList(waitOperands(), ParallelOp::getWaitKeyword(), printer);
 
   // num_gangs()?
-  if (Value numGangs = getNumGangs())
+  if (Value numGangs = this->numGangs())
     printer << " " << ParallelOp::getNumGangsKeyword() << "(" << numGangs
             << ": " << numGangs.getType() << ")";
 
   // num_workers()?
-  if (Value numWorkers = getNumWorkers())
+  if (Value numWorkers = this->numWorkers())
     printer << " " << ParallelOp::getNumWorkersKeyword() << "(" << numWorkers
             << ": " << numWorkers.getType() << ")";
 
   // vector_length()?
-  if (Value vectorLength = getVectorLength())
+  if (Value vectorLength = this->vectorLength())
     printer << " " << ParallelOp::getVectorLengthKeyword() << "("
             << vectorLength << ": " << vectorLength.getType() << ")";
 
   // if()?
-  if (Value ifCond = getIfCond())
+  if (Value ifCond = this->ifCond())
     printer << " " << ParallelOp::getIfKeyword() << "(" << ifCond << ")";
 
   // self()?
-  if (Value selfCond = getSelfCond())
+  if (Value selfCond = this->selfCond())
     printer << " " << ParallelOp::getSelfKeyword() << "(" << selfCond << ")";
 
   // reduction()?
-  printOperandList(getReductionOperands(), ParallelOp::getReductionKeyword(),
+  printOperandList(reductionOperands(), ParallelOp::getReductionKeyword(),
                    printer);
 
   // copy()?
-  printOperandList(getCopyOperands(), ParallelOp::getCopyKeyword(), printer);
+  printOperandList(copyOperands(), ParallelOp::getCopyKeyword(), printer);
 
   // copyin()?
-  printOperandList(getCopyinOperands(), ParallelOp::getCopyinKeyword(),
-                   printer);
+  printOperandList(copyinOperands(), ParallelOp::getCopyinKeyword(), printer);
 
   // copyin_readonly()?
-  printOperandList(getCopyinReadonlyOperands(),
+  printOperandList(copyinReadonlyOperands(),
                    ParallelOp::getCopyinReadonlyKeyword(), printer);
 
   // copyout()?
-  printOperandList(getCopyoutOperands(), ParallelOp::getCopyoutKeyword(),
-                   printer);
+  printOperandList(copyoutOperands(), ParallelOp::getCopyoutKeyword(), printer);
 
   // copyout_zero()?
-  printOperandList(getCopyoutZeroOperands(),
-                   ParallelOp::getCopyoutZeroKeyword(), printer);
-
-  // create()?
-  printOperandList(getCreateOperands(), ParallelOp::getCreateKeyword(),
+  printOperandList(copyoutZeroOperands(), ParallelOp::getCopyoutZeroKeyword(),
                    printer);
 
+  // create()?
+  printOperandList(createOperands(), ParallelOp::getCreateKeyword(), printer);
+
   // create_zero()?
-  printOperandList(getCreateZeroOperands(), ParallelOp::getCreateZeroKeyword(),
+  printOperandList(createZeroOperands(), ParallelOp::getCreateZeroKeyword(),
                    printer);
 
   // no_create()?
-  printOperandList(getNoCreateOperands(), ParallelOp::getNoCreateKeyword(),
+  printOperandList(noCreateOperands(), ParallelOp::getNoCreateKeyword(),
                    printer);
 
   // present()?
-  printOperandList(getPresentOperands(), ParallelOp::getPresentKeyword(),
-                   printer);
+  printOperandList(presentOperands(), ParallelOp::getPresentKeyword(), printer);
 
   // deviceptr()?
-  printOperandList(getDevicePtrOperands(), ParallelOp::getDevicePtrKeyword(),
+  printOperandList(devicePtrOperands(), ParallelOp::getDevicePtrKeyword(),
                    printer);
 
   // attach()?
-  printOperandList(getAttachOperands(), ParallelOp::getAttachKeyword(),
-                   printer);
+  printOperandList(attachOperands(), ParallelOp::getAttachKeyword(), printer);
 
   // private()?
-  printOperandList(getGangPrivateOperands(), ParallelOp::getPrivateKeyword(),
+  printOperandList(gangPrivateOperands(), ParallelOp::getPrivateKeyword(),
                    printer);
 
   // firstprivate()?
-  printOperandList(getGangFirstPrivateOperands(),
+  printOperandList(gangFirstPrivateOperands(),
                    ParallelOp::getFirstPrivateKeyword(), printer);
 
   printer << ' ';
-  printer.printRegion(getRegion(),
+  printer.printRegion(region(),
                       /*printEntryBlockArgs=*/false,
                       /*printBlockTerminators=*/true);
   printer.printOptionalAttrDictWithKeyword(
@@ -488,23 +482,23 @@ void ParallelOp::print(OpAsmPrinter &printer) {
 }
 
 unsigned ParallelOp::getNumDataOperands() {
-  return getReductionOperands().size() + getCopyOperands().size() +
-         getCopyinOperands().size() + getCopyinReadonlyOperands().size() +
-         getCopyoutOperands().size() + getCopyoutZeroOperands().size() +
-         getCreateOperands().size() + getCreateZeroOperands().size() +
-         getNoCreateOperands().size() + getPresentOperands().size() +
-         getDevicePtrOperands().size() + getAttachOperands().size() +
-         getGangPrivateOperands().size() + getGangFirstPrivateOperands().size();
+  return reductionOperands().size() + copyOperands().size() +
+         copyinOperands().size() + copyinReadonlyOperands().size() +
+         copyoutOperands().size() + copyoutZeroOperands().size() +
+         createOperands().size() + createZeroOperands().size() +
+         noCreateOperands().size() + presentOperands().size() +
+         devicePtrOperands().size() + attachOperands().size() +
+         gangPrivateOperands().size() + gangFirstPrivateOperands().size();
 }
 
 Value ParallelOp::getDataOperand(unsigned i) {
-  unsigned numOptional = getAsync() ? 1 : 0;
-  numOptional += getNumGangs() ? 1 : 0;
-  numOptional += getNumWorkers() ? 1 : 0;
-  numOptional += getVectorLength() ? 1 : 0;
-  numOptional += getIfCond() ? 1 : 0;
-  numOptional += getSelfCond() ? 1 : 0;
-  return getOperand(getWaitOperands().size() + numOptional + i);
+  unsigned numOptional = async() ? 1 : 0;
+  numOptional += numGangs() ? 1 : 0;
+  numOptional += numWorkers() ? 1 : 0;
+  numOptional += vectorLength() ? 1 : 0;
+  numOptional += ifCond() ? 1 : 0;
+  numOptional += selfCond() ? 1 : 0;
+  return getOperand(waitOperands().size() + numOptional + i);
 }
 
 //===----------------------------------------------------------------------===//
@@ -537,13 +531,13 @@ ParseResult LoopOp::parse(OpAsmParser &parser, OperationState &result) {
   if (succeeded(parser.parseOptionalLParen())) {
     gangNum = parserOptionalOperandAndTypeWithPrefix(
         parser, result, LoopOp::getGangNumKeyword());
-    if (gangNum.has_value() && failed(*gangNum))
+    if (gangNum.hasValue() && failed(*gangNum))
       return failure();
     // FIXME: Comma should require subsequent operands.
     (void)parser.parseOptionalComma();
     gangStatic = parserOptionalOperandAndTypeWithPrefix(
         parser, result, LoopOp::getGangStaticKeyword());
-    if (gangStatic.has_value() && failed(*gangStatic))
+    if (gangStatic.hasValue() && failed(*gangStatic))
       return failure();
     // FIXME: Why allow optional last commas?
     (void)parser.parseOptionalComma();
@@ -557,7 +551,7 @@ ParseResult LoopOp::parse(OpAsmParser &parser, OperationState &result) {
 
   // optional worker operand
   worker = parseOptionalOperandAndType(parser, result);
-  if (worker.has_value() && failed(*worker))
+  if (worker.hasValue() && failed(*worker))
     return failure();
 
   // vector?
@@ -566,7 +560,7 @@ ParseResult LoopOp::parse(OpAsmParser &parser, OperationState &result) {
 
   // optional vector operand
   vector = parseOptionalOperandAndType(parser, result);
-  if (vector.has_value() && failed(*vector))
+  if (vector.hasValue() && failed(*vector))
     return failure();
 
   // tile()?
@@ -585,7 +579,7 @@ ParseResult LoopOp::parse(OpAsmParser &parser, OperationState &result) {
     return failure();
 
   if (executionMapping != acc::OpenACCExecMapping::NONE)
-    result.addAttribute(LoopOp::getExecutionMappingAttrStrName(),
+    result.addAttribute(LoopOp::getExecutionMappingAttrName(),
                         builder.getI64IntegerAttr(executionMapping));
 
   // Parse optional results in case there is a reduce.
@@ -596,11 +590,11 @@ ParseResult LoopOp::parse(OpAsmParser &parser, OperationState &result) {
     return failure();
 
   result.addAttribute(LoopOp::getOperandSegmentSizeAttr(),
-                      builder.getDenseI32ArrayAttr(
-                          {static_cast<int32_t>(gangNum.has_value() ? 1 : 0),
-                           static_cast<int32_t>(gangStatic.has_value() ? 1 : 0),
-                           static_cast<int32_t>(worker.has_value() ? 1 : 0),
-                           static_cast<int32_t>(vector.has_value() ? 1 : 0),
+                      builder.getI32VectorAttr(
+                          {static_cast<int32_t>(gangNum.hasValue() ? 1 : 0),
+                           static_cast<int32_t>(gangStatic.hasValue() ? 1 : 0),
+                           static_cast<int32_t>(worker.hasValue() ? 1 : 0),
+                           static_cast<int32_t>(vector.hasValue() ? 1 : 0),
                            static_cast<int32_t>(tileOperands.size()),
                            static_cast<int32_t>(privateOperands.size()),
                            static_cast<int32_t>(reductionOperands.size())}));
@@ -612,11 +606,11 @@ ParseResult LoopOp::parse(OpAsmParser &parser, OperationState &result) {
 }
 
 void LoopOp::print(OpAsmPrinter &printer) {
-  unsigned execMapping = getExecMapping();
+  unsigned execMapping = exec_mapping();
   if (execMapping & OpenACCExecMapping::GANG) {
     printer << " " << LoopOp::getGangKeyword();
-    Value gangNum = getGangNum();
-    Value gangStatic = getGangStatic();
+    Value gangNum = this->gangNum();
+    Value gangStatic = this->gangStatic();
 
     // Print optional gang operands
     if (gangNum || gangStatic) {
@@ -638,7 +632,7 @@ void LoopOp::print(OpAsmPrinter &printer) {
     printer << " " << LoopOp::getWorkerKeyword();
 
     // Print optional worker operand if present
-    if (Value workerNum = getWorkerNum())
+    if (Value workerNum = this->workerNum())
       printer << "(" << workerNum << ": " << workerNum.getType() << ")";
   }
 
@@ -646,49 +640,47 @@ void LoopOp::print(OpAsmPrinter &printer) {
     printer << " " << LoopOp::getVectorKeyword();
 
     // Print optional vector operand if present
-    if (Value vectorLength = this->getVectorLength())
+    if (Value vectorLength = this->vectorLength())
       printer << "(" << vectorLength << ": " << vectorLength.getType() << ")";
   }
 
   // tile()?
-  printOperandList(getTileOperands(), LoopOp::getTileKeyword(), printer);
+  printOperandList(tileOperands(), LoopOp::getTileKeyword(), printer);
 
   // private()?
-  printOperandList(getPrivateOperands(), LoopOp::getPrivateKeyword(), printer);
+  printOperandList(privateOperands(), LoopOp::getPrivateKeyword(), printer);
 
   // reduction()?
-  printOperandList(getReductionOperands(), LoopOp::getReductionKeyword(),
-                   printer);
+  printOperandList(reductionOperands(), LoopOp::getReductionKeyword(), printer);
 
   if (getNumResults() > 0)
     printer << " -> (" << getResultTypes() << ")";
 
   printer << ' ';
-  printer.printRegion(getRegion(),
+  printer.printRegion(region(),
                       /*printEntryBlockArgs=*/false,
                       /*printBlockTerminators=*/true);
 
   printer.printOptionalAttrDictWithKeyword(
-      (*this)->getAttrs(), {LoopOp::getExecutionMappingAttrStrName(),
+      (*this)->getAttrs(), {LoopOp::getExecutionMappingAttrName(),
                             LoopOp::getOperandSegmentSizeAttr()});
 }
 
 LogicalResult acc::LoopOp::verify() {
   // auto, independent and seq attribute are mutually exclusive.
-  if ((getAuto_() && (getIndependent() || getSeq())) ||
-      (getIndependent() && getSeq())) {
-    return emitError("only one of " + acc::LoopOp::getAutoAttrStrName() + ", " +
-                     acc::LoopOp::getIndependentAttrStrName() + ", " +
-                     acc::LoopOp::getSeqAttrStrName() +
+  if ((auto_() && (independent() || seq())) || (independent() && seq())) {
+    return emitError("only one of " + acc::LoopOp::getAutoAttrName() + ", " +
+                     acc::LoopOp::getIndependentAttrName() + ", " +
+                     acc::LoopOp::getSeqAttrName() +
                      " can be present at the same time");
   }
 
   // Gang, worker and vector are incompatible with seq.
-  if (getSeq() && getExecMapping() != OpenACCExecMapping::NONE)
+  if (seq() && exec_mapping() != OpenACCExecMapping::NONE)
     return emitError("gang, worker or vector cannot appear with the seq attr");
 
   // Check non-empty body().
-  if (getRegion().empty())
+  if (region().empty())
     return emitError("expected non-empty body.");
 
   return success();
@@ -702,23 +694,23 @@ LogicalResult acc::DataOp::verify() {
   // 2.6.5. Data Construct restriction
   // At least one copy, copyin, copyout, create, no_create, present, deviceptr,
   // attach, or default clause must appear on a data construct.
-  if (getOperands().empty() && !getDefaultAttr())
+  if (getOperands().empty() && !defaultAttr())
     return emitError("at least one operand or the default attribute "
                      "must appear on the data operation");
   return success();
 }
 
 unsigned DataOp::getNumDataOperands() {
-  return getCopyOperands().size() + getCopyinOperands().size() +
-         getCopyinReadonlyOperands().size() + getCopyoutOperands().size() +
-         getCopyoutZeroOperands().size() + getCreateOperands().size() +
-         getCreateZeroOperands().size() + getNoCreateOperands().size() +
-         getPresentOperands().size() + getDeviceptrOperands().size() +
-         getAttachOperands().size();
+  return copyOperands().size() + copyinOperands().size() +
+         copyinReadonlyOperands().size() + copyoutOperands().size() +
+         copyoutZeroOperands().size() + createOperands().size() +
+         createZeroOperands().size() + noCreateOperands().size() +
+         presentOperands().size() + deviceptrOperands().size() +
+         attachOperands().size();
 }
 
 Value DataOp::getDataOperand(unsigned i) {
-  unsigned numOptional = getIfCond() ? 1 : 0;
+  unsigned numOptional = ifCond() ? 1 : 0;
   return getOperand(numOptional + i);
 }
 
@@ -730,38 +722,38 @@ LogicalResult acc::ExitDataOp::verify() {
   // 2.6.6. Data Exit Directive restriction
   // At least one copyout, delete, or detach clause must appear on an exit data
   // directive.
-  if (getCopyoutOperands().empty() && getDeleteOperands().empty() &&
-      getDetachOperands().empty())
+  if (copyoutOperands().empty() && deleteOperands().empty() &&
+      detachOperands().empty())
     return emitError(
         "at least one operand in copyout, delete or detach must appear on the "
         "exit data operation");
 
   // The async attribute represent the async clause without value. Therefore the
   // attribute and operand cannot appear at the same time.
-  if (getAsyncOperand() && getAsync())
+  if (asyncOperand() && async())
     return emitError("async attribute cannot appear with asyncOperand");
 
   // The wait attribute represent the wait clause without values. Therefore the
   // attribute and operands cannot appear at the same time.
-  if (!getWaitOperands().empty() && getWait())
+  if (!waitOperands().empty() && wait())
     return emitError("wait attribute cannot appear with waitOperands");
 
-  if (getWaitDevnum() && getWaitOperands().empty())
+  if (waitDevnum() && waitOperands().empty())
     return emitError("wait_devnum cannot appear without waitOperands");
 
   return success();
 }
 
 unsigned ExitDataOp::getNumDataOperands() {
-  return getCopyoutOperands().size() + getDeleteOperands().size() +
-         getDetachOperands().size();
+  return copyoutOperands().size() + deleteOperands().size() +
+         detachOperands().size();
 }
 
 Value ExitDataOp::getDataOperand(unsigned i) {
-  unsigned numOptional = getIfCond() ? 1 : 0;
-  numOptional += getAsyncOperand() ? 1 : 0;
-  numOptional += getWaitDevnum() ? 1 : 0;
-  return getOperand(getWaitOperands().size() + numOptional + i);
+  unsigned numOptional = ifCond() ? 1 : 0;
+  numOptional += asyncOperand() ? 1 : 0;
+  numOptional += waitDevnum() ? 1 : 0;
+  return getOperand(waitOperands().size() + numOptional + i);
 }
 
 void ExitDataOp::getCanonicalizationPatterns(RewritePatternSet &results,
@@ -777,38 +769,38 @@ LogicalResult acc::EnterDataOp::verify() {
   // 2.6.6. Data Enter Directive restriction
   // At least one copyin, create, or attach clause must appear on an enter data
   // directive.
-  if (getCopyinOperands().empty() && getCreateOperands().empty() &&
-      getCreateZeroOperands().empty() && getAttachOperands().empty())
+  if (copyinOperands().empty() && createOperands().empty() &&
+      createZeroOperands().empty() && attachOperands().empty())
     return emitError(
         "at least one operand in copyin, create, "
         "create_zero or attach must appear on the enter data operation");
 
   // The async attribute represent the async clause without value. Therefore the
   // attribute and operand cannot appear at the same time.
-  if (getAsyncOperand() && getAsync())
+  if (asyncOperand() && async())
     return emitError("async attribute cannot appear with asyncOperand");
 
   // The wait attribute represent the wait clause without values. Therefore the
   // attribute and operands cannot appear at the same time.
-  if (!getWaitOperands().empty() && getWait())
+  if (!waitOperands().empty() && wait())
     return emitError("wait attribute cannot appear with waitOperands");
 
-  if (getWaitDevnum() && getWaitOperands().empty())
+  if (waitDevnum() && waitOperands().empty())
     return emitError("wait_devnum cannot appear without waitOperands");
 
   return success();
 }
 
 unsigned EnterDataOp::getNumDataOperands() {
-  return getCopyinOperands().size() + getCreateOperands().size() +
-         getCreateZeroOperands().size() + getAttachOperands().size();
+  return copyinOperands().size() + createOperands().size() +
+         createZeroOperands().size() + attachOperands().size();
 }
 
 Value EnterDataOp::getDataOperand(unsigned i) {
-  unsigned numOptional = getIfCond() ? 1 : 0;
-  numOptional += getAsyncOperand() ? 1 : 0;
-  numOptional += getWaitDevnum() ? 1 : 0;
-  return getOperand(getWaitOperands().size() + numOptional + i);
+  unsigned numOptional = ifCond() ? 1 : 0;
+  numOptional += asyncOperand() ? 1 : 0;
+  numOptional += waitDevnum() ? 1 : 0;
+  return getOperand(waitOperands().size() + numOptional + i);
 }
 
 void EnterDataOp::getCanonicalizationPatterns(RewritePatternSet &results,
@@ -846,35 +838,35 @@ LogicalResult acc::ShutdownOp::verify() {
 
 LogicalResult acc::UpdateOp::verify() {
   // At least one of host or device should have a value.
-  if (getHostOperands().empty() && getDeviceOperands().empty())
+  if (hostOperands().empty() && deviceOperands().empty())
     return emitError(
         "at least one value must be present in hostOperands or deviceOperands");
 
   // The async attribute represent the async clause without value. Therefore the
   // attribute and operand cannot appear at the same time.
-  if (getAsyncOperand() && getAsync())
+  if (asyncOperand() && async())
     return emitError("async attribute cannot appear with asyncOperand");
 
   // The wait attribute represent the wait clause without values. Therefore the
   // attribute and operands cannot appear at the same time.
-  if (!getWaitOperands().empty() && getWait())
+  if (!waitOperands().empty() && wait())
     return emitError("wait attribute cannot appear with waitOperands");
 
-  if (getWaitDevnum() && getWaitOperands().empty())
+  if (waitDevnum() && waitOperands().empty())
     return emitError("wait_devnum cannot appear without waitOperands");
 
   return success();
 }
 
 unsigned UpdateOp::getNumDataOperands() {
-  return getHostOperands().size() + getDeviceOperands().size();
+  return hostOperands().size() + deviceOperands().size();
 }
 
 Value UpdateOp::getDataOperand(unsigned i) {
-  unsigned numOptional = getAsyncOperand() ? 1 : 0;
-  numOptional += getWaitDevnum() ? 1 : 0;
-  numOptional += getIfCond() ? 1 : 0;
-  return getOperand(getWaitOperands().size() + getDeviceTypeOperands().size() +
+  unsigned numOptional = asyncOperand() ? 1 : 0;
+  numOptional += waitDevnum() ? 1 : 0;
+  numOptional += ifCond() ? 1 : 0;
+  return getOperand(waitOperands().size() + deviceTypeOperands().size() +
                     numOptional + i);
 }
 
@@ -890,10 +882,10 @@ void UpdateOp::getCanonicalizationPatterns(RewritePatternSet &results,
 LogicalResult acc::WaitOp::verify() {
   // The async attribute represent the async clause without value. Therefore the
   // attribute and operand cannot appear at the same time.
-  if (getAsyncOperand() && getAsync())
+  if (asyncOperand() && async())
     return emitError("async attribute cannot appear with asyncOperand");
 
-  if (getWaitDevnum() && getWaitOperands().empty())
+  if (waitDevnum() && waitOperands().empty())
     return emitError("wait_devnum cannot appear without waitOperands");
 
   return success();

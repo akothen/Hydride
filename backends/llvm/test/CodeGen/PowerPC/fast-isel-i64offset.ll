@@ -3,11 +3,11 @@
 
 ; Verify that pointer offsets larger than 32 bits work correctly.
 
-define void @test(ptr %array) {
+define void @test(i32* %array) {
 ; CHECK-LABEL: test:
 ; CHECK-NOT: li {{[0-9]+}}, -8
-  %element = getelementptr i32, ptr %array, i64 2147483646
-  store i32 1234, ptr %element
+  %element = getelementptr i32, i32* %array, i64 2147483646
+  store i32 1234, i32* %element
   ret void
 }
 

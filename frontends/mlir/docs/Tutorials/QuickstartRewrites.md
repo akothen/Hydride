@@ -45,7 +45,7 @@ operations are generated from. To define an operation one needs to specify:
 
 ```tablegen
 def TFL_LeakyReluOp: TFL_Op<TFL_Dialect, "leaky_relu",
-                            [NoMemoryEffect, SameValueType]>,
+                            [NoSideEffect, SameValueType]>,
                      Results<(outs Tensor)> {
   let arguments = (ins
     F32Tensor:$x,

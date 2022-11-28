@@ -1002,21 +1002,24 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   // Copy dst, if it is present in original then should also be present in SDWA
   MachineOperand *Dst = TII->getNamedOperand(MI, AMDGPU::OpName::vdst);
   if (Dst) {
-    assert(AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::vdst));
+    assert(AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::vdst) != -1);
     SDWAInst.add(*Dst);
   } else if ((Dst = TII->getNamedOperand(MI, AMDGPU::OpName::sdst))) {
-    assert(Dst && AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::sdst));
+    assert(Dst &&
+           AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::sdst) != -1);
     SDWAInst.add(*Dst);
   } else {
-    assert(AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::sdst));
+    assert(AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::sdst) != -1);
     SDWAInst.addReg(TRI->getVCC(), RegState::Define);
   }
 
   // Copy src0, initialize src0_modifiers. All sdwa instructions has src0 and
   // src0_modifiers (except for v_nop_sdwa, but it can't get here)
   MachineOperand *Src0 = TII->getNamedOperand(MI, AMDGPU::OpName::src0);
-  assert(Src0 && AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::src0) &&
-         AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::src0_modifiers));
+  assert(
+    Src0 &&
+    AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::src0) != -1 &&
+    AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::src0_modifiers) != -1);
   if (auto *Mod = TII->getNamedOperand(MI, AMDGPU::OpName::src0_modifiers))
     SDWAInst.addImm(Mod->getImm());
   else
@@ -1026,8 +1029,9 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   // Copy src1 if present, initialize src1_modifiers.
   MachineOperand *Src1 = TII->getNamedOperand(MI, AMDGPU::OpName::src1);
   if (Src1) {
-    assert(AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::src1) &&
-           AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::src1_modifiers));
+    assert(
+      AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::src1) != -1 &&
+      AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::src1_modifiers) != -1);
     if (auto *Mod = TII->getNamedOperand(MI, AMDGPU::OpName::src1_modifiers))
       SDWAInst.addImm(Mod->getImm());
     else
@@ -1046,7 +1050,7 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   }
 
   // Copy clamp if present, initialize otherwise
-  assert(AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::clamp));
+  assert(AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::clamp) != -1);
   MachineOperand *Clamp = TII->getNamedOperand(MI, AMDGPU::OpName::clamp);
   if (Clamp) {
     SDWAInst.add(*Clamp);
@@ -1055,7 +1059,7 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   }
 
   // Copy omod if present, initialize otherwise if needed
-  if (AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::omod)) {
+  if (AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::omod) != -1) {
     MachineOperand *OMod = TII->getNamedOperand(MI, AMDGPU::OpName::omod);
     if (OMod) {
       SDWAInst.add(*OMod);
@@ -1065,7 +1069,7 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   }
 
   // Copy dst_sel if present, initialize otherwise if needed
-  if (AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::dst_sel)) {
+  if (AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::dst_sel) != -1) {
     MachineOperand *DstSel = TII->getNamedOperand(MI, AMDGPU::OpName::dst_sel);
     if (DstSel) {
       SDWAInst.add(*DstSel);
@@ -1075,7 +1079,7 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   }
 
   // Copy dst_unused if present, initialize otherwise if needed
-  if (AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::dst_unused)) {
+  if (AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::dst_unused) != -1) {
     MachineOperand *DstUnused = TII->getNamedOperand(MI, AMDGPU::OpName::dst_unused);
     if (DstUnused) {
       SDWAInst.add(*DstUnused);
@@ -1085,7 +1089,7 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
   }
 
   // Copy src0_sel if present, initialize otherwise
-  assert(AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::src0_sel));
+  assert(AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::src0_sel) != -1);
   MachineOperand *Src0Sel = TII->getNamedOperand(MI, AMDGPU::OpName::src0_sel);
   if (Src0Sel) {
     SDWAInst.add(*Src0Sel);
@@ -1095,7 +1099,7 @@ bool SIPeepholeSDWA::convertToSDWA(MachineInstr &MI,
 
   // Copy src1_sel if present, initialize otherwise if needed
   if (Src1) {
-    assert(AMDGPU::hasNamedOperand(SDWAOpcode, AMDGPU::OpName::src1_sel));
+    assert(AMDGPU::getNamedOperandIdx(SDWAOpcode, AMDGPU::OpName::src1_sel) != -1);
     MachineOperand *Src1Sel = TII->getNamedOperand(MI, AMDGPU::OpName::src1_sel);
     if (Src1Sel) {
       SDWAInst.add(*Src1Sel);

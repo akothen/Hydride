@@ -2998,7 +2998,7 @@ TreePatternNodePtr TreePattern::ParseTreePattern(Init *TheInit,
     // chain.
     if (Int.IS.RetVTs.empty())
       Operator = getDAGPatterns().get_intrinsic_void_sdnode();
-    else if (!Int.ME.doesNotAccessMemory() || Int.hasSideEffects)
+    else if (Int.ModRef != CodeGenIntrinsic::NoMem || Int.hasSideEffects)
       // Has side-effects, requires chain.
       Operator = getDAGPatterns().get_intrinsic_w_chain_sdnode();
     else // Otherwise, no chain.
@@ -3637,17 +3637,16 @@ public:
     if (N->NodeHasProperty(SDNPHasChain, CDP)) hasChain = true;
 
     if (const CodeGenIntrinsic *IntInfo = N->getIntrinsicInfo(CDP)) {
-      ModRefInfo MR = IntInfo->ME.getModRef();
       // If this is an intrinsic, analyze it.
-      if (isRefSet(MR))
-        mayLoad = true; // These may load memory.
+      if (IntInfo->ModRef & CodeGenIntrinsic::MR_Ref)
+        mayLoad = true;// These may load memory.
 
-      if (isModSet(MR))
-        mayStore = true; // Intrinsics that can write to memory are 'mayStore'.
+      if (IntInfo->ModRef & CodeGenIntrinsic::MR_Mod)
+        mayStore = true;// Intrinsics that can write to memory are 'mayStore'.
 
-      // Consider intrinsics that don't specify any restrictions on memory
-      // effects as having a side-effect.
-      if (IntInfo->ME == MemoryEffects::unknown() || IntInfo->hasSideEffects)
+      if (IntInfo->ModRef >= CodeGenIntrinsic::ReadWriteMem ||
+          IntInfo->hasSideEffects)
+        // ReadWriteMem intrinsics can have other strange effects.
         hasSideEffects = true;
     }
   }

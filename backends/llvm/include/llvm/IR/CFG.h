@@ -47,7 +47,7 @@ public:
   using pointer = Ptr *;
   using reference = Ptr *;
 
-protected:
+private:
   using Self = PredIterator<Ptr, USE_iterator>;
   USE_iterator It;
 

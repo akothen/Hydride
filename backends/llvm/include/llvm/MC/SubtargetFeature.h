@@ -40,11 +40,14 @@ const unsigned MAX_SUBTARGET_FEATURES = MAX_SUBTARGET_WORDS * 64;
 class FeatureBitset {
   static_assert((MAX_SUBTARGET_FEATURES % 64) == 0,
                 "Should be a multiple of 64!");
-  std::array<uint64_t, MAX_SUBTARGET_WORDS> Bits{};
+  // This cannot be a std::array, operator[] is not constexpr until C++17.
+  uint64_t Bits[MAX_SUBTARGET_WORDS] = {};
 
 protected:
-  constexpr FeatureBitset(const std::array<uint64_t, MAX_SUBTARGET_WORDS> &B)
-      : Bits{B} {}
+  constexpr FeatureBitset(const std::array<uint64_t, MAX_SUBTARGET_WORDS> &B) {
+    for (unsigned I = 0; I != B.size(); ++I)
+      Bits[I] = B[I];
+  }
 
 public:
   constexpr FeatureBitset() = default;
@@ -100,7 +103,7 @@ public:
   }
 
   constexpr FeatureBitset &operator^=(const FeatureBitset &RHS) {
-    for (unsigned I = 0, E = Bits.size(); I != E; ++I) {
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I) {
       Bits[I] ^= RHS.Bits[I];
     }
     return *this;
@@ -112,7 +115,7 @@ public:
   }
 
   constexpr FeatureBitset &operator&=(const FeatureBitset &RHS) {
-    for (unsigned I = 0, E = Bits.size(); I != E; ++I) {
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I) {
       Bits[I] &= RHS.Bits[I];
     }
     return *this;
@@ -124,7 +127,7 @@ public:
   }
 
   constexpr FeatureBitset &operator|=(const FeatureBitset &RHS) {
-    for (unsigned I = 0, E = Bits.size(); I != E; ++I) {
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I) {
       Bits[I] |= RHS.Bits[I];
     }
     return *this;

@@ -32,9 +32,7 @@ Type mlir::getElementTypeOrSelf(Value val) {
 }
 
 Type mlir::getElementTypeOrSelf(Attribute attr) {
-  if (auto typedAttr = attr.dyn_cast<TypedAttr>())
-    return getElementTypeOrSelf(typedAttr.getType());
-  return {};
+  return getElementTypeOrSelf(attr.getType());
 }
 
 SmallVector<Type, 10> mlir::getFlattenedTypes(TupleType t) {

@@ -155,7 +155,7 @@ public:
       : ExprAST(Expr_Return, std::move(loc)), expr(std::move(expr)) {}
 
   llvm::Optional<ExprAST *> getExpr() {
-    if (expr.has_value())
+    if (expr.hasValue())
       return expr->get();
     return llvm::None;
   }

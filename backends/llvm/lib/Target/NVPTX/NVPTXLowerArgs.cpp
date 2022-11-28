@@ -98,7 +98,6 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
 #include "llvm/Pass.h"
-#include <numeric>
 #include <queue>
 
 #define DEBUG_TYPE "nvptx-lower-args"
@@ -304,7 +303,7 @@ static void adjustByValArgAlignment(Argument *Arg, Value *ArgInParamAS,
   }
 
   for (Load &CurLoad : Loads) {
-    Align NewLoadAlign(std::gcd(NewArgAlign, CurLoad.Offset));
+    Align NewLoadAlign(greatestCommonDivisor(NewArgAlign, CurLoad.Offset));
     Align CurLoadAlign(CurLoad.Inst->getAlign());
     CurLoad.Inst->setAlignment(std::max(NewLoadAlign, CurLoadAlign));
   }

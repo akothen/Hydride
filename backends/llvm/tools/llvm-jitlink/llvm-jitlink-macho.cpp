@@ -27,8 +27,8 @@ static bool isMachOStubsSection(Section &S) {
 }
 
 static Expected<Edge &> getFirstRelocationEdge(LinkGraph &G, Block &B) {
-  auto EItr =
-      llvm::find_if(B.edges(), [](Edge &E) { return E.isRelocation(); });
+  auto EItr = std::find_if(B.edges().begin(), B.edges().end(),
+                           [](Edge &E) { return E.isRelocation(); });
   if (EItr == B.edges().end())
     return make_error<StringError>("GOT entry in " + G.getName() + ", \"" +
                                        B.getSection().getName() +
@@ -84,12 +84,13 @@ Error registerMachOGraphInfo(Session &S, LinkGraph &G) {
   for (auto &Sec : G.sections()) {
     LLVM_DEBUG({
       dbgs() << "  Section \"" << Sec.getName() << "\": "
-             << (Sec.symbols().empty() ? "empty. skipping." : "processing...")
+             << (llvm::empty(Sec.symbols()) ? "empty. skipping."
+                                            : "processing...")
              << "\n";
     });
 
     // Skip empty sections.
-    if (Sec.symbols().empty())
+    if (llvm::empty(Sec.symbols()))
       continue;
 
     if (FileInfo.SectionInfos.count(Sec.getName()))

@@ -159,17 +159,16 @@ static SectionKind computeSectionKind(unsigned Flags) {
 bool COFFAsmParser::ParseSectionFlags(StringRef SectionName,
                                       StringRef FlagsString, unsigned *Flags) {
   enum {
-    None = 0,
-    Alloc = 1 << 0,
-    Code = 1 << 1,
-    Load = 1 << 2,
-    InitData = 1 << 3,
-    Shared = 1 << 4,
-    NoLoad = 1 << 5,
-    NoRead = 1 << 6,
-    NoWrite = 1 << 7,
+    None        = 0,
+    Alloc       = 1 << 0,
+    Code        = 1 << 1,
+    Load        = 1 << 2,
+    InitData    = 1 << 3,
+    Shared      = 1 << 4,
+    NoLoad      = 1 << 5,
+    NoRead      = 1 << 6,
+    NoWrite     = 1 << 7,
     Discardable = 1 << 8,
-    Info = 1 << 9,
   };
 
   bool ReadOnlyRemoved = false;
@@ -239,10 +238,6 @@ bool COFFAsmParser::ParseSectionFlags(StringRef SectionName,
       SecFlags |= NoRead | NoWrite;
       break;
 
-    case 'i': // info
-      SecFlags |= Info;
-      break;
-
     default:
       return TokError("unknown flag");
     }
@@ -270,8 +265,6 @@ bool COFFAsmParser::ParseSectionFlags(StringRef SectionName,
     *Flags |= COFF::IMAGE_SCN_MEM_WRITE;
   if (SecFlags & Shared)
     *Flags |= COFF::IMAGE_SCN_MEM_SHARED;
-  if (SecFlags & Info)
-    *Flags |= COFF::IMAGE_SCN_LNK_INFO;
 
   return false;
 }

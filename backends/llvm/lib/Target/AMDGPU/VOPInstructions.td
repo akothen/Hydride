@@ -24,9 +24,6 @@ class LetDummies {
   list<SchedReadWrite> SchedRW;
   list<Register> Uses;
   list<Register> Defs;
-  list<Predicate> OtherPredicates;
-  Predicate AssemblerPredicate;
-  string DecoderNamespace;
 }
 
 class VOP <string opName> {
@@ -64,8 +61,6 @@ class VOP_Pseudo <string opName, string suffix, VOPProfile P, dag outs, dag ins,
   let UseNamedOperandTable = 1;
 
   string Mnemonic = opName;
-  Instruction Opcode = !cast<Instruction>(NAME);
-  bit IsTrue16 = P.IsTrue16;
   VOPProfile Pfl = P;
 
   string AsmOperands;
@@ -1356,13 +1351,14 @@ let AssemblerPredicate = isGFX11Only,
     foreach _ = BoolToList<ps.Pfl.HasOpSel>.ret in
       def _e64_gfx11 :
         VOP3_Real<ps, SIEncodingFamily.GFX11>,
-        VOP3OpSel_gfx11<op, ps.Pfl>;
+        VOP3OpSel_gfx11<op, ps.Pfl>,
+        MnemonicAlias<ps.Mnemonic, asmName>, Requires<[isGFX11Plus]>;
     foreach _ = BoolToList<!not(ps.Pfl.HasOpSel)>.ret in
       def _e64_gfx11 :
         VOP3_Real<ps, SIEncodingFamily.GFX11>,
-        VOP3e_gfx11<op, ps.Pfl>;
+        VOP3e_gfx11<op, ps.Pfl>,
+        MnemonicAlias<ps.Mnemonic, asmName>, Requires<[isGFX11Plus]>;
     }
-    def _gfx11_VOP3_alias : MnemonicAlias<ps.Mnemonic, asmName>, Requires<[isGFX11Plus]>, LetDummies;
   }
   // for READLANE/WRITELANE
   multiclass VOP3_Real_No_Suffix_gfx11<bits<10> op, string opName = NAME> {
@@ -1465,10 +1461,6 @@ multiclass VOP3Only_Realtriple_with_name_gfx11<bits<10> op, string opName,
                                                string asmName> :
   VOP3_Realtriple_with_name_gfx11<op, opName, asmName, 1>;
 
-multiclass VOP3Only_Realtriple_t16_gfx11<bits<10> op, string asmName,
-                                     string opName = NAME>
-    : VOP3Only_Realtriple_with_name_gfx11<op, opName, asmName>;
-
 multiclass VOP3be_Realtriple_gfx11<
     bits<10> op, bit isSingle = 0, string opName = NAME,
     string asmName = !cast<VOP_Pseudo>(opName#"_e64").Mnemonic> :
@@ -1511,12 +1503,3 @@ class VOPC64Table <string Format> : GenericTable {
 
 def VOPC64DPPTable : VOPC64Table<"DPP">;
 def VOPC64DPP8Table : VOPC64Table<"DPP8">;
-
-def VOPTrue16Table : GenericTable {
-  let FilterClass = "VOP_Pseudo";
-  let CppTypeName = "VOPTrue16Info";
-  let Fields = ["Opcode", "IsTrue16"];
-
-  let PrimaryKey = ["Opcode"];
-  let PrimaryKeyName = "getTrue16OpcodeHelper";
-}

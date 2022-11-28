@@ -16,8 +16,7 @@
 using namespace mlir;
 
 raw_indented_ostream &
-mlir::raw_indented_ostream::printReindented(StringRef str,
-                                            StringRef extraPrefix) {
+mlir::raw_indented_ostream::printReindented(StringRef str) {
   StringRef output = str;
   // Skip empty lines.
   while (!output.empty()) {
@@ -40,9 +39,7 @@ mlir::raw_indented_ostream::printReindented(StringRef str,
     remaining = split.second;
   }
   // Print, skipping the empty lines.
-  std::swap(currentExtraPrefix, extraPrefix);
   *this << output;
-  std::swap(currentExtraPrefix, extraPrefix);
   leadingWs = 0;
   return *this;
 }
@@ -52,7 +49,7 @@ void mlir::raw_indented_ostream::write_impl(const char *ptr, size_t size) {
   // Print out indented.
   auto print = [this](StringRef str) {
     if (atStartOfLine)
-      os.indent(currentIndent) << currentExtraPrefix << str.substr(leadingWs);
+      os.indent(currentIndent) << str.substr(leadingWs);
     else
       os << str.substr(leadingWs);
   };
@@ -69,9 +66,8 @@ void mlir::raw_indented_ostream::write_impl(const char *ptr, size_t size) {
 
     auto split =
         std::make_pair(str.slice(0, idx), str.slice(idx + 1, StringRef::npos));
-    // Print empty new line without spaces if line only has spaces and no extra
-    // prefix is requested.
-    if (!split.first.ltrim().empty() || !currentExtraPrefix.empty())
+    // Print empty new line without spaces if line only has spaces.
+    if (!split.first.ltrim().empty())
       print(split.first);
     os << '\n';
     atStartOfLine = true;

@@ -174,35 +174,30 @@ void StackLifetime::collectMarkers() {
 
 void StackLifetime::calculateLocalLiveness() {
   bool Changed = true;
-
-  // LiveIn, LiveOut and BitsIn have a different meaning deppends on type.
-  // ::Maybe true bits represent "may be alive" allocas, ::Must true bits
-  // represent "may be dead". After the loop we will convert ::Must bits from
-  // "may be dead" to "must be alive".
   while (Changed) {
-    // TODO: Consider switching to worklist instead of traversing entire graph.
     Changed = false;
 
     for (const BasicBlock *BB : depth_first(&F)) {
       BlockLifetimeInfo &BlockInfo = BlockLiveness.find(BB)->getSecond();
 
-      // Compute BitsIn by unioning together the LiveOut sets of all preds.
-      BitVector BitsIn;
+      // Compute LiveIn by unioning together the LiveOut sets of all preds.
+      BitVector LocalLiveIn;
       for (const auto *PredBB : predecessors(BB)) {
         LivenessMap::const_iterator I = BlockLiveness.find(PredBB);
         // If a predecessor is unreachable, ignore it.
         if (I == BlockLiveness.end())
           continue;
-        BitsIn |= I->second.LiveOut;
-      }
-
-      // Everything is "may be dead" for entry without predecessors.
-      if (Type == LivenessType::Must && BitsIn.empty())
-        BitsIn.resize(NumAllocas, true);
-
-      // Update block LiveIn set, noting whether it has changed.
-      if (BitsIn.test(BlockInfo.LiveIn)) {
-        BlockInfo.LiveIn |= BitsIn;
+        switch (Type) {
+        case LivenessType::May:
+          LocalLiveIn |= I->second.LiveOut;
+          break;
+        case LivenessType::Must:
+          if (LocalLiveIn.empty())
+            LocalLiveIn = I->second.LiveOut;
+          else
+            LocalLiveIn &= I->second.LiveOut;
+          break;
+        }
       }
 
       // Compute LiveOut by subtracting out lifetimes that end in this
@@ -212,34 +207,22 @@ void StackLifetime::calculateLocalLiveness() {
       // because we already handle the case where the BEGIN comes
       // before the END when collecting the markers (and building the
       // BEGIN/END vectors).
-      switch (Type) {
-      case LivenessType::May:
-        BitsIn.reset(BlockInfo.End);
-        // "may be alive" is set by lifetime start.
-        BitsIn |= BlockInfo.Begin;
-        break;
-      case LivenessType::Must:
-        BitsIn.reset(BlockInfo.Begin);
-        // "may be dead" is set by lifetime end.
-        BitsIn |= BlockInfo.End;
-        break;
+      BitVector LocalLiveOut = LocalLiveIn;
+      LocalLiveOut.reset(BlockInfo.End);
+      LocalLiveOut |= BlockInfo.Begin;
+
+      // Update block LiveIn set, noting whether it has changed.
+      if (LocalLiveIn.test(BlockInfo.LiveIn)) {
+        BlockInfo.LiveIn |= LocalLiveIn;
       }
 
       // Update block LiveOut set, noting whether it has changed.
-      if (BitsIn.test(BlockInfo.LiveOut)) {
+      if (LocalLiveOut.test(BlockInfo.LiveOut)) {
         Changed = true;
-        BlockInfo.LiveOut |= BitsIn;
+        BlockInfo.LiveOut |= LocalLiveOut;
       }
     }
   } // while changed.
-
-  if (Type == LivenessType::Must) {
-    // Convert from "may be dead" to "must be alive".
-    for (auto &[BB, BlockInfo] : BlockLiveness) {
-      BlockInfo.LiveIn.flip();
-      BlockInfo.LiveOut.flip();
-    }
-  }
 }
 
 void StackLifetime::calculateLiveIntervals() {

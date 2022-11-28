@@ -197,7 +197,8 @@ void DAGTypeLegalizer::ExpandRes_BUILD_PAIR(SDNode *N, SDValue &Lo,
 void DAGTypeLegalizer::ExpandRes_EXTRACT_ELEMENT(SDNode *N, SDValue &Lo,
                                                  SDValue &Hi) {
   GetExpandedOp(N->getOperand(0), Lo, Hi);
-  SDValue Part = N->getConstantOperandVal(1) ? Hi : Lo;
+  SDValue Part = cast<ConstantSDNode>(N->getOperand(1))->getZExtValue() ?
+                   Hi : Lo;
 
   assert(Part.getValueType() == N->getValueType(0) &&
          "Type twice as big as expanded type not itself expanded!");
@@ -208,7 +209,7 @@ void DAGTypeLegalizer::ExpandRes_EXTRACT_ELEMENT(SDNode *N, SDValue &Lo,
 void DAGTypeLegalizer::ExpandRes_EXTRACT_VECTOR_ELT(SDNode *N, SDValue &Lo,
                                                     SDValue &Hi) {
   SDValue OldVec = N->getOperand(0);
-  ElementCount OldEltCount = OldVec.getValueType().getVectorElementCount();
+  unsigned OldElts = OldVec.getValueType().getVectorNumElements();
   EVT OldEltVT = OldVec.getValueType().getVectorElementType();
   SDLoc dl(N);
 
@@ -222,13 +223,14 @@ void DAGTypeLegalizer::ExpandRes_EXTRACT_VECTOR_ELT(SDNode *N, SDValue &Lo,
     // the input vector.  If so, extend the elements of the input vector to the
     // same bitwidth as the result before expanding.
     assert(OldEltVT.bitsLT(OldVT) && "Result type smaller then element type!");
-    EVT NVecVT = EVT::getVectorVT(*DAG.getContext(), OldVT, OldEltCount);
+    EVT NVecVT = EVT::getVectorVT(*DAG.getContext(), OldVT, OldElts);
     OldVec = DAG.getNode(ISD::ANY_EXTEND, dl, NVecVT, N->getOperand(0));
   }
 
-  SDValue NewVec = DAG.getNode(
-      ISD::BITCAST, dl,
-      EVT::getVectorVT(*DAG.getContext(), NewVT, OldEltCount * 2), OldVec);
+  SDValue NewVec = DAG.getNode(ISD::BITCAST, dl,
+                               EVT::getVectorVT(*DAG.getContext(),
+                                                NewVT, 2*OldElts),
+                               OldVec);
 
   // Extract the elements at 2 * Idx and 2 * Idx + 1 from the new vector.
   SDValue Idx = N->getOperand(1);
@@ -401,7 +403,7 @@ SDValue DAGTypeLegalizer::ExpandOp_BUILD_VECTOR(SDNode *N) {
 SDValue DAGTypeLegalizer::ExpandOp_EXTRACT_ELEMENT(SDNode *N) {
   SDValue Lo, Hi;
   GetExpandedOp(N->getOperand(0), Lo, Hi);
-  return N->getConstantOperandVal(1) ? Hi : Lo;
+  return cast<ConstantSDNode>(N->getOperand(1))->getZExtValue() ? Hi : Lo;
 }
 
 SDValue DAGTypeLegalizer::ExpandOp_INSERT_VECTOR_ELT(SDNode *N) {

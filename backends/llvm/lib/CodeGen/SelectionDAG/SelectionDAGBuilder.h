@@ -42,7 +42,6 @@ class AAResults;
 class AllocaInst;
 class AtomicCmpXchgInst;
 class AtomicRMWInst;
-class AssumptionCache;
 class BasicBlock;
 class BranchInst;
 class CallInst;
@@ -192,7 +191,6 @@ public:
 
   SelectionDAG &DAG;
   AAResults *AA = nullptr;
-  AssumptionCache *AC = nullptr;
   const TargetLibraryInfo *LibInfo;
 
   class SDAGSwitchLowering : public SwitchCG::SwitchLowering {
@@ -246,7 +244,7 @@ public:
         SL(std::make_unique<SDAGSwitchLowering>(this, funcinfo)), FuncInfo(funcinfo),
         SwiftError(swifterror) {}
 
-  void init(GCFunctionInfo *gfi, AAResults *AA, AssumptionCache *AC,
+  void init(GCFunctionInfo *gfi, AAResults *AA,
             const TargetLibraryInfo *li);
 
   /// Clear out the current SelectionDAG and the associated state and prepare
@@ -569,14 +567,10 @@ private:
   void visitIntrinsicCall(const CallInst &I, unsigned Intrinsic);
   void visitTargetIntrinsic(const CallInst &I, unsigned Intrinsic);
   void visitConstrainedFPIntrinsic(const ConstrainedFPIntrinsic &FPI);
-  void visitVPLoad(const VPIntrinsic &VPIntrin, EVT VT,
-                   SmallVector<SDValue, 7> &OpValues);
-  void visitVPStore(const VPIntrinsic &VPIntrin,
-                    SmallVector<SDValue, 7> &OpValues);
-  void visitVPGather(const VPIntrinsic &VPIntrin, EVT VT,
-                     SmallVector<SDValue, 7> &OpValues);
-  void visitVPScatter(const VPIntrinsic &VPIntrin,
-                      SmallVector<SDValue, 7> &OpValues);
+  void visitVPLoadGather(const VPIntrinsic &VPIntrin, EVT VT,
+                         SmallVector<SDValue, 7> &OpValues, bool IsGather);
+  void visitVPStoreScatter(const VPIntrinsic &VPIntrin,
+                           SmallVector<SDValue, 7> &OpValues, bool IsScatter);
   void visitVPStridedLoad(const VPIntrinsic &VPIntrin, EVT VT,
                           SmallVectorImpl<SDValue> &OpValues);
   void visitVPStridedStore(const VPIntrinsic &VPIntrin,

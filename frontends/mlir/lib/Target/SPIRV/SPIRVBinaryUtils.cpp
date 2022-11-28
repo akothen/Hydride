@@ -31,7 +31,6 @@ void spirv::appendModuleHeader(SmallVectorImpl<uint32_t> &header,
     MIN_VERSION_CASE(3);
     MIN_VERSION_CASE(4);
     MIN_VERSION_CASE(5);
-    MIN_VERSION_CASE(6);
 #undef MIN_VERSION_CASE
   }
 

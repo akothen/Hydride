@@ -5,7 +5,7 @@
 ; RUN: llc -verify-machineinstrs < %s -code-model=medium -mtriple=powerpc64le-unknown-linux-gnu | FileCheck %s -check-prefix=MEDIUM
 ; RUN: llc -verify-machineinstrs < %s -code-model=large -mtriple=powerpc64le-unknown-linux-gnu | FileCheck %s -check-prefix=MEDIUM
 
-define ptr @test() {
+define i8* @test() {
 entry:
   br label %here
 
@@ -21,6 +21,6 @@ here:                                             ; preds = %entry
 ; SMALL: blr
 ; SMALL: .LC[[LC0]]:
 ; SMALL: .tc .Ltmp[[TMP0]][TC],.Ltmp[[TMP0]]
-  ret ptr blockaddress(@test, %here)
+  ret i8* blockaddress(@test, %here)
 }
 

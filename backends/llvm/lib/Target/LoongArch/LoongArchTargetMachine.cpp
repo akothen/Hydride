@@ -27,8 +27,6 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeLoongArchTarget() {
   // Register the target.
   RegisterTargetMachine<LoongArchTargetMachine> X(getTheLoongArch32Target());
   RegisterTargetMachine<LoongArchTargetMachine> Y(getTheLoongArch64Target());
-  auto *PR = PassRegistry::getPassRegistry();
-  initializeLoongArchPreRAExpandPseudoPass(*PR);
 }
 
 static std::string computeDataLayout(const Triple &TT) {
@@ -104,9 +102,6 @@ public:
 
   void addIRPasses() override;
   bool addInstSelector() override;
-  void addPreEmitPass() override;
-  void addPreEmitPass2() override;
-  void addPreRegAlloc() override;
 };
 } // end namespace
 
@@ -125,17 +120,4 @@ bool LoongArchPassConfig::addInstSelector() {
   addPass(createLoongArchISelDag(getLoongArchTargetMachine()));
 
   return false;
-}
-
-void LoongArchPassConfig::addPreEmitPass() { addPass(&BranchRelaxationPassID); }
-
-void LoongArchPassConfig::addPreEmitPass2() {
-  // Schedule the expansion of AtomicPseudos at the last possible moment,
-  // avoiding the possibility for other passes to break the requirements for
-  // forward progress in the LL/SC block.
-  addPass(createLoongArchExpandAtomicPseudoPass());
-}
-
-void LoongArchPassConfig::addPreRegAlloc() {
-  addPass(createLoongArchPreRAExpandPseudoPass());
 }

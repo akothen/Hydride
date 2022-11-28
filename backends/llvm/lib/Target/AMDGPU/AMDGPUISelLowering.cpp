@@ -302,7 +302,7 @@ AMDGPUTargetLowering::AMDGPUTargetLowering(const TargetMachine &TM,
 
   setOperationAction({ISD::FLOG, ISD::FLOG10, ISD::FEXP}, MVT::f32, Custom);
 
-  setOperationAction(ISD::FNEARBYINT, {MVT::f16, MVT::f32, MVT::f64}, Custom);
+  setOperationAction(ISD::FNEARBYINT, {MVT::f32, MVT::f64}, Custom);
 
   setOperationAction(ISD::FREM, {MVT::f16, MVT::f32, MVT::f64}, Custom);
 
@@ -692,11 +692,12 @@ bool AMDGPUTargetLowering::isLoadBitCastBeneficial(EVT LoadTy, EVT CastTy,
 // SI+ has instructions for cttz / ctlz for 32-bit values. This is probably also
 // profitable with the expansion for 64-bit since it's generally good to
 // speculate things.
-bool AMDGPUTargetLowering::isCheapToSpeculateCttz(Type *Ty) const {
+// FIXME: These should really have the size as a parameter.
+bool AMDGPUTargetLowering::isCheapToSpeculateCttz() const {
   return true;
 }
 
-bool AMDGPUTargetLowering::isCheapToSpeculateCtlz(Type *Ty) const {
+bool AMDGPUTargetLowering::isCheapToSpeculateCtlz() const {
   return true;
 }
 
@@ -837,39 +838,6 @@ bool AMDGPUTargetLowering::isNarrowingProfitable(EVT SrcVT, EVT DestVT) const {
   // places trying to reduce the sizes of loads. Shrinking loads to < 32-bits is
   // not profitable, and may actually be harmful.
   return SrcVT.getSizeInBits() > 32 && DestVT.getSizeInBits() == 32;
-}
-
-bool AMDGPUTargetLowering::isDesirableToCommuteWithShift(
-    const SDNode* N, CombineLevel Level) const {
-  assert((N->getOpcode() == ISD::SHL || N->getOpcode() == ISD::SRA ||
-          N->getOpcode() == ISD::SRL) &&
-         "Expected shift op");
-  // Always commute pre-type legalization and right shifts.
-  // We're looking for shl(or(x,y),z) patterns.
-  if (Level < CombineLevel::AfterLegalizeTypes ||
-      N->getOpcode() != ISD::SHL || N->getOperand(0).getOpcode() != ISD::OR)
-    return true;
-
-  // If only user is a i32 right-shift, then don't destroy a BFE pattern.
-  if (N->getValueType(0) == MVT::i32 && N->use_size() == 1 &&
-      (N->use_begin()->getOpcode() == ISD::SRA ||
-       N->use_begin()->getOpcode() == ISD::SRL))
-    return false;
-
-  // Don't destroy or(shl(load_zext(),c), load_zext()) patterns.
-  auto IsShiftAndLoad = [](SDValue LHS, SDValue RHS) {
-    if (LHS.getOpcode() != ISD::SHL)
-      return false;
-    auto *RHSLd = dyn_cast<LoadSDNode>(RHS);
-    auto *LHS0 = dyn_cast<LoadSDNode>(LHS.getOperand(0));
-    auto *LHS1 = dyn_cast<ConstantSDNode>(LHS.getOperand(1));
-    return LHS0 && LHS1 && RHSLd && LHS0->getExtensionType() == ISD::ZEXTLOAD &&
-           LHS1->getAPIntValue() == LHS0->getMemoryVT().getScalarSizeInBits() &&
-           RHSLd->getExtensionType() == ISD::ZEXTLOAD;
-  };
-  SDValue LHS = N->getOperand(0).getOperand(0);
-  SDValue RHS = N->getOperand(0).getOperand(1);
-  return !(IsShiftAndLoad(LHS, RHS) || IsShiftAndLoad(RHS, LHS));
 }
 
 //===---------------------------------------------------------------------===//
@@ -1663,17 +1631,14 @@ SDValue AMDGPUTargetLowering::LowerDIVREM24(SDValue Op, SelectionDAG &DAG,
   SDValue fqneg = DAG.getNode(ISD::FNEG, DL, FltVT, fq);
 
   MachineFunction &MF = DAG.getMachineFunction();
-
-  bool UseFmadFtz = false;
-  if (Subtarget->isGCN()) {
-    const SIMachineFunctionInfo *MFI = MF.getInfo<SIMachineFunctionInfo>();
-    UseFmadFtz = MFI->getMode().allFP32Denormals();
-  }
+  const AMDGPUMachineFunction *MFI = MF.getInfo<AMDGPUMachineFunction>();
 
   // float fr = mad(fqneg, fb, fa);
-  unsigned OpCode = !Subtarget->hasMadMacF32Insts() ? (unsigned)ISD::FMA
-                    : UseFmadFtz ? (unsigned)AMDGPUISD::FMAD_FTZ
-                                 : (unsigned)ISD::FMAD;
+  unsigned OpCode = !Subtarget->hasMadMacF32Insts() ?
+                    (unsigned)ISD::FMA :
+                    !MFI->getMode().allFP32Denormals() ?
+                    (unsigned)ISD::FMAD :
+                    (unsigned)AMDGPUISD::FMAD_FTZ;
   SDValue fr = DAG.getNode(OpCode, DL, FltVT, fqneg, fb, fa);
 
   // int iq = (int)fq;
@@ -2491,8 +2456,7 @@ SDValue AMDGPUTargetLowering::LowerUINT_TO_FP(SDValue Op,
     SDLoc DL(Op);
 
     SDValue IntToFp32 = DAG.getNode(Op.getOpcode(), DL, MVT::f32, Src);
-    SDValue FPRoundFlag =
-        DAG.getIntPtrConstant(0, SDLoc(Op), /*isTarget=*/true);
+    SDValue FPRoundFlag = DAG.getIntPtrConstant(0, SDLoc(Op));
     SDValue FPRound =
         DAG.getNode(ISD::FP_ROUND, DL, MVT::f16, IntToFp32, FPRoundFlag);
 
@@ -2532,8 +2496,7 @@ SDValue AMDGPUTargetLowering::LowerSINT_TO_FP(SDValue Op,
     SDValue Src = Op.getOperand(0);
 
     SDValue IntToFp32 = DAG.getNode(Op.getOpcode(), DL, MVT::f32, Src);
-    SDValue FPRoundFlag =
-        DAG.getIntPtrConstant(0, SDLoc(Op), /*isTarget=*/true);
+    SDValue FPRoundFlag = DAG.getIntPtrConstant(0, SDLoc(Op));
     SDValue FPRound =
         DAG.getNode(ISD::FP_ROUND, DL, MVT::f16, IntToFp32, FPRoundFlag);
 
@@ -3278,14 +3241,9 @@ SDValue AMDGPUTargetLowering::performTruncateCombine(
          Src.getOpcode() == ISD::SHL)) {
       SDValue Amt = Src.getOperand(1);
       KnownBits Known = DAG.computeKnownBits(Amt);
-
-      // - For left shifts, do the transform as long as the shift
-      //   amount is still legal for i32, so when ShiftAmt < 32 (<= 31)
-      // - For right shift, do it if ShiftAmt <= (32 - Size) to avoid
-      //   losing information stored in the high bits when truncating.
-      const unsigned MaxCstSize =
-          (Src.getOpcode() == ISD::SHL) ? 31 : (32 - VT.getScalarSizeInBits());
-      if (Known.getMaxValue().ule(MaxCstSize)) {
+      unsigned Size = VT.getScalarSizeInBits();
+      if ((Known.isConstant() && Known.getConstant().ule(Size)) ||
+          (Known.countMaxActiveBits() <= Log2_32(Size))) {
         EVT MidVT = VT.isVector() ?
           EVT::getVectorVT(*DAG.getContext(), MVT::i32,
                            VT.getVectorNumElements()) : MVT::i32;
@@ -4855,15 +4813,8 @@ AMDGPUTargetLowering::shouldExpandAtomicRMWInIR(AtomicRMWInst *RMW) const {
   case AtomicRMWInst::FMax:
   case AtomicRMWInst::FMin:
     return AtomicExpansionKind::CmpXChg;
-  default: {
-    if (auto *IntTy = dyn_cast<IntegerType>(RMW->getType())) {
-      unsigned Size = IntTy->getBitWidth();
-      if (Size == 32 || Size == 64)
-        return AtomicExpansionKind::None;
-    }
-
-    return AtomicExpansionKind::CmpXChg;
-  }
+  default:
+    return AtomicExpansionKind::None;
   }
 }
 

@@ -105,32 +105,15 @@ static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
   // In theory 2*capacity can overflow if the capacity is 64 bit, but the
   // original capacity would never be large enough for this to be a problem.
   size_t NewCapacity = 2 * OldCapacity + 1; // Always grow.
-  return std::clamp(NewCapacity, MinSize, MaxSize);
-}
-
-template <class Size_T>
-void *SmallVectorBase<Size_T>::replaceAllocation(void *NewElts, size_t TSize,
-                                                 size_t NewCapacity,
-                                                 size_t VSize) {
-  void *NewEltsReplace = llvm::safe_malloc(NewCapacity * TSize);
-  if (VSize)
-    memcpy(NewEltsReplace, NewElts, VSize * TSize);
-  free(NewElts);
-  return NewEltsReplace;
+  return std::min(std::max(NewCapacity, MinSize), MaxSize);
 }
 
 // Note: Moving this function into the header may cause performance regression.
 template <class Size_T>
-void *SmallVectorBase<Size_T>::mallocForGrow(void *FirstEl, size_t MinSize,
-                                             size_t TSize,
+void *SmallVectorBase<Size_T>::mallocForGrow(size_t MinSize, size_t TSize,
                                              size_t &NewCapacity) {
   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
-  // Even if capacity is not 0 now, if the vector was originally created with
-  // capacity 0, it's possible for the malloc to return FirstEl.
-  void *NewElts = llvm::safe_malloc(NewCapacity * TSize);
-  if (NewElts == FirstEl)
-    NewElts = replaceAllocation(NewElts, TSize, NewCapacity);
-  return NewElts;
+  return llvm::safe_malloc(NewCapacity * TSize);
 }
 
 // Note: Moving this function into the header may cause performance regression.
@@ -140,17 +123,13 @@ void SmallVectorBase<Size_T>::grow_pod(void *FirstEl, size_t MinSize,
   size_t NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
   void *NewElts;
   if (BeginX == FirstEl) {
-    NewElts = llvm::safe_malloc(NewCapacity * TSize);
-    if (NewElts == FirstEl)
-      NewElts = replaceAllocation(NewElts, TSize, NewCapacity);
+    NewElts = safe_malloc(NewCapacity * TSize);
 
     // Copy the elements over.  No need to run dtors on PODs.
     memcpy(NewElts, this->BeginX, size() * TSize);
   } else {
     // If this wasn't grown from the inline copy, grow the allocated space.
-    NewElts = llvm::safe_realloc(this->BeginX, NewCapacity * TSize);
-    if (NewElts == FirstEl)
-      NewElts = replaceAllocation(NewElts, TSize, NewCapacity, size());
+    NewElts = safe_realloc(this->BeginX, NewCapacity * TSize);
   }
 
   this->BeginX = NewElts;

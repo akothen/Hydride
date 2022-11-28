@@ -396,22 +396,11 @@ static void createResumeEntryBlock(Function &F, coro::Shape &Shape) {
       // The coroutine should be marked done if it reaches the final suspend
       // point.
       markCoroutineAsDone(Builder, Shape, FramePtr);
-    }
-
-    // If the coroutine don't have unwind coro end, we could omit the store to
-    // the final suspend point since we could infer the coroutine is suspended
-    // at the final suspend point by the nullness of ResumeFnAddr.
-    // However, we can't skip it if the coroutine have unwind coro end. Since
-    // the coroutine reaches unwind coro end is considered suspended at the
-    // final suspend point (the ResumeFnAddr is null) but in fact the coroutine
-    // didn't complete yet. We need the IndexVal for the final suspend point
-    // to make the states clear.
-    if (!S->isFinal() || Shape.SwitchLowering.HasUnwindCoroEnd) {
+    } else {
       auto *GepIndex = Builder.CreateStructGEP(
           FrameTy, FramePtr, Shape.getSwitchIndexField(), "index.addr");
       Builder.CreateStore(IndexVal, GepIndex);
     }
-
     Save->replaceAllUsesWith(ConstantTokenNone::get(C));
     Save->eraseFromParent();
 
@@ -460,22 +449,19 @@ static void createResumeEntryBlock(Function &F, coro::Shape &Shape) {
   Shape.SwitchLowering.ResumeEntryBlock = NewEntry;
 }
 
-// In the resume function, we remove the last case  (when coro::Shape is built,
-// the final suspend point (if present) is always the last element of
-// CoroSuspends array) since it is an undefined behavior to resume a coroutine
-// suspended at the final suspend point.
-// In the destroy function, if it isn't possible that the ResumeFnAddr is NULL
-// and the coroutine doesn't suspend at the final suspend point actually (this
-// is possible since the coroutine is considered suspended at the final suspend
-// point if promise.unhandled_exception() exits via an exception), we can
-// remove the last case.
+
+// Rewrite final suspend point handling. We do not use suspend index to
+// represent the final suspend point. Instead we zero-out ResumeFnAddr in the
+// coroutine frame, since it is undefined behavior to resume a coroutine
+// suspended at the final suspend point. Thus, in the resume function, we can
+// simply remove the last case (when coro::Shape is built, the final suspend
+// point (if present) is always the last element of CoroSuspends array).
+// In the destroy function, we add a code sequence to check if ResumeFnAddress
+// is Null, and if so, jump to the appropriate label to handle cleanup from the
+// final suspend point.
 void CoroCloner::handleFinalSuspend() {
   assert(Shape.ABI == coro::ABI::Switch &&
          Shape.SwitchLowering.HasFinalSuspend);
-
-  if (isSwitchDestroyFunction() && Shape.SwitchLowering.HasUnwindCoroEnd)
-    return;
-
   auto *Switch = cast<SwitchInst>(VMap[Shape.SwitchLowering.ResumeSwitch]);
   auto FinalCaseIt = std::prev(Switch->case_end());
   BasicBlock *ResumeBB = FinalCaseIt->getCaseSuccessor();
@@ -1376,7 +1362,7 @@ static bool shouldBeMustTail(const CallInst &CI, const Function &F) {
 // for symmetrical coroutine control transfer (C++ Coroutines TS extension).
 // This transformation is done only in the resume part of the coroutine that has
 // identical signature and calling convention as the coro.resume call.
-static void addMustTailToCoroResumes(Function &F, TargetTransformInfo &TTI) {
+static void addMustTailToCoroResumes(Function &F) {
   bool changed = false;
 
   // Collect potential resume instructions.
@@ -1388,9 +1374,7 @@ static void addMustTailToCoroResumes(Function &F, TargetTransformInfo &TTI) {
 
   // Set musttail on those that are followed by a ret instruction.
   for (CallInst *Call : Resumes)
-    // Skip targets which don't support tail call on the specific case.
-    if (TTI.supportsTailCallFor(Call) &&
-        simplifyTerminatorLeadingToRet(Call->getNextNode())) {
+    if (simplifyTerminatorLeadingToRet(Call->getNextNode())) {
       Call->setTailCallKind(CallInst::TCK_MustTail);
       changed = true;
     }
@@ -1571,8 +1555,6 @@ static void simplifySuspendPoints(coro::Shape &Shape) {
   size_t I = 0, N = S.size();
   if (N == 0)
     return;
-
-  size_t ChangedFinalIndex = std::numeric_limits<size_t>::max();
   while (true) {
     auto SI = cast<CoroSuspendInst>(S[I]);
     // Leave final.suspend to handleFinalSuspend since it is undefined behavior
@@ -1580,27 +1562,13 @@ static void simplifySuspendPoints(coro::Shape &Shape) {
     if (!SI->isFinal() && simplifySuspendPoint(SI, Shape.CoroBegin)) {
       if (--N == I)
         break;
-
       std::swap(S[I], S[N]);
-
-      if (cast<CoroSuspendInst>(S[I])->isFinal()) {
-        assert(Shape.SwitchLowering.HasFinalSuspend);
-        ChangedFinalIndex = I;
-      }
-
       continue;
     }
     if (++I == N)
       break;
   }
   S.resize(N);
-
-  // Maintain final.suspend in case final suspend was swapped.
-  // Due to we requrie the final suspend to be the last element of CoroSuspends.
-  if (ChangedFinalIndex < N) {
-    assert(cast<CoroSuspendInst>(S[ChangedFinalIndex])->isFinal());
-    std::swap(S[ChangedFinalIndex], S.back());
-  }
 }
 
 static void splitSwitchCoroutine(Function &F, coro::Shape &Shape,
@@ -1626,7 +1594,7 @@ static void splitSwitchCoroutine(Function &F, coro::Shape &Shape,
   // FIXME: Could we support symmetric transfer effectively without musttail
   // call?
   if (TTI.supportsTailCalls())
-    addMustTailToCoroResumes(*ResumeClone, TTI);
+    addMustTailToCoroResumes(*ResumeClone);
 
   // Store addresses resume/destroy/cleanup functions in the coroutine frame.
   updateCoroFrame(Shape, ResumeClone, DestroyClone, CleanupClone);
@@ -1661,7 +1629,7 @@ static void coerceArguments(IRBuilder<> &Builder, FunctionType *FnTy,
                             ArrayRef<Value *> FnArgs,
                             SmallVectorImpl<Value *> &CallArgs) {
   size_t ArgIdx = 0;
-  for (auto *paramTy : FnTy->params()) {
+  for (auto paramTy : FnTy->params()) {
     assert(ArgIdx < FnArgs.size());
     if (paramTy != FnArgs[ArgIdx]->getType())
       CallArgs.push_back(
@@ -1870,7 +1838,7 @@ static void splitRetconCoroutine(Function &F, coro::Shape &Shape,
                                              Shape.CoroSuspends.size()));
 
       // Next, all the directly-yielded values.
-      for (auto *ResultTy : Shape.getRetconResultTypes())
+      for (auto ResultTy : Shape.getRetconResultTypes())
         ReturnPHIs.push_back(Builder.CreatePHI(ResultTy,
                                                Shape.CoroSuspends.size()));
 
@@ -1995,7 +1963,7 @@ static coro::Shape splitCoroutine(Function &F,
 
 /// Remove calls to llvm.coro.end in the original function.
 static void removeCoroEnds(const coro::Shape &Shape) {
-  for (auto *End : Shape.CoroEnds) {
+  for (auto End : Shape.CoroEnds) {
     replaceCoroEnd(End, Shape, Shape.FramePtr, /*in resume*/ false, nullptr);
   }
 }

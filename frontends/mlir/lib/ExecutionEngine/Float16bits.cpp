@@ -12,9 +12,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/ExecutionEngine/Float16bits.h"
-
-#ifdef MLIR_FLOAT16_DEFINE_FUNCTIONS // We are building this library
-
 #include <cmath>
 #include <cstring>
 
@@ -191,5 +188,3 @@ extern "C" BF16ABIType ATTR_WEAK __truncdfbf2(double d) {
   // cases.
   return __truncsfbf2(static_cast<float>(d));
 }
-
-#endif // MLIR_FLOAT16_DEFINE_FUNCTIONS

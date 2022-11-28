@@ -316,9 +316,6 @@ def FeaturePredictableSelectIsExpensive :
                    "true",
                    "Prefer likely predicted branches over selects">;
 
-def FeatureFastMFLR : SubtargetFeature<"fast-MFLR", "HasFastMFLR", "true",
-                                       "MFLR is a fast instruction">;
-
 // Since new processors generally contain a superset of features of those that
 // came before them, the idea is to make implementations of new processors
 // less error prone and easier to read.
@@ -427,7 +424,7 @@ def ProcessorFeatures {
     !listconcat(FusionFeatures, [
        DirectivePwr10, FeatureISA3_1, FeaturePrefixInstrs,
        FeaturePCRelativeMemops, FeatureP10Vector, FeatureMMA,
-       FeaturePairedVectorMemops, FeatureFastMFLR]);
+       FeaturePairedVectorMemops]);
   list<SubtargetFeature> P10SpecificFeatures = [];
   list<SubtargetFeature> P10InheritableFeatures =
     !listconcat(P9InheritableFeatures, P10AdditionalFeatures);
@@ -667,7 +664,6 @@ def PPCInstrInfo : InstrInfo {
   let decodePositionallyEncodedOperands = 1;
 
   let noNamedPositionallyEncodedOperands = 1;
-  let useDeprecatedPositionallyEncodedOperands = 1;
 }
 
 def PPCAsmWriter : AsmWriter {

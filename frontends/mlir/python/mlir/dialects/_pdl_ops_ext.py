@@ -86,14 +86,14 @@ class AttributeOp:
   """Specialization for PDL attribute op class."""
 
   def __init__(self,
-               valueType: Optional[Union[OpView, Operation, Value]] = None,
+               type: Optional[Union[OpView, Operation, Value]] = None,
                value: Optional[Attribute] = None,
                *,
                loc=None,
                ip=None):
-    valueType = valueType if valueType is None else _get_value(valueType)
+    type = type if type is None else _get_value(type)
     result = pdl.AttributeType.get()
-    super().__init__(result, valueType=valueType, value=value, loc=loc, ip=ip)
+    super().__init__(result, type=type, value=value, loc=loc, ip=ip)
 
 
 class EraseOp:
@@ -118,7 +118,7 @@ class OperandOp:
                ip=None):
     type = type if type is None else _get_value(type)
     result = pdl.ValueType.get()
-    super().__init__(result, valueType=type, loc=loc, ip=ip)
+    super().__init__(result, type=type, loc=loc, ip=ip)
 
 
 class OperandsOp:
@@ -131,7 +131,7 @@ class OperandsOp:
                ip=None):
     types = types if types is None else _get_value(types)
     result = pdl.RangeType.get(pdl.ValueType.get())
-    super().__init__(result, valueType=types, loc=loc, ip=ip)
+    super().__init__(result, type=types, loc=loc, ip=ip)
 
 
 class OperationOp:
@@ -147,15 +147,15 @@ class OperationOp:
                ip=None):
     name = name if name is None else _get_str_attr(name)
     args = _get_values(args)
-    attrNames = []
-    attrValues = []
+    attributeNames = []
+    attributeValues = []
     for attrName, attrValue in attributes.items():
-      attrNames.append(StringAttr.get(attrName))
-      attrValues.append(_get_value(attrValue))
-    attrNames = ArrayAttr.get(attrNames)
+      attributeNames.append(StringAttr.get(attrName))
+      attributeValues.append(_get_value(attrValue))
+    attributeNames = ArrayAttr.get(attributeNames)
     types = _get_values(types)
     result = pdl.OperationType.get()
-    super().__init__(result, args, attrValues, attrNames, types, opName=name, loc=loc, ip=ip)
+    super().__init__(result, args, attributeValues, attributeNames, types, name=name, loc=loc, ip=ip)
 
 
 class PatternOp:
@@ -255,26 +255,24 @@ class TypeOp:
   """Specialization for PDL type op class."""
 
   def __init__(self,
-               constantType: Optional[Union[TypeAttr, Type]] = None,
+               type: Optional[Union[TypeAttr, Type]] = None,
                *,
                loc=None,
                ip=None):
-    constantType = constantType if constantType is None else _get_type_attr(
-        constantType)
+    type = type if type is None else _get_type_attr(type)
     result = pdl.TypeType.get()
-    super().__init__(result, constantType=constantType, loc=loc, ip=ip)
+    super().__init__(result, type=type, loc=loc, ip=ip)
 
 
 class TypesOp:
   """Specialization for PDL types op class."""
 
   def __init__(self,
-               constantTypes: Sequence[Union[TypeAttr, Type]] = [],
+               types: Sequence[Union[TypeAttr, Type]] = [],
                *,
                loc=None,
                ip=None):
-    constantTypes = _get_array_attr(
-        [_get_type_attr(ty) for ty in constantTypes])
-    constantTypes = None if not constantTypes else constantTypes
+    types = _get_array_attr([_get_type_attr(ty) for ty in types])
+    types = None if not types else types
     result = pdl.RangeType.get(pdl.TypeType.get())
-    super().__init__(result, constantTypes=constantTypes, loc=loc, ip=ip)
+    super().__init__(result, types=types, loc=loc, ip=ip)

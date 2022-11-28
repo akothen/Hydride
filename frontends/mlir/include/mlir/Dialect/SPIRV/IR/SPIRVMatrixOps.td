@@ -16,7 +16,7 @@ include "mlir/Interfaces/SideEffectInterfaces.td"
 
 // -----
 
-def SPIRV_MatrixTimesMatrixOp : SPIRV_Op<"MatrixTimesMatrix", [Pure]> {
+def SPV_MatrixTimesMatrixOp : SPV_Op<"MatrixTimesMatrix", [NoSideEffect]> {
   let summary = "Linear-algebraic multiply of LeftMatrix X RightMatrix.";
 
   let description = [{
@@ -34,33 +34,33 @@ def SPIRV_MatrixTimesMatrixOp : SPIRV_Op<"MatrixTimesMatrix", [Pure]> {
     <!-- End of AutoGen section -->
 
     ```
-    matrix-times-matrix-op ::= ssa-id `=` `spirv.MatrixTimesMatrix` ssa-use,
+    matrix-times-matrix-op ::= ssa-id `=` `spv.MatrixTimesMatrix` ssa-use,
     ssa-use `:` matrix-type `,` matrix-type `->` matrix-type
     ```mlir
 
     #### Example:
 
     ```
-    %0 = spirv.MatrixTimesMatrix %matrix_1, %matrix_2 :
-        !spirv.matrix<4 x vector<3xf32>>, !spirv.matrix<3 x vector<4xf32>> ->
-        !spirv.matrix<4 x vector<4xf32>>
+    %0 = spv.MatrixTimesMatrix %matrix_1, %matrix_2 :
+        !spv.matrix<4 x vector<3xf32>>, !spv.matrix<3 x vector<4xf32>> ->
+        !spv.matrix<4 x vector<4xf32>>
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[]>,
-    Capability<[SPIRV_C_Matrix]>
+    Capability<[SPV_C_Matrix]>
   ];
 
   let arguments = (ins
-    SPIRV_AnyMatrix:$leftmatrix,
-    SPIRV_AnyMatrix:$rightmatrix
+    SPV_AnyMatrix:$leftmatrix,
+    SPV_AnyMatrix:$rightmatrix
   );
 
   let results = (outs
-    SPIRV_AnyMatrix:$result
+    SPV_AnyMatrix:$result
   );
 
   let assemblyFormat = [{
@@ -70,7 +70,7 @@ def SPIRV_MatrixTimesMatrixOp : SPIRV_Op<"MatrixTimesMatrix", [Pure]> {
 
 // -----
 
-def SPIRV_MatrixTimesScalarOp : SPIRV_Op<"MatrixTimesScalar", [Pure]> {
+def SPV_MatrixTimesScalarOp : SPV_Op<"MatrixTimesScalar", [NoSideEffect]> {
   let summary = "Scale a floating-point matrix.";
 
   let description = [{
@@ -85,7 +85,7 @@ def SPIRV_MatrixTimesScalarOp : SPIRV_Op<"MatrixTimesScalar", [Pure]> {
     <!-- End of AutoGen section -->
 
     ```
-    matrix-times-scalar-op ::= ssa-id `=` `spirv.MatrixTimesScalar` ssa-use,
+    matrix-times-scalar-op ::= ssa-id `=` `spv.MatrixTimesScalar` ssa-use,
     ssa-use `:` matrix-type `,` float-type `->` matrix-type
 
     ```
@@ -94,26 +94,26 @@ def SPIRV_MatrixTimesScalarOp : SPIRV_Op<"MatrixTimesScalar", [Pure]> {
 
     ```mlir
 
-    %0 = spirv.MatrixTimesScalar %matrix, %scalar :
-    !spirv.matrix<3 x vector<3xf32>>, f32 -> !spirv.matrix<3 x vector<3xf32>>
+    %0 = spv.MatrixTimesScalar %matrix, %scalar :
+    !spv.matrix<3 x vector<3xf32>>, f32 -> !spv.matrix<3 x vector<3xf32>>
 
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[]>,
-    Capability<[SPIRV_C_Matrix]>
+    Capability<[SPV_C_Matrix]>
   ];
 
   let arguments = (ins
-    SPIRV_AnyMatrix:$matrix,
-    SPIRV_Float:$scalar
+    SPV_AnyMatrix:$matrix,
+    SPV_Float:$scalar
   );
 
   let results = (outs
-    SPIRV_AnyMatrix:$result
+    SPV_AnyMatrix:$result
   );
 
   // TODO: we need just one matrix type given that the input and result are the
@@ -123,16 +123,16 @@ def SPIRV_MatrixTimesScalarOp : SPIRV_Op<"MatrixTimesScalar", [Pure]> {
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[]>,
-    Capability<[SPIRV_C_Matrix]>
+    Capability<[SPV_C_Matrix]>
   ];
 }
 
 // -----
 
-def SPIRV_TransposeOp : SPIRV_Op<"Transpose", [Pure]> {
+def SPV_TransposeOp : SPV_Op<"Transpose", [NoSideEffect]> {
   let summary = "Transpose a matrix.";
 
   let description = [{
@@ -148,7 +148,7 @@ def SPIRV_TransposeOp : SPIRV_Op<"Transpose", [Pure]> {
     <!-- End of AutoGen section -->
 
     ```
-    transpose-op ::= ssa-id `=` `spirv.Transpose` ssa-use `:` matrix-type `->`
+    transpose-op ::= ssa-id `=` `spv.Transpose` ssa-use `:` matrix-type `->`
     matrix-type
 
     ```mlir
@@ -156,25 +156,25 @@ def SPIRV_TransposeOp : SPIRV_Op<"Transpose", [Pure]> {
     #### Example:
 
     ```
-    %0 = spirv.Transpose %matrix: !spirv.matrix<2 x vector<3xf32>> ->
-    !spirv.matrix<3 x vector<2xf32>>
+    %0 = spv.Transpose %matrix: !spv.matrix<2 x vector<3xf32>> ->
+    !spv.matrix<3 x vector<2xf32>>
 
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[]>,
-    Capability<[SPIRV_C_Matrix]>
+    Capability<[SPV_C_Matrix]>
   ];
 
   let arguments = (ins
-    SPIRV_AnyMatrix:$matrix
+    SPV_AnyMatrix:$matrix
   );
 
   let results = (outs
-    SPIRV_AnyMatrix:$result
+    SPV_AnyMatrix:$result
   );
 
   let assemblyFormat = [{

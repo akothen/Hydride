@@ -39,8 +39,8 @@ class SIOptimizeExecMasking : public MachineFunctionPass {
   MachineBasicBlock::reverse_iterator
   fixTerminators(MachineBasicBlock &MBB) const;
   MachineBasicBlock::reverse_iterator
-  findExecCopy(MachineBasicBlock &MBB,
-               MachineBasicBlock::reverse_iterator I) const;
+  findExecCopy(MachineBasicBlock &MBB, MachineBasicBlock::reverse_iterator I,
+               unsigned CopyToExec) const;
 
   bool isRegisterInUseBetween(MachineInstr &Stop, MachineInstr &Start,
                               MCRegister Reg, bool UseLiveOuts = false,
@@ -296,8 +296,10 @@ SIOptimizeExecMasking::fixTerminators(MachineBasicBlock &MBB) const {
   return FirstNonTerm;
 }
 
-MachineBasicBlock::reverse_iterator SIOptimizeExecMasking::findExecCopy(
-    MachineBasicBlock &MBB, MachineBasicBlock::reverse_iterator I) const {
+MachineBasicBlock::reverse_iterator
+SIOptimizeExecMasking::findExecCopy(MachineBasicBlock &MBB,
+                                    MachineBasicBlock::reverse_iterator I,
+                                    unsigned CopyToExec) const {
   const unsigned InstLimit = 25;
 
   auto E = MBB.rend();
@@ -368,6 +370,7 @@ bool SIOptimizeExecMasking::isRegisterInUseBetween(MachineInstr &Stop,
     LR.addLiveOuts(*Stop.getParent());
 
   MachineBasicBlock::reverse_iterator A(Start);
+  MachineBasicBlock::reverse_iterator E(Stop);
 
   if (IgnoreStart)
     ++A;
@@ -422,7 +425,7 @@ bool SIOptimizeExecMasking::optimizeExecSequence() {
 
     // Scan backwards to find the def.
     auto *CopyToExecInst = &*I;
-    auto CopyFromExecInst = findExecCopy(MBB, I);
+    auto CopyFromExecInst = findExecCopy(MBB, I, CopyToExec);
     if (CopyFromExecInst == E) {
       auto PrepareExecInst = std::next(I);
       if (PrepareExecInst == E)
@@ -632,9 +635,9 @@ void SIOptimizeExecMasking::tryRecordVCmpxAndSaveexecSequence(
     return;
 
   // Tries to find a possibility to optimize a v_cmp ..., s_and_saveexec
-  // sequence by looking at an instance of an s_and_saveexec instruction.
-  // Returns a pointer to the v_cmp instruction if it is safe to replace the
-  // sequence (see the conditions in the function body). This is after register
+  // sequence by looking at an instance of a s_and_saveexec instruction. Returns
+  // a pointer to the v_cmp instruction if it is safe to replace the sequence
+  // (see the conditions in the function body). This is after register
   // allocation, so some checks on operand dependencies need to be considered.
   MachineInstr *VCmp = nullptr;
 
@@ -666,7 +669,7 @@ void SIOptimizeExecMasking::tryRecordVCmpxAndSaveexecSequence(
     return;
 
   // Don't do the transformation if the destination operand is included in
-  // it's MBB Live-outs, meaning it's used in any of its successors, leading
+  // it's MBB Live-outs, meaning it's used in any of it's successors, leading
   // to incorrect code if the v_cmp and therefore the def of
   // the dest operand is removed.
   if (isLiveOut(*VCmp->getParent(), VCmpDest->getReg()))

@@ -17,7 +17,6 @@
 #include <tuple>
 
 #include "TestTraits.h"
-#include "mlir/Dialect/Utils/StructuredOpsUtils.h"
 #include "mlir/IR/Attributes.h"
 #include "mlir/IR/Diagnostics.h"
 #include "mlir/IR/Dialect.h"
@@ -25,14 +24,9 @@
 
 #include "TestAttrInterfaces.h.inc"
 #include "TestOpEnums.h.inc"
-#include "mlir/IR/DialectResourceBlobManager.h"
 
 namespace test {
-class TestDialect;
-
-/// A handle used to reference external elements instances.
-using TestDialectResourceBlobHandle =
-    mlir::DialectResourceBlobHandle<TestDialect>;
+struct TestExternalElementsDataHandle;
 } // namespace test
 
 #define GET_ATTRDEF_CLASSES

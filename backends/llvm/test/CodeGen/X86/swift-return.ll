@@ -147,11 +147,9 @@ define dso_local i32 @test3(i32 %key) #0 {
 ; CHECK-NEXT:    .cfi_def_cfa_offset 16
 ; CHECK-NEXT:    movl %edi, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    callq gen3@PLT
-; CHECK-NEXT:    # kill: def $edx killed $edx def $rdx
-; CHECK-NEXT:    # kill: def $ecx killed $ecx def $rcx
-; CHECK-NEXT:    addl %edx, %ecx
-; CHECK-NEXT:    addl %r8d, %ecx
+; CHECK-NEXT:    addl %edx, %eax
 ; CHECK-NEXT:    addl %ecx, %eax
+; CHECK-NEXT:    addl %r8d, %eax
 ; CHECK-NEXT:    popq %rcx
 ; CHECK-NEXT:    .cfi_def_cfa_offset 8
 ; CHECK-NEXT:    retq
@@ -360,9 +358,9 @@ define swiftcc { double, i64 } @test6() #0 {
 ; CHECK-NEXT:    addsd %xmm1, %xmm0
 ; CHECK-NEXT:    addsd %xmm2, %xmm0
 ; CHECK-NEXT:    addsd %xmm3, %xmm0
-; CHECK-NEXT:    addq %rdx, %rcx
-; CHECK-NEXT:    addq %r8, %rcx
+; CHECK-NEXT:    addq %rdx, %rax
 ; CHECK-NEXT:    addq %rcx, %rax
+; CHECK-NEXT:    addq %r8, %rax
 ; CHECK-NEXT:    popq %rcx
 ; CHECK-NEXT:    .cfi_def_cfa_offset 8
 ; CHECK-NEXT:    retq

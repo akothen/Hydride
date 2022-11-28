@@ -7,7 +7,7 @@ target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3
 
 @empty = constant [1 x i8] zeroinitializer
 
-declare i32 @puts(ptr)
+declare i32 @puts(i8*)
 
 ; Check puts("") -> putchar('\n').
 
@@ -16,7 +16,8 @@ define void @test_simplify1() {
 ; CHECK-NEXT:    [[PUTCHAR:%.*]] = call i32 @putchar(i32 10)
 ; CHECK-NEXT:    ret void
 ;
-  call i32 @puts(ptr @empty)
+  %str = getelementptr [1 x i8], [1 x i8]* @empty, i32 0, i32 0
+  call i32 @puts(i8* %str)
   ret void
 }
 
@@ -24,9 +25,10 @@ define void @test_simplify1() {
 
 define i32 @test_no_simplify1() {
 ; CHECK-LABEL: @test_no_simplify1(
-; CHECK-NEXT:    [[RET:%.*]] = call i32 @puts(ptr noundef nonnull dereferenceable(1) @empty)
+; CHECK-NEXT:    [[RET:%.*]] = call i32 @puts(i8* noundef nonnull dereferenceable(1) getelementptr inbounds ([1 x i8], [1 x i8]* @empty, i32 0, i32 0))
 ; CHECK-NEXT:    ret i32 [[RET]]
 ;
-  %ret = call i32 @puts(ptr @empty)
+  %str = getelementptr [1 x i8], [1 x i8]* @empty, i32 0, i32 0
+  %ret = call i32 @puts(i8* %str)
   ret i32 %ret
 }

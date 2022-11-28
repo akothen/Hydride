@@ -3,10 +3,9 @@
 define i32 @test1(i32 %x) {
 ; CHECK-LABEL: test1:
 ; CHECK:         .quad .Ltmp0
-; CHECK-NEXT:    .quad .LBB0_1
-; CHECK:         .LBB0_1: # Block address taken
-; CHECK-NEXT:    # %bar
-; CHECK-NEXT:    # Label of block must be emitted
+; CHECK-NEXT:    .quad .Ltmp1
+; CHECK: .Ltmp1:
+; CHECK-NEXT: # %bb.1: # %bar
 ; CHECK-NEXT:    callq foo
 ; CHECK-NEXT: .Ltmp0:
 ; CHECK-NEXT:  # %bb.2: # %baz

@@ -62,7 +62,6 @@
 #include "llvm/IR/Operator.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/TypeFinder.h"
-#include "llvm/IR/TypedPointerType.h"
 #include "llvm/IR/Use.h"
 #include "llvm/IR/User.h"
 #include "llvm/IR/Value.h"
@@ -311,12 +310,6 @@ static void PrintCallingConv(unsigned cc, raw_ostream &Out) {
   case CallingConv::AArch64_VectorCall: Out << "aarch64_vector_pcs"; break;
   case CallingConv::AArch64_SVE_VectorCall:
     Out << "aarch64_sve_vector_pcs";
-    break;
-  case CallingConv::AArch64_SME_ABI_Support_Routines_PreserveMost_From_X0:
-    Out << "aarch64_sme_preservemost_from_x0";
-    break;
-  case CallingConv::AArch64_SME_ABI_Support_Routines_PreserveMost_From_X2:
-    Out << "aarch64_sme_preservemost_from_x2";
     break;
   case CallingConv::MSP430_INTR:   Out << "msp430_intrcc"; break;
   case CallingConv::AVR_INTR:      Out << "avr_intrcc "; break;
@@ -617,12 +610,11 @@ void TypePrinting::print(Type *Ty, raw_ostream &OS) {
     OS << '>';
     return;
   }
-  case Type::TypedPointerTyID: {
-    TypedPointerType *TPTy = cast<TypedPointerType>(Ty);
-    OS << "typedptr(" << *TPTy->getElementType() << ", "
-       << TPTy->getAddressSpace() << ")";
+  case Type::DXILPointerTyID:
+    // DXIL pointer types are only handled by the DirectX backend. To avoid
+    // extra dependencies we just print the pointer's address here.
+    OS << "dxil-ptr (" << Ty << ")";
     return;
-  }
   }
   llvm_unreachable("Invalid TypeID");
 }
@@ -1863,12 +1855,6 @@ static void writeDILocation(raw_ostream &Out, const DILocation *DL,
   Printer.printBool("isImplicitCode", DL->isImplicitCode(),
                     /* Default */ false);
   Out << ")";
-}
-
-static void writeDIAssignID(raw_ostream &Out, const DIAssignID *DL,
-                            AsmWriterContext &WriterCtx) {
-  Out << "!DIAssignID()";
-  MDFieldPrinter Printer(Out, WriterCtx);
 }
 
 static void writeDISubrange(raw_ostream &Out, const DISubrange *N,
@@ -4096,7 +4082,8 @@ void AssemblyWriter::printInstruction(const Instruction &I) {
     Out << " within ";
     writeOperand(FPI->getParentPad(), /*PrintType=*/false);
     Out << " [";
-    for (unsigned Op = 0, NumOps = FPI->arg_size(); Op < NumOps; ++Op) {
+    for (unsigned Op = 0, NumOps = FPI->getNumArgOperands(); Op < NumOps;
+         ++Op) {
       if (Op > 0)
         Out << ", ";
       writeOperand(FPI->getArgOperand(Op), /*PrintType=*/true);
@@ -4140,6 +4127,7 @@ void AssemblyWriter::printInstruction(const Instruction &I) {
     // If possible, print out the short form of the call instruction.  We can
     // only do this if the first argument is a pointer to a nonvararg function,
     // and if the return type is not a pointer to a function.
+    //
     Out << ' ';
     TypePrinter.print(FTy->isVarArg() ? FTy : RetTy, Out);
     Out << ' ';
@@ -4155,11 +4143,8 @@ void AssemblyWriter::printInstruction(const Instruction &I) {
     // is only to aid readability, musttail calls forward varargs by default.
     if (CI->isMustTailCall() && CI->getParent() &&
         CI->getParent()->getParent() &&
-        CI->getParent()->getParent()->isVarArg()) {
-      if (CI->arg_size() > 0)
-        Out << ", ";
-      Out << "...";
-    }
+        CI->getParent()->getParent()->isVarArg())
+      Out << ", ...";
 
     Out << ')';
     if (PAL.hasFnAttrs())
@@ -4275,7 +4260,7 @@ void AssemblyWriter::printInstruction(const Instruction &I) {
       Out << ", align " << A->value();
     }
 
-    unsigned AddrSpace = AI->getAddressSpace();
+    unsigned AddrSpace = AI->getType()->getAddressSpace();
     if (AddrSpace != 0) {
       Out << ", addrspace(" << AddrSpace << ')';
     }

@@ -17,7 +17,6 @@
 #define LLVM_ADT_APFIXEDPOINT_H
 
 #include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/DenseMapInfo.h"
 #include "llvm/ADT/SmallString.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -33,51 +32,31 @@ struct fltSemantics;
 /// in the value this represents is treated as padding.
 class FixedPointSemantics {
 public:
-  static constexpr unsigned WidthBitWidth = 16;
-  static constexpr unsigned LsbWeightBitWidth = 13;
-  /// Used to differentiate between constructors with Width and Lsb from the
-  /// default Width and scale
-  struct Lsb {
-    int LsbWeight;
-  };
   FixedPointSemantics(unsigned Width, unsigned Scale, bool IsSigned,
                       bool IsSaturated, bool HasUnsignedPadding)
-      : FixedPointSemantics(Width, Lsb{-static_cast<int>(Scale)}, IsSigned,
-                            IsSaturated, HasUnsignedPadding) {}
-  FixedPointSemantics(unsigned Width, Lsb Weight, bool IsSigned,
-                      bool IsSaturated, bool HasUnsignedPadding)
-      : Width(Width), LsbWeight(Weight.LsbWeight), IsSigned(IsSigned),
+      : Width(Width), Scale(Scale), IsSigned(IsSigned),
         IsSaturated(IsSaturated), HasUnsignedPadding(HasUnsignedPadding) {
-    assert(isUInt<WidthBitWidth>(Width) && isInt<LsbWeightBitWidth>(Weight.LsbWeight));
+    assert(Width >= Scale && "Not enough room for the scale");
     assert(!(IsSigned && HasUnsignedPadding) &&
            "Cannot have unsigned padding on a signed type.");
   }
 
-  /// Check if the Semantic follow the requirements of an older more limited
-  /// version of this class
-  bool isValidLegacySema() const {
-    return LsbWeight <= 0 && static_cast<int>(Width) >= -LsbWeight;
-  }
   unsigned getWidth() const { return Width; }
-  unsigned getScale() const { assert(isValidLegacySema()); return -LsbWeight; }
-  int getLsbWeight() const { return LsbWeight; }
-  int getMsbWeight() const {
-    return LsbWeight + Width - 1 /*Both lsb and msb are both part of width*/;
-  }
+  unsigned getScale() const { return Scale; }
   bool isSigned() const { return IsSigned; }
   bool isSaturated() const { return IsSaturated; }
   bool hasUnsignedPadding() const { return HasUnsignedPadding; }
 
   void setSaturated(bool Saturated) { IsSaturated = Saturated; }
 
-  /// return true if the first bit doesn't have a strictly positive weight
-  bool hasSignOrPaddingBit() const { return IsSigned || HasUnsignedPadding; }
-
   /// Return the number of integral bits represented by these semantics. These
   /// are separate from the fractional bits and do not include the sign or
   /// padding bit.
   unsigned getIntegralBits() const {
-    return std::max(getMsbWeight() + 1 - hasSignOrPaddingBit(), 0);
+    if (IsSigned || (!IsSigned && HasUnsignedPadding))
+      return Width - Scale - 1;
+    else
+      return Width - Scale;
   }
 
   /// Return the FixedPointSemantics that allows for calculating the full
@@ -86,9 +65,6 @@ public:
   /// given binary operation.
   FixedPointSemantics
   getCommonSemantics(const FixedPointSemantics &Other) const;
-
-  /// Print semantics for debug purposes
-  void print(llvm::raw_ostream& OS) const;
 
   /// Returns true if this fixed-point semantic with its value bits interpreted
   /// as an integer can fit in the given floating point semantic without
@@ -107,49 +83,20 @@ public:
                                /*HasUnsignedPadding=*/false);
   }
 
-  bool operator==(FixedPointSemantics Other) const {
-    return Width == Other.Width && LsbWeight == Other.LsbWeight &&
-           IsSigned == Other.IsSigned && IsSaturated == Other.IsSaturated &&
-           HasUnsignedPadding == Other.HasUnsignedPadding;
-  }
-  bool operator!=(FixedPointSemantics Other) const { return !(*this == Other); }
-
 private:
-  unsigned Width          : WidthBitWidth;
-  signed int LsbWeight    : LsbWeightBitWidth;
+  unsigned Width          : 16;
+  unsigned Scale          : 13;
   unsigned IsSigned       : 1;
   unsigned IsSaturated    : 1;
   unsigned HasUnsignedPadding : 1;
 };
 
-static_assert(sizeof(FixedPointSemantics) == 4, "");
-
-inline hash_code hash_value(const FixedPointSemantics &Val) {
-  return hash_value(bit_cast<uint32_t>(Val));
-}
-
-template <> struct DenseMapInfo<FixedPointSemantics> {
-  static inline FixedPointSemantics getEmptyKey() {
-    return FixedPointSemantics(0, 0, false, false, false);
-  }
-
-  static inline FixedPointSemantics getTombstoneKey() {
-    return FixedPointSemantics(0, 1, false, false, false);
-  }
-
-  static unsigned getHashValue(const FixedPointSemantics &Val) {
-    return hash_value(Val);
-  }
-
-  static bool isEqual(const char &LHS, const char &RHS) { return LHS == RHS; }
-};
-
 /// The APFixedPoint class works similarly to APInt/APSInt in that it is a
-/// functional replacement for a scaled integer. It supports a wide range of
-/// semantics including the one used by fixed point types proposed in ISO/IEC
-/// JTC1 SC22 WG14 N1169. The class carries the value and semantics of
-/// a fixed point, and provides different operations that would normally be
-/// performed on fixed point types.
+/// functional replacement for a scaled integer. It is meant to replicate the
+/// fixed point types proposed in ISO/IEC JTC1 SC22 WG14 N1169. The class carries
+/// info about the fixed point type's width, sign, scale, and saturation, and
+/// provides different operations that would normally be performed on fixed point
+/// types.
 class APFixedPoint {
 public:
   APFixedPoint(const APInt &Val, const FixedPointSemantics &Sema)
@@ -167,8 +114,6 @@ public:
   APSInt getValue() const { return APSInt(Val, !Sema.isSigned()); }
   inline unsigned getWidth() const { return Sema.getWidth(); }
   inline unsigned getScale() const { return Sema.getScale(); }
-  int getLsbWeight() const { return Sema.getLsbWeight(); }
-  int getMsbWeight() const { return Sema.getMsbWeight(); }
   inline bool isSaturated() const { return Sema.isSaturated(); }
   inline bool isSigned() const { return Sema.isSigned(); }
   inline bool hasPadding() const { return Sema.hasUnsignedPadding(); }
@@ -209,13 +154,10 @@ public:
   /// Return the integral part of this fixed point number, rounded towards
   /// zero. (-2.5k -> -2)
   APSInt getIntPart() const {
-    if (getMsbWeight() < 0)
-      return APSInt(APInt::getZero(getWidth()), Val.isUnsigned());
-    APSInt ExtVal =
-        (getLsbWeight() > 0) ? Val.extend(getWidth() + getLsbWeight()) : Val;
     if (Val < 0 && Val != -Val) // Cover the case when we have the min val
-      return -((-ExtVal).relativeShl(getLsbWeight()));
-    return ExtVal.relativeShl(getLsbWeight());
+      return -(-Val >> getScale());
+    else
+      return Val >> getScale();
   }
 
   /// Return the integral part of this fixed point number, rounded towards
@@ -236,9 +178,6 @@ public:
     toString(S);
     return std::string(S.str());
   }
-
-  void print(raw_ostream &) const;
-  void dump() const;
 
   // If LHS > RHS, return 1. If LHS == RHS, return 0. If LHS < RHS, return -1.
   int compare(const APFixedPoint &Other) const;
@@ -292,29 +231,6 @@ inline raw_ostream &operator<<(raw_ostream &OS, const APFixedPoint &FX) {
   OS << FX.toString();
   return OS;
 }
-
-inline hash_code hash_value(const APFixedPoint &Val) {
-  return hash_combine(Val.getSemantics(), Val.getValue());
-}
-
-template <> struct DenseMapInfo<APFixedPoint> {
-  static inline APFixedPoint getEmptyKey() {
-    return APFixedPoint(DenseMapInfo<FixedPointSemantics>::getEmptyKey());
-  }
-
-  static inline APFixedPoint getTombstoneKey() {
-    return APFixedPoint(DenseMapInfo<FixedPointSemantics>::getTombstoneKey());
-  }
-
-  static unsigned getHashValue(const APFixedPoint &Val) {
-    return hash_value(Val);
-  }
-
-  static bool isEqual(const APFixedPoint &LHS, const APFixedPoint &RHS) {
-    return LHS.getSemantics() == RHS.getSemantics() &&
-           LHS.getValue() == RHS.getValue();
-  }
-};
 
 } // namespace llvm
 

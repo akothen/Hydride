@@ -25,7 +25,6 @@ entry:
 define dso_local void @fun0() nounwind {
 ; CHECK-LABEL: fun0:
 ; CHECK:       .Lfun0$local:
-; CHECK-NEXT:    .type .Lfun0$local,@function
 ; CHECK-NEXT:  // %bb.0: // %entry
 ; CHECK-NEXT:    ret
 entry:

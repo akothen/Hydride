@@ -45,7 +45,7 @@ TEST(SimpleExecutorMemoryManagerTest, AllocFinalizeFree) {
 
   tpctypes::FinalizeRequest FR;
   FR.Segments.push_back(
-      tpctypes::SegFinalizeRequest{MemProt::Read | MemProt::Write,
+      tpctypes::SegFinalizeRequest{tpctypes::WPF_Read | tpctypes::WPF_Write,
                                    *Mem,
                                    AllocSize,
                                    {HW.data(), HW.size() + 1}});

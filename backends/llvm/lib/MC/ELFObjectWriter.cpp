@@ -786,8 +786,7 @@ void ELFWriter::computeSymbolTable(
 
 void ELFWriter::writeAddrsigSection() {
   for (const MCSymbol *Sym : OWriter.AddrsigSyms)
-    if (Sym->getIndex() != 0)
-      encodeULEB128(Sym->getIndex(), W.OS);
+    encodeULEB128(Sym->getIndex(), W.OS);
 }
 
 MCSectionELF *ELFWriter::createRelocationSection(MCContext &Ctx,
@@ -849,34 +848,27 @@ void ELFWriter::writeSectionData(const MCAssembler &Asm, MCSection &Sec,
   auto &MC = Asm.getContext();
   const auto &MAI = MC.getAsmInfo();
 
-  const DebugCompressionType CompressionType = MAI->compressDebugSections();
-  if (CompressionType == DebugCompressionType::None ||
-      !SectionName.startswith(".debug_")) {
+  bool CompressionEnabled =
+      MAI->compressDebugSections() != DebugCompressionType::None;
+  if (!CompressionEnabled || !SectionName.startswith(".debug_")) {
     Asm.writeSectionData(W.OS, &Section, Layout);
     return;
   }
 
+  assert(MAI->compressDebugSections() == DebugCompressionType::Z &&
+         "expected zlib style compression");
+
   SmallVector<char, 128> UncompressedData;
   raw_svector_ostream VecOS(UncompressedData);
   Asm.writeSectionData(VecOS, &Section, Layout);
-  ArrayRef<uint8_t> Uncompressed =
-      makeArrayRef(reinterpret_cast<uint8_t *>(UncompressedData.data()),
-                   UncompressedData.size());
 
   SmallVector<uint8_t, 128> Compressed;
-  uint32_t ChType;
-  switch (CompressionType) {
-  case DebugCompressionType::None:
-    llvm_unreachable("has been handled");
-  case DebugCompressionType::Zlib:
-    ChType = ELF::ELFCOMPRESS_ZLIB;
-    break;
-  case DebugCompressionType::Zstd:
-    ChType = ELF::ELFCOMPRESS_ZSTD;
-    break;
-  }
-  compression::compress(compression::Params(CompressionType), Uncompressed,
-                        Compressed);
+  const uint32_t ChType = ELF::ELFCOMPRESS_ZLIB;
+  compression::zlib::compress(
+      makeArrayRef(reinterpret_cast<uint8_t *>(UncompressedData.data()),
+                   UncompressedData.size()),
+      Compressed);
+
   if (!maybeWriteCompression(ChType, UncompressedData.size(), Compressed,
                              Sec.getAlignment())) {
     W.OS << UncompressedData;

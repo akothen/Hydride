@@ -15,7 +15,9 @@
 #include <cassert>
 #include <cstdint>
 #include <string>
+#if __cplusplus > 201402L
 #include <string_view>
+#endif
 
 namespace llvm {
 
@@ -285,6 +287,7 @@ namespace llvm {
       assert(isValid() && "Invalid twine!");
     }
 
+#if __cplusplus > 201402L
     /// Construct from an std::string_view by converting it to a pointer and
     /// length.  This handles string_views on a pure API basis, and avoids
     /// storing one (or a pointer to one) inside a Twine, which avoids problems
@@ -295,6 +298,7 @@ namespace llvm {
       LHS.ptrAndLength.length = Str.length();
       assert(isValid() && "Invalid twine!");
     }
+#endif
 
     /// Construct from a StringRef.
     /*implicit*/ Twine(const StringRef &Str) : LHSKind(PtrAndLengthKind) {

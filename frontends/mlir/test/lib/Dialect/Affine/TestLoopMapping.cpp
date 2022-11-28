@@ -17,6 +17,8 @@
 #include "mlir/IR/Builders.h"
 #include "mlir/Pass/Pass.h"
 
+#include "llvm/ADT/SetVector.h"
+
 using namespace mlir;
 
 namespace {

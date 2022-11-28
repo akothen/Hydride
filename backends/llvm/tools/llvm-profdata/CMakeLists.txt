@@ -11,5 +11,4 @@ add_llvm_tool(llvm-profdata
 
   DEPENDS
   intrinsics_gen
-  GENERATE_DRIVER
   )

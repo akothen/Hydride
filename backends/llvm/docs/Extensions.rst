@@ -377,8 +377,7 @@ this directive, all symbols are considered address-significant.
 
   .addrsig_sym sym
 
-If ``sym`` is not otherwise referenced or defined anywhere else in the file,
-this directive is a no-op. Otherwise, mark ``sym`` as address-significant.
+This marks ``sym`` as address-significant.
 
 ``SHT_LLVM_SYMPART`` Section (symbol partition specification)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

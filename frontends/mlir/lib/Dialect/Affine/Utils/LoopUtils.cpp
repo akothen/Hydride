@@ -1090,8 +1090,7 @@ static LogicalResult generateCleanupLoopForUnroll(AffineForOp forOp,
 /// is successfully unrolled.
 LogicalResult mlir::loopUnrollByFactor(
     AffineForOp forOp, uint64_t unrollFactor,
-    function_ref<void(unsigned, Operation *, OpBuilder)> annotateFn,
-    bool cleanUpUnroll) {
+    function_ref<void(unsigned, Operation *, OpBuilder)> annotateFn) {
   assert(unrollFactor > 0 && "unroll factor should be positive");
 
   Optional<uint64_t> mayBeConstantTripCount = getConstantTripCount(forOp);
@@ -1107,14 +1106,9 @@ LogicalResult mlir::loopUnrollByFactor(
     return success();
 
   // If the trip count is lower than the unroll factor, no unrolled body.
-  if (mayBeConstantTripCount && *mayBeConstantTripCount < unrollFactor) {
-    if (cleanUpUnroll) {
-      // Unroll the cleanup loop if cleanUpUnroll is specified.
-      return loopUnrollFull(forOp);
-    }
-
+  // TODO: option to specify cleanup loop unrolling.
+  if (mayBeConstantTripCount && *mayBeConstantTripCount < unrollFactor)
     return failure();
-  }
 
   // Generate the cleanup loop if trip count isn't a multiple of unrollFactor.
   if (getLargestDivisorOfTripCount(forOp) % unrollFactor != 0) {
@@ -1125,9 +1119,6 @@ LogicalResult mlir::loopUnrollByFactor(
     if (forOp.getLowerBoundMap().getNumResults() != 1 ||
         forOp.getUpperBoundMap().getNumResults() != 1)
       return failure();
-    if (cleanUpUnroll)
-      // Force unroll including cleanup loop
-      return loopUnrollFull(forOp);
     if (failed(generateCleanupLoopForUnroll(forOp, unrollFactor)))
       assert(false && "cleanup loop lower bound map for single result lower "
                       "and upper bound maps can always be determined");

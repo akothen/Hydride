@@ -66,13 +66,11 @@ static std::pair<bool, bool> GetSignReturnAddress(const Function &F) {
   return {true, false};
 }
 
-static bool ShouldSignWithBKey(const Function &F, const MachineFunction &MF) {
+static bool ShouldSignWithBKey(const Function &F) {
   if (!F.hasFnAttribute("sign-return-address-key")) {
     if (const auto *BKey = mdconst::extract_or_null<ConstantInt>(
             F.getParent()->getModuleFlag("sign-return-address-with-bkey")))
       return BKey->getZExtValue();
-    if (MF.getTarget().getTargetTriple().isOSWindows())
-      return true;
     return false;
   }
 
@@ -90,7 +88,7 @@ AArch64FunctionInfo::AArch64FunctionInfo(MachineFunction &MF_) : MF(&MF_) {
 
   const Function &F = MF->getFunction();
   std::tie(SignReturnAddress, SignReturnAddressAll) = GetSignReturnAddress(F);
-  SignWithBKey = ShouldSignWithBKey(F, *MF);
+  SignWithBKey = ShouldSignWithBKey(F);
   // TODO: skip functions that have no instrumented allocas for optimization
   IsMTETagged = F.hasFnAttribute(Attribute::SanitizeMemTag);
 

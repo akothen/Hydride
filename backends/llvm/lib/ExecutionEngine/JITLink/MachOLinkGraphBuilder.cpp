@@ -51,10 +51,7 @@ MachOLinkGraphBuilder::MachOLinkGraphBuilder(
     : Obj(Obj),
       G(std::make_unique<LinkGraph>(
           std::string(Obj.getFileName()), std::move(TT), getPointerSize(Obj),
-          getEndianness(Obj), std::move(GetEdgeKindName))) {
-  auto &MachHeader = Obj.getHeader64();
-  SubsectionsViaSymbols = MachHeader.flags & MachO::MH_SUBSECTIONS_VIA_SYMBOLS;
-}
+          getEndianness(Obj), std::move(GetEdgeKindName))) {}
 
 void MachOLinkGraphBuilder::addCustomSectionParser(
     StringRef SectionName, SectionParserFunction Parser) {
@@ -111,8 +108,8 @@ MachOLinkGraphBuilder::getEndianness(const object::MachOObjectFile &Obj) {
 
 Section &MachOLinkGraphBuilder::getCommonSection() {
   if (!CommonSection)
-    CommonSection = &G->createSection(CommonSectionName,
-                                      orc::MemProt::Read | orc::MemProt::Write);
+    CommonSection =
+        &G->createSection(CommonSectionName, MemProt::Read | MemProt::Write);
   return *CommonSection;
 }
 
@@ -177,11 +174,11 @@ Error MachOLinkGraphBuilder::createNormalizedSections() {
     // Get prot flags.
     // FIXME: Make sure this test is correct (it's probably missing cases
     // as-is).
-    orc::MemProt Prot;
+    MemProt Prot;
     if (NSec.Flags & MachO::S_ATTR_PURE_INSTRUCTIONS)
-      Prot = orc::MemProt::Read | orc::MemProt::Exec;
+      Prot = MemProt::Read | MemProt::Exec;
     else
-      Prot = orc::MemProt::Read | orc::MemProt::Write;
+      Prot = MemProt::Read | MemProt::Write;
 
     auto FullyQualifiedName =
         G->allocateString(StringRef(NSec.SegName) + "," + NSec.SectName);
@@ -350,20 +347,19 @@ Error MachOLinkGraphBuilder::graphifyRegularSymbols() {
         if (!NSym.Name)
           return make_error<JITLinkError>("Anonymous common symbol at index " +
                                           Twine(KV.first));
-        NSym.GraphSymbol = &G->addDefinedSymbol(
-            G->createZeroFillBlock(getCommonSection(),
-                                   orc::ExecutorAddrDiff(NSym.Value),
-                                   orc::ExecutorAddr(),
-                                   1ull << MachO::GET_COMM_ALIGN(NSym.Desc), 0),
-            0, *NSym.Name, orc::ExecutorAddrDiff(NSym.Value), Linkage::Strong,
-            NSym.S, false, NSym.Desc & MachO::N_NO_DEAD_STRIP);
+        NSym.GraphSymbol = &G->addCommonSymbol(
+            *NSym.Name, NSym.S, getCommonSection(), orc::ExecutorAddr(),
+            orc::ExecutorAddrDiff(NSym.Value),
+            1ull << MachO::GET_COMM_ALIGN(NSym.Desc),
+            NSym.Desc & MachO::N_NO_DEAD_STRIP);
       } else {
         if (!NSym.Name)
           return make_error<JITLinkError>("Anonymous external symbol at "
                                           "index " +
                                           Twine(KV.first));
         NSym.GraphSymbol = &G->addExternalSymbol(
-            *NSym.Name, 0, (NSym.Desc & MachO::N_WEAK_REF) != 0);
+            *NSym.Name, 0,
+            NSym.Desc & MachO::N_WEAK_REF ? Linkage::Weak : Linkage::Strong);
       }
       break;
     case MachO::N_ABS:
@@ -489,24 +485,15 @@ Error MachOLinkGraphBuilder::graphifyRegularSymbols() {
     }
 
     // Visit section symbols in order by popping off the reverse-sorted stack,
-    // building graph symbols as we go.
-    //
-    // If MH_SUBSECTIONS_VIA_SYMBOLS is set we'll build a block for each
-    // alt-entry chain.
-    //
-    // If MH_SUBSECTIONS_VIA_SYMBOLS is not set then we'll just build one block
-    // for the whole section.
+    // building blocks for each alt-entry chain and creating symbols as we go.
     while (!SecNSymStack.empty()) {
       SmallVector<NormalizedSymbol *, 8> BlockSyms;
 
-      // Get the symbols in this alt-entry chain, or the whole section (if
-      // !SubsectionsViaSymbols).
       BlockSyms.push_back(SecNSymStack.back());
       SecNSymStack.pop_back();
       while (!SecNSymStack.empty() &&
              (isAltEntry(*SecNSymStack.back()) ||
-              SecNSymStack.back()->Value == BlockSyms.back()->Value ||
-             !SubsectionsViaSymbols)) {
+              SecNSymStack.back()->Value == BlockSyms.back()->Value)) {
         BlockSyms.push_back(SecNSymStack.back());
         SecNSymStack.pop_back();
       }

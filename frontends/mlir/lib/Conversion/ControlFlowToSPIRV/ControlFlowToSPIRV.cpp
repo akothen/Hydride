@@ -19,6 +19,7 @@
 #include "mlir/Dialect/SPIRV/Utils/LayoutUtils.h"
 #include "mlir/IR/AffineMap.h"
 #include "mlir/Support/LogicalResult.h"
+#include "llvm/ADT/SetVector.h"
 #include "llvm/Support/Debug.h"
 
 #define DEBUG_TYPE "cf-to-spirv-pattern"
@@ -31,7 +32,7 @@ using namespace mlir;
 
 namespace {
 
-/// Converts cf.br to spirv.Branch.
+/// Converts cf.br to spv.Branch.
 struct BranchOpPattern final : public OpConversionPattern<cf::BranchOp> {
   using OpConversionPattern<cf::BranchOp>::OpConversionPattern;
 
@@ -44,7 +45,7 @@ struct BranchOpPattern final : public OpConversionPattern<cf::BranchOp> {
   }
 };
 
-/// Converts cf.cond_br to spirv.BranchConditional.
+/// Converts cf.cond_br to spv.BranchConditional.
 struct CondBranchOpPattern final
     : public OpConversionPattern<cf::CondBranchOp> {
   using OpConversionPattern<cf::CondBranchOp>::OpConversionPattern;

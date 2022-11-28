@@ -9,7 +9,6 @@
 #include "mlir/Dialect/SparseTensor/Pipelines/Passes.h"
 
 #include "mlir/Conversion/Passes.h"
-#include "mlir/Dialect/Arith/Transforms/Passes.h"
 #include "mlir/Dialect/Bufferization/Transforms/Bufferize.h"
 #include "mlir/Dialect/Bufferization/Transforms/OneShotAnalysis.h"
 #include "mlir/Dialect/Bufferization/Transforms/Passes.h"
@@ -18,7 +17,6 @@
 #include "mlir/Dialect/SparseTensor/IR/SparseTensor.h"
 #include "mlir/Dialect/SparseTensor/Transforms/Passes.h"
 #include "mlir/Pass/PassManager.h"
-#include "mlir/Transforms/Passes.h"
 
 using namespace mlir;
 using namespace mlir::sparse_tensor;
@@ -32,7 +30,8 @@ getBufferizationOptions(bool analysisOnly) {
   // TODO(springerm): To spot memory leaks more easily, returning dense allocs
   // should be disallowed.
   options.allowReturnAllocs = true;
-  options.functionBoundaryTypeConversion = LayoutMapOption::IdentityLayoutMap;
+  options.functionBoundaryTypeConversion =
+      BufferizationOptions::LayoutMapOption::IdentityLayoutMap;
   options.unknownTypeConverterFn = [](Value value, unsigned memorySpace,
                                       const BufferizationOptions &options) {
     return getMemRefTypeWithStaticIdentityLayout(
@@ -51,24 +50,18 @@ getBufferizationOptions(bool analysisOnly) {
 
 void mlir::sparse_tensor::buildSparseCompiler(
     OpPassManager &pm, const SparseCompilerOptions &options) {
+  // TODO(wrengr): ensure the original `pm` is for ModuleOp
   pm.addNestedPass<func::FuncOp>(createLinalgGeneralizationPass());
   pm.addPass(
       bufferization::createTensorCopyInsertionPass(getBufferizationOptions(
           /*analysisOnly=*/options.testBufferizationAnalysisOnly)));
   if (options.testBufferizationAnalysisOnly)
     return;
-  pm.addPass(createSparseTensorRewritePass(options.enableRuntimeLibrary));
   pm.addPass(createSparsificationPass(options.sparsificationOptions()));
-  if (options.enableRuntimeLibrary)
-    pm.addPass(createSparseTensorConversionPass(
-        options.sparseTensorConversionOptions()));
-  else
-    pm.addPass(
-        createSparseTensorCodegenPass(options.enableBufferInitialization));
-  pm.addPass(createSparseBufferRewritePass(options.enableBufferInitialization));
+  pm.addPass(createSparseTensorConversionPass(
+      options.sparseTensorConversionOptions()));
   pm.addPass(createDenseBufferizationPass(
       getBufferizationOptions(/*analysisOnly=*/false)));
-  pm.addNestedPass<func::FuncOp>(createCanonicalizerPass());
   pm.addNestedPass<func::FuncOp>(
       mlir::bufferization::createFinalizingBufferizePass());
   // TODO(springerm): Add sparse support to the BufferDeallocation pass and add
@@ -78,9 +71,8 @@ void mlir::sparse_tensor::buildSparseCompiler(
   pm.addNestedPass<func::FuncOp>(createConvertSCFToCFPass());
   pm.addPass(createLowerAffinePass());
   pm.addPass(createConvertVectorToLLVMPass(options.lowerVectorToLLVMOptions()));
-  pm.addPass(createMemRefToLLVMConversionPass());
+  pm.addPass(createMemRefToLLVMPass());
   pm.addNestedPass<func::FuncOp>(createConvertComplexToStandardPass());
-  pm.addNestedPass<mlir::func::FuncOp>(mlir::arith::createArithExpandOpsPass());
   pm.addNestedPass<func::FuncOp>(createConvertMathToLLVMPass());
   pm.addPass(createConvertMathToLibmPass());
   pm.addPass(createConvertComplexToLibmPass());

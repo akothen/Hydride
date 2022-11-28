@@ -209,7 +209,8 @@ define i1 @nsw_range1(i8 %b) {
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    [[C:%.*]] = add nuw nsw i8 [[B:%.*]], -3
 ; CHECK-NEXT:    [[MUL:%.*]] = mul nsw i8 [[C]], 4
-; CHECK-NEXT:    ret i1 false
+; CHECK-NEXT:    [[CMP:%.*]] = icmp ult i8 [[C]], [[MUL]]
+; CHECK-NEXT:    ret i1 [[CMP]]
 ;
 entry:
   %c = add nuw nsw i8 %b, -3

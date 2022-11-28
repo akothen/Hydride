@@ -10,9 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
-#include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/Dialect/SCF/Transforms/Transforms.h"
 #include "mlir/Dialect/SCF/Utils/Utils.h"
@@ -20,6 +19,8 @@
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
+
+#include "llvm/ADT/SetVector.h"
 
 using namespace mlir;
 
@@ -132,7 +133,6 @@ struct TestSCFPipeliningPass
               std::vector<std::pair<Operation *, unsigned>> &schedule) {
     if (!forOp->hasAttr(kTestPipeliningLoopMarker))
       return;
-
     schedule.resize(forOp.getBody()->getOperations().size() - 1);
     forOp.walk([&schedule](Operation *op) {
       auto attrStage =
@@ -155,30 +155,17 @@ struct TestSCFPipeliningPass
         rewriter.create<scf::IfOp>(loc, op->getResultTypes(), pred, true);
     // True branch.
     op->moveBefore(&ifOp.getThenRegion().front(),
-                   ifOp.getThenRegion().front().begin());
+                   ifOp.getThenRegion().front().end());
     rewriter.setInsertionPointAfter(op);
-    if (op->getNumResults() > 0)
-      rewriter.create<scf::YieldOp>(loc, op->getResults());
+    rewriter.create<scf::YieldOp>(loc, op->getResults());
     // False branch.
     rewriter.setInsertionPointToStart(&ifOp.getElseRegion().front());
-    SmallVector<Value> elseYieldOperands;
-    elseYieldOperands.reserve(ifOp.getNumResults());
-    if (auto viewOp = dyn_cast<memref::SubViewOp>(op)) {
-      // For sub-views, just clone the op.
-      // NOTE: This is okay in the test because we use dynamic memref sizes, so
-      // the verifier will not complain. Otherwise, we may create a logically
-      // out-of-bounds view and a different technique should be used.
-      Operation *opClone = rewriter.clone(*op);
-      elseYieldOperands.append(opClone->result_begin(), opClone->result_end());
-    } else {
-      // Default to assuming constant numeric values.
-      for (Type type : op->getResultTypes()) {
-        elseYieldOperands.push_back(rewriter.create<arith::ConstantOp>(
-            loc, rewriter.getZeroAttr(type)));
-      }
+    SmallVector<Value> zeros;
+    for (Type type : op->getResultTypes()) {
+      zeros.push_back(
+          rewriter.create<arith::ConstantOp>(loc, rewriter.getZeroAttr(type)));
     }
-    if (op->getNumResults() > 0)
-      rewriter.create<scf::YieldOp>(loc, elseYieldOperands);
+    rewriter.create<scf::YieldOp>(loc, zeros);
     return ifOp.getOperation();
   }
 
@@ -202,7 +189,7 @@ struct TestSCFPipeliningPass
   }
 
   void getDependentDialects(DialectRegistry &registry) const override {
-    registry.insert<arith::ArithDialect, memref::MemRefDialect>();
+    registry.insert<arith::ArithmeticDialect>();
   }
 
   void runOnOperation() override {

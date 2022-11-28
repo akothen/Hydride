@@ -26,13 +26,14 @@
 #define LLVM_THREADING_USE_STD_CALL_ONCE 1
 #elif defined(LLVM_ON_UNIX) &&                                                 \
     (defined(_LIBCPP_VERSION) ||                                               \
-     !(defined(__NetBSD__) || defined(__OpenBSD__) || defined(__powerpc__)))
+     !(defined(__NetBSD__) || defined(__OpenBSD__) ||                          \
+       (defined(__ppc__) || defined(__PPC__))))
 // std::call_once from libc++ is used on all Unix platforms. Other
 // implementations like libstdc++ are known to have problems on NetBSD,
 // OpenBSD and PowerPC.
 #define LLVM_THREADING_USE_STD_CALL_ONCE 1
 #elif defined(LLVM_ON_UNIX) &&                                                 \
-    (defined(__powerpc__) && defined(__LITTLE_ENDIAN__))
+    ((defined(__ppc__) || defined(__PPC__)) && defined(__LITTLE_ENDIAN__))
 #define LLVM_THREADING_USE_STD_CALL_ONCE 1
 #else
 #define LLVM_THREADING_USE_STD_CALL_ONCE 0
@@ -49,7 +50,7 @@ class Twine;
 
 /// Returns true if LLVM is compiled with support for multi-threading, and
 /// false otherwise.
-constexpr bool llvm_is_multithreaded() { return LLVM_ENABLE_THREADS; }
+bool llvm_is_multithreaded();
 
 #if LLVM_THREADING_USE_STD_CALL_ONCE
 

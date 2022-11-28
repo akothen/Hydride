@@ -13,13 +13,13 @@
 #define LLVM_LIB_TARGET_DIRECTX_DXILCONSTANTS_H
 
 namespace llvm {
-namespace dxil {
+namespace DXIL {
 
 #define DXIL_OP_ENUM
 #include "DXILOperation.inc"
 #undef DXIL_OP_ENUM
 
-} // namespace dxil
+} // namespace DXIL
 } // namespace llvm
 
 #endif

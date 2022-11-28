@@ -12,7 +12,7 @@ add_mlir_conversion_library(MLIRTosaToLinalg
   MLIRConversionPassIncGen
 
   LINK_LIBS PUBLIC
-  MLIRArithDialect
+  MLIRArithmeticDialect
   MLIRDialectUtils
   MLIRIR
   MLIRLinalgDialect

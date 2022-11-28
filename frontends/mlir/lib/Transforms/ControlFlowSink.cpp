@@ -13,24 +13,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Transforms/Passes.h"
-
+#include "PassDetail.h"
 #include "mlir/IR/Dominance.h"
 #include "mlir/Interfaces/ControlFlowInterfaces.h"
 #include "mlir/Interfaces/SideEffectInterfaces.h"
 #include "mlir/Transforms/ControlFlowSinkUtils.h"
+#include "mlir/Transforms/Passes.h"
 #include "mlir/Transforms/SideEffectUtils.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONTROLFLOWSINK
-#include "mlir/Transforms/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 
 namespace {
 /// A control-flow sink pass.
-struct ControlFlowSink : public impl::ControlFlowSinkBase<ControlFlowSink> {
+struct ControlFlowSink : public ControlFlowSinkBase<ControlFlowSink> {
   void runOnOperation() override;
 };
 } // end anonymous namespace
@@ -44,7 +39,7 @@ void ControlFlowSink::runOnOperation() {
     // Sink side-effect free operations.
     numSunk = controlFlowSink(
         regionsToSink, domInfo,
-        [](Operation *op, Region *) { return isMemoryEffectFree(op); },
+        [](Operation *op, Region *) { return isSideEffectFree(op); },
         [](Operation *op, Region *region) {
           // Move the operation to the beginning of the region's entry block.
           // This guarantees the preservation of SSA dominance of all of the

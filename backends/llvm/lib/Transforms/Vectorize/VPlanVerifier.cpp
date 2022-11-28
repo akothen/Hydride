@@ -133,38 +133,17 @@ void VPlanVerifier::verifyHierarchicalCFG(
   verifyRegionRec(TopRegion);
 }
 
-// Verify that phi-like recipes are at the beginning of \p VPBB, with no
-// other recipes in between. Also check that only header blocks contain
-// VPHeaderPHIRecipes.
-static bool verifyPhiRecipes(const VPBasicBlock *VPBB) {
+static bool
+verifyVPBasicBlock(const VPBasicBlock *VPBB,
+                   DenseMap<const VPBlockBase *, unsigned> &BlockNumbering) {
+  // Verify that phi-like recipes are at the beginning of the block, with no
+  // other recipes in between.
   auto RecipeI = VPBB->begin();
   auto End = VPBB->end();
   unsigned NumActiveLaneMaskPhiRecipes = 0;
-  const VPRegionBlock *ParentR = VPBB->getParent();
-  bool IsHeaderVPBB = ParentR && !ParentR->isReplicator() &&
-                      ParentR->getEntryBasicBlock() == VPBB;
   while (RecipeI != End && RecipeI->isPhi()) {
     if (isa<VPActiveLaneMaskPHIRecipe>(RecipeI))
       NumActiveLaneMaskPhiRecipes++;
-
-    if (IsHeaderVPBB && !isa<VPHeaderPHIRecipe>(*RecipeI)) {
-      errs() << "Found non-header PHI recipe in header VPBB";
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
-      errs() << ": ";
-      RecipeI->dump();
-#endif
-      return false;
-    }
-
-    if (!IsHeaderVPBB && isa<VPHeaderPHIRecipe>(*RecipeI)) {
-      errs() << "Found header PHI recipe in non-header VPBB";
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
-      errs() << ": ";
-      RecipeI->dump();
-#endif
-      return false;
-    }
-
     RecipeI++;
   }
 
@@ -187,14 +166,6 @@ static bool verifyPhiRecipes(const VPBasicBlock *VPBB) {
     }
     RecipeI++;
   }
-  return true;
-}
-
-static bool
-verifyVPBasicBlock(const VPBasicBlock *VPBB,
-                   DenseMap<const VPBlockBase *, unsigned> &BlockNumbering) {
-  if (!verifyPhiRecipes(VPBB))
-    return false;
 
   // Verify that defs in VPBB dominate all their uses. The current
   // implementation is still incomplete.
@@ -311,7 +282,7 @@ bool VPlanVerifier::verifyPlanIsValid(const VPlan &Plan) {
     }
   }
 
-  for (const auto &KV : Plan.getLiveOuts())
+  for (auto &KV : Plan.getLiveOuts())
     if (KV.second->getNumOperands() != 1) {
       errs() << "live outs must have a single operand\n";
       return false;

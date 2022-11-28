@@ -1,4 +1,4 @@
-import("//third-party/unittest/unittest.gni")
+import("//llvm/utils/unittest/unittest.gni")
 
 # Keyed off LLVM_ENABLE_PLUGINS in the CMake build, which is usually false
 # on Windows and true elsewhere.

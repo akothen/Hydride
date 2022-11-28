@@ -72,8 +72,9 @@ std::string computeDataLayout(const Triple &TT, StringRef CPU,
 Reloc::Model getEffectiveRelocModel(const Triple &TT,
                                     Optional<Reloc::Model> RM) {
   // If not defined we default to static
-  if (!RM.has_value())
+  if (!RM.hasValue()) {
     return Reloc::Static;
+  }
 
   return *RM;
 }
@@ -87,7 +88,7 @@ CodeModel::Model getEffectiveCodeModel(Optional<CodeModel::Model> CM,
   } else if (CM == CodeModel::Kernel) {
     llvm_unreachable("Kernel code model is not implemented yet");
   }
-  return CM.value();
+  return CM.getValue();
 }
 } // end anonymous namespace
 
@@ -143,7 +144,6 @@ public:
   const M68kSubtarget &getM68kSubtarget() const {
     return *getM68kTargetMachine().getSubtargetImpl();
   }
-  void addIRPasses() override;
   bool addIRTranslator() override;
   bool addLegalizeMachineIR() override;
   bool addRegBankSelect() override;
@@ -156,11 +156,6 @@ public:
 
 TargetPassConfig *M68kTargetMachine::createPassConfig(PassManagerBase &PM) {
   return new M68kPassConfig(*this, PM);
-}
-
-void M68kPassConfig::addIRPasses() {
-  addPass(createAtomicExpandPass());
-  TargetPassConfig::addIRPasses();
 }
 
 bool M68kPassConfig::addInstSelector() {

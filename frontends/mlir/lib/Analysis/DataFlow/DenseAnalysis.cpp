@@ -49,6 +49,8 @@ void AbstractDenseDataFlowAnalysis::visitOperation(Operation *op) {
 
   // Get the dense lattice to update.
   AbstractDenseLattice *after = getLattice(op);
+  if (after->isAtFixpoint())
+    return;
 
   // If this op implements region control-flow, then control-flow dictates its
   // transfer function.
@@ -62,7 +64,7 @@ void AbstractDenseDataFlowAnalysis::visitOperation(Operation *op) {
     // If not all return sites are known, then conservatively assume we can't
     // reason about the data-flow.
     if (!predecessors->allPredecessorsKnown())
-      return setToEntryState(after);
+      return reset(after);
     for (Operation *predecessor : predecessors->getKnownPredecessors())
       join(after, *getLatticeFor(op, predecessor));
     return;
@@ -74,6 +76,9 @@ void AbstractDenseDataFlowAnalysis::visitOperation(Operation *op) {
     before = getLatticeFor(op, prev);
   else
     before = getLatticeFor(op, op->getBlock());
+  // If the incoming lattice is uninitialized, bail out.
+  if (before->isUninitialized())
+    return;
 
   // Invoke the operation transfer function.
   visitOperationImpl(op, *before, after);
@@ -86,6 +91,8 @@ void AbstractDenseDataFlowAnalysis::visitBlock(Block *block) {
 
   // Get the dense lattice to update.
   AbstractDenseLattice *after = getLattice(block);
+  if (after->isAtFixpoint())
+    return;
 
   // The dense lattices of entry blocks are set by region control-flow or the
   // callgraph.
@@ -97,7 +104,7 @@ void AbstractDenseDataFlowAnalysis::visitBlock(Block *block) {
       // If not all callsites are known, conservatively mark all lattices as
       // having reached their pessimistic fixpoints.
       if (!callsites->allPredecessorsKnown())
-        return setToEntryState(after);
+        return reset(after);
       for (Operation *callsite : callsites->getKnownPredecessors()) {
         // Get the dense lattice before the callsite.
         if (Operation *prev = callsite->getPrevNode())
@@ -113,7 +120,7 @@ void AbstractDenseDataFlowAnalysis::visitBlock(Block *block) {
       return visitRegionBranchOperation(block, branch, after);
 
     // Otherwise, we can't reason about the data-flow.
-    return setToEntryState(after);
+    return reset(after);
   }
 
   // Join the state with the state after the block's predecessors.

@@ -46,14 +46,11 @@ protected:
     DominatorTree DT;
     AssumptionCache AC;
     BasicAAResult BAA;
-    AAResults AAR;
     SimpleAAQueryInfo AAQI;
 
     TestAnalyses(BasicAATest &Test)
         : DT(*Test.F), AC(*Test.F), BAA(Test.DL, *Test.F, Test.TLI, AC, &DT),
-          AAR(Test.TLI), AAQI(AAR) {
-      AAR.addAAResult(BAA);
-    }
+          AAQI() {}
   };
 
   llvm::Optional<TestAnalyses> Analyses;

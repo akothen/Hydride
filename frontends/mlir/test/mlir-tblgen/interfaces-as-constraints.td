@@ -4,6 +4,9 @@ include "mlir/IR/OpBase.td"
 
 def Test_Dialect : Dialect {
   let name = "test";
+
+  // TODO: Flip to _Prefixed
+  let emitAccessorPrefix = kEmitAccessorPrefix_Raw;
 }
 
 def TopLevelTypeInterface : TypeInterface<"TopLevelTypeInterface">;
@@ -43,5 +46,5 @@ def OpUsingAllOfThose : Op<Test_Dialect, "OpUsingAllOfThose"> {
 // CHECK-NEXT:    return op->emitOpError("attribute '") << attrName
 // CHECK-NEXT:        << "' failed to satisfy constraint: AttrInterfaceInNamespace instance";
 
-// CHECK: TopLevelAttrInterface OpUsingAllOfThose::getAttr1()
-// CHECK: test::AttrInterfaceInNamespace OpUsingAllOfThose::getAttr2()
+// CHECK: TopLevelAttrInterface OpUsingAllOfThose::attr1()
+// CHECK: test::AttrInterfaceInNamespace OpUsingAllOfThose::attr2()

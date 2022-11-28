@@ -7,7 +7,7 @@ declare void @use(i1)
 
 define void @test1a() {
 ; CHECK-LABEL: @test1a(
-; CHECK-NEXT:    [[X:%.*]] = load i32, ptr @G
+; CHECK-NEXT:    [[X:%.*]] = load i32, i32* @G
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 false)
@@ -16,7 +16,7 @@ define void @test1a() {
 ; CHECK-NEXT:    call void @use(i1 [[C_1]])
 ; CHECK-NEXT:    ret void
 ;
-  %X = load i32, ptr @G
+  %X = load i32, i32* @G
   %t.1 = icmp ne i32 %X, 124
   call void @use(i1 %t.1)
   %t.2 = icmp ult i32 %X, 124
@@ -34,18 +34,18 @@ define void @test1b(i1 %c) {
 ; CHECK-LABEL: @test1b(
 ; CHECK-NEXT:    br i1 [[C:%.*]], label [[T:%.*]], label [[F:%.*]]
 ; CHECK:       T:
-; CHECK-NEXT:    store i32 17, ptr @G
+; CHECK-NEXT:    store i32 17, i32* @G
 ; CHECK-NEXT:    ret void
 ; CHECK:       F:
-; CHECK-NEXT:    store i32 123, ptr @G
+; CHECK-NEXT:    store i32 123, i32* @G
 ; CHECK-NEXT:    ret void
 ;
   br i1 %c, label %T, label %F
 T:
-  store i32 17, ptr @G
+  store i32 17, i32* @G
   ret void
 F:
-  store i32 123, ptr @G
+  store i32 123, i32* @G
   ret void
 }
 
@@ -54,7 +54,7 @@ F:
 
 define void @test2a() {
 ; CHECK-LABEL: @test2a(
-; CHECK-NEXT:    [[X:%.*]] = load i32, ptr @H
+; CHECK-NEXT:    [[X:%.*]] = load i32, i32* @H
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 false)
@@ -63,7 +63,7 @@ define void @test2a() {
 ; CHECK-NEXT:    call void @use(i1 [[C_1]])
 ; CHECK-NEXT:    ret void
 ;
-  %X = load i32, ptr @H
+  %X = load i32, i32* @H
   %t.1 = icmp ne i32 %X, 124
   call void @use(i1 %t.1)
   %t.2 = icmp ult i32 %X, 124
@@ -83,13 +83,13 @@ define void @test2b(i1 %c.1, i1 %c.2) {
 ; CHECK:       T:
 ; CHECK-NEXT:    br i1 [[C_2:%.*]], label [[T_1:%.*]], label [[F_1:%.*]]
 ; CHECK:       T.1:
-; CHECK-NEXT:    store i32 17, ptr @H
+; CHECK-NEXT:    store i32 17, i32* @H
 ; CHECK-NEXT:    ret void
 ; CHECK:       F.1:
-; CHECK-NEXT:    store i32 20, ptr @H
+; CHECK-NEXT:    store i32 20, i32* @H
 ; CHECK-NEXT:    ret void
 ; CHECK:       F:
-; CHECK-NEXT:    store i32 123, ptr @H
+; CHECK-NEXT:    store i32 123, i32* @H
 ; CHECK-NEXT:    ret void
 ;
   br i1 %c.1, label %T, label %F
@@ -97,15 +97,15 @@ T:
   br i1 %c.2, label %T.1, label %F.1
 
 T.1:
-  store i32 17, ptr @H
+  store i32 17, i32* @H
   ret void
 
 F.1:
-  store i32 20, ptr @H
+  store i32 20, i32* @H
   ret void
 
 F:
-  store i32 123, ptr @H
+  store i32 123, i32* @H
   ret void
 }
 
@@ -114,7 +114,7 @@ F:
 
 define void @test3a() {
 ; CHECK-LABEL: @test3a(
-; CHECK-NEXT:    [[X:%.*]] = load i32, ptr @I
+; CHECK-NEXT:    [[X:%.*]] = load i32, i32* @I
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 false)
@@ -123,7 +123,7 @@ define void @test3a() {
 ; CHECK-NEXT:    call void @use(i1 [[C_1]])
 ; CHECK-NEXT:    ret void
 ;
-  %X = load i32, ptr @I
+  %X = load i32, i32* @I
   %t.1 = icmp ne i32 %X, 124
   call void @use(i1 %t.1)
   %t.2 = icmp ult i32 %X, 124
@@ -146,7 +146,7 @@ define void @test3b(i1 %c.1, i1 %c.2) {
 ; CHECK-NEXT:    br label [[EXIT]]
 ; CHECK:       exit:
 ; CHECK-NEXT:    [[P:%.*]] = phi i32 [ 17, [[T]] ], [ 123, [[F]] ]
-; CHECK-NEXT:    store i32 [[P]], ptr @I
+; CHECK-NEXT:    store i32 [[P]], i32* @I
 ; CHECK-NEXT:    ret void
 ;
   br i1 %c.1, label %T, label %F
@@ -159,7 +159,7 @@ F:
 
 exit:
   %p = phi i32 [ 17, %T ], [ 123, %F ]
-  store i32 %p, ptr @I
+  store i32 %p, i32* @I
   ret void
 
 }
@@ -169,7 +169,7 @@ exit:
 
 define void @test4a() {
 ; CHECK-LABEL: @test4a(
-; CHECK-NEXT:    [[X:%.*]] = load i32, ptr @J
+; CHECK-NEXT:    [[X:%.*]] = load i32, i32* @J
 ; CHECK-NEXT:    [[C_1:%.*]] = icmp ne i32 [[X]], 124
 ; CHECK-NEXT:    call void @use(i1 [[C_1]])
 ; CHECK-NEXT:    [[C_2:%.*]] = icmp ult i32 [[X]], 124
@@ -182,7 +182,7 @@ define void @test4a() {
 ; CHECK-NEXT:    call void @use(i1 [[C_5]])
 ; CHECK-NEXT:    ret void
 ;
-  %X = load i32, ptr @J
+  %X = load i32, i32* @J
   %c.1 = icmp ne i32 %X, 124
   call void @use(i1 %c.1)
   %c.2 = icmp ult i32 %X, 124
@@ -209,7 +209,7 @@ define void @test4b(i1 %c.1, i1 %c.2, i32 %x) {
 ; CHECK-NEXT:    br label [[EXIT]]
 ; CHECK:       exit:
 ; CHECK-NEXT:    [[P:%.*]] = phi i32 [ 17, [[T_1]] ], [ [[X:%.*]], [[F_1]] ], [ 123, [[F]] ]
-; CHECK-NEXT:    store i32 [[P]], ptr @J
+; CHECK-NEXT:    store i32 [[P]], i32* @J
 ; CHECK-NEXT:    ret void
 ;
   br i1 %c.1, label %T, label %F
@@ -227,7 +227,7 @@ F:
 
 exit:
   %p = phi i32 [ 17, %T.1 ], [ %x, %F.1 ], [ 123, %F ]
-  store i32 %p, ptr @J
+  store i32 %p, i32* @J
   ret void
 }
 
@@ -237,7 +237,7 @@ exit:
 
 define void @test5a() {
 ; CHECK-LABEL: @test5a(
-; CHECK-NEXT:    [[X:%.*]] = load i32, ptr @K
+; CHECK-NEXT:    [[X:%.*]] = load i32, i32* @K
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 true)
 ; CHECK-NEXT:    call void @use(i1 false)
@@ -246,7 +246,7 @@ define void @test5a() {
 ; CHECK-NEXT:    call void @use(i1 [[C_1]])
 ; CHECK-NEXT:    ret void
 ;
-  %X = load i32, ptr @K
+  %X = load i32, i32* @K
   %t.1 = icmp ne i32 %X, 499
   call void @use(i1 %t.1)
   %t.2 = icmp ult i32 %X, 600
@@ -266,18 +266,18 @@ define void @test5b(i1 %c.1, i1 %c.2) {
 ; CHECK:       T.1:
 ; CHECK-NEXT:    br i1 [[C_2:%.*]], label [[T_2:%.*]], label [[F_2:%.*]]
 ; CHECK:       T.2:
-; CHECK-NEXT:    store i32 500, ptr @K
+; CHECK-NEXT:    store i32 500, i32* @K
 ; CHECK-NEXT:    ret void
 ; CHECK:       F.2:
-; CHECK-NEXT:    store i32 510, ptr @K
+; CHECK-NEXT:    store i32 510, i32* @K
 ; CHECK-NEXT:    ret void
 ; CHECK:       F.1:
 ; CHECK-NEXT:    br i1 [[C_2]], label [[T_3:%.*]], label [[F_3:%.*]]
 ; CHECK:       T.3:
-; CHECK-NEXT:    store i32 520, ptr @K
+; CHECK-NEXT:    store i32 520, i32* @K
 ; CHECK-NEXT:    ret void
 ; CHECK:       F.3:
-; CHECK-NEXT:    store i32 530, ptr @K
+; CHECK-NEXT:    store i32 530, i32* @K
 ; CHECK-NEXT:    ret void
 ;
   br i1 %c.1, label %T.1, label %F.1
@@ -286,21 +286,21 @@ T.1:
   br i1 %c.2, label %T.2, label %F.2
 
 T.2:
-  store i32 500, ptr @K
+  store i32 500, i32* @K
   ret void
 
 F.2:
-  store i32 510, ptr @K
+  store i32 510, i32* @K
   ret void
 
 F.1:
   br i1 %c.2, label %T.3, label %F.3
 
 T.3:
-  store i32 520, ptr @K
+  store i32 520, i32* @K
   ret void
 
 F.3:
-  store i32 530, ptr @K
+  store i32 530, i32* @K
   ret void
 }

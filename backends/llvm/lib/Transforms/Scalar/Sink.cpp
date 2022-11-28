@@ -79,8 +79,7 @@ static bool IsAcceptableTarget(Instruction *Inst, BasicBlock *SuccToSinkTo,
   if (SuccToSinkTo->getUniquePredecessor() != Inst->getParent()) {
     // We cannot sink a load across a critical edge - there may be stores in
     // other code paths.
-    if (Inst->mayReadFromMemory() &&
-        !Inst->hasMetadata(LLVMContext::MD_invariant_load))
+    if (Inst->mayReadFromMemory())
       return false;
 
     // We don't want to sink across a critical edge if we don't dominate the

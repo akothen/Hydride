@@ -81,7 +81,7 @@ TEST(SharedMemoryMapperTest, MemReserveInitializeDeinitializeRelease) {
         SI.Offset = 0;
         SI.ContentSize = TestString.size() + 1;
         SI.ZeroFillSize = PageSize - SI.ContentSize;
-        SI.AG = MemProt::Read | MemProt::Write;
+        SI.Prot = sys::Memory::MF_READ | sys::Memory::MF_WRITE;
 
         AI.MappingBase = Reservation.Start;
         AI.Segments.push_back(SI);

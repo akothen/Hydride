@@ -3,43 +3,49 @@
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-define ptr @example(ptr dereferenceable(24) %x) {
+define i8* @example(i8* dereferenceable(24) %x) {
 ; CHECK-LABEL: @example(
-; CHECK-NEXT:    [[Y:%.*]] = load ptr, ptr [[X:%.*]], align 8
-; CHECK-NEXT:    [[Y_IS_NULL:%.*]] = icmp ne ptr [[Y]], null
+; CHECK-NEXT:    [[X2:%.*]] = bitcast i8* [[X:%.*]] to {}**
+; CHECK-NEXT:    [[Y:%.*]] = load {}*, {}** [[X2]], align 8
+; CHECK-NEXT:    [[Y_IS_NULL:%.*]] = icmp ne {}* [[Y]], null
 ; CHECK-NEXT:    call void @llvm.assume(i1 [[Y_IS_NULL]])
-; CHECK-NEXT:    ret ptr [[X]]
+; CHECK-NEXT:    ret i8* [[X]]
 ;
-  %y = load ptr, ptr %x, align 8
-  %y_is_null = icmp eq ptr %y, null
+  %x2 = bitcast i8* %x to {}**
+  %y = load {}*, {}** %x2, align 8
+  %y_is_null = icmp eq {}* %y, null
 
-  %res = select i1 %y_is_null, ptr null, ptr %x
+  %x0 = getelementptr inbounds i8, i8* %x, i64 0
+  %res = select i1 %y_is_null, i8* null, i8* %x0
 
-  %nonnull = icmp ne ptr %res, null
+  %nonnull = icmp ne i8* %res, null
   call void @llvm.assume(i1 %nonnull)
 
-  ret ptr %res
+  ret i8* %res
 }
 
-; TODO: this should be folded to `ret ptr %x` as well.
-define ptr @example2(ptr %x) {
+; TODO: this should be folded to `ret i8* %x` as well.
+define i8* @example2(i8* %x) {
 ; CHECK-LABEL: @example2(
-; CHECK-NEXT:    [[Y:%.*]] = load ptr, ptr [[X:%.*]], align 8
-; CHECK-NEXT:    [[Y_IS_NULL:%.*]] = icmp eq ptr [[Y]], null
-; CHECK-NEXT:    [[RES:%.*]] = select i1 [[Y_IS_NULL]], ptr null, ptr [[X]]
-; CHECK-NEXT:    [[NONNULL:%.*]] = icmp ne ptr [[RES]], null
+; CHECK-NEXT:    [[X2:%.*]] = bitcast i8* [[X:%.*]] to {}**
+; CHECK-NEXT:    [[Y:%.*]] = load {}*, {}** [[X2]], align 8
+; CHECK-NEXT:    [[Y_IS_NULL:%.*]] = icmp eq {}* [[Y]], null
+; CHECK-NEXT:    [[RES:%.*]] = select i1 [[Y_IS_NULL]], i8* null, i8* [[X]]
+; CHECK-NEXT:    [[NONNULL:%.*]] = icmp ne i8* [[RES]], null
 ; CHECK-NEXT:    call void @llvm.assume(i1 [[NONNULL]])
-; CHECK-NEXT:    ret ptr [[RES]]
+; CHECK-NEXT:    ret i8* [[RES]]
 ;
-  %y = load ptr, ptr %x, align 8
-  %y_is_null = icmp eq ptr %y, null
+  %x2 = bitcast i8* %x to {}**
+  %y = load {}*, {}** %x2, align 8
+  %y_is_null = icmp eq {}* %y, null
 
-  %res = select i1 %y_is_null, ptr null, ptr %x
+  %x0 = getelementptr inbounds i8, i8* %x, i64 0
+  %res = select i1 %y_is_null, i8* null, i8* %x0
 
-  %nonnull = icmp ne ptr %res, null
+  %nonnull = icmp ne i8* %res, null
   call void @llvm.assume(i1 %nonnull)
 
-  ret ptr %res
+  ret i8* %res
 }
 
 declare void @llvm.assume(i1)

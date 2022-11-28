@@ -790,9 +790,6 @@ public:
       return MipsMCExpr::create(MipsMCExpr::MEK_TPREL_LO, E, Ctx);
     }
   }
-
-  bool areEqualRegs(const MCParsedAsmOperand &Op1,
-                    const MCParsedAsmOperand &Op2) const override;
 };
 
 /// MipsOperand - Instances of this class represent a parsed Mips machine
@@ -1893,7 +1890,7 @@ bool MipsAsmParser::processInstruction(MCInst &Inst, SMLoc IDLoc,
     case Mips::BBIT1:
     case Mips::BBIT132:
       assert(hasCnMips() && "instruction only valid for octeon cpus");
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
 
     case Mips::BEQ:
     case Mips::BNE:
@@ -2075,7 +2072,7 @@ bool MipsAsmParser::processInstruction(MCInst &Inst, SMLoc IDLoc,
   case Mips::SDIV_MM:
     FirstOp = 0;
     SecondOp = 1;
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Mips::SDivMacro:
   case Mips::DSDivMacro:
   case Mips::UDivMacro:
@@ -5667,7 +5664,7 @@ bool MipsAsmParser::expandMXTRAlias(MCInst &Inst, SMLoc IDLoc, MCStreamer &Out,
   switch (Inst.getOpcode()) {
     case Mips::MFTC0:
       IsMFTR = true;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Mips::MTTC0:
       u = 0;
       rd = getRegisterForMxtrC0(Inst, IsMFTR);
@@ -5675,7 +5672,7 @@ bool MipsAsmParser::expandMXTRAlias(MCInst &Inst, SMLoc IDLoc, MCStreamer &Out,
       break;
     case Mips::MFTGPR:
       IsMFTR = true;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Mips::MTTGPR:
       rd = Inst.getOperand(IsMFTR ? 1 : 0).getReg();
       break;
@@ -5684,7 +5681,7 @@ bool MipsAsmParser::expandMXTRAlias(MCInst &Inst, SMLoc IDLoc, MCStreamer &Out,
     case Mips::MFTACX:
     case Mips::MFTDSP:
       IsMFTR = true;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Mips::MTTLO:
     case Mips::MTTHI:
     case Mips::MTTACX:
@@ -5694,7 +5691,7 @@ bool MipsAsmParser::expandMXTRAlias(MCInst &Inst, SMLoc IDLoc, MCStreamer &Out,
       break;
     case Mips::MFTHC1:
       h = 1;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Mips::MFTC1:
       IsMFTR = true;
       rd = getRegisterForMxtrFP(Inst, IsMFTR);
@@ -5702,14 +5699,14 @@ bool MipsAsmParser::expandMXTRAlias(MCInst &Inst, SMLoc IDLoc, MCStreamer &Out,
       break;
     case Mips::MTTHC1:
       h = 1;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Mips::MTTC1:
       rd = getRegisterForMxtrFP(Inst, IsMFTR);
       sel = 2;
       break;
     case Mips::CFTC1:
       IsMFTR = true;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Mips::CTTC1:
       rd = getRegisterForMxtrFP(Inst, IsMFTR);
       sel = 3;
@@ -5941,9 +5938,6 @@ bool MipsAsmParser::MatchAndEmitInstruction(SMLoc IDLoc, unsigned &Opcode,
     return false;
   case Match_MissingFeature:
     Error(IDLoc, "instruction requires a CPU feature not currently enabled");
-    return true;
-  case Match_InvalidTiedOperand:
-    Error(IDLoc, "operand must match destination register");
     return true;
   case Match_InvalidOperand: {
     SMLoc ErrorLoc = IDLoc;
@@ -6933,19 +6927,6 @@ bool MipsAsmParser::parseBracketSuffix(StringRef Name,
 
 static std::string MipsMnemonicSpellCheck(StringRef S, const FeatureBitset &FBS,
                                           unsigned VariantID = 0);
-
-bool MipsAsmParser::areEqualRegs(const MCParsedAsmOperand &Op1,
-                                 const MCParsedAsmOperand &Op2) const {
-  // This target-overriden function exists to maintain current behaviour for
-  // e.g.
-  //   dahi    $3, $3, 0x5678
-  // as tested in test/MC/Mips/mips64r6/valid.s.
-  // FIXME: Should this test actually fail with an error? If so, then remove
-  // this overloaded method.
-  if (!Op1.isReg() || !Op2.isReg())
-    return true;
-  return Op1.getReg() == Op2.getReg();
-}
 
 bool MipsAsmParser::ParseInstruction(ParseInstructionInfo &Info, StringRef Name,
                                      SMLoc NameLoc, OperandVector &Operands) {

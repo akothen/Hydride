@@ -132,8 +132,6 @@ Dialect Attribute::getDialect() const {
   return Dialect(nullptr);
 }
 
-const llvm::Record &Attribute::getDef() const { return *def; }
-
 ConstantAttr::ConstantAttr(const DefInit *init) : def(init->getDef()) {
   assert(def->isSubClassOf("ConstantAttr") &&
          "must be subclass of TableGen 'ConstantAttr' class");

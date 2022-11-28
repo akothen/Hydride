@@ -1,4 +1,4 @@
-; RUN: opt -passes=lint < %s
+; RUN: opt -lint < %s
 
 target datalayout = "p32:32:32-p1:16:16:16-n16:32"
 

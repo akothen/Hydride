@@ -210,7 +210,7 @@ def OMPC_Depend : Clause<"depend"> {
 }
 def OMPC_Device : Clause<"device"> {
   let clangClass = "OMPDeviceClause";
-  let flangClass = "OmpDeviceClause";
+  let flangClass = "ScalarIntExpr";
 }
 def OMPC_Threads : Clause<"threads"> { let clangClass = "OMPThreadsClause"; }
 def OMPC_Simd : Clause<"simd"> { let clangClass = "OMPSIMDClause"; }
@@ -299,7 +299,6 @@ def OMPC_DynamicAllocators : Clause<"dynamic_allocators"> {
 }
 def OMPC_AtomicDefaultMemOrder : Clause<"atomic_default_mem_order"> {
   let clangClass = "OMPAtomicDefaultMemOrderClause";
-  let flangClass = "OmpAtomicDefaultMemOrderClause";
 }
 def OMPC_Allocate : Clause<"allocate"> {
   let clangClass = "OMPAllocateClause";
@@ -527,7 +526,6 @@ def OMP_Critical : Directive<"critical"> {
 }
 def OMP_TaskYield : Directive<"taskyield"> {}
 def OMP_Barrier : Directive<"barrier"> {}
-def OMP_Error : Directive<"error"> {}
 def OMP_TaskWait : Directive<"taskwait"> {
   let allowedClauses = [
     VersionedClause<OMPC_Depend, 50>
@@ -615,7 +613,7 @@ def OMP_Cancel : Directive<"cancel"> {
   ];
 }
 def OMP_Requires : Directive<"requires"> {
-  let allowedOnceClauses = [
+  let allowedClauses = [
     VersionedClause<OMPC_UnifiedAddress>,
     VersionedClause<OMPC_UnifiedSharedMemory>,
     // OpenMP 5.2 Spec: If an implementation is not supporting a requirement

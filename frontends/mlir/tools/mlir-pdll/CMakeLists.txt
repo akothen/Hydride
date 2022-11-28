@@ -13,8 +13,6 @@ set(LIBS
   )
 
 add_tablegen(mlir-pdll MLIR_PDLL
-  DESTINATION "${MLIR_TOOLS_INSTALL_DIR}"
-  EXPORT MLIR
   mlir-pdll.cpp
 
   DEPENDS

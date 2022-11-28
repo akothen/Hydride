@@ -10,10 +10,7 @@ group("lib") {
     deps += [ "//compiler-rt/lib/ubsan_minimal" ]
   }
   if (current_os != "win" && current_os != "baremetal") {
-    deps += [
-      "//compiler-rt/lib/asan",
-      "//compiler-rt/lib/ubsan",
-    ]
+    deps += [ "//compiler-rt/lib/asan" ]
     if (current_cpu == "x64" || current_cpu == "arm64") {
       deps += [ "//compiler-rt/lib/tsan/rtl" ]
     }

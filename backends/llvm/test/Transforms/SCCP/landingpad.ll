@@ -5,7 +5,7 @@
 
 declare void @fn()
 
-define void @test() personality ptr null {
+define void @test() personality i8* null {
 ; CHECK-LABEL: @test(
 ; CHECK-NEXT:    invoke void @fn()
 ; CHECK-NEXT:    to label [[SUCCESS:%.*]] unwind label [[FAILURE:%.*]]

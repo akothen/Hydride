@@ -8,11 +8,10 @@ define i32 @duplicate_normal_and_indirect_dest(i32 %a) {
 ; CHECK-NEXT:    addl $4, %eax
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    xorl %eax, %eax
-; CHECK-NEXT:    jmp .LBB0_1
+; CHECK-NEXT:    jmp .Ltmp0
 ; CHECK-NEXT:    #NO_APP
-; CHECK-NEXT:  .LBB0_1: # Block address taken
-; CHECK-NEXT:    # %fail
-; CHECK-NEXT:    # Label of block must be emitted
+; CHECK-NEXT:  .Ltmp0: # Block address taken
+; CHECK-NEXT:  # %bb.1: # %fail
 ; CHECK-NEXT:    movl $1, %eax
 ; CHECK-NEXT:    retl
 entry:
@@ -30,14 +29,13 @@ define i32 @duplicate_indirect_dest(i32 %a) {
 ; CHECK-NEXT:    addl $4, %eax
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    xorl %eax, %eax
-; CHECK-NEXT:    jmp .LBB1_2
-; CHECK-NEXT:    jmp .LBB1_2
+; CHECK-NEXT:    jmp .Ltmp1
+; CHECK-NEXT:    jmp .Ltmp1
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:  # %bb.1: # %normal
 ; CHECK-NEXT:    retl
-; CHECK-NEXT:  .LBB1_2: # Block address taken
-; CHECK-NEXT:    # %fail
-; CHECK-NEXT:    # Label of block must be emitted
+; CHECK-NEXT:  .Ltmp1: # Block address taken
+; CHECK-NEXT:  .LBB1_2: # %fail
 ; CHECK-NEXT:    movl $1, %eax
 ; CHECK-NEXT:    retl
 entry:

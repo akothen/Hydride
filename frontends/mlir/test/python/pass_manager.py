@@ -28,17 +28,6 @@ def testCapsule():
     assert pm1 is not None  # And does not crash.
 run(testCapsule)
 
-# CHECK-LABEL: TEST: testConstruct
-@run
-def testConstruct():
-  with Context():
-    # CHECK: pm1: 'any()'
-    # CHECK: pm2: 'builtin.module()'
-    pm1 = PassManager()
-    pm2 = PassManager("builtin.module")
-    log(f"pm1: '{pm1}'")
-    log(f"pm2: '{pm2}'")
-
 
 # Verify successful round-trip.
 # CHECK-LABEL: TEST: testParseSuccess
@@ -47,8 +36,10 @@ def testParseSuccess():
     # An unregistered pass should not parse.
     try:
       pm = PassManager.parse("builtin.module(func.func(not-existing-pass{json=false}))")
+      # TODO: this error should be propagate to Python but the C API does not help right now.
+      # CHECK: error: 'not-existing-pass' does not refer to a registered pass or pass pipeline
     except ValueError as e:
-      # CHECK: ValueError exception: {{.+}} 'not-existing-pass' does not refer to a registered pass
+      # CHECK: ValueError exception: invalid pass pipeline 'builtin.module(func.func(not-existing-pass{json=false}))'.
       log("ValueError exception:", e)
     else:
       log("Exception not produced")
@@ -64,30 +55,13 @@ run(testParseSuccess)
 def testParseFail():
   with Context():
     try:
-      pm = PassManager.parse("any(unknown-pass)")
+      pm = PassManager.parse("unknown-pass")
     except ValueError as e:
-      #      CHECK: ValueError exception: MLIR Textual PassPipeline Parser:1:1: error:
-      # CHECK-SAME: 'unknown-pass' does not refer to a registered pass or pass pipeline
-      #      CHECK: unknown-pass
-      #      CHECK: ^
+      # CHECK: ValueError exception: invalid pass pipeline 'unknown-pass'.
       log("ValueError exception:", e)
     else:
       log("Exception not produced")
 run(testParseFail)
-
-# Check that adding to a pass manager works
-# CHECK-LABEL: TEST: testAdd
-@run
-def testAdd():
-  pm = PassManager("any", Context())
-  # CHECK: pm: 'any()'
-  log(f"pm: '{pm}'")
-  # CHECK: pm: 'any(cse)'
-  pm.add("cse")
-  log(f"pm: '{pm}'")
-  # CHECK: pm: 'any(cse,cse)'
-  pm.add("cse")
-  log(f"pm: '{pm}'")
 
 
 # Verify failure on incorrect level of nesting.
@@ -97,7 +71,8 @@ def testInvalidNesting():
     try:
       pm = PassManager.parse("func.func(normalize-memrefs)")
     except ValueError as e:
-      # CHECK: ValueError exception: Can't add pass 'NormalizeMemRefs' restricted to 'builtin.module' on a PassManager intended to run on 'func.func', did you intend to nest?
+      # CHECK: Can't add pass 'NormalizeMemRefs' restricted to 'builtin.module' on a PassManager intended to run on 'func.func', did you intend to nest?
+      # CHECK: ValueError exception: invalid pass pipeline 'func.func(normalize-memrefs)'.
       log("ValueError exception:", e)
     else:
       log("Exception not produced")
@@ -108,7 +83,7 @@ run(testInvalidNesting)
 # CHECK-LABEL: TEST: testRun
 def testRunPipeline():
   with Context():
-    pm = PassManager.parse("builtin.module(print-op-stats{json=false})")
+    pm = PassManager.parse("print-op-stats{json=false}")
     module = Module.parse(r"""func.func @successfulParse() { return }""")
     pm.run(module)
 # CHECK: Operations encountered:

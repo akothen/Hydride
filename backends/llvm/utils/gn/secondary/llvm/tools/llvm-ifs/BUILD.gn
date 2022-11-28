@@ -1,12 +1,11 @@
 import("//llvm/utils/TableGen/tablegen.gni")
-import("//llvm/utils/gn/build/driver_executable.gni")
 
 tablegen("Opts") {
   visibility = [ ":llvm-ifs" ]
   args = [ "-gen-opt-parser-defs" ]
 }
 
-driver_executable("llvm-ifs") {
+executable("llvm-ifs") {
   deps = [
     ":Opts",
     "//llvm/lib/InterfaceStub",

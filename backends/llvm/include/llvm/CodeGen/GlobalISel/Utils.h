@@ -488,10 +488,6 @@ bool matchUnaryPredicate(const MachineRegisterInfo &MRI, Register Reg,
 /// the value \p Val contains a true value.
 bool isConstTrueVal(const TargetLowering &TLI, int64_t Val, bool IsVector,
                     bool IsFP);
-/// \returns true if given the TargetLowering's boolean contents information,
-/// the value \p Val contains a false value.
-bool isConstFalseVal(const TargetLowering &TLI, int64_t Val, bool IsVector,
-                    bool IsFP);
 
 /// Returns an integer representing true, as defined by the
 /// TargetBooleanContents.
@@ -509,10 +505,6 @@ void eraseInstrs(ArrayRef<MachineInstr *> DeadInstrs, MachineRegisterInfo &MRI,
                  LostDebugLocObserver *LocObserver = nullptr);
 void eraseInstr(MachineInstr &MI, MachineRegisterInfo &MRI,
                 LostDebugLocObserver *LocObserver = nullptr);
-
-/// Assuming the instruction \p MI is going to be deleted, attempt to salvage
-/// debug users of \p MI by writing the effect of \p MI in a DIExpression.
-void salvageDebugInfo(const MachineRegisterInfo &MRI, MachineInstr &MI);
 
 } // End namespace llvm.
 #endif

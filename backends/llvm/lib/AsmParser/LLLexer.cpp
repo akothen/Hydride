@@ -597,8 +597,6 @@ lltok::Kind LLLexer::LexIdentifier() {
   KEYWORD(arm_aapcs_vfpcc);
   KEYWORD(aarch64_vector_pcs);
   KEYWORD(aarch64_sve_vector_pcs);
-  KEYWORD(aarch64_sme_preservemost_from_x0);
-  KEYWORD(aarch64_sme_preservemost_from_x2);
   KEYWORD(msp430_intrcc);
   KEYWORD(avr_intrcc);
   KEYWORD(avr_signalcc);
@@ -643,15 +641,6 @@ lltok::Kind LLLexer::LexIdentifier() {
 #define ATTRIBUTE_ENUM(ENUM_NAME, DISPLAY_NAME) \
   KEYWORD(DISPLAY_NAME);
 #include "llvm/IR/Attributes.inc"
-
-  KEYWORD(read);
-  KEYWORD(write);
-  KEYWORD(readwrite);
-  KEYWORD(argmem);
-  KEYWORD(inaccessiblemem);
-  KEYWORD(argmemonly);
-  KEYWORD(inaccessiblememonly);
-  KEYWORD(inaccessiblemem_or_argmemonly);
 
   KEYWORD(type);
   KEYWORD(opaque);

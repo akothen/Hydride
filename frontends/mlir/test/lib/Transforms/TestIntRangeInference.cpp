@@ -25,7 +25,7 @@ static LogicalResult replaceWithConstant(DataFlowSolver &solver, OpBuilder &b,
                                          OperationFolder &folder, Value value) {
   auto *maybeInferredRange =
       solver.lookupState<IntegerValueRangeLattice>(value);
-  if (!maybeInferredRange || maybeInferredRange->getValue().isUninitialized())
+  if (!maybeInferredRange || maybeInferredRange->isUninitialized())
     return failure();
   const ConstantIntRanges &inferredRange =
       maybeInferredRange->getValue().getValue();

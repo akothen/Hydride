@@ -47,14 +47,11 @@ void LoopBase<BlockT, LoopT>::getExitingBlocks(
 template <class BlockT, class LoopT>
 BlockT *LoopBase<BlockT, LoopT>::getExitingBlock() const {
   assert(!isInvalid() && "Loop not in a valid state!");
-  auto notInLoop = [&](BlockT *BB) { return !contains(BB); };
-  auto isExitBlock = [&](BlockT *BB, bool AllowRepeats) -> BlockT * {
-    assert(!AllowRepeats && "Unexpected parameter value.");
-    // Child not in current loop?  It must be an exit block.
-    return any_of(children<BlockT *>(BB), notInLoop) ? BB : nullptr;
-  };
-
-  return find_singleton<BlockT>(blocks(), isExitBlock);
+  SmallVector<BlockT *, 8> ExitingBlocks;
+  getExitingBlocks(ExitingBlocks);
+  if (ExitingBlocks.size() == 1)
+    return ExitingBlocks[0];
+  return nullptr;
 }
 
 /// getExitBlocks - Return all of the successor blocks of this loop.  These
@@ -71,41 +68,23 @@ void LoopBase<BlockT, LoopT>::getExitBlocks(
         ExitBlocks.push_back(Succ);
 }
 
-/// getExitBlock - If getExitBlocks would return exactly one block,
-/// return that block. Otherwise return null.
-template <class BlockT, class LoopT>
-std::pair<BlockT *, bool> getExitBlockHelper(const LoopBase<BlockT, LoopT> *L,
-                                             bool Unique) {
-  assert(!L->isInvalid() && "Loop not in a valid state!");
-  auto notInLoop = [&](BlockT *BB,
-                       bool AllowRepeats) -> std::pair<BlockT *, bool> {
-    assert(AllowRepeats == Unique && "Unexpected parameter value.");
-    return {!L->contains(BB) ? BB : nullptr, false};
-  };
-  auto singleExitBlock = [&](BlockT *BB,
-                             bool AllowRepeats) -> std::pair<BlockT *, bool> {
-    assert(AllowRepeats == Unique && "Unexpected parameter value.");
-    return find_singleton_nested<BlockT>(children<BlockT *>(BB), notInLoop,
-                                         AllowRepeats);
-  };
-  return find_singleton_nested<BlockT>(L->blocks(), singleExitBlock, Unique);
-}
-
 template <class BlockT, class LoopT>
 bool LoopBase<BlockT, LoopT>::hasNoExitBlocks() const {
-  auto RC = getExitBlockHelper(this, false);
-  if (RC.second)
-    // found multiple exit blocks
-    return false;
-  // return true if there is no exit block
-  return !RC.first;
+  SmallVector<BlockT *, 8> ExitBlocks;
+  getExitBlocks(ExitBlocks);
+  return ExitBlocks.empty();
 }
 
 /// getExitBlock - If getExitBlocks would return exactly one block,
 /// return that block. Otherwise return null.
 template <class BlockT, class LoopT>
 BlockT *LoopBase<BlockT, LoopT>::getExitBlock() const {
-  return getExitBlockHelper(this, false).first;
+  assert(!isInvalid() && "Loop not in a valid state!");
+  SmallVector<BlockT *, 8> ExitBlocks;
+  getExitBlocks(ExitBlocks);
+  if (ExitBlocks.size() == 1)
+    return ExitBlocks[0];
+  return nullptr;
 }
 
 template <class BlockT, class LoopT>
@@ -156,7 +135,11 @@ void LoopBase<BlockT, LoopT>::getUniqueNonLatchExitBlocks(
 
 template <class BlockT, class LoopT>
 BlockT *LoopBase<BlockT, LoopT>::getUniqueExitBlock() const {
-  return getExitBlockHelper(this, true).first;
+  SmallVector<BlockT *, 8> UniqueExitBlocks;
+  getUniqueExitBlocks(UniqueExitBlocks);
+  if (UniqueExitBlocks.size() == 1)
+    return UniqueExitBlocks[0];
+  return nullptr;
 }
 
 /// getExitEdges - Return all pairs of (_inside_block_,_outside_block_).
@@ -309,12 +292,17 @@ void LoopBase<BlockT, LoopT>::verifyLoop() const {
   getExitBlocks(ExitBBs);
   df_iterator_default_set<BlockT *> VisitSet;
   VisitSet.insert(ExitBBs.begin(), ExitBBs.end());
+  df_ext_iterator<BlockT *, df_iterator_default_set<BlockT *>>
+      BI = df_ext_begin(getHeader(), VisitSet),
+      BE = df_ext_end(getHeader(), VisitSet);
 
   // Keep track of the BBs visited.
   SmallPtrSet<BlockT *, 8> VisitedBBs;
 
   // Check the individual blocks.
-  for (BlockT *BB : depth_first_ext(getHeader(), VisitSet)) {
+  for (; BI != BE; ++BI) {
+    BlockT *BB = *BI;
+
     assert(std::any_of(GraphTraits<BlockT *>::child_begin(BB),
                        GraphTraits<BlockT *>::child_end(BB),
                        [&](BlockT *B) { return contains(B); }) &&
@@ -352,7 +340,7 @@ void LoopBase<BlockT, LoopT>::verifyLoop() const {
 
   if (VisitedBBs.size() != getNumBlocks()) {
     dbgs() << "The following blocks are unreachable in the loop: ";
-    for (auto *BB : Blocks) {
+    for (auto BB : Blocks) {
       if (!VisitedBBs.count(BB)) {
         dbgs() << *BB << "\n";
       }

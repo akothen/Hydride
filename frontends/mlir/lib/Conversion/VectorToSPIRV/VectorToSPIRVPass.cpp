@@ -12,31 +12,27 @@
 
 #include "mlir/Conversion/VectorToSPIRV/VectorToSPIRVPass.h"
 
+#include "../PassDetail.h"
 #include "mlir/Conversion/VectorToSPIRV/VectorToSPIRV.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVDialect.h"
 #include "mlir/Dialect/SPIRV/Transforms/SPIRVConversion.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/DialectConversion.h"
 
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTVECTORTOSPIRV
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
-
 using namespace mlir;
 
 namespace {
 struct ConvertVectorToSPIRVPass
-    : public impl::ConvertVectorToSPIRVBase<ConvertVectorToSPIRVPass> {
+    : public ConvertVectorToSPIRVBase<ConvertVectorToSPIRVPass> {
   void runOnOperation() override;
 };
 } // namespace
 
 void ConvertVectorToSPIRVPass::runOnOperation() {
   MLIRContext *context = &getContext();
-  Operation *op = getOperation();
+  ModuleOp module = getOperation();
 
-  auto targetAttr = spirv::lookupTargetEnvOrDefault(op);
+  auto targetAttr = spirv::lookupTargetEnvOrDefault(module);
   std::unique_ptr<ConversionTarget> target =
       SPIRVConversionTarget::get(targetAttr);
 
@@ -56,10 +52,11 @@ void ConvertVectorToSPIRVPass::runOnOperation() {
   RewritePatternSet patterns(context);
   populateVectorToSPIRVPatterns(typeConverter, patterns);
 
-  if (failed(applyPartialConversion(op, *target, std::move(patterns))))
+  if (failed(applyPartialConversion(module, *target, std::move(patterns))))
     return signalPassFailure();
 }
 
-std::unique_ptr<OperationPass<>> mlir::createConvertVectorToSPIRVPass() {
+std::unique_ptr<OperationPass<ModuleOp>>
+mlir::createConvertVectorToSPIRVPass() {
   return std::make_unique<ConvertVectorToSPIRVPass>();
 }

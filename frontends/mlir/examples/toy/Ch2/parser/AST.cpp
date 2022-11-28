@@ -155,7 +155,7 @@ void ASTDumper::dump(VariableExprAST *node) {
 void ASTDumper::dump(ReturnExprAST *node) {
   INDENT();
   llvm::errs() << "Return\n";
-  if (node->getExpr().has_value())
+  if (node->getExpr().hasValue())
     return dump(*node->getExpr());
   {
     INDENT();

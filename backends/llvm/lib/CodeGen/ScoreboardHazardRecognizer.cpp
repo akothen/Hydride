@@ -147,7 +147,7 @@ ScoreboardHazardRecognizer::getHazardType(SUnit *SU, int Stalls) {
       case InstrStage::Required:
         // Required FUs conflict with both reserved and required ones
         freeUnits &= ~ReservedScoreboard[StageCycle];
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case InstrStage::Reserved:
         // Reserved FUs can conflict only with required ones.
         freeUnits &= ~RequiredScoreboard[StageCycle];
@@ -198,7 +198,7 @@ void ScoreboardHazardRecognizer::EmitInstruction(SUnit *SU) {
       case InstrStage::Required:
         // Required FUs conflict with both reserved and required ones
         freeUnits &= ~ReservedScoreboard[cycle + i];
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case InstrStage::Reserved:
         // Reserved FUs can conflict only with required ones.
         freeUnits &= ~RequiredScoreboard[cycle + i];

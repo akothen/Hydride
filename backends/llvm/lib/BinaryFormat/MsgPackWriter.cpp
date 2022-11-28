@@ -14,8 +14,6 @@
 #include "llvm/BinaryFormat/MsgPackWriter.h"
 #include "llvm/BinaryFormat/MsgPack.h"
 
-#include <cmath>
-
 using namespace llvm;
 using namespace msgpack;
 

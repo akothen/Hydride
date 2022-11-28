@@ -259,7 +259,7 @@ public:
     // of the loop, the result profile is incomplete.
     // FIXME: add other heuristics to detect long running loops.
     if (SkipRetExitBlock) {
-      for (auto *BB : ExitBlocks)
+      for (auto BB : ExitBlocks)
         if (isa<ReturnInst>(BB->getTerminator()))
           return false;
     }
@@ -525,15 +525,15 @@ bool InstrProfiling::run(
   TT = Triple(M.getTargetTriple());
 
   bool MadeChange = false;
-  bool NeedsRuntimeHook = needsRuntimeHookUnconditionally(TT);
-  if (NeedsRuntimeHook)
+
+  // Emit the runtime hook even if no counters are present.
+  if (needsRuntimeHookUnconditionally(TT))
     MadeChange = emitRuntimeHook();
 
-  bool ContainsProfiling = containsProfilingIntrinsics(M);
+  // Improve compile time by avoiding linear scans when there is no work.
   GlobalVariable *CoverageNamesVar =
       M.getNamedGlobal(getCoverageUnusedNamesVarName());
-  // Improve compile time by avoiding linear scans when there is no work.
-  if (!ContainsProfiling && !CoverageNamesVar)
+  if (!containsProfilingIntrinsics(M) && !CoverageNamesVar)
     return MadeChange;
 
   // We did not know how many value sites there would be inside
@@ -567,14 +567,7 @@ bool InstrProfiling::run(
 
   emitVNodes();
   emitNameData();
-
-  // Emit runtime hook for the cases where the target does not unconditionally
-  // require pulling in profile runtime, and coverage is enabled on code that is
-  // not eliminated by the front-end, e.g. unused functions with internal
-  // linkage.
-  if (!NeedsRuntimeHook && ContainsProfiling)
-    emitRuntimeHook();
-
+  emitRuntimeHook();
   emitRegistration();
   emitUses();
   emitInitialization();
@@ -921,11 +914,6 @@ InstrProfiling::getOrCreateRegionCounters(InstrProfInstBase *Inc) {
       if (!NeedComdat)
         C->setSelectionKind(Comdat::NoDeduplicate);
       GV->setComdat(C);
-      // COFF doesn't allow the comdat group leader to have private linkage, so
-      // upgrade private linkage to internal linkage to produce a symbol table
-      // entry.
-      if (TT.isOSBinFormatCOFF() && GV->hasPrivateLinkage())
-        GV->setLinkage(GlobalValue::InternalLinkage);
     }
   };
 
@@ -936,8 +924,8 @@ InstrProfiling::getOrCreateRegionCounters(InstrProfInstBase *Inc) {
   CounterPtr->setVisibility(Visibility);
   CounterPtr->setSection(
       getInstrProfSectionName(IPSK_cnts, TT.getObjectFormat()));
-  CounterPtr->setLinkage(Linkage);
   MaybeSetComdat(CounterPtr);
+  CounterPtr->setLinkage(Linkage);
   PD.RegionCounters = CounterPtr;
   if (DebugInfoCorrelate) {
     if (auto *SP = Fn->getSubprogram()) {
@@ -1057,6 +1045,7 @@ InstrProfiling::getOrCreateRegionCounters(InstrProfInstBase *Inc) {
   Data->setSection(getInstrProfSectionName(IPSK_data, TT.getObjectFormat()));
   Data->setAlignment(Align(INSTR_PROF_DATA_ALIGNMENT));
   MaybeSetComdat(Data);
+  Data->setLinkage(Linkage);
 
   PD.DataVar = Data;
 
@@ -1199,7 +1188,7 @@ void InstrProfiling::emitRegistration() {
 bool InstrProfiling::emitRuntimeHook() {
   // We expect the linker to be invoked with -u<hook_var> flag for Linux
   // in which case there is no need to emit the external variable.
-  if (TT.isOSLinux() || TT.isOSAIX())
+  if (TT.isOSLinux())
     return false;
 
   // If the module's provided its own runtime, we don't need to do anything.

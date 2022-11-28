@@ -4,7 +4,7 @@
 ; RUN: llc -verify-machineinstrs -ppc-asm-full-reg-names < %s -mtriple=powerpc64le-unknown-linux-gnu | FileCheck -check-prefix=P64 %s
 
 ; PR8327
-define ptr @test1(ptr %foo) nounwind {
+define i8* @test1(i8** %foo) nounwind {
 ; P32-LABEL: test1:
 ; P32:       # %bb.0:
 ; P32-NEXT:    lbz r4, 0(r3)
@@ -41,8 +41,8 @@ define ptr @test1(ptr %foo) nounwind {
 ; P64-NEXT:    std r5, 0(r3)
 ; P64-NEXT:    ld r3, 0(r4)
 ; P64-NEXT:    blr
-  %A = va_arg ptr %foo, ptr
-  ret ptr %A
+  %A = va_arg i8** %foo, i8*
+  ret i8* %A
 }
 
 

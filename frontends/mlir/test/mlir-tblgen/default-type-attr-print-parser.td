@@ -30,7 +30,7 @@ def AttrA : TestAttr<"AttrA"> {
 // ATTR:   {
 // ATTR:     ::mlir::Attribute attr;
 // ATTR:     auto parseResult = generatedAttributeParser(parser, &attrTag, type, attr);
-// ATTR:     if (parseResult.has_value())
+// ATTR:     if (parseResult.hasValue())
 // ATTR:       return attr;
 // ATTR:   }
 // ATTR:   parser.emitError(typeLoc) << "unknown attribute `"
@@ -57,7 +57,7 @@ def TypeA : TestType<"TypeA"> {
 // TYPE:   ::llvm::StringRef mnemonic;
 // TYPE:   ::mlir::Type genType;
 // TYPE:   auto parseResult = generatedTypeParser(parser, &mnemonic, genType);
-// TYPE:   if (parseResult.has_value())
+// TYPE:   if (parseResult.hasValue())
 // TYPE:     return genType;
 // TYPE:   parser.emitError(typeLoc) << "unknown  type `"
 // TYPE:       << mnemonic << "` in dialect `" << getNamespace() << "`";

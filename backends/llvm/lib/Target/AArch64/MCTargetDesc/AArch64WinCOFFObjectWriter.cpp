@@ -30,10 +30,8 @@ namespace {
 
 class AArch64WinCOFFObjectWriter : public MCWinCOFFObjectTargetWriter {
 public:
-  AArch64WinCOFFObjectWriter(const Triple &TheTriple)
-      : MCWinCOFFObjectTargetWriter(TheTriple.isWindowsArm64EC()
-                                        ? COFF::IMAGE_FILE_MACHINE_ARM64EC
-                                        : COFF::IMAGE_FILE_MACHINE_ARM64) {}
+  AArch64WinCOFFObjectWriter()
+      : MCWinCOFFObjectTargetWriter(COFF::IMAGE_FILE_MACHINE_ARM64) {}
 
   ~AArch64WinCOFFObjectWriter() override = default;
 
@@ -161,7 +159,6 @@ bool AArch64WinCOFFObjectWriter::recordRelocation(const MCFixup &Fixup) const {
   return true;
 }
 
-std::unique_ptr<MCObjectTargetWriter>
-llvm::createAArch64WinCOFFObjectWriter(const Triple &TheTriple) {
-  return std::make_unique<AArch64WinCOFFObjectWriter>(TheTriple);
+std::unique_ptr<MCObjectTargetWriter> llvm::createAArch64WinCOFFObjectWriter() {
+  return std::make_unique<AArch64WinCOFFObjectWriter>();
 }

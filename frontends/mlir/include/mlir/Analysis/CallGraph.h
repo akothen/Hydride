@@ -184,14 +184,9 @@ public:
   /// registered.
   CallGraphNode *lookupNode(Region *region) const;
 
-  /// Return the callgraph node representing an external caller.
-  CallGraphNode *getExternalCallerNode() const {
-    return const_cast<CallGraphNode *>(&externalCallerNode);
-  }
-
-  /// Return the callgraph node representing an indirect callee.
-  CallGraphNode *getUnknownCalleeNode() const {
-    return const_cast<CallGraphNode *>(&unknownCalleeNode);
+  /// Return the callgraph node representing the indirect-external callee.
+  CallGraphNode *getExternalNode() const {
+    return const_cast<CallGraphNode *>(&externalNode);
   }
 
   /// Resolve the callable for given callee to a node in the callgraph, or the
@@ -217,11 +212,8 @@ private:
   /// The set of nodes within the callgraph.
   NodeMapT nodes;
 
-  /// A special node used to indicate an external caller.
-  CallGraphNode externalCallerNode;
-
-  /// A special node used to indicate an unknown callee.
-  CallGraphNode unknownCalleeNode;
+  /// A special node used to indicate an external edges.
+  CallGraphNode externalNode;
 };
 
 } // namespace mlir
@@ -254,7 +246,7 @@ struct GraphTraits<const mlir::CallGraph *>
     : public GraphTraits<const mlir::CallGraphNode *> {
   /// The entry node into the graph is the external node.
   static NodeRef getEntryNode(const mlir::CallGraph *cg) {
-    return cg->getExternalCallerNode();
+    return cg->getExternalNode();
   }
 
   // nodes_iterator/begin/end - Allow iteration over all nodes in the graph

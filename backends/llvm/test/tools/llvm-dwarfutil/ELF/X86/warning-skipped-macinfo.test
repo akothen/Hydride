@@ -1,19 +1,11 @@
 ## This test checks the warning message displayed if input file
-## contains non-empty .debug_macinfo section. Warning message
-## should not be displayed if .debug_macinfo is empty.
+## contains .debug_macinfo section.
 
-# RUN: yaml2obj -D MACINFO_CONTENT="0000" %s -o %t.o
+# RUN: yaml2obj %s -o %t.o
 
-# RUN: llvm-dwarfutil --garbage-collection %t.o %t1 2>&1 \
-# RUN:   | FileCheck %s -DFILE=%t.o --check-prefix=NOWARN --allow-empty
+# RUN: llvm-dwarfutil --garbage-collection %t.o %t1 2>&1 | FileCheck %s -DFILE=%t.o
 
-# RUN: yaml2obj -D MACINFO_CONTENT="0001" %s -o %t.o
-
-# RUN: llvm-dwarfutil --garbage-collection %t.o %t1 2>&1 \
-# RUN:   | FileCheck %s -DFILE=%t.o --check-prefix=WARN
-
-# WARN: [[FILE]]: warning: '.debug_macinfo' is not currently supported: file will be skipped
-# NOWARN-NOT: warning
+# CHECK: [[FILE]]: warning: '.debug_macinfo' is not currently supported: file will be skipped
 
 --- !ELF
 FileHeader:
@@ -31,7 +23,7 @@ Sections:
   - Name:            .debug_macinfo
     Type:            SHT_PROGBITS
     Flags:           [  ]
-    Content:        [[MACINFO_CONTENT]]
+    Content:        "0000"
 DWARF:
   debug_abbrev:
     - Table:

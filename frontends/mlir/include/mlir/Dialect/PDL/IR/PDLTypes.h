@@ -28,11 +28,6 @@ public:
 
   static bool classof(Type type);
 };
-
-/// If the given type is a range, return its element type, otherwise return
-/// the type itself.
-Type getRangeElementTypeOrSelf(Type type);
-
 } // namespace pdl
 } // namespace mlir
 

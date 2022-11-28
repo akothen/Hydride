@@ -3,12 +3,12 @@
 @a = external hidden global i32
 @b = external global i32
 
-define ptr @get_a() {
-  ret ptr @a
+define i32* @get_a() {
+  ret i32* @a
 }
 
-define ptr @get_b() {
-  ret ptr @b
+define i32* @get_b() {
+  ret i32* @b
 }
 
 ; CHECK: .globl  get_a

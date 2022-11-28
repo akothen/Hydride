@@ -10,28 +10,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/Async/Passes.h"
-
+#include "PassDetail.h"
 #include "mlir/Dialect/Async/IR/Async.h"
+#include "mlir/Dialect/Async/Passes.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "llvm/ADT/SmallSet.h"
 #include "llvm/Support/Debug.h"
 
-namespace mlir {
-#define GEN_PASS_DEF_ASYNCRUNTIMEREFCOUNTINGOPT
-#include "mlir/Dialect/Async/Passes.h.inc"
-} // namespace mlir
-
-#define DEBUG_TYPE "async-ref-counting"
-
 using namespace mlir;
 using namespace mlir::async;
+
+#define DEBUG_TYPE "async-ref-counting"
 
 namespace {
 
 class AsyncRuntimeRefCountingOptPass
-    : public impl::AsyncRuntimeRefCountingOptBase<
-          AsyncRuntimeRefCountingOptPass> {
+    : public AsyncRuntimeRefCountingOptBase<AsyncRuntimeRefCountingOptPass> {
 public:
   AsyncRuntimeRefCountingOptPass() = default;
   void runOnOperation() override;
@@ -112,7 +106,7 @@ LogicalResult AsyncRuntimeRefCountingOptPass::optimizeReferenceCounting(
     for (RuntimeAddRefOp addRef : info.addRefs) {
       for (RuntimeDropRefOp dropRef : info.dropRefs) {
         // `drop_ref` operation after the `add_ref` with matching count.
-        if (dropRef.getCount() != addRef.getCount() ||
+        if (dropRef.count() != addRef.count() ||
             dropRef->isBeforeInBlock(addRef.getOperation()))
           continue;
 

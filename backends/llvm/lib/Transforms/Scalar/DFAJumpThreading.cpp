@@ -724,7 +724,7 @@ private:
 
     // Make DeterminatorBB the first element in Path.
     PathType Path = TPath.getPath();
-    auto ItDet = llvm::find(Path, DeterminatorBB);
+    auto ItDet = std::find(Path.begin(), Path.end(), DeterminatorBB);
     std::rotate(Path.begin(), ItDet, Path.end());
 
     bool IsDetBBSeen = false;
@@ -798,7 +798,7 @@ private:
 
       // Otherwise update Metrics for all blocks that will be cloned. If any
       // block is already cloned and would be reused, don't double count it.
-      auto DetIt = llvm::find(PathBBs, Determinator);
+      auto DetIt = std::find(PathBBs.begin(), PathBBs.end(), Determinator);
       for (auto BBIt = DetIt; BBIt != PathBBs.end(); BBIt++) {
         BB = *BBIt;
         VisitedBB = getClonedBB(BB, NextState, DuplicateMap);
@@ -840,7 +840,7 @@ private:
       }
     }
 
-    InstructionCost DuplicationCost = 0;
+    unsigned DuplicationCost = 0;
 
     unsigned JumpTableSize = 0;
     TTI->getEstimatedNumberOfCaseClusters(*Switch, JumpTableSize, nullptr,
@@ -851,7 +851,7 @@ private:
       // using binary search, hence the LogBase2().
       unsigned CondBranches =
           APInt(32, Switch->getNumSuccessors()).ceilLogBase2();
-      DuplicationCost = Metrics.NumInsts / CondBranches;
+      DuplicationCost = *Metrics.NumInsts.getValue() / CondBranches;
     } else {
       // Compared with jump tables, the DFA optimizer removes an indirect branch
       // on each loop iteration, thus making branch prediction more precise. The
@@ -859,7 +859,7 @@ private:
       // predictor to make a mistake, and the more benefit there is in the DFA
       // optimizer. Thus, the more branch targets there are, the lower is the
       // cost of the DFA opt.
-      DuplicationCost = Metrics.NumInsts / JumpTableSize;
+      DuplicationCost = *Metrics.NumInsts.getValue() / JumpTableSize;
     }
 
     LLVM_DEBUG(dbgs() << "\nDFA Jump Threading: Cost to jump thread block "
@@ -943,7 +943,7 @@ private:
     if (PathBBs.front() == Determinator)
       PathBBs.pop_front();
 
-    auto DetIt = llvm::find(PathBBs, Determinator);
+    auto DetIt = std::find(PathBBs.begin(), PathBBs.end(), Determinator);
     auto Prev = std::prev(DetIt);
     BasicBlock *PrevBB = *Prev;
     for (auto BBIt = DetIt; BBIt != PathBBs.end(); BBIt++) {

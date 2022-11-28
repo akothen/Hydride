@@ -222,7 +222,7 @@ casts between two different shapes.
 ```tablegen
 def CastOp : Toy_Op<"cast", [
     DeclareOpInterfaceMethods<CastOpInterface>,
-    NoMemoryEffect,
+    NoSideEffect,
     SameOperandsAndResultShape]
   > {
   let summary = "shape cast operation";

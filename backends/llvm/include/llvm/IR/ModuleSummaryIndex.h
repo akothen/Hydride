@@ -1223,7 +1223,7 @@ public:
         dyn_cast<FunctionSummary>(V.getSummaryList().front().get());
     assert(F != nullptr && "Expected FunctionSummary node");
 
-    for (const auto &C : F->calls()) {
+    for (auto &C : F->calls()) {
       // Insert node if necessary
       auto S = FunctionHasParent.emplace(C.first, true);
 
@@ -1465,15 +1465,10 @@ public:
   /// Convenience method for creating a promoted global name
   /// for the given value name of a local, and its original module's ID.
   static std::string getGlobalNameForLocal(StringRef Name, ModuleHash ModHash) {
-    std::string Suffix = utostr((uint64_t(ModHash[0]) << 32) |
-                                ModHash[1]); // Take the first 64 bits
-    return getGlobalNameForLocal(Name, Suffix);
-  }
-
-  static std::string getGlobalNameForLocal(StringRef Name, StringRef Suffix) {
     SmallString<256> NewName(Name);
     NewName += ".llvm.";
-    NewName += Suffix;
+    NewName += utostr((uint64_t(ModHash[0]) << 32) |
+                      ModHash[1]); // Take the first 64 bits
     return std::string(NewName.str());
   }
 
@@ -1572,9 +1567,9 @@ public:
   template <class Map>
   void
   collectDefinedGVSummariesPerModule(Map &ModuleToDefinedGVSummaries) const {
-    for (const auto &GlobalList : *this) {
+    for (auto &GlobalList : *this) {
       auto GUID = GlobalList.first;
-      for (const auto &Summary : GlobalList.second.SummaryList) {
+      for (auto &Summary : GlobalList.second.SummaryList) {
         ModuleToDefinedGVSummaries[Summary->modulePath()][GUID] = Summary.get();
       }
     }

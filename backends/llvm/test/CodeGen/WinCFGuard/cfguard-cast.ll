@@ -1,5 +1,4 @@
 ; RUN: llc < %s -mtriple=x86_64-pc-windows-msvc | FileCheck %s
-; RUN: llc < %s -mtriple=x86_64-w64-windows-gnu | FileCheck %s
 
 ; Check how constant function pointer casts are handled.
 

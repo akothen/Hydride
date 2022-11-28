@@ -59,10 +59,10 @@
 
 // -----
 
-// expected-error@+4 {{unknown 'resource' key 'unknown_entry' for dialect 'ml_program'}}
+// expected-error@+4 {{unknown 'resource' key 'unknown_entry' for dialect 'builtin'}}
 {-#
   dialect_resources: {
-    ml_program: {
+    builtin: {
       unknown_entry: "foo"
     }
   }
@@ -127,5 +127,16 @@
 {-#
   external_resources: {
     entry "value"
+  }
+#-}
+
+// -----
+
+// expected-warning@+3 {{ignoring unknown external resources for 'foobar'}}
+{-#
+  external_resources: {
+    foobar: {
+      entry: "foo"
+    }
   }
 #-}

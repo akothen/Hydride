@@ -17,21 +17,16 @@ namespace llvm {
 namespace orc {
 
 Expected<std::unique_ptr<EPCEHFrameRegistrar>>
-EPCEHFrameRegistrar::Create(ExecutionSession &ES,
-                            Optional<ExecutorAddr> RegistrationFunctionsDylib) {
+EPCEHFrameRegistrar::Create(ExecutionSession &ES) {
   // FIXME: Proper mangling here -- we really need to decouple linker mangling
   // from DataLayout.
 
   // Find the addresses of the registration/deregistration functions in the
   // executor process.
   auto &EPC = ES.getExecutorProcessControl();
-
-  if (!RegistrationFunctionsDylib) {
-    if (auto D = EPC.loadDylib(nullptr))
-      RegistrationFunctionsDylib = *D;
-    else
-      return D.takeError();
-  }
+  auto ProcessHandle = EPC.loadDylib(nullptr);
+  if (!ProcessHandle)
+    return ProcessHandle.takeError();
 
   std::string RegisterWrapperName, DeregisterWrapperName;
   if (EPC.getTargetTriple().isOSBinFormatMachO()) {
@@ -45,8 +40,7 @@ EPCEHFrameRegistrar::Create(ExecutionSession &ES,
   RegistrationSymbols.add(EPC.intern(RegisterWrapperName));
   RegistrationSymbols.add(EPC.intern(DeregisterWrapperName));
 
-  auto Result =
-      EPC.lookupSymbols({{*RegistrationFunctionsDylib, RegistrationSymbols}});
+  auto Result = EPC.lookupSymbols({{*ProcessHandle, RegistrationSymbols}});
   if (!Result)
     return Result.takeError();
 

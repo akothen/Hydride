@@ -178,5 +178,6 @@ static void extractAttributesFromModule(Oracle &O, Module &Program) {
 }
 
 void llvm::reduceAttributesDeltaPass(TestRunner &Test) {
-  runDeltaPass(Test, extractAttributesFromModule, "Reducing Attributes");
+  outs() << "*** Reducing Attributes...\n";
+  runDeltaPass(Test, extractAttributesFromModule);
 }

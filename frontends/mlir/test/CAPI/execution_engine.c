@@ -35,8 +35,8 @@ void lowerModuleToLLVM(MlirContext ctx, MlirModule module) {
   MlirOpPassManager opm = mlirPassManagerGetNestedUnder(
       pm, mlirStringRefCreateFromCString("func.func"));
   mlirPassManagerAddOwnedPass(pm, mlirCreateConversionConvertFuncToLLVM());
-  mlirOpPassManagerAddOwnedPass(
-      opm, mlirCreateConversionArithToLLVMConversionPass());
+  mlirOpPassManagerAddOwnedPass(opm,
+                                mlirCreateConversionConvertArithmeticToLLVM());
   MlirLogicalResult status = mlirPassManagerRun(pm, module);
   if (mlirLogicalResultIsFailure(status)) {
     fprintf(stderr, "Unexpected failure running pass pipeline\n");
@@ -63,8 +63,7 @@ void testSimpleExecution() {
   lowerModuleToLLVM(ctx, module);
   mlirRegisterAllLLVMTranslations(ctx);
   MlirExecutionEngine jit = mlirExecutionEngineCreate(
-      module, /*optLevel=*/2, /*numPaths=*/0, /*sharedLibPaths=*/NULL,
-      /*enableObjectDump=*/false);
+      module, /*optLevel=*/2, /*numPaths=*/0, /*sharedLibPaths=*/NULL);
   if (mlirExecutionEngineIsNull(jit)) {
     fprintf(stderr, "Execution engine creation failed");
     exit(2);

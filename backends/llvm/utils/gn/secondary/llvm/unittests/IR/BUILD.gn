@@ -1,4 +1,4 @@
-import("//third-party/unittest/unittest.gni")
+import("//llvm/utils/unittest/unittest.gni")
 
 unittest("IRTests") {
   deps = [
@@ -36,7 +36,6 @@ unittest("IRTests") {
     "PassBuilderCallbacksTest.cpp",
     "PassManagerTest.cpp",
     "PatternMatch.cpp",
-    "ShuffleVectorInstTest.cpp",
     "TimePassesTest.cpp",
     "TypesTest.cpp",
     "UseTest.cpp",

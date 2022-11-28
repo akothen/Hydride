@@ -275,7 +275,8 @@ public:
   /// for pre-order erasure. See Operation::walk for more details.
   template <WalkOrder Order = WalkOrder::PostOrder, typename FnT,
             typename RetT = detail::walkResultType<FnT>>
-  std::enable_if_t<std::is_same<RetT, void>::value, RetT> walk(FnT &&callback) {
+  typename std::enable_if<std::is_same<RetT, void>::value, RetT>::type
+  walk(FnT &&callback) {
     for (auto &block : *this)
       block.walk<Order>(callback);
   }
@@ -293,7 +294,7 @@ public:
   /// See Operation::walk for more details.
   template <WalkOrder Order = WalkOrder::PostOrder, typename FnT,
             typename RetT = detail::walkResultType<FnT>>
-  std::enable_if_t<std::is_same<RetT, WalkResult>::value, RetT>
+  typename std::enable_if<std::is_same<RetT, WalkResult>::value, RetT>::type
   walk(FnT &&callback) {
     for (auto &block : *this)
       if (block.walk<Order>(callback).wasInterrupted())
@@ -340,16 +341,17 @@ public:
 
   RegionRange(MutableArrayRef<Region> regions = llvm::None);
 
-  template <typename Arg, typename = std::enable_if_t<std::is_constructible<
-                              ArrayRef<std::unique_ptr<Region>>, Arg>::value>>
+  template <typename Arg,
+            typename = typename std::enable_if_t<std::is_constructible<
+                ArrayRef<std::unique_ptr<Region>>, Arg>::value>>
   RegionRange(Arg &&arg)
       : RegionRange(ArrayRef<std::unique_ptr<Region>>(std::forward<Arg>(arg))) {
   }
   template <typename Arg>
   RegionRange(
       Arg &&arg,
-      std::enable_if_t<std::is_constructible<ArrayRef<Region *>, Arg>::value>
-          * = nullptr)
+      typename std::enable_if_t<
+          std::is_constructible<ArrayRef<Region *>, Arg>::value> * = nullptr)
       : RegionRange(ArrayRef<Region *>(std::forward<Arg>(arg))) {}
   RegionRange(ArrayRef<std::unique_ptr<Region>> regions);
   RegionRange(ArrayRef<Region *> regions);

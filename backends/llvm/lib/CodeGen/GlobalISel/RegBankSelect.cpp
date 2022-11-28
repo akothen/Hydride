@@ -458,7 +458,6 @@ RegBankSelect::MappingCost RegBankSelect::computeMapping(
     LLVM_DEBUG(dbgs() << "Mapping is too expensive from the start\n");
     return Cost;
   }
-  const MachineRegisterInfo &MRI = MI.getMF()->getRegInfo();
 
   // Moreover, to realize this mapping, the register bank of each operand must
   // match this mapping. In other words, we may need to locally reassign the
@@ -472,10 +471,6 @@ RegBankSelect::MappingCost RegBankSelect::computeMapping(
     Register Reg = MO.getReg();
     if (!Reg)
       continue;
-    LLT Ty = MRI.getType(Reg);
-    if (!Ty.isValid())
-      continue;
-
     LLVM_DEBUG(dbgs() << "Opd" << OpIdx << '\n');
     const RegisterBankInfo::ValueMapping &ValMapping =
         InstrMapping.getOperandMapping(OpIdx);
@@ -608,9 +603,6 @@ bool RegBankSelect::applyMapping(
       MRI->setRegBank(Reg, *ValMapping.BreakDown[0].RegBank);
       break;
     case RepairingPlacement::Insert:
-      // Don't insert additional instruction for debug instruction.
-      if (MI.isDebugInstr())
-        break;
       OpdMapper.createVRegs(OpIdx);
       if (!repairReg(MO, ValMapping, RepairPt, OpdMapper.getVRegs(OpIdx)))
         return false;
@@ -722,6 +714,10 @@ bool RegBankSelect::runOnMachineFunction(MachineFunction &MF) {
       // Ignore inline asm instructions: they should use physical
       // registers/regclasses
       if (MI.isInlineAsm())
+        continue;
+
+      // Ignore debug info.
+      if (MI.isDebugInstr())
         continue;
 
       // Ignore IMPLICIT_DEF which must have a regclass.

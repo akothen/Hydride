@@ -96,6 +96,16 @@ BitVector VERegisterInfo::getReservedRegs(const MachineFunction &MF) const {
   return Reserved;
 }
 
+bool VERegisterInfo::isConstantPhysReg(MCRegister PhysReg) const {
+  switch (PhysReg) {
+  case VE::VM0:
+  case VE::VMP0:
+    return true;
+  default:
+    return false;
+  }
+}
+
 const TargetRegisterClass *
 VERegisterInfo::getPointerRegClass(const MachineFunction &MF,
                                    unsigned Kind) const {
@@ -111,7 +121,6 @@ static unsigned offsetToDisp(MachineInstr &MI) {
   {
     using namespace llvm::VE;
     switch (MI.getOpcode()) {
-    case INLINEASM:
     case RRCAS_multi_cases(TS1AML):
     case RRCAS_multi_cases(TS1AMW):
     case RRCAS_multi_cases(CASL):

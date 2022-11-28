@@ -324,8 +324,4 @@ bool getAlign(const CallInst &I, unsigned index, unsigned &align) {
   return false;
 }
 
-Function *getMaybeBitcastedCallee(const CallBase *CB) {
-  return dyn_cast<Function>(CB->getCalledOperand()->stripPointerCasts());
-}
-
 } // namespace llvm

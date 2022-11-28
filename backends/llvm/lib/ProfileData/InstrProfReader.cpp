@@ -545,9 +545,7 @@ Error RawInstrProfReader<IntPtrT>::readValueProfilingData(
 
 template <class IntPtrT>
 Error RawInstrProfReader<IntPtrT>::readNextRecord(NamedInstrProfRecord &Record) {
-  // Keep reading profiles that consist of only headers and no profile data and
-  // counters.
-  while (atEnd())
+  if (atEnd())
     // At this point, ValueDataStart field points to the next header.
     if (Error E = readNextHeader(getNextHeaderPos()))
       return error(std::move(E));
@@ -1042,7 +1040,8 @@ Expected<InstrProfRecord> IndexedInstrProfReader::getInstrProfRecord(
   bool CSBitMatch = false;
   auto getFuncSum = [](const std::vector<uint64_t> &Counts) {
     uint64_t ValueSum = 0;
-    for (uint64_t CountValue : Counts) {
+    for (unsigned I = 0, S = Counts.size(); I < S; I++) {
+      uint64_t CountValue = Counts[I];
       if (CountValue == (uint64_t)-1)
         continue;
       // Handle overflow -- if that happens, return max.

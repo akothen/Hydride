@@ -12,7 +12,6 @@
 #===------------------------------------------------------------------------===#
 
 System=`uname -s`
-Machine=`uname -m`
 if [ "$System" = "FreeBSD" ]; then
     MAKE=gmake
 else
@@ -46,15 +45,6 @@ BuildDir="`pwd`"
 ExtraConfigureFlags=""
 ExportBranch=""
 git_ref=""
-
-do_bolt="no"
-if [ "$System" = "Linux" ]; then
-    case $Machine in
-        x86_64 | arm64 | aarch64 )
-            do_bolt="yes"
-            ;;
-    esac
-fi
 
 function usage() {
     echo "usage: `basename $0` -release X.Y.Z -rc NUM [OPTIONS]"
@@ -173,12 +163,6 @@ while [ $# -gt 0 ]; do
         -no-openmp )
             do_openmp="no"
             ;;
-        -bolt )
-            do_bolt="yes"
-            ;;
-        -no-bolt )
-            do_bolt="no"
-            ;;
         -no-lld )
             do_lld="no"
             ;;
@@ -280,9 +264,6 @@ if [ $do_libs = "yes" ]; then
 fi
 if [ $do_openmp = "yes" ]; then
   projects="$projects openmp"
-fi
-if [ $do_bolt = "yes" ]; then
-  projects="$projects bolt"
 fi
 if [ $do_lld = "yes" ]; then
   projects="$projects lld"

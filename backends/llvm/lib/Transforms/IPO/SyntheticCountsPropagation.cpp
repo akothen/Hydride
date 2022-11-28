@@ -101,7 +101,7 @@ PreservedAnalyses SyntheticCountsPropagation::run(Module &M,
   // parameter.
   auto GetCallSiteProfCount = [&](const CallGraphNode *,
                                   const CallGraphNode::CallRecord &Edge) {
-    Optional<Scaled64> Res;
+    Optional<Scaled64> Res = None;
     if (!Edge.first)
       return Res;
     CallBase &CB = *cast<CallBase>(*Edge.first);

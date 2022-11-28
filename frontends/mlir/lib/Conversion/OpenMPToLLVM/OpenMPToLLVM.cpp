@@ -8,7 +8,8 @@
 
 #include "mlir/Conversion/OpenMPToLLVM/ConvertOpenMPToLLVM.h"
 
-#include "mlir/Conversion/ArithToLLVM/ArithToLLVM.h"
+#include "../PassDetail.h"
+#include "mlir/Conversion/ArithmeticToLLVM/ArithmeticToLLVM.h"
 #include "mlir/Conversion/ControlFlowToLLVM/ControlFlowToLLVM.h"
 #include "mlir/Conversion/FuncToLLVM/ConvertFuncToLLVM.h"
 #include "mlir/Conversion/FuncToLLVM/ConvertFuncToLLVMPass.h"
@@ -17,12 +18,6 @@
 #include "mlir/Conversion/MemRefToLLVM/MemRefToLLVM.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/OpenMP/OpenMPDialect.h"
-#include "mlir/Pass/Pass.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTOPENMPTOLLVM
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 
@@ -40,9 +35,9 @@ struct RegionOpConversion : public ConvertOpToLLVMPattern<OpType> {
                   ConversionPatternRewriter &rewriter) const override {
     auto newOp = rewriter.create<OpType>(
         curOp.getLoc(), TypeRange(), adaptor.getOperands(), curOp->getAttrs());
-    rewriter.inlineRegionBefore(curOp.getRegion(), newOp.getRegion(),
-                                newOp.getRegion().end());
-    if (failed(rewriter.convertRegionTypes(&newOp.getRegion(),
+    rewriter.inlineRegionBefore(curOp.region(), newOp.region(),
+                                newOp.region().end());
+    if (failed(rewriter.convertRegionTypes(&newOp.region(),
                                            *this->getTypeConverter())))
       return failure();
 
@@ -88,7 +83,7 @@ struct ReductionOpConversion : public ConvertOpToLLVMPattern<omp::ReductionOp> {
   LogicalResult
   matchAndRewrite(omp::ReductionOp curOp, OpAdaptor adaptor,
                   ConversionPatternRewriter &rewriter) const override {
-    if (curOp.getAccumulator().getType().isa<MemRefType>()) {
+    if (curOp.accumulator().getType().isa<MemRefType>()) {
       // TODO: Support memref type in variable operands
       return rewriter.notifyMatchFailure(curOp, "memref is not supported yet");
     }
@@ -102,13 +97,13 @@ struct ReductionOpConversion : public ConvertOpToLLVMPattern<omp::ReductionOp> {
 void mlir::configureOpenMPToLLVMConversionLegality(
     ConversionTarget &target, LLVMTypeConverter &typeConverter) {
   target.addDynamicallyLegalOp<mlir::omp::CriticalOp, mlir::omp::ParallelOp,
-                               mlir::omp::WsLoopOp, mlir::omp::SimdLoopOp,
-                               mlir::omp::MasterOp, mlir::omp::SectionsOp,
-                               mlir::omp::SingleOp>([&](Operation *op) {
-    return typeConverter.isLegal(&op->getRegion(0)) &&
-           typeConverter.isLegal(op->getOperandTypes()) &&
-           typeConverter.isLegal(op->getResultTypes());
-  });
+                               mlir::omp::WsLoopOp, mlir::omp::MasterOp,
+                               mlir::omp::SectionsOp, mlir::omp::SingleOp>(
+      [&](Operation *op) {
+        return typeConverter.isLegal(&op->getRegion(0)) &&
+               typeConverter.isLegal(op->getOperandTypes()) &&
+               typeConverter.isLegal(op->getResultTypes());
+      });
   target
       .addDynamicallyLegalOp<mlir::omp::AtomicReadOp, mlir::omp::AtomicWriteOp,
                              mlir::omp::FlushOp, mlir::omp::ThreadprivateOp>(
@@ -128,7 +123,7 @@ void mlir::populateOpenMPToLLVMConversionPatterns(LLVMTypeConverter &converter,
       RegionOpConversion<omp::MasterOp>, ReductionOpConversion,
       RegionOpConversion<omp::MasterOp>, RegionOpConversion<omp::ParallelOp>,
       RegionOpConversion<omp::WsLoopOp>, RegionOpConversion<omp::SectionsOp>,
-      RegionOpConversion<omp::SimdLoopOp>, RegionOpConversion<omp::SingleOp>,
+      RegionOpConversion<omp::SingleOp>,
       RegionLessOpWithVarOperandsConversion<omp::AtomicReadOp>,
       RegionLessOpWithVarOperandsConversion<omp::AtomicWriteOp>,
       RegionLessOpWithVarOperandsConversion<omp::FlushOp>,
@@ -137,7 +132,7 @@ void mlir::populateOpenMPToLLVMConversionPatterns(LLVMTypeConverter &converter,
 
 namespace {
 struct ConvertOpenMPToLLVMPass
-    : public impl::ConvertOpenMPToLLVMBase<ConvertOpenMPToLLVMPass> {
+    : public ConvertOpenMPToLLVMBase<ConvertOpenMPToLLVMPass> {
   void runOnOperation() override;
 };
 } // namespace
@@ -148,7 +143,7 @@ void ConvertOpenMPToLLVMPass::runOnOperation() {
   // Convert to OpenMP operations with LLVM IR dialect
   RewritePatternSet patterns(&getContext());
   LLVMTypeConverter converter(&getContext());
-  arith::populateArithToLLVMConversionPatterns(converter, patterns);
+  arith::populateArithmeticToLLVMConversionPatterns(converter, patterns);
   cf::populateControlFlowToLLVMConversionPatterns(converter, patterns);
   populateMemRefToLLVMConversionPatterns(converter, patterns);
   populateFuncToLLVMConversionPatterns(converter, patterns);

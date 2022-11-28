@@ -49,6 +49,7 @@ public:
                          SmallVectorImpl<MCFixup> &Fixups,
                          const MCSubtargetInfo &STI) const override;
 
+  /// \returns the encoding for an MCOperand.
   void getMachineOpValue(const MCInst &MI, const MCOperand &MO, APInt &Op,
                          SmallVectorImpl<MCFixup> &Fixups,
                          const MCSubtargetInfo &STI) const override;
@@ -274,7 +275,7 @@ uint32_t SIMCCodeEmitter::getLitEncoding(const MCOperand &MO,
       return getLit32Encoding(static_cast<uint32_t>(Imm), STI);
     if (OpInfo.OperandType == AMDGPU::OPERAND_REG_IMM_V2FP16)
       return getLit16Encoding(static_cast<uint16_t>(Imm), STI);
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   }
   case AMDGPU::OPERAND_REG_INLINE_C_V2INT16:
   case AMDGPU::OPERAND_REG_INLINE_AC_V2INT16:
@@ -297,12 +298,12 @@ uint64_t SIMCCodeEmitter::getImplicitOpSelHiEncoding(int Opcode) const {
   using namespace AMDGPU::VOP3PEncoding;
   using namespace AMDGPU::OpName;
 
-  if (AMDGPU::hasNamedOperand(Opcode, op_sel_hi)) {
-    if (AMDGPU::hasNamedOperand(Opcode, src2))
+  if (AMDGPU::getNamedOperandIdx(Opcode, op_sel_hi) != -1) {
+    if (AMDGPU::getNamedOperandIdx(Opcode, src2) != -1)
       return 0;
-    if (AMDGPU::hasNamedOperand(Opcode, src1))
+    if (AMDGPU::getNamedOperandIdx(Opcode, src1) != -1)
       return OP_SEL_HI_2;
-    if (AMDGPU::hasNamedOperand(Opcode, src0))
+    if (AMDGPU::getNamedOperandIdx(Opcode, src0) != -1)
       return OP_SEL_HI_1 | OP_SEL_HI_2;
   }
   return OP_SEL_HI_0 | OP_SEL_HI_1 | OP_SEL_HI_2;
@@ -330,13 +331,13 @@ void SIMCCodeEmitter::encodeInstruction(const MCInst &MI, raw_ostream &OS,
     Encoding |= getImplicitOpSelHiEncoding(Opcode);
   }
 
-  // GFX10+ v_cmpx opcodes promoted to VOP3 have implied dst=EXEC.
+  // GFX11 v_cmpx opcodes promoted to VOP3 have implied dst=EXEC.
   // Documentation requires dst to be encoded as EXEC (0x7E),
   // but it looks like the actual value encoded for dst operand
   // is ignored by HW. It was decided to define dst as "do not care"
   // in td files to allow disassembler accept any dst value.
   // However, dst is encoded as EXEC for compatibility with SP3.
-  if (AMDGPU::isGFX10Plus(STI) && isVCMPX64(Desc)) {
+  if (AMDGPU::isGFX11Plus(STI) && isVCMPX64(Desc)) {
     assert((Encoding & 0xFF) == 0);
     Encoding |= MRI.getEncodingValue(AMDGPU::EXEC_LO);
   }
@@ -369,7 +370,9 @@ void SIMCCodeEmitter::encodeInstruction(const MCInst &MI, raw_ostream &OS,
     return;
 
   // Do not print literals from SISrc Operands for insts with mandatory literals
-  if (AMDGPU::hasNamedOperand(MI.getOpcode(), AMDGPU::OpName::imm))
+  int ImmLitIdx =
+      AMDGPU::getNamedOperandIdx(MI.getOpcode(), AMDGPU::OpName::imm);
+  if (ImmLitIdx != -1)
     return;
 
   // Check for additional literals

@@ -15,10 +15,8 @@ add_mlir_dialect_library(MLIRLinalgDialect
 
   LINK_LIBS PUBLIC
   MLIRAffineDialect
-  MLIRArithDialect
-  MLIRArithUtils
+  MLIRArithmeticDialect
   MLIRBufferizationDialect
-  MLIRDestinationStyleOpInterface
   MLIRDialectUtils
   MLIRInferTypeOpInterface
   MLIRIR

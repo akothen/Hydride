@@ -1,5 +1,5 @@
 ; RUN: opt < %s -loop-reduce
-; RUN: opt < %s -passes='require<scalar-evolution>'
+; RUN: opt < %s -scalar-evolution
 ; PR 3086
 
 	%struct.Cls = type { i32, i8, [2 x %struct.Cls*], [2 x %struct.Lit*] }

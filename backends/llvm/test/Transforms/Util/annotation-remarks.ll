@@ -1,3 +1,5 @@
+; RUN: opt -annotation-remarks -pass-remarks-missed='annotation-remarks' -disable-output -pass-remarks-output=%t.opt.yaml %s
+; RUN: FileCheck --input-file=%t.opt.yaml %s
 ; RUN: opt -passes='annotation-remarks' -pass-remarks-missed='annotation-remarks' -disable-output -pass-remarks-output=%t.opt.yaml %s
 ; RUN: FileCheck --input-file=%t.opt.yaml %s
 
@@ -32,17 +34,17 @@
 ; CHECK-NEXT:   - type:            _remarks1
 ; CHECK-NEXT: ...
 
-define void @test1(ptr %a) {
+define void @test1(float* %a) {
 entry:
-  %a.addr = alloca ptr, align 8, !annotation !0
-  store ptr null, ptr %a.addr, align 8, !annotation !1
-  store ptr %a, ptr %a.addr, align 8, !annotation !0
+  %a.addr = alloca float*, align 8, !annotation !0
+  store float* null, float** %a.addr, align 8, !annotation !1
+  store float* %a, float** %a.addr, align 8, !annotation !0
   ret void, !annotation !0
 }
 
-define void @test2(ptr %a) {
+define void @test2(float* %a) {
 entry:
-  %a.addr = alloca ptr, align 8, !annotation !1
+  %a.addr = alloca float*, align 8, !annotation !1
   ret void, !annotation !1
 }
 

@@ -73,16 +73,10 @@ bool MachineFunctionPass::runOnFunction(Function &F) {
 
   // For --print-changed, if the function name is a candidate, save the
   // serialized MF to be compared later.
+  // TODO Implement --filter-passes.
   SmallString<0> BeforeStr, AfterStr;
-  StringRef PassID;
-  if (PrintChanged != ChangePrinter::None) {
-    if (const PassInfo *PI = Pass::lookupPassInfo(getPassID()))
-      PassID = PI->getPassArgument();
-  }
-  const bool IsInterestingPass = isPassInPrintList(PassID);
-  const bool ShouldPrintChanged = PrintChanged != ChangePrinter::None &&
-                                  IsInterestingPass &&
-                                  isFunctionInPrintList(MF.getName());
+  bool ShouldPrintChanged = PrintChanged != ChangePrinter::None &&
+                            isFunctionInPrintList(MF.getName());
   if (ShouldPrintChanged) {
     raw_svector_ostream OS(BeforeStr);
     MF.print(OS);
@@ -118,47 +112,18 @@ bool MachineFunctionPass::runOnFunction(Function &F) {
 
   // For --print-changed, print if the serialized MF has changed. Modes other
   // than quiet/verbose are unimplemented and treated the same as 'quiet'.
-  if (ShouldPrintChanged || !IsInterestingPass) {
-    if (ShouldPrintChanged) {
-      raw_svector_ostream OS(AfterStr);
-      MF.print(OS);
-    }
-    if (IsInterestingPass && BeforeStr != AfterStr) {
-      errs() << ("*** IR Dump After " + getPassName() + " (" + PassID +
-                 ") on " + MF.getName() + " ***\n");
-      switch (PrintChanged) {
-      case ChangePrinter::None:
-        llvm_unreachable("");
-      case ChangePrinter::Quiet:
-      case ChangePrinter::Verbose:
-      case ChangePrinter::DotCfgQuiet:   // unimplemented
-      case ChangePrinter::DotCfgVerbose: // unimplemented
-        errs() << AfterStr;
-        break;
-      case ChangePrinter::DiffQuiet:
-      case ChangePrinter::DiffVerbose:
-      case ChangePrinter::ColourDiffQuiet:
-      case ChangePrinter::ColourDiffVerbose: {
-        bool Color = llvm::is_contained(
-            {ChangePrinter::ColourDiffQuiet, ChangePrinter::ColourDiffVerbose},
-            PrintChanged.getValue());
-        StringRef Removed = Color ? "\033[31m-%l\033[0m\n" : "-%l\n";
-        StringRef Added = Color ? "\033[32m+%l\033[0m\n" : "+%l\n";
-        StringRef NoChange = " %l\n";
-        errs() << doSystemDiff(BeforeStr, AfterStr, Removed, Added, NoChange);
-        break;
-      }
-      }
-    } else if (llvm::is_contained({ChangePrinter::Verbose,
-                                   ChangePrinter::DiffVerbose,
-                                   ChangePrinter::ColourDiffVerbose},
-                                  PrintChanged.getValue())) {
-      const char *Reason =
-          IsInterestingPass ? " omitted because no change" : " filtered out";
-      errs() << "*** IR Dump After " << getPassName();
-      if (!PassID.empty())
-        errs() << " (" << PassID << ")";
-      errs() << " on " << MF.getName() + Reason + " ***\n";
+  if (ShouldPrintChanged) {
+    raw_svector_ostream OS(AfterStr);
+    MF.print(OS);
+    if (BeforeStr != AfterStr) {
+      StringRef Arg;
+      if (const PassInfo *PI = Pass::lookupPassInfo(getPassID()))
+        Arg = PI->getPassArgument();
+      errs() << ("*** IR Dump After " + getPassName() + " (" + Arg + ") on " +
+                 MF.getName() + " ***\n" + AfterStr);
+    } else if (PrintChanged == ChangePrinter::Verbose) {
+      errs() << ("*** IR Dump After " + getPassName() + " on " + MF.getName() +
+                 " omitted because no change ***\n");
     }
   }
   return RV;

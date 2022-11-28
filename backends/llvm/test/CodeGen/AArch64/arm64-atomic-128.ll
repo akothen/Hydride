@@ -301,10 +301,14 @@ define void @fetch_and_min(i128* %p, i128 %bits) {
 ; CHECK-NEXT:  .LBB8_1: // %atomicrmw.start
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    ldaxp x9, x8, [x0]
-; CHECK-NEXT:    cmp x2, x9
-; CHECK-NEXT:    sbcs xzr, x3, x8
-; CHECK-NEXT:    csel x10, x8, x3, ge
-; CHECK-NEXT:    csel x11, x9, x2, ge
+; CHECK-NEXT:    cmp x9, x2
+; CHECK-NEXT:    cset w10, ls
+; CHECK-NEXT:    cmp x8, x3
+; CHECK-NEXT:    cset w11, le
+; CHECK-NEXT:    csel w10, w10, w11, eq
+; CHECK-NEXT:    cmp w10, #0
+; CHECK-NEXT:    csel x10, x8, x3, ne
+; CHECK-NEXT:    csel x11, x9, x2, ne
 ; CHECK-NEXT:    stlxp w12, x11, x10, [x0]
 ; CHECK-NEXT:    cbnz w12, .LBB8_1
 ; CHECK-NEXT:  // %bb.2: // %atomicrmw.end
@@ -324,10 +328,14 @@ define void @fetch_and_max(i128* %p, i128 %bits) {
 ; CHECK-NEXT:  .LBB9_1: // %atomicrmw.start
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    ldaxp x9, x8, [x0]
-; CHECK-NEXT:    cmp x2, x9
-; CHECK-NEXT:    sbcs xzr, x3, x8
-; CHECK-NEXT:    csel x10, x8, x3, lt
-; CHECK-NEXT:    csel x11, x9, x2, lt
+; CHECK-NEXT:    cmp x9, x2
+; CHECK-NEXT:    cset w10, hi
+; CHECK-NEXT:    cmp x8, x3
+; CHECK-NEXT:    cset w11, gt
+; CHECK-NEXT:    csel w10, w10, w11, eq
+; CHECK-NEXT:    cmp w10, #0
+; CHECK-NEXT:    csel x10, x8, x3, ne
+; CHECK-NEXT:    csel x11, x9, x2, ne
 ; CHECK-NEXT:    stlxp w12, x11, x10, [x0]
 ; CHECK-NEXT:    cbnz w12, .LBB9_1
 ; CHECK-NEXT:  // %bb.2: // %atomicrmw.end
@@ -347,10 +355,14 @@ define void @fetch_and_umin(i128* %p, i128 %bits) {
 ; CHECK-NEXT:  .LBB10_1: // %atomicrmw.start
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    ldaxp x9, x8, [x0]
-; CHECK-NEXT:    cmp x2, x9
-; CHECK-NEXT:    sbcs xzr, x3, x8
-; CHECK-NEXT:    csel x10, x8, x3, hs
-; CHECK-NEXT:    csel x11, x9, x2, hs
+; CHECK-NEXT:    cmp x9, x2
+; CHECK-NEXT:    cset w10, ls
+; CHECK-NEXT:    cmp x8, x3
+; CHECK-NEXT:    cset w11, ls
+; CHECK-NEXT:    csel w10, w10, w11, eq
+; CHECK-NEXT:    cmp w10, #0
+; CHECK-NEXT:    csel x10, x8, x3, ne
+; CHECK-NEXT:    csel x11, x9, x2, ne
 ; CHECK-NEXT:    stlxp w12, x11, x10, [x0]
 ; CHECK-NEXT:    cbnz w12, .LBB10_1
 ; CHECK-NEXT:  // %bb.2: // %atomicrmw.end
@@ -370,10 +382,14 @@ define void @fetch_and_umax(i128* %p, i128 %bits) {
 ; CHECK-NEXT:  .LBB11_1: // %atomicrmw.start
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    ldaxp x9, x8, [x0]
-; CHECK-NEXT:    cmp x2, x9
-; CHECK-NEXT:    sbcs xzr, x3, x8
-; CHECK-NEXT:    csel x10, x8, x3, lo
-; CHECK-NEXT:    csel x11, x9, x2, lo
+; CHECK-NEXT:    cmp x9, x2
+; CHECK-NEXT:    cset w10, hi
+; CHECK-NEXT:    cmp x8, x3
+; CHECK-NEXT:    cset w11, hi
+; CHECK-NEXT:    csel w10, w10, w11, eq
+; CHECK-NEXT:    cmp w10, #0
+; CHECK-NEXT:    csel x10, x8, x3, ne
+; CHECK-NEXT:    csel x11, x9, x2, ne
 ; CHECK-NEXT:    stlxp w12, x11, x10, [x0]
 ; CHECK-NEXT:    cbnz w12, .LBB11_1
 ; CHECK-NEXT:  // %bb.2: // %atomicrmw.end

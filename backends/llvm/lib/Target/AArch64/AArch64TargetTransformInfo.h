@@ -59,14 +59,6 @@ class AArch64TTIImpl : public BasicTTIImplBase<AArch64TTIImpl> {
   bool isWideningInstruction(Type *Ty, unsigned Opcode,
                              ArrayRef<const Value *> Args);
 
-  // A helper function called by 'getVectorInstrCost'.
-  //
-  // 'Val' and 'Index' are forwarded from 'getVectorInstrCost'; 'HasRealUse'
-  // indicates whether the vector instruction is available in the input IR or
-  // just imaginary in vectorizer passes.
-  InstructionCost getVectorInstrCostHelper(Type *Val, unsigned Index,
-                                           bool HasRealUse);
-
 public:
   explicit AArch64TTIImpl(const AArch64TargetMachine *TM, const Function &F)
       : BaseT(TM, F.getParent()->getDataLayout()), ST(TM->getSubtargetImpl(F)),
@@ -120,7 +112,20 @@ public:
       std::function<void(Instruction *, unsigned, APInt, APInt &)>
           SimplifyAndSetOp) const;
 
-  TypeSize getRegisterBitWidth(TargetTransformInfo::RegisterKind K) const;
+  TypeSize getRegisterBitWidth(TargetTransformInfo::RegisterKind K) const {
+    switch (K) {
+    case TargetTransformInfo::RGK_Scalar:
+      return TypeSize::getFixed(64);
+    case TargetTransformInfo::RGK_FixedWidthVector:
+      if (ST->hasSVE())
+        return TypeSize::getFixed(
+            std::max(ST->getMinSVEVectorSizeInBits(), 128u));
+      return TypeSize::getFixed(ST->hasNEON() ? 128 : 0);
+    case TargetTransformInfo::RGK_ScalableVector:
+      return TypeSize::getScalable(ST->hasSVE() ? 128 : 0);
+    }
+    llvm_unreachable("Unsupported register kind");
+  }
 
   unsigned getMinVectorRegisterBitWidth() const {
     return ST->getMinVectorRegisterBitWidth();
@@ -170,8 +175,6 @@ public:
 
   InstructionCost getVectorInstrCost(unsigned Opcode, Type *Val,
                                      unsigned Index);
-  InstructionCost getVectorInstrCost(const Instruction &I, Type *Val,
-                                     unsigned Index);
 
   InstructionCost getMinMaxReductionCost(VectorType *Ty, VectorType *CondTy,
                                          bool IsUnsigned,
@@ -185,8 +188,10 @@ public:
 
   InstructionCost getArithmeticInstrCost(
       unsigned Opcode, Type *Ty, TTI::TargetCostKind CostKind,
-      TTI::OperandValueInfo Op1Info = {TTI::OK_AnyValue, TTI::OP_None},
-      TTI::OperandValueInfo Op2Info = {TTI::OK_AnyValue, TTI::OP_None},
+      TTI::OperandValueKind Opd1Info = TTI::OK_AnyValue,
+      TTI::OperandValueKind Opd2Info = TTI::OK_AnyValue,
+      TTI::OperandValueProperties Opd1PropInfo = TTI::OP_None,
+      TTI::OperandValueProperties Opd2PropInfo = TTI::OP_None,
       ArrayRef<const Value *> Args = ArrayRef<const Value *>(),
       const Instruction *CxtI = nullptr);
 
@@ -202,11 +207,10 @@ public:
                                                     bool IsZeroCmp) const;
   bool useNeonVector(const Type *Ty) const;
 
-  InstructionCost
-  getMemoryOpCost(unsigned Opcode, Type *Src, MaybeAlign Alignment,
-                  unsigned AddressSpace, TTI::TargetCostKind CostKind,
-                  TTI::OperandValueInfo OpInfo = {TTI::OK_AnyValue, TTI::OP_None},
-                  const Instruction *I = nullptr);
+  InstructionCost getMemoryOpCost(unsigned Opcode, Type *Src,
+                                  MaybeAlign Alignment, unsigned AddressSpace,
+                                  TTI::TargetCostKind CostKind,
+                                  const Instruction *I = nullptr);
 
   InstructionCost getCostOfKeepingLiveOverCall(ArrayRef<Type *> Tys);
 
@@ -295,32 +299,22 @@ public:
     return false;
   }
 
-  bool isLegalNTStoreLoad(Type *DataType, Align Alignment) {
+  bool isLegalNTStore(Type *DataType, Align Alignment) {
     // NOTE: The logic below is mostly geared towards LV, which calls it with
     //       vectors with 2 elements. We might want to improve that, if other
     //       users show up.
-    // Nontemporal vector loads/stores can be directly lowered to LDNP/STNP, if
-    // the vector can be halved so that each half fits into a register. That's
-    // the case if the element type fits into a register and the number of
-    // elements is a power of 2 > 1.
-    if (auto *DataTypeTy = dyn_cast<FixedVectorType>(DataType)) {
-      unsigned NumElements = DataTypeTy->getNumElements();
-      unsigned EltSize = DataTypeTy->getElementType()->getScalarSizeInBits();
+    // Nontemporal vector stores can be directly lowered to STNP, if the vector
+    // can be halved so that each half fits into a register. That's the case if
+    // the element type fits into a register and the number of elements is a
+    // power of 2 > 1.
+    if (auto *DataTypeVTy = dyn_cast<VectorType>(DataType)) {
+      unsigned NumElements =
+          cast<FixedVectorType>(DataTypeVTy)->getNumElements();
+      unsigned EltSize = DataTypeVTy->getElementType()->getScalarSizeInBits();
       return NumElements > 1 && isPowerOf2_64(NumElements) && EltSize >= 8 &&
              EltSize <= 128 && isPowerOf2_64(EltSize);
     }
     return BaseT::isLegalNTStore(DataType, Alignment);
-  }
-
-  bool isLegalNTStore(Type *DataType, Align Alignment) {
-    return isLegalNTStoreLoad(DataType, Alignment);
-  }
-
-  bool isLegalNTLoad(Type *DataType, Align Alignment) {
-    // Only supports little-endian targets.
-    if (ST->isLittleEndian())
-      return isLegalNTStoreLoad(DataType, Alignment);
-    return BaseT::isLegalNTLoad(DataType, Alignment);
   }
 
   bool enableOrderedReductions() const { return true; }
@@ -353,8 +347,7 @@ public:
   bool preferPredicateOverEpilogue(Loop *L, LoopInfo *LI, ScalarEvolution &SE,
                                    AssumptionCache &AC, TargetLibraryInfo *TLI,
                                    DominatorTree *DT,
-                                   LoopVectorizationLegality *LVL,
-                                   InterleavedAccessInfo *IAI);
+                                   LoopVectorizationLegality *LVL);
 
   bool supportsScalableVectors() const { return ST->hasSVE(); }
 
@@ -373,19 +366,9 @@ public:
                                              TTI::TargetCostKind CostKind);
 
   InstructionCost getShuffleCost(TTI::ShuffleKind Kind, VectorType *Tp,
-                                 ArrayRef<int> Mask,
-                                 TTI::TargetCostKind CostKind, int Index,
+                                 ArrayRef<int> Mask, int Index,
                                  VectorType *SubTp,
                                  ArrayRef<const Value *> Args = None);
-
-  /// Return the cost of the scaling factor used in the addressing
-  /// mode represented by AM for this target, for a load/store
-  /// of the specified type.
-  /// If the AM is supported, the return value must be >= 0.
-  /// If the AM is not supported, it returns a negative value.
-  InstructionCost getScalingFactorCost(Type *Ty, GlobalValue *BaseGV,
-                                       int64_t BaseOffset, bool HasBaseReg,
-                                       int64_t Scale, unsigned AddrSpace) const;
   /// @}
 };
 

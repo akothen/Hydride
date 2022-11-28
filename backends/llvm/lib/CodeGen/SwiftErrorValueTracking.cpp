@@ -202,10 +202,11 @@ void SwiftErrorValueTracking::propagateVRegs() {
       // downward defs.
       bool needPHI =
           VRegs.size() >= 1 &&
-          llvm::any_of(
+          llvm::find_if(
               VRegs,
               [&](const std::pair<const MachineBasicBlock *, Register> &V)
-                  -> bool { return V.second != VRegs[0].second; });
+                  -> bool { return V.second != VRegs[0].second; }) !=
+              VRegs.end();
 
       // If there is no upwards exposed used and we don't need a phi just
       // forward the swifterror vreg from the predecessor(s).

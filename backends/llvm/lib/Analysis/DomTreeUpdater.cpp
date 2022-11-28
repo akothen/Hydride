@@ -218,9 +218,9 @@ void DomTreeUpdater::validateDeleteBB(BasicBlock *DelBB) {
   // DelBB is unreachable and all its instructions are dead.
   while (!DelBB->empty()) {
     Instruction &I = DelBB->back();
-    // Replace used instructions with an arbitrary value (poison).
+    // Replace used instructions with an arbitrary value (undef).
     if (!I.use_empty())
-      I.replaceAllUsesWith(PoisonValue::get(I.getType()));
+      I.replaceAllUsesWith(llvm::UndefValue::get(I.getType()));
     DelBB->getInstList().pop_back();
   }
   // Make sure DelBB has a valid terminator instruction. As long as DelBB is a

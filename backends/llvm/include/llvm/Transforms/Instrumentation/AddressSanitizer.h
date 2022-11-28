@@ -33,11 +33,13 @@ struct AddressSanitizerOptions {
 ///
 /// This adds 'asan.module_ctor' to 'llvm.global_ctors'. This pass may also
 /// run intependently of the function address sanitizer.
-class AddressSanitizerPass : public PassInfoMixin<AddressSanitizerPass> {
+class ModuleAddressSanitizerPass
+    : public PassInfoMixin<ModuleAddressSanitizerPass> {
 public:
-  AddressSanitizerPass(const AddressSanitizerOptions &Options,
-                       bool UseGlobalGC = true, bool UseOdrIndicator = true,
-                       AsanDtorKind DestructorKind = AsanDtorKind::Global);
+  ModuleAddressSanitizerPass(
+      const AddressSanitizerOptions &Options, bool UseGlobalGC = true,
+      bool UseOdrIndicator = false,
+      AsanDtorKind DestructorKind = AsanDtorKind::Global);
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
   void printPipeline(raw_ostream &OS,
                      function_ref<StringRef(StringRef)> MapClassName2PassName);

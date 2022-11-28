@@ -11,7 +11,7 @@ def run(f):
 
 def testAsyncPass():
   with Context() as context:
-    PassManager.parse('any(async-to-async-runtime)')
+    PassManager.parse('async-to-async-runtime')
   print('SUCCESS')
 
 # CHECK-LABEL: testAsyncPass

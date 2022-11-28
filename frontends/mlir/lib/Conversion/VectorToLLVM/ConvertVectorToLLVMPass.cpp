@@ -8,11 +8,13 @@
 
 #include "mlir/Conversion/VectorToLLVM/ConvertVectorToLLVM.h"
 
+#include "../PassDetail.h"
+
 #include "mlir/Conversion/LLVMCommon/ConversionTarget.h"
 #include "mlir/Conversion/LLVMCommon/TypeConverter.h"
 #include "mlir/Dialect/AMX/AMXDialect.h"
 #include "mlir/Dialect/AMX/Transforms.h"
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/ArmNeon/ArmNeonDialect.h"
 #include "mlir/Dialect/ArmSVE/ArmSVEDialect.h"
 #include "mlir/Dialect/ArmSVE/Transforms.h"
@@ -22,20 +24,14 @@
 #include "mlir/Dialect/Vector/Transforms/VectorRewritePatterns.h"
 #include "mlir/Dialect/X86Vector/Transforms.h"
 #include "mlir/Dialect/X86Vector/X86VectorDialect.h"
-#include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTVECTORTOLLVM
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 using namespace mlir::vector;
 
 namespace {
 struct LowerVectorToLLVMPass
-    : public impl::ConvertVectorToLLVMBase<LowerVectorToLLVMPass> {
+    : public ConvertVectorToLLVMBase<LowerVectorToLLVMPass> {
   LowerVectorToLLVMPass(const LowerVectorToLLVMOptions &options) {
     this->reassociateFPReductions = options.reassociateFPReductions;
     this->force32BitVectorIndices = options.force32BitVectorIndices;
@@ -47,7 +43,7 @@ struct LowerVectorToLLVMPass
   // Override explicitly to allow conditional dialect dependence.
   void getDependentDialects(DialectRegistry &registry) const override {
     registry.insert<LLVM::LLVMDialect>();
-    registry.insert<arith::ArithDialect>();
+    registry.insert<arith::ArithmeticDialect>();
     registry.insert<memref::MemRefDialect>();
     if (armNeon)
       registry.insert<arm_neon::ArmNeonDialect>();
@@ -90,7 +86,7 @@ void LowerVectorToLLVMPass::runOnOperation() {
 
   // Architecture specific augmentations.
   LLVMConversionTarget target(getContext());
-  target.addLegalDialect<arith::ArithDialect>();
+  target.addLegalDialect<arith::ArithmeticDialect>();
   target.addLegalDialect<memref::MemRefDialect>();
   target.addLegalOp<UnrealizedConversionCastOp>();
   if (armNeon) {

@@ -1,4 +1,4 @@
-; RUN: opt -passes=objc-arc-contract -S < %s | FileCheck %s
+; RUN: opt -objc-arc-contract -S < %s | FileCheck %s
 ; rdar://9511608
 
 %0 = type opaque

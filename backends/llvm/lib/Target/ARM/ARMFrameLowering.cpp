@@ -812,7 +812,7 @@ void ARMFrameLowering::emitPrologue(MachineFunction &MF,
           GPRCS2Size += 4;
           break;
         }
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case ARM::R0:
       case ARM::R1:
       case ARM::R2:
@@ -1105,7 +1105,7 @@ void ARMFrameLowering::emitPrologue(MachineFunction &MF,
       case ARM::R12:
         if (STI.splitFramePushPop(MF))
           break;
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case ARM::R0:
       case ARM::R1:
       case ARM::R2:
@@ -1842,11 +1842,11 @@ skipAlignedDPRCS2Spills(MachineBasicBlock::iterator MI,
   case 7:
     ++MI;
     assert(MI->mayStore() && "Expecting spill instruction");
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   default:
     ++MI;
     assert(MI->mayStore() && "Expecting spill instruction");
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case 1:
   case 2:
   case 4:
@@ -2344,7 +2344,7 @@ void ARMFrameLowering::determineCalleeSaves(MachineFunction &MF,
       switch (Reg) {
       case ARM::LR:
         LRSpilled = true;
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case ARM::R0: case ARM::R1:
       case ARM::R2: case ARM::R3:
       case ARM::R4: case ARM::R5:
@@ -2792,7 +2792,7 @@ bool ARMFrameLowering::assignCalleeSavedSpillSlots(
 const TargetFrameLowering::SpillSlot *
 ARMFrameLowering::getCalleeSavedSpillSlots(unsigned &NumEntries) const {
   static const SpillSlot FixedSpillOffsets[] = {{ARM::FPCXTNS, -4}};
-  NumEntries = std::size(FixedSpillOffsets);
+  NumEntries = array_lengthof(FixedSpillOffsets);
   return FixedSpillOffsets;
 }
 

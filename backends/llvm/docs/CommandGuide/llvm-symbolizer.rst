@@ -221,12 +221,6 @@ OPTIONS
   ``auto``, which detects whether standard output supports color. Specifying
   ``--color`` alone is equivalent to ``--color=always``.
 
-.. option:: --debug-file-directory <path>
-
-  Provide a path to a directory with a `.build-id` subdirectory to search for
-  debug information for stripped binaries. Multiple instances of this argument
-  are searched in the order given.
-
 .. option:: --debuginfod, --no-debuginfod
 
   Whether or not to try debuginfod lookups for debug binaries. Unless specified,

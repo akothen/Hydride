@@ -27,21 +27,13 @@ public:
   /// Create a maximal range ([0, uint_max(t)] / [int_min(t), int_max(t)])
   /// range that is used to mark the value as unable to be analyzed further,
   /// where `t` is the type of `value`.
-  static IntegerValueRange getMaxRange(Value value);
+  static IntegerValueRange getPessimisticValueState(Value value);
 
   /// Create an integer value range lattice value.
-  IntegerValueRange(Optional<ConstantIntRanges> value = None)
-      : value(std::move(value)) {}
-
-  /// Whether the range is uninitialized. This happens when the state hasn't
-  /// been set during the analysis.
-  bool isUninitialized() const { return !value.has_value(); }
+  IntegerValueRange(ConstantIntRanges value) : value(std::move(value)) {}
 
   /// Get the known integer value range.
-  const ConstantIntRanges &getValue() const {
-    assert(!isUninitialized());
-    return *value;
-  }
+  const ConstantIntRanges &getValue() const { return value; }
 
   /// Compare two ranges.
   bool operator==(const IntegerValueRange &rhs) const {
@@ -51,11 +43,7 @@ public:
   /// Take the union of two ranges.
   static IntegerValueRange join(const IntegerValueRange &lhs,
                                 const IntegerValueRange &rhs) {
-    if (lhs.isUninitialized())
-      return rhs;
-    if (rhs.isUninitialized())
-      return lhs;
-    return IntegerValueRange{lhs.getValue().rangeUnion(rhs.getValue())};
+    return lhs.value.rangeUnion(rhs.value);
   }
 
   /// Print the integer value range.
@@ -63,7 +51,7 @@ public:
 
 private:
   /// The known integer value range.
-  Optional<ConstantIntRanges> value;
+  ConstantIntRanges value;
 };
 
 /// This lattice element represents the integer value range of an SSA value.
@@ -85,12 +73,6 @@ class IntegerRangeAnalysis
     : public SparseDataFlowAnalysis<IntegerValueRangeLattice> {
 public:
   using SparseDataFlowAnalysis::SparseDataFlowAnalysis;
-
-  /// At an entry point, we cannot reason about interger value ranges.
-  void setToEntryState(IntegerValueRangeLattice *lattice) override {
-    propagateIfChanged(lattice, lattice->join(IntegerValueRange::getMaxRange(
-                                    lattice->getPoint())));
-  }
 
   /// Visit an operation. Invoke the transfer function on each operation that
   /// implements `InferIntRangeInterface`.

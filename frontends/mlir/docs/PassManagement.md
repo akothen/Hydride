@@ -186,8 +186,6 @@ loaded before starting the execution of a multi-threaded pass pipeline. To this
 end, a pass that may create an entity from a dialect that isn't guaranteed to
 already be loaded must express this by overriding the `getDependentDialects()`
 method and declare this list of Dialects explicitly.
-See also the `dependentDialects` field in the
-[TableGen Specification](#tablegen-specification).
 
 ### Initialization
 
@@ -379,7 +377,7 @@ For example, the following `.mlir`:
 
 ```mlir
 module {
-  spirv.module "Logical" "GLSL450" {
+  spv.module "Logical" "GLSL450" {
     func @foo() {
       ...
     }
@@ -391,8 +389,8 @@ Has the nesting structure of:
 
 ```
 `builtin.module`
-  `spirv.module`
-    `spirv.func`
+  `spv.module`
+    `spv.func`
 ```
 
 Below is an example of constructing a pipeline that operates on the above
@@ -419,7 +417,7 @@ OpPassManager &nestedFunctionPM = nestedModulePM.nest<func::FuncOp>();
 nestedFunctionPM.addPass(std::make_unique<MyFunctionPass>());
 
 // Nest an op-agnostic pass manager. This will operate on any viable
-// operation, e.g. func.func, spirv.func, spirv.module, builtin.module, etc.
+// operation, e.g. func.func, spv.func, spv.module, builtin.module, etc.
 OpPassManager &nestedAnyPM = nestedModulePM.nestAny();
 nestedAnyPM.addPass(createCanonicalizePass());
 nestedAnyPM.addPass(createCSEPass());
@@ -602,7 +600,7 @@ A pipeline view that models the structure of the pass manager, this is the
 default view:
 
 ```shell
-$ mlir-opt -pass-pipeline='any(func.func(my-pass,my-pass))' foo.mlir -mlir-pass-statistics
+$ mlir-opt -pass-pipeline='func.func(my-pass,my-pass)' foo.mlir -mlir-pass-statistics
 
 ===-------------------------------------------------------------------------===
                          ... Pass statistics report ...
@@ -621,7 +619,7 @@ A list view that aggregates the statistics of all instances of a specific pass
 together:
 
 ```shell
-$ mlir-opt -pass-pipeline='any(func.func(my-pass,my-pass))' foo.mlir -mlir-pass-statistics -mlir-pass-statistics-display=list
+$ mlir-opt -pass-pipeline='func.func(my-pass, my-pass)' foo.mlir -mlir-pass-statistics -mlir-pass-statistics-display=list
 
 ===-------------------------------------------------------------------------===
                          ... Pass statistics report ...
@@ -750,10 +748,10 @@ Can also be specified as (via the `-pass-pipeline` flag):
 
 ```shell
 # Anchor the cse and canonicalize passes on the `func.func` operation.
-$ mlir-opt foo.mlir -pass-pipeline='builtin.module(func.func(cse,canonicalize),convert-func-to-llvm{use-bare-ptr-memref-call-conv=1})'
+$ mlir-opt foo.mlir -pass-pipeline='func.func(cse,canonicalize),convert-func-to-llvm{use-bare-ptr-memref-call-conv=1}'
 
 # Anchor the cse and canonicalize passes on "any" viable root operation.
-$ mlir-opt foo.mlir -pass-pipeline='builtin.module(any(cse,canonicalize),convert-func-to-llvm{use-bare-ptr-memref-call-conv=1})'
+$ mlir-opt foo.mlir -pass-pipeline='any(cse,canonicalize),convert-func-to-llvm{use-bare-ptr-memref-call-conv=1}'
 ```
 
 In order to support round-tripping a pass to the textual representation using
@@ -810,8 +808,7 @@ def MyPass : Pass<"my-pass", "ModuleOp"> {
   }];
 
   // A constructor must be provided to specify how to create a default instance
-  // of MyPass. It can be skipped for this specific example, because both the
-  // constructor and the registration methods live in the same namespace.
+  // of MyPass.
   let constructor = "foo::createMyPass()";
 
   // Specify any options.
@@ -832,104 +829,55 @@ def MyPass : Pass<"my-pass", "ModuleOp"> {
 Using the `gen-pass-decls` generator, we can generate most of the boilerplate
 above automatically. This generator takes as an input a `-name` parameter, that
 provides a tag for the group of passes that are being generated. This generator
-produces code with multiple purposes:
+produces two chunks of output:
 
-The first is to register the declared passes with the global registry. For
-each pass, the generator produces a `registerPassName` where
-`PassName` is the name of the definition specified in tablegen. It also
-generates a `registerGroupPasses`, where `Group` is the tag provided via the
-`-name` input parameter, that registers all of the passes present.
+The first is a code block for registering the declarative passes with the global
+registry. For each pass, the generator produces a `registerFooPass` where `Foo`
+is the name of the definition specified in tablegen. It also generates a
+`registerGroupPasses`, where `Group` is the tag provided via the `-name` input
+parameter, that registers all of the passes present.
 
 ```c++
-// Tablegen options: -gen-pass-decls -name="Example"
+// gen-pass-decls -name="Example"
 
-// Passes.h
-
-namespace foo {
 #define GEN_PASS_REGISTRATION
 #include "Passes.h.inc"
-} // namespace foo
 
 void registerMyPasses() {
   // Register all of the passes.
-  foo::registerExamplePasses();
-  
-  // Or
+  registerExamplePasses();
 
   // Register `MyPass` specifically.
-  foo::registerMyPass();
+  registerMyPassPass();
 }
 ```
 
-The second is to provide a way to configure the pass options. These classes are
-named in the form of `MyPassOptions`, where `MyPass` is the name of the pass
-definition in tablegen. The configurable parameters reflect the options declared
-in the tablegen file. These declarations can be enabled for the whole group of
-passes by defining the `GEN_PASS_DECL` macro, or on a per-pass basis by defining
-`GEN_PASS_DECL_PASSNAME` where `PASSNAME` is the uppercase version of the name
-specified in tablegen.
+The second is a base class for each of the passes, containing most of the boiler
+plate related to pass definitions. These classes are named in the form of
+`MyPassBase`, where `MyPass` is the name of the pass definition in tablegen. We
+can update the original C++ pass definition as so:
 
 ```c++
-// .h.inc
-
-#ifdef GEN_PASS_DECL_MYPASS
-
-struct MyPassOptions {
-    bool option = true;
-    ::llvm::ArrayRef<int64_t> listOption;
-};
-
-#undef GEN_PASS_DECL_MYPASS
-#endif // GEN_PASS_DECL_MYPASS
-```
-
-If the `constructor` field has not been specified in the tablegen declaration,
-then autogenerated file will also contain the declarations of the default
-constructors.
-
-```c++
-// .h.inc
-
-#ifdef GEN_PASS_DECL_MYPASS
-...
-
-std::unique_ptr<::mlir::Pass> createMyPass();
-std::unique_ptr<::mlir::Pass> createMyPass(const MyPassOptions &options);
-
-#undef GEN_PASS_DECL_MYPASS
-#endif // GEN_PASS_DECL_MYPASS
-```
-
-The last purpose of this generator is to emit a base class for each of the
-passes, containing most of the boiler plate related to pass definitions. These
-classes are named in the form of `MyPassBase` and are declared inside the
-`impl` namespace, where `MyPass` is the name of the pass definition in
-tablegen. We can update the original C++ pass definition as so:
-
-```c++
-// MyPass.cpp
-
 /// Include the generated base pass class definitions.
-namespace foo {
-#define GEN_PASS_DEF_MYPASS
+#define GEN_PASS_CLASSES
 #include "Passes.h.inc"
-}
 
 /// Define the main class as deriving from the generated base class.
-struct MyPass : foo::impl::MyPassBase<MyPass> {
-  using MyPassBase::MyPassBase;
+struct MyPass : MyPassBase<MyPass> {
+  /// The explicit constructor is no longer explicitly necessary when defining
+  /// pass options and statistics, the base class takes care of that
+  /// automatically.
+  ...
 
   /// The definitions of the options and statistics are now generated within
   /// the base class, but are accessible in the same way.
 };
-```
 
-These definitions can be enabled on a per-pass basis by defining the appropriate
-preprocessor `GEN_PASS_DEF_PASSNAME` macro, with `PASSNAME` equal to the
-uppercase version of the name of the pass definition in tablegen.
-If the `constructor` field has not been specified in tablegen, then the default
-constructors are also defined and expect the name of the actual pass class to
-be equal to the name defined in tablegen.
+/// Expose this pass to the outside world.
+std::unique_ptr<Pass> foo::createMyPass() {
+  return std::make_unique<MyPass>();
+}
+```
 
 Using the `gen-pass-doc` generator, markdown documentation for each of the
 passes can be generated. See [Passes.md](Passes.md) for example output of real
@@ -1121,7 +1069,7 @@ pipeline. This display mode is available in mlir-opt via
 `-mlir-timing-display=list`.
 
 ```shell
-$ mlir-opt foo.mlir -mlir-disable-threading -pass-pipeline='builtin.module(func.func(cse,canonicalize),convert-func-to-llvm)' -mlir-timing -mlir-timing-display=list
+$ mlir-opt foo.mlir -mlir-disable-threading -pass-pipeline='func.func(cse,canonicalize)' -convert-func-to-llvm -mlir-timing -mlir-timing-display=list
 
 ===-------------------------------------------------------------------------===
                       ... Pass execution timing report ...
@@ -1146,7 +1094,7 @@ the most time, and can also be used to identify when analyses are being
 invalidated and recomputed. This is the default display mode.
 
 ```shell
-$ mlir-opt foo.mlir -mlir-disable-threading -pass-pipeline='builtin.module(func.func(cse,canonicalize),convert-func-to-llvm)' -mlir-timing
+$ mlir-opt foo.mlir -mlir-disable-threading -pass-pipeline='func.func(cse,canonicalize)' -convert-func-to-llvm -mlir-timing
 
 ===-------------------------------------------------------------------------===
                       ... Pass execution timing report ...
@@ -1177,7 +1125,7 @@ perceived time, or clock time, whereas the `User Time` will display the total
 cpu time.
 
 ```shell
-$ mlir-opt foo.mlir -pass-pipeline='builtin.module(func.func(cse,canonicalize),convert-func-to-llvm)'  -mlir-timing
+$ mlir-opt foo.mlir -pass-pipeline='func.func(cse,canonicalize)' -convert-func-to-llvm -mlir-timing
 
 ===-------------------------------------------------------------------------===
                       ... Pass execution timing report ...
@@ -1328,7 +1276,7 @@ module {
 {-#
   external_resources: {
     mlir_reproducer: {
-      pipeline: "builtin.module(func.func(cse,canonicalize),inline)",
+      pipeline: "func.func(cse,canonicalize),inline",
       disable_threading: true,
       verify_each: true
     }
@@ -1371,7 +1319,7 @@ module {
 {-#
   external_resources: {
     mlir_reproducer: {
-      pipeline: "builtin.module(func.func(canonicalize))",
+      pipeline: "func.func(canonicalize)",
       disable_threading: true,
       verify_each: true
     }

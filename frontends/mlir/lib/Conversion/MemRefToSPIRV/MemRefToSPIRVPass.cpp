@@ -11,35 +11,30 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/Conversion/MemRefToSPIRV/MemRefToSPIRVPass.h"
-
+#include "../PassDetail.h"
 #include "mlir/Conversion/MemRefToSPIRV/MemRefToSPIRV.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVDialect.h"
 #include "mlir/Dialect/SPIRV/Transforms/SPIRVConversion.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTMEMREFTOSPIRV
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 
 namespace {
 /// A pass converting MLIR MemRef operations into the SPIR-V dialect.
 class ConvertMemRefToSPIRVPass
-    : public impl::ConvertMemRefToSPIRVBase<ConvertMemRefToSPIRVPass> {
+    : public ConvertMemRefToSPIRVBase<ConvertMemRefToSPIRVPass> {
   void runOnOperation() override;
 };
 } // namespace
 
 void ConvertMemRefToSPIRVPass::runOnOperation() {
   MLIRContext *context = &getContext();
-  Operation *op = getOperation();
+  ModuleOp module = getOperation();
 
-  auto targetAttr = spirv::lookupTargetEnvOrDefault(op);
+  auto targetAttr = spirv::lookupTargetEnvOrDefault(module);
   std::unique_ptr<ConversionTarget> target =
       SPIRVConversionTarget::get(targetAttr);
 
-  SPIRVConversionOptions options;
+  SPIRVTypeConverter::Options options;
   options.boolNumBits = this->boolNumBits;
   SPIRVTypeConverter typeConverter(targetAttr, options);
 
@@ -57,10 +52,11 @@ void ConvertMemRefToSPIRVPass::runOnOperation() {
   RewritePatternSet patterns(context);
   populateMemRefToSPIRVPatterns(typeConverter, patterns);
 
-  if (failed(applyPartialConversion(op, *target, std::move(patterns))))
+  if (failed(applyPartialConversion(module, *target, std::move(patterns))))
     return signalPassFailure();
 }
 
-std::unique_ptr<OperationPass<>> mlir::createConvertMemRefToSPIRVPass() {
+std::unique_ptr<OperationPass<ModuleOp>>
+mlir::createConvertMemRefToSPIRVPass() {
   return std::make_unique<ConvertMemRefToSPIRVPass>();
 }

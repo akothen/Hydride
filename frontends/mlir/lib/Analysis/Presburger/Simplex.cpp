@@ -11,7 +11,6 @@
 #include "mlir/Support/MathExtras.h"
 #include "llvm/ADT/Optional.h"
 #include "llvm/Support/Compiler.h"
-#include <numeric>
 
 using namespace mlir;
 using namespace presburger;
@@ -22,10 +21,10 @@ const int nullIndex = std::numeric_limits<int>::max();
 
 // Return a + scale*b;
 LLVM_ATTRIBUTE_UNUSED
-static SmallVector<MPInt, 8>
-scaleAndAddForAssert(ArrayRef<MPInt> a, const MPInt &scale, ArrayRef<MPInt> b) {
+static SmallVector<int64_t, 8>
+scaleAndAddForAssert(ArrayRef<int64_t> a, int64_t scale, ArrayRef<int64_t> b) {
   assert(a.size() == b.size());
-  SmallVector<MPInt, 8> res;
+  SmallVector<int64_t, 8> res;
   res.reserve(a.size());
   for (unsigned i = 0, e = a.size(); i < e; ++i)
     res.push_back(a[i] + scale * b[i]);
@@ -101,7 +100,7 @@ unsigned SimplexBase::addZeroRow(bool makeRestricted) {
 /// Add a new row to the tableau corresponding to the given constant term and
 /// list of coefficients. The coefficients are specified as a vector of
 /// (variable index, coefficient) pairs.
-unsigned SimplexBase::addRow(ArrayRef<MPInt> coeffs, bool makeRestricted) {
+unsigned SimplexBase::addRow(ArrayRef<int64_t> coeffs, bool makeRestricted) {
   assert(coeffs.size() == var.size() + 1 &&
          "Incorrect number of coefficients!");
   assert(var.size() + getNumFixedCols() == getNumColumns() &&
@@ -124,7 +123,7 @@ unsigned SimplexBase::addRow(ArrayRef<MPInt> coeffs, bool makeRestricted) {
     //
     // Symbols don't use the big M parameter since they do not get lex
     // optimized.
-    MPInt bigMCoeff(0);
+    int64_t bigMCoeff = 0;
     for (unsigned i = 0; i < coeffs.size() - 1; ++i)
       if (!var[i].isSymbol)
         bigMCoeff -= coeffs[i];
@@ -150,9 +149,9 @@ unsigned SimplexBase::addRow(ArrayRef<MPInt> coeffs, bool makeRestricted) {
     // row, scaled by the coefficient for the variable, accounting for the two
     // rows potentially having different denominators. The new denominator is
     // the lcm of the two.
-    MPInt lcm = presburger::lcm(tableau(newRow, 0), tableau(pos, 0));
-    MPInt nRowCoeff = lcm / tableau(newRow, 0);
-    MPInt idxRowCoeff = coeffs[i] * (lcm / tableau(pos, 0));
+    int64_t lcm = mlir::lcm(tableau(newRow, 0), tableau(pos, 0));
+    int64_t nRowCoeff = lcm / tableau(newRow, 0);
+    int64_t idxRowCoeff = coeffs[i] * (lcm / tableau(pos, 0));
     tableau(newRow, 0) = lcm;
     for (unsigned col = 1, e = getNumColumns(); col < e; ++col)
       tableau(newRow, col) =
@@ -165,7 +164,7 @@ unsigned SimplexBase::addRow(ArrayRef<MPInt> coeffs, bool makeRestricted) {
 }
 
 namespace {
-bool signMatchesDirection(const MPInt &elem, Direction direction) {
+bool signMatchesDirection(int64_t elem, Direction direction) {
   assert(elem != 0 && "elem should not be 0");
   return direction == Direction::Up ? elem > 0 : elem < 0;
 }
@@ -261,7 +260,7 @@ MaybeOptimum<SmallVector<Fraction, 8>> LexSimplex::findRationalLexMin() {
 /// The constraint is violated when added (it would be useless otherwise)
 /// so we immediately try to move it to a column.
 LogicalResult LexSimplexBase::addCut(unsigned row) {
-  MPInt d = tableau(row, 0);
+  int64_t d = tableau(row, 0);
   unsigned cutRow = addZeroRow(/*makeRestricted=*/true);
   tableau(cutRow, 0) = d;
   tableau(cutRow, 1) = -mod(-tableau(row, 1), d); // -c%d.
@@ -285,7 +284,7 @@ Optional<unsigned> LexSimplex::maybeGetNonIntegralVarRow() const {
   return {};
 }
 
-MaybeOptimum<SmallVector<MPInt, 8>> LexSimplex::findIntegerLexMin() {
+MaybeOptimum<SmallVector<int64_t, 8>> LexSimplex::findIntegerLexMin() {
   // We first try to make the tableau consistent.
   if (restoreRationalConsistency().failed())
     return OptimumKind::Empty;
@@ -316,19 +315,19 @@ MaybeOptimum<SmallVector<MPInt, 8>> LexSimplex::findIntegerLexMin() {
       llvm::map_range(*sample, std::mem_fn(&Fraction::getAsInteger)));
 }
 
-bool LexSimplex::isSeparateInequality(ArrayRef<MPInt> coeffs) {
+bool LexSimplex::isSeparateInequality(ArrayRef<int64_t> coeffs) {
   SimplexRollbackScopeExit scopeExit(*this);
   addInequality(coeffs);
   return findIntegerLexMin().isEmpty();
 }
 
-bool LexSimplex::isRedundantInequality(ArrayRef<MPInt> coeffs) {
+bool LexSimplex::isRedundantInequality(ArrayRef<int64_t> coeffs) {
   return isSeparateInequality(getComplementIneq(coeffs));
 }
 
-SmallVector<MPInt, 8>
+SmallVector<int64_t, 8>
 SymbolicLexSimplex::getSymbolicSampleNumerator(unsigned row) const {
-  SmallVector<MPInt, 8> sample;
+  SmallVector<int64_t, 8> sample;
   sample.reserve(nSymbol + 1);
   for (unsigned col = 3; col < 3 + nSymbol; ++col)
     sample.push_back(tableau(row, col));
@@ -336,9 +335,9 @@ SymbolicLexSimplex::getSymbolicSampleNumerator(unsigned row) const {
   return sample;
 }
 
-SmallVector<MPInt, 8>
+SmallVector<int64_t, 8>
 SymbolicLexSimplex::getSymbolicSampleIneq(unsigned row) const {
-  SmallVector<MPInt, 8> sample = getSymbolicSampleNumerator(row);
+  SmallVector<int64_t, 8> sample = getSymbolicSampleNumerator(row);
   // The inequality is equivalent to the GCD-normalized one.
   normalizeRange(sample);
   return sample;
@@ -351,14 +350,13 @@ void LexSimplexBase::appendSymbol() {
   nSymbol++;
 }
 
-static bool isRangeDivisibleBy(ArrayRef<MPInt> range, const MPInt &divisor) {
+static bool isRangeDivisibleBy(ArrayRef<int64_t> range, int64_t divisor) {
   assert(divisor > 0 && "divisor must be positive!");
-  return llvm::all_of(range,
-                      [divisor](const MPInt &x) { return x % divisor == 0; });
+  return llvm::all_of(range, [divisor](int64_t x) { return x % divisor == 0; });
 }
 
 bool SymbolicLexSimplex::isSymbolicSampleIntegral(unsigned row) const {
-  MPInt denom = tableau(row, 0);
+  int64_t denom = tableau(row, 0);
   return tableau(row, 1) % denom == 0 &&
          isRangeDivisibleBy(tableau.getRow(row).slice(3, nSymbol), denom);
 }
@@ -397,7 +395,7 @@ bool SymbolicLexSimplex::isSymbolicSampleIntegral(unsigned row) const {
 /// This constraint is violated when added so we immediately try to move it to a
 /// column.
 LogicalResult SymbolicLexSimplex::addSymbolicCut(unsigned row) {
-  MPInt d = tableau(row, 0);
+  int64_t d = tableau(row, 0);
   if (isRangeDivisibleBy(tableau.getRow(row).slice(3, nSymbol), d)) {
     // The coefficients of symbols in the symbol numerator are divisible
     // by the denominator, so we can add the constraint directly,
@@ -406,9 +404,9 @@ LogicalResult SymbolicLexSimplex::addSymbolicCut(unsigned row) {
   }
 
   // Construct the division variable `q = ((-c%d) + sum_i (-a_i%d)s_i)/d`.
-  SmallVector<MPInt, 8> divCoeffs;
+  SmallVector<int64_t, 8> divCoeffs;
   divCoeffs.reserve(nSymbol + 1);
-  MPInt divDenom = d;
+  int64_t divDenom = d;
   for (unsigned col = 3; col < 3 + nSymbol; ++col)
     divCoeffs.push_back(mod(-tableau(row, col), divDenom)); // (-a_i%d)s_i
   divCoeffs.push_back(mod(-tableau(row, 1), divDenom));     // -c%d.
@@ -449,7 +447,7 @@ void SymbolicLexSimplex::recordOutput(SymbolicLexMin &result) const {
       return;
     }
 
-    MPInt denom = tableau(u.pos, 0);
+    int64_t denom = tableau(u.pos, 0);
     if (tableau(u.pos, 2) < denom) {
       // M + u has a sample value of fM + something, where f < 1, so
       // u = (f - 1)M + something, which has a negative coefficient for M,
@@ -460,21 +458,14 @@ void SymbolicLexSimplex::recordOutput(SymbolicLexMin &result) const {
     assert(tableau(u.pos, 2) == denom &&
            "Coefficient of M should not be greater than 1!");
 
-    SmallVector<MPInt, 8> sample = getSymbolicSampleNumerator(u.pos);
-    for (MPInt &elem : sample) {
+    SmallVector<int64_t, 8> sample = getSymbolicSampleNumerator(u.pos);
+    for (int64_t &elem : sample) {
       assert(elem % denom == 0 && "coefficients must be integral!");
       elem /= denom;
     }
     output.appendExtraRow(sample);
   }
-
-  // Store the output in a MultiAffineFunction and add it the result.
-  PresburgerSpace funcSpace = result.lexmin.getSpace();
-  funcSpace.insertVar(VarKind::Local, 0, domainPoly.getNumLocalVars());
-
-  result.lexmin.addPiece(
-      {PresburgerSet(domainPoly),
-       MultiAffineFunction(funcSpace, output, domainPoly.getLocalReprs())});
+  result.lexmin.addPiece(domainPoly, output);
 }
 
 Optional<unsigned> SymbolicLexSimplex::maybeGetAlwaysViolatedRow() {
@@ -516,10 +507,7 @@ LogicalResult SymbolicLexSimplex::doNonBranchingPivots() {
 }
 
 SymbolicLexMin SymbolicLexSimplex::computeSymbolicIntegerLexMin() {
-  SymbolicLexMin result(PresburgerSpace::getRelationSpace(
-      /*numDomain=*/domainPoly.getNumDimVars(),
-      /*numRange=*/var.size() - nSymbol,
-      /*numSymbols=*/domainPoly.getNumSymbolVars()));
+  SymbolicLexMin result(domainPoly.getSpace(), var.size() - nSymbol);
 
   /// The algorithm is more naturally expressed recursively, but we implement
   /// it iteratively here to avoid potential issues with stack overflows in the
@@ -558,7 +546,7 @@ SymbolicLexMin SymbolicLexSimplex::computeSymbolicIntegerLexMin() {
         continue;
       }
 
-      SmallVector<MPInt, 8> symbolicSample;
+      SmallVector<int64_t, 8> symbolicSample;
       unsigned splitRow = 0;
       for (unsigned e = getNumRows(); splitRow < e; ++splitRow) {
         if (tableau(splitRow, 2) > 0)
@@ -643,7 +631,7 @@ SymbolicLexMin SymbolicLexSimplex::computeSymbolicIntegerLexMin() {
       // was negative.
       assert(u.orientation == Orientation::Row &&
              "The split row should have been returned to row orientation!");
-      SmallVector<MPInt, 8> splitIneq =
+      SmallVector<int64_t, 8> splitIneq =
           getComplementIneq(getSymbolicSampleIneq(u.pos));
       normalizeRange(splitIneq);
       if (moveRowUnknownToColumn(u.pos).failed()) {
@@ -819,7 +807,7 @@ unsigned LexSimplexBase::getLexMinPivotColumn(unsigned row, unsigned colA,
   // all possible values of the symbols.
   auto getSampleChangeCoeffForVar = [this, row](unsigned col,
                                                 const Unknown &u) -> Fraction {
-    MPInt a = tableau(row, col);
+    int64_t a = tableau(row, col);
     if (u.orientation == Orientation::Column) {
       // Pivot column case.
       if (u.pos == col)
@@ -834,7 +822,7 @@ unsigned LexSimplexBase::getLexMinPivotColumn(unsigned row, unsigned colA,
       return {1, 1};
 
     // Non-pivot row case.
-    MPInt c = tableau(u.pos, col);
+    int64_t c = tableau(u.pos, col);
     return {c, a};
   };
 
@@ -868,7 +856,7 @@ Optional<SimplexBase::Pivot> Simplex::findPivot(int row,
                                                 Direction direction) const {
   Optional<unsigned> col;
   for (unsigned j = 2, e = getNumColumns(); j < e; ++j) {
-    MPInt elem = tableau(row, j);
+    int64_t elem = tableau(row, j);
     if (elem == 0)
       continue;
 
@@ -1017,18 +1005,18 @@ Optional<unsigned> Simplex::findPivotRow(Optional<unsigned> skipRow,
   // retConst being used uninitialized in the initialization of `diff` below. In
   // reality, these are always initialized when that line is reached since these
   // are set whenever retRow is set.
-  MPInt retElem, retConst;
+  int64_t retElem = 0, retConst = 0;
   for (unsigned row = nRedundant, e = getNumRows(); row < e; ++row) {
     if (skipRow && row == *skipRow)
       continue;
-    MPInt elem = tableau(row, col);
+    int64_t elem = tableau(row, col);
     if (elem == 0)
       continue;
     if (!unknownFromRow(row).restricted)
       continue;
     if (signMatchesDirection(elem, direction))
       continue;
-    MPInt constTerm = tableau(row, 1);
+    int64_t constTerm = tableau(row, 1);
 
     if (!retRow) {
       retRow = row;
@@ -1037,7 +1025,7 @@ Optional<unsigned> Simplex::findPivotRow(Optional<unsigned> skipRow,
       continue;
     }
 
-    MPInt diff = retConst * elem - constTerm * retElem;
+    int64_t diff = retConst * elem - constTerm * retElem;
     if ((diff == 0 && rowUnknown[row] < rowUnknown[*retRow]) ||
         (diff != 0 && !signMatchesDirection(diff, direction))) {
       retRow = row;
@@ -1088,7 +1076,7 @@ void SimplexBase::markEmpty() {
 /// We add the inequality and mark it as restricted. We then try to make its
 /// sample value non-negative. If this is not possible, the tableau has become
 /// empty and we mark it as such.
-void Simplex::addInequality(ArrayRef<MPInt> coeffs) {
+void Simplex::addInequality(ArrayRef<int64_t> coeffs) {
   unsigned conIndex = addRow(coeffs, /*makeRestricted=*/true);
   LogicalResult result = restoreRow(con[conIndex]);
   if (failed(result))
@@ -1101,10 +1089,10 @@ void Simplex::addInequality(ArrayRef<MPInt> coeffs) {
 ///
 /// We simply add two opposing inequalities, which force the expression to
 /// be zero.
-void SimplexBase::addEquality(ArrayRef<MPInt> coeffs) {
+void SimplexBase::addEquality(ArrayRef<int64_t> coeffs) {
   addInequality(coeffs);
-  SmallVector<MPInt, 8> negatedCoeffs;
-  for (const MPInt &coeff : coeffs)
+  SmallVector<int64_t, 8> negatedCoeffs;
+  for (int64_t coeff : coeffs)
     negatedCoeffs.emplace_back(-coeff);
   addInequality(negatedCoeffs);
 }
@@ -1249,7 +1237,8 @@ void SimplexBase::undo(UndoLogEntry entry) {
            col++) {
         assert(colUnknown[col] != nullIndex &&
                "Column should not be a fixed column!");
-        if (llvm::is_contained(basis, colUnknown[col]))
+        if (std::find(basis.begin(), basis.end(), colUnknown[col]) !=
+            basis.end())
           continue;
         if (tableau(u.pos, col) == 0)
           continue;
@@ -1279,18 +1268,17 @@ void SimplexBase::rollback(unsigned snapshot) {
 ///
 /// This constrains the remainder `coeffs - denom*q` to be in the
 /// range `[0, denom - 1]`, which fixes the integer value of the quotient `q`.
-void SimplexBase::addDivisionVariable(ArrayRef<MPInt> coeffs,
-                                      const MPInt &denom) {
-  assert(denom > 0 && "Denominator must be positive!");
+void SimplexBase::addDivisionVariable(ArrayRef<int64_t> coeffs, int64_t denom) {
+  assert(denom != 0 && "Cannot divide by zero!\n");
   appendVariable();
 
-  SmallVector<MPInt, 8> ineq(coeffs.begin(), coeffs.end());
-  MPInt constTerm = ineq.back();
+  SmallVector<int64_t, 8> ineq(coeffs.begin(), coeffs.end());
+  int64_t constTerm = ineq.back();
   ineq.back() = -denom;
   ineq.push_back(constTerm);
   addInequality(ineq);
 
-  for (MPInt &coeff : ineq)
+  for (int64_t &coeff : ineq)
     coeff = -coeff;
   ineq.back() += denom - 1;
   addInequality(ineq);
@@ -1340,7 +1328,7 @@ MaybeOptimum<Fraction> Simplex::computeRowOptimum(Direction direction,
 /// Compute the optimum of the specified expression in the specified direction,
 /// or None if it is unbounded.
 MaybeOptimum<Fraction> Simplex::computeOptimum(Direction direction,
-                                               ArrayRef<MPInt> coeffs) {
+                                               ArrayRef<int64_t> coeffs) {
   if (empty)
     return OptimumKind::Empty;
 
@@ -1449,7 +1437,7 @@ bool Simplex::isUnbounded() {
   if (empty)
     return false;
 
-  SmallVector<MPInt, 8> dir(var.size() + 1);
+  SmallVector<int64_t, 8> dir(var.size() + 1);
   for (unsigned i = 0; i < var.size(); ++i) {
     dir[i] = 1;
 
@@ -1559,14 +1547,14 @@ Optional<SmallVector<Fraction, 8>> Simplex::getRationalSample() const {
     } else {
       // If the variable is in row position, its sample value is the
       // entry in the constant column divided by the denominator.
-      MPInt denom = tableau(u.pos, 0);
+      int64_t denom = tableau(u.pos, 0);
       sample.emplace_back(tableau(u.pos, 1), denom);
     }
   }
   return sample;
 }
 
-void LexSimplexBase::addInequality(ArrayRef<MPInt> coeffs) {
+void LexSimplexBase::addInequality(ArrayRef<int64_t> coeffs) {
   addRow(coeffs, /*makeRestricted=*/true);
 }
 
@@ -1591,7 +1579,7 @@ MaybeOptimum<SmallVector<Fraction, 8>> LexSimplex::getRationalSample() const {
 
     // If the variable is in row position, its sample value is the
     // entry in the constant column divided by the denominator.
-    MPInt denom = tableau(u.pos, 0);
+    int64_t denom = tableau(u.pos, 0);
     if (usingBigM)
       if (tableau(u.pos, 2) != denom)
         return OptimumKind::Unbounded;
@@ -1600,14 +1588,14 @@ MaybeOptimum<SmallVector<Fraction, 8>> LexSimplex::getRationalSample() const {
   return sample;
 }
 
-Optional<SmallVector<MPInt, 8>> Simplex::getSamplePointIfIntegral() const {
+Optional<SmallVector<int64_t, 8>> Simplex::getSamplePointIfIntegral() const {
   // If the tableau is empty, no sample point exists.
   if (empty)
     return {};
 
   // The value will always exist since the Simplex is non-empty.
   SmallVector<Fraction, 8> rationalSample = *getRationalSample();
-  SmallVector<MPInt, 8> integerSample;
+  SmallVector<int64_t, 8> integerSample;
   integerSample.reserve(var.size());
   for (const Fraction &coord : rationalSample) {
     // If the sample is non-integral, return None.
@@ -1639,14 +1627,14 @@ public:
   /// Add an equality dotProduct(dir, x - y) == 0.
   /// First pushes a snapshot for the current simplex state to the stack so
   /// that this can be rolled back later.
-  void addEqualityForDirection(ArrayRef<MPInt> dir) {
-    assert(llvm::any_of(dir, [](const MPInt &x) { return x != 0; }) &&
+  void addEqualityForDirection(ArrayRef<int64_t> dir) {
+    assert(llvm::any_of(dir, [](int64_t x) { return x != 0; }) &&
            "Direction passed is the zero vector!");
     snapshotStack.push_back(simplex.getSnapshot());
     simplex.addEquality(getCoeffsForDirection(dir));
   }
   /// Compute max(dotProduct(dir, x - y)).
-  Fraction computeWidth(ArrayRef<MPInt> dir) {
+  Fraction computeWidth(ArrayRef<int64_t> dir) {
     MaybeOptimum<Fraction> maybeWidth =
         simplex.computeOptimum(Direction::Up, getCoeffsForDirection(dir));
     assert(maybeWidth.isBounded() && "Width should be bounded!");
@@ -1655,9 +1643,9 @@ public:
 
   /// Compute max(dotProduct(dir, x - y)) and save the dual variables for only
   /// the direction equalities to `dual`.
-  Fraction computeWidthAndDuals(ArrayRef<MPInt> dir,
-                                SmallVectorImpl<MPInt> &dual,
-                                MPInt &dualDenom) {
+  Fraction computeWidthAndDuals(ArrayRef<int64_t> dir,
+                                SmallVectorImpl<int64_t> &dual,
+                                int64_t &dualDenom) {
     // We can't just call into computeWidth or computeOptimum since we need to
     // access the state of the tableau after computing the optimum, and these
     // functions rollback the insertion of the objective function into the
@@ -1725,12 +1713,12 @@ private:
   /// i.e.,   dir_1 * x_1 + dir_2 * x_2 + ... + dir_n * x_n
   ///       - dir_1 * y_1 - dir_2 * y_2 - ... - dir_n * y_n,
   /// where n is the dimension of the original polytope.
-  SmallVector<MPInt, 8> getCoeffsForDirection(ArrayRef<MPInt> dir) {
+  SmallVector<int64_t, 8> getCoeffsForDirection(ArrayRef<int64_t> dir) {
     assert(2 * dir.size() == simplex.getNumVariables() &&
            "Direction vector has wrong dimensionality");
-    SmallVector<MPInt, 8> coeffs(dir.begin(), dir.end());
+    SmallVector<int64_t, 8> coeffs(dir.begin(), dir.end());
     coeffs.reserve(2 * dir.size());
-    for (const MPInt &coeff : dir)
+    for (int64_t coeff : dir)
       coeffs.push_back(-coeff);
     coeffs.emplace_back(0); // constant term
     return coeffs;
@@ -1807,8 +1795,8 @@ void Simplex::reduceBasis(Matrix &basis, unsigned level) {
 
   GBRSimplex gbrSimplex(*this);
   SmallVector<Fraction, 8> width;
-  SmallVector<MPInt, 8> dual;
-  MPInt dualDenom;
+  SmallVector<int64_t, 8> dual;
+  int64_t dualDenom;
 
   // Finds the value of u that minimizes width_i(b_{i+1} + u*b_i), caches the
   // duals from this computation, sets b_{i+1} to b_{i+1} + u*b_i, and returns
@@ -1831,11 +1819,11 @@ void Simplex::reduceBasis(Matrix &basis, unsigned level) {
   auto updateBasisWithUAndGetFCandidate = [&](unsigned i) -> Fraction {
     assert(i < level + dual.size() && "dual_i is not known!");
 
-    MPInt u = floorDiv(dual[i - level], dualDenom);
+    int64_t u = floorDiv(dual[i - level], dualDenom);
     basis.addToRow(i, i + 1, u);
     if (dual[i - level] % dualDenom != 0) {
-      SmallVector<MPInt, 8> candidateDual[2];
-      MPInt candidateDualDenom[2];
+      SmallVector<int64_t, 8> candidateDual[2];
+      int64_t candidateDualDenom[2];
       Fraction widthI[2];
 
       // Initially u is floor(dual) and basis reflects this.
@@ -1862,13 +1850,11 @@ void Simplex::reduceBasis(Matrix &basis, unsigned level) {
 
       // Check the value at u - 1.
       assert(gbrSimplex.computeWidth(scaleAndAddForAssert(
-                 basis.getRow(i + 1), MPInt(-1), basis.getRow(i))) >=
-                 widthI[j] &&
+                 basis.getRow(i + 1), -1, basis.getRow(i))) >= widthI[j] &&
              "Computed u value does not minimize the width!");
       // Check the value at u + 1.
       assert(gbrSimplex.computeWidth(scaleAndAddForAssert(
-                 basis.getRow(i + 1), MPInt(+1), basis.getRow(i))) >=
-                 widthI[j] &&
+                 basis.getRow(i + 1), +1, basis.getRow(i))) >= widthI[j] &&
              "Computed u value does not minimize the width!");
 
       dual = std::move(candidateDual[j]);
@@ -1968,7 +1954,7 @@ void Simplex::reduceBasis(Matrix &basis, unsigned level) {
 ///
 /// To avoid potentially arbitrarily large recursion depths leading to stack
 /// overflows, this algorithm is implemented iteratively.
-Optional<SmallVector<MPInt, 8>> Simplex::findIntegerSample() {
+Optional<SmallVector<int64_t, 8>> Simplex::findIntegerSample() {
   if (empty)
     return {};
 
@@ -1979,9 +1965,9 @@ Optional<SmallVector<MPInt, 8>> Simplex::findIntegerSample() {
   // The snapshot just before constraining a direction to a value at each level.
   SmallVector<unsigned, 8> snapshotStack;
   // The maximum value in the range of the direction for each level.
-  SmallVector<MPInt, 8> upperBoundStack;
+  SmallVector<int64_t, 8> upperBoundStack;
   // The next value to try constraining the basis vector to at each level.
-  SmallVector<MPInt, 8> nextValueStack;
+  SmallVector<int64_t, 8> nextValueStack;
 
   snapshotStack.reserve(basis.getNumRows());
   upperBoundStack.reserve(basis.getNumRows());
@@ -2001,11 +1987,13 @@ Optional<SmallVector<MPInt, 8>> Simplex::findIntegerSample() {
       // just come down a level ("recursed"). Find the lower and upper bounds.
       // If there is more than one integer point in the range, perform
       // generalized basis reduction.
-      SmallVector<MPInt, 8> basisCoeffs =
+      SmallVector<int64_t, 8> basisCoeffs =
           llvm::to_vector<8>(basis.getRow(level));
       basisCoeffs.emplace_back(0);
 
-      auto [minRoundedUp, maxRoundedDown] = computeIntegerBounds(basisCoeffs);
+      MaybeOptimum<int64_t> minRoundedUp, maxRoundedDown;
+      std::tie(minRoundedUp, maxRoundedDown) =
+          computeIntegerBounds(basisCoeffs);
 
       // We don't have any integer values in the range.
       // Pop the stack and return up a level.
@@ -2053,7 +2041,7 @@ Optional<SmallVector<MPInt, 8>> Simplex::findIntegerSample() {
     // to the snapshot of the starting state at this level. (in the "recursed"
     // case this has no effect)
     rollback(snapshotStack.back());
-    MPInt nextValue = nextValueStack.back();
+    int64_t nextValue = nextValueStack.back();
     ++nextValueStack.back();
     if (nextValue > upperBoundStack.back()) {
       // We have exhausted the range and found no solution. Pop the stack and
@@ -2066,8 +2054,8 @@ Optional<SmallVector<MPInt, 8>> Simplex::findIntegerSample() {
     }
 
     // Try the next value in the range and "recurse" into the next level.
-    SmallVector<MPInt, 8> basisCoeffs(basis.getRow(level).begin(),
-                                      basis.getRow(level).end());
+    SmallVector<int64_t, 8> basisCoeffs(basis.getRow(level).begin(),
+                                        basis.getRow(level).end());
     basisCoeffs.push_back(-nextValue);
     addEquality(basisCoeffs);
     level++;
@@ -2078,11 +2066,11 @@ Optional<SmallVector<MPInt, 8>> Simplex::findIntegerSample() {
 
 /// Compute the minimum and maximum integer values the expression can take. We
 /// compute each separately.
-std::pair<MaybeOptimum<MPInt>, MaybeOptimum<MPInt>>
-Simplex::computeIntegerBounds(ArrayRef<MPInt> coeffs) {
-  MaybeOptimum<MPInt> minRoundedUp(
+std::pair<MaybeOptimum<int64_t>, MaybeOptimum<int64_t>>
+Simplex::computeIntegerBounds(ArrayRef<int64_t> coeffs) {
+  MaybeOptimum<int64_t> minRoundedUp(
       computeOptimum(Simplex::Direction::Down, coeffs).map(ceil));
-  MaybeOptimum<MPInt> maxRoundedDown(
+  MaybeOptimum<int64_t> maxRoundedDown(
       computeOptimum(Simplex::Direction::Up, coeffs).map(floor));
   return {minRoundedUp, maxRoundedDown};
 }
@@ -2153,7 +2141,7 @@ bool Simplex::isRationalSubsetOf(const IntegerRelation &rel) {
 /// maximum satisfy it. Hence, it is a cut inequality. If both are < 0, no
 /// points of the polytope satisfy the inequality, which means it is a separate
 /// inequality.
-Simplex::IneqType Simplex::findIneqType(ArrayRef<MPInt> coeffs) {
+Simplex::IneqType Simplex::findIneqType(ArrayRef<int64_t> coeffs) {
   MaybeOptimum<Fraction> minimum = computeOptimum(Direction::Down, coeffs);
   if (minimum.isBounded() && *minimum >= Fraction(0, 1)) {
     return IneqType::Redundant;
@@ -2168,7 +2156,7 @@ Simplex::IneqType Simplex::findIneqType(ArrayRef<MPInt> coeffs) {
 
 /// Checks whether the type of the inequality with coefficients `coeffs`
 /// is Redundant.
-bool Simplex::isRedundantInequality(ArrayRef<MPInt> coeffs) {
+bool Simplex::isRedundantInequality(ArrayRef<int64_t> coeffs) {
   assert(!empty &&
          "It is not meaningful to ask about redundancy in an empty set!");
   return findIneqType(coeffs) == IneqType::Redundant;
@@ -2178,7 +2166,7 @@ bool Simplex::isRedundantInequality(ArrayRef<MPInt> coeffs) {
 /// the existing constraints. This is redundant when `coeffs` is already
 /// always zero under the existing constraints. `coeffs` is always zero
 /// when the minimum and maximum value that `coeffs` can take are both zero.
-bool Simplex::isRedundantEquality(ArrayRef<MPInt> coeffs) {
+bool Simplex::isRedundantEquality(ArrayRef<int64_t> coeffs) {
   assert(!empty &&
          "It is not meaningful to ask about redundancy in an empty set!");
   MaybeOptimum<Fraction> minimum = computeOptimum(Direction::Down, coeffs);

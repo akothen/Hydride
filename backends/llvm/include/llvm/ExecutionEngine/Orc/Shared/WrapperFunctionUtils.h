@@ -636,8 +636,7 @@ public:
                                               const ArgTs &...Args) {
     ArgDataBufferType ArgData;
     ArgData.resize(SPSSerializer::size(Args...));
-    SPSOutputBuffer OB(ArgData.empty() ? nullptr : ArgData.data(),
-                       ArgData.size());
+    SPSOutputBuffer OB(&ArgData[0], ArgData.size());
     if (SPSSerializer::serialize(OB, Args...))
       return WrapperFunctionCall(FnAddr, std::move(ArgData));
     return make_error<StringError>("Cannot serialize arguments for "

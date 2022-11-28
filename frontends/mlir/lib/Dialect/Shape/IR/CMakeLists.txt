@@ -12,7 +12,7 @@ add_mlir_dialect_library(MLIRShapeDialect
   MLIRShapeOpsIncGen
 
   LINK_LIBS PUBLIC
-  MLIRArithDialect
+  MLIRArithmeticDialect
   MLIRCallInterfaces
   MLIRCastInterfaces
   MLIRControlFlowInterfaces

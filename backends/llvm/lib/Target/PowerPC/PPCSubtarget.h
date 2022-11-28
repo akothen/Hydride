@@ -168,7 +168,6 @@ protected:
   bool UsePPCPostRASchedStrategy;
   bool PairedVectorMemops;
   bool PredictableSelectIsExpensive;
-  bool HasFastMFLR;
   bool HasModernAIXAs;
   bool IsAIX;
 
@@ -317,7 +316,6 @@ public:
   bool hasPartwordAtomics() const { return HasPartwordAtomics; }
   bool hasQuadwordAtomics() const { return HasQuadwordAtomics; }
   bool hasDirectMove() const { return HasDirectMove; }
-  bool hasFastMFLR() const { return HasFastMFLR; }
 
   Align getPlatformStackAlignment() const {
     return Align(16);

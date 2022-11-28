@@ -102,15 +102,15 @@ void InstCombinerImpl::PHIArgMergedDebugLoc(Instruction *Inst, PHINode &PN) {
 //    ptr_val_inc = ...
 //    ...
 //
-bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
+Instruction *InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
   if (!PN.getType()->isIntegerTy())
-    return false;
+    return nullptr;
   if (!PN.hasOneUse())
-    return false;
+    return nullptr;
 
   auto *IntToPtr = dyn_cast<IntToPtrInst>(PN.user_back());
   if (!IntToPtr)
-    return false;
+    return nullptr;
 
   // Check if the pointer is actually used as pointer:
   auto HasPointerUse = [](Instruction *IIP) {
@@ -131,11 +131,11 @@ bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
   };
 
   if (!HasPointerUse(IntToPtr))
-    return false;
+    return nullptr;
 
   if (DL.getPointerSizeInBits(IntToPtr->getAddressSpace()) !=
       DL.getTypeSizeInBits(IntToPtr->getOperand(0)->getType()))
-    return false;
+    return nullptr;
 
   SmallVector<Value *, 4> AvailablePtrVals;
   for (auto Incoming : zip(PN.blocks(), PN.incoming_values())) {
@@ -174,10 +174,10 @@ bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
     // For a single use integer load:
     auto *LoadI = dyn_cast<LoadInst>(Arg);
     if (!LoadI)
-      return false;
+      return nullptr;
 
     if (!LoadI->hasOneUse())
-      return false;
+      return nullptr;
 
     // Push the integer typed Load instruction into the available
     // value set, and fix it up later when the pointer typed PHI
@@ -194,7 +194,7 @@ bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
   for (PHINode &PtrPHI : BB->phis()) {
     // FIXME: consider handling this in AggressiveInstCombine
     if (NumPhis++ > MaxNumPhis)
-      return false;
+      return nullptr;
     if (&PtrPHI == &PN || PtrPHI.getType() != IntToPtr->getType())
       continue;
     if (any_of(zip(PN.blocks(), AvailablePtrVals),
@@ -211,19 +211,16 @@ bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
   if (MatchingPtrPHI) {
     assert(MatchingPtrPHI->getType() == IntToPtr->getType() &&
            "Phi's Type does not match with IntToPtr");
-    // Explicitly replace the inttoptr (rather than inserting a ptrtoint) here,
-    // to make sure another transform can't undo it in the meantime.
-    replaceInstUsesWith(*IntToPtr, MatchingPtrPHI);
-    eraseInstFromFunction(*IntToPtr);
-    eraseInstFromFunction(PN);
-    return true;
+    // The PtrToCast + IntToPtr will be simplified later
+    return CastInst::CreateBitOrPointerCast(MatchingPtrPHI,
+                                            IntToPtr->getOperand(0)->getType());
   }
 
   // If it requires a conversion for every PHI operand, do not do it.
   if (all_of(AvailablePtrVals, [&](Value *V) {
         return (V->getType() != IntToPtr->getType()) || isa<IntToPtrInst>(V);
       }))
-    return false;
+    return nullptr;
 
   // If any of the operand that requires casting is a terminator
   // instruction, do not do it. Similarly, do not do the transform if the value
@@ -242,7 +239,7 @@ bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
           return true;
         return false;
       }))
-    return false;
+    return nullptr;
 
   PHINode *NewPtrPHI = PHINode::Create(
       IntToPtr->getType(), PN.getNumIncomingValues(), PN.getName() + ".ptr");
@@ -293,12 +290,9 @@ bool InstCombinerImpl::foldIntegerTypedPHI(PHINode &PN) {
     NewPtrPHI->addIncoming(CI, IncomingBB);
   }
 
-  // Explicitly replace the inttoptr (rather than inserting a ptrtoint) here,
-  // to make sure another transform can't undo it in the meantime.
-  replaceInstUsesWith(*IntToPtr, NewPtrPHI);
-  eraseInstFromFunction(*IntToPtr);
-  eraseInstFromFunction(PN);
-  return true;
+  // The PtrToCast + IntToPtr will be simplified later
+  return CastInst::CreateBitOrPointerCast(NewPtrPHI,
+                                          IntToPtr->getOperand(0)->getType());
 }
 
 // Remove RoundTrip IntToPtr/PtrToInt Cast on PHI-Operand and
@@ -1418,8 +1412,8 @@ Instruction *InstCombinerImpl::visitPHINode(PHINode &PN) {
   // this PHI only has a single use (a PHI), and if that PHI only has one use (a
   // PHI)... break the cycle.
   if (PN.hasOneUse()) {
-    if (foldIntegerTypedPHI(PN))
-      return nullptr;
+    if (Instruction *Result = foldIntegerTypedPHI(PN))
+      return Result;
 
     Instruction *PHIUser = cast<Instruction>(PN.user_back());
     if (PHINode *PU = dyn_cast<PHINode>(PHIUser)) {

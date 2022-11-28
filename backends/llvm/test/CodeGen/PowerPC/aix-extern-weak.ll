@@ -16,20 +16,21 @@
 ; RUN:   -filetype=obj -o %t64.o < %s
 ; RUN: llvm-readobj --symbols %t64.o | FileCheck --check-prefixes=CHECKSYM,CHECKSYM64 %s
 
-@foo_ext_weak_p = global ptr @foo_ext_weak_ref
+@foo_ext_weak_p = global void (...)* bitcast (void ()* @foo_ext_weak_ref to void (...)*)
 @b_w = extern_weak global i32
 
 declare extern_weak void @foo_ext_weak_ref()
 
 define i32 @main() {
 entry:
-  %0 = load ptr, ptr @foo_ext_weak_p
-  call void %0()
-  call void @foo_ext_weak(ptr @b_w)
+  %0 = load void (...)*, void (...)** @foo_ext_weak_p
+  %callee.knr.cast = bitcast void (...)* %0 to void ()*
+  call void %callee.knr.cast()
+  call void @foo_ext_weak(i32* @b_w)
   ret i32 0
 }
 
-declare extern_weak void @foo_ext_weak(ptr)
+declare extern_weak void @foo_ext_weak(i32*)
 
 ; COMMON:         .globl	main[DS]                # -- Begin function main
 ; COMMON-NEXT:    .globl	.main

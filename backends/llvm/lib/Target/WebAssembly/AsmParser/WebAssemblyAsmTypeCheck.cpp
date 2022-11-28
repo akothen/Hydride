@@ -74,9 +74,9 @@ bool WebAssemblyAsmTypeCheck::typeError(SMLoc ErrorLoc, const Twine &Msg) {
   // which are mostly not helpful.
   if (TypeErrorThisFunction)
     return true;
-  // If we're currently in unreachable code, we suppress errors completely.
+  // If we're currently in unreachable code, we surpress errors as well.
   if (Unreachable)
-    return false;
+    return true;
   TypeErrorThisFunction = true;
   dumpTypeStack("current stack: ");
   return Parser.Error(ErrorLoc, Msg);
@@ -184,7 +184,7 @@ bool WebAssemblyAsmTypeCheck::getGlobal(SMLoc ErrorLoc, const MCInst &Inst,
     default:
       break;
     }
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   default:
     return typeError(ErrorLoc, StringRef("symbol ") + WasmSym->getName() +
                                     " missing .globaltype");

@@ -244,8 +244,6 @@ function(llvm_distribution_add_targets)
     set(distributions "<DEFAULT>")
   endif()
 
-  get_property(LLVM_DRIVER_TOOL_SYMLINKS GLOBAL PROPERTY LLVM_DRIVER_TOOL_SYMLINKS)
-
   foreach(distribution ${distributions})
     if(distribution STREQUAL "<DEFAULT>")
       set(distribution_target distribution)
@@ -270,16 +268,12 @@ function(llvm_distribution_add_targets)
 
       if(TARGET install-${target})
         add_dependencies(install-${distribution_target} install-${target})
-      elseif(TARGET install-llvm-driver AND ${target} IN_LIST LLVM_DRIVER_TOOL_SYMLINKS)
-        add_dependencies(install-${distribution_target} install-llvm-driver)
       else()
         message(SEND_ERROR "Specified distribution component '${target}' doesn't have an install target")
       endif()
 
       if(TARGET install-${target}-stripped)
         add_dependencies(install-${distribution_target}-stripped install-${target}-stripped)
-      elseif(TARGET install-llvm-driver-stripped AND ${target} IN_LIST LLVM_DRIVER_TOOL_SYMLINKS)
-        add_dependencies(install-${distribution_target}-stripped install-llvm-driver-stripped)
       else()
         message(SEND_ERROR
                 "Specified distribution component '${target}' doesn't have an install-stripped target."

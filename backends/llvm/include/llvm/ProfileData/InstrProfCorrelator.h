@@ -16,7 +16,6 @@
 #include "llvm/ProfileData/InstrProf.h"
 #include "llvm/Support/Error.h"
 #include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/YAMLTraits.h"
 #include <vector>
 
 namespace llvm {
@@ -36,9 +35,6 @@ public:
   /// Construct a ProfileData vector used to correlate raw instrumentation data
   /// to their functions.
   virtual Error correlateProfileData() = 0;
-
-  /// Process debug info and dump the correlation data.
-  virtual Error dumpYaml(raw_ostream &OS) = 0;
 
   /// Return the number of ProfileData elements.
   llvm::Optional<size_t> getDataSize() const;
@@ -73,31 +69,13 @@ protected:
     /// True if target and host have different endian orders.
     bool ShouldSwapBytes;
   };
-  const std::unique_ptr<Context> Ctx;
+  const std::unique_ptr<InstrProfCorrelator::Context> Ctx;
 
   InstrProfCorrelator(InstrProfCorrelatorKind K, std::unique_ptr<Context> Ctx)
       : Ctx(std::move(Ctx)), Kind(K) {}
 
   std::string Names;
   std::vector<std::string> NamesVec;
-
-  struct Probe {
-    std::string FunctionName;
-    Optional<std::string> LinkageName;
-    yaml::Hex64 CFGHash;
-    yaml::Hex64 CounterOffset;
-    uint32_t NumCounters;
-    Optional<std::string> FilePath;
-    Optional<int> LineNumber;
-  };
-
-  struct CorrelationData {
-    std::vector<Probe> Probes;
-  };
-
-  friend struct yaml::MappingTraits<Probe>;
-  friend struct yaml::SequenceElementTraits<Probe>;
-  friend struct yaml::MappingTraits<CorrelationData>;
 
 private:
   static llvm::Expected<std::unique_ptr<InstrProfCorrelator>>
@@ -131,10 +109,7 @@ protected:
   std::vector<RawInstrProf::ProfileData<IntPtrT>> Data;
 
   Error correlateProfileData() override;
-  virtual void correlateProfileDataImpl(
-      InstrProfCorrelator::CorrelationData *Data = nullptr) = 0;
-
-  Error dumpYaml(raw_ostream &OS) override;
+  virtual void correlateProfileDataImpl() = 0;
 
   void addProbe(StringRef FunctionName, uint64_t CFGHash, IntPtrT CounterOffset,
                 IntPtrT FunctionPtr, uint32_t NumCounters);
@@ -196,8 +171,7 @@ private:
   ///       NULL
   ///     NULL
   /// \endcode
-  void correlateProfileDataImpl(
-      InstrProfCorrelator::CorrelationData *Data = nullptr) override;
+  void correlateProfileDataImpl() override;
 };
 
 } // end namespace llvm

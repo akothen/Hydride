@@ -34,9 +34,6 @@ transform::OneShotBufferizeOp::apply(TransformResults &transformResults,
   options.createDeallocs = getCreateDeallocs();
   options.testAnalysisOnly = getTestAnalysisOnly();
   options.printConflicts = getPrintConflicts();
-  if (getFunctionBoundaryTypeConversion().has_value())
-    options.functionBoundaryTypeConversion =
-        *getFunctionBoundaryTypeConversion();
 
   ArrayRef<Operation *> payloadOps = state.getPayloadOps(getTarget());
   for (Operation *target : payloadOps) {
@@ -96,8 +93,6 @@ public:
 
 #define GET_OP_CLASSES
 #include "mlir/Dialect/Bufferization/TransformOps/BufferizationTransformOps.cpp.inc"
-
-#include "mlir/Dialect/Bufferization/IR/BufferizationEnums.cpp.inc"
 
 void mlir::bufferization::registerTransformDialectExtension(
     DialectRegistry &registry) {

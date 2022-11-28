@@ -1,4 +1,4 @@
-; RUN: llc -mcpu=mvp -filetype=obj %s -o - | obj2yaml | FileCheck %s
+; RUN: llc -filetype=obj %s -o - | obj2yaml | FileCheck %s
 ; PR33624
 
 source_filename = "ws.c"

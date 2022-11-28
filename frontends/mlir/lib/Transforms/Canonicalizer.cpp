@@ -11,21 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Transforms/Passes.h"
-
+#include "PassDetail.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CANONICALIZER
-#include "mlir/Transforms/Passes.h.inc"
-} // namespace mlir
+#include "mlir/Transforms/Passes.h"
 
 using namespace mlir;
 
 namespace {
 /// Canonicalize operations in nested regions.
-struct Canonicalizer : public impl::CanonicalizerBase<Canonicalizer> {
+struct Canonicalizer : public CanonicalizerBase<Canonicalizer> {
   Canonicalizer() = default;
   Canonicalizer(const GreedyRewriteConfig &config,
                 ArrayRef<std::string> disabledPatterns,

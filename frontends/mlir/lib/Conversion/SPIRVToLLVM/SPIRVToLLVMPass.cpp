@@ -11,24 +11,18 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/Conversion/SPIRVToLLVM/SPIRVToLLVMPass.h"
-
+#include "../PassDetail.h"
 #include "mlir/Conversion/LLVMCommon/TypeConverter.h"
 #include "mlir/Conversion/SPIRVToLLVM/SPIRVToLLVM.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVDialect.h"
-#include "mlir/Pass/Pass.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTSPIRVTOLLVM
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 
 namespace {
 /// A pass converting MLIR SPIR-V operations into LLVM dialect.
 class ConvertSPIRVToLLVMPass
-    : public impl::ConvertSPIRVToLLVMBase<ConvertSPIRVToLLVMPass> {
+    : public ConvertSPIRVToLLVMBase<ConvertSPIRVToLLVMPass> {
   void runOnOperation() override;
 };
 } // namespace
@@ -53,7 +47,7 @@ void ConvertSPIRVToLLVMPass::runOnOperation() {
   target.addIllegalDialect<spirv::SPIRVDialect>();
   target.addLegalDialect<LLVM::LLVMDialect>();
 
-  // Set `ModuleOp` as legal for `spirv.module` conversion.
+  // Set `ModuleOp` as legal for `spv.module` conversion.
   target.addLegalOp<ModuleOp>();
   if (failed(applyPartialConversion(module, target, std::move(patterns))))
     signalPassFailure();

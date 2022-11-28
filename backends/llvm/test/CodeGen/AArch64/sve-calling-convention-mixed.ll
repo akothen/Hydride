@@ -13,8 +13,8 @@ define float @foo1(double* %x0, double* %x1, double* %x2) nounwind {
 ; CHECK-NEXT:    addvl sp, sp, #-4
 ; CHECK-NEXT:    ptrue p0.b
 ; CHECK-NEXT:    fmov s0, #1.00000000
-; CHECK-NEXT:    ld4d { z1.d - z4.d }, p0/z, [x0]
-; CHECK-NEXT:    ld4d { z16.d - z19.d }, p0/z, [x1]
+; CHECK-NEXT:    ld4d { z1.d, z2.d, z3.d, z4.d }, p0/z, [x0]
+; CHECK-NEXT:    ld4d { z16.d, z17.d, z18.d, z19.d }, p0/z, [x1]
 ; CHECK-NEXT:    ld1d { z5.d }, p0/z, [x2]
 ; CHECK-NEXT:    mov x0, sp
 ; CHECK-NEXT:    ptrue p0.d
@@ -29,26 +29,10 @@ define float @foo1(double* %x0, double* %x1, double* %x2) nounwind {
 entry:
   %0 = call <vscale x 16 x i1> @llvm.aarch64.sve.ptrue.nxv16i1(i32 31)
   %1 = call <vscale x 2 x i1> @llvm.aarch64.sve.convert.from.svbool.nxv2i1(<vscale x 16 x i1> %0)
-  %2 = call {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld4.sret.nxv2f64(<vscale x 2 x i1> %1, double* %x0)
-  %3 = call {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld4.sret.nxv2f64(<vscale x 2 x i1> %1, double* %x1)
+  %2 = call <vscale x 8 x double> @llvm.aarch64.sve.ld4.nxv8f64.nxv2i1(<vscale x 2 x i1> %1, double* %x0)
+  %3 = call <vscale x 8 x double> @llvm.aarch64.sve.ld4.nxv8f64.nxv2i1(<vscale x 2 x i1> %1, double* %x1)
   %4 = call <vscale x 2 x double> @llvm.aarch64.sve.ld1.nxv2f64(<vscale x 2 x i1> %1, double* %x2)
-  %5 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  0
-  %6 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  1
-  %7 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  2
-  %8 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  3
-  %9 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> poison, <vscale x 2 x double> %5, i64 0)
-  %10 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %9, <vscale x 2 x double> %6, i64 2)
-  %11 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %10, <vscale x 2 x double> %7, i64 4)
-  %12 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %11, <vscale x 2 x double> %8, i64 6)
-  %13 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  0
-  %14 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  1
-  %15 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  2
-  %16 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  3
-  %17 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> undef, <vscale x 2 x double> %13, i64 0)
-  %18 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %17, <vscale x 2 x double> %14, i64 2)
-  %19 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %18, <vscale x 2 x double> %15, i64 4)
-  %20 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %19, <vscale x 2 x double> %16, i64 6)
-  %call = call float @callee1(float 1.000000e+00, <vscale x 8 x double> %12, <vscale x 8 x double> %20, <vscale x 2 x double> %4)
+  %call = call float @callee1(float 1.000000e+00, <vscale x 8 x double> %2, <vscale x 8 x double> %3, <vscale x 2 x double> %4)
   ret float %call
 }
 
@@ -60,8 +44,8 @@ define float @foo2(double* %x0, double* %x1) nounwind {
 ; CHECK-NEXT:    sub sp, sp, #16
 ; CHECK-NEXT:    ptrue p0.b
 ; CHECK-NEXT:    add x9, sp, #16
-; CHECK-NEXT:    ld4d { z1.d - z4.d }, p0/z, [x0]
-; CHECK-NEXT:    ld4d { z16.d - z19.d }, p0/z, [x1]
+; CHECK-NEXT:    ld4d { z1.d, z2.d, z3.d, z4.d }, p0/z, [x0]
+; CHECK-NEXT:    ld4d { z16.d, z17.d, z18.d, z19.d }, p0/z, [x1]
 ; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    add x8, sp, #16
 ; CHECK-NEXT:    fmov s0, #1.00000000
@@ -89,25 +73,9 @@ define float @foo2(double* %x0, double* %x1) nounwind {
 entry:
   %0 = call <vscale x 16 x i1> @llvm.aarch64.sve.ptrue.nxv16i1(i32 31)
   %1 = call <vscale x 2 x i1> @llvm.aarch64.sve.convert.from.svbool.nxv2i1(<vscale x 16 x i1> %0)
-  %2 = call {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld4.sret.nxv2f64(<vscale x 2 x i1> %1, double* %x0)
-  %3 = call {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld4.sret.nxv2f64(<vscale x 2 x i1> %1, double* %x1)
-  %4 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  0
-  %5 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  1
-  %6 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  2
-  %7 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  3
-  %8 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> poison, <vscale x 2 x double> %4, i64 0)
-  %9 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %8, <vscale x 2 x double> %5, i64 2)
-  %10 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %9, <vscale x 2 x double> %6, i64 4)
-  %11 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %10, <vscale x 2 x double> %7, i64 6)
-  %12 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  0
-  %13 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  1
-  %14 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  2
-  %15 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  3
-  %16 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> poison, <vscale x 2 x double> %12, i64 0)
-  %17 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %16, <vscale x 2 x double> %13, i64 2)
-  %18 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %17, <vscale x 2 x double> %14, i64 4)
-  %19 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %18, <vscale x 2 x double> %15, i64 6)
-  %call = call float @callee2(i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, float 1.000000e+00, <vscale x 8 x double> %11, <vscale x 8 x double> %19)
+  %2 = call <vscale x 8 x double> @llvm.aarch64.sve.ld4.nxv8f64.nxv2i1(<vscale x 2 x i1> %1, double* %x0)
+  %3 = call <vscale x 8 x double> @llvm.aarch64.sve.ld4.nxv8f64.nxv2i1(<vscale x 2 x i1> %1, double* %x1)
+  %call = call float @callee2(i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, float 1.000000e+00, <vscale x 8 x double> %2, <vscale x 8 x double> %3)
   ret float %call
 }
 
@@ -118,8 +86,8 @@ define float @foo3(double* %x0, double* %x1, double* %x2) nounwind {
 ; CHECK-NEXT:    addvl sp, sp, #-3
 ; CHECK-NEXT:    ptrue p0.b
 ; CHECK-NEXT:    fmov s0, #1.00000000
-; CHECK-NEXT:    ld4d { z2.d - z5.d }, p0/z, [x0]
-; CHECK-NEXT:    ld3d { z16.d - z18.d }, p0/z, [x1]
+; CHECK-NEXT:    ld4d { z2.d, z3.d, z4.d, z5.d }, p0/z, [x0]
+; CHECK-NEXT:    ld3d { z16.d, z17.d, z18.d }, p0/z, [x1]
 ; CHECK-NEXT:    ld1d { z6.d }, p0/z, [x2]
 ; CHECK-NEXT:    fmov s1, #2.00000000
 ; CHECK-NEXT:    mov x0, sp
@@ -134,24 +102,10 @@ define float @foo3(double* %x0, double* %x1, double* %x2) nounwind {
 entry:
   %0 = call <vscale x 16 x i1> @llvm.aarch64.sve.ptrue.nxv16i1(i32 31)
   %1 = call <vscale x 2 x i1> @llvm.aarch64.sve.convert.from.svbool.nxv2i1(<vscale x 16 x i1> %0)
-  %2 = call {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld4.sret.nxv2f64(<vscale x 2 x i1> %1, double* %x0)
-  %3 = call {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld3.sret.nxv2f64(<vscale x 2 x i1> %1, double* %x1)
+  %2 = call <vscale x 8 x double> @llvm.aarch64.sve.ld4.nxv8f64.nxv2i1(<vscale x 2 x i1> %1, double* %x0)
+  %3 = call <vscale x 6 x double> @llvm.aarch64.sve.ld3.nxv6f64.nxv2i1(<vscale x 2 x i1> %1, double* %x1)
   %4 = call <vscale x 2 x double> @llvm.aarch64.sve.ld1.nxv2f64(<vscale x 2 x i1> %1, double* %x2)
-  %5 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  0
-  %6 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  1
-  %7 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  2
-  %8 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %2,  3
-  %9 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> poison, <vscale x 2 x double> %5, i64 0)
-  %10 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %9, <vscale x 2 x double> %6, i64 2)
-  %11 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %10, <vscale x 2 x double> %7, i64 4)
-  %12 = call <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double> %11, <vscale x 2 x double> %8, i64 6)
-  %13 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} %3,  0
-  %14 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  1
-  %15 = extractvalue { <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double> } %3,  2
-  %16 = call <vscale x 6 x double> @llvm.vector.insert.nxv6f64.nx2f64(<vscale x 6 x double> poison, <vscale x 2 x double> %13, i64 0)
-  %17 = call <vscale x 6 x double> @llvm.vector.insert.nxv6f64.nx2f64(<vscale x 6 x double> %16 , <vscale x 2 x double> %14, i64 2)
-  %18 = call <vscale x 6 x double> @llvm.vector.insert.nxv6f64.nx2f64(<vscale x 6 x double> %17 , <vscale x 2 x double> %15, i64 4)
-  %call = call float @callee3(float 1.000000e+00, float 2.000000e+00, <vscale x 8 x double> %12, <vscale x 6 x double> %18, <vscale x 2 x double> %4)
+  %call = call float @callee3(float 1.000000e+00, float 2.000000e+00, <vscale x 8 x double> %2, <vscale x 6 x double> %3, <vscale x 2 x double> %4)
   ret float %call
 }
 
@@ -234,7 +188,7 @@ entry:
   ret double %x0
 }
 
-; Use AAVPCS, SVE register in z0 - z7 used
+; Use AAVPCS, SVE register in z0-z7 used
 
 define void @aavpcs1(i32 %s0, i32 %s1, i32 %s2, i32 %s3, i32 %s4, i32 %s5, i32 %s6, <vscale x 4 x i32> %s7, <vscale x 4 x i32> %s8, <vscale x 4 x i32> %s9, <vscale x 4 x i32> %s10, <vscale x 4 x i32> %s11, <vscale x 4 x i32> %s12, <vscale x 4 x i32> %s13, <vscale x 4 x i32> %s14, <vscale x 4 x i32> %s15, <vscale x 4 x i32> %s16, i32 * %ptr) nounwind {
 ; CHECK-LABEL: aavpcs1:
@@ -267,7 +221,7 @@ entry:
   ret void
 }
 
-; Use AAVPCS, SVE register in z0 - z7 used
+; Use AAVPCS, SVE register in z0-z7 used
 
 define void @aavpcs2(float %s0, float %s1, float %s2, float %s3, float %s4, float %s5, float %s6, <vscale x 4 x float> %s7, <vscale x 4 x float> %s8, <vscale x 4 x float> %s9, <vscale x 4 x float> %s10, <vscale x 4 x float> %s11, <vscale x 4 x float> %s12,<vscale x 4 x float> %s13,<vscale x 4 x float> %s14,<vscale x 4 x float> %s15,<vscale x 4 x float> %s16,float * %ptr) nounwind {
 ; CHECK-LABEL: aavpcs2:
@@ -306,7 +260,7 @@ entry:
   ret void
 }
 
-; Use AAVPCS, no SVE register in z0 - z7 used (floats occupy z0 - z7) but predicate arg is used
+; Use AAVPCS, no SVE register in z0-z7 used (floats occupy z0-z7) but predicate arg is used
 
 define void @aavpcs3(float %s0, float %s1, float %s2, float %s3, float %s4, float %s5, float %s6, float %s7, <vscale x 4 x float> %s8, <vscale x 4 x float> %s9, <vscale x 4 x float> %s10, <vscale x 4 x float> %s11, <vscale x 4 x float> %s12, <vscale x 4 x float> %s13, <vscale x 4 x float> %s14, <vscale x 4 x float> %s15, <vscale x 4 x float> %s16, <vscale x 4 x float> %s17, <vscale x 16 x i1> %p0, float * %ptr) nounwind {
 ; CHECK-LABEL: aavpcs3:
@@ -347,7 +301,7 @@ entry:
   ret void
 }
 
-; use AAVPCS, SVE register in z0 - z7 used (i32s dont occupy z0 - z7)
+; use AAVPCS, SVE register in z0-z7 used (i32s dont occupy z0-z7)
 
 define void @aavpcs4(i32 %s0, i32 %s1, i32 %s2, i32 %s3, i32 %s4, i32 %s5, i32 %s6, i32 %s7, <vscale x 4 x i32> %s8, <vscale x 4 x i32> %s9, <vscale x 4 x i32> %s10, <vscale x 4 x i32> %s11, <vscale x 4 x i32> %s12, <vscale x 4 x i32> %s13, <vscale x 4 x i32> %s14, <vscale x 4 x i32> %s15, <vscale x 4 x i32> %s16, <vscale x 4 x i32> %s17, i32 * %ptr) nounwind {
 ; CHECK-LABEL: aavpcs4:
@@ -722,9 +676,9 @@ declare float @callee3(float, float, <vscale x 8 x double>, <vscale x 6 x double
 
 declare <vscale x 16 x i1> @llvm.aarch64.sve.ptrue.nxv16i1(i32 immarg)
 declare <vscale x 2 x i1> @llvm.aarch64.sve.convert.from.svbool.nxv2i1(<vscale x 16 x i1>)
-declare {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld4.sret.nxv2f64(<vscale x 2 x i1>, double*)
-declare {<vscale x 2 x double>, <vscale x 2 x double>, <vscale x 2 x double>} @llvm.aarch64.sve.ld3.sret.nxv2f64(<vscale x 2 x i1>, double*)
+declare <vscale x 8 x double> @llvm.aarch64.sve.ld4.nxv8f64.nxv2i1(<vscale x 2 x i1>, double*)
+declare <vscale x 6 x double> @llvm.aarch64.sve.ld3.nxv6f64.nxv2i1(<vscale x 2 x i1>, double*)
 declare <vscale x 2 x double> @llvm.aarch64.sve.ld1.nxv2f64(<vscale x 2 x i1>, double*)
 declare double @llvm.aarch64.sve.faddv.nxv2f64(<vscale x 2 x i1>, <vscale x 2 x double>)
-declare <vscale x 8 x double> @llvm.vector.insert.nxv8f64.nx2f64(<vscale x 8 x double>, <vscale x 2 x double>, i64)
-declare <vscale x 6 x double> @llvm.vector.insert.nxv6f64.nx2f64(<vscale x 6 x double>, <vscale x 2 x double>, i64)
+declare <vscale x 2 x double> @llvm.aarch64.sve.tuple.get.nxv2f64.nxv8f64(<vscale x 8 x double>, i32 immarg)
+declare <vscale x 2 x double> @llvm.aarch64.sve.tuple.get.nxv2f64.nxv6f64(<vscale x 6 x double>, i32 immarg)

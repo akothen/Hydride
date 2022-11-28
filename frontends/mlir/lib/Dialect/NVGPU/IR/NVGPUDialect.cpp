@@ -13,27 +13,43 @@
 #include "mlir/Dialect/NVGPU/IR/NVGPUDialect.h"
 #include "mlir/Dialect/GPU/IR/GPUDialect.h"
 #include "mlir/IR/Builders.h"
-#include "mlir/IR/BuiltinAttributes.h"
 #include "mlir/IR/DialectImplementation.h"
 #include "mlir/IR/OpImplementation.h"
 #include "mlir/IR/TypeUtilities.h"
-#include "mlir/IR/Verifier.h"
 #include "llvm/ADT/TypeSwitch.h"
 
 using namespace mlir;
 using namespace mlir::nvgpu;
 
+#include "mlir/Dialect/NVGPU/IR/NVGPUDialect.cpp.inc"
+
 void nvgpu::NVGPUDialect::initialize() {
-  addTypes<
-#define GET_TYPEDEF_LIST
-#include "mlir/Dialect/NVGPU/IR/NVGPUTypes.cpp.inc"
-      >();
+  addTypes<DeviceAsyncTokenType>();
   addOperations<
 #define GET_OP_LIST
 #include "mlir/Dialect/NVGPU/IR/NVGPU.cpp.inc"
       >();
 }
 
+Type NVGPUDialect::parseType(DialectAsmParser &parser) const {
+  // Parse the main keyword for the type.
+  StringRef keyword;
+  if (parser.parseKeyword(&keyword))
+    return Type();
+  MLIRContext *context = getContext();
+  // Handle 'device async token' types.
+  if (keyword == "device.async.token")
+    return DeviceAsyncTokenType::get(context);
+
+  parser.emitError(parser.getNameLoc(), "unknown nvgpu type: " + keyword);
+  return Type();
+}
+
+void NVGPUDialect::printType(Type type, DialectAsmPrinter &os) const {
+  TypeSwitch<Type>(type)
+      .Case<DeviceAsyncTokenType>([&](Type) { os << "device.async.token"; })
+      .Default([](Type) { llvm_unreachable("unexpected 'nvgpu' type kind"); });
+}
 //===----------------------------------------------------------------------===//
 // NVGPU_DeviceAsyncCopyOp
 //===----------------------------------------------------------------------===//
@@ -75,28 +91,14 @@ LogicalResult DeviceAsyncCopyOp::verify() {
 //===----------------------------------------------------------------------===//
 // NVGPU_MmaSyncOp
 //===----------------------------------------------------------------------===//
-void MmaSyncOp::build(::mlir::OpBuilder &odsBuilder,
-                      ::mlir::OperationState &odsState, Value matrixA,
-                      Value matrixB, Value matrixC, ArrayAttr mmaShape) {
-  build(odsBuilder, odsState, matrixC.getType(), matrixA, matrixB, matrixC,
-        mmaShape, UnitAttr());
-}
 
-/// Performs verification for MmaSyncOp and MmaSparseSyncOp.
-static LogicalResult verifyMmaSyncOp(Operation *op,
-                                     TypedValue<VectorType> matrixA,
-                                     TypedValue<VectorType> matrixB,
-                                     TypedValue<VectorType> matrixC,
-                                     const std::array<int64_t, 3> &mmaShape,
-                                     bool tf32Enabled, bool sparse = false) {
+LogicalResult MmaSyncOp::verify() {
 
-  // The verification for mma.sync covering various shapes and data types is
-  // based on the fundamental tensor core shape.
-
-  // "Fundamental" tensor core shapes:
-  //  - For F32 (TF32), F16, S8, and S4 data
-  //    types the fundamental tensor core operation is of shape 8-by-8-by-128b.
-  //  - F64 is an exception and is of shape 8-by-8-by-256b.
+  // Fundamental tensor core mma.sync op
+  // For F32 (TF32), F16, S8, and S4 data types fundamental tensor core
+  // operation is of shape: 8-by-8-by-128b. F64 is an exception. The
+  // verification for mma.sync covering various shapes and data types is based
+  // on the fundamental tensor core operionation.
   constexpr int kThreads = 32; // 32 threads per warp
   int64_t shapeM = 8;
   int64_t shapeN = 8;
@@ -108,9 +110,9 @@ static LogicalResult verifyMmaSyncOp(Operation *op,
   int64_t numElementC{2}; // two accumulator elements per fundamental tile
 
   // nvgpu.mma.sync vector operands (per thread)
-  auto aVector = matrixA.getType();
-  auto bVector = matrixB.getType();
-  auto cVector = matrixC.getType();
+  auto aVector = getMatrixA().getType().cast<VectorType>();
+  auto bVector = getMatrixB().getType().cast<VectorType>();
+  auto cVector = getMatrixC().getType().cast<VectorType>();
 
   // vector shapes
   ArrayRef<int64_t> aShape = aVector.getShape();
@@ -120,9 +122,10 @@ static LogicalResult verifyMmaSyncOp(Operation *op,
   // vector element type
   Type aType = aVector.getElementType();
 
-  // Certain data types are not allowed in sparse mode.
-  if (sparse && aType.isF64())
-    return op->emitError() << "f64 is not supported for sparse mode";
+  // nvgpu.mma.sync shape (per 32 threads or per warp)
+  int64_t m = getMmaShape()[0].cast<IntegerAttr>().getInt();
+  int64_t n = getMmaShape()[1].cast<IntegerAttr>().getInt();
+  int64_t k = getMmaShape()[2].cast<IntegerAttr>().getInt();
 
   if (aType.isF64()) {
     // exception to 8-by-8-128b fundamental tensor core tile size
@@ -133,43 +136,32 @@ static LogicalResult verifyMmaSyncOp(Operation *op,
              aType.isInteger(8) || aType.isInteger(4)) {
     // 8-by-8-128b fundamental tensor core tile size
     int operandBitwidth = aType.getIntOrFloatBitWidth();
-    shapeK = 128 / operandBitwidth; // 128b wide shapeK
-
+    shapeK = 128 / operandBitwidth;     // 128b wide shapeK
     numElementA = 32 / operandBitwidth; // 32b wide operand A
     numElementB = 32 / operandBitwidth; // 32b wide operand B
   } else {
-    return op->emitError()
-           << "expected input data type (i4,i8,f16,bf16,tf32,f64) "
-              "supported by "
-           << op->getName();
+    return emitError() << "expected input data type (i4,i8,f16,bf16,tf32,f64) "
+                          "supported by nvgpu.mma.sync";
   }
 
   //
   // Basic verification
   //
 
-  auto [m, n, k] = mmaShape;
-
   // verify warp-wide size for vector a
-  int64_t sparseFactor = sparse ? 2 : 1;
-  if (aShape[0] * aShape[1] * kThreads != m * k / sparseFactor)
-    return op->emitOpError()
-           << "expected " << m * k << " warp-wide matrix A elements";
+  if (aShape[0] * aShape[1] * kThreads != m * k)
+    return emitOpError() << "expected " << m * k
+                         << " warp-wide matrix A elements";
 
   // verify warp-wide size for vector b
   if (bShape[0] * bShape[1] * kThreads != k * n)
-    return op->emitOpError()
-           << "expected " << k * n << " warp-wide matrix B elements";
+    return emitOpError() << "expected " << k * n
+                         << " warp-wide matrix B elements";
 
   // verify warp-wide size for vector c
   if (cShape[0] * cShape[1] * kThreads != m * n)
-    return op->emitOpError()
-           << "expected " << m * n << " warp-wide matrix C elements";
-
-  // verify tf32 tensor cores are enabled for only F32 datatype
-  if (tf32Enabled && !(aType.isF32()))
-    return op->emitOpError()
-           << "expected tf32 tensor cores only for F32 operands";
+    return emitOpError() << "expected " << m * n
+                         << " warp-wide matrix C elements";
 
   //
   // Extended verification
@@ -181,46 +173,21 @@ static LogicalResult verifyMmaSyncOp(Operation *op,
   int64_t kTile = k / shapeK;
 
   // verify shape of aVector
-  if ((aShape[0] != mTile * kTile / (sparse ? 2 : 1)) ||
-      (aShape[1] != numElementA))
-    return op->emitOpError() << "expected matrix A to be shaped ("
-                             << mTile * kTile << " x " << numElementA << ")";
+  if (!((aShape[0] == mTile * kTile) && (aShape[1] == numElementA)))
+    return emitOpError() << "expected matrix A to be shaped (" << mTile * kTile
+                         << " x " << numElementA << ")";
 
   // verify shape of bVector
-  if ((bShape[0] != kTile * nTile) || (bShape[1] != numElementB))
-    return op->emitOpError() << "expected matrix B to be shaped ("
-                             << kTile * nTile << " x " << numElementB << ")";
+  if (!((bShape[0] == kTile * nTile) && (bShape[1] == numElementB)))
+    return emitOpError() << "expected matrix B to be shaped (" << kTile * nTile
+                         << " x " << numElementB << ")";
 
   // verify shape of cVector
-  if ((cShape[0] != mTile * nTile) || (cShape[1] != numElementC))
-    return op->emitOpError() << "expected matrix C to be shaped ("
-                             << mTile * nTile << " x " << numElementC << ")";
+  if (!((cShape[0] == mTile * nTile) && (cShape[1] == numElementC)))
+    return emitOpError() << "expected matrix C to be shaped (" << mTile * nTile
+                         << " x " << numElementC << ")";
 
   return success();
-}
-
-LogicalResult MmaSyncOp::verify() {
-  return verifyMmaSyncOp(this->getOperation(), getMatrixA(), getMatrixB(),
-                         getMatrixC(), getMmaShapeAsArray(),
-                         getOperation()->hasAttr(getTf32EnabledAttrName()));
-}
-
-//===----------------------------------------------------------------------===//
-// NVGPU_MmaSparseSyncOp
-//===----------------------------------------------------------------------===//
-void MmaSparseSyncOp::build(::mlir::OpBuilder &odsBuilder,
-                            ::mlir::OperationState &odsState, Value matrixA,
-                            Value matrixB, Value matrixC, Value sparseMetadata,
-                            ArrayRef<int64_t> mmaShape) {
-  build(odsBuilder, odsState, matrixC.getType(), matrixA, matrixB, matrixC,
-        sparseMetadata, odsBuilder.getI64ArrayAttr(mmaShape), 0, UnitAttr());
-}
-
-LogicalResult MmaSparseSyncOp::verify() {
-  return verifyMmaSyncOp(this->getOperation(), getMatrixA(), getMatrixB(),
-                         getMatrixC(), getMmaShapeAsArray(),
-                         getOperation()->hasAttr(getTf32EnabledAttrName()),
-                         true);
 }
 
 //===----------------------------------------------------------------------===//
@@ -274,14 +241,5 @@ LogicalResult LdMatrixOp::verify() {
   return success();
 }
 
-//===----------------------------------------------------------------------===//
-// TableGen'd dialect, type, and op definitions
-//===----------------------------------------------------------------------===//
-
-#include "mlir/Dialect/NVGPU/IR/NVGPUDialect.cpp.inc"
-
 #define GET_OP_CLASSES
 #include "mlir/Dialect/NVGPU/IR/NVGPU.cpp.inc"
-
-#define GET_TYPEDEF_CLASSES
-#include "mlir/Dialect/NVGPU/IR/NVGPUTypes.cpp.inc"

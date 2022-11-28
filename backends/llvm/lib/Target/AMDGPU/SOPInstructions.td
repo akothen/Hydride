@@ -157,7 +157,6 @@ class SOP1_1 <string opName, list<dag> pattern=[]> : SOP1_Pseudo <
   let has_sdst = 0;
 }
 
-
 class UniformUnaryFrag<SDPatternOperator Op> : PatFrag <
   (ops node:$src0),
   (Op $src0),
@@ -173,18 +172,6 @@ class UniformUnaryFrag<SDPatternOperator Op> : PatFrag <
 class UniformBinFrag<SDPatternOperator Op> : PatFrag <
   (ops node:$src0, node:$src1),
   (Op $src0, $src1),
-  [{ return !N->isDivergent(); }]> {
-  // This check is unnecessary as it's captured by the result register
-  // bank constraint.
-  //
-  // FIXME: Should add a way for the emitter to recognize this is a
-  // trivially true predicate to eliminate the check.
-  let GISelPredicateCode = [{return true;}];
-}
-
-class UniformTernaryFrag<SDPatternOperator Op> : PatFrag <
-  (ops node:$src0, node:$src1, node:$src2),
-  (Op $src0, $src1, $src2),
   [{ return !N->isDivergent(); }]> {
   // This check is unnecessary as it's captured by the result register
   // bank constraint.
@@ -529,16 +516,21 @@ def S_MAX_U32 : SOP2_32 <"s_max_u32",
 } // End isCommutable = 1
 } // End Defs = [SCC]
 
-def SelectPat : PatFrag <
+// This pattern is restricted to certain subtargets (practically GFX8Plus)
+// because isel sometimes produces an sreg_64 copy to SCC as a by-product
+// of this pattern, and only for subtargets with hasScalarCompareEq64
+// is it possible to map such copy to a single instruction (S_CMP_LG_U64).
+class SelectPat<SDPatternOperator select> : PatFrag <
   (ops node:$src1, node:$src2),
   (select SCC, $src1, $src2),
-  [{ return !N->isDivergent(); }]
+  [{ return Subtarget->hasScalarCompareEq64() &&
+            N->getOperand(0)->hasOneUse() && !N->isDivergent(); }]
 >;
 
 let Uses = [SCC] in {
   let AddedComplexity = 20 in {
     def S_CSELECT_B32 : SOP2_32 <"s_cselect_b32",
-      [(set i32:$sdst, (SelectPat i32:$src0, i32:$src1))]
+      [(set i32:$sdst, (SelectPat<select> i32:$src0, i32:$src1))]
     >;
   }
 
@@ -731,7 +723,6 @@ class SOPK_Pseudo <string opName, dag outs, dag ins,
   let hasSideEffects = 0;
   let SALU = 1;
   let SOPK = 1;
-  let FixedSize = 1;
   let SchedRW = [WriteSALU];
   let UseNamedOperandTable = 1;
   string Mnemonic = opName;
@@ -747,7 +738,6 @@ class SOPK_Real<SOPK_Pseudo ps> :
   let SOPK = 1;
   let isPseudo = 0;
   let isCodeGenOnly = 0;
-  let UseNamedOperandTable = 1;
 
   // copy relevant pseudo op flags
   let SubtargetPredicate = ps.SubtargetPredicate;
@@ -1036,7 +1026,7 @@ class SOPC_Base <RegisterOperand rc0, RegisterOperand rc1,
 class SOPC_Helper <RegisterOperand rc, ValueType vt,
                     string opName, SDPatternOperator cond> : SOPC_Base <
   rc, rc, opName,
-  [(set SCC, (UniformTernaryFrag<setcc> vt:$src0, vt:$src1, cond))] > {
+  [(set SCC, (si_setcc_uniform vt:$src0, vt:$src1, cond))] > {
 }
 
 class SOPC_CMP_32<string opName,

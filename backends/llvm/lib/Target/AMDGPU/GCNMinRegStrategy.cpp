@@ -232,7 +232,7 @@ GCNMinRegScheduler::schedule(ArrayRef<const SUnit*> TopRoots,
 
   int StepNo = 0;
 
-  for (const auto *SU : TopRoots) {
+  for (auto SU : TopRoots) {
     RQ.push_back(*new (Alloc.Allocate()) Candidate(SU, StepNo));
   }
   releaseSuccessors(&DAG.EntrySU, StepNo);

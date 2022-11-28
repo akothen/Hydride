@@ -244,7 +244,7 @@ public:
   template <class Function>
   auto map(const Function &F) const -> InstructionCost {
     if (isValid())
-      return F(Value);
+      return F(*getValue());
     return getInvalid();
   }
 };

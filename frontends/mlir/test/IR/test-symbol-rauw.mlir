@@ -94,19 +94,3 @@ module {
       } : () -> ()
     }
 }
-
-// -----
-
-module {
-  // CHECK: module @replaced_foo
-  module @foo attributes {sym.new_name = "replaced_foo" } {
-    // CHECK: func.func private @foo
-    func.func private @foo()
-  }
-
-  // CHECK: foo.op
-  // CHECK-SAME: use = @replaced_foo::@foo
-  "foo.op"() {
-    use = @foo::@foo
-  } : () -> ()
-}

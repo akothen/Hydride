@@ -39,6 +39,7 @@
 ;
 ;   void test(bool *B, bool *E) { f<false, 0>(B, E); }
 ;
+; RUN: opt -S < %s -inline -inline-threshold=150 -enable-new-pm=0 | FileCheck %s --check-prefixes=CHECK,OLD
 ; RUN: opt -S < %s -passes=inline -inline-threshold=150 | FileCheck %s --check-prefixes=CHECK,NEW
 ; RUN: opt -S < %s -passes=inliner-wrapper -inline-threshold=150 | FileCheck %s --check-prefixes=CHECK,NEW
 
@@ -47,6 +48,15 @@ target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 declare void @_Z1gi(i32)
 
 ; CHECK-LABEL: define void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi1EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call
@@ -82,6 +92,17 @@ if.end3:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi1EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call
@@ -116,6 +137,21 @@ if.end3:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb0ELi1EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi2EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1fILb1ELi2EEvPbS0_(
 ; NEW-NOT: call
@@ -147,6 +183,13 @@ if.end3:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb1ELi1EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi2EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call
@@ -186,6 +229,17 @@ if.end3:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb0ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call
@@ -221,6 +275,19 @@ if.end3:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb1ELi2EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1gi(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call
@@ -259,6 +326,11 @@ if.end3:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb0ELi3EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb0ELi0EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call
@@ -334,6 +406,9 @@ entry:
 }
 
 ; CHECK-LABEL: define void @_Z1fILb1ELi4EEvPbS0_(
+; OLD-NOT: call
+; OLD: call void @_Z1fILb1ELi0EEvPbS0_(
+; OLD-NOT: call
 ; NEW-NOT: call
 ; NEW: call void @_Z1gi(
 ; NEW-NOT: call

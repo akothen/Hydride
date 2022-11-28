@@ -4,13 +4,15 @@ target datalayout = "E-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3
 target triple = "powerpc-unknown-linux-gnu"
 
 %struct.abc = type { i32, [32 x i8] }        
-%struct.def = type { ptr, %struct.abc }        
+%struct.def = type { i8**, %struct.abc }        
         %struct.anon = type <{  }>
 
-define ptr @foo(ptr %deviceRef, ptr %pCap) {
+define i8* @foo(%struct.anon* %deviceRef, %struct.abc* %pCap) {
 entry:
-        %tmp3 = getelementptr %struct.def, ptr %deviceRef, i32 0, i32 1               
-        ret ptr %tmp3
+        %tmp1 = bitcast %struct.anon* %deviceRef to %struct.def*            
+        %tmp3 = getelementptr %struct.def, %struct.def* %tmp1, i32 0, i32 1               
+        %tmp35 = bitcast %struct.abc* %tmp3 to i8*           
+        ret i8* %tmp35
 }
 
 

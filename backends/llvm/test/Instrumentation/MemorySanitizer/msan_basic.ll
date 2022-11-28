@@ -1,8 +1,11 @@
-; RUN: opt < %s -msan-check-access-address=0 -S -passes='module(msan)' 2>&1 | FileCheck -allow-deprecated-dag-overlap %s --check-prefixes=CHECK,NOORIGINS --implicit-check-not="call void @__msan_warning"
-; RUN: opt < %s --passes='module(msan)' -msan-check-access-address=0 -S | FileCheck -allow-deprecated-dag-overlap %s --check-prefixes=CHECK,NOORIGINS --implicit-check-not="call void @__msan_warning"
-; RUN: opt < %s -msan-check-access-address=0 -msan-track-origins=1 -S -passes='module(msan)' 2>&1 | FileCheck -allow-deprecated-dag-overlap -check-prefixes=CHECK,ORIGINS %s --implicit-check-not="call void @__msan_warning"
-; RUN: opt < %s -passes='module(msan)' -msan-check-access-address=0 -msan-track-origins=1 -S | FileCheck -allow-deprecated-dag-overlap -check-prefixes=CHECK,ORIGINS %s --implicit-check-not="call void @__msan_warning"
-; RUN: opt < %s -passes='module(msan)' -msan-instrumentation-with-call-threshold=0 -msan-track-origins=1 -S | FileCheck -allow-deprecated-dag-overlap -check-prefixes=CHECK-CALLS %s --implicit-check-not="call void @__msan_warning"
+; RUN: opt < %s -msan-check-access-address=0 -S -passes='module(msan-module),function(msan)' 2>&1 | FileCheck -allow-deprecated-dag-overlap %s
+; RUN: opt < %s --passes='module(msan-module),function(msan)' -msan-check-access-address=0 -S | FileCheck -allow-deprecated-dag-overlap %s
+; RUN: opt < %s -msan-check-access-address=0 -msan-track-origins=1 -S -passes='module(msan-module),function(msan)' 2>&1 | \
+; RUN:   FileCheck -allow-deprecated-dag-overlap -check-prefixes=CHECK,CHECK-ORIGINS %s
+; RUN: opt < %s -passes='module(msan-module),function(msan)' -msan-check-access-address=0 -msan-track-origins=1 -S | \
+; RUN:   FileCheck -allow-deprecated-dag-overlap -check-prefixes=CHECK,CHECK-ORIGINS %s
+; RUN: opt < %s -passes='module(msan-module),function(msan)' -msan-instrumentation-with-call-threshold=0 -msan-track-origins=1 -S | \
+; RUN:   FileCheck -allow-deprecated-dag-overlap -check-prefixes=CHECK-CALLS %s
 
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
@@ -13,7 +16,7 @@ target triple = "x86_64-unknown-linux-gnu"
 ; Check the presence and the linkage type of __msan_track_origins and
 ; other interface symbols.
 ; CHECK-NOT: @__msan_track_origins
-; ORIGINS: @__msan_track_origins = weak_odr constant i32 1
+; CHECK-ORIGINS: @__msan_track_origins = weak_odr constant i32 1
 ; CHECK-NOT: @__msan_keep_going = weak_odr constant i32 0
 ; CHECK: @__msan_retval_tls = external thread_local(initialexec) global [{{.*}}]
 ; CHECK: @__msan_retval_origin_tls = external thread_local(initialexec) global i32
@@ -33,14 +36,14 @@ entry:
 
 ; CHECK-LABEL: @Store
 ; CHECK: load {{.*}} @__msan_param_tls
-; ORIGINS: load {{.*}} @__msan_param_origin_tls
+; CHECK-ORIGINS: load {{.*}} @__msan_param_origin_tls
 ; CHECK: store
-; ORIGINS: icmp
-; ORIGINS: br i1
-; ORIGINS: {{^[0-9]+}}:
-; ORIGINS: store
-; ORIGINS: br label
-; ORIGINS: {{^[0-9]+}}:
+; CHECK-ORIGINS: icmp
+; CHECK-ORIGINS: br i1
+; CHECK-ORIGINS: {{^[0-9]+}}:
+; CHECK-ORIGINS: store
+; CHECK-ORIGINS: br label
+; CHECK-ORIGINS: {{^[0-9]+}}:
 ; CHECK: store
 ; CHECK: ret void
 
@@ -57,14 +60,14 @@ entry:
 
 ; CHECK-LABEL: @AlignedStore
 ; CHECK: load {{.*}} @__msan_param_tls
-; ORIGINS: load {{.*}} @__msan_param_origin_tls
+; CHECK-ORIGINS: load {{.*}} @__msan_param_origin_tls
 ; CHECK: store {{.*}} align 32
-; ORIGINS: icmp
-; ORIGINS: br i1
-; ORIGINS: {{^[0-9]+}}:
-; ORIGINS: store {{.*}} align 32
-; ORIGINS: br label
-; ORIGINS: {{^[0-9]+}}:
+; CHECK-ORIGINS: icmp
+; CHECK-ORIGINS: br i1
+; CHECK-ORIGINS: {{^[0-9]+}}:
+; CHECK-ORIGINS: store {{.*}} align 32
+; CHECK-ORIGINS: br label
+; CHECK-ORIGINS: {{^[0-9]+}}:
 ; CHECK: store {{.*}} align 32
 ; CHECK: ret void
 
@@ -89,9 +92,9 @@ declare void @foo(...)
 ; CHECK-LABEL: @LoadAndCmp
 ; CHECK: %0 = load i32,
 ; CHECK: = load
-; ORIGINS: %[[ORIGIN:.*]] = load
-; NOORIGINS: call void @__msan_warning_noreturn()
-; ORIGINS: call void @__msan_warning_with_origin_noreturn(i32 %[[ORIGIN]])
+; CHECK-ORIGINS: %[[ORIGIN:.*]] = load
+; CHECK: call void @__msan_warning_with_origin_noreturn(i32
+; CHECK-ORIGINS-SAME %[[ORIGIN]])
 ; CHECK-CONT:
 ; CHECK-NEXT: unreachable
 ; CHECK: br i1 %tobool
@@ -143,8 +146,6 @@ entry:
 }
 
 ; CHECK-LABEL: @FuncWithPhi
-; NOORIGINS: call void @__msan_warning_noreturn()
-; ORIGINS: call void @__msan_warning_with_origin_noreturn(i32
 ; CHECK: = phi
 ; CHECK-NEXT: = phi
 ; CHECK: store
@@ -232,31 +233,6 @@ declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i1) n
 ; CHECK: call i8* @__msan_memcpy
 ; CHECK: ret void
 
-; memset.inline
-define void @MemSetInline(i8* nocapture %x) nounwind uwtable sanitize_memory {
-entry:
-  call void @llvm.memset.inline.p0i8.i64(i8* %x, i8 42, i64 10, i1 false)
-  ret void
-}
-
-declare void @llvm.memset.inline.p0i8.i64(i8* nocapture, i8, i64, i1) nounwind
-
-; CHECK-LABEL: @MemSetInline
-; CHECK: call i8* @__msan_memset
-; CHECK: ret void
-
-; memcpy.inline
-define void @MemCpyInline(i8* nocapture %x, i8* nocapture %y) nounwind uwtable sanitize_memory {
-entry:
-  call void @llvm.memcpy.inline.p0i8.p0i8.i64(i8* %x, i8* %y, i64 10, i1 false)
-  ret void
-}
-
-declare void @llvm.memcpy.inline.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i1) nounwind
-
-; CHECK-LABEL: @MemCpyInline
-; CHECK: call i8* @__msan_memcpy
-; CHECK: ret void
 
 ; memmove is lowered to a call
 define void @MemMove(i8* nocapture %x, i8* nocapture %y) nounwind uwtable sanitize_memory {
@@ -324,11 +300,11 @@ entry:
 ; CHECK-DAG: xor i32
 ; CHECK: or i32
 ; CHECK-DAG: select i1
-; ORIGINS-DAG: select
-; ORIGINS-DAG: select
+; CHECK-ORIGINS-DAG: select
+; CHECK-ORIGINS-DAG: select
 ; CHECK-DAG: select i1
 ; CHECK: store i32{{.*}}@__msan_retval_tls
-; ORIGINS: store i32{{.*}}@__msan_retval_origin_tls
+; CHECK-ORIGINS: store i32{{.*}}@__msan_retval_origin_tls
 ; CHECK: ret i32
 
 
@@ -348,11 +324,11 @@ entry:
 ; CHECK-DAG: xor <8 x i16>
 ; CHECK: or <8 x i16>
 ; CHECK-DAG: select <8 x i1>
-; ORIGINS-DAG: select
-; ORIGINS-DAG: select
+; CHECK-ORIGINS-DAG: select
+; CHECK-ORIGINS-DAG: select
 ; CHECK-DAG: select <8 x i1>
 ; CHECK: store <8 x i16>{{.*}}@__msan_retval_tls
-; ORIGINS: store i32{{.*}}@__msan_retval_origin_tls
+; CHECK-ORIGINS: store i32{{.*}}@__msan_retval_origin_tls
 ; CHECK: ret <8 x i16>
 
 
@@ -372,8 +348,8 @@ entry:
 ; CHECK-DAG: xor <8 x i16>
 ; CHECK: or <8 x i16>
 ; CHECK-DAG: select i1
-; ORIGINS-DAG: select i1
-; ORIGINS-DAG: select i1
+; CHECK-ORIGINS-DAG: select i1
+; CHECK-ORIGINS-DAG: select i1
 ; CHECK-DAG: select i1
 ; CHECK: ret <8 x i16>
 
@@ -387,8 +363,8 @@ entry:
 ; CHECK-LABEL: @SelectStruct
 ; CHECK: select i1 {{.*}}, { i64, i64 }
 ; CHECK-NEXT: select i1 {{.*}}, { i64, i64 } { i64 -1, i64 -1 }, { i64, i64 }
-; ORIGINS: select i1
-; ORIGINS: select i1
+; CHECK-ORIGINS: select i1
+; CHECK-ORIGINS: select i1
 ; CHECK-NEXT: select i1 {{.*}}, { i64, i64 }
 ; CHECK: ret { i64, i64 }
 
@@ -402,8 +378,8 @@ entry:
 ; CHECK-LABEL: @SelectStruct2
 ; CHECK: select i1 {{.*}}, { i64, i64 }
 ; CHECK-NEXT: select i1 {{.*}}, { i64, i64 } { i64 -1, i64 -1 }, { i64, i64 }
-; ORIGINS: select i1
-; ORIGINS: select i1
+; CHECK-ORIGINS: select i1
+; CHECK-ORIGINS: select i1
 ; CHECK-NEXT: select i1 {{.*}}, { i64*, double }
 ; CHECK: ret { i64*, double }
 
@@ -416,7 +392,7 @@ entry:
 
 ; CHECK-LABEL: @IntToPtr
 ; CHECK: load i64, i64*{{.*}}__msan_param_tls
-; ORIGINS-NEXT: load i32, i32*{{.*}}__msan_param_origin_tls
+; CHECK-ORIGINS-NEXT: load i32, i32*{{.*}}__msan_param_origin_tls
 ; CHECK-NEXT: call void @llvm.donothing
 ; CHECK-NEXT: inttoptr
 ; CHECK-NEXT: store i64{{.*}}__msan_retval_tls
@@ -448,8 +424,7 @@ entry:
 
 ; CHECK-LABEL: @Div
 ; CHECK: icmp
-; NOORIGINS: call void @__msan_warning_noreturn()
-; ORIGINS: call void @__msan_warning_with_origin_noreturn(i32
+; CHECK: call void @__msan_warning_with_origin
 ; CHECK-NOT: icmp
 ; CHECK: udiv
 ; CHECK-NOT: icmp
@@ -481,10 +456,10 @@ entry:
 
 ; CHECK-LABEL: @FNeg
 ; CHECK: %[[SA:.*]] = load i32,{{.*}}@__msan_param_tls
-; ORIGINS: %[[SB:.*]] = load i32,{{.*}}@__msan_param_origin_tls
+; CHECK-ORIGINS: %[[SB:.*]] = load i32,{{.*}}@__msan_param_origin_tls
 ; CHECK: = fneg float
 ; CHECK: store i32 %[[SA]], i32* {{.*}}@__msan_retval_tls
-; ORIGINS: store i32{{.*}}@__msan_retval_origin_tls
+; CHECK-ORIGINS: store i32{{.*}}@__msan_retval_origin_tls
 ; CHECK: ret float
 
 ; Check that we propagate shadow for x<0, x>=0, etc (i.e. sign bit tests)
@@ -496,9 +471,9 @@ define zeroext i1 @ICmpSLTZero(i32 %x) nounwind uwtable readnone sanitize_memory
 
 ; CHECK-LABEL: @ICmpSLTZero
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 define zeroext i1 @ICmpSGEZero(i32 %x) nounwind uwtable readnone sanitize_memory {
@@ -508,9 +483,9 @@ define zeroext i1 @ICmpSGEZero(i32 %x) nounwind uwtable readnone sanitize_memory
 
 ; CHECK-LABEL: @ICmpSGEZero
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp sge
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 define zeroext i1 @ICmpSGTZero(i32 %x) nounwind uwtable readnone sanitize_memory {
@@ -520,9 +495,9 @@ define zeroext i1 @ICmpSGTZero(i32 %x) nounwind uwtable readnone sanitize_memory
 
 ; CHECK-LABEL: @ICmpSGTZero
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp sgt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 define zeroext i1 @ICmpSLEZero(i32 %x) nounwind uwtable readnone sanitize_memory {
@@ -532,9 +507,9 @@ define zeroext i1 @ICmpSLEZero(i32 %x) nounwind uwtable readnone sanitize_memory
 
 ; CHECK-LABEL: @ICmpSLEZero
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp sle
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 
@@ -547,9 +522,9 @@ define zeroext i1 @ICmpSLTAllOnes(i32 %x) nounwind uwtable readnone sanitize_mem
 
 ; CHECK-LABEL: @ICmpSLTAllOnes
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 define zeroext i1 @ICmpSGEAllOnes(i32 %x) nounwind uwtable readnone sanitize_memory {
@@ -559,9 +534,9 @@ define zeroext i1 @ICmpSGEAllOnes(i32 %x) nounwind uwtable readnone sanitize_mem
 
 ; CHECK-LABEL: @ICmpSGEAllOnes
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp sge
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 define zeroext i1 @ICmpSGTAllOnes(i32 %x) nounwind uwtable readnone sanitize_memory {
@@ -571,9 +546,9 @@ define zeroext i1 @ICmpSGTAllOnes(i32 %x) nounwind uwtable readnone sanitize_mem
 
 ; CHECK-LABEL: @ICmpSGTAllOnes
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp sgt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 define zeroext i1 @ICmpSLEAllOnes(i32 %x) nounwind uwtable readnone sanitize_memory {
@@ -583,9 +558,9 @@ define zeroext i1 @ICmpSLEAllOnes(i32 %x) nounwind uwtable readnone sanitize_mem
 
 ; CHECK-LABEL: @ICmpSLEAllOnes
 ; CHECK: icmp slt
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp sle
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 
@@ -599,9 +574,9 @@ define <2 x i1> @ICmpSLT_vector_Zero(<2 x i32*> %x) nounwind uwtable readnone sa
 
 ; CHECK-LABEL: @ICmpSLT_vector_Zero
 ; CHECK: icmp slt <2 x i64>
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp slt <2 x i32*>
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret <2 x i1>
 
 ; Check that we propagate shadow for x<=-1, x>0, etc (i.e. sign bit tests)
@@ -614,9 +589,9 @@ define <2 x i1> @ICmpSLT_vector_AllOnes(<2 x i32> %x) nounwind uwtable readnone 
 
 ; CHECK-LABEL: @ICmpSLT_vector_AllOnes
 ; CHECK: icmp slt <2 x i32>
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp slt <2 x i32>
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret <2 x i1>
 
 
@@ -631,11 +606,11 @@ entry:
 
 ; CHECK-LABEL: @ICmpUGTConst
 ; CHECK: icmp ugt i32
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp ugt i32
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: icmp ugt i32
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i1
 
 
@@ -662,7 +637,7 @@ define i32 @ShadowLoadAlignmentSmall() nounwind uwtable sanitize_memory {
 ; CHECK-LABEL: @ShadowLoadAlignmentSmall
 ; CHECK: load volatile i32, i32* {{.*}} align 2
 ; CHECK: load i32, i32* {{.*}} align 2
-; ORIGINS: load i32, i32* {{.*}} align 4
+; CHECK-ORIGINS: load i32, i32* {{.*}} align 4
 ; CHECK: ret i32
 
 
@@ -677,8 +652,7 @@ define i32 @ExtractElement(<4 x i32> %vec, i32 %idx) sanitize_memory {
 
 ; CHECK-LABEL: @ExtractElement
 ; CHECK: extractelement
-; NOORIGINS: call void @__msan_warning_noreturn()
-; ORIGINS: call void @__msan_warning_with_origin_noreturn(i32
+; CHECK: call void @__msan_warning_with_origin
 ; CHECK: extractelement
 ; CHECK: ret i32
 
@@ -689,8 +663,7 @@ define <4 x i32> @InsertElement(<4 x i32> %vec, i32 %idx, i32 %x) sanitize_memor
 
 ; CHECK-LABEL: @InsertElement
 ; CHECK: insertelement
-; NOORIGINS: call void @__msan_warning_noreturn()
-; ORIGINS: call void @__msan_warning_with_origin_noreturn(i32
+; CHECK: call void @__msan_warning_with_origin
 ; CHECK: insertelement
 ; CHECK: ret <4 x i32>
 
@@ -702,7 +675,7 @@ define <4 x i32> @ShuffleVector(<4 x i32> %vec, <4 x i32> %vec1) sanitize_memory
 
 ; CHECK-LABEL: @ShuffleVector
 ; CHECK: shufflevector
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: shufflevector
 ; CHECK: ret <4 x i32>
 
@@ -716,11 +689,11 @@ define i32 @BSwap(i32 %x) nounwind uwtable readnone sanitize_memory {
 declare i32 @llvm.bswap.i32(i32) nounwind readnone
 
 ; CHECK-LABEL: @BSwap
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: @llvm.bswap.i32
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: @llvm.bswap.i32
-; CHECK-NOT: call void @__msan_warning
+; CHECK-NOT: call void @__msan_warning_with_origin
 ; CHECK: ret i32
 
 ; Test handling of vectors of pointers.
@@ -913,22 +886,22 @@ entry:
   ret { i64, i32 } %b
 }
 
-; ORIGINS: @make_pair_64_32
+; CHECK-ORIGINS: @make_pair_64_32
 ; First element shadow
-; ORIGINS: insertvalue { i64, i32 } { i64 -1, i32 -1 }, i64 {{.*}}, 0
+; CHECK-ORIGINS: insertvalue { i64, i32 } { i64 -1, i32 -1 }, i64 {{.*}}, 0
 ; First element origin
-; ORIGINS: icmp ne i64
-; ORIGINS: select i1
+; CHECK-ORIGINS: icmp ne i64
+; CHECK-ORIGINS: select i1
 ; First element app value
-; ORIGINS: insertvalue { i64, i32 } undef, i64 {{.*}}, 0
+; CHECK-ORIGINS: insertvalue { i64, i32 } undef, i64 {{.*}}, 0
 ; Second element shadow
-; ORIGINS: insertvalue { i64, i32 } {{.*}}, i32 {{.*}}, 1
+; CHECK-ORIGINS: insertvalue { i64, i32 } {{.*}}, i32 {{.*}}, 1
 ; Second element origin
-; ORIGINS: icmp ne i32
-; ORIGINS: select i1
+; CHECK-ORIGINS: icmp ne i32
+; CHECK-ORIGINS: select i1
 ; Second element app value
-; ORIGINS: insertvalue { i64, i32 } {{.*}}, i32 {{.*}}, 1
-; ORIGINS: ret { i64, i32 }
+; CHECK-ORIGINS: insertvalue { i64, i32 } {{.*}}, i32 {{.*}}, 1
+; CHECK-ORIGINS: ret { i64, i32 }
 
 
 ; Test shadow propagation for aggregates passed through ellipsis.

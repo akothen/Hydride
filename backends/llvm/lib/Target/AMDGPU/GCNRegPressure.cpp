@@ -18,6 +18,40 @@ using namespace llvm;
 
 #define DEBUG_TYPE "machine-scheduler"
 
+#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+LLVM_DUMP_METHOD
+void llvm::printLivesAt(SlotIndex SI,
+                        const LiveIntervals &LIS,
+                        const MachineRegisterInfo &MRI) {
+  dbgs() << "Live regs at " << SI << ": "
+         << *LIS.getInstructionFromIndex(SI);
+  unsigned Num = 0;
+  for (unsigned I = 0, E = MRI.getNumVirtRegs(); I != E; ++I) {
+    const Register Reg = Register::index2VirtReg(I);
+    if (!LIS.hasInterval(Reg))
+      continue;
+    const auto &LI = LIS.getInterval(Reg);
+    if (LI.hasSubRanges()) {
+      bool firstTime = true;
+      for (const auto &S : LI.subranges()) {
+        if (!S.liveAt(SI)) continue;
+        if (firstTime) {
+          dbgs() << "  " << printReg(Reg, MRI.getTargetRegisterInfo())
+                 << '\n';
+          firstTime = false;
+        }
+        dbgs() << "  " << S << '\n';
+        ++Num;
+      }
+    } else if (LI.liveAt(SI)) {
+      dbgs() << "  " << LI << '\n';
+      ++Num;
+    }
+  }
+  if (!Num) dbgs() << "  <none>\n";
+}
+#endif
+
 bool llvm::isEqual(const GCNRPTracker::LiveRegSet &S1,
                    const GCNRPTracker::LiveRegSet &S2) {
   if (S1.size() != S2.size())
@@ -135,23 +169,18 @@ bool GCNRegPressure::less(const GCNSubtarget &ST,
 
 #if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
 LLVM_DUMP_METHOD
-Printable llvm::print(const GCNRegPressure &RP, const GCNSubtarget *ST) {
-  return Printable([&RP, ST](raw_ostream &OS) {
-    OS << "VGPRs: " << RP.Value[GCNRegPressure::VGPR32] << ' '
-       << "AGPRs: " << RP.getAGPRNum();
-    if (ST)
-      OS << "(O"
-         << ST->getOccupancyWithNumVGPRs(RP.getVGPRNum(ST->hasGFX90AInsts()))
-         << ')';
-    OS << ", SGPRs: " << RP.getSGPRNum();
-    if (ST)
-      OS << "(O" << ST->getOccupancyWithNumSGPRs(RP.getSGPRNum()) << ')';
-    OS << ", LVGPR WT: " << RP.getVGPRTuplesWeight()
-       << ", LSGPR WT: " << RP.getSGPRTuplesWeight();
-    if (ST)
-      OS << " -> Occ: " << RP.getOccupancy(*ST);
-    OS << '\n';
-  });
+void GCNRegPressure::print(raw_ostream &OS, const GCNSubtarget *ST) const {
+  OS << "VGPRs: " << Value[VGPR32] << ' ';
+  OS << "AGPRs: " << Value[AGPR32];
+  if (ST) OS << "(O"
+             << ST->getOccupancyWithNumVGPRs(getVGPRNum(ST->hasGFX90AInsts()))
+             << ')';
+  OS << ", SGPRs: " << getSGPRNum();
+  if (ST) OS << "(O" << ST->getOccupancyWithNumSGPRs(getSGPRNum()) << ')';
+  OS << ", LVGPR WT: " << getVGPRTuplesWeight()
+     << ", LSGPR WT: " << getSGPRTuplesWeight();
+  if (ST) OS << " -> Occ: " << getOccupancy(*ST);
+  OS << '\n';
 }
 #endif
 
@@ -325,14 +354,12 @@ bool GCNDownwardRPTracker::reset(const MachineInstr &MI,
 
 bool GCNDownwardRPTracker::advanceBeforeNext() {
   assert(MRI && "call reset first");
-  if (!LastTrackedMI)
-    return NextMI == MBBEnd;
 
-  assert(NextMI == MBBEnd || !NextMI->isDebugInstr());
+  NextMI = skipDebugInstructionsForward(NextMI, MBBEnd);
+  if (NextMI == MBBEnd)
+    return false;
 
-  SlotIndex SI = NextMI == MBBEnd
-                     ? LIS.getInstructionIndex(*LastTrackedMI).getDeadSlot()
-                     : LIS.getInstructionIndex(*NextMI).getBaseIndex();
+  SlotIndex SI = LIS.getInstructionIndex(*NextMI).getBaseIndex();
   assert(SI.isValid());
 
   // Remove dead registers or mask bits.
@@ -357,9 +384,7 @@ bool GCNDownwardRPTracker::advanceBeforeNext() {
 
   MaxPressure = max(MaxPressure, CurPressure);
 
-  LastTrackedMI = nullptr;
-
-  return NextMI == MBBEnd;
+  return true;
 }
 
 void GCNDownwardRPTracker::advanceToNext() {
@@ -383,9 +408,9 @@ void GCNDownwardRPTracker::advanceToNext() {
 }
 
 bool GCNDownwardRPTracker::advance() {
-  if (NextMI == MBBEnd)
+  // If we have just called reset live set is actual.
+  if ((NextMI == MBBEnd) || (LastTrackedMI && !advanceBeforeNext()))
     return false;
-  advanceBeforeNext();
   advanceToNext();
   return true;
 }
@@ -405,29 +430,33 @@ bool GCNDownwardRPTracker::advance(MachineBasicBlock::const_iterator Begin,
 
 #if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
 LLVM_DUMP_METHOD
-Printable llvm::reportMismatch(const GCNRPTracker::LiveRegSet &LISLR,
-                               const GCNRPTracker::LiveRegSet &TrackedLR,
-                               const TargetRegisterInfo *TRI) {
-  return Printable([&LISLR, &TrackedLR, TRI](raw_ostream &OS) {
-    for (auto const &P : TrackedLR) {
-      auto I = LISLR.find(P.first);
-      if (I == LISLR.end()) {
-        OS << "  " << printReg(P.first, TRI) << ":L" << PrintLaneMask(P.second)
-           << " isn't found in LIS reported set\n";
-      } else if (I->second != P.second) {
-        OS << "  " << printReg(P.first, TRI)
-           << " masks doesn't match: LIS reported " << PrintLaneMask(I->second)
-           << ", tracked " << PrintLaneMask(P.second) << '\n';
-      }
+static void reportMismatch(const GCNRPTracker::LiveRegSet &LISLR,
+                           const GCNRPTracker::LiveRegSet &TrackedLR,
+                           const TargetRegisterInfo *TRI) {
+  for (auto const &P : TrackedLR) {
+    auto I = LISLR.find(P.first);
+    if (I == LISLR.end()) {
+      dbgs() << "  " << printReg(P.first, TRI)
+             << ":L" << PrintLaneMask(P.second)
+             << " isn't found in LIS reported set\n";
     }
-    for (auto const &P : LISLR) {
-      auto I = TrackedLR.find(P.first);
-      if (I == TrackedLR.end()) {
-        OS << "  " << printReg(P.first, TRI) << ":L" << PrintLaneMask(P.second)
-           << " isn't found in tracked set\n";
-      }
+    else if (I->second != P.second) {
+      dbgs() << "  " << printReg(P.first, TRI)
+        << " masks doesn't match: LIS reported "
+        << PrintLaneMask(I->second)
+        << ", tracked "
+        << PrintLaneMask(P.second)
+        << '\n';
     }
-  });
+  }
+  for (auto const &P : LISLR) {
+    auto I = TrackedLR.find(P.first);
+    if (I == TrackedLR.end()) {
+      dbgs() << "  " << printReg(P.first, TRI)
+             << ":L" << PrintLaneMask(P.second)
+             << " isn't found in tracked set\n";
+    }
+  }
 }
 
 bool GCNUpwardRPTracker::isValid() const {
@@ -437,38 +466,33 @@ bool GCNUpwardRPTracker::isValid() const {
 
   if (!isEqual(LISLR, TrackedLR)) {
     dbgs() << "\nGCNUpwardRPTracker error: Tracked and"
-              " LIS reported livesets mismatch:\n"
-           << print(LISLR, *MRI);
+              " LIS reported livesets mismatch:\n";
+    printLivesAt(SI, LIS, *MRI);
     reportMismatch(LISLR, TrackedLR, MRI->getTargetRegisterInfo());
     return false;
   }
 
   auto LISPressure = getRegPressure(*MRI, LISLR);
   if (LISPressure != CurPressure) {
-    dbgs() << "GCNUpwardRPTracker error: Pressure sets different\nTracked: "
-           << print(CurPressure) << "LIS rpt: " << print(LISPressure);
+    dbgs() << "GCNUpwardRPTracker error: Pressure sets different\nTracked: ";
+    CurPressure.print(dbgs());
+    dbgs() << "LIS rpt: ";
+    LISPressure.print(dbgs());
     return false;
   }
   return true;
 }
 
-LLVM_DUMP_METHOD
-Printable llvm::print(const GCNRPTracker::LiveRegSet &LiveRegs,
-                      const MachineRegisterInfo &MRI) {
-  return Printable([&LiveRegs, &MRI](raw_ostream &OS) {
-    const TargetRegisterInfo *TRI = MRI.getTargetRegisterInfo();
-    for (unsigned I = 0, E = MRI.getNumVirtRegs(); I != E; ++I) {
-      Register Reg = Register::index2VirtReg(I);
-      auto It = LiveRegs.find(Reg);
-      if (It != LiveRegs.end() && It->second.any())
-        OS << ' ' << printVRegOrUnit(Reg, TRI) << ':'
-           << PrintLaneMask(It->second);
-    }
-    OS << '\n';
-  });
+void GCNRPTracker::printLiveRegs(raw_ostream &OS, const LiveRegSet& LiveRegs,
+                                 const MachineRegisterInfo &MRI) {
+  const TargetRegisterInfo *TRI = MRI.getTargetRegisterInfo();
+  for (unsigned I = 0, E = MRI.getNumVirtRegs(); I != E; ++I) {
+    Register Reg = Register::index2VirtReg(I);
+    auto It = LiveRegs.find(Reg);
+    if (It != LiveRegs.end() && It->second.any())
+      OS << ' ' << printVRegOrUnit(Reg, TRI) << ':'
+         << PrintLaneMask(It->second);
+  }
+  OS << '\n';
 }
-
-LLVM_DUMP_METHOD
-void GCNRegPressure::dump() const { dbgs() << print(*this); }
-
 #endif

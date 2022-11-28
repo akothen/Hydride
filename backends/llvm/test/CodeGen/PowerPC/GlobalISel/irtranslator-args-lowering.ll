@@ -64,7 +64,7 @@ define void @foo_notrunc(<7 x i64> %x) {
   ret void
 }
 
-define void @foo_pt(ptr %x) {
+define void @foo_pt(<7 x i8>* %x) {
   ; CHECK-LABEL: name: foo_pt
   ; CHECK: bb.1 (%ir-block.0):
   ; CHECK:   liveins: $x3
@@ -91,7 +91,7 @@ entry:
   ret void
 }
 
-define void @foo_int(ptr %x) {
+define void @foo_int(i32* %x) {
   ; CHECK-LABEL: name: foo_int
   ; CHECK: bb.1 (%ir-block.0):
   ; CHECK:   liveins: $x3
@@ -100,7 +100,7 @@ define void @foo_int(ptr %x) {
   ret void
 }
 
-define void @foo(ptr %x) {
+define void @foo(float* %x) {
   ; CHECK-LABEL: name: foo
   ; CHECK: bb.1 (%ir-block.0):
   ; CHECK:   liveins: $x3

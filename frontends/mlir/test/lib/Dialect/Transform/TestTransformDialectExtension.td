@@ -14,20 +14,11 @@
 #ifndef MLIR_TESTTRANSFORMDIALECTEXTENSION_TD
 #define MLIR_TESTTRANSFORMDIALECTEXTENSION_TD
 
-include "mlir/IR/AttrTypeBase.td"
 include "mlir/IR/OpBase.td"
 include "mlir/Dialect/Transform/IR/TransformDialect.td"
 include "mlir/Dialect/Transform/IR/TransformEffects.td"
 include "mlir/Dialect/Transform/IR/TransformInterfaces.td"
 include "mlir/Dialect/PDL/IR/PDLTypes.td"
-
-def TestTransformTestDialectHandleType
-  : TypeDef<Transform_Dialect, "TestDialectOp",
-      [DeclareTypeInterfaceMethods<TransformTypeInterface>]> {
-  let description = [{Handle pointing to an op from the Test dialect.}];
-  let mnemonic = "test_dialect_op";
-  let assemblyFormat = "";
-}
 
 def TestProduceParamOrForwardOperandOp
   : Op<Transform_Dialect, "test_produce_param_or_forward_operand",
@@ -47,10 +38,8 @@ def TestConsumeOperand : Op<Transform_Dialect, "test_consume_operand",
      [DeclareOpInterfaceMethods<TransformOpInterface>]> {
   let arguments = (ins
     Arg<PDL_Operation, "",
-        [TransformMappingRead, TransformMappingFree]>:$operand,
-    Arg<Optional<PDL_Operation>, "",
-        [TransformMappingRead, TransformMappingFree]>:$second_operand);
-  let assemblyFormat = "$operand (`,` $second_operand^)? attr-dict";
+        [TransformMappingRead, TransformMappingFree]>:$operand);
+  let assemblyFormat = "$operand attr-dict";
   let cppNamespace = "::mlir::test";
 }
 
@@ -69,18 +58,17 @@ def TestPrintRemarkAtOperandOp
   : Op<Transform_Dialect, "test_print_remark_at_operand",
        [DeclareOpInterfaceMethods<TransformOpInterface>]> {
   let arguments = (ins 
-    Arg<TransformTypeInterface, "",
+    Arg<PDL_Operation, "",
         [TransformMappingRead, PayloadIRRead]>:$operand,
     StrAttr:$message);
-  let assemblyFormat =
-    "$operand `,` $message attr-dict `:` type($operand)";
+  let assemblyFormat = "$operand `,` $message attr-dict";
   let cppNamespace = "::mlir::test";
 }
 
 def TestAddTestExtensionOp
   : Op<Transform_Dialect, "test_add_test_extension",
        [DeclareOpInterfaceMethods<TransformOpInterface>,
-        NoMemoryEffect]> {
+        NoSideEffect]> {
   let arguments = (ins StrAttr:$message);
   let assemblyFormat = "$message attr-dict";
   let cppNamespace = "::mlir::test";
@@ -108,7 +96,7 @@ def TestRemapOperandPayloadToSelfOp
 def TestRemoveTestExtensionOp
   : Op<Transform_Dialect, "test_remove_test_extension",
        [DeclareOpInterfaceMethods<TransformOpInterface>,
-        NoMemoryEffect]> {
+        NoSideEffect]> {
   let assemblyFormat = "attr-dict";
   let cppNamespace = "::mlir::test";
 }
@@ -240,25 +228,6 @@ def TestPrintNumberOfAssociatedPayloadIROps
         DeclareOpInterfaceMethods<MemoryEffectsOpInterface>]> {
   let arguments = (ins PDL_Operation:$handle);
   let assemblyFormat = "$handle attr-dict";
-  let cppNamespace = "::mlir::test";
-}
-
-def TestCopyPayloadOp
-  : Op<Transform_Dialect, "test_copy_payload",
-       [DeclareOpInterfaceMethods<TransformOpInterface>]> {
-  let arguments = (ins Arg<PDL_Operation, "", [TransformMappingRead]>:$handle);
-  let results = (outs Res<PDL_Operation, "",
-      [TransformMappingAlloc, TransformMappingWrite]>:$copy);
-  let cppNamespace = "::mlir::test";
-  let assemblyFormat = "$handle attr-dict";
-}
-
-def TestReportNumberOfTrackedHandlesNestedUnder
-  : Op<Transform_Dialect, "test_report_number_of_tracked_handles_nested_under",
-    [DeclareOpInterfaceMethods<MemoryEffectsOpInterface>,
-     DeclareOpInterfaceMethods<TransformOpInterface>]> {
-  let arguments = (ins PDL_Operation:$target);
-  let assemblyFormat = "$target attr-dict";
   let cppNamespace = "::mlir::test";
 }
 

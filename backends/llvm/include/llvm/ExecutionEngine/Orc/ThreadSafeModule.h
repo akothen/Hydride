@@ -37,7 +37,7 @@ private:
 
 public:
   // RAII based lock for ThreadSafeContext.
-  class [[nodiscard]] Lock {
+  class LLVM_NODISCARD Lock {
   public:
     Lock(std::shared_ptr<State> S) : S(std::move(S)), L(this->S->Mutex) {}
 

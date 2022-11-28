@@ -3,8 +3,8 @@
 
 define void @bar() {
 entry:
-  call void @foo()
-  call void @long_undef_name()
+  call void bitcast (void (...)* @foo to void ()*)()
+  call void bitcast (void (...)* @long_undef_name to void ()*)()
   ret void
 }
 

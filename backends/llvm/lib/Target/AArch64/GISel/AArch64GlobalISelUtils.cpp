@@ -161,7 +161,7 @@ void AArch64GISelUtils::changeVectorFCMPPredToAArch64CC(
     break;
   case CmpInst::FCMP_UNO:
     Invert = true;
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case CmpInst::FCMP_ORD:
     CondCode = AArch64CC::MI;
     CondCode2 = AArch64CC::GE;

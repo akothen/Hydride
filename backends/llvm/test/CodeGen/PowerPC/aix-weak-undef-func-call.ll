@@ -3,7 +3,7 @@
 
 define void @bar() {
 entry:
-  call void @foo()
+  call void bitcast (void (...)* @foo to void ()*)()
   ret void
 }
 

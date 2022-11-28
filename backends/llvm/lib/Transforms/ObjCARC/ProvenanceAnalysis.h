@@ -26,7 +26,6 @@
 #define LLVM_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
 
 #include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/PassManager.h"
 #include "llvm/IR/ValueHandle.h"
 #include <utility>
 

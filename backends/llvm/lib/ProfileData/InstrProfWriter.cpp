@@ -530,10 +530,13 @@ Error InstrProfWriter::validateRecord(const InstrProfRecord &Func) {
     for (uint32_t S = 0; S < NS; S++) {
       uint32_t ND = Func.getNumValueDataForSite(VK, S);
       std::unique_ptr<InstrProfValueData[]> VD = Func.getValueForSite(VK, S);
-      DenseSet<uint64_t> SeenValues;
+      bool WasZero = false;
       for (uint32_t I = 0; I < ND; I++)
-        if ((VK != IPVK_IndirectCallTarget) && !SeenValues.insert(VD[I].Value).second)
-          return make_error<InstrProfError>(instrprof_error::invalid_prof);
+        if ((VK != IPVK_IndirectCallTarget) && (VD[I].Value == 0)) {
+          if (WasZero)
+            return make_error<InstrProfError>(instrprof_error::invalid_prof);
+          WasZero = true;
+        }
     }
   }
 

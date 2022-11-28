@@ -11,12 +11,14 @@
 
 #      SINGLE:[
 # SINGLE-NEXT:  {
-# SINGLE-NEXT:    "FileSummary": {
-# SINGLE-NEXT:      "File": "{{.*}}/obj",
-# SINGLE-NEXT:      "Format": "elf64-x86-64",
-# SINGLE-NEXT:      "Arch": "x86_64",
-# SINGLE-NEXT:      "AddressSize": "64bit",
-# SINGLE-NEXT:      "LoadName": "<Not found>"
+# SINGLE-NEXT:    "{{.*}}/obj": {
+# SINGLE-NEXT:      "FileSummary": {
+# SINGLE-NEXT:        "File": "{{.*}}/obj",
+# SINGLE-NEXT:        "Format": "elf64-x86-64",
+# SINGLE-NEXT:        "Arch": "x86_64",
+# SINGLE-NEXT:        "AddressSize": "64bit",
+# SINGLE-NEXT:        "LoadName": "<Not found>"
+# SINGLE-NEXT:      }
 # SINGLE-NEXT:    }
 # SINGLE-NEXT:  }
 # SINGLE-NEXT:]
@@ -28,21 +30,25 @@
 
 #      MULTI:[
 # MULTI-NEXT:  {
-# MULTI-NEXT:    "FileSummary": {
-# MULTI-NEXT:      "File": "{{.*}}/obj",
-# MULTI-NEXT:      "Format": "elf64-x86-64",
-# MULTI-NEXT:      "Arch": "x86_64",
-# MULTI-NEXT:      "AddressSize": "64bit",
-# MULTI-NEXT:      "LoadName": "<Not found>"
+# MULTI-NEXT:    "{{.*}}/obj": {
+# MULTI-NEXT:      "FileSummary": {
+# MULTI-NEXT:        "File": "{{.*}}/obj",
+# MULTI-NEXT:        "Format": "elf64-x86-64",
+# MULTI-NEXT:        "Arch": "x86_64",
+# MULTI-NEXT:        "AddressSize": "64bit",
+# MULTI-NEXT:        "LoadName": "<Not found>"
+# MULTI-NEXT:      }
 # MULTI-NEXT:    }
 # MULTI-NEXT:  },
 # MULTI-NEXT:  {
-# MULTI-NEXT:    "FileSummary": {
-# MULTI-NEXT:      "File": "{{.*}}/obj",
-# MULTI-NEXT:      "Format": "elf64-x86-64",
-# MULTI-NEXT:      "Arch": "x86_64",
-# MULTI-NEXT:      "AddressSize": "64bit",
-# MULTI-NEXT:      "LoadName": "<Not found>"
+# MULTI-NEXT:    "{{.*}}/obj": {
+# MULTI-NEXT:      "FileSummary": {
+# MULTI-NEXT:        "File": "{{.*}}/obj",
+# MULTI-NEXT:        "Format": "elf64-x86-64",
+# MULTI-NEXT:        "Arch": "x86_64",
+# MULTI-NEXT:        "AddressSize": "64bit",
+# MULTI-NEXT:        "LoadName": "<Not found>"
+# MULTI-NEXT:      }
 # MULTI-NEXT:    }
 # MULTI-NEXT:  }
 # MULTI-NEXT:]
@@ -56,12 +62,14 @@
 
 #      ARCH-SINGLE:[
 # ARCH-SINGLE-NEXT:  {
-# ARCH-SINGLE-NEXT:    "FileSummary": {
-# ARCH-SINGLE-NEXT:      "File": "{{.*}}.archive-single(obj)",
-# ARCH-SINGLE-NEXT:      "Format": "elf64-x86-64",
-# ARCH-SINGLE-NEXT:      "Arch": "x86_64",
-# ARCH-SINGLE-NEXT:      "AddressSize": "64bit",
-# ARCH-SINGLE-NEXT:      "LoadName": "<Not found>"
+# ARCH-SINGLE-NEXT:    "{{.*}}.archive-single(obj)": {
+# ARCH-SINGLE-NEXT:      "FileSummary": {
+# ARCH-SINGLE-NEXT:        "File": "{{.*}}.archive-single(obj)",
+# ARCH-SINGLE-NEXT:        "Format": "elf64-x86-64",
+# ARCH-SINGLE-NEXT:        "Arch": "x86_64",
+# ARCH-SINGLE-NEXT:        "AddressSize": "64bit",
+# ARCH-SINGLE-NEXT:        "LoadName": "<Not found>"
+# ARCH-SINGLE-NEXT:      }
 # ARCH-SINGLE-NEXT:    }
 # ARCH-SINGLE-NEXT:  }
 # ARCH-SINGLE-NEXT:]
@@ -75,21 +83,25 @@
 
 #      ARCH-MULTI:[
 # ARCH-MULTI-NEXT:  {
-# ARCH-MULTI-NEXT:    "FileSummary": {
-# ARCH-MULTI-NEXT:      "File": "{{.*}}.archive-multiple(obj)",
-# ARCH-MULTI-NEXT:      "Format": "elf64-x86-64",
-# ARCH-MULTI-NEXT:      "Arch": "x86_64",
-# ARCH-MULTI-NEXT:      "AddressSize": "64bit",
-# ARCH-MULTI-NEXT:      "LoadName": "<Not found>"
+# ARCH-MULTI-NEXT:    "{{.*}}.archive-multiple(obj)": {
+# ARCH-MULTI-NEXT:      "FileSummary": {
+# ARCH-MULTI-NEXT:        "File": "{{.*}}.archive-multiple(obj)",
+# ARCH-MULTI-NEXT:        "Format": "elf64-x86-64",
+# ARCH-MULTI-NEXT:        "Arch": "x86_64",
+# ARCH-MULTI-NEXT:        "AddressSize": "64bit",
+# ARCH-MULTI-NEXT:        "LoadName": "<Not found>"
+# ARCH-MULTI-NEXT:      }
 # ARCH-MULTI-NEXT:    }
 # ARCH-MULTI-NEXT:  },
 # ARCH-MULTI-NEXT:  {
-# ARCH-MULTI-NEXT:    "FileSummary": {
-# ARCH-MULTI-NEXT:      "File": "{{.*}}.archive-multiple(obj)",
-# ARCH-MULTI-NEXT:      "Format": "elf64-x86-64",
-# ARCH-MULTI-NEXT:      "Arch": "x86_64",
-# ARCH-MULTI-NEXT:      "AddressSize": "64bit",
-# ARCH-MULTI-NEXT:      "LoadName": "<Not found>"
+# ARCH-MULTI-NEXT:    "{{.*}}.archive-multiple(obj)": {
+# ARCH-MULTI-NEXT:      "FileSummary": {
+# ARCH-MULTI-NEXT:        "File": "{{.*}}.archive-multiple(obj)",
+# ARCH-MULTI-NEXT:        "Format": "elf64-x86-64",
+# ARCH-MULTI-NEXT:        "Arch": "x86_64",
+# ARCH-MULTI-NEXT:        "AddressSize": "64bit",
+# ARCH-MULTI-NEXT:        "LoadName": "<Not found>"
+# ARCH-MULTI-NEXT:      }
 # ARCH-MULTI-NEXT:    }
 # ARCH-MULTI-NEXT:  }
 # ARCH-MULTI-NEXT:]

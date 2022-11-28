@@ -9,9 +9,9 @@
 declare void @__assert_fail();
 
 define dso_local i8 @_ZNK5clang9NamedDecl23getLinkageAndVisibilityEv(
-    ptr %this) {
+    %"class.clang::NamedDecl"* %this) {
 entry:
-  %tobool = icmp eq ptr %this, null
+  %tobool = icmp eq %"class.clang::NamedDecl"* %this, null
   br i1 %tobool, label %cond.false, label %exit
 
 cond.false:
@@ -19,9 +19,12 @@ cond.false:
   unreachable
 
 exit:
-  %bf.load = load i32, ptr %this, align 4
+  %DeclKind = getelementptr inbounds
+                            %"class.clang::NamedDecl",
+                            %"class.clang::NamedDecl"* %this, i64 0, i32 0
+  %bf.load = load i32, i32* %DeclKind, align 4
   %call.i = tail call i8 @LVComputationKind(
-    ptr %this,
+    %"class.clang::NamedDecl"* %this,
     i32 %bf.load)
   ret i8 %call.i
 
@@ -35,7 +38,7 @@ exit:
 }
 
 define dso_local fastcc i8 @LVComputationKind(
-    ptr %D,
+    %"class.clang::NamedDecl"* %D,
     i32 %computation) {
   ret i8 0
 }

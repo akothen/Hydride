@@ -83,10 +83,7 @@ user_code.entry:                                  ; preds = %entry
   br label %common.ret
 }
 
-define weak i32 @__kmpc_target_init(%struct.ident_t*, i8, i1, i1) {
-  ret i32 0
-}
-
+declare i32 @__kmpc_target_init(%struct.ident_t*, i8, i1, i1) local_unnamed_addr
 
 ; Function Attrs: convergent
 declare void @unknown() local_unnamed_addr #1

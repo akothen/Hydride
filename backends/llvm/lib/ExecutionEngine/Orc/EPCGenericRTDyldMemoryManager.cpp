@@ -142,7 +142,7 @@ void EPCGenericRTDyldMemoryManager::reserveAllocationSpace(
   }
 
   std::lock_guard<std::mutex> Lock(M);
-  Unmapped.push_back(SectionAllocGroup());
+  Unmapped.push_back(AllocGroup());
   Unmapped.back().RemoteCode = {
       *TargetAllocAddr, ExecutorAddrDiff(alignTo(CodeSize, EPC.getPageSize()))};
   Unmapped.back().RemoteROData = {
@@ -170,11 +170,10 @@ void EPCGenericRTDyldMemoryManager::registerEHFrames(uint8_t *Addr,
     return;
 
   ExecutorAddr LA(LoadAddr);
-  for (auto &SecAllocGroup : llvm::reverse(Unfinalized)) {
-    if (SecAllocGroup.RemoteCode.contains(LA) ||
-        SecAllocGroup.RemoteROData.contains(LA) ||
-        SecAllocGroup.RemoteRWData.contains(LA)) {
-      SecAllocGroup.UnfinalizedEHFrames.push_back({LA, Size});
+  for (auto &Alloc : llvm::reverse(Unfinalized)) {
+    if (Alloc.RemoteCode.contains(LA) || Alloc.RemoteROData.contains(LA) ||
+        Alloc.RemoteRWData.contains(LA)) {
+      Alloc.UnfinalizedEHFrames.push_back({LA, Size});
       return;
     }
   }
@@ -205,29 +204,35 @@ bool EPCGenericRTDyldMemoryManager::finalizeMemory(std::string *ErrMsg) {
   LLVM_DEBUG(dbgs() << "Allocator " << (void *)this << " finalizing:\n");
 
   // If there's an error then bail out here.
-  std::vector<SectionAllocGroup> SecAllocGroups;
+  std::vector<AllocGroup> Allocs;
   {
     std::lock_guard<std::mutex> Lock(M);
     if (ErrMsg && !this->ErrMsg.empty()) {
       *ErrMsg = std::move(this->ErrMsg);
       return true;
     }
-    std::swap(SecAllocGroups, Unfinalized);
+    std::swap(Allocs, Unfinalized);
   }
 
   // Loop over unfinalized objects to make finalization requests.
-  for (auto &SecAllocGroup : SecAllocGroups) {
+  for (auto &ObjAllocs : Allocs) {
 
-    MemProt SegMemProts[3] = {MemProt::Read | MemProt::Exec, MemProt::Read,
-                              MemProt::Read | MemProt::Write};
+    tpctypes::WireProtectionFlags SegProts[3] = {
+        tpctypes::toWireProtectionFlags(
+            static_cast<sys::Memory::ProtectionFlags>(sys::Memory::MF_READ |
+                                                      sys::Memory::MF_EXEC)),
+        tpctypes::toWireProtectionFlags(sys::Memory::MF_READ),
+        tpctypes::toWireProtectionFlags(
+            static_cast<sys::Memory::ProtectionFlags>(sys::Memory::MF_READ |
+                                                      sys::Memory::MF_WRITE))};
 
-    ExecutorAddrRange *RemoteAddrs[3] = {&SecAllocGroup.RemoteCode,
-                                         &SecAllocGroup.RemoteROData,
-                                         &SecAllocGroup.RemoteRWData};
+    ExecutorAddrRange *RemoteAddrs[3] = {&ObjAllocs.RemoteCode,
+                                         &ObjAllocs.RemoteROData,
+                                         &ObjAllocs.RemoteRWData};
 
-    std::vector<SectionAlloc> *SegSections[3] = {&SecAllocGroup.CodeAllocs,
-                                                 &SecAllocGroup.RODataAllocs,
-                                                 &SecAllocGroup.RWDataAllocs};
+    std::vector<Alloc> *SegSections[3] = {&ObjAllocs.CodeAllocs,
+                                          &ObjAllocs.RODataAllocs,
+                                          &ObjAllocs.RWDataAllocs};
 
     tpctypes::FinalizeRequest FR;
     std::unique_ptr<char[]> AggregateContents[3];
@@ -235,7 +240,7 @@ bool EPCGenericRTDyldMemoryManager::finalizeMemory(std::string *ErrMsg) {
     for (unsigned I = 0; I != 3; ++I) {
       FR.Segments.push_back({});
       auto &Seg = FR.Segments.back();
-      Seg.AG = SegMemProts[I];
+      Seg.Prot = SegProts[I];
       Seg.Addr = RemoteAddrs[I]->Start;
       for (auto &SecAlloc : *SegSections[I]) {
         Seg.Size = alignTo(Seg.Size, SecAlloc.Align);
@@ -256,7 +261,7 @@ bool EPCGenericRTDyldMemoryManager::finalizeMemory(std::string *ErrMsg) {
       Seg.Content = {AggregateContents[I].get(), SecOffset};
     }
 
-    for (auto &Frame : SecAllocGroup.UnfinalizedEHFrames)
+    for (auto &Frame : ObjAllocs.UnfinalizedEHFrames)
       FR.Actions.push_back(
           {cantFail(
                WrapperFunctionCall::Create<SPSArgList<SPSExecutorAddrRange>>(
@@ -292,8 +297,7 @@ bool EPCGenericRTDyldMemoryManager::finalizeMemory(std::string *ErrMsg) {
 }
 
 void EPCGenericRTDyldMemoryManager::mapAllocsToRemoteAddrs(
-    RuntimeDyld &Dyld, std::vector<SectionAlloc> &Allocs,
-    ExecutorAddr NextAddr) {
+    RuntimeDyld &Dyld, std::vector<Alloc> &Allocs, ExecutorAddr NextAddr) {
   for (auto &Alloc : Allocs) {
     NextAddr.setValue(alignTo(NextAddr.getValue(), Alloc.Align));
     LLVM_DEBUG({

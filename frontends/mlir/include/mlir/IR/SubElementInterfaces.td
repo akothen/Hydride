@@ -32,11 +32,7 @@ class SubElementInterfaceBase<string interfaceName, string attrOrType,
         method does not recurse into sub elements.
       }], "void", "walkImmediateSubElements",
       (ins "llvm::function_ref<void(mlir::Attribute)>":$walkAttrsFn,
-           "llvm::function_ref<void(mlir::Type)>":$walkTypesFn),
-      /*methodBody=*/[{}], /*defaultImplementation=*/[{
-        ::mlir::detail::walkImmediateSubElementsImpl(
-          }] # derivedValue # [{, walkAttrsFn, walkTypesFn);
-      }]
+           "llvm::function_ref<void(mlir::Type)>":$walkTypesFn)
     >,
     InterfaceMethod<
       /*desc=*/[{
@@ -46,18 +42,10 @@ class SubElementInterfaceBase<string interfaceName, string attrOrType,
         would replace the very first attribute given by `walkImmediateSubElements`.
         On success, the new instance with the values replaced is returned. If replacement
         fails, nullptr is returned.
-
-        Note that replacing the sub-elements of mutable types or attributes is
-        not currently supported by the interface. If an implementing type or
-        attribute is mutable, it should return `nullptr` if it has no mechanism
-        for replacing sub elements.
-      }], attrOrType, "replaceImmediateSubElements",
-      (ins "::llvm::ArrayRef<::mlir::Attribute>":$replAttrs,
-           "::llvm::ArrayRef<::mlir::Type>":$replTypes),
-      /*methodBody=*/[{}], /*defaultImplementation=*/[{
-        return ::mlir::detail::replaceImmediateSubElementsImpl(
-           }] # derivedValue # [{, replAttrs, replTypes);
-      }]>,
+      }], attrOrType, "replaceImmediateSubElements", (ins
+        "::llvm::ArrayRef<::mlir::Attribute>":$replAttrs,
+        "::llvm::ArrayRef<::mlir::Type>":$replTypes
+      )>,
   ];
 
   code extraClassDeclaration = [{
@@ -66,14 +54,11 @@ class SubElementInterfaceBase<string interfaceName, string attrOrType,
                          llvm::function_ref<void(mlir::Type)> walkTypesFn);
 
     /// Recursively replace all of the nested sub-attributes and sub-types using the
-    /// provided map functions. Returns nullptr in the case of failure. See
-    /// `AttrTypeReplacer` for information on the support replacement function types.
-    template <typename... ReplacementFns>
-    }] # attrOrType # [{ replaceSubElements(ReplacementFns &&... replacementFns) {
-      AttrTypeReplacer replacer;
-      (replacer.addReplacement(std::forward<ReplacementFns>(replacementFns)), ...);
-      return replacer.replace(*this);
-    }
+    /// provided map functions. Returns nullptr in the case of failure.
+    }] # attrOrType # [{ replaceSubElements(
+      llvm::function_ref<mlir::Attribute(mlir::Attribute)> replaceAttrFn,
+      llvm::function_ref<mlir::Type(mlir::Type)> replaceTypeFn
+    );
   }];
   code extraTraitClassDeclaration = [{
     /// Walk all of the held sub-attributes and sub-types.
@@ -84,13 +69,20 @@ class SubElementInterfaceBase<string interfaceName, string attrOrType,
     }
 
     /// Recursively replace all of the nested sub-attributes and sub-types using the
-    /// provided map functions. Returns nullptr in the case of failure. See
-    /// `AttrTypeReplacer` for information on the support replacement function types.
-    template <typename... ReplacementFns>
-    }] # attrOrType # [{ replaceSubElements(ReplacementFns &&... replacementFns) {
-      AttrTypeReplacer replacer;
-      (replacer.addReplacement(std::forward<ReplacementFns>(replacementFns)), ...);
-      return replacer.replace(}] # derivedValue # [{);
+    /// provided map functions. Returns nullptr in the case of failure.
+    }] # attrOrType # [{ replaceSubElements(
+      llvm::function_ref<mlir::Attribute(mlir::Attribute)> replaceAttrFn,
+      llvm::function_ref<mlir::Type(mlir::Type)> replaceTypeFn) {
+      }] # interfaceName # " interface(" # derivedValue # [{);
+      return interface.replaceSubElements(replaceAttrFn, replaceTypeFn);
+    }
+
+    /// Recursively replace all of the nested sub-attributes and sub-types using the
+    /// provided map functions. Returns nullptr in the case of failure.
+    }] # attrOrType # [{ replaceImmediateSubElements(
+      llvm::ArrayRef<mlir::Attribute> replAttrs,
+      llvm::function_ref<mlir::Type(mlir::Type)> replTypes) {
+      return nullptr;
     }
   }];
   code extraSharedClassDeclaration = [{
@@ -101,6 +93,21 @@ class SubElementInterfaceBase<string interfaceName, string attrOrType,
     /// Walk all of the held sub-types.
     void walkSubTypes(llvm::function_ref<void(mlir::Type)> walkFn) {
       walkSubElements(/*walkAttrsFn=*/[](mlir::Attribute) {}, walkFn);
+    }
+    
+    /// Recursively replace all of the nested sub-attributes using the provided
+    /// map function. Returns nullptr in the case of failure.
+    }] # attrOrType # [{ replaceSubElements(
+      llvm::function_ref<mlir::Attribute(mlir::Attribute)> replaceAttrFn) {
+      return replaceSubElements(
+        replaceAttrFn, [](mlir::Type type) { return type; });
+    }
+    /// Recursively replace all of the nested sub-types using the provided map
+    /// function. Returns nullptr in the case of failure.
+    }] # attrOrType # [{ replaceSubElements(
+      llvm::function_ref<mlir::Type(mlir::Type)> replaceTypeFn) {
+      return replaceSubElements(
+        [](mlir::Attribute attr) { return attr; }, replaceTypeFn);
     }
   }];
 }
@@ -116,9 +123,6 @@ def SubElementAttrInterface
   let description = [{
     An interface used to query and manipulate sub-elements, such as sub-types
     and sub-attributes of a composite attribute.
-    
-    To support the introspection of custom parameters that hold sub-elements,
-    a specialization of the `AttrTypeSubElementHandler` class must be provided.
   }];
 }
 
@@ -133,9 +137,6 @@ def SubElementTypeInterface
   let description = [{
     An interface used to query and manipulate sub-elements, such as sub-types
     and sub-attributes of a composite type.
-    
-    To support the introspection of custom parameters that hold sub-elements,
-    a specialization of the `AttrTypeSubElementHandler` class must be provided.
   }];
 }
 

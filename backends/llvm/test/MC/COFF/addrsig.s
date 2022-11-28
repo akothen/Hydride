@@ -14,41 +14,29 @@
 // CHECK-NEXT:   IMAGE_SCN_LNK_REMOVE (0x800)
 // CHECK-NEXT: ]
 // CHECK-NEXT: SectionData (
-// CHECK-NEXT:   0000: 080B0A02
+// CHECK-NEXT:   0000: 080A0B02
 // CHECK-NEXT: )
 
 // CHECK: Symbols [
-// CHECK:      Name:
-// CHECK-SAME: {{^}} .text
+// CHECK: Name: .text
 // CHECK: AuxSectionDef
-// CHECK:      Name:
-// CHECK-SAME: {{^}} .data
+// CHECK: Name: .data
 // CHECK: AuxSectionDef
-// CHECK:      Name:
-// CHECK-SAME: {{^}} .bss
+// CHECK: Name: .bss
 // CHECK: AuxSectionDef
-// CHECK:      Name:
-// CHECK-SAME: {{^}} .llvm_addrsig
+// CHECK: Name: .llvm_addrsig
 // CHECK: AuxSectionDef
-// CHECK:      Name:
-// CHECK-SAME: {{^}} g1
-// CHECK:      Name:
-// CHECK-SAME: {{^}} g2
-// CHECK:      Name:
-// CHECK-SAME: {{^}} local
-// CHECK:      Name:
-// CHECK-SAME: {{^}} g3
-// CHECK-NOT:  Name:
-// CHECK: }
+// CHECK: Name: g1
+// CHECK: Name: g2
+// CHECK: Name: g3
+// CHECK: Name: local
 
 // CHECK:      Addrsig [
 // CHECK-NEXT:   Sym: g1 (8)
-// CHECK-NEXT:   Sym: g3 (11)
-// CHECK-NEXT:   Sym: local (10)
+// CHECK-NEXT:   Sym: g3 (10)
+// CHECK-NEXT:   Sym: local (11)
 // CHECK-NEXT:   Sym: .data (2)
 // CHECK-NEXT: ]
-
-.globl g1
 
 .addrsig
 .addrsig_sym g1
@@ -56,11 +44,8 @@
 .addrsig_sym g3
 .addrsig_sym local
 .addrsig_sym .Llocal
-.addrsig_sym .Lunseen
-.addrsig_sym unseen
 
 local:
-.globl g3
 
 .data
 .Llocal:

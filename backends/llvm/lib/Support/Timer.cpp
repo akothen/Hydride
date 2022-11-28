@@ -499,8 +499,7 @@ const char *TimerGroup::printAllJSONValues(raw_ostream &OS, const char *delim) {
   return delim;
 }
 
-void TimerGroup::constructForStatistics() {
-  (void)getLibSupportInfoOutputFilename();
+void TimerGroup::ConstructTimerLists() {
   (void)*NamedGroupedTimers;
 }
 

@@ -77,7 +77,6 @@ def sub_32_hi  : SubRegIndex<32, 32>;
 // instructions.
 
 let RegAltNameIndices = [ABIRegAltName] in {
-  let isConstant = true in
   def X0  : RISCVReg<0, "x0", ["zero"]>, DwarfRegNum<[0]>;
   let CostPerUse = [0, 1] in {
   def X1  : RISCVReg<1, "x1", ["ra"]>, DwarfRegNum<[1]>;
@@ -459,7 +458,6 @@ let RegAltNameIndices = [ABIRegAltName] in {
   def VL     : RISCVReg<0, "vl", ["vl"]>;
   def VXSAT  : RISCVReg<0, "vxsat", ["vxsat"]>;
   def VXRM   : RISCVReg<0, "vxrm", ["vxrm"]>;
-  let isConstant = true in
   def VLENB  : RISCVReg<0, "vlenb", ["vlenb"]>,
                DwarfRegNum<[!add(4096, SysRegVLENB.Encoding)]>;
 }

@@ -7,6 +7,7 @@ define i32 @remove_dead_blocks() {
 ; CHECK-LABEL: @remove_dead_blocks(
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    ret i32 1
+; CHECK-NEXT:  }
 ;
 entry:
   ret i32 1
@@ -24,6 +25,7 @@ define i32 @simp1() {
 ; CHECK-NEXT:    ret i32 1
 ; CHECK:       bb.1:
 ; CHECK-NEXT:    ret i32 2
+; CHECK-NEXT:  }
 ;
 entry:
   ret i32 1
@@ -44,6 +46,7 @@ define i32 @remove_dead_block_with_phi() {
 ; CHECK-NEXT:    br label [[BB_2:%.*]]
 ; CHECK:       bb.2:
 ; CHECK-NEXT:    ret i32 1
+; CHECK-NEXT:  }
 ;
 entry:
   br label %bb.2
@@ -60,6 +63,7 @@ define i32 @remove_dead_blocks_remaining_uses(i32 %a) {
 ; CHECK-LABEL: @remove_dead_blocks_remaining_uses(
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    ret i32 1
+; CHECK-NEXT:  }
 ;
 entry:
   ret i32 1
@@ -77,11 +81,12 @@ define i32 @remove_dead_blocks_remaining_uses2(i32 %a, i1 %cond) {
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    ret i32 1
 ; CHECK:       bb.2:
-; CHECK-NEXT:    [[RES2:%.*]] = add i32 poison, 10
-; CHECK-NEXT:    [[RES3:%.*]] = mul i32 [[RES2]], poison
+; CHECK-NEXT:    [[RES2:%.*]] = add i32 undef, 10
+; CHECK-NEXT:    [[RES3:%.*]] = mul i32 [[RES2]], undef
 ; CHECK-NEXT:    ret i32 [[RES3]]
 ; CHECK:       bb.3:
-; CHECK-NEXT:    ret i32 poison
+; CHECK-NEXT:    ret i32 undef
+; CHECK-NEXT:  }
 ;
 entry:
   ret i32 1

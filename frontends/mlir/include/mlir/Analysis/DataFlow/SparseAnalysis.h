@@ -34,12 +34,18 @@ public:
   /// Lattices can only be created for values.
   AbstractSparseLattice(Value value) : AnalysisState(value) {}
 
-  /// Return the program point this lattice is located at.
-  Value getPoint() const { return AnalysisState::getPoint().get<Value>(); }
-
   /// Join the information contained in 'rhs' into this lattice. Returns
   /// if the value of the lattice changed.
   virtual ChangeResult join(const AbstractSparseLattice &rhs) = 0;
+
+  /// Returns true if the lattice element is at fixpoint and further calls to
+  /// `join` will not update the value of the element.
+  virtual bool isAtFixpoint() const = 0;
+
+  /// Mark the lattice element as having reached a pessimistic fixpoint. This
+  /// means that the lattice may potentially have conflicting value states, and
+  /// only the most conservative value should be relied on.
+  virtual ChangeResult markPessimisticFixpoint() = 0;
 
   /// When the lattice gets updated, propagate an update to users of the value
   /// using its use-def chain to subscribed analyses.
@@ -74,23 +80,43 @@ private:
 template <typename ValueT>
 class Lattice : public AbstractSparseLattice {
 public:
-  using AbstractSparseLattice::AbstractSparseLattice;
-
-  /// Return the program point this lattice is located at.
-  Value getPoint() const { return point.get<Value>(); }
+  /// Construct a lattice with a known value.
+  explicit Lattice(Value value)
+      : AbstractSparseLattice(value),
+        knownValue(ValueT::getPessimisticValueState(value)) {}
 
   /// Return the value held by this lattice. This requires that the value is
   /// initialized.
-  ValueT &getValue() { return value; }
+  ValueT &getValue() {
+    assert(!isUninitialized() && "expected known lattice element");
+    return *optimisticValue;
+  }
   const ValueT &getValue() const {
     return const_cast<Lattice<ValueT> *>(this)->getValue();
   }
+
+  /// Returns true if the value of this lattice hasn't yet been initialized.
+  bool isUninitialized() const override { return !optimisticValue.has_value(); }
+  /// Force the initialization of the element by setting it to its pessimistic
+  /// fixpoint.
+  ChangeResult defaultInitialize() override {
+    return markPessimisticFixpoint();
+  }
+
+  /// Returns true if the lattice has reached a fixpoint. A fixpoint is when
+  /// the information optimistically assumed to be true is the same as the
+  /// information known to be true.
+  bool isAtFixpoint() const override { return optimisticValue == knownValue; }
 
   /// Join the information contained in the 'rhs' lattice into this
   /// lattice. Returns if the state of the current lattice changed.
   ChangeResult join(const AbstractSparseLattice &rhs) override {
     const Lattice<ValueT> &rhsLattice =
         static_cast<const Lattice<ValueT> &>(rhs);
+
+    // If we are at a fixpoint, or rhs is uninitialized, there is nothing to do.
+    if (isAtFixpoint() || rhsLattice.isUninitialized())
+      return ChangeResult::NoChange;
 
     // Join the rhs value into this lattice.
     return join(rhsLattice.getValue());
@@ -99,27 +125,58 @@ public:
   /// Join the information contained in the 'rhs' value into this
   /// lattice. Returns if the state of the current lattice changed.
   ChangeResult join(const ValueT &rhs) {
+    // If the current lattice is uninitialized, copy the rhs value.
+    if (isUninitialized()) {
+      optimisticValue = rhs;
+      return ChangeResult::Change;
+    }
+
     // Otherwise, join rhs with the current optimistic value.
-    ValueT newValue = ValueT::join(value, rhs);
-    assert(ValueT::join(newValue, value) == newValue &&
+    ValueT newValue = ValueT::join(*optimisticValue, rhs);
+    assert(ValueT::join(newValue, *optimisticValue) == newValue &&
            "expected `join` to be monotonic");
     assert(ValueT::join(newValue, rhs) == newValue &&
            "expected `join` to be monotonic");
 
     // Update the current optimistic value if something changed.
-    if (newValue == value)
+    if (newValue == optimisticValue)
       return ChangeResult::NoChange;
 
-    value = newValue;
+    optimisticValue = newValue;
+    return ChangeResult::Change;
+  }
+
+  /// Mark the lattice element as having reached a pessimistic fixpoint. This
+  /// means that the lattice may potentially have conflicting value states,
+  /// and only the conservatively known value state should be relied on.
+  ChangeResult markPessimisticFixpoint() override {
+    if (isAtFixpoint())
+      return ChangeResult::NoChange;
+
+    // For this fixed point, we take whatever we knew to be true and set that
+    // to our optimistic value.
+    optimisticValue = knownValue;
     return ChangeResult::Change;
   }
 
   /// Print the lattice element.
-  void print(raw_ostream &os) const override { value.print(os); }
+  void print(raw_ostream &os) const override {
+    os << "[";
+    knownValue.print(os);
+    os << ", ";
+    if (optimisticValue)
+      optimisticValue->print(os);
+    else
+      os << "<NULL>";
+    os << "]";
+  }
 
 private:
-  /// The currently computed value that is optimistically assumed to be true.
-  ValueT value;
+  /// The value that is conservatively known to be true.
+  ValueT knownValue;
+  /// The currently computed value that is optimistically assumed to be true,
+  /// or None if the lattice element is uninitialized.
+  Optional<ValueT> optimisticValue;
 };
 
 //===----------------------------------------------------------------------===//
@@ -170,9 +227,9 @@ protected:
   const AbstractSparseLattice *getLatticeElementFor(ProgramPoint point,
                                                     Value value);
 
-  /// Set the given lattice element(s) at control flow entry point(s).
-  virtual void setToEntryState(AbstractSparseLattice *lattice) = 0;
-  void setAllToEntryStates(ArrayRef<AbstractSparseLattice *> lattices);
+  /// Mark the given lattice elements as having reached their pessimistic
+  /// fixpoints and propagate an update if any changed.
+  void markAllPessimisticFixpoint(ArrayRef<AbstractSparseLattice *> lattices);
 
   /// Join the lattice element and propagate and update if it changed.
   void join(AbstractSparseLattice *lhs, const AbstractSparseLattice &rhs);
@@ -235,8 +292,8 @@ public:
                                             const RegionSuccessor &successor,
                                             ArrayRef<StateT *> argLattices,
                                             unsigned firstIndex) {
-    setAllToEntryStates(argLattices.take_front(firstIndex));
-    setAllToEntryStates(argLattices.drop_front(
+    markAllPessimisticFixpoint(argLattices.take_front(firstIndex));
+    markAllPessimisticFixpoint(argLattices.drop_front(
         firstIndex + successor.getSuccessorInputs().size()));
   }
 
@@ -253,10 +310,10 @@ protected:
         AbstractSparseDataFlowAnalysis::getLatticeElementFor(point, value));
   }
 
-  /// Set the given lattice element(s) at control flow entry point(s).
-  virtual void setToEntryState(StateT *lattice) = 0;
-  void setAllToEntryStates(ArrayRef<StateT *> lattices) {
-    AbstractSparseDataFlowAnalysis::setAllToEntryStates(
+  /// Mark the lattice elements of a range of values as having reached their
+  /// pessimistic fixpoint.
+  void markAllPessimisticFixpoint(ArrayRef<StateT *> lattices) {
+    AbstractSparseDataFlowAnalysis::markAllPessimisticFixpoint(
         {reinterpret_cast<AbstractSparseLattice *const *>(lattices.begin()),
          lattices.size()});
   }
@@ -283,9 +340,6 @@ private:
         {reinterpret_cast<StateT *const *>(argLattices.begin()),
          argLattices.size()},
         firstIndex);
-  }
-  void setToEntryState(AbstractSparseLattice *lattice) override {
-    return setToEntryState(reinterpret_cast<StateT *>(lattice));
   }
 };
 

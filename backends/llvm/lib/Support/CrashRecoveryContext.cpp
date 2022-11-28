@@ -10,6 +10,7 @@
 #include "llvm/Config/llvm-config.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/ExitCodes.h"
+#include "llvm/Support/ManagedStatic.h"
 #include "llvm/Support/Signals.h"
 #include "llvm/Support/ThreadLocal.h"
 #include "llvm/Support/thread.h"
@@ -22,10 +23,8 @@ namespace {
 
 struct CrashRecoveryContextImpl;
 
-sys::ThreadLocal<const CrashRecoveryContextImpl> &getCurrentContext() {
-  static sys::ThreadLocal<const CrashRecoveryContextImpl> CurrentContext;
-  return CurrentContext;
-}
+static ManagedStatic<
+    sys::ThreadLocal<const CrashRecoveryContextImpl> > CurrentContext;
 
 struct CrashRecoveryContextImpl {
   // When threads are disabled, this links up all active
@@ -43,12 +42,12 @@ struct CrashRecoveryContextImpl {
 public:
   CrashRecoveryContextImpl(CrashRecoveryContext *CRC) noexcept
       : CRC(CRC), Failed(false), SwitchedThread(false), ValidJumpBuffer(false) {
-    Next = getCurrentContext().get();
-    getCurrentContext().set(this);
+    Next = CurrentContext->get();
+    CurrentContext->set(this);
   }
   ~CrashRecoveryContextImpl() {
     if (!SwitchedThread)
-      getCurrentContext().set(Next);
+      CurrentContext->set(Next);
   }
 
   /// Called when the separate crash-recovery thread was finished, to
@@ -66,7 +65,7 @@ public:
   void HandleCrash(int RetCode, uintptr_t Context) {
     // Eliminate the current context entry, to avoid re-entering in case the
     // cleanup code crashes.
-    getCurrentContext().set(Next);
+    CurrentContext->set(Next);
 
     assert(!Failed && "Crash recovery context already failed!");
     Failed = true;
@@ -84,20 +83,13 @@ public:
     // this occurs when using SEH on Windows with MSVC or clang-cl.
   }
 };
+} // namespace
 
-std::mutex &getCrashRecoveryContextMutex() {
-  static std::mutex CrashRecoveryContextMutex;
-  return CrashRecoveryContextMutex;
-}
-
+static ManagedStatic<std::mutex> gCrashRecoveryContextMutex;
 static bool gCrashRecoveryEnabled = false;
 
-sys::ThreadLocal<const CrashRecoveryContext> &getIsRecoveringFromCrash() {
-  static sys::ThreadLocal<const CrashRecoveryContext> IsRecoveringFromCrash;
-  return IsRecoveringFromCrash;
-}
-
-} // namespace
+static ManagedStatic<sys::ThreadLocal<const CrashRecoveryContext>>
+       tlIsRecoveringFromCrash;
 
 static void installExceptionOrSignalHandlers();
 static void uninstallExceptionOrSignalHandlers();
@@ -114,8 +106,8 @@ CrashRecoveryContext::CrashRecoveryContext() {
 CrashRecoveryContext::~CrashRecoveryContext() {
   // Reclaim registered resources.
   CrashRecoveryContextCleanup *i = head;
-  const CrashRecoveryContext *PC = getIsRecoveringFromCrash().get();
-  getIsRecoveringFromCrash().set(this);
+  const CrashRecoveryContext *PC = tlIsRecoveringFromCrash->get();
+  tlIsRecoveringFromCrash->set(this);
   while (i) {
     CrashRecoveryContextCleanup *tmp = i;
     i = tmp->next;
@@ -123,21 +115,21 @@ CrashRecoveryContext::~CrashRecoveryContext() {
     tmp->recoverResources();
     delete tmp;
   }
-  getIsRecoveringFromCrash().set(PC);
+  tlIsRecoveringFromCrash->set(PC);
 
   CrashRecoveryContextImpl *CRCI = (CrashRecoveryContextImpl *) Impl;
   delete CRCI;
 }
 
 bool CrashRecoveryContext::isRecoveringFromCrash() {
-  return getIsRecoveringFromCrash().get() != nullptr;
+  return tlIsRecoveringFromCrash->get() != nullptr;
 }
 
 CrashRecoveryContext *CrashRecoveryContext::GetCurrent() {
   if (!gCrashRecoveryEnabled)
     return nullptr;
 
-  const CrashRecoveryContextImpl *CRCI = getCurrentContext().get();
+  const CrashRecoveryContextImpl *CRCI = CurrentContext->get();
   if (!CRCI)
     return nullptr;
 
@@ -145,7 +137,7 @@ CrashRecoveryContext *CrashRecoveryContext::GetCurrent() {
 }
 
 void CrashRecoveryContext::Enable() {
-  std::lock_guard<std::mutex> L(getCrashRecoveryContextMutex());
+  std::lock_guard<std::mutex> L(*gCrashRecoveryContextMutex);
   // FIXME: Shouldn't this be a refcount or something?
   if (gCrashRecoveryEnabled)
     return;
@@ -154,7 +146,7 @@ void CrashRecoveryContext::Enable() {
 }
 
 void CrashRecoveryContext::Disable() {
-  std::lock_guard<std::mutex> L(getCrashRecoveryContextMutex());
+  std::lock_guard<std::mutex> L(*gCrashRecoveryContextMutex);
   if (!gCrashRecoveryEnabled)
     return;
   gCrashRecoveryEnabled = false;
@@ -207,7 +199,7 @@ static void uninstallExceptionOrSignalHandlers() {}
 // occur inside the __except evaluation block
 static int ExceptionFilter(_EXCEPTION_POINTERS *Except) {
   // Lookup the current thread local recovery object.
-  const CrashRecoveryContextImpl *CRCI = getCurrentContext().get();
+  const CrashRecoveryContextImpl *CRCI = CurrentContext->get();
 
   if (!CRCI) {
     // Something has gone horribly wrong, so let's just tell everyone
@@ -284,7 +276,7 @@ static LONG CALLBACK ExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo)
   }
 
   // Lookup the current thread local recovery object.
-  const CrashRecoveryContextImpl *CRCI = getCurrentContext().get();
+  const CrashRecoveryContextImpl *CRCI = CurrentContext->get();
 
   if (!CRCI) {
     // Something has gone horribly wrong, so let's just tell everyone
@@ -353,12 +345,12 @@ static void uninstallExceptionOrSignalHandlers() {
 
 static const int Signals[] =
     { SIGABRT, SIGBUS, SIGFPE, SIGILL, SIGSEGV, SIGTRAP };
-static const unsigned NumSignals = std::size(Signals);
+static const unsigned NumSignals = array_lengthof(Signals);
 static struct sigaction PrevActions[NumSignals];
 
 static void CrashRecoverySignalHandler(int Signal) {
   // Lookup the current thread local recovery object.
-  const CrashRecoveryContextImpl *CRCI = getCurrentContext().get();
+  const CrashRecoveryContextImpl *CRCI = CurrentContext->get();
 
   if (!CRCI) {
     // We didn't find a crash recovery context -- this means either we got a

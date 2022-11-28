@@ -286,17 +286,19 @@ def TestTypeSpaces : Test_Type<"TestTypeSpaceS"> {
 }
 
 class DefaultValuedAPFloat<string value>
-    : DefaultValuedParameter<"llvm::APFloat", "llvm::APFloat(" # value # ")"> {
-  let comparator = "$_lhs.bitwiseIsEqual($_rhs)";
-  let parser = [{ [&]() -> mlir::FailureOr<llvm::APFloat> {
+    : DefaultValuedParameter<"llvm::Optional<llvm::APFloat>",
+                             "llvm::Optional<llvm::APFloat>(" # value # ")"> {
+  let comparator = "$_lhs->bitwiseIsEqual(*$_rhs)";
+  let parser = [{ [&]() -> mlir::FailureOr<llvm::Optional<llvm::APFloat>> {
     mlir::FloatAttr attr;
     auto result = $_parser.parseOptionalAttribute(attr);
-    if (result.has_value() && mlir::succeeded(*result))
-      return attr.getValue();
-    if (!result.has_value())
-      return llvm::APFloat(}] # value # [{);
+    if (result.hasValue() && mlir::succeeded(*result))
+      return {attr.getValue()};
+    if (!result.hasValue())
+      return llvm::Optional<llvm::APFloat>();
     return mlir::failure();
   }() }];
+  let printer = "$_printer << *$_self";
 }
 
 def TestTypeAPFloat : Test_Type<"TestTypeAPFloat"> {
@@ -328,19 +330,6 @@ def TestTypeCustomString : Test_Type<"TestTypeCustomString"> {
   let mnemonic = "custom_type_string";
   let assemblyFormat = [{ `<` custom<FooString>($foo)
                               custom<BarString>(ref($foo)) `>` }];
-}
-
-def TestTypeElseAnchor : Test_Type<"TestTypeElseAnchor"> {
-  let parameters = (ins OptionalParameter<"mlir::Optional<int>">:$a);
-  let mnemonic = "else_anchor";
-  let assemblyFormat = "`<` (`?`) : ($a^)? `>`";
-}
-
-def TestTypeElseAnchorStruct : Test_Type<"TestTypeElseAnchorStruct"> {
-  let parameters = (ins OptionalParameter<"mlir::Optional<int>">:$a,
-                        OptionalParameter<"mlir::Optional<int>">:$b);
-  let mnemonic = "else_anchor_struct";
-  let assemblyFormat = "`<` (`?`) : (struct($a, $b)^)? `>`";
 }
 
 #endif // TEST_TYPEDEFS

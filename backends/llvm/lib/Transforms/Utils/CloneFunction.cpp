@@ -46,7 +46,7 @@ BasicBlock *llvm::CloneBasicBlock(const BasicBlock *BB, ValueToValueMapTy &VMap,
   if (BB->hasName())
     NewBB->setName(BB->getName() + NameSuffix);
 
-  bool hasCalls = false, hasDynamicAllocas = false, hasMemProfMetadata = false;
+  bool hasCalls = false, hasDynamicAllocas = false;
   Module *TheModule = F ? F->getParent() : nullptr;
 
   // Loop over all instructions, and copy them over.
@@ -60,10 +60,7 @@ BasicBlock *llvm::CloneBasicBlock(const BasicBlock *BB, ValueToValueMapTy &VMap,
     NewBB->getInstList().push_back(NewInst);
     VMap[&I] = NewInst; // Add instruction map to value.
 
-    if (isa<CallInst>(I) && !I.isDebugOrPseudoInst()) {
-      hasCalls = true;
-      hasMemProfMetadata |= I.hasMetadata(LLVMContext::MD_memprof);
-    }
+    hasCalls |= (isa<CallInst>(I) && !I.isDebugOrPseudoInst());
     if (const AllocaInst *AI = dyn_cast<AllocaInst>(&I)) {
       if (!AI->isStaticAlloca()) {
         hasDynamicAllocas = true;
@@ -73,7 +70,6 @@ BasicBlock *llvm::CloneBasicBlock(const BasicBlock *BB, ValueToValueMapTy &VMap,
 
   if (CodeInfo) {
     CodeInfo->ContainsCalls |= hasCalls;
-    CodeInfo->ContainsMemProfMetadata |= hasMemProfMetadata;
     CodeInfo->ContainsDynamicAllocas |= hasDynamicAllocas;
   }
   return NewBB;
@@ -475,7 +471,6 @@ void PruningFunctionCloner::CloneBlock(
   }
 
   bool hasCalls = false, hasDynamicAllocas = false, hasStaticAllocas = false;
-  bool hasMemProfMetadata = false;
 
   // Loop over all instructions, and copy them over, DCE'ing as we go.  This
   // loop doesn't include the terminator.
@@ -520,10 +515,7 @@ void PruningFunctionCloner::CloneBlock(
       NewInst->setName(II->getName() + NameSuffix);
     VMap[&*II] = NewInst; // Add instruction map to value.
     NewBB->getInstList().push_back(NewInst);
-    if (isa<CallInst>(II) && !II->isDebugOrPseudoInst()) {
-      hasCalls = true;
-      hasMemProfMetadata |= II->hasMetadata(LLVMContext::MD_memprof);
-    }
+    hasCalls |= (isa<CallInst>(II) && !II->isDebugOrPseudoInst());
 
     if (CodeInfo) {
       CodeInfo->OrigVMap[&*II] = NewInst;
@@ -597,7 +589,6 @@ void PruningFunctionCloner::CloneBlock(
 
   if (CodeInfo) {
     CodeInfo->ContainsCalls |= hasCalls;
-    CodeInfo->ContainsMemProfMetadata |= hasMemProfMetadata;
     CodeInfo->ContainsDynamicAllocas |= hasDynamicAllocas;
     CodeInfo->ContainsDynamicAllocas |=
         hasStaticAllocas && BB != &BB->getParent()->front();
@@ -1050,7 +1041,7 @@ void llvm::cloneNoAliasScopes(ArrayRef<MDNode *> NoAliasDeclScopes,
   MDBuilder MDB(Context);
 
   for (auto *ScopeList : NoAliasDeclScopes) {
-    for (const auto &MDOperand : ScopeList->operands()) {
+    for (auto &MDOperand : ScopeList->operands()) {
       if (MDNode *MD = dyn_cast<MDNode>(MDOperand)) {
         AliasScopeNode SNANode(MD);
 
@@ -1075,7 +1066,7 @@ void llvm::adaptNoAliasScopes(Instruction *I,
   auto CloneScopeList = [&](const MDNode *ScopeList) -> MDNode * {
     bool NeedsReplacement = false;
     SmallVector<Metadata *, 8> NewScopeList;
-    for (const auto &MDOp : ScopeList->operands()) {
+    for (auto &MDOp : ScopeList->operands()) {
       if (MDNode *MD = dyn_cast<MDNode>(MDOp)) {
         if (auto *NewMD = ClonedScopes.lookup(MD)) {
           NewScopeList.push_back(NewMD);

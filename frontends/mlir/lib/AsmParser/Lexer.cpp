@@ -161,7 +161,7 @@ Token Lexer::lexToken() {
         curPtr += 2;
         return formToken(Token::file_metadata_end, tokStart);
       }
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case '!':
     case '^':
     case '%':
@@ -265,7 +265,7 @@ void Lexer::skipComment() {
         --curPtr;
         return;
       }
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     default:
       // Skip over other characters.
       break;
@@ -415,7 +415,7 @@ Token Lexer::lexString(const char *tokStart) {
       // include it.  If it is the end of file, then it is an error.
       if (curPtr - 1 != curBuffer.end())
         continue;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case '\n':
     case '\v':
     case '\f':

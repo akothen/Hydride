@@ -848,19 +848,18 @@ Constant *llvm::ConstantFoldUnaryInstruction(unsigned Opcode, Constant *C) {
 
     Type *Ty = IntegerType::get(VTy->getContext(), 32);
     // Fast path for splatted constants.
-    if (Constant *Splat = C->getSplatValue())
-      if (Constant *Elt = ConstantFoldUnaryInstruction(Opcode, Splat))
-        return ConstantVector::getSplat(VTy->getElementCount(), Elt);
+    if (Constant *Splat = C->getSplatValue()) {
+      Constant *Elt = ConstantExpr::get(Opcode, Splat);
+      return ConstantVector::getSplat(VTy->getElementCount(), Elt);
+    }
 
     // Fold each element and create a vector constant from those constants.
     SmallVector<Constant *, 16> Result;
     for (unsigned i = 0, e = VTy->getNumElements(); i != e; ++i) {
       Constant *ExtractIdx = ConstantInt::get(Ty, i);
       Constant *Elt = ConstantExpr::getExtractElement(C, ExtractIdx);
-      Constant *Res = ConstantFoldUnaryInstruction(Opcode, Elt);
-      if (!Res)
-        return nullptr;
-      Result.push_back(Res);
+
+      Result.push_back(ConstantExpr::get(Opcode, Elt));
     }
 
     return ConstantVector::get(Result);
@@ -904,7 +903,7 @@ Constant *llvm::ConstantFoldBinaryInstruction(unsigned Opcode, Constant *C1,
         // Handle undef ^ undef -> 0 special case. This is a common
         // idiom (misuse).
         return Constant::getNullValue(C1->getType());
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Instruction::Add:
     case Instruction::Sub:
       return UndefValue::get(C1->getType());
@@ -980,7 +979,7 @@ Constant *llvm::ConstantFoldBinaryInstruction(unsigned Opcode, Constant *C1,
       // -0.0 - undef --> undef (consistent with "fneg undef")
       if (match(C1, m_NegZeroFP()) && isa<UndefValue>(C2))
         return C2;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Instruction::FAdd:
     case Instruction::FMul:
     case Instruction::FDiv:
@@ -1514,7 +1513,7 @@ static ICmpInst::Predicate evaluateICmpRelation(Constant *V1, Constant *V2,
       if (const GlobalValue *GV = dyn_cast<GlobalValue>(CE1Op0))
         if (const GlobalValue *GV2 = dyn_cast<GlobalValue>(V2))
           return areGlobalsPotentiallyEqual(GV, GV2);
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Instruction::UIToFP:
     case Instruction::SIToFP:
     case Instruction::ZExt:
@@ -1579,25 +1578,6 @@ static ICmpInst::Predicate evaluateICmpRelation(Constant *V1, Constant *V2,
   return ICmpInst::BAD_ICMP_PREDICATE;
 }
 
-static Constant *constantFoldCompareGlobalToNull(CmpInst::Predicate Predicate,
-                                                 Constant *C1, Constant *C2) {
-  const GlobalValue *GV = dyn_cast<GlobalValue>(C2);
-  if (!GV || !C1->isNullValue())
-    return nullptr;
-
-  // Don't try to evaluate aliases.  External weak GV can be null.
-  if (!isa<GlobalAlias>(GV) && !GV->hasExternalWeakLinkage() &&
-      !NullPointerIsDefined(nullptr /* F */,
-                            GV->getType()->getAddressSpace())) {
-    if (Predicate == ICmpInst::ICMP_EQ)
-      return ConstantInt::getFalse(C1->getContext());
-    else if (Predicate == ICmpInst::ICMP_NE)
-      return ConstantInt::getTrue(C1->getContext());
-  }
-
-  return nullptr;
-}
-
 Constant *llvm::ConstantFoldCompareInstruction(CmpInst::Predicate Predicate,
                                                Constant *C1, Constant *C2) {
   Type *ResultTy;
@@ -1637,14 +1617,31 @@ Constant *llvm::ConstantFoldCompareInstruction(CmpInst::Predicate Predicate,
   }
 
   // icmp eq/ne(null,GV) -> false/true
-  if (Constant *Folded = constantFoldCompareGlobalToNull(Predicate, C1, C2))
-    return Folded;
-
+  if (C1->isNullValue()) {
+    if (const GlobalValue *GV = dyn_cast<GlobalValue>(C2))
+      // Don't try to evaluate aliases.  External weak GV can be null.
+      if (!isa<GlobalAlias>(GV) && !GV->hasExternalWeakLinkage() &&
+          !NullPointerIsDefined(nullptr /* F */,
+                                GV->getType()->getAddressSpace())) {
+        if (Predicate == ICmpInst::ICMP_EQ)
+          return ConstantInt::getFalse(C1->getContext());
+        else if (Predicate == ICmpInst::ICMP_NE)
+          return ConstantInt::getTrue(C1->getContext());
+      }
   // icmp eq/ne(GV,null) -> false/true
-  if (Constant *Folded = constantFoldCompareGlobalToNull(Predicate, C2, C1))
-    return Folded;
+  } else if (C2->isNullValue()) {
+    if (const GlobalValue *GV = dyn_cast<GlobalValue>(C1)) {
+      // Don't try to evaluate aliases.  External weak GV can be null.
+      if (!isa<GlobalAlias>(GV) && !GV->hasExternalWeakLinkage() &&
+          !NullPointerIsDefined(nullptr /* F */,
+                                GV->getType()->getAddressSpace())) {
+        if (Predicate == ICmpInst::ICMP_EQ)
+          return ConstantInt::getFalse(C1->getContext());
+        else if (Predicate == ICmpInst::ICMP_NE)
+          return ConstantInt::getTrue(C1->getContext());
+      }
+    }
 
-  if (C2->isNullValue()) {
     // The caller is expected to commute the operands if the constant expression
     // is C2.
     // C1 >= 0 --> true

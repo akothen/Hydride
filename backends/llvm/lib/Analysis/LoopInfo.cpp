@@ -68,16 +68,15 @@ bool Loop::hasLoopInvariantOperands(const Instruction *I) const {
 }
 
 bool Loop::makeLoopInvariant(Value *V, bool &Changed, Instruction *InsertPt,
-                             MemorySSAUpdater *MSSAU,
-                             ScalarEvolution *SE) const {
+                             MemorySSAUpdater *MSSAU) const {
   if (Instruction *I = dyn_cast<Instruction>(V))
-    return makeLoopInvariant(I, Changed, InsertPt, MSSAU, SE);
+    return makeLoopInvariant(I, Changed, InsertPt, MSSAU);
   return true; // All non-instructions are loop-invariant.
 }
 
 bool Loop::makeLoopInvariant(Instruction *I, bool &Changed,
-                             Instruction *InsertPt, MemorySSAUpdater *MSSAU,
-                             ScalarEvolution *SE) const {
+                             Instruction *InsertPt,
+                             MemorySSAUpdater *MSSAU) const {
   // Test if the value is already loop-invariant.
   if (isLoopInvariant(I))
     return true;
@@ -98,7 +97,7 @@ bool Loop::makeLoopInvariant(Instruction *I, bool &Changed,
   }
   // Don't hoist instructions with loop-variant operands.
   for (Value *Operand : I->operands())
-    if (!makeLoopInvariant(Operand, Changed, InsertPt, MSSAU, SE))
+    if (!makeLoopInvariant(Operand, Changed, InsertPt, MSSAU))
       return false;
 
   // Hoist.
@@ -113,9 +112,6 @@ bool Loop::makeLoopInvariant(Instruction *I, bool &Changed,
   // condition. Conservatively strip it here so that we don't give any wrong
   // information to the optimizer.
   I->dropUnknownNonDebugMetadata();
-
-  if (SE)
-    SE->forgetBlockAndLoopDispositions(I);
 
   Changed = true;
   return true;

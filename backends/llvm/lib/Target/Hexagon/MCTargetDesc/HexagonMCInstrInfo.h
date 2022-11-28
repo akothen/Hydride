@@ -15,7 +15,6 @@
 
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/iterator.h"
 #include "llvm/ADT/iterator_range.h"
 #include "llvm/MC/MCInst.h"
 #include "llvm/Support/MathExtras.h"
@@ -42,9 +41,8 @@ public:
 
 namespace Hexagon {
 
-class PacketIterator
-    : public llvm::iterator_facade_base<
-          PacketIterator, std::forward_iterator_tag, const MCInst> {
+class PacketIterator : public std::iterator<std::forward_iterator_tag,
+    PacketIterator> {
   MCInstrInfo const &MCII;
   MCInst::const_iterator BundleCurrent;
   MCInst::const_iterator BundleEnd;
@@ -58,6 +56,9 @@ public:
   PacketIterator &operator++();
   MCInst const &operator*() const;
   bool operator==(PacketIterator const &Other) const;
+  bool operator!=(PacketIterator const &Other) const {
+    return !(*this == Other);
+  }
 };
 
 } // end namespace Hexagon

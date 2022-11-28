@@ -15,7 +15,6 @@
 #ifndef LLVM_IR_INLINEASM_H
 #define LLVM_IR_INLINEASM_H
 
-#include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/IR/Value.h"
 #include "llvm/Support/ErrorHandling.h"
@@ -84,7 +83,6 @@ public:
 
   const std::string &getAsmString() const { return AsmString; }
   const std::string &getConstraintString() const { return Constraints; }
-  void collectAsmStrs(SmallVectorImpl<StringRef> &AsmStrs) const;
 
   /// This static method can be used by the parser to check to see if the
   /// specified constraint string is legal for the type.
@@ -243,7 +241,6 @@ public:
     Kind_Clobber = 4,            // Clobbered register, "~r".
     Kind_Imm = 5,                // Immediate.
     Kind_Mem = 6,                // Memory operand, "m", or an address, "p".
-    Kind_Func = 7,               // Address operand of function call
 
     // Memory constraint codes.
     // These could be tablegenerated but there's little need to do that since
@@ -255,7 +252,6 @@ public:
     Constraint_Unknown = 0,
     Constraint_es,
     Constraint_i,
-    Constraint_k,
     Constraint_m,
     Constraint_o,
     Constraint_v,
@@ -273,7 +269,6 @@ public:
     Constraint_Uy,
     Constraint_X,
     Constraint_Z,
-    Constraint_ZB,
     Constraint_ZC,
     Constraint_Zy,
 
@@ -292,14 +287,13 @@ public:
 
   static unsigned getFlagWord(unsigned Kind, unsigned NumOps) {
     assert(((NumOps << 3) & ~0xffff) == 0 && "Too many inline asm operands!");
-    assert(Kind >= Kind_RegUse && Kind <= Kind_Func && "Invalid Kind");
+    assert(Kind >= Kind_RegUse && Kind <= Kind_Mem && "Invalid Kind");
     return Kind | (NumOps << 3);
   }
 
   static bool isRegDefKind(unsigned Flag){ return getKind(Flag) == Kind_RegDef;}
   static bool isImmKind(unsigned Flag) { return getKind(Flag) == Kind_Imm; }
   static bool isMemKind(unsigned Flag) { return getKind(Flag) == Kind_Mem; }
-  static bool isFuncKind(unsigned Flag) { return getKind(Flag) == Kind_Func; }
   static bool isRegDefEarlyClobberKind(unsigned Flag) {
     return getKind(Flag) == Kind_RegDefEarlyClobber;
   }
@@ -335,8 +329,7 @@ public:
   /// Augment an existing flag word returned by getFlagWord with the constraint
   /// code for a memory constraint.
   static unsigned getFlagWordForMem(unsigned InputFlag, unsigned Constraint) {
-    assert((isMemKind(InputFlag) || isFuncKind(InputFlag)) &&
-           "InputFlag is not a memory (include function) constraint!");
+    assert(isMemKind(InputFlag) && "InputFlag is not a memory constraint!");
     assert(Constraint <= 0x7fff && "Too large a memory constraint ID");
     assert(Constraint <= Constraints_Max && "Unknown constraint ID");
     assert((InputFlag & ~0xffff) == 0 && "High bits already contain data");
@@ -353,8 +346,7 @@ public:
   }
 
   static unsigned getMemoryConstraintID(unsigned Flag) {
-    assert((isMemKind(Flag) || isFuncKind(Flag)) &&
-           "Not expected mem or function flang!");
+    assert(isMemKind(Flag));
     return (Flag >> Constraints_ShiftAmount) & 0x7fff;
   }
 
@@ -424,7 +416,6 @@ public:
     case InlineAsm::Kind_Imm:
       return "imm";
     case InlineAsm::Kind_Mem:
-    case InlineAsm::Kind_Func:
       return "mem";
     default:
       llvm_unreachable("Unknown operand kind");
@@ -437,8 +428,6 @@ public:
       return "es";
     case InlineAsm::Constraint_i:
       return "i";
-    case InlineAsm::Constraint_k:
-      return "k";
     case InlineAsm::Constraint_m:
       return "m";
     case InlineAsm::Constraint_o:
@@ -471,8 +460,6 @@ public:
       return "X";
     case InlineAsm::Constraint_Z:
       return "Z";
-    case InlineAsm::Constraint_ZB:
-      return "ZB";
     case InlineAsm::Constraint_ZC:
       return "ZC";
     case InlineAsm::Constraint_Zy:

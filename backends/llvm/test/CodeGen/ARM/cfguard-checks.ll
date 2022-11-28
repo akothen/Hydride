@@ -1,5 +1,4 @@
-; RUN: llc < %s -mtriple=arm-pc-windows-msvc | FileCheck %s -check-prefixes=CHECK,MSVC
-; RUN: llc < %s -mtriple=arm-w64-windows-gnu | FileCheck %s -check-prefixes=CHECK,MINGW
+; RUN: llc < %s -mtriple=arm-pc-windows-msvc | FileCheck %s
 ; Control Flow Guard is currently only available on Windows
 
 ; Test that Control Flow Guard checks are correctly added when required.
@@ -100,8 +99,7 @@ lpad:                                             ; preds = %entry
 	; CHECK:       movt r4, :upper16:target_func
 	; CHECK:       mov r0, r4
 	; CHECK:       blx r1
-  ; MSVC-NEXT:   $Mtmp0:
-  ; MINGW-NEXT:  .Ltmp0:
+  ; CHECK-NEXT:  $Mtmp0:
 	; CHECK-NEXT:  blx r4
   ; CHECK:       @ %common.ret
   ; CHECK:       @ %lpad

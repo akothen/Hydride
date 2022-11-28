@@ -24,9 +24,7 @@ void InitializePowerPCExegesisTarget();
 
 class PPCTestBase : public ::testing::Test {
 protected:
-  PPCTestBase()
-      : State(cantFail(
-            LLVMState::Create("powerpc64le-unknown-linux", "ppc64le"))) {}
+  PPCTestBase() : State("powerpc64le-unknown-linux", "ppc64le") {}
 
   static void SetUpTestCase() {
     LLVMInitializePowerPCTargetInfo();

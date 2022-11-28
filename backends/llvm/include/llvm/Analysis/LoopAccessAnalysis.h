@@ -626,7 +626,7 @@ public:
   }
 
   /// Return the list of stores to invariant addresses.
-  ArrayRef<StoreInst *> getStoresToInvariantAddresses() const {
+  const ArrayRef<StoreInst *> getStoresToInvariantAddresses() const {
     return StoresToInvariantAddresses;
   }
 
@@ -720,7 +720,7 @@ const SCEV *replaceSymbolicStrideSCEV(PredicatedScalarEvolution &PSE,
                                       Value *Ptr);
 
 /// If the pointer has a constant stride return it in units of the access type
-/// size.  Otherwise return None.
+/// size.  Otherwise return zero.
 ///
 /// Ensure that it does not wrap in the address space, assuming the predicate
 /// associated with \p PSE is true.
@@ -729,11 +729,10 @@ const SCEV *replaceSymbolicStrideSCEV(PredicatedScalarEvolution &PSE,
 /// to \p PtrToStride and therefore add further predicates to \p PSE.
 /// The \p Assume parameter indicates if we are allowed to make additional
 /// run-time assumptions.
-Optional<int64_t>
-getPtrStride(PredicatedScalarEvolution &PSE, Type *AccessTy, Value *Ptr,
-             const Loop *Lp,
-             const ValueToValueMap &StridesMap = ValueToValueMap(),
-             bool Assume = false, bool ShouldCheckWrap = true);
+int64_t getPtrStride(PredicatedScalarEvolution &PSE, Type *AccessTy, Value *Ptr,
+                     const Loop *Lp,
+                     const ValueToValueMap &StridesMap = ValueToValueMap(),
+                     bool Assume = false, bool ShouldCheckWrap = true);
 
 /// Returns the distance between the pointers \p PtrA and \p PtrB iff they are
 /// compatible and it is possible to calculate the distance between them. This
@@ -764,27 +763,6 @@ bool sortPtrAccesses(ArrayRef<Value *> VL, Type *ElemTy, const DataLayout &DL,
 bool isConsecutiveAccess(Value *A, Value *B, const DataLayout &DL,
                          ScalarEvolution &SE, bool CheckType = true);
 
-class LoopAccessInfoManager {
-  /// The cache.
-  DenseMap<Loop *, std::unique_ptr<LoopAccessInfo>> LoopAccessInfoMap;
-
-  // The used analysis passes.
-  ScalarEvolution &SE;
-  AAResults &AA;
-  DominatorTree &DT;
-  LoopInfo &LI;
-  const TargetLibraryInfo *TLI = nullptr;
-
-public:
-  LoopAccessInfoManager(ScalarEvolution &SE, AAResults &AA, DominatorTree &DT,
-                        LoopInfo &LI, const TargetLibraryInfo *TLI)
-      : SE(SE), AA(AA), DT(DT), LI(LI), TLI(TLI) {}
-
-  const LoopAccessInfo &getInfo(Loop &L);
-
-  void clear() { LoopAccessInfoMap.clear(); }
-};
-
 /// This analysis provides dependence information for the memory accesses
 /// of a loop.
 ///
@@ -802,19 +780,29 @@ public:
 
   void getAnalysisUsage(AnalysisUsage &AU) const override;
 
-  /// Return the proxy object for retrieving LoopAccessInfo for individual
-  /// loops.
+  /// Query the result of the loop access information for the loop \p L.
   ///
   /// If there is no cached result available run the analysis.
-  LoopAccessInfoManager &getLAIs() { return *LAIs; }
+  const LoopAccessInfo &getInfo(Loop *L);
 
   void releaseMemory() override {
     // Invalidate the cache when the pass is freed.
-    LAIs->clear();
+    LoopAccessInfoMap.clear();
   }
 
+  /// Print the result of the analysis when invoked with -analyze.
+  void print(raw_ostream &OS, const Module *M = nullptr) const override;
+
 private:
-  std::unique_ptr<LoopAccessInfoManager> LAIs;
+  /// The cache.
+  DenseMap<Loop *, std::unique_ptr<LoopAccessInfo>> LoopAccessInfoMap;
+
+  // The used analysis passes.
+  ScalarEvolution *SE = nullptr;
+  const TargetLibraryInfo *TLI = nullptr;
+  AAResults *AA = nullptr;
+  DominatorTree *DT = nullptr;
+  LoopInfo *LI = nullptr;
 };
 
 /// This analysis provides dependence information for the memory
@@ -830,9 +818,9 @@ class LoopAccessAnalysis
   static AnalysisKey Key;
 
 public:
-  typedef LoopAccessInfoManager Result;
+  typedef LoopAccessInfo Result;
 
-  Result run(Function &F, FunctionAnalysisManager &AM);
+  Result run(Loop &L, LoopAnalysisManager &AM, LoopStandardAnalysisResults &AR);
 };
 
 inline Instruction *MemoryDepChecker::Dependence::getSource(

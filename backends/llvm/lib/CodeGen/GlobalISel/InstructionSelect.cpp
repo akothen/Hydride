@@ -160,7 +160,6 @@ bool InstructionSelect::runOnMachineFunction(MachineFunction &MF) {
       // If so, erase it.
       if (isTriviallyDead(MI, MRI)) {
         LLVM_DEBUG(dbgs() << "Is dead; erasing.\n");
-        salvageDebugInfo(MRI, MI);
         MI.eraseFromParent();
         continue;
       }

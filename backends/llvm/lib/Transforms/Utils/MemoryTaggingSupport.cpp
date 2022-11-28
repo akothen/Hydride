@@ -14,11 +14,9 @@
 
 #include "llvm/Analysis/CFG.h"
 #include "llvm/Analysis/PostDominators.h"
-#include "llvm/Analysis/StackSafetyAnalysis.h"
 #include "llvm/Analysis/ValueTracking.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
 
 namespace llvm {
 namespace memtag {
@@ -116,7 +114,7 @@ void StackInfoBuilder::visit(Instruction &Inst) {
     }
   }
   if (AllocaInst *AI = dyn_cast<AllocaInst>(&Inst)) {
-    if (isInterestingAlloca(*AI)) {
+    if (IsInterestingAlloca(*AI)) {
       Info.AllocasToInstrument[AI].AI = AI;
     }
     return;
@@ -129,7 +127,7 @@ void StackInfoBuilder::visit(Instruction &Inst) {
       Info.UnrecognizedLifetimes.push_back(&Inst);
       return;
     }
-    if (!isInterestingAlloca(*AI))
+    if (!IsInterestingAlloca(*AI))
       return;
     if (II->getIntrinsicID() == Intrinsic::lifetime_start)
       Info.AllocasToInstrument[AI].LifetimeStart.push_back(II);
@@ -140,7 +138,7 @@ void StackInfoBuilder::visit(Instruction &Inst) {
   if (auto *DVI = dyn_cast<DbgVariableIntrinsic>(&Inst)) {
     for (Value *V : DVI->location_ops()) {
       if (auto *AI = dyn_cast_or_null<AllocaInst>(V)) {
-        if (!isInterestingAlloca(*AI))
+        if (!IsInterestingAlloca(*AI))
           continue;
         AllocaInfo &AInfo = Info.AllocasToInstrument[AI];
         auto &DVIVec = AInfo.DbgVariableIntrinsics;
@@ -152,24 +150,6 @@ void StackInfoBuilder::visit(Instruction &Inst) {
   Instruction *ExitUntag = getUntagLocationIfFunctionExit(Inst);
   if (ExitUntag)
     Info.RetVec.push_back(ExitUntag);
-}
-
-bool StackInfoBuilder::isInterestingAlloca(const AllocaInst &AI) {
-  return (AI.getAllocatedType()->isSized() &&
-          // FIXME: instrument dynamic allocas, too
-          AI.isStaticAlloca() &&
-          // alloca() may be called with 0 size, ignore it.
-          memtag::getAllocaSizeInBytes(AI) > 0 &&
-          // We are only interested in allocas not promotable to registers.
-          // Promotable allocas are common under -O0.
-          !isAllocaPromotable(&AI) &&
-          // inalloca allocas are not treated as static, and we don't want
-          // dynamic alloca instrumentation for them as well.
-          !AI.isUsedWithInAlloca() &&
-          // swifterror allocas are register promoted by ISel
-          !AI.isSwiftError()) &&
-         // safe allocas are not interesting
-         !(SSI && SSI->isSafe(AI));
 }
 
 uint64_t getAllocaSizeInBytes(const AllocaInst &AI) {
@@ -196,8 +176,9 @@ void alignAndPadAlloca(memtag::AllocaInfo &Info, llvm::Align Alignment) {
           : Info.AI->getAllocatedType();
   Type *PaddingType = ArrayType::get(Type::getInt8Ty(Ctx), AlignedSize - Size);
   Type *TypeWithPadding = StructType::get(AllocatedType, PaddingType);
-  auto *NewAI = new AllocaInst(TypeWithPadding, Info.AI->getAddressSpace(),
-                               nullptr, "", Info.AI);
+  auto *NewAI =
+      new AllocaInst(TypeWithPadding, Info.AI->getType()->getAddressSpace(),
+                     nullptr, "", Info.AI);
   NewAI->takeName(Info.AI);
   NewAI->setAlignment(Info.AI->getAlign());
   NewAI->setUsedWithInAlloca(Info.AI->isUsedWithInAlloca());

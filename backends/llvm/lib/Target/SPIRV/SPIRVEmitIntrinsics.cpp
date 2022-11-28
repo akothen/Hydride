@@ -88,7 +88,6 @@ public:
   Instruction *visitStoreInst(StoreInst &I);
   Instruction *visitAllocaInst(AllocaInst &I);
   Instruction *visitAtomicCmpXchgInst(AtomicCmpXchgInst &I);
-  Instruction *visitUnreachableInst(UnreachableInst &I);
   bool runOnFunction(Function &F) override;
 };
 } // namespace
@@ -314,13 +313,7 @@ Instruction *SPIRVEmitIntrinsics::visitStoreInst(StoreInst &I) {
 
 Instruction *SPIRVEmitIntrinsics::visitAllocaInst(AllocaInst &I) {
   TrackConstants = false;
-  Type *PtrTy = I.getType();
-  auto *NewI = IRB->CreateIntrinsic(Intrinsic::spv_alloca, {PtrTy}, {});
-  std::string InstName = I.hasName() ? I.getName().str() : "";
-  I.replaceAllUsesWith(NewI);
-  I.eraseFromParent();
-  NewI->setName(InstName);
-  return NewI;
+  return &I;
 }
 
 Instruction *SPIRVEmitIntrinsics::visitAtomicCmpXchgInst(AtomicCmpXchgInst &I) {
@@ -337,12 +330,6 @@ Instruction *SPIRVEmitIntrinsics::visitAtomicCmpXchgInst(AtomicCmpXchgInst &I) {
                                     {I.getPointerOperand()->getType()}, {Args});
   replaceMemInstrUses(&I, NewI);
   return NewI;
-}
-
-Instruction *SPIRVEmitIntrinsics::visitUnreachableInst(UnreachableInst &I) {
-  IRB->SetInsertPoint(&I);
-  IRB->CreateIntrinsic(Intrinsic::spv_unreachable, {}, {});
-  return &I;
 }
 
 void SPIRVEmitIntrinsics::processGlobalValue(GlobalVariable &GV) {
@@ -381,7 +368,7 @@ void SPIRVEmitIntrinsics::insertAssignTypeIntrs(Instruction *I) {
     if (isa<ConstantPointerNull>(Op) || isa<UndefValue>(Op) ||
         // Check GetElementPtrConstantExpr case.
         (isa<ConstantExpr>(Op) && isa<GEPOperator>(Op))) {
-      setInsertPointSkippingPhis(*IRB, I);
+      IRB->SetInsertPoint(I);
       if (isa<UndefValue>(Op) && Op->getType()->isAggregateType())
         buildIntrWithMD(Intrinsic::spv_assign_type, {IRB->getInt32Ty()}, Op,
                         UndefValue::get(IRB->getInt32Ty()));

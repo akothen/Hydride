@@ -1,4 +1,3 @@
-import("//llvm/utils/gn/build/driver_executable.gni")
 import("//llvm/utils/gn/build/symlink_or_copy.gni")
 
 symlinks = [
@@ -23,7 +22,7 @@ group("symlinks") {
   }
 }
 
-driver_executable("lld") {
+executable("lld") {
   configs += [ "//llvm/utils/gn/build:lld_code" ]
   deps = [
     "//lld/COFF",

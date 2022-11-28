@@ -6,8 +6,6 @@
 
 ;  CHECK: .tabletype  __funcref_call_table, funcref, 1
 
-declare %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1), i32) nounwind
-
 define void @call_funcref_from_table(i32 %i) {
 ; CHECK-LABEL: call_funcref_from_table:
 ; CHECK-NEXT: .functype       call_funcref_from_table (i32) -> ()
@@ -21,7 +19,8 @@ define void @call_funcref_from_table(i32 %i) {
 ; CHECK-NEXT: ref.null_func
 ; CHECK-NEXT: table.set       __funcref_call_table
 ; CHECK-NEXT: end_function
-  %ref = call %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1) @funcref_table, i32 %i)
+  %p = getelementptr [0 x %funcref], ptr addrspace (1) @funcref_table, i32 0, i32 %i
+  %ref = load %funcref, ptr addrspace(1) %p
   call addrspace(20) void %ref()
   ret void
 }

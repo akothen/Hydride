@@ -203,7 +203,7 @@ def MLProgram_GlobalLoadOp : MLProgram_Op<"global_load", [
 //===----------------------------------------------------------------------===//
 
 def MLProgram_GlobalLoadConstOp : MLProgram_Op<"global_load_const", [
-    Pure,
+    NoSideEffect,
     DeclareOpInterfaceMethods<SymbolUserOpInterface>
   ]> {
   let summary = "Direct load a constant value from a global";
@@ -443,7 +443,7 @@ def MLProgram_SubgraphOp : MLProgram_Op<"subgraph", [
 //===----------------------------------------------------------------------===//
 
 def MLProgram_OutputOp : MLProgram_Op<"output", [
-    Pure, HasParent<"SubgraphOp">, ReturnLike, Terminator
+    NoSideEffect, HasParent<"SubgraphOp">, ReturnLike, Terminator
   ]> {
   let summary = "Outputs values from a subgraph function";
   let description = [{
@@ -469,7 +469,7 @@ def MLProgram_OutputOp : MLProgram_Op<"output", [
 //===----------------------------------------------------------------------===//
 
 def MLProgram_ReturnOp : MLProgram_Op<"return", [
-    Pure, HasParent<"FuncOp">, ReturnLike, Terminator
+    NoSideEffect, HasParent<"FuncOp">, ReturnLike, Terminator
   ]> {
   let summary = "Returns values from a `func` function";
   let description = [{
@@ -495,7 +495,7 @@ def MLProgram_ReturnOp : MLProgram_Op<"return", [
 //===----------------------------------------------------------------------===//
 
 def MLProgram_TokenOp : MLProgram_Op<"token", [
-    Pure
+    NoSideEffect
   ]> {
   let summary = "Produces a new token value";
   let description = [{

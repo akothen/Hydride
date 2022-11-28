@@ -23,6 +23,8 @@ define double @selectccat(double, double, double, double) {
 define double @selectccoeq(double, double, double, double) {
 ; CHECK-LABEL: selectccoeq:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.eq %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -34,6 +36,8 @@ define double @selectccoeq(double, double, double, double) {
 define double @selectccone(double, double, double, double) {
 ; CHECK-LABEL: selectccone:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.ne %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -45,6 +49,8 @@ define double @selectccone(double, double, double, double) {
 define double @selectccogt(double, double, double, double) {
 ; CHECK-LABEL: selectccogt:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.gt %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -56,6 +62,8 @@ define double @selectccogt(double, double, double, double) {
 define double @selectccoge(double, double, double, double) {
 ; CHECK-LABEL: selectccoge:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.ge %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -67,6 +75,8 @@ define double @selectccoge(double, double, double, double) {
 define double @selectccolt(double, double, double, double) {
 ; CHECK-LABEL: selectccolt:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.lt %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -78,6 +88,8 @@ define double @selectccolt(double, double, double, double) {
 define double @selectccole(double, double, double, double) {
 ; CHECK-LABEL: selectccole:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.le %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -113,6 +125,8 @@ define double @selectccuno(double, double, double, double) {
 define double @selectccueq(double, double, double, double) {
 ; CHECK-LABEL: selectccueq:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.eqnan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -124,6 +138,8 @@ define double @selectccueq(double, double, double, double) {
 define double @selectccune(double, double, double, double) {
 ; CHECK-LABEL: selectccune:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.nenan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -135,6 +151,8 @@ define double @selectccune(double, double, double, double) {
 define double @selectccugt(double, double, double, double) {
 ; CHECK-LABEL: selectccugt:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.gtnan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -146,6 +164,8 @@ define double @selectccugt(double, double, double, double) {
 define double @selectccuge(double, double, double, double) {
 ; CHECK-LABEL: selectccuge:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.genan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -157,6 +177,8 @@ define double @selectccuge(double, double, double, double) {
 define double @selectccult(double, double, double, double) {
 ; CHECK-LABEL: selectccult:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.ltnan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -168,6 +190,8 @@ define double @selectccult(double, double, double, double) {
 define double @selectccule(double, double, double, double) {
 ; CHECK-LABEL: selectccule:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.d %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.d.lenan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)

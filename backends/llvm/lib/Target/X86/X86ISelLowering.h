@@ -584,13 +584,6 @@ namespace llvm {
     VFCMULCSH,
     VFCMULCSH_RND,
 
-    VPDPBSUD,
-    VPDPBSUDS,
-    VPDPBUUD,
-    VPDPBUUDS,
-    VPDPBSSD,
-    VPDPBSSDS,
-
     // Compress and expand.
     COMPRESS,
     EXPAND,
@@ -710,14 +703,12 @@ namespace llvm {
 
     // Conversions between float and half-float.
     CVTPS2PH,
-    CVTPS2PH_SAE,
     CVTPH2PS,
     CVTPH2PS_SAE,
 
     // Masked version of above.
     // SRC, RND, PASSTHRU, MASK
     MCVTPS2PH,
-    MCVTPS2PH_SAE,
 
     // Galois Field Arithmetic Instructions
     GF2P8AFFINEINVQB,
@@ -780,7 +771,7 @@ namespace llvm {
     STRICT_CVTPS2PH,
     STRICT_CVTPH2PS,
 
-    // WARNING: Only add nodes here if they are strict FP nodes. Non-memory and
+    // WARNING: Only add nodes here if they are stric FP nodes. Non-memory and
     // non-strict FP nodes should be above FIRST_TARGET_STRICTFP_OPCODE.
 
     // Compare and swap.
@@ -799,13 +790,6 @@ namespace llvm {
     LBTS,
     LBTC,
     LBTR,
-
-    /// RAO arithmetic instructions.
-    /// OUTCHAIN = AADD(INCHAIN, PTR, RHS)
-    AADD,
-    AOR,
-    AXOR,
-    AAND,
 
     // Load, scalar_to_vector, and zero extend.
     VZEXT_LOAD,
@@ -882,12 +866,6 @@ namespace llvm {
     AESDECWIDE128KL,
     AESENCWIDE256KL,
     AESDECWIDE256KL,
-
-    /// Compare and Add if Condition is Met. Compare value in operand 2 with
-    /// value in memory of operand 1. If condition of operand 4 is met, add value
-    /// operand 3 to m32 and write new value in operand 1. Operand 2 is
-    /// always updated with the original value from operand 1.
-    CMPCCXADD,
 
     // Save xmm argument registers to the stack, according to %al. An operator
     // is needed so that this can be expanded with control flow.
@@ -1055,9 +1033,9 @@ namespace llvm {
     bool canMergeStoresTo(unsigned AddressSpace, EVT MemVT,
                           const MachineFunction &MF) const override;
 
-    bool isCheapToSpeculateCttz(Type *Ty) const override;
+    bool isCheapToSpeculateCttz() const override;
 
-    bool isCheapToSpeculateCtlz(Type *Ty) const override;
+    bool isCheapToSpeculateCtlz() const override;
 
     bool isCtlzFast() const override;
 
@@ -1178,14 +1156,6 @@ namespace llvm {
         SDValue Op, const APInt &DemandedBits, const APInt &DemandedElts,
         SelectionDAG &DAG, unsigned Depth) const override;
 
-    bool isGuaranteedNotToBeUndefOrPoisonForTargetNode(
-        SDValue Op, const APInt &DemandedElts, const SelectionDAG &DAG,
-        bool PoisonOnly, unsigned Depth) const override;
-
-    bool canCreateUndefOrPoisonForTargetNode(
-        SDValue Op, const APInt &DemandedElts, const SelectionDAG &DAG,
-        bool PoisonOnly, bool ConsiderFlags, unsigned Depth) const override;
-
     bool isSplatValueForTargetNode(SDValue Op, const APInt &DemandedElts,
                                    APInt &UndefElts,
                                    unsigned Depth) const override;
@@ -1269,6 +1239,15 @@ namespace llvm {
     bool isLegalAddImmediate(int64_t Imm) const override;
 
     bool isLegalStoreImmediate(int64_t Imm) const override;
+
+    /// Return the cost of the scaling factor used in the addressing
+    /// mode represented by AM for this target, for a load/store
+    /// of the specified type.
+    /// If the AM is supported, the return value must be >= 0.
+    /// If the AM is not supported, it returns a negative value.
+    InstructionCost getScalingFactorCost(const DataLayout &DL,
+                                         const AddrMode &AM, Type *Ty,
+                                         unsigned AS) const override;
 
     /// This is used to enable splatted operand transforms for vector shifts
     /// and vector funnel shifts.
@@ -1481,20 +1460,15 @@ namespace llvm {
 
     bool supportSwiftError() const override;
 
-    bool supportKCFIBundles() const override { return true; }
+    bool hasStackProbeSymbol(MachineFunction &MF) const override;
+    bool hasInlineStackProbe(MachineFunction &MF) const override;
+    StringRef getStackProbeSymbolName(MachineFunction &MF) const override;
 
-    bool hasStackProbeSymbol(const MachineFunction &MF) const override;
-    bool hasInlineStackProbe(const MachineFunction &MF) const override;
-    StringRef getStackProbeSymbolName(const MachineFunction &MF) const override;
-
-    unsigned getStackProbeSize(const MachineFunction &MF) const;
+    unsigned getStackProbeSize(MachineFunction &MF) const;
 
     bool hasVectorBlend() const override { return true; }
 
     unsigned getMaxSupportedInterleaveFactor() const override { return 4; }
-
-    bool isInlineAsmTargetBranch(const SmallVectorImpl<StringRef> &AsmStrs,
-                                 unsigned OpNo) const override;
 
     /// Lower interleaved load(s) into target specific
     /// instructions/intrinsics.

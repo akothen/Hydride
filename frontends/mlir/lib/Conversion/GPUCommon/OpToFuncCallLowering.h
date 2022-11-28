@@ -60,17 +60,17 @@ public:
       return failure();
 
     LLVMFuncOp funcOp = appendOrGetFuncOp(funcName, funcType, op);
-    auto callOp =
-        rewriter.create<LLVM::CallOp>(op->getLoc(), funcOp, castedOperands);
+    auto callOp = rewriter.create<LLVM::CallOp>(
+        op->getLoc(), resultType, SymbolRefAttr::get(funcOp), castedOperands);
 
     if (resultType == adaptor.getOperands().front().getType()) {
-      rewriter.replaceOp(op, {callOp.getResult()});
+      rewriter.replaceOp(op, {callOp.getResult(0)});
       return success();
     }
 
     Value truncated = rewriter.create<LLVM::FPTruncOp>(
         op->getLoc(), adaptor.getOperands().front().getType(),
-        callOp.getResult());
+        callOp.getResult(0));
     rewriter.replaceOp(op, {truncated});
     return success();
   }

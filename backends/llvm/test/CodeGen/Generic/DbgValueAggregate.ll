@@ -1,5 +1,5 @@
 ; RUN: llc -O0 -global-isel < %s | FileCheck %s
-; REQUIRES: aarch64-registered-target
+; REQUIRES: aarch64
 target triple = "aarch64-unknown-linux-gnu"
 
 define void @MAIN_() #0 {

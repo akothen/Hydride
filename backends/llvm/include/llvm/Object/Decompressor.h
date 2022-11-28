@@ -11,7 +11,6 @@
 
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Compression.h"
 #include "llvm/Support/Error.h"
 
 namespace llvm {
@@ -36,7 +35,8 @@ public:
   }
 
   /// Uncompress section data to raw buffer provided.
-  Error decompress(MutableArrayRef<uint8_t> Output);
+  /// @param Buffer      Destination buffer.
+  Error decompress(MutableArrayRef<uint8_t> Buffer);
 
   /// Return memory buffer size required for decompression.
   uint64_t getDecompressedSize() { return DecompressedSize; }
@@ -44,11 +44,10 @@ public:
 private:
   Decompressor(StringRef Data);
 
-  Error consumeCompressedHeader(bool Is64Bit, bool IsLittleEndian);
+  Error consumeCompressedZLibHeader(bool Is64Bit, bool IsLittleEndian);
 
   StringRef SectionData;
   uint64_t DecompressedSize;
-  DebugCompressionType CompressionType = DebugCompressionType::None;
 };
 
 } // end namespace object

@@ -170,8 +170,10 @@ static std::vector<std::string> ComputeLibsForComponents(
 
   // Build a map of component names to information.
   StringMap<AvailableComponent *> ComponentMap;
-  for (auto &AC : AvailableComponents)
-    ComponentMap[AC.Name] = &AC;
+  for (unsigned i = 0; i != array_lengthof(AvailableComponents); ++i) {
+    AvailableComponent *AC = &AvailableComponents[i];
+    ComponentMap[AC->Name] = AC;
+  }
 
   // Visit the components.
   for (unsigned i = 0, e = Components.size(); i != e; ++i) {
@@ -234,6 +236,7 @@ Options:\n\
   --obj-root        Print the object root used to build LLVM.\n\
   --prefix          Print the installation prefix.\n\
   --shared-mode     Print how the provided components can be collectively linked (`shared` or `static`).\n\
+  --src-root        Print the source root LLVM was built from.\n\
   --system-libs     System Libraries needed to link against LLVM components.\n\
   --targets-built   List of all targets currently built.\n\
   --version         Print LLVM version.\n\
@@ -543,14 +546,15 @@ int main(int argc, char **argv) {
         /// built, print LLVM_DYLIB_COMPONENTS instead of everything
         /// in the manifest.
         std::vector<std::string> Components;
-        for (const auto &AC : AvailableComponents) {
+        for (unsigned j = 0; j != array_lengthof(AvailableComponents); ++j) {
           // Only include non-installed components when in a development tree.
-          if (!AC.IsInstalled && !IsInDevelopmentTree)
+          if (!AvailableComponents[j].IsInstalled && !IsInDevelopmentTree)
             continue;
 
-          Components.push_back(AC.Name);
-          if (AC.Library && !IsInDevelopmentTree) {
-            std::string path(GetComponentLibraryPath(AC.Library, false));
+          Components.push_back(AvailableComponents[j].Name);
+          if (AvailableComponents[j].Library && !IsInDevelopmentTree) {
+            std::string path(
+                GetComponentLibraryPath(AvailableComponents[j].Library, false));
             if (DirSep == "\\") {
               std::replace(path.begin(), path.end(), '/', '\\');
             }
@@ -591,6 +595,8 @@ int main(int argc, char **argv) {
         PrintSharedMode = true;
       } else if (Arg == "--obj-root") {
         OS << ActivePrefix << '\n';
+      } else if (Arg == "--src-root") {
+        OS << LLVM_SRC_ROOT << '\n';
       } else if (Arg == "--ignore-libllvm") {
         LinkDyLib = false;
         LinkMode = BuiltSharedLibs ? LinkModeShared : LinkModeAuto;
@@ -654,7 +660,7 @@ int main(int argc, char **argv) {
         }
         WithColor::error(errs(), "llvm-config")
             << "component libraries and shared library\n\n";
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case LinkModeStatic:
         for (auto &Lib : MissingLibs)
           WithColor::error(errs(), "llvm-config") << "missing: " << Lib << "\n";

@@ -5,8 +5,7 @@ add_mlir_library(MLIRTensorTestPasses
   EXCLUDE_FROM_LIBMLIR
 
   LINK_LIBS PUBLIC
-  MLIRArithDialect
-  MLIRLinalgDialect
+  MLIRArithmeticDialect
   MLIRPass
   MLIRSCFDialect
   MLIRTensorDialect

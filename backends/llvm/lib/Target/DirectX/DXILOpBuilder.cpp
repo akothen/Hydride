@@ -17,7 +17,7 @@
 #include "llvm/Support/ErrorHandling.h"
 
 using namespace llvm;
-using namespace llvm::dxil;
+using namespace llvm::DXIL;
 
 constexpr StringLiteral DXILOpNamePrefix = "dx.op.";
 
@@ -125,10 +125,10 @@ static std::string getTypeName(OverloadKind Kind, Type *Ty) {
 
 // Static properties.
 struct OpCodeProperty {
-  dxil::OpCode OpCode;
+  DXIL::OpCode OpCode;
   // Offset in DXILOpCodeNameTable.
   unsigned OpCodeNameOffset;
-  dxil::OpCodeClass OpCodeClass;
+  DXIL::OpCodeClass OpCodeClass;
   // Offset in DXILOpCodeClassNameTable.
   unsigned OpCodeClassNameOffset;
   uint16_t OverloadTys;
@@ -234,7 +234,7 @@ static FunctionType *getDXILOpFunctionType(const OpCodeProperty *Prop,
       ArgTys[0], ArrayRef<Type *>(&ArgTys[1], ArgTys.size() - 1), false);
 }
 
-static FunctionCallee getOrCreateDXILOpFunction(dxil::OpCode DXILOp,
+static FunctionCallee getOrCreateDXILOpFunction(DXIL::OpCode DXILOp,
                                                 Type *OverloadTy, Module &M) {
   const OpCodeProperty *Prop = getOpCodeProperty(DXILOp);
 
@@ -255,9 +255,9 @@ static FunctionCallee getOrCreateDXILOpFunction(dxil::OpCode DXILOp,
 }
 
 namespace llvm {
-namespace dxil {
+namespace DXIL {
 
-CallInst *DXILOpBuilder::createDXILOpCall(dxil::OpCode OpCode, Type *OverloadTy,
+CallInst *DXILOpBuilder::createDXILOpCall(DXIL::OpCode OpCode, Type *OverloadTy,
                                           llvm::iterator_range<Use *> Args) {
   auto Fn = getOrCreateDXILOpFunction(OpCode, OverloadTy, M);
   SmallVector<Value *> FullArgs;
@@ -266,7 +266,7 @@ CallInst *DXILOpBuilder::createDXILOpCall(dxil::OpCode OpCode, Type *OverloadTy,
   return B.CreateCall(Fn, FullArgs);
 }
 
-Type *DXILOpBuilder::getOverloadTy(dxil::OpCode OpCode, FunctionType *FT,
+Type *DXILOpBuilder::getOverloadTy(DXIL::OpCode OpCode, FunctionType *FT,
                                    bool NoOpCodeParam) {
 
   const OpCodeProperty *Prop = getOpCodeProperty(OpCode);
@@ -317,8 +317,8 @@ Type *DXILOpBuilder::getOverloadTy(dxil::OpCode OpCode, FunctionType *FT,
   return OverloadType;
 }
 
-const char *DXILOpBuilder::getOpCodeName(dxil::OpCode DXILOp) {
+const char *DXILOpBuilder::getOpCodeName(DXIL::OpCode DXILOp) {
   return ::getOpCodeName(DXILOp);
 }
-} // namespace dxil
+} // namespace DXIL
 } // namespace llvm

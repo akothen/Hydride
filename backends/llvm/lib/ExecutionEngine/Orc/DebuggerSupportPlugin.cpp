@@ -137,7 +137,7 @@ public:
     SmallVector<DebugSectionInfo, 12> DebugSecInfos;
     size_t NumSections = 0;
     for (auto &Sec : G.sections()) {
-      if (Sec.blocks().empty())
+      if (llvm::empty(Sec.blocks()))
         continue;
 
       ++NumSections;
@@ -189,7 +189,7 @@ public:
     // Copy debug section blocks and symbols.
     orc::ExecutorAddr NextBlockAddr(MachOContainerBlock->getSize());
     for (auto &SI : DebugSecInfos) {
-      assert(!SI.Sec->blocks().empty() && "Empty debug info section?");
+      assert(!llvm::empty(SI.Sec->blocks()) && "Empty debug info section?");
 
       // Update addresses in debug section.
       LLVM_DEBUG({

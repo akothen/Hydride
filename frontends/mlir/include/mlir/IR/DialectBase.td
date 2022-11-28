@@ -97,7 +97,7 @@ class Dialect {
   // leaving UpperCamel unchanged while also converting lowerCamel to
   // UpperCamel) and prefixed with `get` or `set` depending on if it is a getter
   // or setter.
-  int emitAccessorPrefix = kEmitAccessorPrefix_Prefixed;
+  int emitAccessorPrefix = kEmitAccessorPrefix_Raw;
 
   // If this dialect can be extended at runtime with new operations or types.
   bit isExtensible = 0;

@@ -819,19 +819,6 @@ void MIPrinter::print(const MachineInstr &MI) {
     HeapAllocMarker->printAsOperand(OS, MST);
     NeedComma = true;
   }
-  if (MDNode *PCSections = MI.getPCSections()) {
-    if (NeedComma)
-      OS << ',';
-    OS << " pcsections ";
-    PCSections->printAsOperand(OS, MST);
-    NeedComma = true;
-  }
-  if (uint32_t CFIType = MI.getCFIType()) {
-    if (NeedComma)
-      OS << ',';
-    OS << " cfi-type " << CFIType;
-    NeedComma = true;
-  }
 
   if (auto Num = MI.peekDebugInstrNum()) {
     if (NeedComma)
@@ -893,7 +880,7 @@ void MIPrinter::print(const MachineInstr &MI, unsigned OpIdx,
       MachineOperand::printSubRegIdx(OS, Op.getImm(), TRI);
       break;
     }
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case MachineOperand::MO_Register:
   case MachineOperand::MO_CImmediate:
   case MachineOperand::MO_FPImmediate:

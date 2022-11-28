@@ -95,7 +95,9 @@ public:
     return makeConstIterator(getBucketsEnd(), getBucketsEnd(), *this, true);
   }
 
-  [[nodiscard]] bool empty() const { return getNumEntries() == 0; }
+  LLVM_NODISCARD bool empty() const {
+    return getNumEntries() == 0;
+  }
   unsigned size() const { return getNumEntries(); }
 
   /// Grow the densemap so that it can contain at least \p NumEntries items
@@ -1197,7 +1199,8 @@ class DenseMapIterator : DebugEpochBase::HandleBase {
 
 public:
   using difference_type = ptrdiff_t;
-  using value_type = std::conditional_t<IsConst, const Bucket, Bucket>;
+  using value_type =
+      typename std::conditional<IsConst, const Bucket, Bucket>::type;
   using pointer = value_type *;
   using reference = value_type &;
   using iterator_category = std::forward_iterator_tag;

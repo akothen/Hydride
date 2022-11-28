@@ -38,7 +38,7 @@ public:
 bool MipsPreLegalizerCombinerInfo::combine(GISelChangeObserver &Observer,
                                            MachineInstr &MI,
                                            MachineIRBuilder &B) const {
-  CombinerHelper Helper(Observer, B, /*IsPreLegalize*/ true);
+  CombinerHelper Helper(Observer, B);
 
   switch (MI.getOpcode()) {
   default:

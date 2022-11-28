@@ -54,14 +54,6 @@ _add_capi_test_executable(mlir-capi-pass-test
     MLIRCAPITransforms
 )
 
-_add_capi_test_executable(mlir-capi-pdl-test
-  pdl.c
-  LINK_LIBS PRIVATE
-    MLIRCAPIIR
-    MLIRCAPIRegisterEverything
-    MLIRCAPIPDL
-)
-
 _add_capi_test_executable(mlir-capi-sparse-tensor-test
   sparse_tensor.c
   LINK_LIBS PRIVATE
@@ -78,10 +70,10 @@ _add_capi_test_executable(mlir-capi-quant-test
     MLIRCAPIQuant
 )
 
-_add_capi_test_executable(mlir-capi-transform-test
-  transform.c
+_add_capi_test_executable(mlir-capi-pdl-test
+  pdl.c
   LINK_LIBS PRIVATE
     MLIRCAPIIR
     MLIRCAPIRegisterEverything
-    MLIRCAPITransformDialect
+    MLIRCAPIPDL
 )

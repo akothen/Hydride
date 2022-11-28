@@ -129,8 +129,8 @@ private:
     using Base = ELFLinkGraphBuilder<ELFT>;
     using Self = ELFLinkGraphBuilder_aarch64<ELFT>;
     for (const auto &RelSect : Base::Sections)
-      if (Error Err = Base::forEachRelaRelocation(RelSect, this,
-                                                  &Self::addSingleRelocation))
+      if (Error Err = Base::forEachRelocation(RelSect, this,
+                                              &Self::addSingleRelocation))
         return Err;
 
     return Error::success();
@@ -174,7 +174,7 @@ private:
 
     switch (*RelocKind) {
     case ELFCall26: {
-      Kind = aarch64::Branch26PCRel;
+      Kind = aarch64::Branch26;
       break;
     }
     case ELFAdrPage21: {
@@ -297,20 +297,23 @@ private:
       break;
     }
     case ELFAdrGOTPage21: {
-      Kind = aarch64::RequestGOTAndTransformToPage21;
+      Kind = aarch64::GOTPage21;
       break;
     }
     case ELFLd64GOTLo12: {
-      Kind = aarch64::RequestGOTAndTransformToPageOffset12;
+      Kind = aarch64::GOTPageOffset12;
       break;
     }
     case ELFTLSDescAdrPage21: {
-      Kind = aarch64::RequestTLSDescEntryAndTransformToPage21;
+      Kind = aarch64::TLSDescPage21;
       break;
     }
-    case ELFTLSDescAddLo12:
+    case ELFTLSDescAddLo12: {
+      Kind = aarch64::TLSDescPageOffset12;
+      break;
+    }
     case ELFTLSDescLd64Lo12: {
-      Kind = aarch64::RequestTLSDescEntryAndTransformToPageOffset12;
+      Kind = aarch64::TLSDescPageOffset12;
       break;
     }
     case ELFTLSDescCall: {
@@ -410,7 +413,7 @@ public:
 private:
   Section &getTLSInfoSection(LinkGraph &G) {
     if (!TLSInfoTable)
-      TLSInfoTable = &G.createSection(getSectionName(), orc::MemProt::Read);
+      TLSInfoTable = &G.createSection(getSectionName(), MemProt::Read);
     return *TLSInfoTable;
   }
 
@@ -442,11 +445,11 @@ public:
   bool visitEdge(LinkGraph &G, Block *B, Edge &E) {
     Edge::Kind KindToSet = Edge::Invalid;
     switch (E.getKind()) {
-    case aarch64::RequestTLSDescEntryAndTransformToPage21: {
+    case aarch64::TLSDescPage21: {
       KindToSet = aarch64::Page21;
       break;
     }
-    case aarch64::RequestTLSDescEntryAndTransformToPageOffset12: {
+    case aarch64::TLSDescPageOffset12: {
       KindToSet = aarch64::PageOffset12;
       break;
     }
@@ -478,13 +481,14 @@ public:
 private:
   Section &getTLSDescSection(LinkGraph &G) {
     if (!GOTSection)
-      GOTSection = &G.createSection(getSectionName(), orc::MemProt::Read);
+      GOTSection = &G.createSection(getSectionName(), MemProt::Read);
     return *GOTSection;
   }
 
   Symbol &getTLSDescResolver(LinkGraph &G) {
     if (!TLSDescResolver)
-      TLSDescResolver = &G.addExternalSymbol("__tlsdesc_resolver", 8, false);
+      TLSDescResolver =
+          &G.addExternalSymbol("__tlsdesc_resolver", 8, Linkage::Strong);
     return *TLSDescResolver;
   }
 

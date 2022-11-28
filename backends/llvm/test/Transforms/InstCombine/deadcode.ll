@@ -14,20 +14,20 @@ C:		; preds = %T, %0
 	ret i32 %C.upgrd.1
 }
 
-define ptr @test2(i32 %width) {
-	%tmp = call ptr @llvm.stacksave( )
+define i32* @test2(i32 %width) {
+	%tmp = call i8* @llvm.stacksave( )
         %tmp14 = alloca i32, i32 %width
-	ret ptr %tmp14
+	ret i32* %tmp14
 } 
 
-declare ptr @llvm.stacksave()
+declare i8* @llvm.stacksave()
 
-declare void @llvm.lifetime.start.p0(i64, ptr)
-declare void @llvm.lifetime.end.p0(i64, ptr)
+declare void @llvm.lifetime.start.p0i8(i64, i8*)
+declare void @llvm.lifetime.end.p0i8(i64, i8*)
 
 define void @test3() {
-  call void @llvm.lifetime.start.p0(i64 -1, ptr undef)
-  call void @llvm.lifetime.end.p0(i64 -1, ptr undef)
+  call void @llvm.lifetime.start.p0i8(i64 -1, i8* undef)
+  call void @llvm.lifetime.end.p0i8(i64 -1, i8* undef)
   ret void
 }
 

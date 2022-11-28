@@ -140,11 +140,12 @@ protected:
             MCSymbol *>
       TOC;
   const PPCSubtarget *Subtarget = nullptr;
+  StackMaps SM;
 
 public:
   explicit PPCAsmPrinter(TargetMachine &TM,
                          std::unique_ptr<MCStreamer> Streamer)
-      : AsmPrinter(TM, std::move(Streamer)) {}
+      : AsmPrinter(TM, std::move(Streamer)), SM(*this) {}
 
   StringRef getPassName() const override { return "PowerPC Assembly Printer"; }
 
@@ -170,6 +171,8 @@ public:
                        const char *ExtraCode, raw_ostream &O) override;
   bool PrintAsmMemoryOperand(const MachineInstr *MI, unsigned OpNo,
                              const char *ExtraCode, raw_ostream &O) override;
+
+  void emitEndOfAsmFile(Module &M) override;
 
   void LowerSTACKMAP(StackMaps &SM, const MachineInstr &MI);
   void LowerPATCHPOINT(StackMaps &SM, const MachineInstr &MI);
@@ -422,6 +425,10 @@ PPCAsmPrinter::lookUpOrCreateTOCEntry(const MCSymbol *Sym,
   if (!TOCEntry)
     TOCEntry = createTempSymbol("C");
   return TOCEntry;
+}
+
+void PPCAsmPrinter::emitEndOfAsmFile(Module &M) {
+  emitStackMaps(SM);
 }
 
 void PPCAsmPrinter::LowerSTACKMAP(StackMaps &SM, const MachineInstr &MI) {
@@ -2557,7 +2564,7 @@ void PPCAIXAsmPrinter::emitEndOfAsmFile(Module &M) {
       SmallString<128> Name;
       StringRef Prefix = ".";
       Name += Prefix;
-      Name += cast<MCSymbolXCOFF>(I.first.first)->getSymbolTableName();
+      Name += I.first.first->getName();
       MCSymbol *S = OutContext.getOrCreateSymbol(Name);
       TCEntry = cast<MCSectionXCOFF>(
           getObjFileLowering().getSectionForTOCEntry(S, TM));
@@ -2646,25 +2653,6 @@ void PPCAIXAsmPrinter::emitInstruction(const MachineInstr *MI) {
   switch (MI->getOpcode()) {
   default:
     break;
-  case PPC::TW:
-  case PPC::TWI:
-  case PPC::TD:
-  case PPC::TDI: {
-    if (MI->getNumOperands() < 5)
-      break; 
-    const MachineOperand &LangMO = MI->getOperand(3);
-    const MachineOperand &ReasonMO = MI->getOperand(4);
-    if (!LangMO.isImm() || !ReasonMO.isImm())
-      break;
-    MCSymbol *TempSym = OutContext.createNamedTempSymbol();
-    OutStreamer->emitLabel(TempSym);
-    OutStreamer->emitXCOFFExceptDirective(CurrentFnSym, TempSym,
-                 LangMO.getImm(), ReasonMO.getImm(),
-                 Subtarget->isPPC64() ? MI->getMF()->getInstructionCount() * 8 :
-                 MI->getMF()->getInstructionCount() * 4,
-		 MMI->hasDebugInfo());
-    break;
-  }
   case PPC::GETtlsADDR64AIX:
   case PPC::GETtlsADDR32AIX: {
     // The reference to .__tls_get_addr is unknown to the assembler

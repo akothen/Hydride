@@ -7,7 +7,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/Support/DebugCounter.h"
-#include "mlir/Support/TypeID.h"
 #include "gmock/gmock.h"
 
 using namespace mlir;
@@ -17,8 +16,7 @@ using namespace mlir;
 
 namespace {
 
-struct CounterAction : public DebugAction<CounterAction> {
-  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(CounterAction)
+struct CounterAction : public DebugAction<> {
   static StringRef getTag() { return "counter-action"; }
   static StringRef getDescription() { return "Test action for debug counters"; }
 };

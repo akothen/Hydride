@@ -178,13 +178,6 @@ public:
     LDV->VTracker = &*VTracker;
   }
 
-  DbgOpID addValueDbgOp(ValueIDNum V) {
-    return LDV->DbgOpStore.insert(DbgOp(V));
-  }
-  DbgOpID addConstDbgOp(MachineOperand MO) {
-    return LDV->DbgOpStore.insert(DbgOp(MO));
-  }
-
   // Some routines for bouncing into LDV,
   void buildMLocValueMap(FuncValueTable &MInLocs, FuncValueTable &MOutLocs,
                          SmallVectorImpl<MLocTransferMap> &MLocTransfer) {
@@ -198,12 +191,11 @@ public:
     LDV->placeMLocPHIs(MF, AllBlocks, MInLocs, MLocTransfer);
   }
 
-  bool
-  pickVPHILoc(SmallVectorImpl<DbgOpID> &OutValues, const MachineBasicBlock &MBB,
-              const InstrRefBasedLDV::LiveIdxT &LiveOuts,
-              FuncValueTable &MOutLocs,
+  Optional<ValueIDNum>
+  pickVPHILoc(const MachineBasicBlock &MBB, const DebugVariable &Var,
+              const InstrRefBasedLDV::LiveIdxT &LiveOuts, FuncValueTable &MOutLocs,
               const SmallVectorImpl<const MachineBasicBlock *> &BlockOrders) {
-    return LDV->pickVPHILoc(OutValues, MBB, LiveOuts, MOutLocs, BlockOrders);
+    return LDV->pickVPHILoc(MBB, Var, LiveOuts, MOutLocs, BlockOrders);
   }
 
   bool vlocJoin(MachineBasicBlock &MBB, InstrRefBasedLDV::LiveIdxT &VLOCOutLocs,
@@ -1806,20 +1798,9 @@ TEST_F(InstrRefLDVTest, pickVPHILocDiamond) {
   ValueIDNum LiveInRax(EntryBlk, 0, RaxLoc);
   ValueIDNum RspPHIInBlk2(Br2Blk, 0, RspLoc);
   ValueIDNum RspPHIInBlk3(RetBlk, 0, RspLoc);
-  ValueIDNum RaxPHIInBlk3(RetBlk, 0, RaxLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
-  DbgOpID LiveInRaxID = addValueDbgOp(LiveInRax);
-  DbgOpID RspPHIInBlk2ID = addValueDbgOp(RspPHIInBlk2);
-  DbgOpID RspPHIInBlk3ID = addValueDbgOp(RspPHIInBlk3);
-  DbgOpID RaxPHIInBlk3ID = addValueDbgOp(RaxPHIInBlk3);
-  DbgOpID ConstZeroID = addConstDbgOp(MachineOperand::CreateImm(0));
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
-  DIExpression *TwoOpExpr =
-      DIExpression::get(Ctx, {dwarf::DW_OP_LLVM_arg, 0, dwarf::DW_OP_LLVM_arg,
-                              1, dwarf::DW_OP_plus});
-  DbgValueProperties TwoOpProps(TwoOpExpr, false, true);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
   SmallVector<DbgValue, 32> VLiveOuts;
   VLiveOuts.resize(4, DbgValue(EmptyProps, DbgValue::Undef));
   InstrRefBasedLDV::LiveIdxT VLiveOutIdx;
@@ -1836,144 +1817,87 @@ TEST_F(InstrRefLDVTest, pickVPHILocDiamond) {
   MOutLocs[1][0] = LiveInRsp;
   MOutLocs[2][0] = LiveInRax;
 
-  bool Result;
-  SmallVector<DbgOpID> OutValues;
+  Optional<ValueIDNum> Result;
 
   // Simple case: join two distinct values on entry to the block.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRaxID, EmptyProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   // Should have picked a PHI in $rsp in block 3.
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk3ID);
+    EXPECT_EQ(*Result, RspPHIInBlk3);
   }
 
   // If the incoming values are swapped between blocks, we should not
   // successfully join. The CFG merge would select the right values, but in
   // the wrong conditions.
   std::swap(VLiveOuts[1], VLiveOuts[2]);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // Swap back,
   std::swap(VLiveOuts[1], VLiveOuts[2]);
   // Setting one of these to being a constant should prohibit merging.
-  VLiveOuts[1].setDbgOpIDs(ConstZeroID);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  VLiveOuts[1].Kind = DbgValue::Const;
+  VLiveOuts[1].MO = MachineOperand::CreateImm(0);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
-  // Setting both to being identical constants should result in a valid join
-  // with a constant value.
+  // Seeing both to being a constant -> still prohibit, it shouldn't become
+  // a value in the register file anywhere.
   VLiveOuts[2] = VLiveOuts[1];
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
-  EXPECT_TRUE(Result);
-  if (Result) {
-    EXPECT_EQ(OutValues[0], ConstZeroID);
-  }
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
+  EXPECT_FALSE(Result);
 
   // NoVals shouldn't join with anything else.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[2] = DbgValue(2, EmptyProps, DbgValue::NoVal);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // We might merge in another VPHI in such a join. Present pickVPHILoc with
   // such a scenario: first, where one incoming edge has a VPHI with no known
   // value. This represents an edge where there was a PHI value that can't be
   // found in the register file -- we can't subsequently find a PHI here.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[2] = DbgValue(2, EmptyProps, DbgValue::VPHI);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  EXPECT_EQ(VLiveOuts[2].ID, ValueIDNum::EmptyValue);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // However, if we know the value of the incoming VPHI, we can search for its
   // location. Use a PHI machine-value for doing this, as VPHIs should always
   // have PHI values, or they should have been eliminated.
   MOutLocs[2][0] = RspPHIInBlk2;
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[2] = DbgValue(2, EmptyProps, DbgValue::VPHI);
-  VLiveOuts[2].setDbgOpIDs(RspPHIInBlk2ID); // Set location where PHI happens.
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  VLiveOuts[2].ID = RspPHIInBlk2; // Set location where PHI happens.
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk3ID);
+    EXPECT_EQ(*Result, RspPHIInBlk3);
   }
 
   // If that value isn't available from that block, don't join.
   MOutLocs[2][0] = LiveInRsp;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // Check that we don't pick values when the properties disagree, for example
   // different indirectness or DIExpression.
-  MOutLocs[2][0] = LiveInRax;
   DIExpression *NewExpr =
       DIExpression::prepend(EmptyExpr, DIExpression::ApplyOffset, 4);
-  DbgValueProperties PropsWithExpr(NewExpr, false, false);
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, PropsWithExpr);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  DbgValueProperties PropsWithExpr(NewExpr, false);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, PropsWithExpr, DbgValue::Def);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
-  DbgValueProperties PropsWithIndirect(EmptyExpr, true, false);
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, PropsWithIndirect);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
-  EXPECT_FALSE(Result);
-
-  // When we have operands with values [A, B] and [B, A], we do not necessarily
-  // pick identical join locations for each operand if the locations of those
-  // values differ between incoming basic blocks.
-  MOutLocs[1][0] = LiveInRsp;
-  MOutLocs[2][0] = LiveInRax;
-  MOutLocs[1][1] = LiveInRax;
-  MOutLocs[2][1] = LiveInRsp;
-  DbgOpID Locs0[] = {LiveInRspID, LiveInRaxID};
-  DbgOpID Locs1[] = {LiveInRaxID, LiveInRspID};
-  VLiveOuts[1] = DbgValue(Locs0, TwoOpProps);
-  VLiveOuts[2] = DbgValue(Locs1, TwoOpProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
-  // Should have picked PHIs in block 3.
-  EXPECT_TRUE(Result);
-  if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk3ID);
-    EXPECT_EQ(OutValues[1], RaxPHIInBlk3ID);
-  }
-
-  // When joining identical constants for an operand, we should simply keep that
-  // constant while joining the remaining operands as normal.
-  DbgOpID Locs2[] = {LiveInRspID, ConstZeroID};
-  DbgOpID Locs3[] = {LiveInRaxID, ConstZeroID};
-  VLiveOuts[1] = DbgValue(Locs2, TwoOpProps);
-  VLiveOuts[2] = DbgValue(Locs3, TwoOpProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
-  EXPECT_TRUE(Result);
-  if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk3ID);
-    EXPECT_EQ(OutValues[1], ConstZeroID);
-  }
-
-  // If the debug values have different constants for the same operand, they
-  // cannot be joined.
-  DbgOpID ConstOneID = addConstDbgOp(MachineOperand::CreateImm(1));
-  DbgOpID Locs4[] = {LiveInRaxID, ConstOneID};
-  VLiveOuts[1] = DbgValue(Locs3, TwoOpProps);
-  VLiveOuts[2] = DbgValue(Locs4, TwoOpProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB3, VLiveOutIdx, MOutLocs, Preds);
+  DbgValueProperties PropsWithIndirect(EmptyExpr, true);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, PropsWithIndirect, DbgValue::Def);
+  Result = pickVPHILoc(*MBB3, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 }
 
@@ -2003,17 +1927,9 @@ TEST_F(InstrRefLDVTest, pickVPHILocLoops) {
   ValueIDNum LiveInRax(EntryBlk, 0, RaxLoc);
   ValueIDNum RspPHIInBlk1(LoopBlk, 0, RspLoc);
   ValueIDNum RaxPHIInBlk1(LoopBlk, 0, RaxLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
-  DbgOpID LiveInRaxID = addValueDbgOp(LiveInRax);
-  DbgOpID RspPHIInBlk1ID = addValueDbgOp(RspPHIInBlk1);
-  DbgOpID RaxPHIInBlk1ID = addValueDbgOp(RaxPHIInBlk1);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
-  DIExpression *TwoOpExpr =
-      DIExpression::get(Ctx, {dwarf::DW_OP_LLVM_arg, 0, dwarf::DW_OP_LLVM_arg,
-                              1, dwarf::DW_OP_plus});
-  DbgValueProperties TwoOpProps(TwoOpExpr, false, true);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
   SmallVector<DbgValue, 32> VLiveOuts;
   VLiveOuts.resize(3, DbgValue(EmptyProps, DbgValue::Undef));
   InstrRefBasedLDV::LiveIdxT VLiveOutIdx;
@@ -2029,24 +1945,21 @@ TEST_F(InstrRefLDVTest, pickVPHILocLoops) {
   MOutLocs[0][0] = LiveInRsp;
   MOutLocs[1][0] = LiveInRax;
 
-  bool Result;
-  SmallVector<DbgOpID> OutValues;
+  Optional<ValueIDNum> Result;
 
   // See that we can merge as normal on a backedge.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[1] = DbgValue(LiveInRaxID, EmptyProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[1] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   // Should have picked a PHI in $rsp in block 1.
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk1ID);
+    EXPECT_EQ(*Result, RspPHIInBlk1);
   }
 
   // And that, if the desired values aren't available, we don't merge.
   MOutLocs[1][0] = LiveInRsp;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // Test the backedge behaviour: PHIs that feed back into themselves can
@@ -2057,47 +1970,27 @@ TEST_F(InstrRefLDVTest, pickVPHILocLoops) {
   MOutLocs[0][1] = LiveInRsp;
   MOutLocs[1][0] = RaxPHIInBlk1;
   MOutLocs[1][1] = RaxPHIInBlk1;
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   // Crucially, a VPHI originating in this block:
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RaxPHIInBlk1ID);
-  }
-
-  // Test that we can also find a location when joining a backedge PHI with
-  // a variadic debug value.
-  MOutLocs[1][0] = RspPHIInBlk1;
-  MOutLocs[0][1] = LiveInRax;
-  DbgOpID Locs0[] = {LiveInRspID, LiveInRaxID};
-  VLiveOuts[0] = DbgValue(Locs0, TwoOpProps);
-  // Crucially, a VPHI originating in this block:
-  VLiveOuts[1] = DbgValue(1, TwoOpProps, DbgValue::VPHI);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
-  EXPECT_TRUE(Result);
-  if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk1ID);
-    EXPECT_EQ(OutValues[1], RaxPHIInBlk1ID);
+    EXPECT_EQ(*Result, RaxPHIInBlk1);
   }
 
   // Merging should not be permitted if there's a usable PHI on the backedge,
   // but it's in the wrong place. (Overwrite $rax).
   MOutLocs[1][1] = LiveInRax;
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // Additionally, if the VPHI coming back on the loop backedge isn't from
   // this block (block 1), we can't merge it.
   MOutLocs[1][1] = RaxPHIInBlk1;
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(0, EmptyProps, DbgValue::VPHI);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 }
 
@@ -2136,15 +2029,9 @@ TEST_F(InstrRefLDVTest, pickVPHILocBadlyNestedLoops) {
   ValueIDNum RspPHIInBlk1(Loop1Blk, 0, RspLoc);
   ValueIDNum RaxPHIInBlk1(Loop1Blk, 0, RaxLoc);
   ValueIDNum RbxPHIInBlk1(Loop1Blk, 0, RbxLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
-  DbgOpID LiveInRaxID = addValueDbgOp(LiveInRax);
-  DbgOpID LiveInRbxID = addValueDbgOp(LiveInRbx);
-  DbgOpID RspPHIInBlk1ID = addValueDbgOp(RspPHIInBlk1);
-  addValueDbgOp(RaxPHIInBlk1);
-  DbgOpID RbxPHIInBlk1ID = addValueDbgOp(RbxPHIInBlk1);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
   SmallVector<DbgValue, 32> VLiveOuts;
   VLiveOuts.resize(5, DbgValue(EmptyProps, DbgValue::Undef));
   InstrRefBasedLDV::LiveIdxT VLiveOutIdx;
@@ -2165,27 +2052,24 @@ TEST_F(InstrRefLDVTest, pickVPHILocBadlyNestedLoops) {
   MOutLocs[1][0] = LiveInRax;
   MOutLocs[2][0] = LiveInRbx;
 
-  bool Result;
-  SmallVector<DbgOpID> OutValues;
+  Optional<ValueIDNum> Result;
 
   // See that we can merge as normal on a backedge.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[1] = DbgValue(LiveInRaxID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRbxID, EmptyProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[1] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRbx, EmptyProps, DbgValue::Def);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   // Should have picked a PHI in $rsp in block 1.
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk1ID);
+    EXPECT_EQ(*Result, RspPHIInBlk1);
   }
 
   // Check too that permuting the live-out locations prevents merging
   MOutLocs[0][0] = LiveInRax;
   MOutLocs[1][0] = LiveInRbx;
   MOutLocs[2][0] = LiveInRsp;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   MOutLocs[0][0] = LiveInRsp;
@@ -2195,40 +2079,36 @@ TEST_F(InstrRefLDVTest, pickVPHILocBadlyNestedLoops) {
   // Feeding a PHI back on one backedge shouldn't merge (block 1 self backedge
   // wants LiveInRax).
   MOutLocs[1][0] = RspPHIInBlk1;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // If the variables value on that edge is a VPHI feeding into itself, that's
   // fine.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
-  VLiveOuts[2] = DbgValue(LiveInRbxID, EmptyProps);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  VLiveOuts[2] = DbgValue(LiveInRbx, EmptyProps, DbgValue::Def);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk1ID);
+    EXPECT_EQ(*Result, RspPHIInBlk1);
   }
 
   // Likewise: the other backedge being a VPHI from block 1 should be accepted.
   MOutLocs[2][0] = RspPHIInBlk1;
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
   VLiveOuts[2] = DbgValue(1, EmptyProps, DbgValue::VPHI);
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RspPHIInBlk1ID);
+    EXPECT_EQ(*Result, RspPHIInBlk1);
   }
 
   // Here's where it becomes tricky: we should not merge if there are two
   // _distinct_ backedge PHIs. We can't have a PHI that happens in both rsp
   // and rax for example. We can only pick one location as the live-in.
   MOutLocs[2][0] = RaxPHIInBlk1;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // The above test sources correct machine-PHI-value from two places. Now
@@ -2239,8 +2119,7 @@ TEST_F(InstrRefLDVTest, pickVPHILocBadlyNestedLoops) {
   MOutLocs[1][0] = RspPHIInBlk1;
   MOutLocs[2][0] = LiveInRsp;
   MOutLocs[2][1] = RspPHIInBlk1;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_FALSE(Result);
 
   // Scatter various PHI values across the available locations. Only rbx (loc 2)
@@ -2253,11 +2132,10 @@ TEST_F(InstrRefLDVTest, pickVPHILocBadlyNestedLoops) {
   MOutLocs[2][0] = LiveInRsp;
   MOutLocs[2][1] = RspPHIInBlk1;
   MOutLocs[2][2] = RbxPHIInBlk1;
-  OutValues.clear();
-  Result = pickVPHILoc(OutValues, *MBB1, VLiveOutIdx, MOutLocs, Preds);
+  Result = pickVPHILoc(*MBB1, Var, VLiveOutIdx, MOutLocs, Preds);
   EXPECT_TRUE(Result);
   if (Result) {
-    EXPECT_EQ(OutValues[0], RbxPHIInBlk1ID);
+    EXPECT_EQ(*Result, RbxPHIInBlk1);
   }
 }
 
@@ -2272,13 +2150,17 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   ASSERT_TRUE(MTracker->getNumLocs() == 1);
   LocIdx RspLoc(0);
   Register RAX = getRegByName("RAX");
-  MTracker->lookupOrTrackRegister(RAX);
+  LocIdx RaxLoc = MTracker->lookupOrTrackRegister(RAX);
 
-  DbgOpID LiveInRspID = DbgOpID(false, 0);
-  DbgOpID LiveInRaxID = DbgOpID(false, 1);
+  unsigned EntryBlk = 0, Br2Blk = 2, RetBlk = 3;
+
+  ValueIDNum LiveInRsp(EntryBlk, 0, RspLoc);
+  ValueIDNum LiveInRax(EntryBlk, 0, RaxLoc);
+  ValueIDNum RspPHIInBlkBr2Blk(Br2Blk, 0, RspLoc);
+  ValueIDNum RspPHIInBlkRetBlk(RetBlk, 0, RspLoc);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
   SmallVector<DbgValue, 32> VLiveOuts;
   VLiveOuts.resize(4, DbgValue(EmptyProps, DbgValue::Undef));
   InstrRefBasedLDV::LiveIdxT VLiveOutIdx;
@@ -2303,12 +2185,12 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   // vlocJoin is here to propagate incoming values, and eliminate PHIs. Start
   // off by propagating a value into the merging block, number 3.
   DbgValue JoinedLoc = DbgValue(3, EmptyProps, DbgValue::NoVal);
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   bool Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result); // Output locs should have changed.
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRsp);
 
   // And if we did it a second time, leaving the live-ins as it was, then
   // we should report no change.
@@ -2318,15 +2200,15 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   // If the live-in variable values are different, but there's no PHI placed
   // in this block, then just pick a location. It should be the first (in RPO)
   // predecessor to avoid being a backedge.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRaxID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
   JoinedLoc = DbgValue(3, EmptyProps, DbgValue::NoVal);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
   // RPO is blocks 0 2 1 3, so LiveInRax is picked as the first predecessor
   // of this join.
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRax);
 
   // No tests for whether vlocJoin will pass-through a variable with differing
   // expressions / properties. Those can only come about due to assignments; and
@@ -2342,46 +2224,35 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   EXPECT_FALSE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::VPHI);
   // This should not have been assigned a fixed value.
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), DbgOpID::UndefID);
+  EXPECT_EQ(JoinedLoc.ID, ValueIDNum::EmptyValue);
   EXPECT_EQ(JoinedLoc.BlockNo, 3);
 
   // Try a simple PHI elimination. Put a PHI in block 3, but LiveInRsp on both
   // incoming edges. Re-load in and out-locs with unrelated values; they're
   // irrelevant.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   JoinedLoc = DbgValue(3, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
-
-  // Try the same PHI elimination but with one incoming value being a VPHI
-  // referring to the same value.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(2, EmptyProps, DbgValue::VPHI);
-  VLiveOuts[2].setDbgOpIDs(LiveInRspID);
-  JoinedLoc = DbgValue(3, EmptyProps, DbgValue::VPHI);
-  Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
-  EXPECT_TRUE(Result);
-  EXPECT_EQ(JoinedLoc.Kind, DbgValue::VPHI);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRsp);
 
   // If the "current" live-in is a VPHI, but not a VPHI generated in the current
   // block, then it's the remains of an earlier value propagation. We should
   // value propagate through this merge. Even if the current incoming values
   // disagree, because we've previously determined any VPHI here is redundant.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRaxID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
   JoinedLoc = DbgValue(2, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRaxID); // from block 2
+  EXPECT_EQ(JoinedLoc.ID, LiveInRax); // from block 2
 
   // The above test, but test that we will install one value-propagated VPHI
   // over another.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[2] = DbgValue(0, EmptyProps, DbgValue::VPHI);
   JoinedLoc = DbgValue(2, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
@@ -2390,9 +2261,9 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   EXPECT_EQ(JoinedLoc.BlockNo, 0);
 
   // We shouldn't eliminate PHIs when properties disagree.
-  DbgValueProperties PropsWithIndirect(EmptyExpr, true, false);
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, PropsWithIndirect);
+  DbgValueProperties PropsWithIndirect(EmptyExpr, true);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, PropsWithIndirect, DbgValue::Def);
   JoinedLoc = DbgValue(3, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_FALSE(Result);
@@ -2402,13 +2273,13 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   // Even if properties disagree, we should still value-propagate if there's no
   // PHI to be eliminated. The disagreeing values should work themselves out,
   // seeing how we've determined no PHI is necessary.
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, PropsWithIndirect);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, PropsWithIndirect, DbgValue::Def);
   JoinedLoc = DbgValue(2, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRsp);
   // Also check properties come from block 2, the first RPO predecessor to block
   // three.
   EXPECT_EQ(JoinedLoc.Properties, PropsWithIndirect);
@@ -2417,31 +2288,12 @@ TEST_F(InstrRefLDVTest, vlocJoinDiamond) {
   // not be eliminated.
   DIExpression *NewExpr =
       DIExpression::prepend(EmptyExpr, DIExpression::ApplyOffset, 4);
-  DbgValueProperties PropsWithExpr(NewExpr, false, false);
-  VLiveOuts[1] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRspID, PropsWithExpr);
+  DbgValueProperties PropsWithExpr(NewExpr, false);
+  VLiveOuts[1] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRsp, PropsWithExpr, DbgValue::Def);
   JoinedLoc = DbgValue(3, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_FALSE(Result);
-
-  // Try placing a PHI with variadic debug values. With differing input values
-  // (LiveInRsp, LiveInRax), this PHI should not be eliminated.
-  DIExpression *TwoOpExpr =
-      DIExpression::get(Ctx, {dwarf::DW_OP_LLVM_arg, 0, dwarf::DW_OP_LLVM_arg,
-                              1, dwarf::DW_OP_plus});
-  DbgValueProperties TwoOpProps(TwoOpExpr, false, true);
-  DbgOpID Locs0[] = {LiveInRspID, LiveInRaxID};
-  DbgOpID Locs1[] = {LiveInRaxID, LiveInRspID};
-  JoinedLoc = DbgValue(3, TwoOpProps, DbgValue::VPHI);
-  VLiveOuts[1] = DbgValue(Locs0, TwoOpProps);
-  VLiveOuts[2] = DbgValue(Locs1, TwoOpProps);
-  Result = vlocJoin(*MBB3, VLiveOutIdx, AllBlocks, JoinedLoc);
-  // Expect no change.
-  EXPECT_FALSE(Result);
-  EXPECT_EQ(JoinedLoc.Kind, DbgValue::VPHI);
-  // This should not have been assigned a fixed value.
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), DbgOpID::UndefID);
-  EXPECT_EQ(JoinedLoc.BlockNo, 3);
 }
 
 TEST_F(InstrRefLDVTest, vlocJoinLoops) {
@@ -2456,13 +2308,16 @@ TEST_F(InstrRefLDVTest, vlocJoinLoops) {
   ASSERT_TRUE(MTracker->getNumLocs() == 1);
   LocIdx RspLoc(0);
   Register RAX = getRegByName("RAX");
-  MTracker->lookupOrTrackRegister(RAX);
+  LocIdx RaxLoc = MTracker->lookupOrTrackRegister(RAX);
 
-  DbgOpID LiveInRspID = DbgOpID(false, 0);
-  DbgOpID LiveInRaxID = DbgOpID(false, 1);
+  unsigned EntryBlk = 0, LoopBlk = 1;
+
+  ValueIDNum LiveInRsp(EntryBlk, 0, RspLoc);
+  ValueIDNum LiveInRax(EntryBlk, 0, RaxLoc);
+  ValueIDNum RspPHIInBlk1(LoopBlk, 0, RspLoc);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
   SmallVector<DbgValue, 32> VLiveOuts;
   VLiveOuts.resize(3, DbgValue(EmptyProps, DbgValue::Undef));
   InstrRefBasedLDV::LiveIdxT VLiveOutIdx;
@@ -2488,17 +2343,17 @@ TEST_F(InstrRefLDVTest, vlocJoinLoops) {
 
   // First: when there's no VPHI placed already, propagate the live-in value of
   // the first RPO predecessor.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[1] = DbgValue(LiveInRaxID, EmptyProps);
-  DbgValue JoinedLoc = DbgValue(LiveInRaxID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[1] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
+  DbgValue JoinedLoc = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
   bool Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRsp);
 
   // If there is a VPHI: don't elimiante it if there are disagreeing values.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[1] = DbgValue(LiveInRaxID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[1] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_FALSE(Result);
@@ -2506,20 +2361,20 @@ TEST_F(InstrRefLDVTest, vlocJoinLoops) {
   EXPECT_EQ(JoinedLoc.BlockNo, 1);
 
   // If we feed this VPHI back into itself though, we can eliminate it.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRsp);
 
   // Don't eliminate backedge VPHIs if the predecessors have different
   // properties.
   DIExpression *NewExpr =
       DIExpression::prepend(EmptyExpr, DIExpression::ApplyOffset, 4);
-  DbgValueProperties PropsWithExpr(NewExpr, false, false);
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  DbgValueProperties PropsWithExpr(NewExpr, false);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, PropsWithExpr, DbgValue::VPHI);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
@@ -2528,7 +2383,7 @@ TEST_F(InstrRefLDVTest, vlocJoinLoops) {
   EXPECT_EQ(JoinedLoc.BlockNo, 1);
 
   // Backedges with VPHIs, but from the wrong block, shouldn't be eliminated.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(0, EmptyProps, DbgValue::VPHI);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
@@ -2554,16 +2409,18 @@ TEST_F(InstrRefLDVTest, vlocJoinBadlyNestedLoops) {
   ASSERT_TRUE(MTracker->getNumLocs() == 1);
   LocIdx RspLoc(0);
   Register RAX = getRegByName("RAX");
-  MTracker->lookupOrTrackRegister(RAX);
+  LocIdx RaxLoc = MTracker->lookupOrTrackRegister(RAX);
   Register RBX = getRegByName("RBX");
-  MTracker->lookupOrTrackRegister(RBX);
+  LocIdx RbxLoc = MTracker->lookupOrTrackRegister(RBX);
 
-  DbgOpID LiveInRspID = DbgOpID(false, 0);
-  DbgOpID LiveInRaxID = DbgOpID(false, 1);
-  DbgOpID LiveInRbxID = DbgOpID(false, 2);
+  unsigned EntryBlk = 0;
+
+  ValueIDNum LiveInRsp(EntryBlk, 0, RspLoc);
+  ValueIDNum LiveInRax(EntryBlk, 0, RaxLoc);
+  ValueIDNum LiveInRbx(EntryBlk, 0, RbxLoc);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
   SmallVector<DbgValue, 32> VLiveOuts;
   VLiveOuts.resize(5, DbgValue(EmptyProps, DbgValue::Undef));
   InstrRefBasedLDV::LiveIdxT VLiveOutIdx;
@@ -2589,9 +2446,9 @@ TEST_F(InstrRefLDVTest, vlocJoinBadlyNestedLoops) {
   AllVars.insert(Var);
 
   // Test a normal VPHI isn't eliminated.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
-  VLiveOuts[1] = DbgValue(LiveInRaxID, EmptyProps);
-  VLiveOuts[2] = DbgValue(LiveInRbxID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
+  VLiveOuts[1] = DbgValue(LiveInRax, EmptyProps, DbgValue::Def);
+  VLiveOuts[2] = DbgValue(LiveInRbx, EmptyProps, DbgValue::Def);
   DbgValue JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
   bool Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_FALSE(Result);
@@ -2599,18 +2456,18 @@ TEST_F(InstrRefLDVTest, vlocJoinBadlyNestedLoops) {
   EXPECT_EQ(JoinedLoc.BlockNo, 1);
 
   // Common VPHIs on backedges should merge.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
   VLiveOuts[2] = DbgValue(1, EmptyProps, DbgValue::VPHI);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
   Result = vlocJoin(*MBB1, VLiveOutIdx, AllBlocks, JoinedLoc);
   EXPECT_TRUE(Result);
   EXPECT_EQ(JoinedLoc.Kind, DbgValue::Def);
-  EXPECT_EQ(JoinedLoc.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(JoinedLoc.ID, LiveInRsp);
 
   // They shouldn't merge if one of their properties is different.
-  DbgValueProperties PropsWithIndirect(EmptyExpr, true, false);
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  DbgValueProperties PropsWithIndirect(EmptyExpr, true);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
   VLiveOuts[2] = DbgValue(1, PropsWithIndirect, DbgValue::VPHI);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
@@ -2620,7 +2477,7 @@ TEST_F(InstrRefLDVTest, vlocJoinBadlyNestedLoops) {
   EXPECT_EQ(JoinedLoc.BlockNo, 1);
 
   // VPHIs from different blocks should not merge.
-  VLiveOuts[0] = DbgValue(LiveInRspID, EmptyProps);
+  VLiveOuts[0] = DbgValue(LiveInRsp, EmptyProps, DbgValue::Def);
   VLiveOuts[1] = DbgValue(1, EmptyProps, DbgValue::VPHI);
   VLiveOuts[2] = DbgValue(2, EmptyProps, DbgValue::VPHI);
   JoinedLoc = DbgValue(1, EmptyProps, DbgValue::VPHI);
@@ -2645,11 +2502,10 @@ TEST_F(InstrRefLDVTest, VLocSingleBlock) {
   std::tie(MInLocs, MOutLocs) = allocValueTables(1, 2);
 
   ValueIDNum LiveInRsp = ValueIDNum(0, 0, RspLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
   MInLocs[0][0] = MOutLocs[0][0] = LiveInRsp;
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
 
   SmallSet<DebugVariable, 4> AllVars;
   AllVars.insert(Var);
@@ -2674,7 +2530,7 @@ TEST_F(InstrRefLDVTest, VLocSingleBlock) {
 
   // If we put an assignment in the transfer function, that should... well,
   // do nothing, because we don't store the live-outs.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output.size(), 0ul);
@@ -2701,9 +2557,6 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   ValueIDNum LiveInRsp = ValueIDNum(EntryBlk, 0, RspLoc);
   ValueIDNum LiveInRax = ValueIDNum(EntryBlk, 0, RaxLoc);
   ValueIDNum RspPHIInBlk3 = ValueIDNum(RetBlk, 0, RspLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
-  DbgOpID LiveInRaxID = addValueDbgOp(LiveInRax);
-  DbgOpID RspPHIInBlk3ID = addValueDbgOp(RspPHIInBlk3);
 
   FuncValueTable MInLocs, MOutLocs;
   std::tie(MInLocs, MOutLocs) = allocValueTables(4, 2);
@@ -2712,7 +2565,7 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   initValueArray(MOutLocs, 4, 2);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
 
   SmallSet<DebugVariable, 4> AllVars;
   AllVars.insert(Var);
@@ -2754,7 +2607,7 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
 
   // An assignment in the end block should also not affect other blocks; or
   // produce any live-ins.
-  VLocs[3].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[3].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2766,7 +2619,7 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   // Assignments in either of the side-of-diamond blocks should also not be
   // propagated anywhere.
   VLocs[3].Vars.clear();
-  VLocs[2].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[2].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2776,7 +2629,7 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   VLocs[2].Vars.clear();
   ClearOutputs();
 
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2788,7 +2641,7 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
 
   // However: putting an assignment in the first block should propagate variable
   // values through to all other blocks, as it dominates.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2796,11 +2649,11 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   ASSERT_EQ(Output[2].size(), 1ul);
   ASSERT_EQ(Output[3].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
 
@@ -2808,7 +2661,7 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   // should still be propagated, as buildVLocValueMap shouldn't care about
   // what's in the registers (except for PHIs).
   // values through to all other blocks, as it dominates.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2816,18 +2669,18 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   ASSERT_EQ(Output[2].size(), 1ul);
   ASSERT_EQ(Output[3].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
 
   // We should get a live-in to the merging block, if there are two assigns of
   // the same value in either side of the diamond.
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[2].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[2].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2835,14 +2688,14 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   EXPECT_EQ(Output[2].size(), 0ul);
   ASSERT_EQ(Output[3].size(), 1ul);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[1].Vars.clear();
   VLocs[2].Vars.clear();
 
   // If we assign a value in the entry block, then 'undef' on a branch, we
   // shouldn't have a live-in in the merge block.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   VLocs[1].Vars.insert({Var, DbgValue(EmptyProps, DbgValue::Undef)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
@@ -2851,9 +2704,9 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[3].size(), 0ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -2861,8 +2714,8 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   // Having different values joining into the merge block should mean we have
   // no live-in in that block. Block ones LiveInRax value doesn't appear as a
   // live-in anywhere, it's block internal.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2870,9 +2723,9 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[3].size(), 0ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -2880,8 +2733,8 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   // But on the other hand, if there's a location in the register file where
   // those two values can be joined, do so.
   MOutLocs[1][0] = LiveInRax;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -2889,11 +2742,11 @@ TEST_F(InstrRefLDVTest, VLocDiamondBlocks) {
   ASSERT_EQ(Output[2].size(), 1ul);
   ASSERT_EQ(Output[3].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), RspPHIInBlk3ID);
+  EXPECT_EQ(Output[3][0].second.ID, RspPHIInBlk3);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -2921,11 +2774,6 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   ValueIDNum RspPHIInBlk1 = ValueIDNum(LoopBlk, 0, RspLoc);
   ValueIDNum RspDefInBlk1 = ValueIDNum(LoopBlk, 1, RspLoc);
   ValueIDNum RaxPHIInBlk1 = ValueIDNum(LoopBlk, 0, RaxLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
-  DbgOpID LiveInRaxID = addValueDbgOp(LiveInRax);
-  DbgOpID RspPHIInBlk1ID = addValueDbgOp(RspPHIInBlk1);
-  DbgOpID RspDefInBlk1ID = addValueDbgOp(RspDefInBlk1);
-  DbgOpID RaxPHIInBlk1ID = addValueDbgOp(RaxPHIInBlk1);
 
   FuncValueTable MInLocs, MOutLocs;
   std::tie(MInLocs, MOutLocs) = allocValueTables(3, 2);
@@ -2934,11 +2782,7 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   initValueArray(MOutLocs, 3, 2);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
-  DIExpression *TwoOpExpr =
-      DIExpression::get(Ctx, {dwarf::DW_OP_LLVM_arg, 0, dwarf::DW_OP_LLVM_arg,
-                              1, dwarf::DW_OP_plus});
-  DbgValueProperties VariadicProps(TwoOpExpr, false, true);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
 
   SmallSet<DebugVariable, 4> AllVars;
   AllVars.insert(Var);
@@ -2966,39 +2810,22 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   Output.resize(3);
 
   // Easy starter: a dominating assign should propagate to all blocks.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   ASSERT_EQ(Output[1].size(), 1ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
-  ClearOutputs();
-  VLocs[0].Vars.clear();
-  VLocs[1].Vars.clear();
-
-  // A variadic assignment should behave the same.
-  DbgOpID Locs0[] = {LiveInRspID, LiveInRaxID};
-  VLocs[0].Vars.insert({Var, DbgValue(Locs0, VariadicProps)});
-  buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output, MOutLocs,
-                    MInLocs, VLocs);
-  EXPECT_EQ(Output[0].size(), 0ul);
-  ASSERT_EQ(Output[1].size(), 1ul);
-  ASSERT_EQ(Output[2].size(), 1ul);
-  EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(1), LiveInRaxID);
-  EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
 
   // Put an undef assignment in the loop. Should get no live-in value.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   VLocs[1].Vars.insert({Var, DbgValue(EmptyProps, DbgValue::Undef)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
@@ -3010,32 +2837,32 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   VLocs[1].Vars.clear();
 
   // Assignment of the same value should naturally join.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   ASSERT_EQ(Output[1].size(), 1ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
 
   // Assignment of different values shouldn't join with no machine PHI vals.
   // Will be live-in to exit block as it's dominated.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   EXPECT_EQ(Output[1].size(), 0ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3044,15 +2871,15 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   // with unrelated assign in loop block again.
   MInLocs[1][0] = RspPHIInBlk1;
   MOutLocs[1][0] = RspDefInBlk1;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   EXPECT_EQ(Output[1].size(), 0ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3061,17 +2888,17 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   // find the appropriate PHI.
   MInLocs[1][0] = RspPHIInBlk1;
   MOutLocs[1][0] = RspDefInBlk1;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(RspDefInBlk1ID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(RspDefInBlk1, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   ASSERT_EQ(Output[1].size(), 1ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), RspPHIInBlk1ID);
+  EXPECT_EQ(Output[1][0].second.ID, RspPHIInBlk1);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), RspDefInBlk1ID);
+  EXPECT_EQ(Output[2][0].second.ID, RspDefInBlk1);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3082,17 +2909,17 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   MOutLocs[1][0] = LiveInRsp;
   MInLocs[1][1] = RaxPHIInBlk1;
   MOutLocs[1][1] = RspDefInBlk1;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(RspDefInBlk1ID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(RspDefInBlk1, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   ASSERT_EQ(Output[1].size(), 1ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), RaxPHIInBlk1ID);
+  EXPECT_EQ(Output[1][0].second.ID, RaxPHIInBlk1);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), RspDefInBlk1ID);
+  EXPECT_EQ(Output[2][0].second.ID, RspDefInBlk1);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3104,8 +2931,8 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   MOutLocs[1][0] = RspDefInBlk1;
   MInLocs[1][1] = RaxPHIInBlk1;
   MOutLocs[1][1] = RspDefInBlk1;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(RspDefInBlk1ID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(RspDefInBlk1, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3113,9 +2940,9 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
   // Today, the first register is picked.
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), RspPHIInBlk1ID);
+  EXPECT_EQ(Output[1][0].second.ID, RspPHIInBlk1);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), RspDefInBlk1ID);
+  EXPECT_EQ(Output[2][0].second.ID, RspDefInBlk1);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3138,17 +2965,17 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   MOutLocs[1][0] = RspPHIInBlk1;
   MInLocs[1][1] = LiveInRax;
   MOutLocs[1][1] = LiveInRax;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(RspPHIInBlk1ID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(RspPHIInBlk1, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   ASSERT_EQ(Output[1].size(), 1ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), RspPHIInBlk1ID);
+  EXPECT_EQ(Output[1][0].second.ID, RspPHIInBlk1);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), RspPHIInBlk1ID);
+  EXPECT_EQ(Output[2][0].second.ID, RspPHIInBlk1);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3157,17 +2984,17 @@ TEST_F(InstrRefLDVTest, VLocSimpleLoop) {
   // because there's a def in in.
   MInLocs[1][0] = LiveInRsp;
   MOutLocs[1][0] = LiveInRsp;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
   ASSERT_EQ(Output[1].size(), 1ul);
   ASSERT_EQ(Output[2].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3200,11 +3027,6 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ValueIDNum RspPHIInBlk1 = ValueIDNum(Loop1Blk, 0, RspLoc);
   ValueIDNum RspPHIInBlk2 = ValueIDNum(Loop2Blk, 0, RspLoc);
   ValueIDNum RspDefInBlk2 = ValueIDNum(Loop2Blk, 1, RspLoc);
-  DbgOpID LiveInRspID = addValueDbgOp(LiveInRsp);
-  DbgOpID LiveInRaxID = addValueDbgOp(LiveInRax);
-  DbgOpID RspPHIInBlk1ID = addValueDbgOp(RspPHIInBlk1);
-  DbgOpID RspPHIInBlk2ID = addValueDbgOp(RspPHIInBlk2);
-  DbgOpID RspDefInBlk2ID = addValueDbgOp(RspDefInBlk2);
 
   FuncValueTable MInLocs, MOutLocs;
   std::tie(MInLocs, MOutLocs) = allocValueTables(5, 2);
@@ -3213,7 +3035,7 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   initValueArray(MOutLocs, 5, 2);
 
   DebugVariable Var(FuncVariable, None, nullptr);
-  DbgValueProperties EmptyProps(EmptyExpr, false, false);
+  DbgValueProperties EmptyProps(EmptyExpr, false);
 
   SmallSet<DebugVariable, 4> AllVars;
   AllVars.insert(Var);
@@ -3243,7 +3065,7 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   Output.resize(5);
 
   // A dominating assign should propagate to all blocks.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3252,20 +3074,20 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
 
   // Test that an assign in the inner loop causes unresolved PHIs at the heads
   // of both loops, and no output location. Dominated blocks do get values.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[2].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[2].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3274,16 +3096,16 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[2].Vars.clear();
 
   // Same test, but with no assignment in block 0. We should still get values
   // in dominated blocks.
-  VLocs[2].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[2].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3292,16 +3114,16 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[2].Vars.clear();
 
   // Similarly, assignments in the outer loop gives location to dominated
   // blocks, but no PHI locations are found at the outer loop head.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[3].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[3].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3310,13 +3132,13 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   EXPECT_EQ(Output[3].size(), 0ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[3].Vars.clear();
 
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[1].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[1].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3325,11 +3147,11 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[1].Vars.clear();
@@ -3337,8 +3159,8 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   // With an assignment of the same value in the inner loop, we should work out
   // that all PHIs can be eliminated and the same value is live-through the
   // whole function.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[2].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[2].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3347,13 +3169,13 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[1][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[2][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRsp);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRspID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRsp);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[2].Vars.clear();
@@ -3368,8 +3190,8 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   // one. Even though RspPHIInBlk2 isn't available later in the function, we
   // should still produce a live-in value. The fact it's unavailable is a
   // different concern.
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[2].Vars.insert({Var, DbgValue(LiveInRaxID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[2].Vars.insert({Var, DbgValue(LiveInRax, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3378,9 +3200,9 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[3][0].second.ID, LiveInRax);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), LiveInRaxID);
+  EXPECT_EQ(Output[4][0].second.ID, LiveInRax);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[2].Vars.clear();
@@ -3394,8 +3216,8 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   MOutLocs[2][0] = RspDefInBlk2;
   MInLocs[3][0] = RspDefInBlk2;
   MOutLocs[3][0] = RspDefInBlk2;
-  VLocs[0].Vars.insert({Var, DbgValue(LiveInRspID, EmptyProps)});
-  VLocs[2].Vars.insert({Var, DbgValue(RspDefInBlk2ID, EmptyProps)});
+  VLocs[0].Vars.insert({Var, DbgValue(LiveInRsp, EmptyProps, DbgValue::Def)});
+  VLocs[2].Vars.insert({Var, DbgValue(RspDefInBlk2, EmptyProps, DbgValue::Def)});
   buildVLocValueMap(OutermostLoc, AllVars, AssignBlocks, Output,
                     MOutLocs, MInLocs, VLocs);
   EXPECT_EQ(Output[0].size(), 0ul);
@@ -3404,14 +3226,15 @@ TEST_F(InstrRefLDVTest, VLocNestedLoop) {
   ASSERT_EQ(Output[3].size(), 1ul);
   ASSERT_EQ(Output[4].size(), 1ul);
   EXPECT_EQ(Output[1][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[1][0].second.getDbgOpID(0), RspPHIInBlk1ID);
+  EXPECT_EQ(Output[1][0].second.ID, RspPHIInBlk1);
   EXPECT_EQ(Output[2][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[2][0].second.getDbgOpID(0), RspPHIInBlk2ID);
+  EXPECT_EQ(Output[2][0].second.ID, RspPHIInBlk2);
   EXPECT_EQ(Output[3][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[3][0].second.getDbgOpID(0), RspDefInBlk2ID);
+  EXPECT_EQ(Output[3][0].second.ID, RspDefInBlk2);
   EXPECT_EQ(Output[4][0].second.Kind, DbgValue::Def);
-  EXPECT_EQ(Output[4][0].second.getDbgOpID(0), RspDefInBlk2ID);
+  EXPECT_EQ(Output[4][0].second.ID, RspDefInBlk2);
   ClearOutputs();
   VLocs[0].Vars.clear();
   VLocs[2].Vars.clear();
 }
+

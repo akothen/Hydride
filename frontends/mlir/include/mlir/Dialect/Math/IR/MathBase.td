@@ -20,15 +20,16 @@ def Math_Dialect : Dialect {
 
     ```mlir
     // Scalar absolute value.
-    %a = math.absf %b : f64
-
+    %a = math.abs %b : f64
+    
     // Vector elementwise absolute value.
-    %f = math.absf %g : vector<4xf32>
+    %f = math.abs %g : vector<4xf32>
 
     // Tensor elementwise absolute value.
-    %x = math.absf %y : tensor<4x?xf8>
+    %x = math.abs %y : tensor<4x?xf8>
     ```
   }];
   let hasConstantMaterializer = 1;
+  let emitAccessorPrefix = kEmitAccessorPrefix_Prefixed;
 }
 #endif // MATH_BASE

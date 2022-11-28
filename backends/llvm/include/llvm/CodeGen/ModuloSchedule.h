@@ -192,8 +192,7 @@ private:
                       ValueMapTy *VRMap, MBBVectorTy &PrologBBs);
   void generateEpilog(unsigned LastStage, MachineBasicBlock *KernelBB,
                       MachineBasicBlock *OrigBB, ValueMapTy *VRMap,
-                      ValueMapTy *VRMapPhi, MBBVectorTy &EpilogBBs,
-                      MBBVectorTy &PrologBBs);
+                      MBBVectorTy &EpilogBBs, MBBVectorTy &PrologBBs);
   void generateExistingPhis(MachineBasicBlock *NewBB, MachineBasicBlock *BB1,
                             MachineBasicBlock *BB2, MachineBasicBlock *KernelBB,
                             ValueMapTy *VRMap, InstrMapTy &InstrMap,
@@ -201,9 +200,8 @@ private:
                             bool IsLast);
   void generatePhis(MachineBasicBlock *NewBB, MachineBasicBlock *BB1,
                     MachineBasicBlock *BB2, MachineBasicBlock *KernelBB,
-                    ValueMapTy *VRMap, ValueMapTy *VRMapPhi,
-                    InstrMapTy &InstrMap, unsigned LastStageNum,
-                    unsigned CurStageNum, bool IsLast);
+                    ValueMapTy *VRMap, InstrMapTy &InstrMap,
+                    unsigned LastStageNum, unsigned CurStageNum, bool IsLast);
   void removeDeadInstructions(MachineBasicBlock *KernelBB,
                               MBBVectorTy &EpilogBBs);
   void splitLifetimes(MachineBasicBlock *KernelBB, MBBVectorTy &EpilogBBs);

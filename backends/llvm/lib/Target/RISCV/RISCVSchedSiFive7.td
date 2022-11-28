@@ -44,12 +44,6 @@ def : WriteRes<WriteJal, [SiFive7PipeB]>;
 def : WriteRes<WriteJalr, [SiFive7PipeB]>;
 def : WriteRes<WriteJmpReg, [SiFive7PipeB]>;
 
-//Short forward branch
-def : WriteRes<WriteSFB, [SiFive7PipeA, SiFive7PipeB]> {
-  let Latency = 3;
-  let NumMicroOps = 2;
-}
-
 // Integer arithmetic and logic
 let Latency = 3 in {
 def : WriteRes<WriteIALU, [SiFive7PipeAB]>;
@@ -88,6 +82,7 @@ let Latency = 3 in {
 def : WriteRes<WriteLDB, [SiFive7PipeA]>;
 def : WriteRes<WriteLDH, [SiFive7PipeA]>;
 def : WriteRes<WriteLDW, [SiFive7PipeA]>;
+def : WriteRes<WriteLDWU, [SiFive7PipeA]>;
 def : WriteRes<WriteLDD, [SiFive7PipeA]>;
 }
 
@@ -109,7 +104,7 @@ def : WriteRes<WriteAtomicLDD, [SiFive7PipeA]>;
 
 // Single precision.
 let Latency = 5 in {
-def : WriteRes<WriteFAdd32, [SiFive7PipeB]>;
+def : WriteRes<WriteFALU32, [SiFive7PipeB]>;
 def : WriteRes<WriteFMul32, [SiFive7PipeB]>;
 def : WriteRes<WriteFMA32, [SiFive7PipeB]>;
 }
@@ -125,7 +120,7 @@ def : WriteRes<WriteFSqrt32, [SiFive7PipeB, SiFive7FDiv]> { let Latency = 27;
 
 // Double precision
 let Latency = 7 in {
-def : WriteRes<WriteFAdd64, [SiFive7PipeB]>;
+def : WriteRes<WriteFALU64, [SiFive7PipeB]>;
 def : WriteRes<WriteFMul64, [SiFive7PipeB]>;
 def : WriteRes<WriteFMA64, [SiFive7PipeB]>;
 }
@@ -193,13 +188,12 @@ def : ReadAdvance<ReadAtomicLDW, 0>;
 def : ReadAdvance<ReadAtomicLDD, 0>;
 def : ReadAdvance<ReadAtomicSTW, 0>;
 def : ReadAdvance<ReadAtomicSTD, 0>;
-def : ReadAdvance<ReadFStoreData, 0>;
 def : ReadAdvance<ReadFMemBase, 0>;
-def : ReadAdvance<ReadFAdd32, 0>;
-def : ReadAdvance<ReadFAdd64, 0>;
+def : ReadAdvance<ReadFALU32, 0>;
+def : ReadAdvance<ReadFALU64, 0>;
 def : ReadAdvance<ReadFMul32, 0>;
-def : ReadAdvance<ReadFMul64, 0>;
 def : ReadAdvance<ReadFMA32, 0>;
+def : ReadAdvance<ReadFMul64, 0>;
 def : ReadAdvance<ReadFMA64, 0>;
 def : ReadAdvance<ReadFDiv32, 0>;
 def : ReadAdvance<ReadFDiv64, 0>;
@@ -228,8 +222,6 @@ def : ReadAdvance<ReadFMovI64ToF64, 0>;
 def : ReadAdvance<ReadFClass32, 0>;
 def : ReadAdvance<ReadFClass64, 0>;
 
-def : ReadAdvance<ReadSFB, 0>;
-
 //===----------------------------------------------------------------------===//
 // Unsupported extensions
 defm : UnsupportedSchedV;
@@ -237,7 +229,11 @@ defm : UnsupportedSchedZba;
 defm : UnsupportedSchedZbb;
 defm : UnsupportedSchedZbc;
 defm : UnsupportedSchedZbs;
-defm : UnsupportedSchedZbkb;
-defm : UnsupportedSchedZbkx;
+defm : UnsupportedSchedZbe;
+defm : UnsupportedSchedZbf;
+defm : UnsupportedSchedZbm;
+defm : UnsupportedSchedZbp;
+defm : UnsupportedSchedZbr;
+defm : UnsupportedSchedZbt;
 defm : UnsupportedSchedZfh;
 }

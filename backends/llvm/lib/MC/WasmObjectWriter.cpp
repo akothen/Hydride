@@ -72,7 +72,7 @@ struct WasmDataSegment {
 // A wasm function to be written into the function section.
 struct WasmFunction {
   uint32_t SigIndex;
-  MCSection *Section;
+  const MCSymbolWasm *Sym;
 };
 
 // A wasm global to be written into the global section.
@@ -1058,12 +1058,15 @@ uint32_t WasmObjectWriter::writeCodeSection(const MCAssembler &Asm,
   encodeULEB128(Functions.size(), W->OS);
 
   for (const WasmFunction &Func : Functions) {
-    auto *FuncSection = static_cast<MCSectionWasm *>(Func.Section);
+    auto &FuncSection = static_cast<MCSectionWasm &>(Func.Sym->getSection());
 
-    int64_t Size = Layout.getSectionAddressSize(FuncSection);
+    int64_t Size = 0;
+    if (!Func.Sym->getSize()->evaluateAsAbsolute(Size, Layout))
+      report_fatal_error(".size expression must be evaluatable");
+
     encodeULEB128(Size, W->OS);
-    FuncSection->setSectionOffset(W->OS.tell() - Section.ContentsOffset);
-    Asm.writeSectionData(W->OS, FuncSection, Layout);
+    FuncSection.setSectionOffset(W->OS.tell() - Section.ContentsOffset);
+    Asm.writeSectionData(W->OS, &FuncSection, Layout);
   }
 
   // Apply fixups.
@@ -1588,11 +1591,15 @@ uint64_t WasmObjectWriter::writeOneObject(MCAssembler &Asm,
             report_fatal_error(
                 "function sections must contain one function each");
 
+          if (WS.getSize() == nullptr)
+            report_fatal_error(
+                "function symbols must have a size set with .size");
+
           // A definition. Write out the function body.
           Index = NumFunctionImports + Functions.size();
           WasmFunction Func;
           Func.SigIndex = getFunctionType(WS);
-          Func.Section = &WS.getSection();
+          Func.Sym = &WS;
           assert(WasmIndices.count(&WS) == 0);
           WasmIndices[&WS] = Index;
           Functions.push_back(Func);

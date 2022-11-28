@@ -62,8 +62,7 @@ std::string VRegRenamer::getInstructionOpcodeHash(MachineInstr &MI) {
                                 /* HashConstantPoolIndices */ true,
                                 /* HashMemOperands */ true);
     assert(Hash && "Expected non-zero Hash");
-    OS << format_hex_no_prefix(Hash, 16, true);
-    return OS.str();
+    return std::to_string(Hash).substr(0, 5);
   }
 
   // Gets a hashable artifact from a given MachineOperand (ie an unsigned).
@@ -133,8 +132,7 @@ std::string VRegRenamer::getInstructionOpcodeHash(MachineInstr &MI) {
   }
 
   auto HashMI = hash_combine_range(MIOperands.begin(), MIOperands.end());
-  OS << format_hex_no_prefix(HashMI, 16, true);
-  return OS.str();
+  return std::to_string(HashMI).substr(0, 5);
 }
 
 unsigned VRegRenamer::createVirtualRegister(unsigned VReg) {

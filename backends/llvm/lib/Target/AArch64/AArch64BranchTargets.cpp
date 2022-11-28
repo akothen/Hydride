@@ -39,8 +39,7 @@ public:
   StringRef getPassName() const override { return AARCH64_BRANCH_TARGETS_NAME; }
 
 private:
-  void addBTI(MachineBasicBlock &MBB, bool CouldCall, bool CouldJump,
-              bool NeedsWinCFI);
+  void addBTI(MachineBasicBlock &MBB, bool CouldCall, bool CouldJump);
 };
 } // end anonymous namespace
 
@@ -76,7 +75,6 @@ bool AArch64BranchTargets::runOnMachineFunction(MachineFunction &MF) {
         JumpTableTargets.insert(MBB);
 
   bool MadeChange = false;
-  bool HasWinCFI = MF.hasWinCFI();
   for (MachineBasicBlock &MBB : MF) {
     bool CouldCall = false, CouldJump = false;
     // Even in cases where a function has internal linkage and is only called
@@ -97,7 +95,7 @@ bool AArch64BranchTargets::runOnMachineFunction(MachineFunction &MF) {
       CouldJump = true;
 
     if (CouldCall || CouldJump) {
-      addBTI(MBB, CouldCall, CouldJump, HasWinCFI);
+      addBTI(MBB, CouldCall, CouldJump);
       MadeChange = true;
     }
   }
@@ -106,7 +104,7 @@ bool AArch64BranchTargets::runOnMachineFunction(MachineFunction &MF) {
 }
 
 void AArch64BranchTargets::addBTI(MachineBasicBlock &MBB, bool CouldCall,
-                                  bool CouldJump, bool HasWinCFI) {
+                                  bool CouldJump) {
   LLVM_DEBUG(dbgs() << "Adding BTI " << (CouldJump ? "j" : "")
                     << (CouldCall ? "c" : "") << " to " << MBB.getName()
                     << "\n");
@@ -136,10 +134,6 @@ void AArch64BranchTargets::addBTI(MachineBasicBlock &MBB, bool CouldCall,
        MBBI->getOpcode() == AArch64::PACIBSP))
     return;
 
-  if (HasWinCFI && MBBI->getFlag(MachineInstr::FrameSetup)) {
-    BuildMI(MBB, MBB.begin(), MBB.findDebugLoc(MBB.begin()),
-            TII->get(AArch64::SEH_Nop));
-  }
   BuildMI(MBB, MBB.begin(), MBB.findDebugLoc(MBB.begin()),
           TII->get(AArch64::HINT))
       .addImm(HintNum);

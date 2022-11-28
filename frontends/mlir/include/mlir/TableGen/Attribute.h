@@ -113,9 +113,6 @@ public:
 
   // Returns the dialect for the attribute if defined.
   Dialect getDialect() const;
-
-  // Returns the TableGen definition this Attribute was constructed from.
-  const llvm::Record &getDef() const;
 };
 
 // Wrapper class providing helper methods for accessing MLIR constant attribute

@@ -68,5 +68,6 @@ static void reduceMasksInModule(Oracle &O, ReducerWorkItem &WorkItem) {
 }
 
 void llvm::reduceRegisterMasksMIRDeltaPass(TestRunner &Test) {
-  runDeltaPass(Test, reduceMasksInModule, "Reducing register masks");
+  outs() << "*** Reducing register masks...\n";
+  runDeltaPass(Test, reduceMasksInModule);
 }

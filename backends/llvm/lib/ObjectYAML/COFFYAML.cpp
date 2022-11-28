@@ -65,7 +65,6 @@ void ScalarEnumerationTraits<COFF::MachineTypes>::enumeration(
   ECase(IMAGE_FILE_MACHINE_ARM);
   ECase(IMAGE_FILE_MACHINE_ARMNT);
   ECase(IMAGE_FILE_MACHINE_ARM64);
-  ECase(IMAGE_FILE_MACHINE_ARM64EC);
   ECase(IMAGE_FILE_MACHINE_EBC);
   ECase(IMAGE_FILE_MACHINE_I386);
   ECase(IMAGE_FILE_MACHINE_IA64);
@@ -430,8 +429,7 @@ void MappingTraits<COFFYAML::Relocation>::mapping(IO &IO,
     MappingNormalization<NType<COFF::RelocationTypesARM>, uint16_t> NT(
         IO, Rel.Type);
     IO.mapRequired("Type", NT->Type);
-  } else if (H.Machine == COFF::IMAGE_FILE_MACHINE_ARM64 ||
-             H.Machine == COFF::IMAGE_FILE_MACHINE_ARM64EC) {
+  } else if (H.Machine == COFF::IMAGE_FILE_MACHINE_ARM64) {
     MappingNormalization<NType<COFF::RelocationTypesARM64>, uint16_t> NT(
         IO, Rel.Type);
     IO.mapRequired("Type", NT->Type);

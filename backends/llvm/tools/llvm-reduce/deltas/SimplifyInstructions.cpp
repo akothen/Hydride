@@ -28,11 +28,11 @@ static void extractInstrFromModule(Oracle &O, Module &Program) {
   for (auto &F : Program) {
     for (auto &BB : F) {
       for (auto &Inst : BB) {
+        if (O.shouldKeep())
+          continue;
 
         SimplifyQuery Q(DL, &Inst);
         if (Value *Simplified = simplifyInstruction(&Inst, Q)) {
-          if (O.shouldKeep())
-            continue;
           Inst.replaceAllUsesWith(Simplified);
           InstToDelete.push_back(&Inst);
         }
@@ -45,5 +45,6 @@ static void extractInstrFromModule(Oracle &O, Module &Program) {
 }
 
 void llvm::simplifyInstructionsDeltaPass(TestRunner &Test) {
-  runDeltaPass(Test, extractInstrFromModule, "Simplifying Instructions");
+  outs() << "*** Simplifying Instructions...\n";
+  runDeltaPass(Test, extractInstrFromModule);
 }

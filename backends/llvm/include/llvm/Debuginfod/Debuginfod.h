@@ -20,12 +20,10 @@
 #ifndef LLVM_DEBUGINFOD_DEBUGINFOD_H
 #define LLVM_DEBUGINFOD_DEBUGINFOD_H
 
-#include "HTTPServer.h"
-
 #include "llvm/ADT/Optional.h"
 #include "llvm/ADT/StringMap.h"
 #include "llvm/ADT/StringRef.h"
-#include "llvm/Object/BuildID.h"
+#include "llvm/Debuginfod/HTTPServer.h"
 #include "llvm/Support/Error.h"
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/Mutex.h"
@@ -37,6 +35,10 @@
 #include <queue>
 
 namespace llvm {
+
+typedef ArrayRef<uint8_t> BuildIDRef;
+
+typedef SmallVector<uint8_t, 10> BuildID;
 
 /// Finds default array of Debuginfod server URLs by checking DEBUGINFOD_URLS
 /// environment variable.
@@ -52,16 +54,16 @@ std::chrono::milliseconds getDefaultDebuginfodTimeout();
 
 /// Fetches a specified source file by searching the default local cache
 /// directory and server URLs.
-Expected<std::string> getCachedOrDownloadSource(object::BuildIDRef ID,
+Expected<std::string> getCachedOrDownloadSource(BuildIDRef ID,
                                                 StringRef SourceFilePath);
 
 /// Fetches an executable by searching the default local cache directory and
 /// server URLs.
-Expected<std::string> getCachedOrDownloadExecutable(object::BuildIDRef ID);
+Expected<std::string> getCachedOrDownloadExecutable(BuildIDRef ID);
 
 /// Fetches a debug binary by searching the default local cache directory and
 /// server URLs.
-Expected<std::string> getCachedOrDownloadDebuginfo(object::BuildIDRef ID);
+Expected<std::string> getCachedOrDownloadDebuginfo(BuildIDRef ID);
 
 /// Fetches any debuginfod artifact using the default local cache directory and
 /// server URLs.
@@ -106,8 +108,8 @@ class DebuginfodCollection {
   sys::RWMutex DebugBinariesMutex;
   StringMap<std::string> DebugBinaries;
   Error findBinaries(StringRef Path);
-  Expected<Optional<std::string>> getDebugBinaryPath(object::BuildIDRef);
-  Expected<Optional<std::string>> getBinaryPath(object::BuildIDRef);
+  Expected<Optional<std::string>> getDebugBinaryPath(BuildIDRef);
+  Expected<Optional<std::string>> getBinaryPath(BuildIDRef);
   // If the collection has not been updated since MinInterval, call update() and
   // return true. Otherwise return false. If update returns an error, return the
   // error.
@@ -126,8 +128,8 @@ public:
                        ThreadPool &Pool, double MinInterval);
   Error update();
   Error updateForever(std::chrono::milliseconds Interval);
-  Expected<std::string> findDebugBinaryPath(object::BuildIDRef);
-  Expected<std::string> findBinaryPath(object::BuildIDRef);
+  Expected<std::string> findDebugBinaryPath(BuildIDRef);
+  Expected<std::string> findBinaryPath(BuildIDRef);
 };
 
 struct DebuginfodServer {

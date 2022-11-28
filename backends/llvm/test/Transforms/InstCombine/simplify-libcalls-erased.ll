@@ -13,7 +13,7 @@ define double @pow_exp(double %x, double %y) {
   %call = call fast double @exp(double %x) #1
   %pow = call fast double @llvm.pow.f64(double %call, double %y)
   %C1 = fcmp ule double %call, %pow
-  store i1 %C1, ptr %A
+  store i1 %C1, i1* %A
   ret double %pow
 }
 

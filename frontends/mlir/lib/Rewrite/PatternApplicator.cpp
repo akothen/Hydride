@@ -191,21 +191,20 @@ LogicalResult PatternApplicator::matchAndRewrite(
     Operation *dumpRootOp = getDumpRootOp(op);
 #endif
     if (pdlMatch) {
-      result = bytecode->rewrite(rewriter, *pdlMatch, *mutableByteCodeState);
+      bytecode->rewrite(rewriter, *pdlMatch, *mutableByteCodeState);
+      result = success(!onSuccess || succeeded(onSuccess(*bestPattern)));
     } else {
-      LLVM_DEBUG(llvm::dbgs() << "Trying to match \""
-                              << bestPattern->getDebugName() << "\"\n");
-
       const auto *pattern = static_cast<const RewritePattern *>(bestPattern);
+
+      LLVM_DEBUG(llvm::dbgs()
+                 << "Trying to match \"" << pattern->getDebugName() << "\"\n");
       result = pattern->matchAndRewrite(op, rewriter);
+      LLVM_DEBUG(llvm::dbgs() << "\"" << pattern->getDebugName() << "\" result "
+                              << succeeded(result) << "\n");
 
-      LLVM_DEBUG(llvm::dbgs() << "\"" << bestPattern->getDebugName()
-                              << "\" result " << succeeded(result) << "\n");
+      if (succeeded(result) && onSuccess && failed(onSuccess(*pattern)))
+        result = failure();
     }
-
-    // Process the result of the pattern application.
-    if (succeeded(result) && onSuccess && failed(onSuccess(*bestPattern)))
-      result = failure();
     if (succeeded(result)) {
       LLVM_DEBUG(logSucessfulPatternApplication(dumpRootOp));
       break;

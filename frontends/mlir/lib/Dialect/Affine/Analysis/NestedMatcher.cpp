@@ -56,12 +56,12 @@ void NestedPattern::freeNested() {
 
 NestedPattern::NestedPattern(ArrayRef<NestedPattern> nested,
                              FilterFunctionType filter)
-    : filter(std::move(filter)), skip(nullptr) {
+    : nestedPatterns(), filter(std::move(filter)), skip(nullptr) {
   copyNestedToThis(nested);
 }
 
 NestedPattern::NestedPattern(const NestedPattern &other)
-    : filter(other.filter), skip(other.skip) {
+    : nestedPatterns(), filter(other.filter), skip(other.skip) {
   copyNestedToThis(other.nestedPatterns);
 }
 

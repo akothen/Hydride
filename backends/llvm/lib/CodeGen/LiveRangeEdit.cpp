@@ -24,10 +24,9 @@ using namespace llvm;
 
 #define DEBUG_TYPE "regalloc"
 
-STATISTIC(NumDCEDeleted,        "Number of instructions deleted by DCE");
-STATISTIC(NumDCEFoldedLoads,    "Number of single use loads folded after DCE");
-STATISTIC(NumFracRanges,        "Number of live ranges fractured by DCE");
-STATISTIC(NumReMaterialization, "Number of instructions rematerialized");
+STATISTIC(NumDCEDeleted,     "Number of instructions deleted by DCE");
+STATISTIC(NumDCEFoldedLoads, "Number of single use loads folded after DCE");
+STATISTIC(NumFracRanges,     "Number of live ranges fractured by DCE");
 
 void LiveRangeEdit::Delegate::anchor() { }
 
@@ -135,11 +134,9 @@ bool LiveRangeEdit::allUsesAvailableAt(const MachineInstr *OrigMI,
       return false;
 
     // Check that subrange is live at UseIdx.
-    if (li.hasSubRanges()) {
+    if (MO.getSubReg()) {
       const TargetRegisterInfo *TRI = MRI.getTargetRegisterInfo();
-      unsigned SubReg = MO.getSubReg();
-      LaneBitmask LM = SubReg ? TRI->getSubRegIndexLaneMask(SubReg)
-                              : MRI.getMaxLaneMaskForVReg(MO.getReg());
+      LaneBitmask LM = TRI->getSubRegIndexLaneMask(MO.getSubReg());
       for (LiveInterval::SubRange &SR : li.subranges()) {
         if ((SR.LaneMask & LM).none())
           continue;
@@ -184,20 +181,14 @@ SlotIndex LiveRangeEdit::rematerializeAt(MachineBasicBlock &MBB,
                                          unsigned DestReg,
                                          const Remat &RM,
                                          const TargetRegisterInfo &tri,
-                                         bool Late,
-                                         unsigned SubIdx,
-                                         MachineInstr *ReplaceIndexMI) {
+                                         bool Late) {
   assert(RM.OrigMI && "Invalid remat");
-  TII.reMaterialize(MBB, MI, DestReg, SubIdx, *RM.OrigMI, tri);
+  TII.reMaterialize(MBB, MI, DestReg, 0, *RM.OrigMI, tri);
   // DestReg of the cloned instruction cannot be Dead. Set isDead of DestReg
   // to false anyway in case the isDead flag of RM.OrigMI's dest register
   // is true.
   (*--MI).getOperand(0).setIsDead(false);
   Rematted.insert(RM.ParentVNI);
-  ++NumReMaterialization;
-
-  if (ReplaceIndexMI)
-    return LIS.ReplaceMachineInstrInMaps(*ReplaceIndexMI, *MI).getRegSlot();
   return LIS.getSlotIndexes()->insertMachineInstrInMaps(*MI, Late).getRegSlot();
 }
 

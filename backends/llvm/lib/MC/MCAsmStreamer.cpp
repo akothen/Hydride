@@ -197,10 +197,6 @@ public:
 
   void emitXCOFFRefDirective(StringRef Name) override;
 
-  void emitXCOFFExceptDirective(const MCSymbol *Symbol, MCSymbol *Trap,
-                                unsigned Lang, unsigned Reason,
-                                unsigned FunctionSize, bool hasDebug) override;
-
   void emitELFSize(MCSymbol *Symbol, const MCExpr *Value) override;
   void emitCommonSymbol(MCSymbol *Symbol, uint64_t Size,
                         unsigned ByteAlignment) override;
@@ -248,9 +244,6 @@ public:
 
   void emitFill(const MCExpr &NumValues, int64_t Size, int64_t Expr,
                 SMLoc Loc = SMLoc()) override;
-
-  void emitAlignmentDirective(unsigned ByteAlignment, Optional<int64_t> Value,
-                              unsigned ValueSize, unsigned MaxBytesToEmit);
 
   void emitValueToAlignment(unsigned ByteAlignment, int64_t Value = 0,
                             unsigned ValueSize = 1,
@@ -378,7 +371,7 @@ public:
 
   void emitPseudoProbe(uint64_t Guid, uint64_t Index, uint64_t Type,
                        uint64_t Attr,
-                       const MCPseudoProbeInlineStack &InlineStack, MCSymbol *FnSym) override;
+                       const MCPseudoProbeInlineStack &InlineStack) override;
 
   void emitBundleAlignMode(unsigned AlignPow2) override;
   void emitBundleLock(bool AlignToEnd) override;
@@ -572,8 +565,10 @@ void MCAsmStreamer::emitAssemblerFlag(MCAssemblerFlag Flag) {
 void MCAsmStreamer::emitLinkerOptions(ArrayRef<std::string> Options) {
   assert(!Options.empty() && "At least one option is required!");
   OS << "\t.linker_option \"" << Options[0] << '"';
-  for (const std::string &Opt : llvm::drop_begin(Options))
-    OS << ", " << '"' << Opt << '"';
+  for (ArrayRef<std::string>::iterator it = Options.begin() + 1,
+         ie = Options.end(); it != ie; ++it) {
+    OS << ", " << '"' << *it << '"';
+  }
   EmitEOL();
 }
 
@@ -943,17 +938,6 @@ void MCAsmStreamer::emitXCOFFRenameDirective(const MCSymbol *Name,
 
 void MCAsmStreamer::emitXCOFFRefDirective(StringRef Name) {
   OS << "\t.ref " << Name;
-  EmitEOL();
-}
-
-void MCAsmStreamer::emitXCOFFExceptDirective(const MCSymbol *Symbol,
-                                             MCSymbol *Trap, unsigned Lang,
-                                             unsigned Reason,
-                                             unsigned FunctionSize,
-                                             bool hasDebug) {
-  OS << "\t.except\t";
-  Symbol->print(OS, MAI);
-  OS << ", " << Lang << ", " << Reason;
   EmitEOL();
 }
 
@@ -1412,10 +1396,9 @@ void MCAsmStreamer::emitFill(const MCExpr &NumValues, int64_t Size,
   EmitEOL();
 }
 
-void MCAsmStreamer::emitAlignmentDirective(unsigned ByteAlignment,
-                                           Optional<int64_t> Value,
-                                           unsigned ValueSize,
-                                           unsigned MaxBytesToEmit) {
+void MCAsmStreamer::emitValueToAlignment(unsigned ByteAlignment, int64_t Value,
+                                         unsigned ValueSize,
+                                         unsigned MaxBytesToEmit) {
   if (MAI->useDotAlignForAlignment()) {
     if (!isPowerOf2_32(ByteAlignment))
       report_fatal_error("Only power-of-two alignments are supported "
@@ -1447,13 +1430,9 @@ void MCAsmStreamer::emitAlignmentDirective(unsigned ByteAlignment,
 
     OS << Log2_32(ByteAlignment);
 
-    if (Value.has_value() || MaxBytesToEmit) {
-      if (Value.has_value()) {
-        OS << ", 0x";
-        OS.write_hex(truncateToSize(Value.value(), ValueSize));
-      } else {
-        OS << ", ";
-      }
+    if (Value || MaxBytesToEmit) {
+      OS << ", 0x";
+      OS.write_hex(truncateToSize(Value, ValueSize));
 
       if (MaxBytesToEmit)
         OS << ", " << MaxBytesToEmit;
@@ -1473,30 +1452,18 @@ void MCAsmStreamer::emitAlignmentDirective(unsigned ByteAlignment,
   }
 
   OS << ' ' << ByteAlignment;
-  if (Value.has_value())
-    OS << ", " << truncateToSize(Value.value(), ValueSize);
-  else if (MaxBytesToEmit)
-    OS << ", ";
+  OS << ", " << truncateToSize(Value, ValueSize);
   if (MaxBytesToEmit)
     OS << ", " << MaxBytesToEmit;
   EmitEOL();
-}
-
-void MCAsmStreamer::emitValueToAlignment(unsigned ByteAlignment, int64_t Value,
-                                         unsigned ValueSize,
-                                         unsigned MaxBytesToEmit) {
-  emitAlignmentDirective(ByteAlignment, Value, ValueSize, MaxBytesToEmit);
 }
 
 void MCAsmStreamer::emitCodeAlignment(unsigned ByteAlignment,
                                       const MCSubtargetInfo *STI,
                                       unsigned MaxBytesToEmit) {
   // Emit with a text fill value.
-  if (MAI->getTextAlignFillValue())
-    emitAlignmentDirective(ByteAlignment, MAI->getTextAlignFillValue(), 1,
-                           MaxBytesToEmit);
-  else
-    emitAlignmentDirective(ByteAlignment, None, 1, MaxBytesToEmit);
+  emitValueToAlignment(ByteAlignment, MAI->getTextAlignFillValue(),
+                       1, MaxBytesToEmit);
 }
 
 void MCAsmStreamer::emitValueToOffset(const MCExpr *Offset,
@@ -2338,16 +2305,13 @@ void MCAsmStreamer::emitInstruction(const MCInst &Inst,
 
 void MCAsmStreamer::emitPseudoProbe(
     uint64_t Guid, uint64_t Index, uint64_t Type, uint64_t Attr,
-    const MCPseudoProbeInlineStack &InlineStack, MCSymbol *FnSym) {
+    const MCPseudoProbeInlineStack &InlineStack) {
   OS << "\t.pseudoprobe\t" << Guid << " " << Index << " " << Type << " "
      << Attr;
   // Emit inline stack like
   //  @ GUIDmain:3 @ GUIDCaller:1 @ GUIDDirectCaller:11
   for (const auto &Site : InlineStack)
     OS << " @ " << std::get<0>(Site) << ":" << std::get<1>(Site);
-
-  OS << " " << FnSym->getName();
-
   EmitEOL();
 }
 

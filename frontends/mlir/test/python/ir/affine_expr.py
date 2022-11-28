@@ -116,7 +116,7 @@ def testAffineExprSymbol():
 
     # CHECK: 2
     print(s2.position)
-    # CHECK: s2
+    # CHEKC: s2
     print(s2)
 
     assert s1 == s11

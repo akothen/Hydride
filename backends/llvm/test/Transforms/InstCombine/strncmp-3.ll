@@ -5,7 +5,7 @@
 ; value that results in the call being incorrectly folded (as might happen
 ; when LLVM is compiled in ILP32 mode).
 
-declare i32 @strncmp(ptr, ptr, i64)
+declare i32 @strncmp(i8*, i8*, i64)
 
 @ax = external global [0 x i8]
 @bx = external global [0 x i8]
@@ -18,11 +18,13 @@ declare i32 @strncmp(ptr, ptr, i64)
 
 define i32 @call_strncmp_ax_bx_uimax_p1() {
 ; CHECK-LABEL: @call_strncmp_ax_bx_uimax_p1(
-; CHECK-NEXT:    [[RES:%.*]] = call i32 @strncmp(ptr noundef nonnull dereferenceable(1) @ax, ptr noundef nonnull dereferenceable(1) @bx, i64 4294967296)
+; CHECK-NEXT:    [[RES:%.*]] = call i32 @strncmp(i8* noundef nonnull dereferenceable(1) getelementptr inbounds ([0 x i8], [0 x i8]* @ax, i64 0, i64 0), i8* noundef nonnull dereferenceable(1) getelementptr inbounds ([0 x i8], [0 x i8]* @bx, i64 0, i64 0), i64 4294967296)
 ; CHECK-NEXT:    ret i32 [[RES]]
 ;
 
-  %res = call i32 @strncmp(ptr @ax, ptr @bx, i64 4294967296)
+  %p1 = getelementptr [0 x i8], [0 x i8]* @ax, i32 0, i32 0
+  %p2 = getelementptr [0 x i8], [0 x i8]* @bx, i32 0, i32 0
+  %res = call i32 @strncmp(i8* %p1, i8* %p2, i64 4294967296)
   ret i32 %res
 }
 
@@ -31,11 +33,13 @@ define i32 @call_strncmp_ax_bx_uimax_p1() {
 
 define i32 @call_strncmp_ax_bx_uimax_p2() {
 ; CHECK-LABEL: @call_strncmp_ax_bx_uimax_p2(
-; CHECK-NEXT:    [[RES:%.*]] = call i32 @strncmp(ptr noundef nonnull dereferenceable(1) @ax, ptr noundef nonnull dereferenceable(1) @bx, i64 4294967296)
+; CHECK-NEXT:    [[RES:%.*]] = call i32 @strncmp(i8* noundef nonnull dereferenceable(1) getelementptr inbounds ([0 x i8], [0 x i8]* @ax, i64 0, i64 0), i8* noundef nonnull dereferenceable(1) getelementptr inbounds ([0 x i8], [0 x i8]* @bx, i64 0, i64 0), i64 4294967296)
 ; CHECK-NEXT:    ret i32 [[RES]]
 ;
 
-  %res = call i32 @strncmp(ptr @ax, ptr @bx, i64 4294967296)
+  %p1 = getelementptr [0 x i8], [0 x i8]* @ax, i32 0, i32 0
+  %p2 = getelementptr [0 x i8], [0 x i8]* @bx, i32 0, i32 0
+  %res = call i32 @strncmp(i8* %p1, i8* %p2, i64 4294967296)
   ret i32 %res
 }
 
@@ -47,7 +51,9 @@ define i32 @fold_strncmp_a12345_2_uimax_p2() {
 ; CHECK-NEXT:    ret i32 -1
 ;
 
-  %res = call i32 @strncmp(ptr @a12345, ptr @a123456, i64 4294967297)
+  %p1 = getelementptr [5 x i8], [5 x i8]* @a12345, i32 0, i32 0
+  %p2 = getelementptr [6 x i8], [6 x i8]* @a123456, i32 0, i32 0
+  %res = call i32 @strncmp(i8* %p1, i8* %p2, i64 4294967297)
   ret i32 %res
 }
 
@@ -59,6 +65,8 @@ define i32 @fold_strncmp_a12345_2_uimax_p3() {
 ; CHECK-NEXT:    ret i32 1
 ;
 
-  %res = call i32 @strncmp(ptr @a123456, ptr @a12345, i64 4294967298)
+  %p1 = getelementptr [6 x i8], [6 x i8]* @a123456, i32 0, i32 0
+  %p2 = getelementptr [5 x i8], [5 x i8]* @a12345, i32 0, i32 0
+  %res = call i32 @strncmp(i8* %p1, i8* %p2, i64 4294967298)
   ret i32 %res
 }

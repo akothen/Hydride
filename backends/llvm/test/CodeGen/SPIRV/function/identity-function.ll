@@ -1,15 +1,17 @@
-; RUN: llc -O0 -mtriple=spirv32-unknown-unknown %s -o - | FileCheck %s
+; RUN: llc -O0 %s -o - | FileCheck %s
 
-; CHECK-DAG: OpName %[[#VALUE:]] "value"
-; CHECK-DAG: OpName %[[#IDENTITY:]] "identity"
+target triple = "spirv32-unknown-unknown"
 
-; CHECK: %[[#INT:]] = OpTypeInt 32
-; CHECK: %[[#FN:]] = OpTypeFunction %[[#INT]] %[[#INT]]
+; CHECK-DAG: OpName [[VALUE:%.+]] "value"
+; CHECK-DAG: OpName [[IDENTITY:%.+]] "identity"
 
-; CHECK: %[[#IDENTITY]] = OpFunction %[[#INT]] None %[[#FN]]
-; CHECK-NEXT: %[[#VALUE]] = OpFunctionParameter %[[#INT]]
+; CHECK: [[INT:%.+]] = OpTypeInt 32
+; CHECK: [[FN:%.+]] = OpTypeFunction [[INT]] [[INT]]
+
+; CHECK: [[IDENTITY]] = OpFunction [[INT]] None [[FN]]
+; CHECK-NEXT: [[VALUE]] = OpFunctionParameter [[INT]]
 ; CHECK-NEXT: {{%.+}} = OpLabel
-; CHECK-NEXT: OpReturnValue %[[#VALUE]]
+; CHECK-NEXT: OpReturnValue [[VALUE]]
 ; CHECK-NEXT: OpFunctionEnd
 
 define i32 @identity(i32 %value) {

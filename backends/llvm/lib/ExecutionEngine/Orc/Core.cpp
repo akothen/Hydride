@@ -970,9 +970,10 @@ Error JITDylib::resolve(MaterializationResponsibility &MR,
             SymbolsInErrorState.insert(KV.first);
           else {
             auto Flags = KV.second.getFlags();
-            Flags &= ~JITSymbolFlags::Common;
+            Flags &= ~(JITSymbolFlags::Weak | JITSymbolFlags::Common);
             assert(Flags ==
-                       (SymI->second.getFlags() & ~JITSymbolFlags::Common) &&
+                       (SymI->second.getFlags() &
+                        ~(JITSymbolFlags::Weak | JITSymbolFlags::Common)) &&
                    "Resolved flags should match the declared flags");
 
             Worklist.push_back(
@@ -1481,8 +1482,8 @@ void JITDylib::dump(raw_ostream &OS) {
 void JITDylib::MaterializingInfo::addQuery(
     std::shared_ptr<AsynchronousSymbolQuery> Q) {
 
-  auto I = llvm::lower_bound(
-      llvm::reverse(PendingQueries), Q->getRequiredState(),
+  auto I = std::lower_bound(
+      PendingQueries.rbegin(), PendingQueries.rend(), Q->getRequiredState(),
       [](const std::shared_ptr<AsynchronousSymbolQuery> &V, SymbolState S) {
         return V->getRequiredState() <= S;
       });
@@ -2426,7 +2427,7 @@ void ExecutionSession::OL_applyQueryPhase1(
 
       // Add any non-candidates from the last JITDylib (if any) back on to the
       // list of definition candidates for this JITDylib, reset definition
-      // non-candidates to the empty set.
+      // non-candiates to the empty set.
       SymbolLookupSet Tmp;
       std::swap(IPLS->DefGeneratorNonCandidates, Tmp);
       IPLS->DefGeneratorCandidates.append(std::move(Tmp));
@@ -2908,13 +2909,13 @@ Error ExecutionSession::OL_notifyResolved(MaterializationResponsibility &MR,
   });
 #ifndef NDEBUG
   for (auto &KV : Symbols) {
+    auto WeakFlags = JITSymbolFlags::Weak | JITSymbolFlags::Common;
     auto I = MR.SymbolFlags.find(KV.first);
     assert(I != MR.SymbolFlags.end() &&
            "Resolving symbol outside this responsibility set");
     assert(!I->second.hasMaterializationSideEffectsOnly() &&
            "Can't resolve materialization-side-effects-only symbol");
-    assert((KV.second.getFlags() & ~JITSymbolFlags::Common) ==
-               (I->second & ~JITSymbolFlags::Common) &&
+    assert((KV.second.getFlags() & ~WeakFlags) == (I->second & ~WeakFlags) &&
            "Resolving symbol with incorrect flags");
   }
 #endif

@@ -4,9 +4,9 @@ import {MLIRContext} from '../mlirContext';
 import {ViewPDLLCommand} from './commands/viewOutput';
 
 /**
- *  Register the necessary extensions for supporting PDLL.
+ *  Register the necessary context and commands for PDLL.
  */
-export function registerPDLLExtensions(context: vscode.ExtensionContext,
-                                       mlirContext: MLIRContext) {
+export function registerPDLLCommands(context: vscode.ExtensionContext,
+                                     mlirContext: MLIRContext) {
   context.subscriptions.push(new ViewPDLLCommand(mlirContext));
 }

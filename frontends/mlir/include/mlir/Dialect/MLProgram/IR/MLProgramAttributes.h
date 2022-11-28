@@ -10,7 +10,6 @@
 #define MLIR_DIALECT_MLPROGRAM_IR_MLPROGRAMATTRIBUTES_H_
 
 #include "mlir/IR/Attributes.h"
-#include "mlir/IR/BuiltinAttributeInterfaces.h"
 
 //===----------------------------------------------------------------------===//
 // Tablegen Attribute Declarations

@@ -54,7 +54,7 @@ public:
   }
 
   constexpr FeatureBitset &operator&=(const FeatureBitset &RHS) {
-    for (unsigned I = 0, E = std::size(Bits); I != E; ++I) {
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I) {
       // GCC <6.2 crashes if this is written in a single statement.
       uint32_t NewBits = Bits[I] & RHS.Bits[I];
       Bits[I] = NewBits;
@@ -63,7 +63,7 @@ public:
   }
 
   constexpr FeatureBitset &operator|=(const FeatureBitset &RHS) {
-    for (unsigned I = 0, E = std::size(Bits); I != E; ++I) {
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I) {
       // GCC <6.2 crashes if this is written in a single statement.
       uint32_t NewBits = Bits[I] | RHS.Bits[I];
       Bits[I] = NewBits;
@@ -74,7 +74,7 @@ public:
   // gcc 5.3 miscompiles this if we try to write this using operator&=.
   constexpr FeatureBitset operator&(const FeatureBitset &RHS) const {
     FeatureBitset Result;
-    for (unsigned I = 0, E = std::size(Bits); I != E; ++I)
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I)
       Result.Bits[I] = Bits[I] & RHS.Bits[I];
     return Result;
   }
@@ -82,20 +82,20 @@ public:
   // gcc 5.3 miscompiles this if we try to write this using operator&=.
   constexpr FeatureBitset operator|(const FeatureBitset &RHS) const {
     FeatureBitset Result;
-    for (unsigned I = 0, E = std::size(Bits); I != E; ++I)
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I)
       Result.Bits[I] = Bits[I] | RHS.Bits[I];
     return Result;
   }
 
   constexpr FeatureBitset operator~() const {
     FeatureBitset Result;
-    for (unsigned I = 0, E = std::size(Bits); I != E; ++I)
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I)
       Result.Bits[I] = ~Bits[I];
     return Result;
   }
 
   constexpr bool operator!=(const FeatureBitset &RHS) const {
-    for (unsigned I = 0, E = std::size(Bits); I != E; ++I)
+    for (unsigned I = 0, E = array_lengthof(Bits); I != E; ++I)
       if (Bits[I] != RHS.Bits[I])
         return true;
     return false;
@@ -207,8 +207,6 @@ constexpr FeatureBitset FeaturesSapphireRapids =
     FeatureENQCMD | FeatureMOVDIR64B | FeatureMOVDIRI | FeaturePTWRITE |
     FeatureSERIALIZE | FeatureSHSTK | FeatureTSXLDTRK | FeatureUINTR |
     FeatureWAITPKG;
-constexpr FeatureBitset FeaturesGraniteRapids =
-    FeaturesSapphireRapids | FeatureAMX_FP16 | FeaturePREFETCHI;
 
 // Intel Atom processors.
 // Bonnell has feature parity with Core2 and adds MOVBE.
@@ -230,11 +228,6 @@ constexpr FeatureBitset FeaturesAlderlake =
     FeatureSERIALIZE | FeatureSHSTK | FeatureVAES | FeatureVPCLMULQDQ |
     FeatureCLDEMOTE | FeatureMOVDIR64B | FeatureMOVDIRI | FeatureWAITPKG |
     FeatureAVXVNNI | FeatureHRESET | FeatureWIDEKL;
-constexpr FeatureBitset FeaturesSierraforest =
-    FeaturesAlderlake | FeatureCMPCCXADD | FeatureAVXIFMA |
-    FeatureAVXNECONVERT | FeatureAVXVNNIINT8;
-constexpr FeatureBitset FeaturesGrandridge =
-    FeaturesSierraforest | FeatureRAOINT;
 
 // Geode Processor.
 constexpr FeatureBitset FeaturesGeode =
@@ -328,7 +321,7 @@ constexpr ProcInfo Processors[] = {
   { {"prescott"}, CK_Prescott, ~0U, FeaturesPrescott },
   { {"nocona"}, CK_Nocona, ~0U, FeaturesNocona },
   // Core microarchitecture based processors.
-  { {"core2"}, CK_Core2, FEATURE_SSSE3, FeaturesCore2 },
+  { {"core2"}, CK_Core2, ~0U, FeaturesCore2 },
   { {"penryn"}, CK_Penryn, ~0U, FeaturesPenryn },
   // Atom processors
   { {"bonnell"}, CK_Bonnell, FEATURE_SSSE3, FeaturesBonnell },
@@ -377,16 +370,6 @@ constexpr ProcInfo Processors[] = {
   { {"sapphirerapids"}, CK_SapphireRapids, FEATURE_AVX512BF16, FeaturesSapphireRapids },
   // Alderlake microarchitecture based processors.
   { {"alderlake"}, CK_Alderlake, FEATURE_AVX2, FeaturesAlderlake },
-  // Raptorlake microarchitecture based processors.
-  { {"raptorlake"}, CK_Raptorlake, FEATURE_AVX2, FeaturesAlderlake },
-  // Meteorlake microarchitecture based processors.
-  { {"meteorlake"}, CK_Meteorlake, FEATURE_AVX2, FeaturesAlderlake },
-  // Sierraforest microarchitecture based processors.
-  { {"sierraforest"}, CK_Sierraforest, FEATURE_AVX2, FeaturesSierraforest },
-  // Grandridge microarchitecture based processors.
-  { {"grandridge"}, CK_Grandridge, FEATURE_AVX2, FeaturesGrandridge },
-  // Graniterapids microarchitecture based processors.
-  { {"graniterapids"}, CK_Graniterapids, FEATURE_AVX512BF16, FeaturesGraniteRapids },
   // Knights Landing processor.
   { {"knl"}, CK_KNL, FEATURE_AVX512F, FeaturesKNL },
   // Knights Mill processor.
@@ -595,17 +578,10 @@ constexpr FeatureBitset ImpliedFeaturesXOP = FeatureFMA4;
 // AMX Features
 constexpr FeatureBitset ImpliedFeaturesAMX_TILE = {};
 constexpr FeatureBitset ImpliedFeaturesAMX_BF16 = FeatureAMX_TILE;
-constexpr FeatureBitset ImpliedFeaturesAMX_FP16 = FeatureAMX_TILE;
 constexpr FeatureBitset ImpliedFeaturesAMX_INT8 = FeatureAMX_TILE;
 constexpr FeatureBitset ImpliedFeaturesHRESET = {};
 
-constexpr FeatureBitset ImpliedFeaturesPREFETCHI = {};
-constexpr FeatureBitset ImpliedFeaturesCMPCCXADD = {};
-constexpr FeatureBitset ImpliedFeaturesRAOINT = {};
-constexpr FeatureBitset ImpliedFeaturesAVXVNNIINT8 = FeatureAVX2;
-constexpr FeatureBitset ImpliedFeaturesAVXIFMA = FeatureAVX2;
-constexpr FeatureBitset ImpliedFeaturesAVXNECONVERT = FeatureAVX2;
-constexpr FeatureBitset ImpliedFeaturesAVX512FP16 =
+static constexpr FeatureBitset ImpliedFeaturesAVX512FP16 =
     FeatureAVX512BW | FeatureAVX512DQ | FeatureAVX512VL;
 // Key Locker Features
 constexpr FeatureBitset ImpliedFeaturesKL = FeatureSSE2;
@@ -716,7 +692,7 @@ unsigned llvm::X86::getFeaturePriority(ProcessorFeatures Feat) {
 #include "llvm/Support/X86TargetParser.def"
       std::numeric_limits<unsigned>::max() // Need to consume last comma.
   };
-  std::array<unsigned, std::size(Priorities) - 1> HelperList;
+  std::array<unsigned, array_lengthof(Priorities) - 1> HelperList;
   std::iota(HelperList.begin(), HelperList.end(), 0);
   assert(std::is_permutation(HelperList.begin(), HelperList.end(),
                              std::begin(Priorities),

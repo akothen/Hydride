@@ -1,5 +1,5 @@
 ; RUN: llc %s --filetype=asm -o - | FileCheck %s
-target triple = "dxil-unknown-shadermodel6.7-library"
+target triple = "dxil-unknown-unknown"
 
 define float @negateF(float %0) {
 ; CHECK:  %2 = fsub float -0.000000e+00, %0

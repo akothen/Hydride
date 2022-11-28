@@ -4,9 +4,11 @@ target datalayout = "E-m:e-i64:64-n32:64"
 target triple = "powerpc64-unknown-linux-gnu"
 
 ; Function Attrs: nounwind
-define void @foo1(ptr nocapture %x, ptr nocapture readonly %y) #0 {
+define void @foo1(double* nocapture %x, double* nocapture readonly %y) #0 {
 entry:
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 8 %x, ptr align 8 %y, i64 32, i1 false)
+  %0 = bitcast double* %x to i8*
+  %1 = bitcast double* %y to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %0, i8* align 8 %1, i64 32, i1 false)
   ret void
 
 ; PWR7-LABEL: @foo1
@@ -25,12 +27,14 @@ entry:
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memcpy.p0.p0.i64(ptr nocapture, ptr nocapture readonly, i64, i1) #0
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i1) #0
 
 ; Function Attrs: nounwind
-define void @foo2(ptr nocapture %x, ptr nocapture readonly %y) #0 {
+define void @foo2(double* nocapture %x, double* nocapture readonly %y) #0 {
 entry:
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 8 %x, ptr align 8 %y, i64 128, i1 false)
+  %0 = bitcast double* %x to i8*
+  %1 = bitcast double* %y to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %0, i8* align 8 %1, i64 128, i1 false)
   ret void
 
 ; PWR7-LABEL: @foo2
@@ -44,9 +48,10 @@ entry:
 }
 
 ; Function Attrs: nounwind
-define void @bar1(ptr nocapture %x) #0 {
+define void @bar1(double* nocapture %x) #0 {
 entry:
-  tail call void @llvm.memset.p0.i64(ptr align 8 %x, i8 0, i64 128, i1 false)
+  %0 = bitcast double* %x to i8*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %0, i8 0, i64 128, i1 false)
   ret void
 
 ; PWR7-LABEL: @bar1
@@ -61,9 +66,10 @@ entry:
 }
 
 ; Function Attrs: nounwind
-define void @bar2(ptr nocapture %x) #0 {
+define void @bar2(double* nocapture %x) #0 {
 entry:
-  tail call void @llvm.memset.p0.i64(ptr align 32 %x, i8 0, i64 128, i1 false)
+  %0 = bitcast double* %x to i8*
+  tail call void @llvm.memset.p0i8.i64(i8* align 32 %0, i8 0, i64 128, i1 false)
   ret void
 
 ; PWR7-LABEL: @bar2
@@ -78,7 +84,7 @@ entry:
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memset.p0.i64(ptr nocapture, i8, i64, i1) #0
+declare void @llvm.memset.p0i8.i64(i8* nocapture, i8, i64, i1) #0
 
 attributes #0 = { nounwind }
 

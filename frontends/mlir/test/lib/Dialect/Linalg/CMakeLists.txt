@@ -11,8 +11,8 @@ add_mlir_library(MLIRLinalgTestPasses
 
   LINK_LIBS PUBLIC
   MLIRAffineDialect
-  MLIRArithDialect
-  MLIRArithTransforms
+  MLIRArithmeticDialect
+  MLIRArithmeticTransforms
   MLIRBufferizationDialect
   MLIRBufferizationTransforms
   MLIRGPUTransforms

@@ -23,7 +23,6 @@ class Instruction;
 class PHINode;
 class ScalarEvolution;
 class Loop;
-class TargetLibraryInfo;
 
 struct VPlanTransforms {
   /// Replaces the VPInstructions in \p Plan with corresponding
@@ -33,7 +32,7 @@ struct VPlanTransforms {
                             function_ref<const InductionDescriptor *(PHINode *)>
                                 GetIntOrFpInductionDescriptor,
                             SmallPtrSetImpl<Instruction *> &DeadInstructions,
-                            ScalarEvolution &SE, const TargetLibraryInfo &TLI);
+                            ScalarEvolution &SE);
 
   static bool sinkScalarOperands(VPlan &Plan);
 

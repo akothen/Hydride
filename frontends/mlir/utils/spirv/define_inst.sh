@@ -23,17 +23,13 @@ file_name=$1
 baseclass=$2
 
 case $baseclass in
-  Op | ArithmeticBinaryOp | ArithmeticUnaryOp \
-     | LogicalBinaryOp | LogicalUnaryOp \
-     | CastOp | ControlFlowOp | StructureOp \
-     | AtomicUpdateOp | AtomicUpdateWithValueOp \
-     | KhrVendorOp | ExtVendorOp | IntelVendorOp | NvVendorOp )
+  Op | ArithmeticBinaryOp | ArithmeticUnaryOp | LogicalBinaryOp | LogicalUnaryOp | CastOp | ControlFlowOp | StructureOp | AtomicUpdateOp | AtomicUpdateWithValueOp)
   ;;
   *)
     echo "Usage : " $0 "<filename> <baseclass> (<opname>)*"
     echo "<filename> is the file name of MLIR SPIR-V op definitions spec"
     echo "<baseclass> must be one of " \
-      "(Op|ArithmeticBinaryOp|ArithmeticUnaryOp|LogicalBinaryOp|LogicalUnaryOp|CastOp|ControlFlowOp|StructureOp|AtomicUpdateOp|KhrVendorOp|ExtVendorOp|IntelVendorOp|NvVendorOp)"
+      "(Op|ArithmeticBinaryOp|ArithmeticUnaryOp|LogicalBinaryOp|LogicalUnaryOp|CastOp|ControlFlowOp|StructureOp|AtomicUpdateOp)"
     exit 1;
   ;;
 esac

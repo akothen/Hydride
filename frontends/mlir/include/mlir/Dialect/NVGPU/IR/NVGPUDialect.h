@@ -18,8 +18,19 @@
 #include "mlir/IR/OpDefinition.h"
 #include "mlir/Interfaces/SideEffectInterfaces.h"
 
-#define GET_TYPEDEF_CLASSES
-#include "mlir/Dialect/NVGPU/IR/NVGPUTypes.h.inc"
+namespace mlir {
+namespace nvgpu {
+
+/// Device-side token storage type. There is only one type of device-side token.
+class DeviceAsyncTokenType
+    : public Type::TypeBase<DeviceAsyncTokenType, Type, TypeStorage> {
+public:
+  // Used for generic hooks in TypeBase.
+  using Base::Base;
+};
+
+} // namespace nvgpu
+} // namespace mlir
 
 #include "mlir/Dialect/NVGPU/IR/NVGPUDialect.h.inc"
 

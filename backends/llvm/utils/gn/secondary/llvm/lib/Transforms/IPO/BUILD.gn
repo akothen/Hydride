@@ -53,6 +53,7 @@ static_library("IPO") {
     "OpenMPOpt.cpp",
     "PartialInlining.cpp",
     "PassManagerBuilder.cpp",
+    "PruneEH.cpp",
     "SCCP.cpp",
     "SampleContextTracker.cpp",
     "SampleProfile.cpp",

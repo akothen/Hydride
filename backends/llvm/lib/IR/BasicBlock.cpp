@@ -253,30 +253,6 @@ BasicBlock::const_iterator BasicBlock::getFirstInsertionPt() const {
   return InsertPt;
 }
 
-BasicBlock::const_iterator BasicBlock::getFirstNonPHIOrDbgOrAlloca() const {
-  const Instruction *FirstNonPHI = getFirstNonPHI();
-  if (!FirstNonPHI)
-    return end();
-
-  const_iterator InsertPt = FirstNonPHI->getIterator();
-  if (InsertPt->isEHPad())
-    ++InsertPt;
-
-  if (isEntryBlock()) {
-    const_iterator End = end();
-    while (InsertPt != End &&
-           (isa<AllocaInst>(*InsertPt) || isa<DbgInfoIntrinsic>(*InsertPt) ||
-            isa<PseudoProbeInst>(*InsertPt))) {
-      if (const AllocaInst *AI = dyn_cast<AllocaInst>(&*InsertPt)) {
-        if (!AI->isStaticAlloca())
-          break;
-      }
-      ++InsertPt;
-    }
-  }
-  return InsertPt;
-}
-
 void BasicBlock::dropAllReferences() {
   for (Instruction &I : *this)
     I.dropAllReferences();
@@ -452,11 +428,7 @@ BasicBlock *BasicBlock::splitBasicBlockBefore(iterator I, const Twine &BBName) {
   // If there were PHI nodes in 'this' block, the PHI nodes are updated
   // to reflect that the incoming branches will be from the New block and not
   // from predecessors of the 'this' block.
-  // Save predecessors to separate vector before modifying them.
-  SmallVector<BasicBlock *, 4> Predecessors;
-  for (BasicBlock *Pred : predecessors(this))
-    Predecessors.push_back(Pred);
-  for (BasicBlock *Pred : Predecessors) {
+  for (BasicBlock *Pred : predecessors(this)) {
     Instruction *TI = Pred->getTerminator();
     TI->replaceSuccessorWith(this, New);
     this->replacePhiUsesWith(Pred, New);

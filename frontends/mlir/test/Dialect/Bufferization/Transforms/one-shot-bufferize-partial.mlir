@@ -11,6 +11,8 @@
 // RUN: mlir-opt %s -allow-unregistered-dialect -one-shot-bufferize="dialect-filter=tensor,bufferization allow-unknown-ops allow-return-allocs" -canonicalize -split-input-file | FileCheck %s --check-prefix=CHECK-TENSOR
 // RUN: mlir-opt %s -allow-unregistered-dialect -one-shot-bufferize="dialect-filter=scf,bufferization allow-unknown-ops allow-return-allocs" -canonicalize -split-input-file | FileCheck %s --check-prefix=CHECK-SCF
 
+// CHECK: #[[$MAP:.*]] = affine_map<(d0)[s0, s1] -> (d0 * s1 + s0)>
+
 // CHECK-LABEL: func @use_of_unknown_op_1(
 //  CHECK-SAME:     %[[t1:.*]]: tensor<?xf32>
 // CHECK-NO-LAYOUT-MAP-LABEL: func @use_of_unknown_op_1(
@@ -25,8 +27,8 @@ func.func @use_of_unknown_op_1(%t1: tensor<?xf32>)
 
   %idx = arith.constant 0 : index
   %cst = arith.constant 0.0 : f32
-  // CHECK: %[[dummy_memref:.*]] = bufferization.to_memref %[[dummy]] : memref<?xf32, strided<[?], offset: ?>>
-  // CHECK: vector.transfer_read %[[dummy_memref]][%{{.*}}], %{{.*}} : memref<?xf32, strided<[?], offset: ?>>
+  // CHECK: %[[dummy_memref:.*]] = bufferization.to_memref %[[dummy]] : memref<?xf32, #[[$MAP]]>
+  // CHECK: vector.transfer_read %[[dummy_memref]][%{{.*}}], %{{.*}} : memref<?xf32, #[[$MAP]]>
   // CHECK-NO-LAYOUT-MAP: %[[dummy_memref:.*]] = bufferization.to_memref %[[dummy]] : memref<?xf32>
   // CHECK-NO-LAYOUT-MAP: vector.transfer_read %[[dummy_memref]][%{{.*}}], %{{.*}} : memref<?xf32>
   %1 = vector.transfer_read %0[%idx], %cst : tensor<?xf32>, vector<5xf32>
@@ -49,6 +51,8 @@ func.func @use_of_unknown_op_2(%t1: tensor<?xf32>) -> tensor<?xf32> {
 
 // -----
 
+// CHECK: #[[$MAP2:.*]] = affine_map<(d0)[s0, s1] -> (d0 * s1 + s0)>
+
 // CHECK-LABEL: func @use_of_unknown_op_3(
 //  CHECK-SAME:     %[[t1:.*]]: tensor<?xf32>
 func.func @use_of_unknown_op_3(%t1: tensor<?xf32>)
@@ -61,7 +65,7 @@ func.func @use_of_unknown_op_3(%t1: tensor<?xf32>)
 
   // CHECK: %[[dummy:.*]] = "test.dummy_op"(%[[t1]])
   %0 = "test.dummy_op"(%t1) : (tensor<?xf32>) -> tensor<?xf32>
-  // CHECK: %[[dummy_memref:.*]] = bufferization.to_memref %[[dummy]] : memref<?xf32, strided<[?], offset: ?>>
+  // CHECK: %[[dummy_memref:.*]] = bufferization.to_memref %[[dummy]] : memref<?xf32, #[[$MAP2]]>
   // CHECK: %[[v2:.*]] = vector.transfer_read %[[dummy_memref]]
   %2 = vector.transfer_read %0[%idx], %cst : tensor<?xf32>, vector<5xf32>
 
@@ -203,7 +207,7 @@ func.func @simple_tensor_test(%t1 : tensor<?xf32>, %f : f32) -> tensor<?xf32> {
 func.func @simple_scf_if(%t1: tensor<?xf32> {bufferization.writable = true}, %c: i1, %pos: index, %f: f32)
     -> (tensor<?xf32>, index) {
   // CHECK-SCF: %[[t1_memref:.*]] = bufferization.to_memref %[[t1]]
-  // CHECK-SCF: %[[r:.*]] = scf.if %[[c]] -> (memref<?xf32, strided{{.*}}>) {
+  // CHECK-SCF: %[[r:.*]] = scf.if %[[c]] -> (memref<?xf32, #{{.*}}>) {
   %r1, %r2 = scf.if %c -> (tensor<?xf32>, index) {
     // CHECK-SCF: scf.yield %[[t1_memref]]
     scf.yield %t1, %pos : tensor<?xf32>, index

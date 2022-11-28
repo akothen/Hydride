@@ -31,6 +31,8 @@ def ROCDL_Dialect : Dialect {
     /// functions.
     static StringRef getKernelFuncAttrName() { return "rocdl.kernel"; }
   }];
+
+  let emitAccessorPrefix = kEmitAccessorPrefix_Prefixed;
 }
 
 //===----------------------------------------------------------------------===//
@@ -47,7 +49,7 @@ class ROCDL_Op<string mnemonic, list<Trait> traits = []> :
 
 class ROCDL_SpecialRegisterOp<string mnemonic,
     list<Trait> traits = []> :
-  ROCDL_Op<mnemonic, !listconcat(traits, [Pure])>,
+  ROCDL_Op<mnemonic, !listconcat(traits, [NoSideEffect])>,
   Results<(outs LLVM_Type:$res)>, Arguments<(ins)> {
   string llvmBuilder = "$res = createIntrinsicCall(builder,"
     # "llvm::Intrinsic::amdgcn_" # !subst(".","_", mnemonic) # ");";
@@ -56,7 +58,7 @@ class ROCDL_SpecialRegisterOp<string mnemonic,
 
 class ROCDL_DeviceFunctionOp<string mnemonic, string device_function,
                              int parameter, list<Trait> traits = []> :
-  ROCDL_Op<mnemonic, !listconcat(traits, [Pure])>,
+  ROCDL_Op<mnemonic, !listconcat(traits, [NoSideEffect])>,
   Results<(outs LLVM_Type:$res)>, Arguments<(ins)> {
   string llvmBuilder = "$res = createDeviceFunctionCall(builder, \""
   # device_function # "\", " # parameter # ");";

@@ -1,3 +1,4 @@
+; RUN: opt < %s -domtree -break-crit-edges -disable-output
 ; RUN: opt < %s -passes='require<domtree>,break-crit-edges' -disable-output
 ; PR1110
 

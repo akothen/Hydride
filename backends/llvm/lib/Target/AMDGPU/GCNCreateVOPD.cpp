@@ -71,31 +71,45 @@ public:
     auto VOPDInst = BuildMI(*FirstMI->getParent(), FirstMI,
                             FirstMI->getDebugLoc(), SII->get(NewOpcode))
                         .setMIFlags(FirstMI->getFlags() | SecondMI->getFlags());
+    VOPDInst.add(FirstMI->getOperand(0))
+        .add(SecondMI->getOperand(0))
+        .add(FirstMI->getOperand(1));
 
-    namespace VOPD = AMDGPU::VOPD;
-    MachineInstr *MI[] = {FirstMI, SecondMI};
-    auto InstInfo =
-        AMDGPU::getVOPDInstInfo(FirstMI->getDesc(), SecondMI->getDesc());
-
-    for (auto CompIdx : VOPD::COMPONENTS)
-      VOPDInst.add(MI[CompIdx]->getOperand(InstInfo[CompIdx].getDstIndex()));
-
-    for (auto CompIdx : VOPD::COMPONENTS) {
-      auto SrcOperandsNum = InstInfo[CompIdx].getSrcOperandsNum();
-      for (unsigned SrcIdx = 0; SrcIdx < SrcOperandsNum; ++SrcIdx)
-        VOPDInst.add(
-            MI[CompIdx]->getOperand(InstInfo[CompIdx].getSrcIndex(SrcIdx)));
+    switch (Opc1) {
+    case AMDGPU::V_MOV_B32_e32:
+      break;
+    case AMDGPU::V_FMAMK_F32:
+    case AMDGPU::V_FMAAK_F32:
+      VOPDInst.add(FirstMI->getOperand(2));
+      VOPDInst.add(FirstMI->getOperand(3));
+      break;
+    default:
+      VOPDInst.add(FirstMI->getOperand(2));
+      break;
     }
 
-    for (auto CompIdx : VOPD::COMPONENTS)
-      VOPDInst.copyImplicitOps(*MI[CompIdx]);
+    VOPDInst.add(SecondMI->getOperand(1));
+
+    switch (Opc2) {
+    case AMDGPU::V_MOV_B32_e32:
+      break;
+    case AMDGPU::V_FMAMK_F32:
+    case AMDGPU::V_FMAAK_F32:
+      VOPDInst.add(SecondMI->getOperand(2));
+      VOPDInst.add(SecondMI->getOperand(3));
+      break;
+    default:
+      VOPDInst.add(SecondMI->getOperand(2));
+      break;
+    }
+
+    VOPDInst.copyImplicitOps(*FirstMI);
+    VOPDInst.copyImplicitOps(*SecondMI);
 
     LLVM_DEBUG(dbgs() << "VOPD Fused: " << *VOPDInst << " from\tX: "
                       << *Pair.first << "\tY: " << *Pair.second << "\n");
-
-    for (auto CompIdx : VOPD::COMPONENTS)
-      MI[CompIdx]->eraseFromParent();
-
+    FirstMI->eraseFromParent();
+    SecondMI->eraseFromParent();
     ++NumVOPDCreated;
     return true;
   }

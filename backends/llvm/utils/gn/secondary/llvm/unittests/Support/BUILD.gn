@@ -1,4 +1,4 @@
-import("//third-party/unittest/unittest.gni")
+import("//llvm/utils/unittest/unittest.gni")
 
 unittest("SupportTests") {
   deps = [
@@ -44,7 +44,6 @@ unittest("SupportTests") {
     "FileCollectorTest.cpp",
     "FileOutputBufferTest.cpp",
     "FileUtilitiesTest.cpp",
-    "FormatChkTest.cpp",
     "FormatVariadicTest.cpp",
     "GlobPatternTest.cpp",
     "HashBuilderTest.cpp",
@@ -89,7 +88,6 @@ unittest("SupportTests") {
     "ThreadLocalTest.cpp",
     "ThreadPool.cpp",
     "Threading.cpp",
-    "TimeProfilerTest.cpp",
     "TimerTest.cpp",
     "ToolOutputFileTest.cpp",
     "TrailingObjectsTest.cpp",

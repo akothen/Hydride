@@ -7,7 +7,7 @@
 define <vscale x 1 x double> @vfwsub_vv_nxv1f64(<vscale x 1 x float> %va, <vscale x 1 x float> %vb) {
 ; CHECK-LABEL: vfwsub_vv_nxv1f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, mu
 ; CHECK-NEXT:    vfwsub.vv v10, v8, v9
 ; CHECK-NEXT:    vmv1r.v v8, v10
 ; CHECK-NEXT:    ret
@@ -20,7 +20,7 @@ define <vscale x 1 x double> @vfwsub_vv_nxv1f64(<vscale x 1 x float> %va, <vscal
 define <vscale x 1 x double> @vfwsub_vf_nxv1f64(<vscale x 1 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv1f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v9, v8, fa0
 ; CHECK-NEXT:    vmv1r.v v8, v9
 ; CHECK-NEXT:    ret
@@ -35,7 +35,7 @@ define <vscale x 1 x double> @vfwsub_vf_nxv1f64(<vscale x 1 x float> %va, float 
 define <vscale x 1 x double> @vfwsub_vf_nxv1f64_2(<vscale x 1 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv1f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v9, v8, fa0
 ; CHECK-NEXT:    vmv1r.v v8, v9
 ; CHECK-NEXT:    ret
@@ -50,8 +50,9 @@ define <vscale x 1 x double> @vfwsub_vf_nxv1f64_2(<vscale x 1 x float> %va, floa
 define <vscale x 1 x double> @vfwsub_wv_nxv1f64(<vscale x 1 x double> %va, <vscale x 1 x float> %vb) {
 ; CHECK-LABEL: vfwsub_wv_nxv1f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; CHECK-NEXT:    vfwsub.wv v8, v8, v9
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, mu
+; CHECK-NEXT:    vfwsub.wv v10, v8, v9
+; CHECK-NEXT:    vmv1r.v v8, v10
 ; CHECK-NEXT:    ret
   %vc = fpext <vscale x 1 x float> %vb to <vscale x 1 x double>
   %vd = fsub <vscale x 1 x double> %va, %vc
@@ -61,7 +62,7 @@ define <vscale x 1 x double> @vfwsub_wv_nxv1f64(<vscale x 1 x double> %va, <vsca
 define <vscale x 1 x double> @vfwsub_wf_nxv1f64(<vscale x 1 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv1f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %head = insertelement <vscale x 1 x float> poison, float %b, i32 0
@@ -74,7 +75,7 @@ define <vscale x 1 x double> @vfwsub_wf_nxv1f64(<vscale x 1 x double> %va, float
 define <vscale x 1 x double> @vfwsub_wf_nxv1f64_2(<vscale x 1 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv1f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %fpext = fpext float %b to double
@@ -87,7 +88,7 @@ define <vscale x 1 x double> @vfwsub_wf_nxv1f64_2(<vscale x 1 x double> %va, flo
 define <vscale x 2 x double> @vfwsub_vv_nxv2f64(<vscale x 2 x float> %va, <vscale x 2 x float> %vb) {
 ; CHECK-LABEL: vfwsub_vv_nxv2f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, mu
 ; CHECK-NEXT:    vfwsub.vv v10, v8, v9
 ; CHECK-NEXT:    vmv2r.v v8, v10
 ; CHECK-NEXT:    ret
@@ -100,7 +101,7 @@ define <vscale x 2 x double> @vfwsub_vv_nxv2f64(<vscale x 2 x float> %va, <vscal
 define <vscale x 2 x double> @vfwsub_vf_nxv2f64(<vscale x 2 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv2f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v10, v8, fa0
 ; CHECK-NEXT:    vmv2r.v v8, v10
 ; CHECK-NEXT:    ret
@@ -115,7 +116,7 @@ define <vscale x 2 x double> @vfwsub_vf_nxv2f64(<vscale x 2 x float> %va, float 
 define <vscale x 2 x double> @vfwsub_vf_nxv2f64_2(<vscale x 2 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv2f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v10, v8, fa0
 ; CHECK-NEXT:    vmv2r.v v8, v10
 ; CHECK-NEXT:    ret
@@ -130,8 +131,9 @@ define <vscale x 2 x double> @vfwsub_vf_nxv2f64_2(<vscale x 2 x float> %va, floa
 define <vscale x 2 x double> @vfwsub_wv_nxv2f64(<vscale x 2 x double> %va, <vscale x 2 x float> %vb) {
 ; CHECK-LABEL: vfwsub_wv_nxv2f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; CHECK-NEXT:    vfwsub.wv v8, v8, v10
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, mu
+; CHECK-NEXT:    vfwsub.wv v12, v8, v10
+; CHECK-NEXT:    vmv2r.v v8, v12
 ; CHECK-NEXT:    ret
   %vc = fpext <vscale x 2 x float> %vb to <vscale x 2 x double>
   %vd = fsub <vscale x 2 x double> %va, %vc
@@ -141,7 +143,7 @@ define <vscale x 2 x double> @vfwsub_wv_nxv2f64(<vscale x 2 x double> %va, <vsca
 define <vscale x 2 x double> @vfwsub_wf_nxv2f64(<vscale x 2 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv2f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %head = insertelement <vscale x 2 x float> poison, float %b, i32 0
@@ -154,7 +156,7 @@ define <vscale x 2 x double> @vfwsub_wf_nxv2f64(<vscale x 2 x double> %va, float
 define <vscale x 2 x double> @vfwsub_wf_nxv2f64_2(<vscale x 2 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv2f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %fpext = fpext float %b to double
@@ -167,7 +169,7 @@ define <vscale x 2 x double> @vfwsub_wf_nxv2f64_2(<vscale x 2 x double> %va, flo
 define <vscale x 4 x double> @vfwsub_vv_nxv4f64(<vscale x 4 x float> %va, <vscale x 4 x float> %vb) {
 ; CHECK-LABEL: vfwsub_vv_nxv4f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, mu
 ; CHECK-NEXT:    vfwsub.vv v12, v8, v10
 ; CHECK-NEXT:    vmv4r.v v8, v12
 ; CHECK-NEXT:    ret
@@ -180,7 +182,7 @@ define <vscale x 4 x double> @vfwsub_vv_nxv4f64(<vscale x 4 x float> %va, <vscal
 define <vscale x 4 x double> @vfwsub_vf_nxv4f64(<vscale x 4 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv4f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v12, v8, fa0
 ; CHECK-NEXT:    vmv4r.v v8, v12
 ; CHECK-NEXT:    ret
@@ -195,7 +197,7 @@ define <vscale x 4 x double> @vfwsub_vf_nxv4f64(<vscale x 4 x float> %va, float 
 define <vscale x 4 x double> @vfwsub_vf_nxv4f64_2(<vscale x 4 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv4f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v12, v8, fa0
 ; CHECK-NEXT:    vmv4r.v v8, v12
 ; CHECK-NEXT:    ret
@@ -210,8 +212,9 @@ define <vscale x 4 x double> @vfwsub_vf_nxv4f64_2(<vscale x 4 x float> %va, floa
 define <vscale x 4 x double> @vfwsub_wv_nxv4f64(<vscale x 4 x double> %va, <vscale x 4 x float> %vb) {
 ; CHECK-LABEL: vfwsub_wv_nxv4f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; CHECK-NEXT:    vfwsub.wv v8, v8, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, mu
+; CHECK-NEXT:    vfwsub.wv v16, v8, v12
+; CHECK-NEXT:    vmv4r.v v8, v16
 ; CHECK-NEXT:    ret
   %vc = fpext <vscale x 4 x float> %vb to <vscale x 4 x double>
   %vd = fsub <vscale x 4 x double> %va, %vc
@@ -221,7 +224,7 @@ define <vscale x 4 x double> @vfwsub_wv_nxv4f64(<vscale x 4 x double> %va, <vsca
 define <vscale x 4 x double> @vfwsub_wf_nxv4f64(<vscale x 4 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv4f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %head = insertelement <vscale x 4 x float> poison, float %b, i32 0
@@ -234,7 +237,7 @@ define <vscale x 4 x double> @vfwsub_wf_nxv4f64(<vscale x 4 x double> %va, float
 define <vscale x 4 x double> @vfwsub_wf_nxv4f64_2(<vscale x 4 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv4f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %fpext = fpext float %b to double
@@ -247,7 +250,7 @@ define <vscale x 4 x double> @vfwsub_wf_nxv4f64_2(<vscale x 4 x double> %va, flo
 define <vscale x 8 x double> @vfwsub_vv_nxv8f64(<vscale x 8 x float> %va, <vscale x 8 x float> %vb) {
 ; CHECK-LABEL: vfwsub_vv_nxv8f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, mu
 ; CHECK-NEXT:    vfwsub.vv v16, v8, v12
 ; CHECK-NEXT:    vmv8r.v v8, v16
 ; CHECK-NEXT:    ret
@@ -260,7 +263,7 @@ define <vscale x 8 x double> @vfwsub_vv_nxv8f64(<vscale x 8 x float> %va, <vscal
 define <vscale x 8 x double> @vfwsub_vf_nxv8f64(<vscale x 8 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv8f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v16, v8, fa0
 ; CHECK-NEXT:    vmv8r.v v8, v16
 ; CHECK-NEXT:    ret
@@ -275,7 +278,7 @@ define <vscale x 8 x double> @vfwsub_vf_nxv8f64(<vscale x 8 x float> %va, float 
 define <vscale x 8 x double> @vfwsub_vf_nxv8f64_2(<vscale x 8 x float> %va, float %b) {
 ; CHECK-LABEL: vfwsub_vf_nxv8f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, mu
 ; CHECK-NEXT:    vfwsub.vf v16, v8, fa0
 ; CHECK-NEXT:    vmv8r.v v8, v16
 ; CHECK-NEXT:    ret
@@ -290,8 +293,9 @@ define <vscale x 8 x double> @vfwsub_vf_nxv8f64_2(<vscale x 8 x float> %va, floa
 define <vscale x 8 x double> @vfwsub_wv_nxv8f64(<vscale x 8 x double> %va, <vscale x 8 x float> %vb) {
 ; CHECK-LABEL: vfwsub_wv_nxv8f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
-; CHECK-NEXT:    vfwsub.wv v8, v8, v16
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, mu
+; CHECK-NEXT:    vfwsub.wv v24, v8, v16
+; CHECK-NEXT:    vmv8r.v v8, v24
 ; CHECK-NEXT:    ret
   %vc = fpext <vscale x 8 x float> %vb to <vscale x 8 x double>
   %vd = fsub <vscale x 8 x double> %va, %vc
@@ -301,7 +305,7 @@ define <vscale x 8 x double> @vfwsub_wv_nxv8f64(<vscale x 8 x double> %va, <vsca
 define <vscale x 8 x double> @vfwsub_wf_nxv8f64(<vscale x 8 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv8f64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %head = insertelement <vscale x 8 x float> poison, float %b, i32 0
@@ -314,7 +318,7 @@ define <vscale x 8 x double> @vfwsub_wf_nxv8f64(<vscale x 8 x double> %va, float
 define <vscale x 8 x double> @vfwsub_wf_nxv8f64_2(<vscale x 8 x double> %va, float %b) {
 ; CHECK-LABEL: vfwsub_wf_nxv8f64_2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, mu
 ; CHECK-NEXT:    vfwsub.wf v8, v8, fa0
 ; CHECK-NEXT:    ret
   %fpext = fpext float %b to double

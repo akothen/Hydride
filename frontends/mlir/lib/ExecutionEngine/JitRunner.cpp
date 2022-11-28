@@ -23,7 +23,6 @@
 #include "mlir/IR/MLIRContext.h"
 #include "mlir/Parser/Parser.h"
 #include "mlir/Support/FileUtilities.h"
-#include "mlir/Tools/ParseUtilities.h"
 
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
@@ -92,12 +91,6 @@ struct Options {
   llvm::cl::opt<bool> hostSupportsJit{"host-supports-jit",
                                       llvm::cl::desc("Report host JIT support"),
                                       llvm::cl::Hidden};
-
-  llvm::cl::opt<bool> noImplicitModule{
-      "no-implicit-module",
-      llvm::cl::desc(
-          "Disable implicit addition of a top-level module op during parsing"),
-      llvm::cl::init(false)};
 };
 
 struct CompileAndExecuteConfig {
@@ -106,7 +99,7 @@ struct CompileAndExecuteConfig {
 
   /// A custom function that is passed to ExecutionEngine. It processes MLIR
   /// module and creates LLVM IR module.
-  llvm::function_ref<std::unique_ptr<llvm::Module>(Operation *,
+  llvm::function_ref<std::unique_ptr<llvm::Module>(ModuleOp,
                                                    llvm::LLVMContext &)>
       llvmModuleBuilder;
 
@@ -118,9 +111,8 @@ struct CompileAndExecuteConfig {
 
 } // namespace
 
-static OwningOpRef<Operation *> parseMLIRInput(StringRef inputFilename,
-                                               bool insertImplicitModule,
-                                               MLIRContext *context) {
+static OwningOpRef<ModuleOp> parseMLIRInput(StringRef inputFilename,
+                                            MLIRContext *context) {
   // Set up the input file.
   std::string errorMessage;
   auto file = openInputFile(inputFilename, &errorMessage);
@@ -131,15 +123,7 @@ static OwningOpRef<Operation *> parseMLIRInput(StringRef inputFilename,
 
   llvm::SourceMgr sourceMgr;
   sourceMgr.AddNewSourceBuffer(std::move(file), SMLoc());
-  OwningOpRef<Operation *> module =
-      parseSourceFileForTool(sourceMgr, context, insertImplicitModule);
-  if (!module)
-    return nullptr;
-  if (!module.get()->hasTrait<OpTrait::SymbolTable>()) {
-    llvm::errs() << "Error: top-level op must be a symbol table.\n";
-    return nullptr;
-  }
-  return module;
+  return parseSourceFile<ModuleOp>(sourceMgr, context);
 }
 
 static inline Error makeStringError(const Twine &message) {
@@ -164,7 +148,7 @@ static Optional<unsigned> getCommandLineOptLevel(Options &options) {
 }
 
 // JIT-compile the given module and run "entryPoint" with "args" as arguments.
-static Error compileAndExecute(Options &options, Operation *module,
+static Error compileAndExecute(Options &options, ModuleOp module,
                                StringRef entryPoint,
                                CompileAndExecuteConfig config, void **args) {
   Optional<llvm::CodeGenOpt::Level> jitCodeGenOptLevel;
@@ -229,7 +213,7 @@ static Error compileAndExecute(Options &options, Operation *module,
     engineOptions.transformer = config.transformer;
   engineOptions.jitCodeGenOptLevel = jitCodeGenOptLevel;
   engineOptions.sharedLibPaths = executionEngineLibs;
-  engineOptions.enableObjectDump = true;
+  engineOptions.enableObjectCache = true;
   auto expectedEngine = mlir::ExecutionEngine::create(module, engineOptions);
   if (!expectedEngine)
     return expectedEngine.takeError();
@@ -250,17 +234,15 @@ static Error compileAndExecute(Options &options, Operation *module,
   (*fptr)(args);
 
   // Run all dynamic library destroy callbacks to prepare for the shutdown.
-  for (MlirRunnerDestroyFn destroy : destroyFns)
-    destroy();
+  llvm::for_each(destroyFns, [](MlirRunnerDestroyFn destroy) { destroy(); });
 
   return Error::success();
 }
 
-static Error compileAndExecuteVoidFunction(Options &options, Operation *module,
+static Error compileAndExecuteVoidFunction(Options &options, ModuleOp module,
                                            StringRef entryPoint,
                                            CompileAndExecuteConfig config) {
-  auto mainFunction = dyn_cast_or_null<LLVM::LLVMFuncOp>(
-      SymbolTable::lookupSymbolIn(module, entryPoint));
+  auto mainFunction = module.lookupSymbol<LLVM::LLVMFuncOp>(entryPoint);
   if (!mainFunction || mainFunction.empty())
     return makeStringError("entry point not found");
   void *empty = nullptr;
@@ -300,11 +282,10 @@ Error checkCompatibleReturnType<float>(LLVM::LLVMFuncOp mainFunction) {
   return Error::success();
 }
 template <typename Type>
-Error compileAndExecuteSingleReturnFunction(Options &options, Operation *module,
+Error compileAndExecuteSingleReturnFunction(Options &options, ModuleOp module,
                                             StringRef entryPoint,
                                             CompileAndExecuteConfig config) {
-  auto mainFunction = dyn_cast_or_null<LLVM::LLVMFuncOp>(
-      SymbolTable::lookupSymbolIn(module, entryPoint));
+  auto mainFunction = module.lookupSymbol<LLVM::LLVMFuncOp>(entryPoint);
   if (!mainFunction || mainFunction.isExternal())
     return makeStringError("entry point not found");
 
@@ -341,11 +322,11 @@ int mlir::JitRunnerMain(int argc, char **argv, const DialectRegistry &registry,
   llvm::cl::ParseCommandLineOptions(argc, argv, "MLIR CPU execution driver\n");
 
   if (options.hostSupportsJit) {
-    auto j = llvm::orc::LLJITBuilder().create();
-    if (j)
+    auto J = llvm::orc::LLJITBuilder().create();
+    if (J)
       llvm::outs() << "true\n";
     else {
-      llvm::consumeError(j.takeError());
+      llvm::consumeError(J.takeError());
       llvm::outs() << "false\n";
     }
     return 0;
@@ -357,16 +338,14 @@ int mlir::JitRunnerMain(int argc, char **argv, const DialectRegistry &registry,
 
   MLIRContext context(registry);
 
-  auto m = parseMLIRInput(options.inputFilename, !options.noImplicitModule,
-                          &context);
+  auto m = parseMLIRInput(options.inputFilename, &context);
   if (!m) {
     llvm::errs() << "could not parse the input IR\n";
     return 1;
   }
 
-  JitRunnerOptions runnerOptions{options.mainFuncName, options.mainFuncType};
   if (config.mlirTransformer)
-    if (failed(config.mlirTransformer(m.get(), runnerOptions)))
+    if (failed(config.mlirTransformer(m.get())))
       return EXIT_FAILURE;
 
   auto tmBuilderOrError = llvm::orc::JITTargetMachineBuilder::detectHost();
@@ -390,7 +369,7 @@ int mlir::JitRunnerMain(int argc, char **argv, const DialectRegistry &registry,
 
   // Get the function used to compile and execute the module.
   using CompileAndExecuteFnT =
-      Error (*)(Options &, Operation *, StringRef, CompileAndExecuteConfig);
+      Error (*)(Options &, ModuleOp, StringRef, CompileAndExecuteConfig);
   auto compileAndExecuteFn =
       StringSwitch<CompileAndExecuteFnT>(options.mainFuncType.getValue())
           .Case("i32", compileAndExecuteSingleReturnFunction<int32_t>)

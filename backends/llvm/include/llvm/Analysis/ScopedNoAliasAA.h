@@ -26,7 +26,9 @@ class MDNode;
 class MemoryLocation;
 
 /// A simple AA result which uses scoped-noalias metadata to answer queries.
-class ScopedNoAliasAAResult : public AAResultBase {
+class ScopedNoAliasAAResult : public AAResultBase<ScopedNoAliasAAResult> {
+  friend AAResultBase<ScopedNoAliasAAResult>;
+
 public:
   /// Handle invalidation events from the new pass manager.
   ///

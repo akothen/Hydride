@@ -30,5 +30,7 @@ static void extractAliasesFromModule(Oracle &O, Module &Program) {
 }
 
 void llvm::reduceAliasesDeltaPass(TestRunner &Test) {
-  runDeltaPass(Test, extractAliasesFromModule, "Reducing Aliases");
+  errs() << "*** Reducing Aliases ...\n";
+  runDeltaPass(Test, extractAliasesFromModule);
+  errs() << "----------------------------\n";
 }

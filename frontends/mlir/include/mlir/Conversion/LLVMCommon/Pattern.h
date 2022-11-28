@@ -14,7 +14,6 @@
 #include "mlir/Transforms/DialectConversion.h"
 
 namespace mlir {
-class CallOpInterface;
 
 namespace LLVM {
 namespace detail {
@@ -22,10 +21,8 @@ namespace detail {
 /// and given operands.
 LogicalResult oneToOneRewrite(Operation *op, StringRef targetOp,
                               ValueRange operands,
-                              ArrayRef<NamedAttribute> targetAttrs,
                               LLVMTypeConverter &typeConverter,
                               ConversionPatternRewriter &rewriter);
-
 } // namespace detail
 } // namespace LLVM
 
@@ -199,7 +196,7 @@ public:
   matchAndRewrite(SourceOp op, typename SourceOp::Adaptor adaptor,
                   ConversionPatternRewriter &rewriter) const override {
     return LLVM::detail::oneToOneRewrite(op, TargetOp::getOperationName(),
-                                         adaptor.getOperands(), op->getAttrs(),
+                                         adaptor.getOperands(),
                                          *this->getTypeConverter(), rewriter);
   }
 };

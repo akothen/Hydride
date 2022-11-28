@@ -26,8 +26,6 @@ class Dialect;
 
 using DialectAllocatorFunction = std::function<Dialect *(MLIRContext *)>;
 using DialectAllocatorFunctionRef = function_ref<Dialect *(MLIRContext *)>;
-using DynamicDialectPopulationFunction =
-    std::function<void(MLIRContext *, DynamicDialect *)>;
 
 //===----------------------------------------------------------------------===//
 // DialectExtension
@@ -92,8 +90,9 @@ protected:
     unsigned dialectIdx = 0;
     auto derivedDialects = std::tuple<DialectsT *...>{
         static_cast<DialectsT *>(dialects[dialectIdx++])...};
-    std::apply([&](DialectsT *...dialect) { apply(context, dialect...); },
-               derivedDialects);
+    llvm::apply_tuple(
+        [&](DialectsT *...dialect) { apply(context, dialect...); },
+        derivedDialects);
   }
 };
 
@@ -137,15 +136,8 @@ public:
   void insert(TypeID typeID, StringRef name,
               const DialectAllocatorFunction &ctor);
 
-  /// Add a new dynamic dialect constructor in the registry. The constructor
-  /// provides as argument the created dynamic dialect, and is expected to
-  /// register the dialect types, attributes, and ops, using the
-  /// methods defined in ExtensibleDialect such as registerDynamicOperation.
-  void insertDynamic(StringRef name,
-                     const DynamicDialectPopulationFunction &ctor);
-
-  /// Return an allocation function for constructing the dialect identified
-  /// by its namespace, or nullptr if the namespace is not in this registry.
+  /// Return an allocation function for constructing the dialect identified by
+  /// its namespace, or nullptr if the namespace is not in this registry.
   DialectAllocatorFunctionRef getDialectAllocator(StringRef name) const;
 
   // Register all dialects available in the current registry with the registry
@@ -183,7 +175,8 @@ public:
   /// Add the given extensions to the registry.
   template <typename... ExtensionsT>
   void addExtensions() {
-    (addExtension(std::make_unique<ExtensionsT>()), ...);
+    (void)std::initializer_list<int>{
+        (addExtension(std::make_unique<ExtensionsT>()), 0)...};
   }
 
   /// Add an extension function that requires the given dialects.

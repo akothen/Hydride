@@ -87,11 +87,6 @@ LLVMContext::LLVMContext() : pImpl(new LLVMContextImpl(*this)) {
          "ptrauth operand bundle id drifted!");
   (void)PtrauthEntry;
 
-  auto *KCFIEntry = pImpl->getOrInsertBundleTag("kcfi");
-  assert(KCFIEntry->second == LLVMContext::OB_kcfi &&
-         "kcfi operand bundle id drifted!");
-  (void)KCFIEntry;
-
   SyncScope::ID SingleThreadSSID =
       pImpl->getOrInsertSyncScopeID("singlethread");
   assert(SingleThreadSSID == SyncScope::SingleThread &&
@@ -153,10 +148,10 @@ uint64_t LLVMContext::getDiagnosticsHotnessThreshold() const {
   return pImpl->DiagnosticsHotnessThreshold.value_or(UINT64_MAX);
 }
 void LLVMContext::setDiagnosticsMisExpectTolerance(
-    Optional<uint32_t> Tolerance) {
+    Optional<uint64_t> Tolerance) {
   pImpl->DiagnosticsMisExpectTolerance = Tolerance;
 }
-uint32_t LLVMContext::getDiagnosticsMisExpectTolerance() const {
+uint64_t LLVMContext::getDiagnosticsMisExpectTolerance() const {
   return pImpl->DiagnosticsMisExpectTolerance.value_or(0);
 }
 
@@ -378,4 +373,8 @@ void LLVMContext::setOpaquePointers(bool Enable) const {
 
 bool LLVMContext::supportsTypedPointers() const {
   return !pImpl->getOpaquePointers();
+}
+
+Any &LLVMContext::getTargetData() const {
+  return pImpl->TargetDataStorage;
 }

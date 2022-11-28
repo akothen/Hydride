@@ -62,16 +62,18 @@ public:
   // Construct from a signed integer.
   template <typename T>
   explicit DiagnosticArgument(
-      T val, std::enable_if_t<std::is_signed<T>::value &&
+      T val,
+      typename std::enable_if<std::is_signed<T>::value &&
                               std::numeric_limits<T>::is_integer &&
-                              sizeof(T) <= sizeof(int64_t)> * = nullptr)
+                              sizeof(T) <= sizeof(int64_t)>::type * = nullptr)
       : kind(DiagnosticArgumentKind::Integer), opaqueVal(int64_t(val)) {}
   // Construct from an unsigned integer.
   template <typename T>
   explicit DiagnosticArgument(
-      T val, std::enable_if_t<std::is_unsigned<T>::value &&
+      T val,
+      typename std::enable_if<std::is_unsigned<T>::value &&
                               std::numeric_limits<T>::is_integer &&
-                              sizeof(T) <= sizeof(uint64_t)> * = nullptr)
+                              sizeof(T) <= sizeof(uint64_t)>::type * = nullptr)
       : kind(DiagnosticArgumentKind::Unsigned), opaqueVal(uint64_t(val)) {}
   // Construct from a string reference.
   explicit DiagnosticArgument(StringRef val)
@@ -173,9 +175,10 @@ public:
 
   /// Stream operator for inserting new diagnostic arguments.
   template <typename Arg>
-  std::enable_if_t<!std::is_convertible<Arg, StringRef>::value &&
-                       std::is_constructible<DiagnosticArgument, Arg>::value,
-                   Diagnostic &>
+  typename std::enable_if<
+      !std::is_convertible<Arg, StringRef>::value &&
+          std::is_constructible<DiagnosticArgument, Arg>::value,
+      Diagnostic &>::type
   operator<<(Arg &&val) {
     arguments.push_back(DiagnosticArgument(std::forward<Arg>(val)));
     return *this;
@@ -197,10 +200,10 @@ public:
   Diagnostic &operator<<(OperationName val);
 
   /// Stream in an Operation.
-  Diagnostic &operator<<(Operation &op);
-  Diagnostic &operator<<(Operation *op) { return *this << *op; }
+  Diagnostic &operator<<(Operation &val);
+  Diagnostic &operator<<(Operation *val) { return *this << *val; }
   /// Append an operation with the given printing flags.
-  Diagnostic &appendOp(Operation &op, const OpPrintingFlags &flags);
+  Diagnostic &appendOp(Operation &val, const OpPrintingFlags &flags);
 
   /// Stream in a Value.
   Diagnostic &operator<<(Value val);

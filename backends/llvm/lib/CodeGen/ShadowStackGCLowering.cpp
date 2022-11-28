@@ -320,8 +320,9 @@ bool ShadowStackGCLowering::runOnFunction(Function &F) {
   Instruction *StackEntry =
       AtEntry.CreateAlloca(ConcreteStackEntryTy, nullptr, "gc_frame");
 
-  AtEntry.SetInsertPointPastAllocas(&F);
-  IP = AtEntry.GetInsertPoint();
+  while (isa<AllocaInst>(IP))
+    ++IP;
+  AtEntry.SetInsertPoint(IP->getParent(), IP);
 
   // Initialize the map pointer and load the current head of the shadow stack.
   Instruction *CurrentHead =

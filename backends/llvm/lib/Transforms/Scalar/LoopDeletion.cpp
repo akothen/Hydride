@@ -89,15 +89,16 @@ static bool isLoopDead(Loop *L, ScalarEvolution &SE,
       if (!AllOutgoingValuesSame)
         break;
 
-      if (Instruction *I = dyn_cast<Instruction>(incoming)) {
-        if (!L->makeLoopInvariant(I, Changed, Preheader->getTerminator(),
-                                  /*MSSAU=*/nullptr, &SE)) {
+      if (Instruction *I = dyn_cast<Instruction>(incoming))
+        if (!L->makeLoopInvariant(I, Changed, Preheader->getTerminator())) {
           AllEntriesInvariant = false;
           break;
         }
-      }
     }
   }
+
+  if (Changed)
+    SE.forgetLoopDispositions(L);
 
   if (!AllEntriesInvariant || !AllOutgoingValuesSame)
     return false;
@@ -105,7 +106,7 @@ static bool isLoopDead(Loop *L, ScalarEvolution &SE,
   // Make sure that no instructions in the block have potential side-effects.
   // This includes instructions that could write to memory, and loads that are
   // marked volatile.
-  for (const auto &I : L->blocks())
+  for (auto &I : L->blocks())
     if (any_of(*I, [](Instruction &I) {
           return I.mayHaveSideEffects() && !I.isDroppable();
         }))

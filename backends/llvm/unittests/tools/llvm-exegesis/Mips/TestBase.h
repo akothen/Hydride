@@ -24,8 +24,7 @@ void InitializeMipsExegesisTarget();
 
 class MipsTestBase : public ::testing::Test {
 protected:
-  MipsTestBase()
-      : State(cantFail(LLVMState::Create("mips-unknown-linux", "mips32"))) {}
+  MipsTestBase() : State("mips-unknown-linux", "mips32") {}
 
   static void SetUpTestCase() {
     LLVMInitializeMipsTargetInfo();

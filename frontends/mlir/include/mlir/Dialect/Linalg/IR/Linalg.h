@@ -20,7 +20,6 @@
 #include "mlir/IR/TypeUtilities.h"
 #include "mlir/Interfaces/ControlFlowInterfaces.h"
 #include "mlir/Interfaces/CopyOpInterface.h"
-#include "mlir/Interfaces/DestinationStyleOpInterface.h"
 #include "mlir/Interfaces/InferTypeOpInterface.h"
 #include "mlir/Interfaces/SideEffectInterfaces.h"
 #include "mlir/Interfaces/TilingInterface.h"
@@ -30,6 +29,20 @@ namespace mlir {
 namespace linalg {
 
 class LinalgOp;
+
+// TOFO: allow an extra ValueRange to specify an indexing and allow
+// non-hyperrectangular shapes.
+using LoopRangeBuilder =
+    std::function<SmallVector<Range, 4>(ImplicitLocOpBuilder)>;
+
+/// Provide a very simple inference procedure to build the loop ranges from the
+/// op and its operands. This only works with permutation affine maps and
+/// patterns of the form `(m, n)[s] -> (m + n - s floordiv 2)`.
+/// A more advanced Tensor-Comprehension like inference is possible but has
+/// proven to be ambiguous in unfavorable case.
+/// As a consequence, we relax the default behavior very conservatively and
+/// provide an op-specified hook so that Linalg ops may override the behavior.
+LoopRangeBuilder defaultLoopRangesBuilder(LinalgOp op);
 
 /// Returns the name mangled library call name to disambiguate between different
 /// overloads at the C level. The name mangling scheme is basic and uses MLIR
@@ -70,10 +83,14 @@ AffineMap extractOrIdentityMap(Optional<AffineMap> maybeMap, unsigned rank,
 SmallVector<AffineExpr, 4> concat(ArrayRef<AffineExpr> a,
                                   ArrayRef<AffineExpr> b);
 
-/// Check if `permutation` is a permutation of the range
-/// `[0, permutation.size())`.
-bool isPermutation(ArrayRef<int64_t> permutation);
+/// Return the dims that are `iteratorTypeName` loops in the LinalgOp `op`.
+/// Assumes `op` is a LinalgOp.
+void getDimsOfType(Operation *op, StringRef iteratorTypeName,
+                   SmallVectorImpl<unsigned> &res);
 
+namespace detail {
+LogicalResult verifyStructuredOpInterface(Operation *op);
+} // namespace detail
 } // namespace linalg
 } // namespace mlir
 

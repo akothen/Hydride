@@ -10,25 +10,29 @@ target triple = "x86_64-unknown-linux-gnu"
 ; CHECK: remark: devirt-single.cc:13:0: devirtualized vf
 ; CHECK-NOT: devirtualized
 
-@vt1 = constant [1 x ptr] [ptr @vf], !type !8
-@vt2 = constant [1 x ptr] [ptr @vf], !type !8
+@vt1 = constant [1 x i8*] [i8* bitcast (void (i8*)* @vf to i8*)], !type !8
+@vt2 = constant [1 x i8*] [i8* bitcast (void (i8*)* @vf to i8*)], !type !8
 
-define void @vf(ptr %this) #0 !dbg !7 {
+define void @vf(i8* %this) #0 !dbg !7 {
   ret void
 }
 
 ; CHECK: define void @call
-define void @call(ptr %obj) #1 !dbg !5 {
-  %vtable = load ptr, ptr %obj
-  %p = call i1 @llvm.type.test(ptr %vtable, metadata !"typeid")
+define void @call(i8* %obj) #1 !dbg !5 {
+  %vtableptr = bitcast i8* %obj to [1 x i8*]**
+  %vtable = load [1 x i8*]*, [1 x i8*]** %vtableptr
+  %vtablei8 = bitcast [1 x i8*]* %vtable to i8*
+  %p = call i1 @llvm.type.test(i8* %vtablei8, metadata !"typeid")
   call void @llvm.assume(i1 %p)
-  %fptr = load ptr, ptr %vtable
+  %fptrptr = getelementptr [1 x i8*], [1 x i8*]* %vtable, i32 0, i32 0
+  %fptr = load i8*, i8** %fptrptr
+  %fptr_casted = bitcast i8* %fptr to void (i8*)*
   ; CHECK: call void @vf(
-  call void %fptr(ptr %obj), !dbg !6
+  call void %fptr_casted(i8* %obj), !dbg !6
   ret void
 }
 
-declare i1 @llvm.type.test(ptr, metadata)
+declare i1 @llvm.type.test(i8*, metadata)
 declare void @llvm.assume(i1)
 
 !llvm.dbg.cu = !{!0}

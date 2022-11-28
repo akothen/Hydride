@@ -17,9 +17,8 @@
 
 // -----
 
-def SPIRV_GroupBroadcastOp : SPIRV_Op<"GroupBroadcast",
-                              [Pure,
-                               AllTypesMatch<["value", "result"]>]> {
+def SPV_GroupBroadcastOp : SPV_Op<"GroupBroadcast",
+  [NoSideEffect, AllTypesMatch<["value", "result"]>]> {
   let summary = [{
     Broadcast the Value of the invocation identified by the local id LocalId
     to the result of all invocations in the group.
@@ -52,7 +51,7 @@ def SPIRV_GroupBroadcastOp : SPIRV_Op<"GroupBroadcast",
                                `vector<` integer-literal `x` float-type `>`
     localid-type ::= integer-type |
                    `vector<` integer-literal `x` integer-type `>`
-    group-broadcast-op ::= ssa-id `=` `spirv.GroupBroadcast` scope ssa_use,
+    group-broadcast-op ::= ssa-id `=` `spv.GroupBroadcast` scope ssa_use,
                    ssa_use `:` integer-float-scalar-vector-type `,` localid-type
     ```mlir
 
@@ -63,27 +62,27 @@ def SPIRV_GroupBroadcastOp : SPIRV_Op<"GroupBroadcast",
     %vector_value = ... : vector<4xf32>
     %scalar_localid = ... : i32
     %vector_localid = ... : vector<3xi32>
-    %0 = spirv.GroupBroadcast "Subgroup" %scalar_value, %scalar_localid : f32, i32
-    %1 = spirv.GroupBroadcast "Workgroup" %vector_value, %vector_localid :
+    %0 = spv.GroupBroadcast "Subgroup" %scalar_value, %scalar_localid : f32, i32
+    %1 = spv.GroupBroadcast "Workgroup" %vector_value, %vector_localid :
       vector<4xf32>, vector<3xi32>
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[]>,
-    Capability<[SPIRV_C_Groups]>
+    Capability<[SPV_C_Groups]>
   ];
 
   let arguments = (ins
-    SPIRV_ScopeAttr:$execution_scope,
-    SPIRV_Type:$value,
-    SPIRV_ScalarOrVectorOf<SPIRV_Integer>:$localid
+    SPV_ScopeAttr:$execution_scope,
+    SPV_Type:$value,
+    SPV_ScalarOrVectorOf<SPV_Integer>:$localid
   );
 
   let results = (outs
-    SPIRV_Type:$result
+    SPV_Type:$result
   );
 
   let assemblyFormat = [{
@@ -93,7 +92,7 @@ def SPIRV_GroupBroadcastOp : SPIRV_Op<"GroupBroadcast",
 
 // -----
 
-def SPIRV_KHRSubgroupBallotOp : SPIRV_KhrVendorOp<"SubgroupBallot", []> {
+def SPV_SubgroupBallotKHROp : SPV_Op<"SubgroupBallotKHR", []> {
   let summary = "See extension SPV_KHR_shader_ballot";
 
   let description = [{
@@ -114,30 +113,30 @@ def SPIRV_KHRSubgroupBallotOp : SPIRV_KhrVendorOp<"SubgroupBallot", []> {
     <!-- End of AutoGen section -->
 
     ```
-    subgroup-ballot-op ::= ssa-id `=` `spirv.KHR.SubgroupBallot`
+    subgroup-ballot-op ::= ssa-id `=` `spv.SubgroupBallotKHR`
                                 ssa-use `:` `vector` `<` 4 `x` `i32` `>`
     ```
 
     #### Example:
 
     ```mlir
-    %0 = spirv.KHR.SubgroupBallot %predicate : vector<4xi32>
+    %0 = spv.SubgroupBallotKHR %predicate : vector<4xi32>
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[SPV_KHR_shader_ballot]>,
-    Capability<[SPIRV_C_SubgroupBallotKHR]>
+    Capability<[SPV_C_SubgroupBallotKHR]>
   ];
 
   let arguments = (ins
-    SPIRV_Bool:$predicate
+    SPV_Bool:$predicate
   );
 
   let results = (outs
-    SPIRV_Int32Vec4:$result
+    SPV_Int32Vec4:$result
   );
 
   let hasVerifier = 0;
@@ -147,7 +146,7 @@ def SPIRV_KHRSubgroupBallotOp : SPIRV_KhrVendorOp<"SubgroupBallot", []> {
 
 // -----
 
-def SPIRV_INTELSubgroupBlockReadOp : SPIRV_IntelVendorOp<"SubgroupBlockRead", []> {
+def SPV_SubgroupBlockReadINTELOp : SPV_Op<"SubgroupBlockReadINTEL", []> {
   let summary = "See extension SPV_INTEL_subgroups";
 
   let description = [{
@@ -169,36 +168,36 @@ def SPIRV_INTELSubgroupBlockReadOp : SPIRV_IntelVendorOp<"SubgroupBlockRead", []
     <!-- End of AutoGen section -->
 
     ```
-    subgroup-block-read-INTEL-op ::= ssa-id `=` `spirv.INTEL.SubgroupBlockRead`
+    subgroup-block-read-INTEL-op ::= ssa-id `=` `spv.SubgroupBlockReadINTEL`
                                 storage-class ssa_use `:` spirv-element-type
     ```mlir
 
     #### Example:
 
     ```
-    %0 = spirv.INTEL.SubgroupBlockRead "StorageBuffer" %ptr : i32
+    %0 = spv.SubgroupBlockReadINTEL "StorageBuffer" %ptr : i32
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[SPV_INTEL_subgroups]>,
-    Capability<[SPIRV_C_SubgroupBufferBlockIOINTEL]>
+    Capability<[SPV_C_SubgroupBufferBlockIOINTEL]>
   ];
 
   let arguments = (ins
-    SPIRV_AnyPtr:$ptr
+    SPV_AnyPtr:$ptr
   );
 
   let results = (outs
-    SPIRV_Type:$value
+    SPV_Type:$value
   );
 }
 
 // -----
 
-def SPIRV_INTELSubgroupBlockWriteOp : SPIRV_IntelVendorOp<"SubgroupBlockWrite", []> {
+def SPV_SubgroupBlockWriteINTELOp : SPV_Op<"SubgroupBlockWriteINTEL", []> {
   let summary = "See extension SPV_INTEL_subgroups";
 
   let description = [{
@@ -219,27 +218,27 @@ def SPIRV_INTELSubgroupBlockWriteOp : SPIRV_IntelVendorOp<"SubgroupBlockWrite", 
     <!-- End of AutoGen section -->
 
     ```
-    subgroup-block-write-INTEL-op ::= ssa-id `=` `spirv.INTEL.SubgroupBlockWrite`
+    subgroup-block-write-INTEL-op ::= ssa-id `=` `spv.SubgroupBlockWriteINTEL`
                       storage-class ssa_use `,` ssa-use `:` spirv-element-type
     ```mlir
 
     #### Example:
 
     ```
-    spirv.INTEL.SubgroupBlockWrite "StorageBuffer" %ptr, %value : i32
+    spv.SubgroupBlockWriteINTEL "StorageBuffer" %ptr, %value : i32
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[SPV_INTEL_subgroups]>,
-    Capability<[SPIRV_C_SubgroupBufferBlockIOINTEL]>
+    Capability<[SPV_C_SubgroupBufferBlockIOINTEL]>
   ];
 
   let arguments = (ins
-    SPIRV_AnyPtr:$ptr,
-    SPIRV_Type:$value
+    SPV_AnyPtr:$ptr,
+    SPV_Type:$value
   );
 
   let results = (outs);

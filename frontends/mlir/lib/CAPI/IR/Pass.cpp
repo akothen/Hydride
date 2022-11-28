@@ -24,11 +24,6 @@ MlirPassManager mlirPassManagerCreate(MlirContext ctx) {
   return wrap(new PassManager(unwrap(ctx)));
 }
 
-MlirPassManager mlirPassManagerCreateOnOperation(MlirContext ctx,
-                                                 MlirStringRef anchorOp) {
-  return wrap(new PassManager(unwrap(ctx), unwrap(anchorOp)));
-}
-
 void mlirPassManagerDestroy(MlirPassManager passManager) {
   delete unwrap(passManager);
 }
@@ -70,15 +65,6 @@ void mlirOpPassManagerAddOwnedPass(MlirOpPassManager passManager,
   unwrap(passManager)->addPass(std::unique_ptr<Pass>(unwrap(pass)));
 }
 
-MlirLogicalResult mlirOpPassManagerAddPipeline(MlirOpPassManager passManager,
-                                               MlirStringRef pipelineElements,
-                                               MlirStringCallback callback,
-                                               void *userData) {
-  detail::CallbackOstream stream(callback, userData);
-  return wrap(parsePassPipeline(unwrap(pipelineElements), *unwrap(passManager),
-                                stream));
-}
-
 void mlirPrintPassPipeline(MlirOpPassManager passManager,
                            MlirStringCallback callback, void *userData) {
   detail::CallbackOstream stream(callback, userData);
@@ -86,14 +72,10 @@ void mlirPrintPassPipeline(MlirOpPassManager passManager,
 }
 
 MlirLogicalResult mlirParsePassPipeline(MlirOpPassManager passManager,
-                                        MlirStringRef pipeline,
-                                        MlirStringCallback callback,
-                                        void *userData) {
-  detail::CallbackOstream stream(callback, userData);
-  FailureOr<OpPassManager> pm = parsePassPipeline(unwrap(pipeline), stream);
-  if (succeeded(pm))
-    *unwrap(passManager) = std::move(*pm);
-  return wrap(pm);
+                                        MlirStringRef pipeline) {
+  // TODO: errors are sent to std::errs() at the moment, we should pass in a
+  // stream and redirect to a diagnostic.
+  return wrap(mlir::parsePassPipeline(unwrap(pipeline), *unwrap(passManager)));
 }
 
 //===----------------------------------------------------------------------===//

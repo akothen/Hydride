@@ -316,7 +316,7 @@ bool LoopRotate::rotateLoop(Loop *L, bool SimplifiedLatch) {
                    L->dump());
         return Rotated;
       }
-      if (Metrics.NumInsts > MaxHeaderSize) {
+      if (*Metrics.NumInsts.getValue() > MaxHeaderSize) {
         LLVM_DEBUG(dbgs() << "LoopRotation: NOT rotating - contains "
                           << Metrics.NumInsts
                           << " instructions, which is more than the threshold ("
@@ -345,14 +345,8 @@ bool LoopRotate::rotateLoop(Loop *L, bool SimplifiedLatch) {
     // all outer loops because insertion and deletion of blocks that happens
     // during the rotation may violate invariants related to backedge taken
     // infos in them.
-    if (SE) {
+    if (SE)
       SE->forgetTopmostLoop(L);
-      // We may hoist some instructions out of loop. In case if they were cached
-      // as "loop variant" or "loop computable", these caches must be dropped.
-      // We also may fold basic blocks, so cached block dispositions also need
-      // to be dropped.
-      SE->forgetBlockAndLoopDispositions();
-    }
 
     LLVM_DEBUG(dbgs() << "LoopRotation: rotating "; L->dump());
     if (MSSAU && VerifyMemorySSA)
@@ -719,7 +713,7 @@ static bool shouldSpeculateInstrs(BasicBlock::iterator Begin,
       if (!cast<GEPOperator>(I)->hasAllConstantIndices())
         return false;
       // fall-thru to increment case
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     case Instruction::Add:
     case Instruction::Sub:
     case Instruction::And:

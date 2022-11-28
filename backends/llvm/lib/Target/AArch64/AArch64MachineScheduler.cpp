@@ -24,7 +24,7 @@ static bool needReorderStoreMI(const MachineInstr *MI) {
   case AArch64::STRQui:
     if (!MI->getMF()->getSubtarget<AArch64Subtarget>().isStoreAddressAscend())
       return false;
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case AArch64::STPQi:
     return AArch64InstrInfo::getLdStOffsetOp(*MI).isImm();
   }

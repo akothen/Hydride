@@ -75,7 +75,6 @@ public:
   OpPassManager(const OpPassManager &rhs);
   ~OpPassManager();
   OpPassManager &operator=(const OpPassManager &rhs);
-  OpPassManager &operator=(OpPassManager &&rhs);
 
   /// Iterator over the passes in this pass manager.
   using pass_iterator =

@@ -78,7 +78,6 @@ public:
     identifier,
     literal,
     variable,
-    string,
   };
 
   FormatToken(Kind kind, StringRef spelling) : kind(kind), spelling(spelling) {}
@@ -131,11 +130,10 @@ private:
   /// Return the next character in the stream.
   int getNextChar();
 
-  /// Lex an identifier, literal, variable, or string.
+  /// Lex an identifier, literal, or variable.
   FormatToken lexIdentifier(const char *tokStart);
   FormatToken lexLiteral(const char *tokStart);
   FormatToken lexVariable(const char *tokStart);
-  FormatToken lexString(const char *tokStart);
 
   /// Create a token with the current pointer and a start pointer.
   FormatToken formToken(FormatToken::Kind kind, const char *tokStart) {
@@ -165,7 +163,7 @@ public:
   virtual ~FormatElement();
 
   // The top-level kinds of format elements.
-  enum Kind { Literal, String, Variable, Whitespace, Directive, Optional };
+  enum Kind { Literal, Variable, Whitespace, Directive, Optional };
 
   /// Support LLVM-style RTTI.
   static bool classof(const FormatElement *el) { return true; }
@@ -212,20 +210,6 @@ private:
   /// The spelling of the variable, i.e. the string contained within the
   /// backticks.
   StringRef spelling;
-};
-
-/// This class represents a raw string that can contain arbitrary C++ code.
-class StringElement : public FormatElementBase<FormatElement::String> {
-public:
-  /// Create a string element with the given contents.
-  explicit StringElement(std::string value) : value(std::move(value)) {}
-
-  /// Get the value of the string element.
-  StringRef getValue() const { return value; }
-
-private:
-  /// The contents of the string.
-  std::string value;
 };
 
 /// This class represents a variable element. A variable refers to some part of
@@ -378,48 +362,34 @@ public:
   /// Create an optional group with the given child elements.
   OptionalElement(std::vector<FormatElement *> &&thenElements,
                   std::vector<FormatElement *> &&elseElements,
-                  unsigned thenParseStart, unsigned elseParseStart,
-                  FormatElement *anchor, bool inverted)
+                  unsigned anchorIndex, unsigned parseStart)
       : thenElements(std::move(thenElements)),
-        elseElements(std::move(elseElements)), thenParseStart(thenParseStart),
-        elseParseStart(elseParseStart), anchor(anchor), inverted(inverted) {}
+        elseElements(std::move(elseElements)), anchorIndex(anchorIndex),
+        parseStart(parseStart) {}
 
-  /// Return the `then` elements of the optional group. Drops the first
-  /// `thenParseStart` whitespace elements if `parseable` is true.
-  ArrayRef<FormatElement *> getThenElements(bool parseable = false) const {
-    return llvm::makeArrayRef(thenElements)
-        .drop_front(parseable ? thenParseStart : 0);
-  }
+  /// Return the `then` elements of the optional group.
+  ArrayRef<FormatElement *> getThenElements() const { return thenElements; }
 
-  /// Return the `else` elements of the optional group. Drops the first
-  /// `elseParseStart` whitespace elements if `parseable` is true.
-  ArrayRef<FormatElement *> getElseElements(bool parseable = false) const {
-    return llvm::makeArrayRef(elseElements)
-        .drop_front(parseable ? elseParseStart : 0);
-  }
+  /// Return the `else` elements of the optional group.
+  ArrayRef<FormatElement *> getElseElements() const { return elseElements; }
 
   /// Return the anchor of the optional group.
-  FormatElement *getAnchor() const { return anchor; }
+  FormatElement *getAnchor() const { return thenElements[anchorIndex]; }
 
-  /// Return true if the optional group is inverted.
-  bool isInverted() const { return inverted; }
+  /// Return the index of the first element to be parsed.
+  unsigned getParseStart() const { return parseStart; }
 
 private:
   /// The child elements emitted when the anchor is present.
   std::vector<FormatElement *> thenElements;
   /// The child elements emitted when the anchor is not present.
   std::vector<FormatElement *> elseElements;
+  /// The index of the anchor element of the optional group within
+  /// `thenElements`.
+  unsigned anchorIndex;
   /// The index of the first element that is parsed in `thenElements`. That is,
   /// the first non-whitespace element.
-  unsigned thenParseStart;
-  /// The index of the first element that is parsed in `elseElements`. That is,
-  /// the first non-whitespace element.
-  unsigned elseParseStart;
-  /// The anchor element of the optional group.
-  FormatElement *anchor;
-  /// Whether the optional group condition is inverted and the anchor element is
-  /// in the else group.
-  bool inverted;
+  unsigned parseStart;
 };
 
 //===----------------------------------------------------------------------===//
@@ -477,8 +447,6 @@ protected:
   FailureOr<FormatElement *> parseElement(Context ctx);
   /// Parse a literal.
   FailureOr<FormatElement *> parseLiteral(Context ctx);
-  /// Parse a string.
-  FailureOr<FormatElement *> parseString(Context ctx);
   /// Parse a variable.
   FailureOr<FormatElement *> parseVariable(Context ctx);
   /// Parse a directive.
@@ -510,7 +478,7 @@ protected:
   virtual LogicalResult
   verifyOptionalGroupElements(llvm::SMLoc loc,
                               ArrayRef<FormatElement *> elements,
-                              FormatElement *anchor) = 0;
+                              Optional<unsigned> anchorIndex) = 0;
 
   //===--------------------------------------------------------------------===//
   // Lexer Utilities

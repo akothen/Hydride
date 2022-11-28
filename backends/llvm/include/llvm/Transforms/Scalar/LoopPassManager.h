@@ -356,16 +356,6 @@ public:
     Worklist.insert(CurrentL);
   }
 
-  bool isLoopNestChanged() const {
-    return LoopNestChanged;
-  }
-
-  /// Loopnest passes should use this method to indicate if the
-  /// loopnest has been modified.
-  void markLoopNestChanged(bool Changed) {
-    LoopNestChanged = Changed;
-  }
-
 private:
   friend class llvm::FunctionToLoopPassAdaptor;
 
@@ -378,7 +368,6 @@ private:
   Loop *CurrentL;
   bool SkipCurrentLoop;
   const bool LoopNestMode;
-  bool LoopNestChanged;
 
 #ifdef LLVM_ENABLE_ABI_BREAKING_CHECKS
   // In debug builds we also track the parent loop to implement asserts even in
@@ -387,10 +376,8 @@ private:
 #endif
 
   LPMUpdater(SmallPriorityWorklist<Loop *, 4> &Worklist,
-             LoopAnalysisManager &LAM, bool LoopNestMode = false,
-             bool LoopNestChanged = false)
-      : Worklist(Worklist), LAM(LAM), LoopNestMode(LoopNestMode),
-        LoopNestChanged(LoopNestChanged) {}
+             LoopAnalysisManager &LAM, bool LoopNestMode = false)
+      : Worklist(Worklist), LAM(LAM), LoopNestMode(LoopNestMode) {}
 };
 
 template <typename IRUnitT, typename PassT>
@@ -405,7 +392,11 @@ Optional<PreservedAnalyses> LoopPassManager::runSinglePass(
   if (!PI.runBeforePass<Loop>(*Pass, L))
     return None;
 
-  PreservedAnalyses PA = Pass->run(IR, AM, AR, U);
+  PreservedAnalyses PA;
+  {
+    TimeTraceScope TimeScope(Pass->name(), IR.getName());
+    PA = Pass->run(IR, AM, AR, U);
+  }
 
   // do not pass deleted Loop into the instrumentation
   if (U.skipCurrentLoop())

@@ -1,4 +1,4 @@
-; RUN: opt -passes=objc-arc -S %s | FileCheck %s
+; RUN: opt -objc-arc -S %s | FileCheck %s
 
 %0 = type opaque
 

@@ -1,4 +1,6 @@
-; RUN: llc -mtriple=spirv32-unknown-unknown %s -o - | FileCheck %s
+; RUN: llc %s -o - | FileCheck %s
+
+target triple = "spirv32-unknown-unknown"
 
 ; CHECK-DAG: OpName [[UEQ:%.*]] "test_ueq"
 ; CHECK-DAG: OpName [[OEQ:%.*]] "test_oeq"
@@ -30,7 +32,7 @@
 ; CHECK-DAG: OpName [[v3UNO:%.*]] "test_v3_uno"
 ; CHECK-DAG: OpName [[v3ORD:%.*]] "test_v3_ord"
 
-; CHECK:      [[UEQ]] = OpFunction
+; CHECK: [[UEQ]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -42,7 +44,7 @@ define i1 @test_ueq(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[OEQ]] = OpFunction
+; CHECK: [[OEQ]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -54,7 +56,7 @@ define i1 @test_oeq(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[UNE]] = OpFunction
+; CHECK: [[UNE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -66,7 +68,7 @@ define i1 @test_une(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[ONE]] = OpFunction
+; CHECK: [[ONE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -78,7 +80,7 @@ define i1 @test_one(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[ULT]] = OpFunction
+; CHECK: [[ULT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -90,7 +92,7 @@ define i1 @test_ult(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[OLT]] = OpFunction
+; CHECK: [[OLT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -102,7 +104,7 @@ define i1 @test_olt(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[ULE]] = OpFunction
+; CHECK: [[ULE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -114,7 +116,7 @@ define i1 @test_ule(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[OLE]] = OpFunction
+; CHECK: [[OLE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -126,7 +128,7 @@ define i1 @test_ole(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[UGT]] = OpFunction
+; CHECK: [[UGT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -138,7 +140,7 @@ define i1 @test_ugt(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[OGT]] = OpFunction
+; CHECK: [[OGT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -150,7 +152,7 @@ define i1 @test_ogt(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[UGE]] = OpFunction
+; CHECK: [[UGE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -162,7 +164,7 @@ define i1 @test_uge(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[OGE]] = OpFunction
+; CHECK: [[OGE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -174,7 +176,7 @@ define i1 @test_oge(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[ORD]] = OpFunction
+; CHECK: [[ORD]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -186,7 +188,7 @@ define i1 @test_ord(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[UNO]] = OpFunction
+; CHECK: [[UNO]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -198,7 +200,7 @@ define i1 @test_uno(float %a, float %b) {
   ret i1 %r
 }
 
-; CHECK:      [[v3UEQ]] = OpFunction
+; CHECK: [[v3UEQ]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -210,7 +212,7 @@ define <3 x i1> @test_v3_ueq(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3OEQ]] = OpFunction
+; CHECK: [[v3OEQ]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -222,7 +224,7 @@ define <3 x i1> @test_v3_oeq(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3UNE]] = OpFunction
+; CHECK: [[v3UNE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -234,7 +236,7 @@ define <3 x i1> @test_v3_une(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3ONE]] = OpFunction
+; CHECK: [[v3ONE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -246,7 +248,7 @@ define <3 x i1> @test_v3_one(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3ULT]] = OpFunction
+; CHECK: [[v3ULT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -258,7 +260,7 @@ define <3 x i1> @test_v3_ult(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3OLT]] = OpFunction
+; CHECK: [[v3OLT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -270,7 +272,7 @@ define <3 x i1> @test_v3_olt(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3ULE]] = OpFunction
+; CHECK: [[v3ULE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -282,7 +284,7 @@ define <3 x i1> @test_v3_ule(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3OLE]] = OpFunction
+; CHECK: [[v3OLE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -294,7 +296,7 @@ define <3 x i1> @test_v3_ole(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3UGT]] = OpFunction
+; CHECK: [[v3UGT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -306,7 +308,7 @@ define <3 x i1> @test_v3_ugt(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3OGT]] = OpFunction
+; CHECK: [[v3OGT]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -318,7 +320,7 @@ define <3 x i1> @test_v3_ogt(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3UGE]] = OpFunction
+; CHECK: [[v3UGE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -330,7 +332,7 @@ define <3 x i1> @test_v3_uge(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3OGE]] = OpFunction
+; CHECK: [[v3OGE]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -342,7 +344,7 @@ define <3 x i1> @test_v3_oge(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3ORD]] = OpFunction
+; CHECK: [[v3ORD]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel
@@ -354,7 +356,7 @@ define <3 x i1> @test_v3_ord(<3 x float> %a, <3 x float> %b) {
   ret <3 x i1> %r
 }
 
-; CHECK:      [[v3UNO]] = OpFunction
+; CHECK: [[v3UNO]] = OpFunction
 ; CHECK-NEXT: [[A:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: [[B:%.*]] = OpFunctionParameter
 ; CHECK-NEXT: OpLabel

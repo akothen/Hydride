@@ -18,7 +18,7 @@ include "mlir/Dialect/SPIRV/IR/SPIRVBase.td"
 
 // -----
 
-def SPIRV_KHRAssumeTrueOp : SPIRV_KhrVendorOp<"AssumeTrue", []> {
+def SPV_AssumeTrueKHROp : SPV_Op<"AssumeTrueKHR", []> {
   let summary = "TBD";
 
   let description = [{
@@ -27,25 +27,25 @@ def SPIRV_KHRAssumeTrueOp : SPIRV_KhrVendorOp<"AssumeTrue", []> {
     <!-- End of AutoGen section -->
 
     ```
-    assumetruekhr-op ::= `spirv.KHR.AssumeTrue` ssa-use
+    assumetruekhr-op ::= `spv.AssumeTrueKHR` ssa-use
     ```mlir
 
     #### Example:
 
     ```
-    spirv.KHR.AssumeTrue %arg
+    spv.AssumeTrueKHR %arg
     ```
   }];
 
   let availability = [
-    MinVersion<SPIRV_V_1_0>,
-    MaxVersion<SPIRV_V_1_6>,
+    MinVersion<SPV_V_1_0>,
+    MaxVersion<SPV_V_1_5>,
     Extension<[SPV_KHR_expect_assume]>,
-    Capability<[SPIRV_C_ExpectAssumeKHR]>
+    Capability<[SPV_C_ExpectAssumeKHR]>
   ];
 
   let arguments = (ins
-    SPIRV_Bool:$condition
+    SPV_Bool:$condition
   );
 
   let results = (outs);
@@ -56,7 +56,7 @@ def SPIRV_KHRAssumeTrueOp : SPIRV_KhrVendorOp<"AssumeTrue", []> {
 
 // -----
 
-def SPIRV_UndefOp : SPIRV_Op<"Undef", [Pure]> {
+def SPV_UndefOp : SPV_Op<"Undef", [NoSideEffect]> {
   let summary = "Make an intermediate object whose value is undefined.";
 
   let description = [{
@@ -69,21 +69,21 @@ def SPIRV_UndefOp : SPIRV_Op<"Undef", [Pure]> {
     <!-- End of AutoGen section -->
 
     ```
-    undef-op ::= `spirv.Undef` `:` spirv-type
+    undef-op ::= `spv.Undef` `:` spirv-type
     ```
 
     #### Example:
 
     ```mlir
-    %0 = spirv.Undef : f32
-    %1 = spirv.Undef : !spirv.struct<!spirv.array<4 x vector<4xi32>>>
+    %0 = spv.Undef : f32
+    %1 = spv.Undef : !spv.struct<!spv.array<4 x vector<4xi32>>>
     ```
   }];
 
   let arguments = (ins);
 
   let results = (outs
-    SPIRV_Type:$result
+    SPV_Type:$result
   );
 
   let hasVerifier = 0;

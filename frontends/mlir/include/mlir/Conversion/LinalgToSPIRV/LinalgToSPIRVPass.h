@@ -18,9 +18,6 @@
 namespace mlir {
 class ModuleOp;
 
-#define GEN_PASS_DECL_CONVERTLINALGTOSPIRV
-#include "mlir/Conversion/Passes.h.inc"
-
 /// Creates and returns a pass to convert Linalg ops to SPIR-V ops.
 std::unique_ptr<OperationPass<ModuleOp>> createLinalgToSPIRVPass();
 

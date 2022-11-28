@@ -6,7 +6,7 @@ set(LLVM_LINK_COMPONENTS
   TransformUtils
   )
 
-set(MLGO_TESTS TFUtilsTest.cpp TrainingLoggerTest.cpp)
+set(MLGO_TESTS TFUtilsTest.cpp)
 if (DEFINED LLVM_HAVE_TF_API)
   LIST(APPEND EXTRA_TESTS ${MLGO_TESTS})
 else()

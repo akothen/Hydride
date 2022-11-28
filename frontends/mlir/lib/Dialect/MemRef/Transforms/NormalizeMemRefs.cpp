@@ -11,6 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "PassDetail.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
 #include "mlir/Dialect/Affine/Utils.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
@@ -18,13 +19,6 @@
 #include "mlir/Dialect/MemRef/Transforms/Passes.h"
 #include "llvm/ADT/SmallSet.h"
 #include "llvm/Support/Debug.h"
-
-namespace mlir {
-namespace memref {
-#define GEN_PASS_DEF_NORMALIZEMEMREFS
-#include "mlir/Dialect/MemRef/Transforms/Passes.h.inc"
-} // namespace memref
-} // namespace mlir
 
 #define DEBUG_TYPE "normalize-memrefs"
 
@@ -38,8 +32,7 @@ namespace {
 /// such functions as normalizable. Also, if a normalizable function is known
 /// to call a non-normalizable function, we treat that function as
 /// non-normalizable as well. We assume external functions to be normalizable.
-struct NormalizeMemRefs
-    : public memref::impl::NormalizeMemRefsBase<NormalizeMemRefs> {
+struct NormalizeMemRefs : public NormalizeMemRefsBase<NormalizeMemRefs> {
   void runOnOperation() override;
   void normalizeFuncOpMemRefs(func::FuncOp funcOp, ModuleOp moduleOp);
   bool areMemRefsNormalizable(func::FuncOp funcOp);
@@ -152,10 +145,10 @@ void NormalizeMemRefs::setCalleesAndCallersNonNormalizable(
 /// Check whether all the uses of AllocOps, CallOps and function arguments of a
 /// function are either of dereferencing type or are uses in: DeallocOp, CallOp
 /// or ReturnOp. Only if these constraints are satisfied will the function
-/// become a candidate for normalization. When the uses of a memref are
-/// non-normalizable and the memref map layout is trivial (identity), we can
-/// still label the entire function as normalizable. We assume external
-/// functions to be normalizable.
+/// become a candidate for normalization. We follow a conservative approach here
+/// wherein even if the non-normalizable memref is not a part of the function's
+/// argument or return type, we still label the entire function as
+/// non-normalizable. We assume external functions to be normalizable.
 bool NormalizeMemRefs::areMemRefsNormalizable(func::FuncOp funcOp) {
   // We assume external functions to be normalizable.
   if (funcOp.isExternal())
@@ -164,8 +157,7 @@ bool NormalizeMemRefs::areMemRefsNormalizable(func::FuncOp funcOp) {
   if (funcOp
           .walk([&](memref::AllocOp allocOp) -> WalkResult {
             Value oldMemRef = allocOp.getResult();
-            if (!allocOp.getType().getLayout().isIdentity() &&
-                !isMemRefNormalizable(oldMemRef.getUsers()))
+            if (!isMemRefNormalizable(oldMemRef.getUsers()))
               return WalkResult::interrupt();
             return WalkResult::advance();
           })
@@ -177,10 +169,8 @@ bool NormalizeMemRefs::areMemRefsNormalizable(func::FuncOp funcOp) {
             for (unsigned resIndex :
                  llvm::seq<unsigned>(0, callOp.getNumResults())) {
               Value oldMemRef = callOp.getResult(resIndex);
-              if (auto oldMemRefType =
-                      oldMemRef.getType().dyn_cast<MemRefType>())
-                if (!oldMemRefType.getLayout().isIdentity() &&
-                    !isMemRefNormalizable(oldMemRef.getUsers()))
+              if (oldMemRef.getType().isa<MemRefType>())
+                if (!isMemRefNormalizable(oldMemRef.getUsers()))
                   return WalkResult::interrupt();
             }
             return WalkResult::advance();
@@ -190,9 +180,8 @@ bool NormalizeMemRefs::areMemRefsNormalizable(func::FuncOp funcOp) {
 
   for (unsigned argIndex : llvm::seq<unsigned>(0, funcOp.getNumArguments())) {
     BlockArgument oldMemRef = funcOp.getArgument(argIndex);
-    if (auto oldMemRefType = oldMemRef.getType().dyn_cast<MemRefType>())
-      if (!oldMemRefType.getLayout().isIdentity() &&
-          !isMemRefNormalizable(oldMemRef.getUsers()))
+    if (oldMemRef.getType().isa<MemRefType>())
+      if (!isMemRefNormalizable(oldMemRef.getUsers()))
         return false;
   }
 
@@ -364,7 +353,7 @@ void NormalizeMemRefs::normalizeFuncOpMemRefs(func::FuncOp funcOp,
     }
     // Fetch a new memref type after normalizing the old memref to have an
     // identity map layout.
-    MemRefType newMemRefType = normalizeMemRefType(memrefType,
+    MemRefType newMemRefType = normalizeMemRefType(memrefType, b,
                                                    /*numSymbolicOperands=*/0);
     if (newMemRefType == memrefType || funcOp.isExternal()) {
       // Either memrefType already had an identity map or the map couldn't be
@@ -472,7 +461,7 @@ void NormalizeMemRefs::normalizeFuncOpMemRefs(func::FuncOp funcOp,
       }
       // Computing a new memref type after normalizing the old memref to have an
       // identity map layout.
-      MemRefType newMemRefType = normalizeMemRefType(memrefType,
+      MemRefType newMemRefType = normalizeMemRefType(memrefType, b,
                                                      /*numSymbolicOperands=*/0);
       resultTypes.push_back(newMemRefType);
     }
@@ -511,7 +500,7 @@ Operation *NormalizeMemRefs::createOpResultsNormalized(func::FuncOp funcOp,
       continue;
     }
     // Fetch a new memref type after normalizing the old memref.
-    MemRefType newMemRefType = normalizeMemRefType(memrefType,
+    MemRefType newMemRefType = normalizeMemRefType(memrefType, b,
                                                    /*numSymbolicOperands=*/0);
     if (newMemRefType == memrefType) {
       // Either memrefType already had an identity map or the map couldn't

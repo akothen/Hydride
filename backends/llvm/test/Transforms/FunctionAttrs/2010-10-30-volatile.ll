@@ -9,6 +9,6 @@
 ; CHECK-NOT: readonly
 ; CHECK-NEXT: void @foo()
 define void @foo() {
-  %tmp = load volatile i32, ptr @g
+  %tmp = load volatile i32, i32* @g
   ret void
 }

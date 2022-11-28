@@ -371,7 +371,6 @@ private:
         DeadInstructions.emplace_back(LandingPad);
 
       for (Instruction *I : DeadInstructions) {
-        SE.forgetBlockAndLoopDispositions(I);
         I->replaceAllUsesWith(PoisonValue::get(I->getType()));
         I->eraseFromParent();
       }
@@ -417,7 +416,6 @@ private:
           DTU.applyUpdates(DTUpdates);
         DTUpdates.clear();
         formLCSSARecursively(*FixLCSSALoop, DT, &LI, &SE);
-        SE.forgetBlockAndLoopDispositions();
       }
     }
 
@@ -476,7 +474,7 @@ private:
     NumLoopBlocksDeleted += DeadLoopBlocks.size();
   }
 
-  /// Constant-fold terminators of blocks accumulated in FoldCandidates into the
+  /// Constant-fold terminators of blocks acculumated in FoldCandidates into the
   /// unconditional branches.
   void foldTerminators() {
     for (BasicBlock *BB : FoldCandidates) {
@@ -597,9 +595,6 @@ public:
     LLVM_DEBUG(dbgs() << "Constant-folding " << FoldCandidates.size()
                       << " terminators in loop " << Header->getName() << "\n");
 
-    if (!DeadLoopBlocks.empty())
-      SE.forgetBlockAndLoopDispositions();
-
     // Make the actual transforms.
     handleDeadExits();
     foldTerminators();
@@ -660,8 +655,7 @@ static bool constantFoldTerminators(Loop &L, DominatorTree &DT, LoopInfo &LI,
 }
 
 static bool mergeBlocksIntoPredecessors(Loop &L, DominatorTree &DT,
-                                        LoopInfo &LI, MemorySSAUpdater *MSSAU,
-                                        ScalarEvolution &SE) {
+                                        LoopInfo &LI, MemorySSAUpdater *MSSAU) {
   bool Changed = false;
   DomTreeUpdater DTU(DT, DomTreeUpdater::UpdateStrategy::Eager);
   // Copy blocks into a temporary array to avoid iterator invalidation issues
@@ -688,9 +682,6 @@ static bool mergeBlocksIntoPredecessors(Loop &L, DominatorTree &DT,
     Changed = true;
   }
 
-  if (Changed)
-    SE.forgetBlockAndLoopDispositions();
-
   return Changed;
 }
 
@@ -706,7 +697,7 @@ static bool simplifyLoopCFG(Loop &L, DominatorTree &DT, LoopInfo &LI,
     return true;
 
   // Eliminate unconditional branches by merging blocks into their predecessors.
-  Changed |= mergeBlocksIntoPredecessors(L, DT, LI, MSSAU, SE);
+  Changed |= mergeBlocksIntoPredecessors(L, DT, LI, MSSAU);
 
   if (Changed)
     SE.forgetTopmostLoop(&L);

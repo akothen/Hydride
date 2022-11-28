@@ -21,11 +21,11 @@ define double @f2() {
 }
 
 ; Test f128.
-define void @f3(ptr %x) {
+define void @f3(fp128 *%x) {
 ; CHECK-LABEL: f3:
 ; CHECK: lzxr [[REGISTER:%f[0-5]+]]
 ; CHECK: lcxbr %f0, [[REGISTER]]
 ; CHECK: br %r14
-  store fp128 0xL00000000000000008000000000000000, ptr %x
+  store fp128 0xL00000000000000008000000000000000, fp128 *%x
   ret void
 }

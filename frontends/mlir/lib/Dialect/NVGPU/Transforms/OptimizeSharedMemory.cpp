@@ -9,26 +9,18 @@
 // This file implements transforms to optimize accesses to shared memory.
 //
 //===----------------------------------------------------------------------===//
-
-#include "mlir/Dialect/NVGPU/Passes.h"
-
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "PassDetail.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/GPU/IR/GPUDialect.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/NVGPU/IR/NVGPUDialect.h"
+#include "mlir/Dialect/NVGPU/Passes.h"
 #include "mlir/Dialect/NVGPU/Transforms/Transforms.h"
 #include "mlir/Dialect/Vector/IR/VectorOps.h"
 #include "mlir/Interfaces/SideEffectInterfaces.h"
 #include "mlir/Support/LogicalResult.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/Support/MathExtras.h"
-
-namespace mlir {
-namespace nvgpu {
-#define GEN_PASS_DEF_OPTIMIZESHAREDMEMORY
-#include "mlir/Dialect/NVGPU/Passes.h.inc"
-} // namespace nvgpu
-} // namespace mlir
 
 using namespace mlir;
 using namespace mlir::nvgpu;
@@ -67,12 +59,12 @@ static Value permuteVectorOffset(OpBuilder &b, Location loc,
   // bits[0:N] = sub-vector element offset
   // bits[N:M] = vector index
   // clang-format on
-  int64_t n =
+  int64_t N =
       llvm::Log2_64(kDefaultVectorSizeBits / memrefTy.getElementTypeBitWidth());
-  int64_t m = llvm::Log2_64(memrefTy.getDimSize(tgtDim));
+  int64_t M = llvm::Log2_64(memrefTy.getDimSize(tgtDim));
 
   // Capture bits[0:(M-N)] of src by first creating a (M-N) mask.
-  int64_t mask = (1LL << (m - n)) - 1;
+  int64_t mask = (1LL << (M - N)) - 1;
   if (permuteEveryN > 1)
     mask = mask << llvm::Log2_64(permuteEveryN);
   Value srcBits = b.create<arith::ConstantIndexOp>(loc, mask);
@@ -81,7 +73,7 @@ static Value permuteVectorOffset(OpBuilder &b, Location loc,
   // Use the src bits to permute the target bits b[N:M] containing the
   // vector offset.
   if (permuteEveryN > 1) {
-    int64_t shlBits = n - llvm::Log2_64(permuteEveryN);
+    int64_t shlBits = N - llvm::Log2_64(permuteEveryN);
     if (shlBits > 0) {
       Value finalShiftVal = b.create<arith::ConstantIndexOp>(loc, shlBits);
       srcBits = b.createOrFold<arith::ShLIOp>(loc, srcBits, finalShiftVal);
@@ -90,7 +82,7 @@ static Value permuteVectorOffset(OpBuilder &b, Location loc,
       srcBits = b.createOrFold<arith::ShRUIOp>(loc, srcBits, finalShiftVal);
     }
   } else {
-    Value finalShiftVal = b.create<arith::ConstantIndexOp>(loc, n);
+    Value finalShiftVal = b.create<arith::ConstantIndexOp>(loc, N);
     srcBits = b.createOrFold<arith::ShLIOp>(loc, srcBits, finalShiftVal);
   }
 
@@ -250,7 +242,7 @@ mlir::nvgpu::optimizeSharedMemoryReadsAndWrites(Operation *parentOp,
 
 namespace {
 class OptimizeSharedMemoryPass
-    : public nvgpu::impl::OptimizeSharedMemoryBase<OptimizeSharedMemoryPass> {
+    : public OptimizeSharedMemoryBase<OptimizeSharedMemoryPass> {
 public:
   OptimizeSharedMemoryPass() = default;
 

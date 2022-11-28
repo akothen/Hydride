@@ -74,7 +74,7 @@ MlirPass mlirCreate{0}{1}() {
   return wrap({2}.release());
 }
 void mlirRegister{0}{1}() {
-  register{1}();
+  register{1}Pass();
 }
 
 )";
@@ -97,15 +97,8 @@ static bool emitCAPIImpl(const llvm::RecordKeeper &records, raw_ostream &os) {
   for (const auto *def : records.getAllDerivedDefinitions("PassBase")) {
     Pass pass(def);
     StringRef defName = pass.getDef()->getName();
-
-    std::string constructorCall;
-    if (StringRef constructor = pass.getConstructor(); !constructor.empty())
-      constructorCall = constructor.str();
-    else
-      constructorCall =
-          llvm::formatv("create{0}()", pass.getDef()->getName()).str();
-
-    os << llvm::formatv(passCreateDef, groupName, defName, constructorCall);
+    os << llvm::formatv(passCreateDef, groupName, defName,
+                        pass.getConstructor());
   }
   return false;
 }

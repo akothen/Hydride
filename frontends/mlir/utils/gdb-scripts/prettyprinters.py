@@ -161,6 +161,7 @@ for name in [
     'UnitAttr',
     'DenseStringElementsAttr',
     'DenseIntOrFPElementsAttr',
+    'OpaqueElementsAttr',
     'SparseElementsAttr',
     # mlir/IR/BuiltinTypes.h
     'ComplexType',

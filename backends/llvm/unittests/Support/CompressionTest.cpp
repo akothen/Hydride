@@ -29,19 +29,13 @@ static void testZlibCompression(StringRef Input, int Level) {
   zlib::compress(arrayRefFromStringRef(Input), Compressed, Level);
 
   // Check that uncompressed buffer is the same as original.
-  Error E = zlib::decompress(Compressed, Uncompressed, Input.size());
-  EXPECT_FALSE(std::move(E));
-  EXPECT_EQ(Input, toStringRef(Uncompressed));
+  Error E = zlib::uncompress(Compressed, Uncompressed, Input.size());
+  consumeError(std::move(E));
 
-  // decompress with Z dispatches to zlib::decompress.
-  E = compression::decompress(DebugCompressionType::Zlib, Compressed,
-                              Uncompressed, Input.size());
-  EXPECT_FALSE(std::move(E));
   EXPECT_EQ(Input, toStringRef(Uncompressed));
-
   if (Input.size() > 0) {
-    // Decompression fails if expected length is too short.
-    E = zlib::decompress(Compressed, Uncompressed, Input.size() - 1);
+    // Uncompression fails if expected length is too short.
+    E = zlib::uncompress(Compressed, Uncompressed, Input.size() - 1);
     EXPECT_EQ("zlib error: Z_BUF_ERROR", llvm::toString(std::move(E)));
   }
 }
@@ -74,19 +68,13 @@ static void testZstdCompression(StringRef Input, int Level) {
   zstd::compress(arrayRefFromStringRef(Input), Compressed, Level);
 
   // Check that uncompressed buffer is the same as original.
-  Error E = zstd::decompress(Compressed, Uncompressed, Input.size());
-  EXPECT_FALSE(std::move(E));
-  EXPECT_EQ(Input, toStringRef(Uncompressed));
+  Error E = zstd::uncompress(Compressed, Uncompressed, Input.size());
+  consumeError(std::move(E));
 
-  // decompress with Zstd dispatches to zstd::decompress.
-  E = compression::decompress(DebugCompressionType::Zstd, Compressed,
-                              Uncompressed, Input.size());
-  EXPECT_FALSE(std::move(E));
   EXPECT_EQ(Input, toStringRef(Uncompressed));
-
   if (Input.size() > 0) {
-    // Decompression fails if expected length is too short.
-    E = zstd::decompress(Compressed, Uncompressed, Input.size() - 1);
+    // Uncompression fails if expected length is too short.
+    E = zstd::uncompress(Compressed, Uncompressed, Input.size() - 1);
     EXPECT_EQ("Destination buffer is too small", llvm::toString(std::move(E)));
   }
 }

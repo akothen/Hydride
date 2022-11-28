@@ -1,18 +1,18 @@
 ; RUN: opt < %s -passes=instcombine -disable-output
 
-declare ptr @bar()
+declare i32* @bar()
 
-define ptr @foo() personality ptr @__gxx_personality_v0 {
-        %tmp.11 = invoke ptr @bar( )
-                        to label %invoke_cont unwind label %X           ; <ptr> [#uses=1]
+define float* @foo() personality i32 (...)* @__gxx_personality_v0 {
+        %tmp.11 = invoke float* bitcast (i32* ()* @bar to float* ()*)( )
+                        to label %invoke_cont unwind label %X           ; <float*> [#uses=1]
 
 invoke_cont:            ; preds = %0
-        ret ptr %tmp.11
+        ret float* %tmp.11
 
 X:              ; preds = %0
-        %exn = landingpad {ptr, i32}
+        %exn = landingpad {i8*, i32}
                  cleanup
-        ret ptr null
+        ret float* null
 }
 
 declare i32 @__gxx_personality_v0(...)

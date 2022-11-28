@@ -18,7 +18,7 @@ include "mlir/Dialect/SPIRV/IR/SPIRVBase.td"
 
 // -----
 
-def SPIRV_ControlBarrierOp : SPIRV_Op<"ControlBarrier", []> {
+def SPV_ControlBarrierOp : SPV_Op<"ControlBarrier", []> {
   let summary = [{
     Wait for other invocations of this module to reach the current point of
     execution.
@@ -58,24 +58,26 @@ def SPIRV_ControlBarrierOp : SPIRV_Op<"ControlBarrier", []> {
 
     memory-semantics ::= `"None"` | `"Acquire"` | "Release"` | ...
 
-    control-barrier-op ::= `spirv.ControlBarrier` scope, scope, memory-semantics
+    control-barrier-op ::= `spv.ControlBarrier` scope, scope, memory-semantics
     ```
 
     #### Example:
 
     ```mlir
-    spirv.ControlBarrier "Workgroup", "Device", "Acquire|UniformMemory"
+    spv.ControlBarrier "Workgroup", "Device", "Acquire|UniformMemory"
 
     ```
   }];
 
   let arguments = (ins
-    SPIRV_ScopeAttr:$execution_scope,
-    SPIRV_ScopeAttr:$memory_scope,
-    SPIRV_MemorySemanticsAttr:$memory_semantics
+    SPV_ScopeAttr:$execution_scope,
+    SPV_ScopeAttr:$memory_scope,
+    SPV_MemorySemanticsAttr:$memory_semantics
   );
 
   let results = (outs);
+
+  let autogenSerialization = 0;
 
   let assemblyFormat = [{
     $execution_scope `,` $memory_scope `,` $memory_semantics attr-dict
@@ -84,7 +86,7 @@ def SPIRV_ControlBarrierOp : SPIRV_Op<"ControlBarrier", []> {
 
 // -----
 
-def SPIRV_MemoryBarrierOp : SPIRV_Op<"MemoryBarrier", []> {
+def SPV_MemoryBarrierOp : SPV_Op<"MemoryBarrier", []> {
   let summary = "Control the order that memory accesses are observed.";
 
   let description = [{
@@ -109,23 +111,25 @@ def SPIRV_MemoryBarrierOp : SPIRV_Op<"MemoryBarrier", []> {
 
     memory-semantics ::= `"None"` | `"Acquire"` | `"Release"` | ...
 
-    memory-barrier-op ::= `spirv.MemoryBarrier` scope, memory-semantics
+    memory-barrier-op ::= `spv.MemoryBarrier` scope, memory-semantics
     ```
 
     #### Example:
 
     ```mlir
-    spirv.MemoryBarrier "Device", "Acquire|UniformMemory"
+    spv.MemoryBarrier "Device", "Acquire|UniformMemory"
 
     ```
   }];
 
   let arguments = (ins
-    SPIRV_ScopeAttr:$memory_scope,
-    SPIRV_MemorySemanticsAttr:$memory_semantics
+    SPV_ScopeAttr:$memory_scope,
+    SPV_MemorySemanticsAttr:$memory_semantics
   );
 
   let results = (outs);
+
+  let autogenSerialization = 0;
 
   let assemblyFormat = "$memory_scope `,` $memory_semantics attr-dict";
 }

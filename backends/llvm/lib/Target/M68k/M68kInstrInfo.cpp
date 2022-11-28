@@ -702,7 +702,7 @@ unsigned getLoadStoreRegOpcode(unsigned Reg, const TargetRegisterClass *RC,
     llvm_unreachable("Unknown spill size");
   case 8:
     if (M68k::DR8RegClass.hasSubClassEq(RC))
-      return load ? M68k::MOV8dp : M68k::MOV8pd;
+      return load ? M68k::MOVM8mp_P : M68k::MOVM8pm_P;
     if (M68k::CCRCRegClass.hasSubClassEq(RC))
       return load ? M68k::MOV16cp : M68k::MOV16pc;
 
@@ -745,10 +745,9 @@ void M68kInstrInfo::storeRegToStackSlot(MachineBasicBlock &MBB,
                                         int FrameIndex,
                                         const TargetRegisterClass *RC,
                                         const TargetRegisterInfo *TRI) const {
-  const MachineFrameInfo &MFI = MBB.getParent()->getFrameInfo();
-  assert(MFI.getObjectSize(FrameIndex) >= TRI->getSpillSize(*RC) &&
-         "Stack slot is too small to store");
-
+  const MachineFunction &MF = *MBB.getParent();
+  assert(MF.getFrameInfo().getObjectSize(FrameIndex) == 4 &&
+         "Stack slot too small for store");
   unsigned Opc = getStoreRegOpcode(SrcReg, RC, TRI, Subtarget);
   DebugLoc DL = MBB.findDebugLoc(MI);
   // (0,FrameIndex) <- $reg
@@ -761,10 +760,9 @@ void M68kInstrInfo::loadRegFromStackSlot(MachineBasicBlock &MBB,
                                          Register DstReg, int FrameIndex,
                                          const TargetRegisterClass *RC,
                                          const TargetRegisterInfo *TRI) const {
-  const MachineFrameInfo &MFI = MBB.getParent()->getFrameInfo();
-  assert(MFI.getObjectSize(FrameIndex) >= TRI->getSpillSize(*RC) &&
-         "Stack slot is too small to load");
-
+  const MachineFunction &MF = *MBB.getParent();
+  assert(MF.getFrameInfo().getObjectSize(FrameIndex) == 4 &&
+         "Stack slot too small for store");
   unsigned Opc = getLoadRegOpcode(DstReg, RC, TRI, Subtarget);
   DebugLoc DL = MBB.findDebugLoc(MI);
   M68k::addFrameReference(BuildMI(MBB, MI, DL, get(Opc), DstReg), FrameIndex);

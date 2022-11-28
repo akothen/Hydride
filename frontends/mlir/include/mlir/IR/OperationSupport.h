@@ -642,11 +642,11 @@ public:
   OperationState(Location location, OperationName name);
 
   OperationState(Location location, OperationName name, ValueRange operands,
-                 TypeRange types, ArrayRef<NamedAttribute> attributes = {},
+                 TypeRange types, ArrayRef<NamedAttribute> attributes,
                  BlockRange successors = {},
                  MutableArrayRef<std::unique_ptr<Region>> regions = {});
   OperationState(Location location, StringRef name, ValueRange operands,
-                 TypeRange types, ArrayRef<NamedAttribute> attributes = {},
+                 TypeRange types, ArrayRef<NamedAttribute> attributes,
                  BlockRange successors = {},
                  MutableArrayRef<std::unique_ptr<Region>> regions = {});
 
@@ -893,29 +893,6 @@ struct OperationEquivalence {
 
 /// Enable Bitmask enums for OperationEquivalence::Flags.
 LLVM_ENABLE_BITMASK_ENUMS_IN_NAMESPACE();
-
-//===----------------------------------------------------------------------===//
-// OperationFingerPrint
-//===----------------------------------------------------------------------===//
-
-/// A unique fingerprint for a specific operation, and all of it's internal
-/// operations.
-class OperationFingerPrint {
-public:
-  OperationFingerPrint(Operation *topOp);
-  OperationFingerPrint(const OperationFingerPrint &) = default;
-  OperationFingerPrint &operator=(const OperationFingerPrint &) = default;
-
-  bool operator==(const OperationFingerPrint &other) const {
-    return hash == other.hash;
-  }
-  bool operator!=(const OperationFingerPrint &other) const {
-    return !(*this == other);
-  }
-
-private:
-  std::array<uint8_t, 20> hash;
-};
 
 } // namespace mlir
 

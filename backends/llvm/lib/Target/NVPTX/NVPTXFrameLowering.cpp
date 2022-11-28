@@ -33,7 +33,7 @@ void NVPTXFrameLowering::emitPrologue(MachineFunction &MF,
                                       MachineBasicBlock &MBB) const {
   if (MF.getFrameInfo().hasStackObjects()) {
     assert(&MF.front() == &MBB && "Shrink-wrapping not yet supported");
-    MachineBasicBlock::iterator MBBI = MBB.begin();
+    MachineInstr *MI = &MBB.front();
     MachineRegisterInfo &MR = MF.getRegInfo();
 
     const NVPTXRegisterInfo *NRI =
@@ -55,13 +55,12 @@ void NVPTXFrameLowering::emitPrologue(MachineFunction &MF,
         (Is64Bit ? NVPTX::MOV_DEPOT_ADDR_64 : NVPTX::MOV_DEPOT_ADDR);
     if (!MR.use_empty(NRI->getFrameRegister(MF))) {
       // If %SP is not used, do not bother emitting "cvta.local %SP, %SPL".
-      MBBI = BuildMI(MBB, MBBI, dl,
-                     MF.getSubtarget().getInstrInfo()->get(CvtaLocalOpcode),
-                     NRI->getFrameRegister(MF))
-                 .addReg(NRI->getFrameLocalRegister(MF));
+      MI = BuildMI(MBB, MI, dl,
+                   MF.getSubtarget().getInstrInfo()->get(CvtaLocalOpcode),
+                   NRI->getFrameRegister(MF))
+               .addReg(NRI->getFrameLocalRegister(MF));
     }
-    BuildMI(MBB, MBBI, dl,
-            MF.getSubtarget().getInstrInfo()->get(MovDepotOpcode),
+    BuildMI(MBB, MI, dl, MF.getSubtarget().getInstrInfo()->get(MovDepotOpcode),
             NRI->getFrameLocalRegister(MF))
         .addImm(MF.getFunctionNumber());
   }

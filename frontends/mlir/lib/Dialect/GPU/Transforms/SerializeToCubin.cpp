@@ -48,8 +48,7 @@ class SerializeToCubinPass
 public:
   MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(SerializeToCubinPass)
 
-  SerializeToCubinPass(StringRef triple = "nvptx64-nvidia-cuda",
-                       StringRef chip = "sm_35", StringRef features = "+ptx60");
+  SerializeToCubinPass();
 
   StringRef getArgument() const override { return "gpu-to-cubin"; }
   StringRef getDescription() const override {
@@ -66,16 +65,16 @@ private:
 } // namespace
 
 // Sets the 'option' to 'value' unless it already has a value.
-static void maybeSetOption(Pass::Option<std::string> &option, StringRef value) {
+static void maybeSetOption(Pass::Option<std::string> &option,
+                           const char *value) {
   if (!option.hasValue())
-    option = value.str();
+    option = value;
 }
 
-SerializeToCubinPass::SerializeToCubinPass(StringRef triple, StringRef chip,
-                                           StringRef features) {
-  maybeSetOption(this->triple, triple);
-  maybeSetOption(this->chip, chip);
-  maybeSetOption(this->features, features);
+SerializeToCubinPass::SerializeToCubinPass() {
+  maybeSetOption(this->triple, "nvptx64-nvidia-cuda");
+  maybeSetOption(this->chip, "sm_35");
+  maybeSetOption(this->features, "+ptx60");
 }
 
 void SerializeToCubinPass::getDependentDialects(
@@ -144,13 +143,6 @@ void mlir::registerGpuSerializeToCubinPass() {
     return std::make_unique<SerializeToCubinPass>();
   });
 }
-
-std::unique_ptr<Pass> mlir::createGpuSerializeToCubinPass(StringRef triple,
-                                                          StringRef arch,
-                                                          StringRef features) {
-  return std::make_unique<SerializeToCubinPass>(triple, arch, features);
-}
-
 #else  // MLIR_GPU_TO_CUBIN_PASS_ENABLE
 void mlir::registerGpuSerializeToCubinPass() {}
 #endif // MLIR_GPU_TO_CUBIN_PASS_ENABLE

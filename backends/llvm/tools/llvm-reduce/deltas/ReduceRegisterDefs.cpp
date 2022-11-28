@@ -117,5 +117,6 @@ static void removeDefsFromModule(Oracle &O, ReducerWorkItem &WorkItem) {
 }
 
 void llvm::reduceRegisterDefsMIRDeltaPass(TestRunner &Test) {
-  runDeltaPass(Test, removeDefsFromModule, "Reducing register defs");
+  outs() << "*** Reducing register defs...\n";
+  runDeltaPass(Test, removeDefsFromModule);
 }

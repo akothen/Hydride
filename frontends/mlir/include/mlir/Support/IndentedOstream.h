@@ -59,10 +59,8 @@ public:
 
   /// Prints a string re-indented to the current indent. Re-indents by removing
   /// the leading whitespace from the first non-empty line from every line of
-  /// the string, skipping over empty lines at the start. Prefixes each line
-  /// with extraPrefix after the indentation.
-  raw_indented_ostream &printReindented(StringRef str,
-                                        StringRef extraPrefix = "");
+  /// the string, skipping over empty lines at the start.
+  raw_indented_ostream &printReindented(StringRef str);
 
   /// Increases the indent and returning this raw_indented_ostream.
   raw_indented_ostream &indent() {
@@ -94,19 +92,16 @@ private:
   /// Constant indent added/removed.
   static constexpr int indentSize = 2;
 
-  /// Tracker for current indentation.
+  // Tracker for current indentation.
   int currentIndent = 0;
 
-  /// The leading whitespace of the string being printed, if reindent is used.
+  // The leading whitespace of the string being printed, if reindent is used.
   int leadingWs = 0;
 
-  /// The extra prefix to be printed, if reindent is used.
-  StringRef currentExtraPrefix;
-
-  /// Tracks whether at start of line and so indent is required or not.
+  // Tracks whether at start of line and so indent is required or not.
   bool atStartOfLine = true;
 
-  /// The underlying raw_ostream.
+  // The underlying raw_ostream.
   raw_ostream &os;
 };
 

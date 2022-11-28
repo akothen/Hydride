@@ -54,7 +54,6 @@ constexpr bool isValidForDXIL(Attribute::AttrKind Attr) {
                        Attribute::NonNull,
                        Attribute::Dereferenceable,
                        Attribute::DereferenceableOrNull,
-                       Attribute::Memory,
                        Attribute::NoRedZone,
                        Attribute::NoReturn,
                        Attribute::NoUnwind,
@@ -62,6 +61,7 @@ constexpr bool isValidForDXIL(Attribute::AttrKind Attr) {
                        Attribute::OptimizeNone,
                        Attribute::ReadNone,
                        Attribute::ReadOnly,
+                       Attribute::ArgMemOnly,
                        Attribute::Returned,
                        Attribute::ReturnsTwice,
                        Attribute::SExt,
@@ -158,13 +158,6 @@ public:
                     Builder, PointerTypes, I, GEP->getPointerOperand(),
                     GEP->getResultElementType()))
               GEP->setOperand(0, NoOpBitcast);
-            continue;
-          }
-          if (auto *CB = dyn_cast<CallBase>(&I)) {
-            CB->removeFnAttrs(AttrMask);
-            CB->removeRetAttrs(AttrMask);
-            for (size_t Idx = 0, End = CB->arg_size(); Idx < End; ++Idx)
-              CB->removeParamAttrs(Idx, AttrMask);
             continue;
           }
         }

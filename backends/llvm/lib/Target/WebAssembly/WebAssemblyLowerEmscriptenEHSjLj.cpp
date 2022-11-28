@@ -545,10 +545,12 @@ Value *WebAssemblyLowerEmscriptenEHSjLj::wrapInvoke(CallBase *CI) {
     ArgAttributes.push_back(InvokeAL.getParamAttrs(I));
 
   AttrBuilder FnAttrs(CI->getContext(), InvokeAL.getFnAttrs());
-  if (auto Args = FnAttrs.getAllocSizeArgs()) {
+  if (FnAttrs.contains(Attribute::AllocSize)) {
     // The allocsize attribute (if any) referes to parameters by index and needs
     // to be adjusted.
-    auto [SizeArg, NEltArg] = *Args;
+    unsigned SizeArg;
+    Optional<unsigned> NEltArg;
+    std::tie(SizeArg, NEltArg) = FnAttrs.getAllocSizeArgs();
     SizeArg += 1;
     if (NEltArg)
       NEltArg = NEltArg.value() + 1;
@@ -1225,8 +1227,8 @@ bool WebAssemblyLowerEmscriptenEHSjLj::runEHOnFunction(Function &F) {
     // Create a call to __cxa_find_matching_catch_N function
     Function *FMCF = getFindMatchingCatch(M, FMCArgs.size());
     CallInst *FMCI = IRB.CreateCall(FMCF, FMCArgs, "fmc");
-    Value *Poison = PoisonValue::get(LPI->getType());
-    Value *Pair0 = IRB.CreateInsertValue(Poison, FMCI, 0, "pair0");
+    Value *Undef = UndefValue::get(LPI->getType());
+    Value *Pair0 = IRB.CreateInsertValue(Undef, FMCI, 0, "pair0");
     Value *TempRet0 = IRB.CreateCall(GetTempRet0F, None, "tempret0");
     Value *Pair1 = IRB.CreateInsertValue(Pair0, TempRet0, 1, "pair1");
 
@@ -1288,11 +1290,9 @@ bool WebAssemblyLowerEmscriptenEHSjLj::runSjLjOnFunction(Function &F) {
                              "setjmpTableSize", Entry->getTerminator());
   SetjmpTableSize->setDebugLoc(FirstDL);
   // setjmpTable = (int *) malloc(40);
-  Type *IntPtrTy = getAddrIntType(&M);
-  Constant *size = ConstantInt::get(IntPtrTy, 40);
-  Instruction *SetjmpTable =
-      CallInst::CreateMalloc(SetjmpTableSize, IntPtrTy, IRB.getInt32Ty(), size,
-                             nullptr, nullptr, "setjmpTable");
+  Instruction *SetjmpTable = CallInst::CreateMalloc(
+      SetjmpTableSize, IRB.getInt32Ty(), IRB.getInt32Ty(), IRB.getInt32(40),
+      nullptr, nullptr, "setjmpTable");
   SetjmpTable->setDebugLoc(FirstDL);
   // CallInst::CreateMalloc may return a bitcast instruction if the result types
   // mismatch. We need to set the debug loc for the original call too.

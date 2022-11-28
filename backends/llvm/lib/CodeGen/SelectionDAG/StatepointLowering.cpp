@@ -197,7 +197,7 @@ static Optional<int> findPreviousSpillSlot(const Value *Val,
   // All incoming values should have same known stack slot, otherwise result
   // is unknown.
   if (const PHINode *Phi = dyn_cast<PHINode>(Val)) {
-    Optional<int> MergedResult;
+    Optional<int> MergedResult = None;
 
     for (const auto &IncomingValue : Phi->incoming_values()) {
       Optional<int> SpillSlot =
@@ -321,7 +321,7 @@ static void reservePreviousStackSlotForValue(const Value *IncomingValue,
 /// reference lowered call result
 static std::pair<SDValue, SDNode *> lowerCallFromStatepointLoweringInfo(
     SelectionDAGBuilder::StatepointLoweringInfo &SI,
-    SelectionDAGBuilder &Builder) {
+    SelectionDAGBuilder &Builder, SmallVectorImpl<SDValue> &PendingExports) {
   SDValue ReturnValue, CallEndVal;
   std::tie(ReturnValue, CallEndVal) =
       Builder.lowerInvokable(SI.CLI, SI.EHPadBB);
@@ -770,7 +770,8 @@ SDValue SelectionDAGBuilder::LowerAsSTATEPOINT(
   // Get call node, we will replace it later with statepoint
   SDValue ReturnVal;
   SDNode *CallNode;
-  std::tie(ReturnVal, CallNode) = lowerCallFromStatepointLoweringInfo(SI, *this);
+  std::tie(ReturnVal, CallNode) =
+      lowerCallFromStatepointLoweringInfo(SI, *this, PendingExports);
 
   // Construct the actual GC_TRANSITION_START, STATEPOINT, and GC_TRANSITION_END
   // nodes with all the appropriate arguments and return values.

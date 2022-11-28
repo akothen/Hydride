@@ -11,14 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/Vector/IR/VectorOps.h"
 #include "mlir/Dialect/Vector/Transforms/VectorTransforms.h"
 #include "mlir/Dialect/Vector/Utils/VectorUtils.h"
 #include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/Dominance.h"
-#include "mlir/Transforms/SideEffectUtils.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Support/Debug.h"
@@ -96,32 +95,14 @@ bool TransferOptimization::isReachable(Operation *start, Operation *dest) {
 void TransferOptimization::deadStoreOp(vector::TransferWriteOp write) {
   LLVM_DEBUG(DBGS() << "Candidate for dead store: " << *write.getOperation()
                     << "\n");
-  llvm::SmallVector<Operation *, 8> blockingAccesses;
+  llvm::SmallVector<Operation *, 8> reads;
   Operation *firstOverwriteCandidate = nullptr;
-  Value source = write.getSource();
-  // Skip subview ops.
-  while (auto subView = source.getDefiningOp<memref::SubViewOp>())
-    source = subView.getSource();
-  llvm::SmallVector<Operation *, 32> users(source.getUsers().begin(),
-                                           source.getUsers().end());
-  llvm::SmallDenseSet<Operation *, 32> processed;
-  while (!users.empty()) {
-    Operation *user = users.pop_back_val();
-    // If the user has already been processed skip.
-    if (!processed.insert(user).second)
-      continue;
-    if (auto subView = dyn_cast<memref::SubViewOp>(user)) {
-      users.append(subView->getUsers().begin(), subView->getUsers().end());
-      continue;
-    }
-    if (isMemoryEffectFree(user))
-      continue;
+  for (auto *user : write.getSource().getUsers()) {
     if (user == write.getOperation())
       continue;
     if (auto nextWrite = dyn_cast<vector::TransferWriteOp>(user)) {
       // Check candidate that can override the store.
-      if (write.getSource() == nextWrite.getSource() &&
-          checkSameValueWAW(nextWrite, write) &&
+      if (checkSameValueWAW(nextWrite, write) &&
           postDominators.postDominates(nextWrite, write)) {
         if (firstOverwriteCandidate == nullptr ||
             postDominators.postDominates(firstOverwriteCandidate, nextWrite))
@@ -129,17 +110,17 @@ void TransferOptimization::deadStoreOp(vector::TransferWriteOp write) {
         else
           assert(
               postDominators.postDominates(nextWrite, firstOverwriteCandidate));
-        continue;
       }
+    } else {
+      if (auto read = dyn_cast<vector::TransferReadOp>(user)) {
+        // Don't need to consider disjoint reads.
+        if (vector::isDisjointTransferSet(
+                cast<VectorTransferOpInterface>(write.getOperation()),
+                cast<VectorTransferOpInterface>(read.getOperation())))
+          continue;
+      }
+      reads.push_back(user);
     }
-    if (auto transferOp = dyn_cast<VectorTransferOpInterface>(user)) {
-      // Don't need to consider disjoint accesses.
-      if (vector::isDisjointTransferSet(
-              cast<VectorTransferOpInterface>(write.getOperation()),
-              cast<VectorTransferOpInterface>(transferOp.getOperation())))
-        continue;
-    }
-    blockingAccesses.push_back(user);
   }
   if (firstOverwriteCandidate == nullptr)
     return;
@@ -148,16 +129,15 @@ void TransferOptimization::deadStoreOp(vector::TransferWriteOp write) {
   assert(writeAncestor &&
          "write op should be recursively part of the top region");
 
-  for (Operation *access : blockingAccesses) {
-    Operation *accessAncestor = findAncestorOpInRegion(topRegion, access);
-    // TODO: if the access and write have the same ancestor we could recurse in
-    // the region to know if the access is reachable with more precision.
-    if (accessAncestor == nullptr ||
-        !isReachable(writeAncestor, accessAncestor))
+  for (Operation *read : reads) {
+    Operation *readAncestor = findAncestorOpInRegion(topRegion, read);
+    // TODO: if the read and write have the same ancestor we could recurse in
+    // the region to know if the read is reachable with more precision.
+    if (readAncestor == nullptr || !isReachable(writeAncestor, readAncestor))
       continue;
-    if (!dominators.dominates(firstOverwriteCandidate, accessAncestor)) {
-      LLVM_DEBUG(DBGS() << "Store may not be dead due to op: "
-                        << *accessAncestor << "\n");
+    if (!dominators.dominates(firstOverwriteCandidate, read)) {
+      LLVM_DEBUG(DBGS() << "Store may not be dead due to op: " << *read
+                        << "\n");
       return;
     }
   }
@@ -184,23 +164,8 @@ void TransferOptimization::storeToLoadForwarding(vector::TransferReadOp read) {
                     << "\n");
   SmallVector<Operation *, 8> blockingWrites;
   vector::TransferWriteOp lastwrite = nullptr;
-  Value source = read.getSource();
-  // Skip subview ops.
-  while (auto subView = source.getDefiningOp<memref::SubViewOp>())
-    source = subView.getSource();
-  llvm::SmallVector<Operation *, 32> users(source.getUsers().begin(),
-                                           source.getUsers().end());
-  llvm::SmallDenseSet<Operation *, 32> processed;
-  while (!users.empty()) {
-    Operation *user = users.pop_back_val();
-    // If the user has already been processed skip.
-    if (!processed.insert(user).second)
-      continue;
-    if (auto subView = dyn_cast<memref::SubViewOp>(user)) {
-      users.append(subView->getUsers().begin(), subView->getUsers().end());
-      continue;
-    }
-    if (isMemoryEffectFree(user) || isa<vector::TransferReadOp>(user))
+  for (Operation *user : read.getSource().getUsers()) {
+    if (isa<vector::TransferReadOp>(user))
       continue;
     if (auto write = dyn_cast<vector::TransferWriteOp>(user)) {
       // If there is a write, but we can prove that it is disjoint we can ignore
@@ -209,8 +174,7 @@ void TransferOptimization::storeToLoadForwarding(vector::TransferReadOp read) {
               cast<VectorTransferOpInterface>(write.getOperation()),
               cast<VectorTransferOpInterface>(read.getOperation())))
         continue;
-      if (write.getSource() == read.getSource() &&
-          dominators.dominates(write, read) && checkSameValueRAW(write, read)) {
+      if (dominators.dominates(write, read) && checkSameValueRAW(write, read)) {
         if (lastwrite == nullptr || dominators.dominates(lastwrite, write))
           lastwrite = write;
         else
@@ -293,7 +257,7 @@ static bool isZero(Value v) {
 /// inserting a memref.subview dropping those unit dims.
 class TransferReadDropUnitDimsPattern
     : public OpRewritePattern<vector::TransferReadOp> {
-  using OpRewritePattern::OpRewritePattern;
+  using OpRewritePattern<vector::TransferReadOp>::OpRewritePattern;
 
   LogicalResult matchAndRewrite(vector::TransferReadOp transferReadOp,
                                 PatternRewriter &rewriter) const override {
@@ -336,7 +300,7 @@ class TransferReadDropUnitDimsPattern
 /// unit dims, by inserting a memref.subview dropping those unit dims.
 class TransferWriteDropUnitDimsPattern
     : public OpRewritePattern<vector::TransferWriteOp> {
-  using OpRewritePattern::OpRewritePattern;
+  using OpRewritePattern<vector::TransferWriteOp>::OpRewritePattern;
 
   LogicalResult matchAndRewrite(vector::TransferWriteOp transferWriteOp,
                                 PatternRewriter &rewriter) const override {
@@ -375,26 +339,34 @@ class TransferWriteDropUnitDimsPattern
   }
 };
 
-/// Return true if the memref type has its inner dimension matching the given
-/// shape. Otherwise return false.
-static int64_t hasMatchingInnerContigousShape(MemRefType memrefType,
-                                              ArrayRef<int64_t> targetShape) {
+/// Returns the position of the first inner dimension that has contiguous layout
+/// with at least `requiredContiguousSize` contiguous elements.
+/// When such a dimension is found, the return value satisfies:
+///   0 <= return_value <= memrefType.getRank() - 1.
+/// When no such dimension is found, the return value is memrefType.getRank().
+static int64_t getContiguousInnerDim(MemRefType memrefType,
+                                     int64_t requiredContiguousSize) {
   auto shape = memrefType.getShape();
   SmallVector<int64_t> strides;
   int64_t offset;
-  if (!succeeded(getStridesAndOffset(memrefType, strides, offset)))
-    return false;
-  if (strides.back() != 1)
-    return false;
-  strides.pop_back();
-  int64_t flatDim = 1;
-  for (auto [targetDim, memrefDim, memrefStride] :
-       llvm::reverse(llvm::zip(targetShape, shape, strides))) {
-    flatDim *= memrefDim;
-    if (flatDim != memrefStride || targetDim != memrefDim)
-      return false;
+  int64_t innerDim = shape.size();
+  if (succeeded(getStridesAndOffset(memrefType, strides, offset))) {
+    int64_t innerSize = 1;
+    while (true) {
+      if (innerDim == 0)
+        break;
+      const int64_t nextDim = innerDim - 1;
+      if (shape[nextDim] == ShapedType::kDynamicSize)
+        break;
+      if (strides[nextDim] != innerSize)
+        break;
+      innerSize *= shape[nextDim];
+      innerDim = nextDim;
+      if (innerSize >= requiredContiguousSize)
+        break;
+    }
   }
-  return true;
+  return innerDim;
 }
 
 /// Creates a memref.collapse_shape collapsing all inner dimensions of the
@@ -440,7 +412,7 @@ checkAndCollapseInnerZeroIndices(ValueRange indices, int64_t firstDimToCollapse,
 /// already reduced i.e. without unit dims.
 class FlattenContiguousRowMajorTransferReadPattern
     : public OpRewritePattern<vector::TransferReadOp> {
-  using OpRewritePattern::OpRewritePattern;
+  using OpRewritePattern<vector::TransferReadOp>::OpRewritePattern;
 
   LogicalResult matchAndRewrite(vector::TransferReadOp transferReadOp,
                                 PatternRewriter &rewriter) const override {
@@ -455,12 +427,10 @@ class FlattenContiguousRowMajorTransferReadPattern
     if (vectorType.getRank() <= 1)
       // Already 0D/1D, nothing to do.
       return failure();
-    if (!hasMatchingInnerContigousShape(
-            sourceType,
-            vectorType.getShape().take_back(vectorType.getRank() - 1)))
-      return failure();
     int64_t firstContiguousInnerDim =
-        sourceType.getRank() - vectorType.getRank();
+        getContiguousInnerDim(sourceType, vectorType.getNumElements());
+    if (firstContiguousInnerDim >= sourceType.getRank() - 1)
+      return failure();
     // TODO: generalize this pattern, relax the requirements here.
     if (transferReadOp.hasOutOfBoundsDim())
       return failure();
@@ -500,7 +470,7 @@ class FlattenContiguousRowMajorTransferReadPattern
 /// already reduced i.e. without unit dims.
 class FlattenContiguousRowMajorTransferWritePattern
     : public OpRewritePattern<vector::TransferWriteOp> {
-  using OpRewritePattern::OpRewritePattern;
+  using OpRewritePattern<vector::TransferWriteOp>::OpRewritePattern;
 
   LogicalResult matchAndRewrite(vector::TransferWriteOp transferWriteOp,
                                 PatternRewriter &rewriter) const override {
@@ -515,12 +485,10 @@ class FlattenContiguousRowMajorTransferWritePattern
     if (vectorType.getRank() <= 1)
       // Already 0D/1D, nothing to do.
       return failure();
-    if (!hasMatchingInnerContigousShape(
-            sourceType,
-            vectorType.getShape().take_back(vectorType.getRank() - 1)))
-      return failure();
     int64_t firstContiguousInnerDim =
-        sourceType.getRank() - vectorType.getRank();
+        getContiguousInnerDim(sourceType, vectorType.getNumElements());
+    if (firstContiguousInnerDim >= sourceType.getRank() - 1)
+      return failure();
     // TODO: generalize this pattern, relax the requirements here.
     if (transferWriteOp.hasOutOfBoundsDim())
       return failure();
@@ -575,17 +543,17 @@ void mlir::vector::transferOpflowOpt(Operation *rootOp) {
 }
 
 void mlir::vector::populateVectorTransferDropUnitDimsPatterns(
-    RewritePatternSet &patterns, PatternBenefit benefit) {
+    RewritePatternSet &patterns) {
   patterns
       .add<TransferReadDropUnitDimsPattern, TransferWriteDropUnitDimsPattern>(
-          patterns.getContext(), benefit);
+          patterns.getContext());
   populateShapeCastFoldingPatterns(patterns);
 }
 
 void mlir::vector::populateFlattenVectorTransferPatterns(
-    RewritePatternSet &patterns, PatternBenefit benefit) {
+    RewritePatternSet &patterns) {
   patterns.add<FlattenContiguousRowMajorTransferReadPattern,
                FlattenContiguousRowMajorTransferWritePattern>(
-      patterns.getContext(), benefit);
-  populateShapeCastFoldingPatterns(patterns, benefit);
+      patterns.getContext());
+  populateShapeCastFoldingPatterns(patterns);
 }

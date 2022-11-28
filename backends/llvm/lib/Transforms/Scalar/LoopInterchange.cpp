@@ -44,7 +44,6 @@
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Scalar/LoopPassManager.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/LoopUtils.h"
 #include <cassert>
@@ -87,8 +86,7 @@ static void printDepMatrix(CharMatrix &DepMatrix) {
 #endif
 
 static bool populateDependencyMatrix(CharMatrix &DepMatrix, unsigned Level,
-                                     Loop *L, DependenceInfo *DI,
-                                     ScalarEvolution *SE) {
+                                     Loop *L, DependenceInfo *DI) {
   using ValueVector = SmallVector<Value *, 16>;
 
   ValueVector MemInstr;
@@ -127,10 +125,6 @@ static bool populateDependencyMatrix(CharMatrix &DepMatrix, unsigned Level,
       // Track Output, Flow, and Anti dependencies.
       if (auto D = DI->depends(Src, Dst, true)) {
         assert(D->isOrdered() && "Expected an output, flow or anti dep.");
-        // If the direction vector is negative, normalize it to
-        // make it non-negative.
-        if (D->normalize(SE))
-          LLVM_DEBUG(dbgs() << "Negative dependence vector normalized.\n");
         LLVM_DEBUG(StringRef DepType =
                        D->isFlow() ? "flow" : D->isAnti() ? "anti" : "output";
                    dbgs() << "Found " << DepType
@@ -139,7 +133,19 @@ static bool populateDependencyMatrix(CharMatrix &DepMatrix, unsigned Level,
         unsigned Levels = D->getLevels();
         char Direction;
         for (unsigned II = 1; II <= Levels; ++II) {
-          if (D->isScalar(II)) {
+          const SCEV *Distance = D->getDistance(II);
+          const SCEVConstant *SCEVConst =
+              dyn_cast_or_null<SCEVConstant>(Distance);
+          if (SCEVConst) {
+            const ConstantInt *CI = SCEVConst->getValue();
+            if (CI->isNegative())
+              Direction = '<';
+            else if (CI->isZero())
+              Direction = '=';
+            else
+              Direction = '>';
+            Dep.push_back(Direction);
+          } else if (D->isScalar(II)) {
             Direction = 'S';
             Dep.push_back(Direction);
           } else {
@@ -182,6 +188,20 @@ static void interChangeDependencies(CharMatrix &DepMatrix, unsigned FromIndx,
     std::swap(DepMatrix[I][ToIndx], DepMatrix[I][FromIndx]);
 }
 
+// Checks if outermost non '=','S'or'I' dependence in the dependence matrix is
+// '>'
+static bool isOuterMostDepPositive(CharMatrix &DepMatrix, unsigned Row,
+                                   unsigned Column) {
+  for (unsigned i = 0; i <= Column; ++i) {
+    if (DepMatrix[Row][i] == '<')
+      return false;
+    if (DepMatrix[Row][i] == '>')
+      return true;
+  }
+  // All dependencies were '=','S' or 'I'
+  return false;
+}
+
 // Checks if no dependence exist in the dependency matrix in Row before Column.
 static bool containsNoDependence(CharMatrix &DepMatrix, unsigned Row,
                                  unsigned Column) {
@@ -196,6 +216,9 @@ static bool containsNoDependence(CharMatrix &DepMatrix, unsigned Row,
 static bool validDepInterchange(CharMatrix &DepMatrix, unsigned Row,
                                 unsigned OuterLoopId, char InnerDep,
                                 char OuterDep) {
+  if (isOuterMostDepPositive(DepMatrix, Row, OuterLoopId))
+    return false;
+
   if (InnerDep == OuterDep)
     return true;
 
@@ -463,7 +486,7 @@ struct LoopInterchange {
     CharMatrix DependencyMatrix;
     Loop *OuterMostLoop = *(LoopList.begin());
     if (!populateDependencyMatrix(DependencyMatrix, LoopNestDepth,
-                                  OuterMostLoop, DI, SE)) {
+                                  OuterMostLoop, DI)) {
       LLVM_DEBUG(dbgs() << "Populating dependency matrix failed\n");
       return false;
     }
@@ -556,7 +579,11 @@ struct LoopInterchange {
     LLVM_DEBUG(dbgs() << "Loops interchanged.\n");
     LoopsInterchanged++;
 
-    llvm::formLCSSARecursively(*OuterLoop, *DT, LI, SE);
+    assert(InnerLoop->isLCSSAForm(*DT) &&
+           "Inner loop not left in LCSSA form after loop interchange!");
+    assert(OuterLoop->isLCSSAForm(*DT) &&
+           "Outer loop not left in LCSSA form after loop interchange!");
+
     return true;
   }
 };
@@ -831,26 +858,18 @@ bool LoopInterchangeLegality::currentLimitations() {
   }
 
   Inductions.clear();
-  // For multi-level loop nests, make sure that all phi nodes for inner loops
-  // at all levels can be recognized as a induction or reduction phi. Bail out
-  // if a phi node at a certain nesting level cannot be properly recognized.
-  Loop *CurLevelLoop = OuterLoop;
-  while (!CurLevelLoop->getSubLoops().empty()) {
-    // We already made sure that the loop nest is tightly nested.
-    CurLevelLoop = CurLevelLoop->getSubLoops().front();
-    if (!findInductionAndReductions(CurLevelLoop, Inductions, nullptr)) {
-      LLVM_DEBUG(
-          dbgs() << "Only inner loops with induction or reduction PHI nodes "
-                << "are supported currently.\n");
-      ORE->emit([&]() {
-        return OptimizationRemarkMissed(DEBUG_TYPE, "UnsupportedPHIInner",
-                                        CurLevelLoop->getStartLoc(),
-                                        CurLevelLoop->getHeader())
-              << "Only inner loops with induction or reduction PHI nodes can be"
-                  " interchange currently.";
-      });
-      return true;
-    }
+  if (!findInductionAndReductions(InnerLoop, Inductions, nullptr)) {
+    LLVM_DEBUG(
+        dbgs() << "Only inner loops with induction or reduction PHI nodes "
+               << "are supported currently.\n");
+    ORE->emit([&]() {
+      return OptimizationRemarkMissed(DEBUG_TYPE, "UnsupportedPHIInner",
+                                      InnerLoop->getStartLoc(),
+                                      InnerLoop->getHeader())
+             << "Only inner loops with induction or reduction PHI nodes can be"
+                " interchange currently.";
+    });
+    return true;
   }
 
   // TODO: Triangular loops are not handled for now.
@@ -1341,11 +1360,9 @@ bool LoopInterchangeTransform::transform() {
     for (Instruction *InnerIndexVar : InnerIndexVarList)
       WorkList.insert(cast<Instruction>(InnerIndexVar));
     MoveInstructions();
-  }
 
-  // Ensure the inner loop phi nodes have a separate basic block.
-  BasicBlock *InnerLoopHeader = InnerLoop->getHeader();
-  if (InnerLoopHeader->getFirstNonPHI() != InnerLoopHeader->getTerminator()) {
+    // Splits the inner loops phi nodes out into a separate basic block.
+    BasicBlock *InnerLoopHeader = InnerLoop->getHeader();
     SplitBlock(InnerLoopHeader, InnerLoopHeader->getFirstNonPHI(), DT, LI);
     LLVM_DEBUG(dbgs() << "splitting InnerLoopHeader done\n");
   }
@@ -1756,6 +1773,5 @@ PreservedAnalyses LoopInterchangePass::run(LoopNest &LN,
   OptimizationRemarkEmitter ORE(&F);
   if (!LoopInterchange(&AR.SE, &AR.LI, &DI, &AR.DT, CC, &ORE).run(LN))
     return PreservedAnalyses::all();
-  U.markLoopNestChanged(true);
   return getLoopPassPreservedAnalyses();
 }

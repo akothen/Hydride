@@ -1,6 +1,8 @@
-; RUN: llc -O0 -mtriple=spirv32-unknown-unknown %s -o - | FileCheck %s
+; RUN: llc -O0 %s -o - | FileCheck %s
 
-;; NOTE: This does not check for structured control-flow operations.
+; NOTE: This does not check for structured control-flow operations.
+
+target triple = "spirv32-unknown-unknown"
 
 ; CHECK-DAG: OpName [[FOO:%.+]] "foo"
 ; CHECK-DAG: OpName [[BAR:%.+]] "bar"

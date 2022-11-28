@@ -14,7 +14,7 @@
 #include <climits>
 #include <cstddef>
 
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/Math/IR/Math.h"
 #include "mlir/Dialect/Math/Transforms/Approximation.h"
 #include "mlir/Dialect/Math/Transforms/Passes.h"
@@ -165,14 +165,6 @@ handleMultidimensionalVectors(ImplicitLocOpBuilder &builder,
 // Helper functions to create constants.
 //----------------------------------------------------------------------------//
 
-static Value floatCst(ImplicitLocOpBuilder &builder, float value,
-                      Type elementType) {
-  assert((elementType.isF16() || elementType.isF32()) &&
-         "x must be f16 or f32 type.");
-  return builder.create<arith::ConstantOp>(
-      builder.getFloatAttr(elementType, value));
-}
-
 static Value f32Cst(ImplicitLocOpBuilder &builder, float value) {
   return builder.create<arith::ConstantOp>(builder.getF32FloatAttr(value));
 }
@@ -240,7 +232,7 @@ static std::pair<Value, Value> frexp(ImplicitLocOpBuilder &builder, Value arg,
   Value normalizedFraction = builder.create<arith::BitcastOp>(f32Vec, tmp1);
 
   // Compute exponent.
-  Value arg0 = isPositive ? arg : builder.create<math::AbsFOp>(arg);
+  Value arg0 = isPositive ? arg : builder.create<math::AbsOp>(arg);
   Value biasedExponentBits = builder.create<arith::ShRUIOp>(
       builder.create<arith::BitcastOp>(i32Vec, arg0),
       bcast(i32Cst(builder, 23)));
@@ -278,13 +270,11 @@ static Value exp2I32(ImplicitLocOpBuilder &builder, Value arg) {
 namespace {
 Value makePolynomialCalculation(ImplicitLocOpBuilder &builder,
                                 llvm::ArrayRef<Value> coeffs, Value x) {
-  Type elementType = getElementTypeOrSelf(x);
-  assert((elementType.isF32() || elementType.isF16()) &&
-         "x must be f32 or f16 type");
+  assert(getElementTypeOrSelf(x).isF32() && "x must be f32 type");
   ArrayRef<int64_t> shape = vectorShape(x);
 
   if (coeffs.empty())
-    return broadcast(builder, floatCst(builder, 0.0f, elementType), shape);
+    return broadcast(builder, f32Cst(builder, 0.0f), shape);
 
   if (coeffs.size() == 1)
     return coeffs[0];
@@ -385,7 +375,7 @@ AtanApproximation::matchAndRewrite(math::AtanOp op,
 
   // Remap the problem over [0.0, 1.0] by looking at the absolute value and the
   // handling symmetry.
-  Value abs = builder.create<math::AbsFOp>(operand);
+  Value abs = builder.create<math::AbsOp>(operand);
   Value reciprocal = builder.create<arith::DivFOp>(one, abs);
   Value compare =
       builder.create<arith::CmpFOp>(arith::CmpFPredicate::OLT, abs, reciprocal);
@@ -517,7 +507,7 @@ TanhApproximation::matchAndRewrite(math::TanhOp op,
   // Mask for tiny values that are approximated with `operand`.
   Value tiny = bcast(f32Cst(builder, 0.0004f));
   Value tinyMask = builder.create<arith::CmpFOp>(
-      arith::CmpFPredicate::OLT, builder.create<math::AbsFOp>(op.getOperand()),
+      arith::CmpFPredicate::OLT, builder.create<math::AbsOp>(op.getOperand()),
       tiny);
 
   // The monomial coefficients of the numerator polynomial (odd).
@@ -781,13 +771,10 @@ Log1pApproximation::matchAndRewrite(math::Log1pOp op,
 LogicalResult
 ErfPolynomialApproximation::matchAndRewrite(math::ErfOp op,
                                             PatternRewriter &rewriter) const {
-  Value operand = op.getOperand();
-  Type elementType = getElementTypeOrSelf(operand);
+  if (!getElementTypeOrSelf(op.getOperand()).isF32())
+    return rewriter.notifyMatchFailure(op, "unsupported operand type");
 
-  if (!(elementType.isF32() || elementType.isF16()))
-    return rewriter.notifyMatchFailure(op,
-                                       "only f32 and f16 type is supported.");
-  ArrayRef<int64_t> shape = vectorShape(operand);
+  ArrayRef<int64_t> shape = vectorShape(op.getOperand());
 
   ImplicitLocOpBuilder builder(op->getLoc(), rewriter);
   auto bcast = [&](Value value) -> Value {
@@ -797,56 +784,57 @@ ErfPolynomialApproximation::matchAndRewrite(math::ErfOp op,
   const int intervalsCount = 3;
   const int polyDegree = 4;
 
-  Value zero = bcast(floatCst(builder, 0, elementType));
-  Value one = bcast(floatCst(builder, 1, elementType));
+  Value zero = bcast(f32Cst(builder, 0));
+  Value one = bcast(f32Cst(builder, 1));
   Value pp[intervalsCount][polyDegree + 1];
-  pp[0][0] = bcast(floatCst(builder, +0.00000000000000000e+00f, elementType));
-  pp[0][1] = bcast(floatCst(builder, +1.12837916222975858e+00f, elementType));
-  pp[0][2] = bcast(floatCst(builder, -5.23018562988006470e-01f, elementType));
-  pp[0][3] = bcast(floatCst(builder, +2.09741709609267072e-01f, elementType));
-  pp[0][4] = bcast(floatCst(builder, +2.58146801602987875e-02f, elementType));
-  pp[1][0] = bcast(floatCst(builder, +0.00000000000000000e+00f, elementType));
-  pp[1][1] = bcast(floatCst(builder, +1.12750687816789140e+00f, elementType));
-  pp[1][2] = bcast(floatCst(builder, -3.64721408487825775e-01f, elementType));
-  pp[1][3] = bcast(floatCst(builder, +1.18407396425136952e-01f, elementType));
-  pp[1][4] = bcast(floatCst(builder, +3.70645533056476558e-02f, elementType));
-  pp[2][0] = bcast(floatCst(builder, -3.30093071049483172e-03f, elementType));
-  pp[2][1] = bcast(floatCst(builder, +3.51961938357697011e-03f, elementType));
-  pp[2][2] = bcast(floatCst(builder, -1.41373622814988039e-03f, elementType));
-  pp[2][3] = bcast(floatCst(builder, +2.53447094961941348e-04f, elementType));
-  pp[2][4] = bcast(floatCst(builder, -1.71048029455037401e-05f, elementType));
+  pp[0][0] = bcast(f32Cst(builder, +0.00000000000000000e+00f));
+  pp[0][1] = bcast(f32Cst(builder, +1.12837916222975858e+00f));
+  pp[0][2] = bcast(f32Cst(builder, -5.23018562988006470e-01f));
+  pp[0][3] = bcast(f32Cst(builder, +2.09741709609267072e-01f));
+  pp[0][4] = bcast(f32Cst(builder, +2.58146801602987875e-02f));
+  pp[1][0] = bcast(f32Cst(builder, +0.00000000000000000e+00f));
+  pp[1][1] = bcast(f32Cst(builder, +1.12750687816789140e+00f));
+  pp[1][2] = bcast(f32Cst(builder, -3.64721408487825775e-01f));
+  pp[1][3] = bcast(f32Cst(builder, +1.18407396425136952e-01f));
+  pp[1][4] = bcast(f32Cst(builder, +3.70645533056476558e-02f));
+  pp[2][0] = bcast(f32Cst(builder, -3.30093071049483172e-03f));
+  pp[2][1] = bcast(f32Cst(builder, +3.51961938357697011e-03f));
+  pp[2][2] = bcast(f32Cst(builder, -1.41373622814988039e-03f));
+  pp[2][3] = bcast(f32Cst(builder, +2.53447094961941348e-04f));
+  pp[2][4] = bcast(f32Cst(builder, -1.71048029455037401e-05f));
 
   Value qq[intervalsCount][polyDegree + 1];
-  qq[0][0] = bcast(floatCst(builder, +1.000000000000000000e+00f, elementType));
-  qq[0][1] = bcast(floatCst(builder, -4.635138185962547255e-01f, elementType));
-  qq[0][2] = bcast(floatCst(builder, +5.192301327279782447e-01f, elementType));
-  qq[0][3] = bcast(floatCst(builder, -1.318089722204810087e-01f, elementType));
-  qq[0][4] = bcast(floatCst(builder, +7.397964654672315005e-02f, elementType));
-  qq[1][0] = bcast(floatCst(builder, +1.00000000000000000e+00f, elementType));
-  qq[1][1] = bcast(floatCst(builder, -3.27607011824493086e-01f, elementType));
-  qq[1][2] = bcast(floatCst(builder, +4.48369090658821977e-01f, elementType));
-  qq[1][3] = bcast(floatCst(builder, -8.83462621207857930e-02f, elementType));
-  qq[1][4] = bcast(floatCst(builder, +5.72442770283176093e-02f, elementType));
-  qq[2][0] = bcast(floatCst(builder, +1.00000000000000000e+00f, elementType));
-  qq[2][1] = bcast(floatCst(builder, -2.06069165953913769e+00f, elementType));
-  qq[2][2] = bcast(floatCst(builder, +1.62705939945477759e+00f, elementType));
-  qq[2][3] = bcast(floatCst(builder, -5.83389859211130017e-01f, elementType));
-  qq[2][4] = bcast(floatCst(builder, +8.21908939856640930e-02f, elementType));
+  qq[0][0] = bcast(f32Cst(builder, +1.000000000000000000e+00f));
+  qq[0][1] = bcast(f32Cst(builder, -4.635138185962547255e-01f));
+  qq[0][2] = bcast(f32Cst(builder, +5.192301327279782447e-01f));
+  qq[0][3] = bcast(f32Cst(builder, -1.318089722204810087e-01f));
+  qq[0][4] = bcast(f32Cst(builder, +7.397964654672315005e-02f));
+  qq[1][0] = bcast(f32Cst(builder, +1.00000000000000000e+00f));
+  qq[1][1] = bcast(f32Cst(builder, -3.27607011824493086e-01f));
+  qq[1][2] = bcast(f32Cst(builder, +4.48369090658821977e-01f));
+  qq[1][3] = bcast(f32Cst(builder, -8.83462621207857930e-02f));
+  qq[1][4] = bcast(f32Cst(builder, +5.72442770283176093e-02f));
+  qq[2][0] = bcast(f32Cst(builder, +1.00000000000000000e+00f));
+  qq[2][1] = bcast(f32Cst(builder, -2.06069165953913769e+00f));
+  qq[2][2] = bcast(f32Cst(builder, +1.62705939945477759e+00f));
+  qq[2][3] = bcast(f32Cst(builder, -5.83389859211130017e-01f));
+  qq[2][4] = bcast(f32Cst(builder, +8.21908939856640930e-02f));
 
   Value offsets[intervalsCount];
-  offsets[0] = bcast(floatCst(builder, 0.0f, elementType));
-  offsets[1] = bcast(floatCst(builder, 0.0f, elementType));
-  offsets[2] = bcast(floatCst(builder, 1.0f, elementType));
+  offsets[0] = bcast(f32Cst(builder, 0.0f));
+  offsets[1] = bcast(f32Cst(builder, 0.0f));
+  offsets[2] = bcast(f32Cst(builder, 1.0f));
 
   Value bounds[intervalsCount];
-  bounds[0] = bcast(floatCst(builder, 0.8f, elementType));
-  bounds[1] = bcast(floatCst(builder, 2.0f, elementType));
-  bounds[2] = bcast(floatCst(builder, 3.75f, elementType));
+  bounds[0] = bcast(f32Cst(builder, 0.8f));
+  bounds[1] = bcast(f32Cst(builder, 2.0f));
+  bounds[2] = bcast(f32Cst(builder, 3.75f));
 
-  Value isNegativeArg =
-      builder.create<arith::CmpFOp>(arith::CmpFPredicate::OLT, operand, zero);
-  Value negArg = builder.create<arith::NegFOp>(operand);
-  Value x = builder.create<arith::SelectOp>(isNegativeArg, negArg, operand);
+  Value isNegativeArg = builder.create<arith::CmpFOp>(arith::CmpFPredicate::OLT,
+                                                      op.getOperand(), zero);
+  Value negArg = builder.create<arith::NegFOp>(op.getOperand());
+  Value x =
+      builder.create<arith::SelectOp>(isNegativeArg, negArg, op.getOperand());
 
   Value offset = offsets[0];
   Value p[polyDegree + 1];

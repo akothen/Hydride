@@ -23,6 +23,7 @@ def Func_Dialect : Dialect {
   let cppNamespace = "::mlir::func";
   let dependentDialects = ["cf::ControlFlowDialect"];
   let hasConstantMaterializer = 1;
+  let emitAccessorPrefix = kEmitAccessorPrefix_Prefixed;
 }
 
 // Base class for Func dialect ops.
@@ -165,7 +166,7 @@ def CallIndirectOp : Func_Op<"call_indirect", [
 //===----------------------------------------------------------------------===//
 
 def ConstantOp : Func_Op<"constant",
-    [ConstantLike, Pure,
+    [ConstantLike, NoSideEffect,
      DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>]> {
   let summary = "constant";
   let description = [{
@@ -327,7 +328,7 @@ def FuncOp : Func_Op<"func", [
 // ReturnOp
 //===----------------------------------------------------------------------===//
 
-def ReturnOp : Func_Op<"return", [Pure, HasParent<"FuncOp">,
+def ReturnOp : Func_Op<"return", [NoSideEffect, HasParent<"FuncOp">,
                                 MemRefsNormalizable, ReturnLike, Terminator]> {
   let summary = "Function return operation";
   let description = [{

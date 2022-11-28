@@ -290,11 +290,11 @@ unsigned A15SDOptimizer::optimizeSDPattern(MachineInstr *MI) {
     unsigned NumImplicit = 0, NumTotal = 0;
     unsigned NonImplicitReg = ~0U;
 
-    for (MachineOperand &MO : llvm::drop_begin(MI->explicit_operands())) {
-      if (!MO.isReg())
+    for (unsigned I = 1; I < MI->getNumExplicitOperands(); ++I) {
+      if (!MI->getOperand(I).isReg())
         continue;
       ++NumTotal;
-      Register OpReg = MO.getReg();
+      Register OpReg = MI->getOperand(I).getReg();
 
       if (!Register::isVirtualRegister(OpReg))
         break;
@@ -305,7 +305,7 @@ unsigned A15SDOptimizer::optimizeSDPattern(MachineInstr *MI) {
       if (Def->isImplicitDef())
         ++NumImplicit;
       else
-        NonImplicitReg = MO.getReg();
+        NonImplicitReg = MI->getOperand(I).getReg();
     }
 
     if (NumImplicit == NumTotal - 1)

@@ -12,8 +12,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "DirectXTargetMachine.h"
-#include "DXILResourceAnalysis.h"
-#include "DXILShaderFlags.h"
 #include "DXILWriter/DXILWriterPass.h"
 #include "DirectX.h"
 #include "DirectXSubtarget.h"
@@ -27,7 +25,6 @@
 #include "llvm/MC/MCSectionDXContainer.h"
 #include "llvm/MC/SectionKind.h"
 #include "llvm/MC/TargetRegistry.h"
-#include "llvm/Passes/PassBuilder.h"
 #include "llvm/Support/CodeGen.h"
 #include "llvm/Support/Compiler.h"
 #include "llvm/Support/ErrorHandling.h"
@@ -42,8 +39,6 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeDirectXTarget() {
   initializeEmbedDXILPassPass(*PR);
   initializeDXILOpLoweringLegacyPass(*PR);
   initializeDXILTranslateMetadataPass(*PR);
-  initializeDXILResourceWrapperPass(*PR);
-  initializeShaderFlagsAnalysisWrapperPass(*PR);
 }
 
 class DXILTargetObjectFile : public TargetLoweringObjectFile {
@@ -72,11 +67,6 @@ public:
   }
 
   FunctionPass *createTargetRegisterAllocator(bool) override { return nullptr; }
-  void addCodeGenPrepare() override {
-    addPass(createDXILOpLoweringLegacyPass());
-    addPass(createDXILPrepareModulePass());
-    addPass(createDXILTranslateMetadataPass());
-  }
 };
 
 DirectXTargetMachine::DirectXTargetMachine(const Target &T, const Triple &TT,
@@ -97,43 +87,18 @@ DirectXTargetMachine::DirectXTargetMachine(const Target &T, const Triple &TT,
 
 DirectXTargetMachine::~DirectXTargetMachine() {}
 
-void DirectXTargetMachine::registerPassBuilderCallbacks(PassBuilder &PB) {
-  PB.registerPipelineParsingCallback(
-      [](StringRef PassName, ModulePassManager &PM,
-         ArrayRef<PassBuilder::PipelineElement>) {
-        if (PassName == "print-dxil-resource") {
-          PM.addPass(DXILResourcePrinterPass(dbgs()));
-          return true;
-        }
-        if (PassName == "print-dx-shader-flags") {
-          PM.addPass(dxil::ShaderFlagsAnalysisPrinter(dbgs()));
-          return true;
-        }
-        return false;
-      });
-
-  PB.registerAnalysisRegistrationCallback([](ModuleAnalysisManager &MAM) {
-    MAM.registerPass([&] { return DXILResourceAnalysis(); });
-    MAM.registerPass([&] { return dxil::ShaderFlagsAnalysis(); });
-  });
-}
-
 bool DirectXTargetMachine::addPassesToEmitFile(
     PassManagerBase &PM, raw_pwrite_stream &Out, raw_pwrite_stream *DwoOut,
     CodeGenFileType FileType, bool DisableVerify,
     MachineModuleInfoWrapperPass *MMIWP) {
-  TargetPassConfig *PassConfig = createPassConfig(PM);
-  PassConfig->addCodeGenPrepare();
-
+  PM.add(createDXILOpLoweringLegacyPass());
+  PM.add(createDXILPrepareModulePass());
+  PM.add(createDXILTranslateMetadataPass());
   if (TargetPassConfig::willCompleteCodeGenPipeline()) {
     PM.add(createDXILEmbedderPass());
-    // We embed the other DXContainer globals after embedding DXIL so that the
-    // globals don't pollute the DXIL.
-    PM.add(createDXContainerGlobalsPass());
   }
   switch (FileType) {
   case CGFT_AssemblyFile:
-    PM.add(createDXILPrettyPrinterPass(Out));
     PM.add(createPrintModulePass(Out, "", true));
     break;
   case CGFT_ObjectFile:

@@ -16,50 +16,51 @@ define dso_local void @n(ptr %o, i32 %p, i32 %u) nounwind {
 ; CHECK-NEXT:    pushq %r12
 ; CHECK-NEXT:    pushq %rbx
 ; CHECK-NEXT:    pushq %rax
-; CHECK-NEXT:    movl %edx, %ebp
+; CHECK-NEXT:    movl %edx, %ebx
 ; CHECK-NEXT:    movl %esi, %r12d
-; CHECK-NEXT:    movq %rdi, %rbx
+; CHECK-NEXT:    movq %rdi, %r15
 ; CHECK-NEXT:    callq c
-; CHECK-NEXT:    movl %eax, %r14d
-; CHECK-NEXT:    movq %rbx, %rdi
+; CHECK-NEXT:    movl %eax, %r13d
+; CHECK-NEXT:    movq %r15, %rdi
 ; CHECK-NEXT:    callq l
 ; CHECK-NEXT:    testl %eax, %eax
 ; CHECK-NEXT:    jne .LBB0_9
 ; CHECK-NEXT:  # %bb.1: # %if.end
+; CHECK-NEXT:    movl %ebx, {{[-0-9]+}}(%r{{[sb]}}p) # 4-byte Spill
 ; CHECK-NEXT:    cmpl $0, e(%rip)
-; CHECK-NEXT:    # implicit-def: $r15d
-; CHECK-NEXT:    # implicit-def: $r13d
+; CHECK-NEXT:    # implicit-def: $ebx
+; CHECK-NEXT:    # implicit-def: $r14d
 ; CHECK-NEXT:    je .LBB0_4
 ; CHECK-NEXT:  # %bb.2: # %if.then4
 ; CHECK-NEXT:    movslq %r12d, %rdi
 ; CHECK-NEXT:    callq m
-; CHECK-NEXT:    # implicit-def: $r15d
-; CHECK-NEXT:    # implicit-def: $r12d
+; CHECK-NEXT:    # implicit-def: $ebx
+; CHECK-NEXT:    # implicit-def: $ebp
 ; CHECK-NEXT:  .LBB0_3: # %r
 ; CHECK-NEXT:    callq c
-; CHECK-NEXT:    movl %r12d, %r13d
+; CHECK-NEXT:    movl %ebp, %r14d
 ; CHECK-NEXT:  .LBB0_4: # %if.end8
-; CHECK-NEXT:    movl %r15d, %edi
+; CHECK-NEXT:    movl %ebx, %edi
 ; CHECK-NEXT:    callq i
-; CHECK-NEXT:    movl %eax, %r12d
-; CHECK-NEXT:    orl %r13d, %r12d
-; CHECK-NEXT:    andl $4, %r15d
-; CHECK-NEXT:    testl %r14d, %r14d
+; CHECK-NEXT:    movl %eax, %ebp
+; CHECK-NEXT:    orl %r14d, %ebp
+; CHECK-NEXT:    andl $4, %ebx
+; CHECK-NEXT:    testl %r13d, %r13d
 ; CHECK-NEXT:    jne .LBB0_3
 ; CHECK-NEXT:  # %bb.5: # %if.end12
-; CHECK-NEXT:    testl %r12d, %r12d
+; CHECK-NEXT:    testl %ebp, %ebp
 ; CHECK-NEXT:    je .LBB0_8
 ; CHECK-NEXT:  # %bb.6: # %if.then14
+; CHECK-NEXT:    movl {{[-0-9]+}}(%r{{[sb]}}p), %eax # 4-byte Reload
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    jmp .LBB0_9
-; CHECK-NEXT:  .LBB0_7: # Block address taken
-; CHECK-NEXT:    # %if.then20.critedge
-; CHECK-NEXT:    # Label of block must be emitted
+; CHECK-NEXT:  .Ltmp0: # Block address taken
+; CHECK-NEXT:  # %bb.7: # %if.then20.critedge
 ; CHECK-NEXT:    movl j(%rip), %edi
-; CHECK-NEXT:    movslq %ebp, %rcx
+; CHECK-NEXT:    movslq %eax, %rcx
 ; CHECK-NEXT:    movl $1, %esi
-; CHECK-NEXT:    movq %rbx, %rdx
+; CHECK-NEXT:    movq %r15, %rdx
 ; CHECK-NEXT:    addq $8, %rsp
 ; CHECK-NEXT:    popq %rbx
 ; CHECK-NEXT:    popq %r12

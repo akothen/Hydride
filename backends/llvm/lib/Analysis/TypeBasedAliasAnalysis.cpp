@@ -385,42 +385,45 @@ AliasResult TypeBasedAAResult::alias(const MemoryLocation &LocA,
   return AliasResult::NoAlias;
 }
 
-ModRefInfo TypeBasedAAResult::getModRefInfoMask(const MemoryLocation &Loc,
-                                                AAQueryInfo &AAQI,
-                                                bool IgnoreLocals) {
+bool TypeBasedAAResult::pointsToConstantMemory(const MemoryLocation &Loc,
+                                               AAQueryInfo &AAQI,
+                                               bool OrLocal) {
   if (!EnableTBAA)
-    return AAResultBase::getModRefInfoMask(Loc, AAQI, IgnoreLocals);
+    return AAResultBase::pointsToConstantMemory(Loc, AAQI, OrLocal);
 
   const MDNode *M = Loc.AATags.TBAA;
   if (!M)
-    return AAResultBase::getModRefInfoMask(Loc, AAQI, IgnoreLocals);
+    return AAResultBase::pointsToConstantMemory(Loc, AAQI, OrLocal);
 
   // If this is an "immutable" type, we can assume the pointer is pointing
   // to constant memory.
   if ((!isStructPathTBAA(M) && TBAANode(M).isTypeImmutable()) ||
       (isStructPathTBAA(M) && TBAAStructTagNode(M).isTypeImmutable()))
-    return ModRefInfo::NoModRef;
+    return true;
 
-  return AAResultBase::getModRefInfoMask(Loc, AAQI, IgnoreLocals);
+  return AAResultBase::pointsToConstantMemory(Loc, AAQI, OrLocal);
 }
 
-MemoryEffects TypeBasedAAResult::getMemoryEffects(const CallBase *Call,
-                                                  AAQueryInfo &AAQI) {
+FunctionModRefBehavior
+TypeBasedAAResult::getModRefBehavior(const CallBase *Call) {
   if (!EnableTBAA)
-    return AAResultBase::getMemoryEffects(Call, AAQI);
+    return AAResultBase::getModRefBehavior(Call);
 
-  // If this is an "immutable" type, the access is not observable.
+  FunctionModRefBehavior Min = FMRB_UnknownModRefBehavior;
+
+  // If this is an "immutable" type, we can assume the call doesn't write
+  // to memory.
   if (const MDNode *M = Call->getMetadata(LLVMContext::MD_tbaa))
     if ((!isStructPathTBAA(M) && TBAANode(M).isTypeImmutable()) ||
         (isStructPathTBAA(M) && TBAAStructTagNode(M).isTypeImmutable()))
-      return MemoryEffects::none();
+      Min = FMRB_OnlyReadsMemory;
 
-  return AAResultBase::getMemoryEffects(Call, AAQI);
+  return FunctionModRefBehavior(AAResultBase::getModRefBehavior(Call) & Min);
 }
 
-MemoryEffects TypeBasedAAResult::getMemoryEffects(const Function *F) {
+FunctionModRefBehavior TypeBasedAAResult::getModRefBehavior(const Function *F) {
   // Functions don't have metadata. Just chain to the next implementation.
-  return AAResultBase::getMemoryEffects(F);
+  return AAResultBase::getModRefBehavior(F);
 }
 
 ModRefInfo TypeBasedAAResult::getModRefInfo(const CallBase *Call,

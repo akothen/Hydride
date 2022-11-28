@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/SCF/Transforms/Passes.h"
-
+#include "PassDetail.h"
 #include "mlir/Dialect/Affine/Analysis/AffineStructures.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
+#include "mlir/Dialect/SCF/Transforms/Passes.h"
 #include "mlir/Dialect/SCF/Transforms/Transforms.h"
 #include "mlir/Dialect/SCF/Utils/AffineCanonicalizationUtils.h"
 #include "mlir/Dialect/Utils/StaticValueUtils.h"
@@ -25,13 +25,6 @@
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "llvm/ADT/DenseMap.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_SCFFORLOOPPEELING
-#define GEN_PASS_DEF_SCFFORLOOPSPECIALIZATION
-#define GEN_PASS_DEF_SCFPARALLELLOOPSPECIALIZATION
-#include "mlir/Dialect/SCF/Transforms/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 using scf::ForOp;
@@ -242,8 +235,7 @@ struct ForLoopPeelingPattern : public OpRewritePattern<ForOp> {
 
 namespace {
 struct ParallelLoopSpecialization
-    : public impl::SCFParallelLoopSpecializationBase<
-          ParallelLoopSpecialization> {
+    : public SCFParallelLoopSpecializationBase<ParallelLoopSpecialization> {
   void runOnOperation() override {
     getOperation()->walk(
         [](ParallelOp op) { specializeParallelLoopForUnrolling(op); });
@@ -251,13 +243,13 @@ struct ParallelLoopSpecialization
 };
 
 struct ForLoopSpecialization
-    : public impl::SCFForLoopSpecializationBase<ForLoopSpecialization> {
+    : public SCFForLoopSpecializationBase<ForLoopSpecialization> {
   void runOnOperation() override {
     getOperation()->walk([](ForOp op) { specializeForLoopForUnrolling(op); });
   }
 };
 
-struct ForLoopPeeling : public impl::SCFForLoopPeelingBase<ForLoopPeeling> {
+struct ForLoopPeeling : public SCFForLoopPeelingBase<ForLoopPeeling> {
   void runOnOperation() override {
     auto *parentOp = getOperation();
     MLIRContext *ctx = parentOp->getContext();

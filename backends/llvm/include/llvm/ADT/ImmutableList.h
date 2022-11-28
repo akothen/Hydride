@@ -94,7 +94,7 @@ public:
     bool operator==(const iterator& I) const { return L == I.L; }
     bool operator!=(const iterator& I) const { return L != I.L; }
     const value_type& operator*() const { return L->getHead(); }
-    const std::remove_reference_t<value_type> *operator->() const {
+    const typename std::remove_reference<value_type>::type* operator->() const {
       return &L->getHead();
     }
 
@@ -174,7 +174,7 @@ public:
   }
 
   template <typename ElemT>
-  [[nodiscard]] ImmutableList<T> concat(ElemT &&Head, ImmutableList<T> Tail) {
+  LLVM_NODISCARD ImmutableList<T> concat(ElemT &&Head, ImmutableList<T> Tail) {
     // Profile the new list to see if it already exists in our cache.
     FoldingSetNodeID ID;
     void* InsertPos;
@@ -197,13 +197,13 @@ public:
   }
 
   template <typename ElemT>
-  [[nodiscard]] ImmutableList<T> add(ElemT &&Data, ImmutableList<T> L) {
+  LLVM_NODISCARD ImmutableList<T> add(ElemT &&Data, ImmutableList<T> L) {
     return concat(std::forward<ElemT>(Data), L);
   }
 
-  template <typename... CtorArgs>
-  [[nodiscard]] ImmutableList<T> emplace(ImmutableList<T> Tail,
-                                         CtorArgs &&...Args) {
+  template <typename ...CtorArgs>
+  LLVM_NODISCARD ImmutableList<T> emplace(ImmutableList<T> Tail,
+                                          CtorArgs &&...Args) {
     return concat(T(std::forward<CtorArgs>(Args)...), Tail);
   }
 

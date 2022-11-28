@@ -496,7 +496,6 @@ int main(int argc, char const *argv[]) {
         CurrentGsym = GsymReader::openFile(GSYMPath);
         if (!*CurrentGsym)
           error(GSYMPath, CurrentGsym->takeError());
-        CurrentGSYMPath = GSYMPath;
       }
 
       uint64_t Addr;

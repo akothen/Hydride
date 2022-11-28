@@ -17,12 +17,27 @@
 #include "DeltaManager.h"
 #include "ReducerWorkItem.h"
 #include "TestRunner.h"
+#include "llvm/Analysis/ProfileSummaryInfo.h"
+#include "llvm/Analysis/ModuleSummaryAnalysis.h"
+#include "llvm/ADT/SmallString.h"
+#include "llvm/Bitcode/BitcodeReader.h"
+#include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/CodeGen/CommandFlags.h"
-
+#include "llvm/CodeGen/MachineFunction.h"
+#include "llvm/CodeGen/MachineModuleInfo.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/IRReader/IRReader.h"
+#include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Host.h"
 #include "llvm/Support/InitLLVM.h"
+#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/WithColor.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Transforms/IPO.h"
 #include <system_error>
 #include <vector>
 
@@ -56,8 +71,7 @@ static cl::list<std::string>
                   cl::cat(LLVMReduceOptions));
 
 static cl::opt<std::string> OutputFilename(
-    "output",
-    cl::desc("Specify the output file. default: reduced.ll|.bc|.mir"));
+    "output", cl::desc("Specify the output file. default: reduced.ll|mir"));
 static cl::alias OutputFileAlias("o", cl::desc("Alias for -output"),
                                  cl::aliasopt(OutputFilename),
                                  cl::cat(LLVMReduceOptions));
@@ -78,11 +92,6 @@ static cl::opt<InputLanguages>
                              clEnumValN(InputLanguages::MIR, "mir", "")),
                   cl::cat(LLVMReduceOptions));
 
-static cl::opt<bool> ForceOutputBitcode(
-    "output-bitcode",
-    cl::desc("Emit final result as bitcode instead of text IR"), cl::Hidden,
-    cl::cat(LLVMReduceOptions));
-
 static cl::opt<int>
     MaxPassIterations("max-pass-iterations",
                       cl::desc("Maximum number of times to run the full set "
@@ -91,23 +100,35 @@ static cl::opt<int>
 
 static codegen::RegisterCodeGenFlags CGF;
 
-bool isReduced(ReducerWorkItem &M, TestRunner &Test);
-
-static std::pair<StringRef, bool> determineOutputType(bool IsMIR,
-                                                      bool InputIsBitcode) {
-  bool OutputBitcode = ForceOutputBitcode || InputIsBitcode;
-
-  if (ReplaceInput) { // In-place
+void writeOutput(ReducerWorkItem &M, StringRef Message) {
+  if (ReplaceInput) // In-place
     OutputFilename = InputFilename.c_str();
-  } else if (OutputFilename.empty()) {
-    // Default to producing bitcode if the input was bitcode, if not explicitly
-    // requested.
-
-    OutputFilename =
-        IsMIR ? "reduced.mir" : (OutputBitcode ? "reduced.bc" : "reduced.ll");
+  else if (OutputFilename.empty() || OutputFilename == "-")
+    OutputFilename = M.isMIR() ? "reduced.mir" : "reduced.ll";
+  std::error_code EC;
+  raw_fd_ostream Out(OutputFilename, EC);
+  if (EC) {
+    errs() << "Error opening output file: " << EC.message() << "!\n";
+    exit(1);
   }
+  M.print(Out, /*AnnotationWriter=*/nullptr);
+  errs() << Message << OutputFilename << "\n";
+}
 
-  return {OutputFilename, OutputBitcode};
+void writeBitcode(ReducerWorkItem &M, llvm::raw_ostream &OutStream) {
+  if (M.LTOInfo && M.LTOInfo->IsThinLTO && M.LTOInfo->EnableSplitLTOUnit) {
+    legacy::PassManager PM;
+    PM.add(llvm::createWriteThinLTOBitcodePass(OutStream));
+    PM.run(*(M.M));
+  } else {
+    std::unique_ptr<ModuleSummaryIndex> Index;
+    if (M.LTOInfo && M.LTOInfo->HasSummary) {
+      ProfileSummaryInfo PSI(M);
+      Index = std::make_unique<ModuleSummaryIndex>(
+          buildModuleSummaryIndex(M, nullptr, &PSI));
+    }
+    WriteBitcodeToFile(M, OutStream, Index.get());
+  }
 }
 
 void readBitcode(ReducerWorkItem &M, MemoryBufferRef Data, LLVMContext &Ctx, const char *ToolName) {
@@ -149,30 +170,15 @@ int main(int Argc, char **Argv) {
   LLVMContext Context;
   std::unique_ptr<TargetMachine> TM;
 
-  auto [OriginalProgram, InputIsBitcode] =
+  std::unique_ptr<ReducerWorkItem> OriginalProgram =
       parseReducerWorkItem(Argv[0], InputFilename, Context, TM, ReduceModeMIR);
   if (!OriginalProgram) {
     return 1;
   }
 
-  StringRef OutputFilename;
-  bool OutputBitcode;
-  std::tie(OutputFilename, OutputBitcode) =
-      determineOutputType(ReduceModeMIR, InputIsBitcode);
-
   // Initialize test environment
   TestRunner Tester(TestFilename, TestArguments, std::move(OriginalProgram),
-                    std::move(TM), Argv[0], OutputFilename, InputIsBitcode,
-                    OutputBitcode);
-
-  // This parses and writes out the testcase into a temporary file copy for the
-  // test, rather than evaluating the source IR directly. This is for the
-  // convenience of lit tests; the stripped out comments may have broken the
-  // interestingness checks.
-  if (!isReduced(Tester.getProgram(), Tester)) {
-    errs() << "\nInput isn't interesting! Verify interesting-ness test\n";
-    return 1;
-  }
+                    std::move(TM), Argv[0]);
 
   // Try to reduce code
   runDeltaPasses(Tester, MaxPassIterations);
@@ -181,7 +187,7 @@ int main(int Argc, char **Argv) {
   if (OutputFilename == "-")
     Tester.getProgram().print(outs(), nullptr);
   else
-    Tester.writeOutput("Done reducing! Reduced testcase: ");
+    writeOutput(Tester.getProgram(), "\nDone reducing! Reduced testcase: ");
 
   return 0;
 }

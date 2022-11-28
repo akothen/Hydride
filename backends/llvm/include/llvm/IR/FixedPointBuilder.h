@@ -25,8 +25,6 @@
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Value.h"
 
-#include <cmath>
-
 namespace llvm {
 
 template <class IRBuilderTy> class FixedPointBuilder {

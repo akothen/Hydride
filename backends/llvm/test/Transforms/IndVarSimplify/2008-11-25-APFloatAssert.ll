@@ -1,4 +1,4 @@
-; RUN: opt < %s -passes=indvars
+; RUN: opt < %s -indvars
 
 define void @t() nounwind {
 entry:

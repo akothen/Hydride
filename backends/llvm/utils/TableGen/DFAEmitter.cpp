@@ -35,7 +35,6 @@
 #include <map>
 #include <set>
 #include <string>
-#include <variant>
 #include <vector>
 
 #define DEBUG_TYPE "dfa-emitter"
@@ -170,8 +169,30 @@ void DfaEmitter::printActionValue(action_type A, raw_ostream &OS) { OS << A; }
 //===----------------------------------------------------------------------===//
 
 namespace {
+// FIXME: This entire discriminated union could be removed with c++17:
+//   using Action = std::variant<Record *, unsigned, std::string>;
+struct Action {
+  Record *R = nullptr;
+  unsigned I = 0;
+  std::string S;
 
-using Action = std::variant<Record *, unsigned, std::string>;
+  Action() = default;
+  Action(Record *R, unsigned I, std::string S) : R(R), I(I), S(S) {}
+
+  void print(raw_ostream &OS) const {
+    if (R)
+      OS << R->getName();
+    else if (!S.empty())
+      OS << '"' << S << '"';
+    else
+      OS << I;
+  }
+  bool operator<(const Action &Other) const {
+    return std::make_tuple(R, I, S) <
+           std::make_tuple(Other.R, Other.I, Other.S);
+  }
+};
+
 using ActionTuple = std::vector<Action>;
 class Automaton;
 
@@ -321,13 +342,13 @@ Transition::Transition(Record *R, Automaton *Parent) {
   for (StringRef A : Parent->getActionSymbolFields()) {
     RecordVal *SymbolV = R->getValue(A);
     if (auto *Ty = dyn_cast<RecordRecTy>(SymbolV->getType())) {
-      Actions.emplace_back(R->getValueAsDef(A));
+      Actions.emplace_back(R->getValueAsDef(A), 0, "");
       Types.emplace_back(Ty->getAsString());
     } else if (isa<IntRecTy>(SymbolV->getType())) {
-      Actions.emplace_back(static_cast<unsigned>(R->getValueAsInt(A)));
+      Actions.emplace_back(nullptr, R->getValueAsInt(A), "");
       Types.emplace_back("unsigned");
     } else if (isa<StringRecTy>(SymbolV->getType())) {
-      Actions.emplace_back(std::string(R->getValueAsString(A)));
+      Actions.emplace_back(nullptr, 0, std::string(R->getValueAsString(A)));
       Types.emplace_back("std::string");
     } else {
       report_fatal_error("Unhandled symbol type!");
@@ -359,12 +380,7 @@ void CustomDfaEmitter::printActionValue(action_type A, raw_ostream &OS) {
   ListSeparator LS;
   for (const auto &SingleAction : AT) {
     OS << LS;
-    if (const auto *R = std::get_if<Record *>(&SingleAction))
-      OS << (*R)->getName();
-    else if (const auto *S = std::get_if<std::string>(&SingleAction))
-      OS << '"' << *S << '"';
-    else
-      OS << std::get<unsigned>(SingleAction);
+    SingleAction.print(OS);
   }
   if (AT.size() > 1)
     OS << ")";

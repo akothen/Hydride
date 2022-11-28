@@ -12,10 +12,6 @@
 ; RUN: llc -global-isel=0 -mtriple=amdgcn-amd-amdhsa -mcpu=gfx1102 -amdgpu-enable-vopd=0 < %s | FileCheck -check-prefixes=GCN,WORKAROUND %s
 ; RUN: llc -global-isel=1 -mtriple=amdgcn-amd-amdhsa -mcpu=gfx1102 -amdgpu-enable-vopd=0 < %s | FileCheck -check-prefixes=GCN,WORKAROUND %s
 
-; Does not apply to gfx1103
-; RUN: llc -global-isel=0 -mtriple=amdgcn-amd-amdhsa -mcpu=gfx1103 -amdgpu-enable-vopd=0 < %s | FileCheck -check-prefixes=GCN,NOWORKAROUND %s
-; RUN: llc -global-isel=1 -mtriple=amdgcn-amd-amdhsa -mcpu=gfx1103 -amdgpu-enable-vopd=0 < %s | FileCheck -check-prefixes=GCN,NOWORKAROUND %s
-
 ; There aren't any stack objects, but we still enable the
 ; private_segment_wavefront_offset to get to 16, and the workgroup ID
 ; is in s14.
@@ -36,6 +32,7 @@
 ; GCN-NEXT: .amdhsa_user_sgpr_dispatch_id 0
 ; GCN-NEXT: .amdhsa_user_sgpr_private_segment_size 0
 ; GCN-NEXT: .amdhsa_wavefront_size32
+; GCN-NEXT: .amdhsa_uses_dynamic_stack 0
 ; GCN-NEXT: .amdhsa_enable_private_segment 0
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_x 1
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_y 0
@@ -64,6 +61,7 @@ define amdgpu_kernel void @minimal_kernel_inputs() {
 ; GCN-NEXT: .amdhsa_user_sgpr_dispatch_id 0
 ; GCN-NEXT: .amdhsa_user_sgpr_private_segment_size 0
 ; GCN-NEXT: .amdhsa_wavefront_size32
+; GCN-NEXT: .amdhsa_uses_dynamic_stack 0
 ; GCN-NEXT: .amdhsa_enable_private_segment 1
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_x 1
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_y 0
@@ -96,6 +94,7 @@ define amdgpu_kernel void @minimal_kernel_inputs_with_stack() {
 ; GCN-NEXT: .amdhsa_user_sgpr_dispatch_id 0
 ; GCN-NEXT: .amdhsa_user_sgpr_private_segment_size 0
 ; GCN-NEXT: .amdhsa_wavefront_size32
+; GCN-NEXT: .amdhsa_uses_dynamic_stack 0
 ; GCN-NEXT: .amdhsa_enable_private_segment 0
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_x 1
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_y 0
@@ -142,6 +141,7 @@ define amdgpu_kernel void @queue_ptr() {
 ; GCN-NEXT: .amdhsa_user_sgpr_dispatch_id 1
 ; GCN-NEXT: .amdhsa_user_sgpr_private_segment_size 0
 ; GCN-NEXT: .amdhsa_wavefront_size32
+; GCN-NEXT: .amdhsa_uses_dynamic_stack 0
 ; GCN-NEXT: .amdhsa_enable_private_segment 1
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_x 1
 ; GCN-NEXT: .amdhsa_system_sgpr_workgroup_id_y 1

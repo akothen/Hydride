@@ -14,7 +14,6 @@
 
 #include "mlir/Dialect/SPIRV/IR/SPIRVAttributes.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVDialect.h"
-#include "mlir/Dialect/SPIRV/IR/SPIRVEnums.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVTypes.h"
 #include "mlir/Support/LogicalResult.h"
 #include "mlir/Target/SPIRV/SPIRVBinaryUtils.h"
@@ -24,7 +23,6 @@
 #include "llvm/ADT/TypeSwitch.h"
 #include "llvm/ADT/bit.h"
 #include "llvm/Support/Debug.h"
-#include <cstdint>
 
 #define DEBUG_TYPE "spirv-serialization"
 
@@ -45,7 +43,7 @@ static Block *getStructuredControlFlowOpMergeBlock(Operation *op) {
 /// corresponding to the block arguments.
 static Block *getPhiIncomingBlock(Block *block) {
   // If the predecessor block in question is the entry block for a
-  // spirv.mlir.loop, we jump to this spirv.mlir.loop from its enclosing block.
+  // spv.mlir.loop, we jump to this spv.mlir.loop from its enclosing block.
   if (block->isEntryBlock()) {
     if (auto loopOp = dyn_cast<spirv::LoopOp>(block->getParentOp())) {
       // Then the incoming parent block for OpPhi should be the merge block of
@@ -119,8 +117,7 @@ void Serializer::collect(SmallVectorImpl<uint32_t> &binary) {
   binary.clear();
   binary.reserve(moduleSize);
 
-  spirv::appendModuleHeader(binary, module.getVceTriple()->getVersion(),
-                            nextID);
+  spirv::appendModuleHeader(binary, module.vce_triple()->getVersion(), nextID);
   binary.append(capabilities.begin(), capabilities.end());
   binary.append(extensions.begin(), extensions.end());
   binary.append(extendedSets.begin(), extendedSets.end());
@@ -167,7 +164,7 @@ uint32_t Serializer::getOrCreateFunctionID(StringRef fnName) {
 }
 
 void Serializer::processCapability() {
-  for (auto cap : module.getVceTriple()->getCapabilities())
+  for (auto cap : module.vce_triple()->getCapabilities())
     encodeInstructionInto(capabilities, spirv::Opcode::OpCapability,
                           {static_cast<uint32_t>(cap)});
 }
@@ -187,7 +184,7 @@ void Serializer::processDebugInfo() {
 
 void Serializer::processExtension() {
   llvm::SmallVector<uint32_t, 16> extName;
-  for (spirv::Extension ext : module.getVceTriple()->getExtensions()) {
+  for (spirv::Extension ext : module.vce_triple()->getExtensions()) {
     extName.clear();
     spirv::encodeStringLiteralInto(extName, spirv::stringifyExtension(ext));
     encodeInstructionInto(extensions, spirv::Opcode::OpExtension, extName);
@@ -195,11 +192,8 @@ void Serializer::processExtension() {
 }
 
 void Serializer::processMemoryModel() {
-  auto mm = static_cast<uint32_t>(
-      module->getAttrOfType<spirv::MemoryModelAttr>("memory_model").getValue());
-  auto am = static_cast<uint32_t>(
-      module->getAttrOfType<spirv::AddressingModelAttr>("addressing_model")
-          .getValue());
+  uint32_t mm = module->getAttrOfType<IntegerAttr>("memory_model").getInt();
+  uint32_t am = module->getAttrOfType<IntegerAttr>("addressing_model").getInt();
 
   encodeInstructionInto(memoryModel, spirv::Opcode::OpMemoryModel, {am, mm});
 }
@@ -599,27 +593,6 @@ LogicalResult Serializer::prepareBasicType(
     return success();
   }
 
-  if (auto jointMatrixType = type.dyn_cast<spirv::JointMatrixINTELType>()) {
-    uint32_t elementTypeID = 0;
-    if (failed(processTypeImpl(loc, jointMatrixType.getElementType(),
-                               elementTypeID, serializationCtx))) {
-      return failure();
-    }
-    typeEnum = spirv::Opcode::OpTypeJointMatrixINTEL;
-    auto getConstantOp = [&](uint32_t id) {
-      auto attr = IntegerAttr::get(IntegerType::get(type.getContext(), 32), id);
-      return prepareConstantInt(loc, attr);
-    };
-    operands.push_back(elementTypeID);
-    operands.push_back(getConstantOp(jointMatrixType.getRows()));
-    operands.push_back(getConstantOp(jointMatrixType.getColumns()));
-    operands.push_back(getConstantOp(
-        static_cast<uint32_t>(jointMatrixType.getMatrixLayout())));
-    operands.push_back(
-        getConstantOp(static_cast<uint32_t>(jointMatrixType.getScope())));
-    return success();
-  }
-
   if (auto matrixType = type.dyn_cast<spirv::MatrixType>()) {
     uint32_t elementTypeID = 0;
     if (failed(processTypeImpl(loc, matrixType.getColumnType(), elementTypeID,
@@ -796,8 +769,7 @@ uint32_t Serializer::prepareConstantBool(Location loc, BoolAttr boolAttr,
 
   // Process the type for this bool literal
   uint32_t typeID = 0;
-  if (failed(
-          processType(loc, boolAttr.cast<IntegerAttr>().getType(), typeID))) {
+  if (failed(processType(loc, boolAttr.getType(), typeID))) {
     return 0;
   }
 
@@ -1035,8 +1007,8 @@ LogicalResult Serializer::emitPhiForBlockArguments(Block *block) {
     // structure. It does not directly map to the incoming parent block for the
     // OpPhi instructions at SPIR-V binary level. This is because structured
     // control flow ops are serialized to multiple SPIR-V blocks. If there is a
-    // spirv.mlir.selection/spirv.mlir.loop op in the MLIR predecessor block,
-    // the branch op jumping to the OpPhi's block then resides in the previous
+    // spv.mlir.selection/spv.mlir.loop op in the MLIR predecessor block, the
+    // branch op jumping to the OpPhi's block then resides in the previous
     // structured control flow op's merge block.
     Block *spirvPredecessor = getPhiIncomingBlock(mlirPredecessor);
     LLVM_DEBUG(llvm::dbgs() << "  spirv predecessor ");
@@ -1046,11 +1018,11 @@ LogicalResult Serializer::emitPhiForBlockArguments(Block *block) {
     } else if (auto branchCondOp =
                    dyn_cast<spirv::BranchConditionalOp>(terminator)) {
       Optional<OperandRange> blockOperands;
-      if (branchCondOp.getTrueTarget() == block) {
-        blockOperands = branchCondOp.getTrueTargetOperands();
+      if (branchCondOp.trueTarget() == block) {
+        blockOperands = branchCondOp.trueTargetOperands();
       } else {
-        assert(branchCondOp.getFalseTarget() == block);
-        blockOperands = branchCondOp.getFalseTargetOperands();
+        assert(branchCondOp.falseTarget() == block);
+        blockOperands = branchCondOp.falseTargetOperands();
       }
 
       assert(!blockOperands->empty() &&

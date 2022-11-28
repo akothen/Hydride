@@ -1,7 +1,7 @@
 ; PR672
 ; RUN: %lli -jit-kind=mcjit %s
 ; RUN: %lli %s
-; XFAIL: i686 && windows
+; XFAIL: mcjit-ia32
 
 define i32 @main() {
 	%f = bitcast i32 (i32, i32*, i32)* @check_tail to i32*		; <i32*> [#uses=1]

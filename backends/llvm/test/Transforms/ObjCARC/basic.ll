@@ -1,3 +1,4 @@
+; RUN: opt -basic-aa -objc-arc -S < %s | FileCheck %s
 ; RUN: opt -aa-pipeline=basic-aa -passes=objc-arc -S < %s | FileCheck %s
 
 target datalayout = "e-p:64:64:64"
@@ -3073,5 +3074,5 @@ define void @test68(i8* %a, i8* %b) {
 !5 = !{i32 2, !"Debug Info Version", i32 3}
 
 ; CHECK: attributes [[NUW]] = { nounwind }
-; CHECK: attributes #1 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+; CHECK: attributes #1 = { nocallback nofree nosync nounwind readnone speculatable willreturn }
 ; CHECK: ![[RELEASE]] = !{}

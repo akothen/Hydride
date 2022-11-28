@@ -1,3 +1,4 @@
+; RUN: opt < %s -iv-users
 ; RUN: opt < %s -passes='require<iv-users>'
 ; PR4538
 

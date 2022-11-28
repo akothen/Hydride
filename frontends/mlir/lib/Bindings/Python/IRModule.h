@@ -330,7 +330,7 @@ public:
   PyDiagnosticHandler(MlirContext context, pybind11::object callback);
   ~PyDiagnosticHandler();
 
-  bool isAttached() { return registeredID.has_value(); }
+  bool isAttached() { return registeredID.hasValue(); }
   bool getHadError() { return hadError; }
 
   /// Detaches the handler. Does nothing if not attached.
@@ -511,9 +511,6 @@ public:
                           bool enableDebugInfo, bool prettyDebugInfo,
                           bool printGenericOpForm, bool useLocalScope,
                           bool assumeVerified);
-
-  // Implement the bound 'writeBytecode' method.
-  void writeBytecode(const pybind11::object &fileObject);
 
   /// Moves the operation before or after the other operation.
   void moveAfter(PyOperationBase &other);

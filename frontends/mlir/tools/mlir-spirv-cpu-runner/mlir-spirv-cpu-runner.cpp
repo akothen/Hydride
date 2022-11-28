@@ -15,7 +15,7 @@
 #include "mlir/Conversion/FuncToLLVM/ConvertFuncToLLVMPass.h"
 #include "mlir/Conversion/GPUToSPIRV/GPUToSPIRVPass.h"
 #include "mlir/Conversion/SPIRVToLLVM/SPIRVToLLVMPass.h"
-#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/GPU/IR/GPUDialect.h"
 #include "mlir/Dialect/GPU/Transforms/Passes.h"
@@ -51,10 +51,7 @@ using namespace mlir;
 /// Each of these two modules is translated to LLVM IR module, then they are
 /// linked together and returned.
 static std::unique_ptr<llvm::Module>
-convertMLIRModule(Operation *op, llvm::LLVMContext &context) {
-  auto module = dyn_cast<ModuleOp>(op);
-  if (!module)
-    return op->emitError("op must be a 'builtin.module"), nullptr;
+convertMLIRModule(ModuleOp module, llvm::LLVMContext &context) {
   // Verify that there is only one nested module.
   auto modules = module.getOps<ModuleOp>();
   if (!llvm::hasSingleElement(modules)) {
@@ -74,13 +71,11 @@ convertMLIRModule(Operation *op, llvm::LLVMContext &context) {
   return mainModule;
 }
 
-static LogicalResult runMLIRPasses(Operation *module,
-                                   JitRunnerOptions &options) {
-  PassManager passManager(module->getContext(),
-                          module->getName().getStringRef());
+static LogicalResult runMLIRPasses(ModuleOp module) {
+  PassManager passManager(module.getContext());
   applyPassManagerCLOptions(passManager);
   passManager.addPass(createGpuKernelOutliningPass());
-  passManager.addPass(createConvertGPUToSPIRVPass(/*mapMemorySpace=*/true));
+  passManager.addPass(createConvertGPUToSPIRVPass());
 
   OpPassManager &nestedPM = passManager.nest<spirv::ModuleOp>();
   nestedPM.addPass(spirv::createLowerABIAttributesPass());
@@ -101,7 +96,7 @@ int main(int argc, char **argv) {
   jitRunnerConfig.llvmModuleBuilder = convertMLIRModule;
 
   mlir::DialectRegistry registry;
-  registry.insert<mlir::arith::ArithDialect, mlir::LLVM::LLVMDialect,
+  registry.insert<mlir::arith::ArithmeticDialect, mlir::LLVM::LLVMDialect,
                   mlir::gpu::GPUDialect, mlir::spirv::SPIRVDialect,
                   mlir::func::FuncDialect, mlir::memref::MemRefDialect>();
   mlir::registerLLVMDialectTranslation(registry);

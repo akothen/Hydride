@@ -20,7 +20,7 @@
 #include "llvm/ADT/StringSwitch.h"
 
 namespace llvm {
-namespace dxil {
+namespace DXIL {
 
 enum class ParameterKind : uint8_t {
   INVALID = 0,
@@ -57,7 +57,7 @@ inline ParameterKind parameterTypeNameToKind(StringRef Name) {
       .Default(ParameterKind::INVALID);
 }
 
-} // namespace dxil
+} // namespace DXIL
 } // namespace llvm
 
 #endif

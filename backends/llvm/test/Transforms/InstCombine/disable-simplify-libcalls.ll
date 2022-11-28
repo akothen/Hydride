@@ -18,38 +18,38 @@ declare double @copysign(double, double)
 declare double @cos(double)
 declare double @fabs(double)
 declare double @floor(double)
-declare ptr @strcat(ptr, ptr)
-declare ptr @strncat(ptr, ptr, i32)
-declare ptr @strchr(ptr, i32)
-declare ptr @strrchr(ptr, i32)
-declare i32 @strcmp(ptr, ptr)
-declare i32 @strncmp(ptr, ptr, i64)
-declare ptr @strcpy(ptr, ptr)
-declare ptr @stpcpy(ptr, ptr)
-declare ptr @strncpy(ptr, ptr, i64)
-declare i64 @strlen(ptr)
-declare ptr @strpbrk(ptr, ptr)
-declare i64 @strspn(ptr, ptr)
-declare double @strtod(ptr, ptr)
-declare float @strtof(ptr, ptr)
-declare x86_fp80 @strtold(ptr, ptr)
-declare i64 @strtol(ptr, ptr, i32)
-declare i64 @strtoll(ptr, ptr, i32)
-declare i64 @strtoul(ptr, ptr, i32)
-declare i64 @strtoull(ptr, ptr, i32)
-declare i64 @strcspn(ptr, ptr)
+declare i8* @strcat(i8*, i8*)
+declare i8* @strncat(i8*, i8*, i32)
+declare i8* @strchr(i8*, i32)
+declare i8* @strrchr(i8*, i32)
+declare i32 @strcmp(i8*, i8*)
+declare i32 @strncmp(i8*, i8*, i64)
+declare i8* @strcpy(i8*, i8*)
+declare i8* @stpcpy(i8*, i8*)
+declare i8* @strncpy(i8*, i8*, i64)
+declare i64 @strlen(i8*)
+declare i8* @strpbrk(i8*, i8*)
+declare i64 @strspn(i8*, i8*)
+declare double @strtod(i8*, i8**)
+declare float @strtof(i8*, i8**)
+declare x86_fp80 @strtold(i8*, i8**)
+declare i64 @strtol(i8*, i8**, i32)
+declare i64 @strtoll(i8*, i8**, i32)
+declare i64 @strtoul(i8*, i8**, i32)
+declare i64 @strtoull(i8*, i8**, i32)
+declare i64 @strcspn(i8*, i8*)
 declare i32 @abs(i32)
 declare i32 @ffs(i32)
 declare i32 @ffsl(i64)
 declare i32 @ffsll(i64)
-declare i32 @fprintf(ptr, ptr)
+declare i32 @fprintf(i8*, i8*)
 declare i32 @isascii(i32)
 declare i32 @isdigit(i32)
 declare i32 @toascii(i32)
 declare i64 @labs(i64)
 declare i64 @llabs(i64)
-declare i32 @printf(ptr)
-declare i32 @sprintf(ptr, ptr)
+declare i32 @printf(i8*)
+declare i32 @sprintf(i8*, i8*)
 
 define double @t1(double %x) {
 ; CHECK-LABEL: @t1(
@@ -86,142 +86,164 @@ define double @t5(double %x) {
 ; CHECK: call double @floor
 }
 
-define ptr @t6(ptr %x) {
+define i8* @t6(i8* %x) {
 ; CHECK-LABEL: @t6(
-  %ret = call ptr @strcat(ptr %x, ptr @empty)
-  ret ptr %ret
-; CHECK: call ptr @strcat
+  %empty = getelementptr [1 x i8], [1 x i8]* @empty, i32 0, i32 0
+  %ret = call i8* @strcat(i8* %x, i8* %empty)
+  ret i8* %ret
+; CHECK: call i8* @strcat
 }
 
-define ptr @t7(ptr %x) {
+define i8* @t7(i8* %x) {
 ; CHECK-LABEL: @t7(
-  %ret = call ptr @strncat(ptr %x, ptr @empty, i32 1)
-  ret ptr %ret
-; CHECK: call ptr @strncat
+  %empty = getelementptr [1 x i8], [1 x i8]* @empty, i32 0, i32 0
+  %ret = call i8* @strncat(i8* %x, i8* %empty, i32 1)
+  ret i8* %ret
+; CHECK: call i8* @strncat
 }
 
-define ptr @t8() {
+define i8* @t8() {
 ; CHECK-LABEL: @t8(
-  %ret = call ptr @strchr(ptr @.str1, i32 119)
-  ret ptr %ret
-; CHECK: call ptr @strchr
+  %x = getelementptr inbounds [13 x i8], [13 x i8]* @.str1, i32 0, i32 0
+  %ret = call i8* @strchr(i8* %x, i32 119)
+  ret i8* %ret
+; CHECK: call i8* @strchr
 }
 
-define ptr @t9() {
+define i8* @t9() {
 ; CHECK-LABEL: @t9(
-  %ret = call ptr @strrchr(ptr @.str1, i32 119)
-  ret ptr %ret
-; CHECK: call ptr @strrchr
+  %x = getelementptr inbounds [13 x i8], [13 x i8]* @.str1, i32 0, i32 0
+  %ret = call i8* @strrchr(i8* %x, i32 119)
+  ret i8* %ret
+; CHECK: call i8* @strrchr
 }
 
 define i32 @t10() {
 ; CHECK-LABEL: @t10(
-  %ret = call i32 @strcmp(ptr @.str2, ptr @.str3)
+  %x = getelementptr inbounds [4 x i8], [4 x i8]* @.str2, i32 0, i32 0
+  %y = getelementptr inbounds [4 x i8], [4 x i8]* @.str3, i32 0, i32 0
+  %ret = call i32 @strcmp(i8* %x, i8* %y)
   ret i32 %ret
 ; CHECK: call i32 @strcmp
 }
 
 define i32 @t11() {
 ; CHECK-LABEL: @t11(
-  %ret = call i32 @strncmp(ptr @.str2, ptr @.str3, i64 3)
+  %x = getelementptr inbounds [4 x i8], [4 x i8]* @.str2, i32 0, i32 0
+  %y = getelementptr inbounds [4 x i8], [4 x i8]* @.str3, i32 0, i32 0
+  %ret = call i32 @strncmp(i8* %x, i8* %y, i64 3)
   ret i32 %ret
 ; CHECK: call i32 @strncmp
 }
 
-define ptr @t12(ptr %x) {
+define i8* @t12(i8* %x) {
 ; CHECK-LABEL: @t12(
-  %ret = call ptr @strcpy(ptr %x, ptr @.str2)
-  ret ptr %ret
-; CHECK: call ptr @strcpy
+  %y = getelementptr inbounds [4 x i8], [4 x i8]* @.str2, i32 0, i32 0
+  %ret = call i8* @strcpy(i8* %x, i8* %y)
+  ret i8* %ret
+; CHECK: call i8* @strcpy
 }
 
-define ptr @t13(ptr %x) {
+define i8* @t13(i8* %x) {
 ; CHECK-LABEL: @t13(
-  %ret = call ptr @stpcpy(ptr %x, ptr @.str2)
-  ret ptr %ret
-; CHECK: call ptr @stpcpy
+  %y = getelementptr inbounds [4 x i8], [4 x i8]* @.str2, i32 0, i32 0
+  %ret = call i8* @stpcpy(i8* %x, i8* %y)
+  ret i8* %ret
+; CHECK: call i8* @stpcpy
 }
 
-define ptr @t14(ptr %x) {
+define i8* @t14(i8* %x) {
 ; CHECK-LABEL: @t14(
-  %ret = call ptr @strncpy(ptr %x, ptr @.str2, i64 3)
-  ret ptr %ret
-; CHECK: call ptr @strncpy
+  %y = getelementptr inbounds [4 x i8], [4 x i8]* @.str2, i32 0, i32 0
+  %ret = call i8* @strncpy(i8* %x, i8* %y, i64 3)
+  ret i8* %ret
+; CHECK: call i8* @strncpy
 }
 
 define i64 @t15() {
 ; CHECK-LABEL: @t15(
-  %ret = call i64 @strlen(ptr @.str2)
+  %x = getelementptr inbounds [4 x i8], [4 x i8]* @.str2, i32 0, i32 0
+  %ret = call i64 @strlen(i8* %x)
   ret i64 %ret
 ; CHECK: call i64 @strlen
 }
 
-define ptr @t16(ptr %x) {
+define i8* @t16(i8* %x) {
 ; CHECK-LABEL: @t16(
-  %ret = call ptr @strpbrk(ptr %x, ptr @.str)
-  ret ptr %ret
-; CHECK: call ptr @strpbrk
+  %y = getelementptr inbounds [1 x i8], [1 x i8]* @.str, i32 0, i32 0
+  %ret = call i8* @strpbrk(i8* %x, i8* %y)
+  ret i8* %ret
+; CHECK: call i8* @strpbrk
 }
 
-define i64 @t17(ptr %x) {
+define i64 @t17(i8* %x) {
 ; CHECK-LABEL: @t17(
-  %ret = call i64 @strspn(ptr %x, ptr @.str)
+  %y = getelementptr inbounds [1 x i8], [1 x i8]* @.str, i32 0, i32 0
+  %ret = call i64 @strspn(i8* %x, i8* %y)
   ret i64 %ret
 ; CHECK: call i64 @strspn
 }
 
-define double @t18(ptr %y) {
+define double @t18(i8** %y) {
 ; CHECK-LABEL: @t18(
-  %ret = call double @strtod(ptr @.str4, ptr %y)
+  %x = getelementptr inbounds [6 x i8], [6 x i8]* @.str4, i64 0, i64 0
+  %ret = call double @strtod(i8* %x, i8** %y)
   ret double %ret
 ; CHECK: call double @strtod
 }
 
-define float @t19(ptr %y) {
+define float @t19(i8** %y) {
 ; CHECK-LABEL: @t19(
-  %ret = call float @strtof(ptr @.str4, ptr %y)
+  %x = getelementptr inbounds [6 x i8], [6 x i8]* @.str4, i64 0, i64 0
+  %ret = call float @strtof(i8* %x, i8** %y)
   ret float %ret
 ; CHECK: call float @strtof
 }
 
-define x86_fp80 @t20(ptr %y) {
+define x86_fp80 @t20(i8** %y) {
 ; CHECK-LABEL: @t20(
-  %ret = call x86_fp80 @strtold(ptr @.str4, ptr %y)
+  %x = getelementptr inbounds [6 x i8], [6 x i8]* @.str4, i64 0, i64 0
+  %ret = call x86_fp80 @strtold(i8* %x, i8** %y)
   ret x86_fp80 %ret
 ; CHECK: call x86_fp80 @strtold
 }
 
-define i64 @t21(ptr %y) {
+define i64 @t21(i8** %y) {
 ; CHECK-LABEL: @t21(
-  %ret = call i64 @strtol(ptr @.str5, ptr %y, i32 10)
+  %x = getelementptr inbounds [5 x i8], [5 x i8]* @.str5, i64 0, i64 0
+  %ret = call i64 @strtol(i8* %x, i8** %y, i32 10)
   ret i64 %ret
 ; CHECK: call i64 @strtol
 }
 
-define i64 @t22(ptr %y) {
+define i64 @t22(i8** %y) {
 ; CHECK-LABEL: @t22(
-  %ret = call i64 @strtoll(ptr @.str5, ptr %y, i32 10)
+  %x = getelementptr inbounds [5 x i8], [5 x i8]* @.str5, i64 0, i64 0
+  %ret = call i64 @strtoll(i8* %x, i8** %y, i32 10)
   ret i64 %ret
 ; CHECK: call i64 @strtoll
 }
 
-define i64 @t23(ptr %y) {
+define i64 @t23(i8** %y) {
 ; CHECK-LABEL: @t23(
-  %ret = call i64 @strtoul(ptr @.str5, ptr %y, i32 10)
+  %x = getelementptr inbounds [5 x i8], [5 x i8]* @.str5, i64 0, i64 0
+  %ret = call i64 @strtoul(i8* %x, i8** %y, i32 10)
   ret i64 %ret
 ; CHECK: call i64 @strtoul
 }
 
-define i64 @t24(ptr %y) {
+define i64 @t24(i8** %y) {
 ; CHECK-LABEL: @t24(
-  %ret = call i64 @strtoull(ptr @.str5, ptr %y, i32 10)
+  %x = getelementptr inbounds [5 x i8], [5 x i8]* @.str5, i64 0, i64 0
+  %ret = call i64 @strtoull(i8* %x, i8** %y, i32 10)
   ret i64 %ret
 ; CHECK: call i64 @strtoull
 }
 
-define i64 @t25(ptr %y) {
+define i64 @t25(i8* %y) {
 ; CHECK-LABEL: @t25(
-  %ret = call i64 @strcspn(ptr @empty, ptr %y)
+  %x = getelementptr [1 x i8], [1 x i8]* @empty, i32 0, i32 0
+  %ret = call i64 @strcspn(i8* %x, i8* %y)
   ret i64 %ret
 ; CHECK: call i64 @strcspn
 }
@@ -256,7 +278,8 @@ define i32 @t29(i64 %y) {
 
 define void @t30() {
 ; CHECK-LABEL: @t30(
-  call i32 @fprintf(ptr null, ptr @.str1)
+  %x = getelementptr inbounds [13 x i8], [13 x i8]* @.str1, i32 0, i32 0
+  call i32 @fprintf(i8* null, i8* %x)
   ret void
 ; CHECK: call i32 @fprintf
 }
@@ -298,14 +321,16 @@ define i64 @t35(i64 %y) {
 
 define void @t36() {
 ; CHECK-LABEL: @t36(
-  call i32 @printf(ptr @empty)
+  %x = getelementptr inbounds [1 x i8], [1 x i8]* @empty, i32 0, i32 0
+  call i32 @printf(i8* %x)
   ret void
 ; CHECK: call i32 @printf
 }
 
-define void @t37(ptr %x) {
+define void @t37(i8* %x) {
 ; CHECK-LABEL: @t37(
-  call i32 @sprintf(ptr %x, ptr @.str1)
+  %y = getelementptr inbounds [13 x i8], [13 x i8]* @.str1, i32 0, i32 0
+  call i32 @sprintf(i8* %x, i8* %y)
   ret void
 ; CHECK: call i32 @sprintf
 }

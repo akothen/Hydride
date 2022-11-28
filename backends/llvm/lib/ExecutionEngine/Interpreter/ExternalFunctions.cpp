@@ -30,6 +30,7 @@
 #include "llvm/Support/Casting.h"
 #include "llvm/Support/DynamicLibrary.h"
 #include "llvm/Support/ErrorHandling.h"
+#include "llvm/Support/ManagedStatic.h"
 #include "llvm/Support/Mutex.h"
 #include "llvm/Support/raw_ostream.h"
 #include <cassert>
@@ -56,26 +57,16 @@
 
 using namespace llvm;
 
-namespace {
+static ManagedStatic<sys::Mutex> FunctionsLock;
 
 typedef GenericValue (*ExFunc)(FunctionType *, ArrayRef<GenericValue>);
-typedef void (*RawFunc)();
+static ManagedStatic<std::map<const Function *, ExFunc> > ExportedFunctions;
+static ManagedStatic<std::map<std::string, ExFunc> > FuncNames;
 
-struct Functions {
-  sys::Mutex Lock;
-  std::map<const Function *, ExFunc> ExportedFunctions;
-  std::map<std::string, ExFunc> FuncNames;
 #ifdef USE_LIBFFI
-  std::map<const Function *, RawFunc> RawFunctions;
+typedef void (*RawFunc)();
+static ManagedStatic<std::map<const Function *, RawFunc> > RawFunctions;
 #endif
-};
-
-Functions &getFunctions() {
-  static Functions F;
-  return F;
-}
-
-} // anonymous namespace
 
 static Interpreter *TheInterpreter;
 
@@ -116,16 +107,15 @@ static ExFunc lookupFunction(const Function *F) {
     ExtName += getTypeID(T);
   ExtName += ("_" + F->getName()).str();
 
-  auto &Fns = getFunctions();
-  sys::ScopedLock Writer(Fns.Lock);
-  ExFunc FnPtr = Fns.FuncNames[ExtName];
+  sys::ScopedLock Writer(*FunctionsLock);
+  ExFunc FnPtr = (*FuncNames)[ExtName];
   if (!FnPtr)
-    FnPtr = Fns.FuncNames[("lle_X_" + F->getName()).str()];
+    FnPtr = (*FuncNames)[("lle_X_" + F->getName()).str()];
   if (!FnPtr)  // Try calling a generic function... if it exists...
     FnPtr = (ExFunc)(intptr_t)sys::DynamicLibrary::SearchForAddressOfSymbol(
         ("lle_X_" + F->getName()).str());
   if (FnPtr)
-    Fns.ExportedFunctions.insert(std::make_pair(F, FnPtr)); // Cache for later
+    ExportedFunctions->insert(std::make_pair(F, FnPtr));  // Cache for later
   return FnPtr;
 }
 
@@ -270,29 +260,27 @@ GenericValue Interpreter::callExternalFunction(Function *F,
                                                ArrayRef<GenericValue> ArgVals) {
   TheInterpreter = this;
 
-  auto &Fns = getFunctions();
-  std::unique_lock<sys::Mutex> Guard(Fns.Lock);
+  std::unique_lock<sys::Mutex> Guard(*FunctionsLock);
 
   // Do a lookup to see if the function is in our cache... this should just be a
   // deferred annotation!
-  std::map<const Function *, ExFunc>::iterator FI =
-      Fns.ExportedFunctions.find(F);
-  if (ExFunc Fn = (FI == Fns.ExportedFunctions.end()) ? lookupFunction(F)
-                                                      : FI->second) {
+  std::map<const Function *, ExFunc>::iterator FI = ExportedFunctions->find(F);
+  if (ExFunc Fn = (FI == ExportedFunctions->end()) ? lookupFunction(F)
+                                                   : FI->second) {
     Guard.unlock();
     return Fn(F->getFunctionType(), ArgVals);
   }
 
 #ifdef USE_LIBFFI
-  std::map<const Function *, RawFunc>::iterator RF = Fns.RawFunctions.find(F);
+  std::map<const Function *, RawFunc>::iterator RF = RawFunctions->find(F);
   RawFunc RawFn;
-  if (RF == Fns.RawFunctions.end()) {
+  if (RF == RawFunctions->end()) {
     RawFn = (RawFunc)(intptr_t)
       sys::DynamicLibrary::SearchForAddressOfSymbol(std::string(F->getName()));
     if (!RawFn)
       RawFn = (RawFunc)(intptr_t)getPointerToGlobalIfAvailable(F);
     if (RawFn != 0)
-      Fns.RawFunctions.insert(std::make_pair(F, RawFn)); // Cache for later
+      RawFunctions->insert(std::make_pair(F, RawFn));  // Cache for later
   } else {
     RawFn = RF->second;
   }
@@ -508,17 +496,16 @@ static GenericValue lle_X_memcpy(FunctionType *FT,
 }
 
 void Interpreter::initializeExternalFunctions() {
-  auto &Fns = getFunctions();
-  sys::ScopedLock Writer(Fns.Lock);
-  Fns.FuncNames["lle_X_atexit"]       = lle_X_atexit;
-  Fns.FuncNames["lle_X_exit"]         = lle_X_exit;
-  Fns.FuncNames["lle_X_abort"]        = lle_X_abort;
+  sys::ScopedLock Writer(*FunctionsLock);
+  (*FuncNames)["lle_X_atexit"]       = lle_X_atexit;
+  (*FuncNames)["lle_X_exit"]         = lle_X_exit;
+  (*FuncNames)["lle_X_abort"]        = lle_X_abort;
 
-  Fns.FuncNames["lle_X_printf"]       = lle_X_printf;
-  Fns.FuncNames["lle_X_sprintf"]      = lle_X_sprintf;
-  Fns.FuncNames["lle_X_sscanf"]       = lle_X_sscanf;
-  Fns.FuncNames["lle_X_scanf"]        = lle_X_scanf;
-  Fns.FuncNames["lle_X_fprintf"]      = lle_X_fprintf;
-  Fns.FuncNames["lle_X_memset"]       = lle_X_memset;
-  Fns.FuncNames["lle_X_memcpy"]       = lle_X_memcpy;
+  (*FuncNames)["lle_X_printf"]       = lle_X_printf;
+  (*FuncNames)["lle_X_sprintf"]      = lle_X_sprintf;
+  (*FuncNames)["lle_X_sscanf"]       = lle_X_sscanf;
+  (*FuncNames)["lle_X_scanf"]        = lle_X_scanf;
+  (*FuncNames)["lle_X_fprintf"]      = lle_X_fprintf;
+  (*FuncNames)["lle_X_memset"]       = lle_X_memset;
+  (*FuncNames)["lle_X_memcpy"]       = lle_X_memcpy;
 }

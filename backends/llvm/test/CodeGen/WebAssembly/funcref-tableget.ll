@@ -4,15 +4,14 @@
 
 @funcref_table = local_unnamed_addr addrspace(1) global [0 x %funcref] undef
 
-declare %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1), i32) nounwind
-
 define %funcref @get_funcref_from_table(i32 %i) {
 ; CHECK-LABEL: get_funcref_from_table:
 ; CHECK-NEXT: .functype       get_funcref_from_table (i32) -> (funcref)
 ; CHECK-NEXT: local.get 0
 ; CHECK-NEXT: table.get funcref_table
 ; CHECK-NEXT: end_function
-  %ref = call %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1) @funcref_table, i32 %i)
+  %p = getelementptr [0 x %funcref], ptr addrspace (1) @funcref_table, i32 0, i32 %i
+  %ref = load %funcref, ptr addrspace(1) %p
   ret %funcref %ref
 }
 
@@ -22,7 +21,8 @@ define %funcref @get_funcref_from_table_const() {
 ; CHECK-NEXT:  i32.const      0
 ; CHECK-NEXT:  table.get      funcref_table
 ; CHECK-NEXT:  end_function
-  %ref = call %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1) @funcref_table, i32 0)
+  %p = getelementptr [0 x %funcref], ptr addrspace (1) @funcref_table, i32 0, i32 0
+  %ref = load %funcref, ptr addrspace(1) %p
   ret %funcref %ref
 }
 
@@ -35,7 +35,8 @@ define %funcref @get_funcref_from_table_with_offset(i32 %i) {
 ; CHECK-NEXT:  table.get       funcref_table
 ; CHECK-NEXT:  end_function
   %off = add nsw i32 %i, 2
-  %ref = call %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1) @funcref_table, i32 %off)
+  %p = getelementptr [0 x %funcref], ptr addrspace (1) @funcref_table, i32 0, i32 %off
+  %ref = load %funcref, ptr addrspace(1) %p
   ret %funcref %ref
 }
 
@@ -49,7 +50,8 @@ define %funcref @get_funcref_from_table_with_var_offset(i32 %i, i32 %j) {
 ; CHECK-NEXT:  table.get       funcref_table
 ; CHECK-NEXT:  end_function
   %off = add nsw i32 %i, %j
-  %ref = call %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1) @funcref_table, i32 %off)
+  %p = getelementptr [0 x %funcref], ptr addrspace (1) @funcref_table, i32 0, i32 %off
+  %ref = load %funcref, ptr addrspace(1) %p
   ret %funcref %ref
 }
 
@@ -65,7 +67,8 @@ define %funcref @get_funcref_from_table_with_var_offset2(i32 %i) {
 ; CHECK-NEXT:  end_function
   %j = call i32 @get_offset()
   %off = add nsw i32 %i, %j
-  %ref = call %funcref @llvm.wasm.table.get.funcref(ptr addrspace(1) @funcref_table, i32 %off)
+  %p = getelementptr [0 x %funcref], ptr addrspace (1) @funcref_table, i32 0, i32 %off
+  %ref = load %funcref, ptr addrspace(1) %p
   ret %funcref %ref
 }
 

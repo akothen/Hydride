@@ -25,7 +25,6 @@ class MCInst;
 class MCOperand;
 class MachineInstr;
 class MachineOperand;
-class PassRegistry;
 
 bool lowerLoongArchMachineInstrToMCInst(const MachineInstr *MI, MCInst &OutMI,
                                         AsmPrinter &AP);
@@ -34,11 +33,6 @@ bool lowerLoongArchMachineOperandToMCOperand(const MachineOperand &MO,
                                              const AsmPrinter &AP);
 
 FunctionPass *createLoongArchISelDag(LoongArchTargetMachine &TM);
-FunctionPass *createLoongArchExpandAtomicPseudoPass();
-void initializeLoongArchExpandAtomicPseudoPass(PassRegistry &);
-
-FunctionPass *createLoongArchPreRAExpandPseudoPass();
-void initializeLoongArchPreRAExpandPseudoPass(PassRegistry &);
 } // end namespace llvm
 
 #endif // LLVM_LIB_TARGET_LOONGARCH_LOONGARCH_H

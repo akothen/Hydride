@@ -20,6 +20,7 @@
 #include "mlir/Support/FileUtilities.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/ScopeExit.h"
+#include "llvm/ADT/SetVector.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/CrashRecoveryContext.h"
 #include "llvm/Support/Mutex.h"
@@ -50,13 +51,17 @@ void Pass::copyOptionValuesFrom(const Pass *other) {
 }
 
 /// Prints out the pass in the textual representation of pipelines. If this is
-/// an adaptor pass, print its pass managers.
+/// an adaptor pass, print with the op_name(sub_pass,...) format.
 void Pass::printAsTextualPipeline(raw_ostream &os) {
-  // Special case for adaptors to print its pass managers.
+  // Special case for adaptors to use the 'op_name(sub_passes)' format.
   if (auto *adaptor = dyn_cast<OpToOpPassAdaptor>(this)) {
     llvm::interleave(
         adaptor->getPassManagers(),
-        [&](OpPassManager &pm) { pm.printAsTextualPipeline(os); },
+        [&](OpPassManager &pm) {
+          os << pm.getOpAnchorName() << "(";
+          pm.printAsTextualPipeline(os);
+          os << ")";
+        },
         [&] { os << ","; });
     return;
   }
@@ -290,14 +295,10 @@ OpPassManager::OpPassManager(StringRef name, Nesting nesting)
     : impl(new OpPassManagerImpl(name, nesting)) {}
 OpPassManager::OpPassManager(OperationName name, Nesting nesting)
     : impl(new OpPassManagerImpl(name, nesting)) {}
-OpPassManager::OpPassManager(OpPassManager &&rhs) { *this = std::move(rhs); }
+OpPassManager::OpPassManager(OpPassManager &&rhs) : impl(std::move(rhs.impl)) {}
 OpPassManager::OpPassManager(const OpPassManager &rhs) { *this = rhs; }
 OpPassManager &OpPassManager::operator=(const OpPassManager &rhs) {
   impl = std::make_unique<OpPassManagerImpl>(*rhs.impl);
-  return *this;
-}
-OpPassManager &OpPassManager::operator=(OpPassManager &&rhs) {
-  impl = std::move(rhs.impl);
   return *this;
 }
 
@@ -355,22 +356,26 @@ StringRef OpPassManager::getOpAnchorName() const {
   return impl->getOpAnchorName();
 }
 
-/// Prints out the passes of the pass manager as the textual representation
-/// of pipelines.
-void OpPassManager::printAsTextualPipeline(raw_ostream &os) const {
-  os << getOpAnchorName() << "(";
+/// Prints out the given passes as the textual representation of a pipeline.
+static void printAsTextualPipeline(ArrayRef<std::unique_ptr<Pass>> passes,
+                                   raw_ostream &os) {
   llvm::interleave(
-      impl->passes,
+      passes,
       [&](const std::unique_ptr<Pass> &pass) {
         pass->printAsTextualPipeline(os);
       },
-      [&]() { os << ","; });
-  os << ")";
+      [&] { os << ","; });
+}
+
+/// Prints out the passes of the pass manager as the textual representation
+/// of pipelines.
+void OpPassManager::printAsTextualPipeline(raw_ostream &os) const {
+  ::printAsTextualPipeline(impl->passes, os);
 }
 
 void OpPassManager::dump() {
-  llvm::errs() << "Pass Manager with " << impl->passes.size() << " passes:\n";
-  printAsTextualPipeline(llvm::errs());
+  llvm::errs() << "Pass Manager with " << impl->passes.size() << " passes: ";
+  ::printAsTextualPipeline(impl->passes, llvm::errs());
   llvm::errs() << "\n";
 }
 
@@ -777,11 +782,9 @@ void PassManager::enableVerifier(bool enabled) { verifyPasses = enabled; }
 /// Run the passes within this manager on the provided operation.
 LogicalResult PassManager::run(Operation *op) {
   MLIRContext *context = getContext();
-  Optional<OperationName> anchorOp = getOpName(*context);
-  if (anchorOp && anchorOp != op->getName())
-    return emitError(op->getLoc())
-           << "can't run '" << getOpAnchorName() << "' pass manager on '"
-           << op->getName() << "' op";
+  assert(op->getName() == getOpName(*context) &&
+         "operation has a different name than the PassManager or is from a "
+         "different context");
 
   // Register all dialects for the current pipeline.
   DialectRegistry dependentDialects;

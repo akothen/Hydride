@@ -38,6 +38,12 @@ class Executable : public AnalysisState {
 public:
   using AnalysisState::AnalysisState;
 
+  /// The state is initialized by default.
+  bool isUninitialized() const override { return false; }
+
+  /// The state is always initialized.
+  ChangeResult defaultInitialize() override { return ChangeResult::NoChange; }
+
   /// Set the state of the program point to live.
   ChangeResult setToLive();
 
@@ -91,6 +97,12 @@ private:
 class PredecessorState : public AnalysisState {
 public:
   using AnalysisState::AnalysisState;
+
+  /// The state is initialized by default.
+  bool isUninitialized() const override { return false; }
+
+  /// The state is always initialized.
+  ChangeResult defaultInitialize() override { return ChangeResult::NoChange; }
 
   /// Print the known predecessors.
   void print(raw_ostream &os) const override;
@@ -221,11 +233,6 @@ private:
   /// Get the constant values of the operands of the operation. Returns none if
   /// any of the operand lattices are uninitialized.
   Optional<SmallVector<Attribute>> getOperandValues(Operation *op);
-
-  /// The top-level operation the analysis is running on. This is used to detect
-  /// if a callable is outside the scope of the analysis and thus must be
-  /// considered an external callable.
-  Operation *analysisScope;
 
   /// A symbol table used for O(1) symbol lookups during simplification.
   SymbolTableCollection symbolTable;

@@ -253,5 +253,5 @@ Further Help
 
 If you have any questions or need any help creating an LLVM project, the LLVM
 team would be more than happy to help.  You can always post your questions to
-the `Discourse forums
-<https://discourse.llvm.org>`_.
+the `LLVM Developers Mailing List
+<http://lists.llvm.org/pipermail/llvm-dev/>`_.

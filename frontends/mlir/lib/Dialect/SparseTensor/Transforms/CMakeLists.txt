@@ -3,8 +3,6 @@ add_mlir_dialect_library(MLIRSparseTensorTransforms
   CodegenUtils.cpp
   DenseBufferizationPass.cpp
   Sparsification.cpp
-  SparseBufferRewriting.cpp
-  SparseTensorCodegen.cpp
   SparseTensorConversion.cpp
   SparseTensorPasses.cpp
   SparseTensorRewriting.cpp
@@ -16,7 +14,7 @@ add_mlir_dialect_library(MLIRSparseTensorTransforms
   MLIRSparseTensorPassIncGen
 
   LINK_LIBS PUBLIC
-  MLIRArithDialect
+  MLIRArithmeticDialect
   MLIRBufferizationDialect
   MLIRBufferizationTransforms
   MLIRComplexDialect
@@ -31,7 +29,6 @@ add_mlir_dialect_library(MLIRSparseTensorTransforms
   MLIRSCFTransforms
   MLIRSCFUtils
   MLIRSparseTensorDialect
-  MLIRSparseTensorEnums
   MLIRSparseTensorUtils
   MLIRTensorDialect
   MLIRTransforms

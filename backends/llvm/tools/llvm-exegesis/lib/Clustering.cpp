@@ -63,13 +63,13 @@ bool InstructionBenchmarkClustering::areAllNeighbours(
     ArrayRef<size_t> Pts) const {
   // First, get the centroid of this group of points. This is O(N).
   SchedClassClusterCentroid G;
-  for (size_t P : Pts) {
+  for_each(Pts, [this, &G](size_t P) {
     assert(P < Points_.size());
     ArrayRef<BenchmarkMeasure> Measurements = Points_[P].Measurements;
     if (Measurements.empty()) // Error point.
-      continue;
+      return;
     G.addPoint(Measurements);
-  }
+  });
   const std::vector<BenchmarkMeasure> Centroid = G.getAsPoint();
 
   // Since we will be comparing with the centroid, we need to halve the epsilon.
@@ -226,8 +226,9 @@ void InstructionBenchmarkClustering::clusterizeNaive(
           /*IsUnstable=*/!areAllNeighbours(PointsOfSchedClass)));
       Cluster &CurrentCluster = Clusters_.back();
       // Mark points as belonging to the new cluster.
-      for (size_t P : PointsOfSchedClass)
+      for_each(PointsOfSchedClass, [this, &CurrentCluster](size_t P) {
         ClusterIdForPoint_[P] = CurrentCluster.Id;
+      });
       // And add all the points of this opcode's sched class to the new cluster.
       CurrentCluster.PointIndices.reserve(PointsOfSchedClass.size());
       CurrentCluster.PointIndices.assign(PointsOfSchedClass.begin(),

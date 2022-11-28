@@ -41,10 +41,7 @@ public:
     return dyn_cast_or_null<T>(lookup(name));
   }
 
-  /// Remove the given symbol from the table, without deleting it.
-  void remove(Operation *op);
-
-  /// Erase the given symbol from the table and delete the operation.
+  /// Erase the given symbol from the table.
   void erase(Operation *symbol);
 
   /// Insert a new symbol into the table, and rename it as necessary to avoid
@@ -249,7 +246,7 @@ public:
   Operation *lookupSymbolIn(Operation *symbolTableOp, StringAttr symbol);
   Operation *lookupSymbolIn(Operation *symbolTableOp, SymbolRefAttr name);
   template <typename T, typename NameT>
-  T lookupSymbolIn(Operation *symbolTableOp, NameT &&name) {
+  T lookupSymbolIn(Operation *symbolTableOp, NameT &&name) const {
     return dyn_cast_or_null<T>(
         lookupSymbolIn(symbolTableOp, std::forward<NameT>(name)));
   }

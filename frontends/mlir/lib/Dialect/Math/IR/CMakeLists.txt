@@ -9,7 +9,7 @@ add_mlir_dialect_library(MLIRMathDialect
   MLIRMathOpsIncGen
 
   LINK_LIBS PUBLIC
-  MLIRArithDialect
+  MLIRArithmeticDialect
   MLIRDialect
   MLIRIR
   )

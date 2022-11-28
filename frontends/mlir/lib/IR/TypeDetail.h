@@ -47,8 +47,6 @@ struct IntegerTypeStorage : public TypeStorage {
         IntegerTypeStorage(key.first, key.second);
   }
 
-  KeyTy getAsKey() const { return KeyTy(width, signedness); }
-
   unsigned width : 30;
   IntegerType::SignednessSemantics signedness : 2;
 };
@@ -61,7 +59,7 @@ struct FunctionTypeStorage : public TypeStorage {
         inputsAndResults(inputsAndResults) {}
 
   /// The hash key used for uniquing.
-  using KeyTy = std::tuple<TypeRange, TypeRange>;
+  using KeyTy = std::pair<TypeRange, TypeRange>;
   bool operator==(const KeyTy &key) const {
     if (std::get<0>(key) == getInputs())
       return std::get<1>(key) == getResults();
@@ -71,7 +69,7 @@ struct FunctionTypeStorage : public TypeStorage {
   /// Construction.
   static FunctionTypeStorage *construct(TypeStorageAllocator &allocator,
                                         const KeyTy &key) {
-    auto [inputs, results] = key;
+    TypeRange inputs = key.first, results = key.second;
 
     // Copy the inputs and results into the bump pointer.
     SmallVector<Type, 16> types;
@@ -91,8 +89,6 @@ struct FunctionTypeStorage : public TypeStorage {
   ArrayRef<Type> getResults() const {
     return ArrayRef<Type>(inputsAndResults + numInputs, numResults);
   }
-
-  KeyTy getAsKey() const { return KeyTy(getInputs(), getResults()); }
 
   unsigned numInputs;
   unsigned numResults;
@@ -130,8 +126,6 @@ struct TupleTypeStorage final
   ArrayRef<Type> getTypes() const {
     return {getTrailingObjects<Type>(), size()};
   }
-
-  KeyTy getAsKey() const { return getTypes(); }
 
   /// The number of tuple elements.
   unsigned numElements;

@@ -23,6 +23,8 @@ define float @selectccat(float, float, float, float) {
 define float @selectccoeq(float, float, float, float) {
 ; CHECK-LABEL: selectccoeq:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.eq %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -34,6 +36,8 @@ define float @selectccoeq(float, float, float, float) {
 define float @selectccone(float, float, float, float) {
 ; CHECK-LABEL: selectccone:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.ne %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -45,6 +49,8 @@ define float @selectccone(float, float, float, float) {
 define float @selectccogt(float, float, float, float) {
 ; CHECK-LABEL: selectccogt:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.gt %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -56,6 +62,8 @@ define float @selectccogt(float, float, float, float) {
 define float @selectccoge(float, float, float, float) {
 ; CHECK-LABEL: selectccoge:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.ge %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -67,6 +75,8 @@ define float @selectccoge(float, float, float, float) {
 define float @selectccolt(float, float, float, float) {
 ; CHECK-LABEL: selectccolt:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.lt %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -78,6 +88,8 @@ define float @selectccolt(float, float, float, float) {
 define float @selectccole(float, float, float, float) {
 ; CHECK-LABEL: selectccole:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.le %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -113,6 +125,8 @@ define float @selectccuno(float, float, float, float) {
 define float @selectccueq(float, float, float, float) {
 ; CHECK-LABEL: selectccueq:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.eqnan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -124,6 +138,8 @@ define float @selectccueq(float, float, float, float) {
 define float @selectccune(float, float, float, float) {
 ; CHECK-LABEL: selectccune:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.nenan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -135,6 +151,8 @@ define float @selectccune(float, float, float, float) {
 define float @selectccugt(float, float, float, float) {
 ; CHECK-LABEL: selectccugt:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.gtnan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -146,6 +164,8 @@ define float @selectccugt(float, float, float, float) {
 define float @selectccuge(float, float, float, float) {
 ; CHECK-LABEL: selectccuge:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.genan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -157,6 +177,8 @@ define float @selectccuge(float, float, float, float) {
 define float @selectccult(float, float, float, float) {
 ; CHECK-LABEL: selectccult:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.ltnan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)
@@ -168,6 +190,8 @@ define float @selectccult(float, float, float, float) {
 define float @selectccule(float, float, float, float) {
 ; CHECK-LABEL: selectccule:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    lea.sl %s1, 0
+; CHECK-NEXT:    fcmp.s %s0, %s0, %s1
 ; CHECK-NEXT:    cmov.s.lenan %s3, %s2, %s0
 ; CHECK-NEXT:    or %s0, 0, %s3
 ; CHECK-NEXT:    b.l.t (, %s10)

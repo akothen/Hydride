@@ -7,7 +7,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm/Transforms/Utils/EntryExitInstrumenter.h"
-#include "llvm/ADT/Triple.h"
 #include "llvm/Analysis/GlobalsModRef.h"
 #include "llvm/IR/DebugInfoMetadata.h"
 #include "llvm/IR/Dominators.h"
@@ -35,24 +34,9 @@ static void insertCall(Function &CurFn, StringRef Func,
       Func == "__mcount" ||
       Func == "_mcount" ||
       Func == "__cyg_profile_func_enter_bare") {
-    Triple TargetTriple(M.getTargetTriple());
-    if (TargetTriple.isOSAIX() && Func == "__mcount") {
-      Type *SizeTy = M.getDataLayout().getIntPtrType(C);
-      Type *SizePtrTy = SizeTy->getPointerTo();
-      GlobalVariable *GV = new GlobalVariable(M, SizeTy, /*isConstant=*/false,
-                                              GlobalValue::InternalLinkage,
-                                              ConstantInt::get(SizeTy, 0));
-      CallInst *Call = CallInst::Create(
-          M.getOrInsertFunction(Func,
-                                FunctionType::get(Type::getVoidTy(C), {SizePtrTy},
-                                                  /*isVarArg=*/false)),
-          {GV}, "", InsertionPt);
-      Call->setDebugLoc(DL);
-    } else {
-      FunctionCallee Fn = M.getOrInsertFunction(Func, Type::getVoidTy(C));
-      CallInst *Call = CallInst::Create(Fn, "", InsertionPt);
-      Call->setDebugLoc(DL);
-    }
+    FunctionCallee Fn = M.getOrInsertFunction(Func, Type::getVoidTy(C));
+    CallInst *Call = CallInst::Create(Fn, "", InsertionPt);
+    Call->setDebugLoc(DL);
     return;
   }
 

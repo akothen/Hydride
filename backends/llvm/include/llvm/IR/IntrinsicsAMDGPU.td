@@ -241,25 +241,6 @@ def int_amdgcn_sched_barrier : ClangBuiltin<"__builtin_amdgcn_sched_barrier">,
   Intrinsic<[], [llvm_i32_ty], [ImmArg<ArgIndex<0>>, IntrNoMem, IntrHasSideEffects, IntrConvergent,
                                 IntrWillReturn]>;
 
-// The first parameter is a mask that determines the types of instructions that
-// you would like to synchronize around and add to a scheduling group. The
-// values of the mask are defined above for sched_barrier. These instructions
-// will be selected from the bottom up starting from the sched_group_barrier's
-// location during instruction scheduling. The second parameter is the number of
-// matching instructions that will be associated with this sched_group_barrier.
-// The third parameter is an identifier which is used to describe what other
-// sched_group_barriers should be synchronized with.
-def int_amdgcn_sched_group_barrier : ClangBuiltin<"__builtin_amdgcn_sched_group_barrier">,
-  Intrinsic<[], [llvm_i32_ty, llvm_i32_ty, llvm_i32_ty],
-  [ImmArg<ArgIndex<0>>, ImmArg<ArgIndex<1>>, ImmArg<ArgIndex<2>>, IntrNoMem, IntrHasSideEffects,
-   IntrConvergent, IntrWillReturn]>;
-
-// Scheduler optimization hint.
-//     MASK = 0: Small gemm opt
-def int_amdgcn_iglp_opt : ClangBuiltin<"__builtin_amdgcn_iglp_opt">,
-  Intrinsic<[], [llvm_i32_ty], [ImmArg<ArgIndex<0>>, IntrNoMem, IntrHasSideEffects, IntrConvergent,
-                                IntrWillReturn]>;
-
 def int_amdgcn_s_waitcnt : ClangBuiltin<"__builtin_amdgcn_s_waitcnt">,
   Intrinsic<[], [llvm_i32_ty], [ImmArg<ArgIndex<0>>, IntrNoMem, IntrHasSideEffects, IntrWillReturn]>;
 
@@ -343,7 +324,6 @@ def int_amdgcn_rsq_legacy :  ClangBuiltin<"__builtin_amdgcn_rsq_legacy">,
 def int_amdgcn_rsq_clamp : Intrinsic<
   [llvm_anyfloat_ty], [LLVMMatchType<0>], [IntrNoMem, IntrSpeculatable, IntrWillReturn]>;
 
-// For int_amdgcn_ldexp_f16, only the low 16 bits of the i32 src1 operand will used.
 def int_amdgcn_ldexp : Intrinsic<
   [llvm_anyfloat_ty], [LLVMMatchType<0>, llvm_i32_ty],
   [IntrNoMem, IntrSpeculatable, IntrWillReturn]
@@ -1931,7 +1911,7 @@ class AMDGPUGlobalLoadLDS : Intrinsic <
                                        //                                   bit 2 = dlc on gfx10+))
                                        //                                   bit 4 = scc/nt on gfx90a+))
   [IntrWillReturn, NoCapture<ArgIndex<0>>, NoCapture<ArgIndex<1>>,
-   ImmArg<ArgIndex<2>>, ImmArg<ArgIndex<3>>, ImmArg<ArgIndex<4>>],
+   ImmArg<ArgIndex<2>>, ImmArg<ArgIndex<2>>, ImmArg<ArgIndex<3>>, ImmArg<ArgIndex<4>>],
   "", [SDNPMemOperand]>;
 def int_amdgcn_global_load_lds : AMDGPUGlobalLoadLDS;
 
@@ -1992,7 +1972,6 @@ def int_amdgcn_image_bvh_intersect_ray :
 
 // llvm.amdgcn.permlane64 <src0>
 def int_amdgcn_permlane64 :
-  ClangBuiltin<"__builtin_amdgcn_permlane64">,
   Intrinsic<[llvm_i32_ty], [llvm_i32_ty],
             [IntrNoMem, IntrConvergent, IntrWillReturn]>;
 
@@ -2005,18 +1984,6 @@ def int_amdgcn_ds_sub_gs_reg_rtn :
   ClangBuiltin<"__builtin_amdgcn_ds_sub_gs_reg_rtn">,
   Intrinsic<[llvm_anyint_ty], [llvm_i32_ty, llvm_i32_ty],
             [ImmArg<ArgIndex<1>>, IntrHasSideEffects, IntrWillReturn]>;
-
-def int_amdgcn_ds_bvh_stack_rtn :
-  Intrinsic<
-    [llvm_i32_ty, llvm_i32_ty], // %vdst, %addr
-    [
-      llvm_i32_ty,   // %addr
-      llvm_i32_ty,   // %data0
-      llvm_v4i32_ty, // %data1
-      llvm_i32_ty,   // %offset
-    ],
-    [ImmArg<ArgIndex<3>>, IntrWillReturn]
-  >;
 
 // WMMA (Wave Matrix Multiply-Accumulate) intrinsics
 //

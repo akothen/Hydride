@@ -25,5 +25,3 @@ _main:
 	.p2align	3
 ExtraDefRef:
 	.quad	ExtraDef
-
-        .subsections_via_symbols

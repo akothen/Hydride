@@ -18,10 +18,6 @@ template <typename T>
 class InterfacePass;
 class Pass;
 
-#define GEN_PASS_DECL_CONVERTAFFINEFORTOGPU
-#define GEN_PASS_DECL_CONVERTPARALLELLOOPTOGPU
-#include "mlir/Conversion/Passes.h.inc"
-
 /// Create a pass that converts loop nests into GPU kernels.  It considers
 /// top-level affine.for operations as roots of loop nests and converts them to
 /// the gpu.launch operations if possible.

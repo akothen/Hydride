@@ -40,8 +40,8 @@ static cl::opt<unsigned>
                                  "sets may contain before degradation"));
 
 /// mergeSetIn - Merge the specified alias set into this alias set.
-void AliasSet::mergeSetIn(AliasSet &AS, AliasSetTracker &AST,
-                          BatchAAResults &BatchAA) {
+///
+void AliasSet::mergeSetIn(AliasSet &AS, AliasSetTracker &AST) {
   assert(!AS.Forward && "Alias set is already forwarding!");
   assert(!Forward && "This set is a forwarding set!!");
 
@@ -54,11 +54,12 @@ void AliasSet::mergeSetIn(AliasSet &AS, AliasSetTracker &AST,
     // Check that these two merged sets really are must aliases.  Since both
     // used to be must-alias sets, we can just check any pointer from each set
     // for aliasing.
+    AliasAnalysis &AA = AST.getAliasAnalysis();
     PointerRec *L = getSomePointer();
     PointerRec *R = AS.getSomePointer();
 
     // If the pointers are not a must-alias pair, this set becomes a may alias.
-    if (!BatchAA.isMustAlias(
+    if (!AA.isMustAlias(
             MemoryLocation(L->getValue(), L->getSize(), L->getAAInfo()),
             MemoryLocation(R->getValue(), R->getSize(), R->getAAInfo())))
       Alias = SetMayAlias;
@@ -188,7 +189,7 @@ void AliasSet::addUnknownInst(Instruction *I, AliasAnalysis &AA) {
 ///
 AliasResult AliasSet::aliasesPointer(const Value *Ptr, LocationSize Size,
                                      const AAMDNodes &AAInfo,
-                                     BatchAAResults &AA) const {
+                                     AliasAnalysis &AA) const {
   if (AliasAny)
     return AliasResult::MayAlias;
 
@@ -227,7 +228,7 @@ AliasResult AliasSet::aliasesPointer(const Value *Ptr, LocationSize Size,
 }
 
 bool AliasSet::aliasesUnknownInst(const Instruction *Inst,
-                                  BatchAAResults &AA) const {
+                                  AliasAnalysis &AA) const {
 
   if (AliasAny)
     return true;
@@ -274,12 +275,11 @@ AliasSet *AliasSetTracker::mergeAliasSetsForPointer(const Value *Ptr,
                                                     bool &MustAliasAll) {
   AliasSet *FoundSet = nullptr;
   MustAliasAll = true;
-  BatchAAResults BatchAA(AA);
   for (AliasSet &AS : llvm::make_early_inc_range(*this)) {
     if (AS.Forward)
       continue;
 
-    AliasResult AR = AS.aliasesPointer(Ptr, Size, AAInfo, BatchAA);
+    AliasResult AR = AS.aliasesPointer(Ptr, Size, AAInfo, AA);
     if (AR == AliasResult::NoAlias)
       continue;
 
@@ -291,7 +291,7 @@ AliasSet *AliasSetTracker::mergeAliasSetsForPointer(const Value *Ptr,
       FoundSet = &AS;
     } else {
       // Otherwise, we must merge the sets.
-      FoundSet->mergeSetIn(AS, *this, BatchAA);
+      FoundSet->mergeSetIn(AS, *this);
     }
   }
 
@@ -299,17 +299,16 @@ AliasSet *AliasSetTracker::mergeAliasSetsForPointer(const Value *Ptr,
 }
 
 AliasSet *AliasSetTracker::findAliasSetForUnknownInst(Instruction *Inst) {
-  BatchAAResults BatchAA(AA);
   AliasSet *FoundSet = nullptr;
   for (AliasSet &AS : llvm::make_early_inc_range(*this)) {
-    if (AS.Forward || !AS.aliasesUnknownInst(Inst, BatchAA))
+    if (AS.Forward || !AS.aliasesUnknownInst(Inst, AA))
       continue;
     if (!FoundSet) {
       // If this is the first alias set ptr can go into, remember it.
       FoundSet = &AS;
     } else {
       // Otherwise, we must merge the sets.
-      FoundSet->mergeSetIn(AS, *this, BatchAA);
+      FoundSet->mergeSetIn(AS, *this);
     }
   }
   return FoundSet;
@@ -452,7 +451,7 @@ void AliasSetTracker::add(Instruction *I) {
           return AliasSet::NoAccess;
       };
 
-      ModRefInfo CallMask = AA.getMemoryEffects(Call).getModRef();
+      ModRefInfo CallMask = createModRefInfo(AA.getModRefBehavior(Call));
 
       // Some intrinsics are marked as modifying memory for control flow
       // modelling purposes, but don't actually modify any specific memory
@@ -460,7 +459,7 @@ void AliasSetTracker::add(Instruction *I) {
       using namespace PatternMatch;
       if (Call->use_empty() &&
           match(Call, m_Intrinsic<Intrinsic::invariant_start>()))
-        CallMask &= ModRefInfo::Ref;
+        CallMask = clearMod(CallMask);
 
       for (auto IdxArgPair : enumerate(Call->args())) {
         int ArgIdx = IdxArgPair.index();
@@ -470,7 +469,7 @@ void AliasSetTracker::add(Instruction *I) {
         MemoryLocation ArgLoc =
             MemoryLocation::getForArgument(Call, ArgIdx, nullptr);
         ModRefInfo ArgMask = AA.getArgModRefInfo(Call, ArgIdx);
-        ArgMask &= CallMask;
+        ArgMask = intersectModRef(CallMask, ArgMask);
         if (!isNoModRef(ArgMask))
           addPointer(ArgLoc, getAccessFromModRef(ArgMask));
       }
@@ -580,7 +579,6 @@ AliasSet &AliasSetTracker::mergeAllAliasSets() {
   AliasAnyAS->Access = AliasSet::ModRefAccess;
   AliasAnyAS->AliasAny = true;
 
-  BatchAAResults BatchAA(AA);
   for (auto *Cur : ASVector) {
     // If Cur was already forwarding, just forward to the new AS instead.
     AliasSet *FwdTo = Cur->Forward;
@@ -592,7 +590,7 @@ AliasSet &AliasSetTracker::mergeAllAliasSets() {
     }
 
     // Otherwise, perform the actual merge.
-    AliasAnyAS->mergeSetIn(*Cur, *this, BatchAA);
+    AliasAnyAS->mergeSetIn(*Cur, *this);
   }
 
   return *AliasAnyAS;
@@ -697,6 +695,42 @@ AliasSetTracker::ASTCallbackVH::operator=(Value *V) {
 //===----------------------------------------------------------------------===//
 //                            AliasSetPrinter Pass
 //===----------------------------------------------------------------------===//
+
+namespace {
+
+  class AliasSetPrinter : public FunctionPass {
+  public:
+    static char ID; // Pass identification, replacement for typeid
+
+    AliasSetPrinter() : FunctionPass(ID) {
+      initializeAliasSetPrinterPass(*PassRegistry::getPassRegistry());
+    }
+
+    void getAnalysisUsage(AnalysisUsage &AU) const override {
+      AU.setPreservesAll();
+      AU.addRequired<AAResultsWrapperPass>();
+    }
+
+    bool runOnFunction(Function &F) override {
+      auto &AAWP = getAnalysis<AAResultsWrapperPass>();
+      AliasSetTracker Tracker(AAWP.getAAResults());
+      errs() << "Alias sets for function '" << F.getName() << "':\n";
+      for (Instruction &I : instructions(F))
+        Tracker.add(&I);
+      Tracker.print(errs());
+      return false;
+    }
+  };
+
+} // end anonymous namespace
+
+char AliasSetPrinter::ID = 0;
+
+INITIALIZE_PASS_BEGIN(AliasSetPrinter, "print-alias-sets",
+                "Alias Set Printer", false, true)
+INITIALIZE_PASS_DEPENDENCY(AAResultsWrapperPass)
+INITIALIZE_PASS_END(AliasSetPrinter, "print-alias-sets",
+                "Alias Set Printer", false, true)
 
 AliasSetsPrinterPass::AliasSetsPrinterPass(raw_ostream &OS) : OS(OS) {}
 

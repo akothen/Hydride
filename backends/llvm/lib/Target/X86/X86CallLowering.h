@@ -36,10 +36,6 @@ public:
 
   bool lowerCall(MachineIRBuilder &MIRBuilder,
                  CallLoweringInfo &Info) const override;
-
-  bool canLowerReturn(MachineFunction &MF, CallingConv::ID CallConv,
-                      SmallVectorImpl<BaseArgInfo> &Outs,
-                      bool IsVarArg) const override;
 };
 
 } // end namespace llvm

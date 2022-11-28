@@ -22,28 +22,20 @@
 #include "mlir/Rewrite/FrozenRewritePatternSet.h"
 #include "mlir/Support/FileUtilities.h"
 #include "mlir/Support/LogicalResult.h"
-#include "mlir/Tools/ParseUtilities.h"
 #include "llvm/Support/InitLLVM.h"
-#include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/ToolOutputFile.h"
 
 using namespace mlir;
 
-// Parse and verify the input MLIR file. Returns null on error.
-OwningOpRef<Operation *> loadModule(MLIRContext &context,
-                                    StringRef inputFilename,
-                                    bool insertImplictModule) {
-  // Set up the input file.
-  std::string errorMessage;
-  auto file = openInputFile(inputFilename, &errorMessage);
-  if (!file) {
-    llvm::errs() << errorMessage << "\n";
-    return nullptr;
-  }
+// Parse and verify the input MLIR file.
+static LogicalResult loadModule(MLIRContext &context,
+                                OwningOpRef<ModuleOp> &module,
+                                StringRef inputFilename) {
+  module = parseSourceFile<ModuleOp>(inputFilename, &context);
+  if (!module)
+    return failure();
 
-  llvm::SourceMgr sourceMgr;
-  sourceMgr.AddNewSourceBuffer(std::move(file), SMLoc());
-  return parseSourceFileForTool(sourceMgr, &context, insertImplictModule);
+  return success();
 }
 
 LogicalResult mlir::mlirReduceMain(int argc, char **argv,
@@ -62,12 +54,6 @@ LogicalResult mlir::mlirReduceMain(int argc, char **argv,
   static llvm::cl::opt<std::string> outputFilename(
       "o", llvm::cl::desc("Output filename for the reduced test case"),
       llvm::cl::init("-"), llvm::cl::cat(mlirReduceCategory));
-
-  static llvm::cl::opt<bool> noImplicitModule{
-      "no-implicit-module",
-      llvm::cl::desc(
-          "Disable implicit addition of a top-level module op during parsing"),
-      llvm::cl::init(false)};
 
   llvm::cl::HideUnrelatedOptions(mlirReduceCategory);
 
@@ -90,9 +76,8 @@ LogicalResult mlir::mlirReduceMain(int argc, char **argv,
   if (!output)
     return failure();
 
-  OwningOpRef<Operation *> opRef =
-      loadModule(context, inputFilename, !noImplicitModule);
-  if (!opRef)
+  OwningOpRef<ModuleOp> moduleRef;
+  if (failed(loadModule(context, moduleRef, inputFilename)))
     return failure();
 
   auto errorHandler = [&](const Twine &msg) {
@@ -100,16 +85,16 @@ LogicalResult mlir::mlirReduceMain(int argc, char **argv,
   };
 
   // Reduction pass pipeline.
-  PassManager pm(&context, opRef.get()->getName().getStringRef());
+  PassManager pm(&context);
   if (failed(parser.addToPipeline(pm, errorHandler)))
     return failure();
 
-  OwningOpRef<Operation *> op = opRef.get()->clone();
+  OwningOpRef<ModuleOp> m = moduleRef.get().clone();
 
-  if (failed(pm.run(op.get())))
+  if (failed(pm.run(m.get())))
     return failure();
 
-  op.get()->print(output->os());
+  m->print(output->os());
   output->keep();
 
   return success();

@@ -83,10 +83,7 @@ public:
   PresburgerRelation intersect(const PresburgerRelation &set) const;
 
   /// Return true if the set contains the given point, and false otherwise.
-  bool containsPoint(ArrayRef<MPInt> point) const;
-  bool containsPoint(ArrayRef<int64_t> point) const {
-    return containsPoint(getMPIntVec(point));
-  }
+  bool containsPoint(ArrayRef<int64_t> point) const;
 
   /// Return the complement of this set. All local variables in the set must
   /// correspond to floor divisions.
@@ -111,7 +108,7 @@ public:
 
   /// Find an integer sample from the given set. This should not be called if
   /// any of the disjuncts in the union are unbounded.
-  bool findIntegerSample(SmallVectorImpl<MPInt> &sample);
+  bool findIntegerSample(SmallVectorImpl<int64_t> &sample);
 
   /// Compute an overapproximation of the number of integer points in the
   /// disjunct. Symbol vars are currently not supported. If the computed
@@ -120,7 +117,7 @@ public:
   /// This currently just sums up the overapproximations of the volumes of the
   /// disjuncts, so the approximation might be far from the true volume in the
   /// case when there is a lot of overlap between disjuncts.
-  Optional<MPInt> computeVolume() const;
+  Optional<uint64_t> computeVolume() const;
 
   /// Simplifies the representation of a PresburgerRelation.
   ///

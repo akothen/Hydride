@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <climits>
 #include <functional>
 #include <initializer_list>
 #include <memory>
@@ -163,7 +162,8 @@ public:
     int64_t nElements = 1;
     for (int64_t s : shapeAlloc)
       nElements *= s;
-    auto [data, alignedData] =
+    T *data, *alignedData;
+    std::tie(data, alignedData) =
         detail::allocAligned<T>(nElements, allocFun, alignment);
     descriptor = detail::makeStridedMemRefDescriptor<Rank>(data, alignedData,
                                                            shape, shapeAlloc);

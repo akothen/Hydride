@@ -10,7 +10,7 @@ target triple = "aarch64-unknown-linux-gnu"
 ;
 
 ; No single instruction NEON support. Use SVE.
-define half @fadda_v4f16(half %start, <4 x half> %a) vscale_range(1,0) #0 {
+define half @fadda_v4f16(half %start, <4 x half> %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v4f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 def $z0
@@ -24,7 +24,7 @@ define half @fadda_v4f16(half %start, <4 x half> %a) vscale_range(1,0) #0 {
 }
 
 ; No single instruction NEON support. Use SVE.
-define half @fadda_v8f16(half %start, <8 x half> %a) vscale_range(1,0) #0 {
+define half @fadda_v8f16(half %start, <8 x half> %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v8f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 def $z0
@@ -37,7 +37,7 @@ define half @fadda_v8f16(half %start, <8 x half> %a) vscale_range(1,0) #0 {
   ret half %res
 }
 
-define half @fadda_v16f16(half %start, ptr %a) vscale_range(2,0) #0 {
+define half @fadda_v16f16(half %start, <16 x half>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v16f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl16
@@ -46,12 +46,12 @@ define half @fadda_v16f16(half %start, ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fadda h0, p0, h0, z1.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <16 x half>, ptr %a
+  %op = load <16 x half>, <16 x half>* %a
   %res = call half @llvm.vector.reduce.fadd.v16f16(half %start, <16 x half> %op)
   ret half %res
 }
 
-define half @fadda_v32f16(half %start, ptr %a) #0 {
+define half @fadda_v32f16(half %start, <32 x half>* %a) #0 {
 ; VBITS_GE_256-LABEL: fadda_v32f16:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #16
@@ -72,12 +72,12 @@ define half @fadda_v32f16(half %start, ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fadda h0, p0, h0, z1.h
 ; VBITS_GE_512-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <32 x half>, ptr %a
+  %op = load <32 x half>, <32 x half>* %a
   %res = call half @llvm.vector.reduce.fadd.v32f16(half %start, <32 x half> %op)
   ret half %res
 }
 
-define half @fadda_v64f16(half %start, ptr %a) vscale_range(8,0) #0 {
+define half @fadda_v64f16(half %start, <64 x half>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fadda_v64f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl64
@@ -86,12 +86,12 @@ define half @fadda_v64f16(half %start, ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fadda h0, p0, h0, z1.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <64 x half>, ptr %a
+  %op = load <64 x half>, <64 x half>* %a
   %res = call half @llvm.vector.reduce.fadd.v64f16(half %start, <64 x half> %op)
   ret half %res
 }
 
-define half @fadda_v128f16(half %start, ptr %a) vscale_range(16,0) #0 {
+define half @fadda_v128f16(half %start, <128 x half>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fadda_v128f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl128
@@ -100,13 +100,13 @@ define half @fadda_v128f16(half %start, ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fadda h0, p0, h0, z1.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <128 x half>, ptr %a
+  %op = load <128 x half>, <128 x half>* %a
   %res = call half @llvm.vector.reduce.fadd.v128f16(half %start, <128 x half> %op)
   ret half %res
 }
 
 ; No single instruction NEON support. Use SVE.
-define float @fadda_v2f32(float %start, <2 x float> %a) vscale_range(1,0) #0 {
+define float @fadda_v2f32(float %start, <2 x float> %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v2f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 def $z0
@@ -120,7 +120,7 @@ define float @fadda_v2f32(float %start, <2 x float> %a) vscale_range(1,0) #0 {
 }
 
 ; No single instruction NEON support. Use SVE.
-define float @fadda_v4f32(float %start, <4 x float> %a) vscale_range(1,0) #0 {
+define float @fadda_v4f32(float %start, <4 x float> %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v4f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 def $z0
@@ -133,7 +133,7 @@ define float @fadda_v4f32(float %start, <4 x float> %a) vscale_range(1,0) #0 {
   ret float %res
 }
 
-define float @fadda_v8f32(float %start, ptr %a) vscale_range(2,0) #0 {
+define float @fadda_v8f32(float %start, <8 x float>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v8f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl8
@@ -142,12 +142,12 @@ define float @fadda_v8f32(float %start, ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fadda s0, p0, s0, z1.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <8 x float>, ptr %a
+  %op = load <8 x float>, <8 x float>* %a
   %res = call float @llvm.vector.reduce.fadd.v8f32(float %start, <8 x float> %op)
   ret float %res
 }
 
-define float @fadda_v16f32(float %start, ptr %a) #0 {
+define float @fadda_v16f32(float %start, <16 x float>* %a) #0 {
 ; VBITS_GE_256-LABEL: fadda_v16f32:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #8
@@ -168,12 +168,12 @@ define float @fadda_v16f32(float %start, ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fadda s0, p0, s0, z1.s
 ; VBITS_GE_512-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <16 x float>, ptr %a
+  %op = load <16 x float>, <16 x float>* %a
   %res = call float @llvm.vector.reduce.fadd.v16f32(float %start, <16 x float> %op)
   ret float %res
 }
 
-define float @fadda_v32f32(float %start, ptr %a) vscale_range(8,0) #0 {
+define float @fadda_v32f32(float %start, <32 x float>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fadda_v32f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl32
@@ -182,12 +182,12 @@ define float @fadda_v32f32(float %start, ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fadda s0, p0, s0, z1.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <32 x float>, ptr %a
+  %op = load <32 x float>, <32 x float>* %a
   %res = call float @llvm.vector.reduce.fadd.v32f32(float %start, <32 x float> %op)
   ret float %res
 }
 
-define float @fadda_v64f32(float %start, ptr %a) vscale_range(16,0) #0 {
+define float @fadda_v64f32(float %start, <64 x float>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fadda_v64f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl64
@@ -196,23 +196,27 @@ define float @fadda_v64f32(float %start, ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fadda s0, p0, s0, z1.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <64 x float>, ptr %a
+  %op = load <64 x float>, <64 x float>* %a
   %res = call float @llvm.vector.reduce.fadd.v64f32(float %start, <64 x float> %op)
   ret float %res
 }
 
 ; No single instruction NEON support. Use SVE.
-define double @fadda_v1f64(double %start, <1 x double> %a) vscale_range(1,0) #0 {
+define double @fadda_v1f64(double %start, <1 x double> %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v1f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fadd d0, d0, d1
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $z0
+; CHECK-NEXT:    ptrue p0.d, vl1
+; CHECK-NEXT:    // kill: def $d1 killed $d1 def $z1
+; CHECK-NEXT:    fadda d0, p0, d0, z1.d
+; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
   %res = call double @llvm.vector.reduce.fadd.v1f64(double %start, <1 x double> %a)
   ret double %res
 }
 
 ; No single instruction NEON support. Use SVE.
-define double @fadda_v2f64(double %start, <2 x double> %a) vscale_range(1,0) #0 {
+define double @fadda_v2f64(double %start, <2 x double> %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v2f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $z0
@@ -225,7 +229,7 @@ define double @fadda_v2f64(double %start, <2 x double> %a) vscale_range(1,0) #0 
   ret double %res
 }
 
-define double @fadda_v4f64(double %start, ptr %a) vscale_range(2,0) #0 {
+define double @fadda_v4f64(double %start, <4 x double>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fadda_v4f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl4
@@ -234,12 +238,12 @@ define double @fadda_v4f64(double %start, ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fadda d0, p0, d0, z1.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <4 x double>, ptr %a
+  %op = load <4 x double>, <4 x double>* %a
   %res = call double @llvm.vector.reduce.fadd.v4f64(double %start, <4 x double> %op)
   ret double %res
 }
 
-define double @fadda_v8f64(double %start, ptr %a) #0 {
+define double @fadda_v8f64(double %start, <8 x double>* %a) #0 {
 ; VBITS_GE_256-LABEL: fadda_v8f64:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #4
@@ -260,12 +264,12 @@ define double @fadda_v8f64(double %start, ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fadda d0, p0, d0, z1.d
 ; VBITS_GE_512-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <8 x double>, ptr %a
+  %op = load <8 x double>, <8 x double>* %a
   %res = call double @llvm.vector.reduce.fadd.v8f64(double %start, <8 x double> %op)
   ret double %res
 }
 
-define double @fadda_v16f64(double %start, ptr %a) vscale_range(8,0) #0 {
+define double @fadda_v16f64(double %start, <16 x double>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fadda_v16f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl16
@@ -274,12 +278,12 @@ define double @fadda_v16f64(double %start, ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fadda d0, p0, d0, z1.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <16 x double>, ptr %a
+  %op = load <16 x double>, <16 x double>* %a
   %res = call double @llvm.vector.reduce.fadd.v16f64(double %start, <16 x double> %op)
   ret double %res
 }
 
-define double @fadda_v32f64(double %start, ptr %a) vscale_range(16,0) #0 {
+define double @fadda_v32f64(double %start, <32 x double>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fadda_v32f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl32
@@ -288,7 +292,7 @@ define double @fadda_v32f64(double %start, ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fadda d0, p0, d0, z1.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <32 x double>, ptr %a
+  %op = load <32 x double>, <32 x double>* %a
   %res = call double @llvm.vector.reduce.fadd.v32f64(double %start, <32 x double> %op)
   ret double %res
 }
@@ -323,7 +327,7 @@ define half @faddv_v8f16(half %start, <8 x half> %a) vscale_range(2,0) #0 {
   ret half %res
 }
 
-define half @faddv_v16f16(half %start, ptr %a) vscale_range(2,0) #0 {
+define half @faddv_v16f16(half %start, <16 x half>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: faddv_v16f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl16
@@ -331,12 +335,12 @@ define half @faddv_v16f16(half %start, ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    faddv h1, p0, z1.h
 ; CHECK-NEXT:    fadd h0, h0, h1
 ; CHECK-NEXT:    ret
-  %op = load <16 x half>, ptr %a
+  %op = load <16 x half>, <16 x half>* %a
   %res = call fast half @llvm.vector.reduce.fadd.v16f16(half %start, <16 x half> %op)
   ret half %res
 }
 
-define half @faddv_v32f16(half %start, ptr %a) #0 {
+define half @faddv_v32f16(half %start, <32 x half>* %a) #0 {
 ; VBITS_GE_256-LABEL: faddv_v32f16:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #16
@@ -355,12 +359,12 @@ define half @faddv_v32f16(half %start, ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    faddv h1, p0, z1.h
 ; VBITS_GE_512-NEXT:    fadd h0, h0, h1
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <32 x half>, ptr %a
+  %op = load <32 x half>, <32 x half>* %a
   %res = call fast half @llvm.vector.reduce.fadd.v32f16(half %start, <32 x half> %op)
   ret half %res
 }
 
-define half @faddv_v64f16(half %start, ptr %a) vscale_range(8,0) #0 {
+define half @faddv_v64f16(half %start, <64 x half>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: faddv_v64f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl64
@@ -368,12 +372,12 @@ define half @faddv_v64f16(half %start, ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    faddv h1, p0, z1.h
 ; CHECK-NEXT:    fadd h0, h0, h1
 ; CHECK-NEXT:    ret
-  %op = load <64 x half>, ptr %a
+  %op = load <64 x half>, <64 x half>* %a
   %res = call fast half @llvm.vector.reduce.fadd.v64f16(half %start, <64 x half> %op)
   ret half %res
 }
 
-define half @faddv_v128f16(half %start, ptr %a) vscale_range(16,0) #0 {
+define half @faddv_v128f16(half %start, <128 x half>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: faddv_v128f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl128
@@ -381,7 +385,7 @@ define half @faddv_v128f16(half %start, ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    faddv h1, p0, z1.h
 ; CHECK-NEXT:    fadd h0, h0, h1
 ; CHECK-NEXT:    ret
-  %op = load <128 x half>, ptr %a
+  %op = load <128 x half>, <128 x half>* %a
   %res = call fast half @llvm.vector.reduce.fadd.v128f16(half %start, <128 x half> %op)
   ret half %res
 }
@@ -410,7 +414,7 @@ define float @faddv_v4f32(float %start, <4 x float> %a) vscale_range(2,0) #0 {
   ret float %res
 }
 
-define float @faddv_v8f32(float %start, ptr %a) vscale_range(2,0) #0 {
+define float @faddv_v8f32(float %start, <8 x float>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: faddv_v8f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl8
@@ -418,12 +422,12 @@ define float @faddv_v8f32(float %start, ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    faddv s1, p0, z1.s
 ; CHECK-NEXT:    fadd s0, s0, s1
 ; CHECK-NEXT:    ret
-  %op = load <8 x float>, ptr %a
+  %op = load <8 x float>, <8 x float>* %a
   %res = call fast float @llvm.vector.reduce.fadd.v8f32(float %start, <8 x float> %op)
   ret float %res
 }
 
-define float @faddv_v16f32(float %start, ptr %a) #0 {
+define float @faddv_v16f32(float %start, <16 x float>* %a) #0 {
 ; VBITS_GE_256-LABEL: faddv_v16f32:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #8
@@ -442,12 +446,12 @@ define float @faddv_v16f32(float %start, ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    faddv s1, p0, z1.s
 ; VBITS_GE_512-NEXT:    fadd s0, s0, s1
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <16 x float>, ptr %a
+  %op = load <16 x float>, <16 x float>* %a
   %res = call fast float @llvm.vector.reduce.fadd.v16f32(float %start, <16 x float> %op)
   ret float %res
 }
 
-define float @faddv_v32f32(float %start, ptr %a) vscale_range(8,0) #0 {
+define float @faddv_v32f32(float %start, <32 x float>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: faddv_v32f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl32
@@ -455,12 +459,12 @@ define float @faddv_v32f32(float %start, ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    faddv s1, p0, z1.s
 ; CHECK-NEXT:    fadd s0, s0, s1
 ; CHECK-NEXT:    ret
-  %op = load <32 x float>, ptr %a
+  %op = load <32 x float>, <32 x float>* %a
   %res = call fast float @llvm.vector.reduce.fadd.v32f32(float %start, <32 x float> %op)
   ret float %res
 }
 
-define float @faddv_v64f32(float %start, ptr %a) vscale_range(16,0) #0 {
+define float @faddv_v64f32(float %start, <64 x float>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: faddv_v64f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl64
@@ -468,7 +472,7 @@ define float @faddv_v64f32(float %start, ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    faddv s1, p0, z1.s
 ; CHECK-NEXT:    fadd s0, s0, s1
 ; CHECK-NEXT:    ret
-  %op = load <64 x float>, ptr %a
+  %op = load <64 x float>, <64 x float>* %a
   %res = call fast float @llvm.vector.reduce.fadd.v64f32(float %start, <64 x float> %op)
   ret float %res
 }
@@ -494,7 +498,7 @@ define double @faddv_v2f64(double %start, <2 x double> %a) vscale_range(2,0) #0 
   ret double %res
 }
 
-define double @faddv_v4f64(double %start, ptr %a) vscale_range(2,0) #0 {
+define double @faddv_v4f64(double %start, <4 x double>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: faddv_v4f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl4
@@ -502,12 +506,12 @@ define double @faddv_v4f64(double %start, ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    faddv d1, p0, z1.d
 ; CHECK-NEXT:    fadd d0, d0, d1
 ; CHECK-NEXT:    ret
-  %op = load <4 x double>, ptr %a
+  %op = load <4 x double>, <4 x double>* %a
   %res = call fast double @llvm.vector.reduce.fadd.v4f64(double %start, <4 x double> %op)
   ret double %res
 }
 
-define double @faddv_v8f64(double %start, ptr %a) #0 {
+define double @faddv_v8f64(double %start, <8 x double>* %a) #0 {
 ; VBITS_GE_256-LABEL: faddv_v8f64:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #4
@@ -526,12 +530,12 @@ define double @faddv_v8f64(double %start, ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    faddv d1, p0, z1.d
 ; VBITS_GE_512-NEXT:    fadd d0, d0, d1
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <8 x double>, ptr %a
+  %op = load <8 x double>, <8 x double>* %a
   %res = call fast double @llvm.vector.reduce.fadd.v8f64(double %start, <8 x double> %op)
   ret double %res
 }
 
-define double @faddv_v16f64(double %start, ptr %a) vscale_range(8,0) #0 {
+define double @faddv_v16f64(double %start, <16 x double>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: faddv_v16f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl16
@@ -539,12 +543,12 @@ define double @faddv_v16f64(double %start, ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    faddv d1, p0, z1.d
 ; CHECK-NEXT:    fadd d0, d0, d1
 ; CHECK-NEXT:    ret
-  %op = load <16 x double>, ptr %a
+  %op = load <16 x double>, <16 x double>* %a
   %res = call fast double @llvm.vector.reduce.fadd.v16f64(double %start, <16 x double> %op)
   ret double %res
 }
 
-define double @faddv_v32f64(double %start, ptr %a) vscale_range(16,0) #0 {
+define double @faddv_v32f64(double %start, <32 x double>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: faddv_v32f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl32
@@ -552,7 +556,7 @@ define double @faddv_v32f64(double %start, ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    faddv d1, p0, z1.d
 ; CHECK-NEXT:    fadd d0, d0, d1
 ; CHECK-NEXT:    ret
-  %op = load <32 x double>, ptr %a
+  %op = load <32 x double>, <32 x double>* %a
   %res = call fast double @llvm.vector.reduce.fadd.v32f64(double %start, <32 x double> %op)
   ret double %res
 }
@@ -581,7 +585,7 @@ define half @fmaxv_v8f16(<8 x half> %a) vscale_range(2,0) #0 {
   ret half %res
 }
 
-define half @fmaxv_v16f16(ptr %a) vscale_range(2,0) #0 {
+define half @fmaxv_v16f16(<16 x half>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fmaxv_v16f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl16
@@ -589,12 +593,12 @@ define half @fmaxv_v16f16(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fmaxnmv h0, p0, z0.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <16 x half>, ptr %a
+  %op = load <16 x half>, <16 x half>* %a
   %res = call half @llvm.vector.reduce.fmax.v16f16(<16 x half> %op)
   ret half %res
 }
 
-define half @fmaxv_v32f16(ptr %a) #0 {
+define half @fmaxv_v32f16(<32 x half>* %a) #0 {
 ; VBITS_GE_256-LABEL: fmaxv_v32f16:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #16
@@ -613,12 +617,12 @@ define half @fmaxv_v32f16(ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fmaxnmv h0, p0, z0.h
 ; VBITS_GE_512-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <32 x half>, ptr %a
+  %op = load <32 x half>, <32 x half>* %a
   %res = call half @llvm.vector.reduce.fmax.v32f16(<32 x half> %op)
   ret half %res
 }
 
-define half @fmaxv_v64f16(ptr %a) vscale_range(8,0) #0 {
+define half @fmaxv_v64f16(<64 x half>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fmaxv_v64f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl64
@@ -626,12 +630,12 @@ define half @fmaxv_v64f16(ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fmaxnmv h0, p0, z0.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <64 x half>, ptr %a
+  %op = load <64 x half>, <64 x half>* %a
   %res = call half @llvm.vector.reduce.fmax.v64f16(<64 x half> %op)
   ret half %res
 }
 
-define half @fmaxv_v128f16(ptr %a) vscale_range(16,0) #0 {
+define half @fmaxv_v128f16(<128 x half>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fmaxv_v128f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl128
@@ -639,7 +643,7 @@ define half @fmaxv_v128f16(ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fmaxnmv h0, p0, z0.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <128 x half>, ptr %a
+  %op = load <128 x half>, <128 x half>* %a
   %res = call half @llvm.vector.reduce.fmax.v128f16(<128 x half> %op)
   ret half %res
 }
@@ -664,7 +668,7 @@ define float @fmaxv_v4f32(<4 x float> %a) vscale_range(2,0) #0 {
   ret float %res
 }
 
-define float @fmaxv_v8f32(ptr %a) vscale_range(2,0) #0 {
+define float @fmaxv_v8f32(<8 x float>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fmaxv_v8f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl8
@@ -672,12 +676,12 @@ define float @fmaxv_v8f32(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fmaxnmv s0, p0, z0.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <8 x float>, ptr %a
+  %op = load <8 x float>, <8 x float>* %a
   %res = call float @llvm.vector.reduce.fmax.v8f32(<8 x float> %op)
   ret float %res
 }
 
-define float @fmaxv_v16f32(ptr %a) #0 {
+define float @fmaxv_v16f32(<16 x float>* %a) #0 {
 ; VBITS_GE_256-LABEL: fmaxv_v16f32:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #8
@@ -696,12 +700,12 @@ define float @fmaxv_v16f32(ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fmaxnmv s0, p0, z0.s
 ; VBITS_GE_512-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <16 x float>, ptr %a
+  %op = load <16 x float>, <16 x float>* %a
   %res = call float @llvm.vector.reduce.fmax.v16f32(<16 x float> %op)
   ret float %res
 }
 
-define float @fmaxv_v32f32(ptr %a) vscale_range(8,0) #0 {
+define float @fmaxv_v32f32(<32 x float>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fmaxv_v32f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl32
@@ -709,12 +713,12 @@ define float @fmaxv_v32f32(ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fmaxnmv s0, p0, z0.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <32 x float>, ptr %a
+  %op = load <32 x float>, <32 x float>* %a
   %res = call float @llvm.vector.reduce.fmax.v32f32(<32 x float> %op)
   ret float %res
 }
 
-define float @fmaxv_v64f32(ptr %a) vscale_range(16,0) #0 {
+define float @fmaxv_v64f32(<64 x float>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fmaxv_v64f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl64
@@ -722,7 +726,7 @@ define float @fmaxv_v64f32(ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fmaxnmv s0, p0, z0.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <64 x float>, ptr %a
+  %op = load <64 x float>, <64 x float>* %a
   %res = call float @llvm.vector.reduce.fmax.v64f32(<64 x float> %op)
   ret float %res
 }
@@ -746,7 +750,7 @@ define double @fmaxv_v2f64(<2 x double> %a) vscale_range(2,0) #0 {
   ret double %res
 }
 
-define double @fmaxv_v4f64(ptr %a) vscale_range(2,0) #0 {
+define double @fmaxv_v4f64(<4 x double>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fmaxv_v4f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl4
@@ -754,12 +758,12 @@ define double @fmaxv_v4f64(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fmaxnmv d0, p0, z0.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <4 x double>, ptr %a
+  %op = load <4 x double>, <4 x double>* %a
   %res = call double @llvm.vector.reduce.fmax.v4f64(<4 x double> %op)
   ret double %res
 }
 
-define double @fmaxv_v8f64(ptr %a) #0 {
+define double @fmaxv_v8f64(<8 x double>* %a) #0 {
 ; VBITS_GE_256-LABEL: fmaxv_v8f64:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #4
@@ -778,12 +782,12 @@ define double @fmaxv_v8f64(ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fmaxnmv d0, p0, z0.d
 ; VBITS_GE_512-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <8 x double>, ptr %a
+  %op = load <8 x double>, <8 x double>* %a
   %res = call double @llvm.vector.reduce.fmax.v8f64(<8 x double> %op)
   ret double %res
 }
 
-define double @fmaxv_v16f64(ptr %a) vscale_range(8,0) #0 {
+define double @fmaxv_v16f64(<16 x double>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fmaxv_v16f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl16
@@ -791,12 +795,12 @@ define double @fmaxv_v16f64(ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fmaxnmv d0, p0, z0.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <16 x double>, ptr %a
+  %op = load <16 x double>, <16 x double>* %a
   %res = call double @llvm.vector.reduce.fmax.v16f64(<16 x double> %op)
   ret double %res
 }
 
-define double @fmaxv_v32f64(ptr %a) vscale_range(16,0) #0 {
+define double @fmaxv_v32f64(<32 x double>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fmaxv_v32f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl32
@@ -804,7 +808,7 @@ define double @fmaxv_v32f64(ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fmaxnmv d0, p0, z0.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <32 x double>, ptr %a
+  %op = load <32 x double>, <32 x double>* %a
   %res = call double @llvm.vector.reduce.fmax.v32f64(<32 x double> %op)
   ret double %res
 }
@@ -833,7 +837,7 @@ define half @fminv_v8f16(<8 x half> %a) vscale_range(2,0) #0 {
   ret half %res
 }
 
-define half @fminv_v16f16(ptr %a) vscale_range(2,0) #0 {
+define half @fminv_v16f16(<16 x half>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fminv_v16f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl16
@@ -841,12 +845,12 @@ define half @fminv_v16f16(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fminnmv h0, p0, z0.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <16 x half>, ptr %a
+  %op = load <16 x half>, <16 x half>* %a
   %res = call half @llvm.vector.reduce.fmin.v16f16(<16 x half> %op)
   ret half %res
 }
 
-define half @fminv_v32f16(ptr %a) #0 {
+define half @fminv_v32f16(<32 x half>* %a) #0 {
 ; VBITS_GE_256-LABEL: fminv_v32f16:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #16
@@ -865,12 +869,12 @@ define half @fminv_v32f16(ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fminnmv h0, p0, z0.h
 ; VBITS_GE_512-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <32 x half>, ptr %a
+  %op = load <32 x half>, <32 x half>* %a
   %res = call half @llvm.vector.reduce.fmin.v32f16(<32 x half> %op)
   ret half %res
 }
 
-define half @fminv_v64f16(ptr %a) vscale_range(8,0) #0 {
+define half @fminv_v64f16(<64 x half>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fminv_v64f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl64
@@ -878,12 +882,12 @@ define half @fminv_v64f16(ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fminnmv h0, p0, z0.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <64 x half>, ptr %a
+  %op = load <64 x half>, <64 x half>* %a
   %res = call half @llvm.vector.reduce.fmin.v64f16(<64 x half> %op)
   ret half %res
 }
 
-define half @fminv_v128f16(ptr %a) vscale_range(16,0) #0 {
+define half @fminv_v128f16(<128 x half>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fminv_v128f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl128
@@ -891,7 +895,7 @@ define half @fminv_v128f16(ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fminnmv h0, p0, z0.h
 ; CHECK-NEXT:    // kill: def $h0 killed $h0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <128 x half>, ptr %a
+  %op = load <128 x half>, <128 x half>* %a
   %res = call half @llvm.vector.reduce.fmin.v128f16(<128 x half> %op)
   ret half %res
 }
@@ -916,7 +920,7 @@ define float @fminv_v4f32(<4 x float> %a) vscale_range(2,0) #0 {
   ret float %res
 }
 
-define float @fminv_v8f32(ptr %a) vscale_range(2,0) #0 {
+define float @fminv_v8f32(<8 x float>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fminv_v8f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl8
@@ -924,12 +928,12 @@ define float @fminv_v8f32(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fminnmv s0, p0, z0.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <8 x float>, ptr %a
+  %op = load <8 x float>, <8 x float>* %a
   %res = call float @llvm.vector.reduce.fmin.v8f32(<8 x float> %op)
   ret float %res
 }
 
-define float @fminv_v16f32(ptr %a) #0 {
+define float @fminv_v16f32(<16 x float>* %a) #0 {
 ; VBITS_GE_256-LABEL: fminv_v16f32:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #8
@@ -948,12 +952,12 @@ define float @fminv_v16f32(ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fminnmv s0, p0, z0.s
 ; VBITS_GE_512-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <16 x float>, ptr %a
+  %op = load <16 x float>, <16 x float>* %a
   %res = call float @llvm.vector.reduce.fmin.v16f32(<16 x float> %op)
   ret float %res
 }
 
-define float @fminv_v32f32(ptr %a) vscale_range(8,0) #0 {
+define float @fminv_v32f32(<32 x float>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fminv_v32f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl32
@@ -961,12 +965,12 @@ define float @fminv_v32f32(ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fminnmv s0, p0, z0.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <32 x float>, ptr %a
+  %op = load <32 x float>, <32 x float>* %a
   %res = call float @llvm.vector.reduce.fmin.v32f32(<32 x float> %op)
   ret float %res
 }
 
-define float @fminv_v64f32(ptr %a) vscale_range(16,0) #0 {
+define float @fminv_v64f32(<64 x float>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fminv_v64f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl64
@@ -974,7 +978,7 @@ define float @fminv_v64f32(ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fminnmv s0, p0, z0.s
 ; CHECK-NEXT:    // kill: def $s0 killed $s0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <64 x float>, ptr %a
+  %op = load <64 x float>, <64 x float>* %a
   %res = call float @llvm.vector.reduce.fmin.v64f32(<64 x float> %op)
   ret float %res
 }
@@ -998,7 +1002,7 @@ define double @fminv_v2f64(<2 x double> %a) vscale_range(2,0) #0 {
   ret double %res
 }
 
-define double @fminv_v4f64(ptr %a) vscale_range(2,0) #0 {
+define double @fminv_v4f64(<4 x double>* %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: fminv_v4f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl4
@@ -1006,12 +1010,12 @@ define double @fminv_v4f64(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-NEXT:    fminnmv d0, p0, z0.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <4 x double>, ptr %a
+  %op = load <4 x double>, <4 x double>* %a
   %res = call double @llvm.vector.reduce.fmin.v4f64(<4 x double> %op)
   ret double %res
 }
 
-define double @fminv_v8f64(ptr %a) #0 {
+define double @fminv_v8f64(<8 x double>* %a) #0 {
 ; VBITS_GE_256-LABEL: fminv_v8f64:
 ; VBITS_GE_256:       // %bb.0:
 ; VBITS_GE_256-NEXT:    mov x8, #4
@@ -1030,12 +1034,12 @@ define double @fminv_v8f64(ptr %a) #0 {
 ; VBITS_GE_512-NEXT:    fminnmv d0, p0, z0.d
 ; VBITS_GE_512-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; VBITS_GE_512-NEXT:    ret
-  %op = load <8 x double>, ptr %a
+  %op = load <8 x double>, <8 x double>* %a
   %res = call double @llvm.vector.reduce.fmin.v8f64(<8 x double> %op)
   ret double %res
 }
 
-define double @fminv_v16f64(ptr %a) vscale_range(8,0) #0 {
+define double @fminv_v16f64(<16 x double>* %a) vscale_range(8,0) #0 {
 ; CHECK-LABEL: fminv_v16f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl16
@@ -1043,12 +1047,12 @@ define double @fminv_v16f64(ptr %a) vscale_range(8,0) #0 {
 ; CHECK-NEXT:    fminnmv d0, p0, z0.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <16 x double>, ptr %a
+  %op = load <16 x double>, <16 x double>* %a
   %res = call double @llvm.vector.reduce.fmin.v16f64(<16 x double> %op)
   ret double %res
 }
 
-define double @fminv_v32f64(ptr %a) vscale_range(16,0) #0 {
+define double @fminv_v32f64(<32 x double>* %a) vscale_range(16,0) #0 {
 ; CHECK-LABEL: fminv_v32f64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d, vl32
@@ -1056,7 +1060,7 @@ define double @fminv_v32f64(ptr %a) vscale_range(16,0) #0 {
 ; CHECK-NEXT:    fminnmv d0, p0, z0.d
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
 ; CHECK-NEXT:    ret
-  %op = load <32 x double>, ptr %a
+  %op = load <32 x double>, <32 x double>* %a
   %res = call double @llvm.vector.reduce.fmin.v32f64(<32 x double> %op)
   ret double %res
 }

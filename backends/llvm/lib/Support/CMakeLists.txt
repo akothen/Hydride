@@ -131,7 +131,6 @@ add_llvm_component_library(LLVMSupport
   ARMWinEH.cpp
   Allocator.cpp
   AutoConvert.cpp
-  Base64.cpp
   BinaryStreamError.cpp
   BinaryStreamReader.cpp
   BinaryStreamRef.cpp
@@ -170,7 +169,6 @@ add_llvm_component_library(LLVMSupport
   FileUtilities.cpp
   FileOutputBuffer.cpp
   FoldingSet.cpp
-  Format.cpp
   FormattedStream.cpp
   FormatVariadic.cpp
   GlobPattern.cpp
@@ -187,7 +185,6 @@ add_llvm_component_library(LLVMSupport
   LineIterator.cpp
   Locale.cpp
   LockFileManager.cpp
-  LoongArchTargetParser.cpp
   LowLevelType.cpp
   ManagedStatic.cpp
   MathExtras.cpp

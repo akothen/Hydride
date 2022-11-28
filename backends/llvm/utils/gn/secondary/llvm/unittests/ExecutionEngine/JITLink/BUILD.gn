@@ -1,4 +1,4 @@
-import("//third-party/unittest/unittest.gni")
+import("//llvm/utils/unittest/unittest.gni")
 
 unittest("JITLinkTests") {
   deps = [
@@ -11,8 +11,5 @@ unittest("JITLinkTests") {
     "//llvm/lib/Target:TargetsToBuild",
     "//llvm/lib/Testing/Support",
   ]
-  sources = [
-    "EHFrameSupportTests.cpp",
-    "LinkGraphTests.cpp",
-  ]
+  sources = [ "LinkGraphTests.cpp" ]
 }

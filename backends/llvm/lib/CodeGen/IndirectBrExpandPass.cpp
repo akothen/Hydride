@@ -198,7 +198,7 @@ bool IndirectBrExpandPass::runOnFunction(Function &F) {
       CommonITy = ITy;
   }
 
-  auto GetSwitchValue = [CommonITy](IndirectBrInst *IBr) {
+  auto GetSwitchValue = [DL, CommonITy](IndirectBrInst *IBr) {
     return CastInst::CreatePointerCast(
         IBr->getAddress(), CommonITy,
         Twine(IBr->getAddress()->getName()) + ".switch_cast", IBr);

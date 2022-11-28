@@ -6,19 +6,12 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "PassDetail.h"
 #include "mlir/Dialect/Bufferization/Transforms/Passes.h"
-
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/IR/Operation.h"
 #include "mlir/Pass/Pass.h"
-
-namespace mlir {
-namespace bufferization {
-#define GEN_PASS_DEF_BUFFERRESULTSTOOUTPARAMS
-#include "mlir/Dialect/Bufferization/Transforms/Passes.h.inc"
-} // namespace bufferization
-} // namespace mlir
 
 using namespace mlir;
 
@@ -119,21 +112,9 @@ static void updateReturnOps(func::FuncOp func,
 
 // Updates all CallOps in the scope of the given ModuleOp by allocating
 // temporary buffers for newly introduced out params.
-static LogicalResult
-updateCalls(ModuleOp module,
-            const bufferization::BufferResultsToOutParamsOptions &options) {
+static LogicalResult updateCalls(ModuleOp module) {
   bool didFail = false;
-  SymbolTable symtab(module);
   module.walk([&](func::CallOp op) {
-    auto callee = symtab.lookup<func::FuncOp>(op.getCallee());
-    if (!callee) {
-      op.emitError() << "cannot find callee '" << op.getCallee() << "' in "
-                     << "symbol table";
-      didFail = true;
-      return;
-    }
-    if (!options.filterFn(&callee))
-      return;
     SmallVector<Value, 6> replaceWithNewCallResults;
     SmallVector<Value, 6> replaceWithOutParams;
     for (OpResult result : op.getResults()) {
@@ -181,12 +162,9 @@ updateCalls(ModuleOp module,
   return failure(didFail);
 }
 
-LogicalResult mlir::bufferization::promoteBufferResultsToOutParams(
-    ModuleOp module,
-    const bufferization::BufferResultsToOutParamsOptions &options) {
+LogicalResult
+mlir::bufferization::promoteBufferResultsToOutParams(ModuleOp module) {
   for (auto func : module.getOps<func::FuncOp>()) {
-    if (!options.filterFn(&func))
-      continue;
     SmallVector<BlockArgument, 6> appendedEntryArgs;
     if (failed(updateFuncOp(func, appendedEntryArgs)))
       return failure();
@@ -194,31 +172,22 @@ LogicalResult mlir::bufferization::promoteBufferResultsToOutParams(
       continue;
     updateReturnOps(func, appendedEntryArgs);
   }
-  if (failed(updateCalls(module, options)))
+  if (failed(updateCalls(module)))
     return failure();
   return success();
 }
 
 namespace {
 struct BufferResultsToOutParamsPass
-    : bufferization::impl::BufferResultsToOutParamsBase<
-          BufferResultsToOutParamsPass> {
-  explicit BufferResultsToOutParamsPass(
-      const bufferization::BufferResultsToOutParamsOptions &options)
-      : options(options) {}
-
+    : BufferResultsToOutParamsBase<BufferResultsToOutParamsPass> {
   void runOnOperation() override {
-    if (failed(bufferization::promoteBufferResultsToOutParams(getOperation(),
-                                                              options)))
+    if (failed(bufferization::promoteBufferResultsToOutParams(getOperation())))
       return signalPassFailure();
   }
-
-private:
-  bufferization::BufferResultsToOutParamsOptions options;
 };
 } // namespace
 
-std::unique_ptr<Pass> mlir::bufferization::createBufferResultsToOutParamsPass(
-    const bufferization::BufferResultsToOutParamsOptions &options) {
-  return std::make_unique<BufferResultsToOutParamsPass>(options);
+std::unique_ptr<Pass>
+mlir::bufferization::createBufferResultsToOutParamsPass() {
+  return std::make_unique<BufferResultsToOutParamsPass>();
 }

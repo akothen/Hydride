@@ -55,7 +55,7 @@ Parser::parseCommaSeparatedList(Delimiter delimiter,
   case Delimiter::OptionalParen:
     if (getToken().isNot(Token::l_paren))
       return success();
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Delimiter::Paren:
     if (parseToken(Token::l_paren, "expected '('" + contextMessage))
       return failure();
@@ -67,7 +67,7 @@ Parser::parseCommaSeparatedList(Delimiter delimiter,
     // Check for absent list.
     if (getToken().isNot(Token::less))
       return success();
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Delimiter::LessGreater:
     if (parseToken(Token::less, "expected '<'" + contextMessage))
       return success();
@@ -78,7 +78,7 @@ Parser::parseCommaSeparatedList(Delimiter delimiter,
   case Delimiter::OptionalSquare:
     if (getToken().isNot(Token::l_square))
       return success();
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Delimiter::Square:
     if (parseToken(Token::l_square, "expected '['" + contextMessage))
       return failure();
@@ -89,7 +89,7 @@ Parser::parseCommaSeparatedList(Delimiter delimiter,
   case Delimiter::OptionalBraces:
     if (getToken().isNot(Token::l_brace))
       return success();
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Delimiter::Braces:
     if (parseToken(Token::l_brace, "expected '{'" + contextMessage))
       return failure();
@@ -238,16 +238,6 @@ ParseResult Parser::parseToken(Token::Kind expectedToken,
 
 /// Parse an optional integer value from the stream.
 OptionalParseResult Parser::parseOptionalInteger(APInt &result) {
-  // Parse `false` and `true` keywords as 0 and 1 respectively.
-  if (consumeIf(Token::kw_false)) {
-    result = false;
-    return success();
-  }
-  if (consumeIf(Token::kw_true)) {
-    result = true;
-    return success();
-  }
-
   Token curToken = getToken();
   if (curToken.isNot(Token::integer, Token::minus))
     return llvm::None;
@@ -348,17 +338,6 @@ Parser::parseResourceHandle(const OpAsmDialectInterface *dialect,
 
   name = entry.first;
   return entry.second;
-}
-
-FailureOr<AsmDialectResourceHandle>
-Parser::parseResourceHandle(Dialect *dialect) {
-  const auto *interface = dyn_cast<OpAsmDialectInterface>(dialect);
-  if (!interface) {
-    return emitError() << "dialect '" << dialect->getNamespace()
-                       << "' does not expect resource handles";
-  }
-  StringRef resourceName;
-  return parseResourceHandle(interface, resourceName);
 }
 
 //===----------------------------------------------------------------------===//
@@ -768,7 +747,7 @@ ParseResult OperationParser::finalize() {
   auto &attributeAliases = state.symbols.attributeAliasDefinitions;
   auto locID = TypeID::get<DeferredLocInfo *>();
   auto resolveLocation = [&, this](auto &opOrArgument) -> LogicalResult {
-    auto fwdLoc = dyn_cast<OpaqueLoc>(opOrArgument.getLoc());
+    auto fwdLoc = opOrArgument.getLoc().template dyn_cast<OpaqueLoc>();
     if (!fwdLoc || fwdLoc.getUnderlyingTypeID() != locID)
       return success();
     auto locInfo = deferredLocsReferences[fwdLoc.getUnderlyingLocation()];
@@ -776,7 +755,7 @@ ParseResult OperationParser::finalize() {
     if (!attr)
       return this->emitError(locInfo.loc)
              << "operation location alias was never defined";
-    auto locAttr = dyn_cast<LocationAttr>(attr);
+    auto locAttr = attr.dyn_cast<LocationAttr>();
     if (!locAttr)
       return this->emitError(locInfo.loc)
              << "expected location, but found '" << attr << "'";
@@ -802,7 +781,7 @@ ParseResult OperationParser::finalize() {
     return failure();
 
   // Verify that the parsed operations are valid.
-  if (state.config.shouldVerifyAfterParse() && failed(verify(topLevelOp)))
+  if (failed(verify(topLevelOp)))
     return failure();
 
   // If we are populating the parser state, finalize the top-level operation.
@@ -1930,7 +1909,7 @@ ParseResult OperationParser::parseLocationAlias(LocationAttr &loc) {
   // If this alias can be resolved, do it now.
   Attribute attr = state.symbols.attributeAliasDefinitions.lookup(identifier);
   if (attr) {
-    if (!(loc = dyn_cast<LocationAttr>(attr)))
+    if (!(loc = attr.dyn_cast<LocationAttr>()))
       return emitError(tok.getLoc())
              << "expected location, but found '" << attr << "'";
   } else {
@@ -2255,7 +2234,7 @@ ParseResult OperationParser::codeCompleteSSAUse() {
 
       // If the value isn't a forward reference, we also add the name of the op
       // to the detail.
-      if (auto result = dyn_cast<OpResult>(frontValue)) {
+      if (auto result = frontValue.dyn_cast<OpResult>()) {
         if (!forwardRefPlaceholders.count(result))
           detailOS << result.getOwner()->getName() << ": ";
       } else {
@@ -2343,14 +2322,6 @@ public:
   StringRef getKey() const final { return key; }
 
   InFlightDiagnostic emitError() const final { return p.emitError(keyLoc); }
-
-  AsmResourceEntryKind getKind() const final {
-    if (value.isAny(Token::kw_true, Token::kw_false))
-      return AsmResourceEntryKind::Bool;
-    return value.getSpelling().startswith("\"0x")
-               ? AsmResourceEntryKind::Blob
-               : AsmResourceEntryKind::String;
-  }
 
   FailureOr<bool> parseAsBool() const final {
     if (value.is(Token::kw_true))
@@ -2593,8 +2564,8 @@ ParseResult TopLevelOperationParser::parse(Block *topLevelBlock,
       // top-level block.
       auto &parsedOps = topLevelOp->getBody()->getOperations();
       auto &destOps = topLevelBlock->getOperations();
-      destOps.splice(destOps.end(), parsedOps, parsedOps.begin(),
-                     parsedOps.end());
+      destOps.splice(destOps.empty() ? destOps.end() : std::prev(destOps.end()),
+                     parsedOps, parsedOps.begin(), parsedOps.end());
       return success();
     }
 

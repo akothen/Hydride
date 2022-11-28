@@ -114,6 +114,15 @@ static cl::opt<std::string>
                  cl::desc("Ignorelist file (sanitizer ignorelist format)"),
                  cl::cat(Cat));
 
+static cl::opt<std::string>
+    ClBlacklist("blacklist", cl::init(""), cl::Hidden,
+                cl::desc("ignorelist file (sanitizer ignorelist format)"),
+                cl::cat(Cat));
+
+static cl::opt<bool> ClUseDefaultBlacklist(
+    "use_default_blacklist", cl::init(true), cl::Hidden,
+    cl::desc("Controls if default ignorelist should be used"), cl::cat(Cat));
+
 static cl::opt<bool> ClUseDefaultIgnorelist(
     "use_default_ignorelist", cl::init(true), cl::Hidden,
     cl::desc("Controls if default ignorelist should be used"), cl::cat(Cat));
@@ -505,7 +514,7 @@ public:
 
 private:
   static std::unique_ptr<SpecialCaseList> createDefaultIgnorelist() {
-    if (!ClUseDefaultIgnorelist)
+    if ((!ClUseDefaultIgnorelist) && (!ClUseDefaultBlacklist))
       return std::unique_ptr<SpecialCaseList>();
     std::unique_ptr<MemoryBuffer> MB =
         MemoryBuffer::getMemBuffer(DefaultIgnorelistStr);
@@ -516,8 +525,13 @@ private:
   }
 
   static std::unique_ptr<SpecialCaseList> createUserIgnorelist() {
-    if (ClIgnorelist.empty())
+    if ((ClBlacklist.empty()) && ClIgnorelist.empty())
       return std::unique_ptr<SpecialCaseList>();
+
+    if (!ClBlacklist.empty())
+      return SpecialCaseList::createOrDie({{ClBlacklist}},
+                                          *vfs::getRealFileSystem());
+
     return SpecialCaseList::createOrDie({{ClIgnorelist}},
                                         *vfs::getRealFileSystem());
   }

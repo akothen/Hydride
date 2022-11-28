@@ -37,7 +37,6 @@ class AliasSetTracker;
 class AnyMemSetInst;
 class AnyMemTransferInst;
 class BasicBlock;
-class BatchAAResults;
 class LoadInst;
 class raw_ostream;
 class StoreInst;
@@ -209,7 +208,7 @@ public:
   bool isForwardingAliasSet() const { return Forward; }
 
   /// Merge the specified alias set into this alias set.
-  void mergeSetIn(AliasSet &AS, AliasSetTracker &AST, BatchAAResults &BatchAA);
+  void mergeSetIn(AliasSet &AS, AliasSetTracker &AST);
 
   // Alias Set iteration - Allow access to all of the pointers which are part of
   // this alias set.
@@ -311,8 +310,8 @@ public:
   /// If the specified pointer "may" (or must) alias one of the members in the
   /// set return the appropriate AliasResult. Otherwise return NoAlias.
   AliasResult aliasesPointer(const Value *Ptr, LocationSize Size,
-                             const AAMDNodes &AAInfo, BatchAAResults &AA) const;
-  bool aliasesUnknownInst(const Instruction *Inst, BatchAAResults &AA) const;
+                             const AAMDNodes &AAInfo, AAResults &AA) const;
+  bool aliasesUnknownInst(const Instruction *Inst, AAResults &AA) const;
 };
 
 inline raw_ostream& operator<<(raw_ostream &OS, const AliasSet &AS) {

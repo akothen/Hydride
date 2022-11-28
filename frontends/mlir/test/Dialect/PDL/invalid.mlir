@@ -121,8 +121,8 @@ pdl.pattern : benefit(1) {
 pdl.pattern : benefit(1) {
   // expected-error@below {{expected the same number of attribute values and attribute names, got 1 names and 0 values}}
   %op = "pdl.operation"() {
-    attributeValueNames = ["attr"],
-    operand_segment_sizes = array<i32: 0, 0, 0>
+    attributeNames = ["attr"],
+    operand_segment_sizes = dense<0> : vector<3xi32>
   } : () -> (!pdl.operation)
   rewrite %op with "rewriter"
 }
@@ -230,25 +230,8 @@ pdl.pattern : benefit(1) {
 
     // expected-error@below {{expected no replacement values to be provided when the replacement operation is present}}
     "pdl.replace"(%root, %newOp, %newResult) {
-      operand_segment_sizes = array<i32: 1, 1, 1>
+      operand_segment_sizes = dense<1> : vector<3xi32>
     } : (!pdl.operation, !pdl.operation, !pdl.value) -> ()
-  }
-}
-
-// -----
-
-//===----------------------------------------------------------------------===//
-// pdl::RangeOp
-//===----------------------------------------------------------------------===//
-
-pdl.pattern : benefit(1) {
-  %operand = pdl.operand
-  %resultType = pdl.type
-  %root = pdl.operation "baz.op"(%operand : !pdl.value) -> (%resultType : !pdl.type)
-  
-  rewrite %root {
-    // expected-error @below {{expected operand to have element type '!pdl.value', but got '!pdl.type'}}
-    %range = pdl.range %operand, %resultType : !pdl.value, !pdl.type
   }
 }
 
@@ -276,7 +259,7 @@ pdl.pattern : benefit(1) {
 
   // expected-error@below {{expected rewrite region to be non-empty if external name is not specified}}
   "pdl.rewrite"(%op) ({}) {
-    operand_segment_sizes = array<i32: 1,0>
+    operand_segment_sizes = dense<[1,0]> : vector<2xi32>
   } : (!pdl.operation) -> ()
 }
 
@@ -289,7 +272,7 @@ pdl.pattern : benefit(1) {
   "pdl.rewrite"(%op, %op) ({
     ^bb1:
   }) {
-    operand_segment_sizes = array<i32: 1, 1>
+    operand_segment_sizes = dense<1> : vector<2xi32>
   }: (!pdl.operation, !pdl.operation) -> ()
 }
 
@@ -303,7 +286,7 @@ pdl.pattern : benefit(1) {
     ^bb1:
   }) {
     name = "foo",
-    operand_segment_sizes = array<i32: 1,0>
+    operand_segment_sizes = dense<[1,0]> : vector<2xi32>
   } : (!pdl.operation) -> ()
 }
 

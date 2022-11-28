@@ -1,4 +1,5 @@
 ; RUN: llc -march=hexagon -mcpu=hexagonv65 < %s | FileCheck %s
+; REQUIRES: hexagon
 
 ; C file was:
 ; struct S { int a[3];};

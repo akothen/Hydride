@@ -17,9 +17,6 @@ struct OneShotBufferizationOptions;
 // Passes
 //===----------------------------------------------------------------------===//
 
-#define GEN_PASS_DECL
-#include "mlir/Dialect/Bufferization/Transforms/Passes.h.inc"
-
 /// Creates an instance of the BufferDeallocation pass to free all allocated
 /// buffers.
 std::unique_ptr<Pass> createBufferDeallocationPass();
@@ -35,32 +32,16 @@ std::unique_ptr<Pass> createBufferHoistingPass();
 /// reallocations inside of loops.
 std::unique_ptr<Pass> createBufferLoopHoistingPass();
 
-// Options struct for BufferResultsToOutParams pass.
-// Note: defined only here, not in tablegen.
-struct BufferResultsToOutParamsOptions {
-  // Filter function; returns true if the function should be converted.
-  // Defaults to true, i.e. all functions are converted.
-  llvm::function_ref<bool(func::FuncOp *)> filterFn = [](func::FuncOp *func) {
-    return true;
-  };
-};
-
 /// Creates a pass that converts memref function results to out-params.
-std::unique_ptr<Pass> createBufferResultsToOutParamsPass(
-    const BufferResultsToOutParamsOptions &options = {});
+std::unique_ptr<Pass> createBufferResultsToOutParamsPass();
 
 /// Replace buffers that are returned from a function with an out parameter.
 /// Also update all call sites.
-LogicalResult
-promoteBufferResultsToOutParams(ModuleOp module,
-                                const BufferResultsToOutParamsOptions &options);
+LogicalResult promoteBufferResultsToOutParams(ModuleOp module);
 
 /// Creates a pass that drops memref function results that are equivalent to a
 /// function argument.
 std::unique_ptr<Pass> createDropEquivalentBufferResultsPass();
-
-/// Create a pass that rewrites tensor.empty to bufferization.alloc_tensor.
-std::unique_ptr<Pass> createEmptyTensorToAllocTensorPass();
 
 /// Drop all memref function results that are equivalent to a function argument.
 LogicalResult dropEquivalentBufferResults(ModuleOp module);
@@ -90,9 +71,9 @@ createPromoteBuffersToStackPass(unsigned maxAllocSizeInBytes = 1024,
 std::unique_ptr<Pass>
 createPromoteBuffersToStackPass(std::function<bool(Value)> isSmallAlloc);
 
-/// Create a pass that tries to eliminate tensor.empty ops that are anchored on
+/// Create a pass that tries to eliminate alloc_tensor ops that are anchored on
 /// insert_slice ops.
-std::unique_ptr<Pass> createEmptyTensorEliminationPass();
+std::unique_ptr<Pass> createAllocTensorEliminationPass();
 
 /// Create a pass that bufferizes ops from the bufferization dialect.
 std::unique_ptr<Pass> createBufferizationBufferizePass();

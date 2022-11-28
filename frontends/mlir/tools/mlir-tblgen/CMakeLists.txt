@@ -5,10 +5,9 @@ set(LLVM_LINK_COMPONENTS
 )
 
 add_tablegen(mlir-tblgen MLIR
-  DESTINATION "${MLIR_TOOLS_INSTALL_DIR}"
-  EXPORT MLIR
   AttrOrTypeDefGen.cpp
   AttrOrTypeFormatGen.cpp
+  CodeGenHelpers.cpp
   DialectGen.cpp
   DirectiveCommonGen.cpp
   EnumsGen.cpp
@@ -34,6 +33,6 @@ set_target_properties(mlir-tblgen PROPERTIES FOLDER "Tablegenning")
 target_link_libraries(mlir-tblgen
   PRIVATE
   MLIRSupportIndentedOstream
-  MLIRTblgenLib)
+  MLIRTableGen)
 
 mlir_check_all_link_libraries(mlir-tblgen)

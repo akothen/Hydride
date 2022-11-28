@@ -1,5 +1,5 @@
 ; RUN: llc --filetype=obj %s -o - | dxil-dis 
-target triple = "dxil-unknown-shadermodel6.7-library"
+target triple = "dxil-unknown-unknown"
 
 !llvm.foo = !{!0}
 !llvm.bar = !{!1}

@@ -21,7 +21,7 @@ using namespace mlir;
 Operation *
 CallOpInterface::resolveCallable(SymbolTableCollection *symbolTable) {
   CallInterfaceCallable callable = getCallableForCallee();
-  if (auto symbolVal = dyn_cast<Value>(callable))
+  if (auto symbolVal = callable.dyn_cast<Value>())
     return symbolVal.getDefiningOp();
 
   // If the callable isn't a value, lookup the symbol reference.

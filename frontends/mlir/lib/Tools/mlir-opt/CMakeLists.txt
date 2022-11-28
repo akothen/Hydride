@@ -5,7 +5,6 @@ add_mlir_library(MLIROptLib
   ${MLIR_MAIN_INCLUDE_DIR}/mlir/Tools/mlir-opt
 
   LINK_LIBS PUBLIC
-  MLIRBytecodeWriter
   MLIRPass
   MLIRParser
   MLIRSupport

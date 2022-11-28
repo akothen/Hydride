@@ -3,7 +3,7 @@
 ;
 ; RUN: opt < %s -passes=instcombine -S | FileCheck %s
 
-declare i64 @strlen(ptr)
+declare i64 @strlen(i8*)
 
 @a5_4 = constant [5 x [4 x i8]] [[4 x i8] c"123\00", [4 x i8] c"12\00\00", [4 x i8] c"1\00\00\00", [4 x i8] zeroinitializer, [4 x i8] zeroinitializer]
 
@@ -14,7 +14,8 @@ define i64 @fold_a5_4_i0_to_3() {
 ; CHECK-LABEL: @fold_a5_4_i0_to_3(
 ; CHECK-NEXT:    ret i64 3
 ;
-  %len = call i64 @strlen(ptr @a5_4)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 0, i64 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -25,8 +26,8 @@ define i64 @fold_a5_4_i0_p1_to_2() {
 ; CHECK-LABEL: @fold_a5_4_i0_p1_to_2(
 ; CHECK-NEXT:    ret i64 2
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 0, i64 1
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 0, i64 1
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -37,8 +38,8 @@ define i64 @fold_a5_4_i0_p2_to_1() {
 ; CHECK-LABEL: @fold_a5_4_i0_p2_to_1(
 ; CHECK-NEXT:    ret i64 1
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 0, i64 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 0, i64 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -49,8 +50,8 @@ define i64 @fold_a5_4_i0_p3_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i0_p3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 0, i64 3
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 0, i64 3
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -61,8 +62,8 @@ define i64 @fold_a5_4_i1_to_2() {
 ; CHECK-LABEL: @fold_a5_4_i1_to_2(
 ; CHECK-NEXT:    ret i64 2
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 1, i64 0
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 1, i64 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -73,8 +74,8 @@ define i64 @fold_a5_4_i1_p1_to_1() {
 ; CHECK-LABEL: @fold_a5_4_i1_p1_to_1(
 ; CHECK-NEXT:    ret i64 1
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 1, i64 1
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 1, i64 1
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -85,8 +86,8 @@ define i64 @fold_a5_4_i1_p2_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i1_p2_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 1, i64 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 1, i64 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -97,8 +98,8 @@ define i64 @fold_a5_4_i1_p3_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i1_p3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 1, i64 3
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 1, i64 3
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -109,8 +110,8 @@ define i64 @fold_a5_4_i2_to_1() {
 ; CHECK-LABEL: @fold_a5_4_i2_to_1(
 ; CHECK-NEXT:    ret i64 1
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 2, i64 0
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 2, i64 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -121,8 +122,8 @@ define i64 @fold_a5_4_i2_p1_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i2_p1_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 2, i64 1
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 2, i64 1
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -133,8 +134,8 @@ define i64 @fold_a5_4_i2_p2_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i2_p2_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 2, i64 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 2, i64 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -145,8 +146,8 @@ define i64 @fold_a5_4_i2_p3_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i2_p3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 2, i64 3
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 2, i64 3
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -157,8 +158,8 @@ define i64 @fold_a5_4_i3_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 3, i64 0
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 3, i64 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -169,8 +170,8 @@ define i64 @fold_a5_4_i3_p1_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i3_p1_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 3, i64 1
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 3, i64 1
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -181,8 +182,8 @@ define i64 @fold_a5_4_i3_p2_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i3_p2_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 3, i64 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 3, i64 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -193,8 +194,8 @@ define i64 @fold_a5_3_i4_p3_to_0() {
 ; CHECK-LABEL: @fold_a5_3_i4_p3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 3, i64 3
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 3, i64 3
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -205,8 +206,8 @@ define i64 @fold_a5_4_i4_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i4_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 4, i64 0
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 4, i64 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -217,8 +218,8 @@ define i64 @fold_a5_4_i4_p1_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i4_p1_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 4, i64 1
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 4, i64 1
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -229,8 +230,8 @@ define i64 @fold_a5_4_i4_p2_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i4_p2_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 4, i64 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 4, i64 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -241,7 +242,7 @@ define i64 @fold_a5_4_i4_p3_to_0() {
 ; CHECK-LABEL: @fold_a5_4_i4_p3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr [5 x [4 x i8]], ptr @a5_4, i64 0, i64 4, i64 3
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr [5 x [4 x i8]], [5 x [4 x i8]]* @a5_4, i64 0, i64 4, i64 3
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }

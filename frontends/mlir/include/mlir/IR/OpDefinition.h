@@ -44,17 +44,11 @@ public:
   OptionalParseResult(llvm::NoneType) : impl(llvm::None) {}
 
   /// Returns true if we contain a valid ParseResult value.
-  bool has_value() const { return impl.has_value(); }
-  LLVM_DEPRECATED("Use has_value instead", "has_value") bool hasValue() const {
-    return impl.has_value();
-  }
+  bool hasValue() const { return impl.has_value(); }
 
   /// Access the internal ParseResult value.
-  ParseResult value() const { return impl.value(); }
-  LLVM_DEPRECATED("Use value instead", "value") ParseResult getValue() const {
-    return impl.value();
-  }
-  ParseResult operator*() const { return value(); }
+  ParseResult getValue() const { return impl.value(); }
+  ParseResult operator*() const { return getValue(); }
 
 private:
   Optional<ParseResult> impl;
@@ -147,8 +141,8 @@ public:
   /// See Operation::walk for more details.
   template <WalkOrder Order = WalkOrder::PostOrder, typename FnT,
             typename RetT = detail::walkResultType<FnT>>
-  std::enable_if_t<llvm::function_traits<std::decay_t<FnT>>::num_args == 1,
-                   RetT>
+  typename std::enable_if<
+      llvm::function_traits<std::decay_t<FnT>>::num_args == 1, RetT>::type
   walk(FnT &&callback) {
     return state->walk<Order>(std::forward<FnT>(callback));
   }
@@ -175,8 +169,8 @@ public:
   ///         return WalkResult::advance();
   ///       });
   template <typename FnT, typename RetT = detail::walkResultType<FnT>>
-  std::enable_if_t<llvm::function_traits<std::decay_t<FnT>>::num_args == 2,
-                   RetT>
+  typename std::enable_if<
+      llvm::function_traits<std::decay_t<FnT>>::num_args == 2, RetT>::type
   walk(FnT &&callback) {
     return state->walk(std::forward<FnT>(callback));
   }
@@ -240,7 +234,7 @@ class OpFoldResult : public PointerUnion<Attribute, Value> {
   using PointerUnion<Attribute, Value>::PointerUnion;
 
 public:
-  void dump() const { llvm::errs() << *this << "\n"; }
+  void dump() { llvm::errs() << *this << "\n"; }
 };
 
 /// Allow printing to a stream.
@@ -854,7 +848,7 @@ public:
   /// can use SFINAE to disable the methods for non-single region operations.
   template <typename OpT, typename T = void>
   using enable_if_single_region =
-      std::enable_if_t<OpT::template hasTrait<OneRegion>(), T>;
+      typename std::enable_if_t<OpT::template hasTrait<OneRegion>(), T>;
 
   template <typename OpT = ConcreteType>
   enable_if_single_region<OpT, Block::iterator> begin() {
@@ -957,7 +951,7 @@ struct SingleBlockImplicitTerminator {
 
     template <typename OpT, typename T = void>
     using enable_if_single_region =
-        std::enable_if_t<OpT::template hasTrait<OneRegion>(), T>;
+        typename std::enable_if_t<OpT::template hasTrait<OneRegion>(), T>;
 
     /// Insert the operation into the back of the body, before the terminator.
     template <typename OpT = ConcreteType>
@@ -1496,10 +1490,12 @@ using has_fold_trait =
 template <typename T>
 using detect_has_fold_trait = llvm::is_detected<has_fold_trait, T>;
 /// Trait to check if T provides any `foldTrait` method.
+/// NOTE: This should use std::disjunction when C++17 is available.
 template <typename T>
 using detect_has_any_fold_trait =
-    std::disjunction<detect_has_fold_trait<T>,
-                     detect_has_single_result_fold_trait<T>>;
+    std::conditional_t<bool(detect_has_fold_trait<T>::value),
+                       detect_has_fold_trait<T>,
+                       detect_has_single_result_fold_trait<T>>;
 
 /// Returns the result of folding a trait that implements a `foldTrait` function
 /// that is specialized for operations that have a single result.
@@ -1545,7 +1541,10 @@ foldTrait(Operation *, ArrayRef<Attribute>, SmallVectorImpl<OpFoldResult> &) {
 template <typename... Ts>
 static LogicalResult foldTraits(Operation *op, ArrayRef<Attribute> operands,
                                 SmallVectorImpl<OpFoldResult> &results) {
-  return success((succeeded(foldTrait<Ts>(op, operands, results)) || ...));
+  bool anyFolded = false;
+  (void)std::initializer_list<int>{
+      (anyFolded |= succeeded(foldTrait<Ts>(op, operands, results)), 0)...};
+  return success(anyFolded);
 }
 
 //===----------------------------------------------------------------------===//
@@ -1580,7 +1579,10 @@ verifyTrait(Operation *) {
 /// Given a set of traits, return the result of verifying the given operation.
 template <typename... Ts>
 LogicalResult verifyTraits(Operation *op) {
-  return success((succeeded(verifyTrait<Ts>(op)) && ...));
+  LogicalResult result = success();
+  (void)std::initializer_list<int>{
+      (result = succeeded(result) ? verifyTrait<Ts>(op) : failure(), 0)...};
+  return result;
 }
 
 /// Verify the given trait if it provides a region verifier.
@@ -1600,7 +1602,12 @@ verifyRegionTrait(Operation *) {
 /// given operation.
 template <typename... Ts>
 LogicalResult verifyRegionTraits(Operation *op) {
-  return success((succeeded(verifyRegionTrait<Ts>(op)) && ...));
+  (void)op;
+  LogicalResult result = success();
+  (void)std::initializer_list<int>{
+      (result = succeeded(result) ? verifyRegionTrait<Ts>(op) : failure(),
+       0)...};
+  return result;
 }
 } // namespace op_definition_impl
 
@@ -1686,7 +1693,7 @@ public:
       llvm::report_fatal_error(
           "Attempting to attach an interface to an unregistered operation " +
           ConcreteType::getOperationName() + ".");
-    (checkInterfaceTarget<Models>(), ...);
+    (void)std::initializer_list<int>{(checkInterfaceTarget<Models>(), 0)...};
     info->attachInterface<Models...>();
   }
 

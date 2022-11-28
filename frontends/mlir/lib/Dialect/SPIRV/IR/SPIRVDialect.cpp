@@ -26,6 +26,7 @@
 #include "llvm/ADT/SetVector.h"
 #include "llvm/ADT/StringExtras.h"
 #include "llvm/ADT/StringMap.h"
+#include "llvm/ADT/StringSwitch.h"
 #include "llvm/ADT/TypeSwitch.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -38,8 +39,7 @@ using namespace mlir::spirv;
 // InlinerInterface
 //===----------------------------------------------------------------------===//
 
-/// Returns true if the given region contains spirv.Return or spirv.ReturnValue
-/// ops.
+/// Returns true if the given region contains spv.Return or spv.ReturnValue ops.
 static inline bool containsReturn(Region &region) {
   return llvm::any_of(region, [](Block &block) {
     Operation *terminator = block.getTerminator();
@@ -62,8 +62,8 @@ struct SPIRVInlinerInterface : public DialectInlinerInterface {
   /// 'dest' that is attached to an operation registered to the current dialect.
   bool isLegalToInline(Region *dest, Region *src, bool wouldBeCloned,
                        BlockAndValueMapping &) const final {
-    // Return true here when inlining into spirv.func, spirv.mlir.selection, and
-    // spirv.mlir.loop operations.
+    // Return true here when inlining into spv.func, spv.mlir.selection, and
+    // spv.mlir.loop operations.
     auto *op = dest->getParentOp();
     return isa<spirv::FuncOp, spirv::SelectionOp, spirv::LoopOp>(op);
   }
@@ -91,7 +91,7 @@ struct SPIRVInlinerInterface : public DialectInlinerInterface {
       OpBuilder(op).create<spirv::BranchOp>(op->getLoc(), newDest);
       op->erase();
     } else if (auto retValOp = dyn_cast<spirv::ReturnValueOp>(op)) {
-      llvm_unreachable("unimplemented spirv.ReturnValue in inliner");
+      llvm_unreachable("unimplemented spv.ReturnValue in inliner");
     }
   }
 
@@ -99,15 +99,15 @@ struct SPIRVInlinerInterface : public DialectInlinerInterface {
   /// as necessary.
   void handleTerminator(Operation *op,
                         ArrayRef<Value> valuesToRepl) const final {
-    // Only spirv.ReturnValue needs to be handled here.
+    // Only spv.ReturnValue needs to be handled here.
     auto retValOp = dyn_cast<spirv::ReturnValueOp>(op);
     if (!retValOp)
       return;
 
     // Replace the values directly with the return operands.
     assert(valuesToRepl.size() == 1 &&
-           "spirv.ReturnValue expected to only handle one result");
-    valuesToRepl.front().replaceAllUsesWith(retValOp.getValue());
+           "spv.ReturnValue expected to only handle one result");
+    valuesToRepl.front().replaceAllUsesWith(retValOp.value());
   }
 };
 } // namespace
@@ -280,7 +280,7 @@ static LogicalResult parseOptionalArrayStride(const SPIRVDialect &dialect,
 //                | vector-type
 //                | spirv-type
 //
-// array-type ::= `!spirv.array` `<` integer-literal `x` element-type
+// array-type ::= `!spv.array` `<` integer-literal `x` element-type
 //                (`,` `stride` `=` integer-literal)? `>`
 static Type parseArrayType(SPIRVDialect const &dialect,
                            DialectAsmParser &parser) {
@@ -318,8 +318,7 @@ static Type parseArrayType(SPIRVDialect const &dialect,
   return ArrayType::get(elementType, count, stride);
 }
 
-// cooperative-matrix-type ::= `!spirv.coopmatrix` `<` element-type ',' scope
-// ','
+// cooperative-matrix-type ::= `!spv.coopmatrix` `<` element-type ',' scope ','
 //                                                   rows ',' columns>`
 static Type parseCooperativeMatrixType(SPIRVDialect const &dialect,
                                        DialectAsmParser &parser) {
@@ -349,40 +348,6 @@ static Type parseCooperativeMatrixType(SPIRVDialect const &dialect,
   return CooperativeMatrixNVType::get(elementTy, scope, dims[0], dims[1]);
 }
 
-// joint-matrix-type ::= `!spirv.jointmatrix` `<`rows `x` columns `x`
-// element-type
-//                                                       `,` layout `,` scope`>`
-static Type parseJointMatrixType(SPIRVDialect const &dialect,
-                                 DialectAsmParser &parser) {
-  if (parser.parseLess())
-    return Type();
-
-  SmallVector<int64_t, 2> dims;
-  SMLoc countLoc = parser.getCurrentLocation();
-  if (parser.parseDimensionList(dims, /*allowDynamic=*/false))
-    return Type();
-
-  if (dims.size() != 2) {
-    parser.emitError(countLoc, "expected rows and columns size");
-    return Type();
-  }
-
-  auto elementTy = parseAndVerifyType(dialect, parser);
-  if (!elementTy)
-    return Type();
-  MatrixLayout matrixLayout;
-  if (parser.parseComma() ||
-      parseEnumKeywordAttr(matrixLayout, parser, "matrixLayout <id>"))
-    return Type();
-  Scope scope;
-  if (parser.parseComma() || parseEnumKeywordAttr(scope, parser, "scope <id>"))
-    return Type();
-  if (parser.parseGreater())
-    return Type();
-  return JointMatrixINTELType::get(elementTy, scope, dims[0], dims[1],
-                                   matrixLayout);
-}
-
 // TODO: Reorder methods to be utilities first and parse*Type
 // methods in alphabetical order
 //
@@ -391,7 +356,7 @@ static Type parseJointMatrixType(SPIRVDialect const &dialect,
 //                 | `Workgroup`
 //                 | <and other storage classes...>
 //
-// pointer-type ::= `!spirv.ptr<` element-type `,` storage-class `>`
+// pointer-type ::= `!spv.ptr<` element-type `,` storage-class `>`
 static Type parsePointerType(SPIRVDialect const &dialect,
                              DialectAsmParser &parser) {
   if (parser.parseLess())
@@ -417,7 +382,7 @@ static Type parsePointerType(SPIRVDialect const &dialect,
   return PointerType::get(pointeeType, *storageClass);
 }
 
-// runtime-array-type ::= `!spirv.rtarray` `<` element-type
+// runtime-array-type ::= `!spv.rtarray` `<` element-type
 //                        (`,` `stride` `=` integer-literal)? `>`
 static Type parseRuntimeArrayType(SPIRVDialect const &dialect,
                                   DialectAsmParser &parser) {
@@ -437,7 +402,7 @@ static Type parseRuntimeArrayType(SPIRVDialect const &dialect,
   return RuntimeArrayType::get(elementType, stride);
 }
 
-// matrix-type ::= `!spirv.matrix` `<` integer-literal `x` element-type `>`
+// matrix-type ::= `!spv.matrix` `<` integer-literal `x` element-type `>`
 static Type parseMatrixType(SPIRVDialect const &dialect,
                             DialectAsmParser &parser) {
   if (parser.parseLess())
@@ -562,7 +527,7 @@ struct ParseCommaSeparatedList<ParseType> {
 //
 // format ::= `Unknown` | `Rgba32f` | <and other SPIR-V Image formats...>
 //
-// image-type ::= `!spirv.image<` element-type `,` dim `,` depth-info `,`
+// image-type ::= `!spv.image<` element-type `,` dim `,` depth-info `,`
 //                              arrayed-info `,` sampling-info `,`
 //                              sampler-use-info `,` format `>`
 static Type parseImageType(SPIRVDialect const &dialect,
@@ -582,7 +547,7 @@ static Type parseImageType(SPIRVDialect const &dialect,
   return ImageType::get(*value);
 }
 
-// sampledImage-type :: = `!spirv.sampledImage<` image-type `>`
+// sampledImage-type :: = `!spv.sampledImage<` image-type `>`
 static Type parseSampledImageType(SPIRVDialect const &dialect,
                                   DialectAsmParser &parser) {
   if (parser.parseLess())
@@ -608,7 +573,7 @@ static ParseResult parseStructMemberDecorations(
   SMLoc offsetLoc = parser.getCurrentLocation();
   StructType::OffsetInfo offset = 0;
   OptionalParseResult offsetParseResult = parser.parseOptionalInteger(offset);
-  if (offsetParseResult.has_value()) {
+  if (offsetParseResult.hasValue()) {
     if (failed(*offsetParseResult))
       return failure();
 
@@ -625,7 +590,7 @@ static ParseResult parseStructMemberDecorations(
     return success();
 
   // If there was an offset, make sure to parse the comma.
-  if (offsetParseResult.has_value() && parser.parseComma())
+  if (offsetParseResult.hasValue() && parser.parseComma())
     return failure();
 
   // Check for spirv::Decorations.
@@ -661,7 +626,7 @@ static ParseResult parseStructMemberDecorations(
 
 // struct-member-decoration ::= integer-literal? spirv-decoration*
 // struct-type ::=
-//             `!spirv.struct<` (id `,`)?
+//             `!spv.struct<` (id `,`)?
 //                          `(`
 //                            (spirv-type (`[` struct-member-decoration `]`)?)*
 //                          `)>`
@@ -788,8 +753,6 @@ Type SPIRVDialect::parseType(DialectAsmParser &parser) const {
     return parseArrayType(*this, parser);
   if (keyword == "coopmatrix")
     return parseCooperativeMatrixType(*this, parser);
-  if (keyword == "jointmatrix")
-    return parseJointMatrixType(*this, parser);
   if (keyword == "image")
     return parseImageType(*this, parser);
   if (keyword == "ptr")
@@ -896,13 +859,6 @@ static void print(CooperativeMatrixNVType type, DialectAsmPrinter &os) {
   os << ">";
 }
 
-static void print(JointMatrixINTELType type, DialectAsmPrinter &os) {
-  os << "jointmatrix<" << type.getRows() << "x" << type.getColumns() << "x";
-  os << type.getElementType() << ", "
-     << stringifyMatrixLayout(type.getMatrixLayout());
-  os << ", " << stringifyScope(type.getScope()) << ">";
-}
-
 static void print(MatrixType type, DialectAsmPrinter &os) {
   os << "matrix<" << type.getNumColumns() << " x " << type.getColumnType();
   os << ">";
@@ -910,9 +866,9 @@ static void print(MatrixType type, DialectAsmPrinter &os) {
 
 void SPIRVDialect::printType(Type type, DialectAsmPrinter &os) const {
   TypeSwitch<Type>(type)
-      .Case<ArrayType, CooperativeMatrixNVType, JointMatrixINTELType,
-            PointerType, RuntimeArrayType, ImageType, SampledImageType,
-            StructType, MatrixType>([&](auto type) { print(type, os); })
+      .Case<ArrayType, CooperativeMatrixNVType, PointerType, RuntimeArrayType,
+            ImageType, SampledImageType, StructType, MatrixType>(
+          [&](auto type) { print(type, os); })
       .Default([](Type) { llvm_unreachable("unhandled SPIR-V type"); });
 }
 

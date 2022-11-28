@@ -34,7 +34,6 @@
 namespace llvm {
 
 class AllocaInst;
-class AssumptionCache;
 class BasicBlock;
 class CallInst;
 class CallLowering;
@@ -48,7 +47,6 @@ class MachineInstr;
 class MachineRegisterInfo;
 class OptimizationRemarkEmitter;
 class PHINode;
-class TargetLibraryInfo;
 class TargetPassConfig;
 class User;
 class Value;
@@ -572,8 +570,6 @@ private:
   std::unique_ptr<OptimizationRemarkEmitter> ORE;
 
   AAResults *AA;
-  AssumptionCache *AC;
-  const TargetLibraryInfo *LibInfo;
   FunctionLoweringInfo FuncInfo;
 
   // True when either the Target Machine specifies no optimizations or the

@@ -24,7 +24,7 @@
 @ax = external global [0 x i64]
 
 
-declare i64 @strlen(ptr)
+declare i64 @strlen(i8*)
 
 
 ; Fold strlen(a_s3.a) to 3.
@@ -33,7 +33,8 @@ define i64 @fold_strlen_a_S3_to_3() {
 ; CHECK-LABEL: @fold_strlen_a_S3_to_3(
 ; CHECK-NEXT:    ret i64 3
 ;
-  %len = call i64 @strlen(ptr @a_s3)
+  %ptr = getelementptr %struct.A_a4, %struct.A_a4* @a_s3, i32 0, i32 0, i32 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -44,8 +45,8 @@ define i64 @fold_strlen_a_S3_p1_to_2() {
 ; CHECK-LABEL: @fold_strlen_a_S3_p1_to_2(
 ; CHECK-NEXT:    ret i64 2
 ;
-  %ptr = getelementptr %struct.A_a4, ptr @a_s3, i32 0, i32 0, i32 1
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr %struct.A_a4, %struct.A_a4* @a_s3, i32 0, i32 0, i32 1
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -56,8 +57,8 @@ define i64 @fold_strlen_a_S3_p2_to_1() {
 ; CHECK-LABEL: @fold_strlen_a_S3_p2_to_1(
 ; CHECK-NEXT:    ret i64 1
 ;
-  %ptr = getelementptr %struct.A_a4, ptr @a_s3, i32 0, i32 0, i32 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr %struct.A_a4, %struct.A_a4* @a_s3, i32 0, i32 0, i32 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -68,8 +69,8 @@ define i64 @fold_strlen_a_S3_p3_to_0() {
 ; CHECK-LABEL: @fold_strlen_a_S3_p3_to_0(
 ; CHECK-NEXT:    ret i64 0
 ;
-  %ptr = getelementptr %struct.A_a4, ptr @a_s3, i32 0, i32 0, i32 3
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr %struct.A_a4, %struct.A_a4* @a_s3, i32 0, i32 0, i32 3
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -80,7 +81,8 @@ define i64 @fold_strlen_a_S3_s4_to_3() {
 ; CHECK-LABEL: @fold_strlen_a_S3_s4_to_3(
 ; CHECK-NEXT:    ret i64 3
 ;
-  %len = call i64 @strlen(ptr @a_s3_s4)
+  %ptr = getelementptr %struct.A_a4_a5, %struct.A_a4_a5* @a_s3_s4, i32 0, i32 0, i32 0
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -91,8 +93,8 @@ define i64 @fold_strlen_a_S3_p2_s4_to_1() {
 ; CHECK-LABEL: @fold_strlen_a_S3_p2_s4_to_1(
 ; CHECK-NEXT:    ret i64 1
 ;
-  %ptr = getelementptr %struct.A_a4_a5, ptr @a_s3_s4, i32 0, i32 0, i32 2
-  %len = call i64 @strlen(ptr %ptr)
+  %ptr = getelementptr %struct.A_a4_a5, %struct.A_a4_a5* @a_s3_s4, i32 0, i32 0, i32 2
+  %len = call i64 @strlen(i8* %ptr)
   ret i64 %len
 }
 
@@ -102,18 +104,19 @@ define i64 @fold_strlen_a_S3_p2_s4_to_1() {
 
 define void @fold_strlen_a_s3_S4_to_4() {
 ; CHECK-LABEL: @fold_strlen_a_s3_S4_to_4(
-; CHECK-NEXT:    store i64 4, ptr @ax, align 4
-; CHECK-NEXT:    store i64 4, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 4, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 4, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_a5, ptr @a_s3_s4, i32 0, i32 0, i32 4
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_a5, %struct.A_a4_a5* @a_s3_s4, i32 0, i32 0, i32 4
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_a5, ptr @a_s3_s4, i32 0, i32 1, i32 0
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_a5, %struct.A_a4_a5* @a_s3_s4, i32 0, i32 1, i32 0
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -124,18 +127,19 @@ define void @fold_strlen_a_s3_S4_to_4() {
 
 define void @fold_strlen_a_s3_S4_p1_to_3() {
 ; CHECK-LABEL: @fold_strlen_a_s3_S4_p1_to_3(
-; CHECK-NEXT:    store i64 3, ptr @ax, align 4
-; CHECK-NEXT:    store i64 3, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 3, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 3, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_a5, ptr @a_s3_s4, i32 0, i32 0, i32 5
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_a5, %struct.A_a4_a5* @a_s3_s4, i32 0, i32 0, i32 5
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_a5, ptr @a_s3_s4, i32 0, i32 1, i32 1
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_a5, %struct.A_a4_a5* @a_s3_s4, i32 0, i32 1, i32 1
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -146,18 +150,19 @@ define void @fold_strlen_a_s3_S4_p1_to_3() {
 
 define void @fold_strlen_a_s3_i32_S4_to_4() {
 ; CHECK-LABEL: @fold_strlen_a_s3_i32_S4_to_4(
-; CHECK-NEXT:    store i64 4, ptr @ax, align 4
-; CHECK-NEXT:    store i64 4, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 4, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 4, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 0, i32 8
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 0, i32 8
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 2, i32 0
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 2, i32 0
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -168,18 +173,19 @@ define void @fold_strlen_a_s3_i32_S4_to_4() {
 
 define void @fold_strlen_a_s3_i32_S4_p1_to_3() {
 ; CHECK-LABEL: @fold_strlen_a_s3_i32_S4_p1_to_3(
-; CHECK-NEXT:    store i64 3, ptr @ax, align 4
-; CHECK-NEXT:    store i64 3, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 3, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 3, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 0, i32 9
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 0, i32 9
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 2, i32 0
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 2, i32 0
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -190,18 +196,19 @@ define void @fold_strlen_a_s3_i32_S4_p1_to_3() {
 
 define void @fold_strlen_a_s3_i32_S4_p2_to_2() {
 ; CHECK-LABEL: @fold_strlen_a_s3_i32_S4_p2_to_2(
-; CHECK-NEXT:    store i64 2, ptr @ax, align 4
-; CHECK-NEXT:    store i64 2, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 2, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 2, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 0, i32 10
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 0, i32 10
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 2, i32 2
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 2, i32 2
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -212,18 +219,19 @@ define void @fold_strlen_a_s3_i32_S4_p2_to_2() {
 
 define void @fold_strlen_a_s3_i32_S4_p3_to_1() {
 ; CHECK-LABEL: @fold_strlen_a_s3_i32_S4_p3_to_1(
-; CHECK-NEXT:    store i64 1, ptr @ax, align 4
-; CHECK-NEXT:    store i64 1, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 1, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 1, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 0, i32 11
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 0, i32 11
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 2, i32 3
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 2, i32 3
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -234,18 +242,19 @@ define void @fold_strlen_a_s3_i32_S4_p3_to_1() {
 
 define void @fold_strlen_a_s3_i32_S4_p4_to_0() {
 ; CHECK-LABEL: @fold_strlen_a_s3_i32_S4_p4_to_0(
-; CHECK-NEXT:    store i64 0, ptr @ax, align 4
-; CHECK-NEXT:    store i64 0, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 0, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 0, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %p1 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 0, i32 12
-  %len1 = call i64 @strlen(ptr %p1)
-  store i64 %len1, ptr @ax
+  %p1 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 0, i32 12
+  %len1 = call i64 @strlen(i8* %p1)
+  %pax0 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len1, i64* %pax0
 
-  %p2 = getelementptr %struct.A_a4_i32_a5, ptr @a_s3_i32_s4, i32 0, i32 2, i32 4
-  %len2 = call i64 @strlen(ptr %p2)
-  %pax1 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len1, ptr %pax1
+  %p2 = getelementptr %struct.A_a4_i32_a5, %struct.A_a4_i32_a5* @a_s3_i32_s4, i32 0, i32 2, i32 4
+  %len2 = call i64 @strlen(i8* %p2)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len1, i64* %pax1
 
   ret void
 }
@@ -256,24 +265,25 @@ define void @fold_strlen_a_s3_i32_S4_p4_to_0() {
 
 define void @fold_strlen_ax_s() {
 ; CHECK-LABEL: @fold_strlen_ax_s(
-; CHECK-NEXT:    store i64 3, ptr @ax, align 4
-; CHECK-NEXT:    store i64 5, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 1), align 4
-; CHECK-NEXT:    store i64 7, ptr getelementptr inbounds ([0 x i64], ptr @ax, i64 0, i64 2), align 4
+; CHECK-NEXT:    store i64 3, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 0), align 4
+; CHECK-NEXT:    store i64 5, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 1), align 4
+; CHECK-NEXT:    store i64 7, i64* getelementptr inbounds ([0 x i64], [0 x i64]* @ax, i64 0, i64 2), align 4
 ; CHECK-NEXT:    ret void
 ;
-  %pax_s3 = getelementptr { i8, [4 x i8] }, ptr @ax_s3, i64 0, i32 1, i64 0
-  %len3 = call i64 @strlen(ptr %pax_s3)
-  store i64 %len3, ptr @ax
+  %pax_s3 = getelementptr { i8, [4 x i8] }, { i8, [4 x i8] }* @ax_s3, i64 0, i32 1, i64 0
+  %len3 = call i64 @strlen(i8* %pax_s3)
+  %pax1 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 0
+  store i64 %len3, i64* %pax1
 
-  %pax_s5 = getelementptr { i16, [6 x i8] }, ptr @ax_s5, i64 0, i32 1, i64 0
-  %len5 = call i64 @strlen(ptr %pax_s5)
-  %pax2 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 1
-  store i64 %len5, ptr %pax2
+  %pax_s5 = getelementptr { i16, [6 x i8] }, { i16, [6 x i8] }* @ax_s5, i64 0, i32 1, i64 0
+  %len5 = call i64 @strlen(i8* %pax_s5)
+  %pax2 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 1
+  store i64 %len5, i64* %pax2
 
-  %pax_s7 = getelementptr { i32, i32, [8 x i8] }, ptr @ax_s7, i64 0, i32 2, i64 0
-  %len7 = call i64 @strlen(ptr %pax_s7)
-  %pax3 = getelementptr inbounds [0 x i64], ptr @ax, i64 0, i64 2
-  store i64 %len7, ptr %pax3
+  %pax_s7 = getelementptr { i32, i32, [8 x i8] }, { i32, i32, [8 x i8] }* @ax_s7, i64 0, i32 2, i64 0
+  %len7 = call i64 @strlen(i8* %pax_s7)
+  %pax3 = getelementptr inbounds [0 x i64], [0 x i64]* @ax, i64 0, i64 2
+  store i64 %len7, i64* %pax3
 
   ret void
 }

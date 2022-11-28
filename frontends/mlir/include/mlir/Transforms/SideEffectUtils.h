@@ -13,24 +13,17 @@ namespace mlir {
 
 class Operation;
 
-/// Returns true if the given operation is free of memory effects.
+/// Returns true if the given operation is side-effect free.
 ///
-/// An operation is free of memory effects if its implementation of
+/// An operation is side-effect free if its implementation of
 /// `MemoryEffectOpInterface` indicates that it has no memory effects. For
-/// example, it may implement `NoMemoryEffect` in ODS. Alternatively, if the
-/// operation has the `HasRecursiveMemoryEffects` trait, then it is free of
-/// memory effects if all of its nested operations are free of memory effects.
+/// example, it may implement `NoSideEffect` in ODS. Alternatively, if the
+/// operation `HasRecursiveSideEffects`, then it is side-effect free if all of
+/// its nested operations are side-effect free.
 ///
-/// If the operation has both, then it is free of memory effects if both
-/// conditions are satisfied.
-bool isMemoryEffectFree(Operation *op);
-
-/// Returns true if the given operation is speculatable, i.e. has no undefined
-/// behavior or other side effects.
-///
-/// An operation can indicate that it is speculatable by implementing the
-/// getSpeculatability hook in the ConditionallySpeculatable op interface.
-bool isSpeculatable(Operation *op);
+/// If the operation has both, then it is side-effect free if both conditions
+/// are satisfied.
+bool isSideEffectFree(Operation *op);
 
 } // end namespace mlir
 

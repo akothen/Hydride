@@ -435,7 +435,6 @@ enum : unsigned {
   EF_ARM_ABI_FLOAT_SOFT = 0x00000200U, // EABI_VER5
   EF_ARM_VFP_FLOAT = 0x00000400U,      // Legacy pre EABI_VER5
   EF_ARM_ABI_FLOAT_HARD = 0x00000400U, // EABI_VER5
-  EF_ARM_BE8 = 0x00800000U,
   EF_ARM_EABI_UNKNOWN = 0x00000000U,
   EF_ARM_EABI_VER1 = 0x01000000U,
   EF_ARM_EABI_VER2 = 0x02000000U,
@@ -903,20 +902,22 @@ enum {
 
 // LoongArch Specific e_flags
 enum : unsigned {
-  // Definitions from LoongArch ELF psABI v2.01.
-  // Reference: https://github.com/loongson/LoongArch-Documentation
-  // (commit hash 296de4def055c871809068e0816325a4ac04eb12)
-
-  // Base ABI Modifiers
-  EF_LOONGARCH_ABI_SOFT_FLOAT    = 0x1,
-  EF_LOONGARCH_ABI_SINGLE_FLOAT  = 0x2,
-  EF_LOONGARCH_ABI_DOUBLE_FLOAT  = 0x3,
-  EF_LOONGARCH_ABI_MODIFIER_MASK = 0x7,
-
-  // Object file ABI versions
-  EF_LOONGARCH_OBJABI_V0   = 0x0,
-  EF_LOONGARCH_OBJABI_V1   = 0x40,
-  EF_LOONGARCH_OBJABI_MASK = 0xC0,
+  // Reference: https://github.com/loongson/LoongArch-Documentation.
+  // The last commit hash (main branch) is
+  // 99016636af64d02dee05e39974d4c1e55875c45b.
+  // Note that there is an open PR
+  // https://github.com/loongson/LoongArch-Documentation/pull/47
+  // talking about using 0x1, 0x2, 0x3 for ILP32S/F/D and use EI_CLASS to
+  // distinguish LP64 and ILP32. If this PR get merged, we will update
+  // the definition here.
+  // Base ABI Types.
+  EF_LOONGARCH_BASE_ABI_LP64S = 0x1,  // LP64 soft-float ABI
+  EF_LOONGARCH_BASE_ABI_LP64F = 0x2,  // LP64 single-float ABI
+  EF_LOONGARCH_BASE_ABI_LP64D = 0x3,  // LP64 double-float ABI
+  EF_LOONGARCH_BASE_ABI_ILP32S = 0x5, // ILP32 soft-float ABI
+  EF_LOONGARCH_BASE_ABI_ILP32F = 0x6, // ILP32 single-float ABI
+  EF_LOONGARCH_BASE_ABI_ILP32D = 0x7, // ILP32 double-float ABI
+  EF_LOONGARCH_BASE_ABI_MASK = 0x7,   // Mask for selecting base ABI
 };
 
 // ELF Relocation types for LoongArch
@@ -1376,7 +1377,6 @@ enum {
   PT_GNU_RELRO = 0x6474e552,    // Read-only after relocation.
   PT_GNU_PROPERTY = 0x6474e553, // .note.gnu.property notes sections.
 
-  PT_OPENBSD_MUTABLE = 0x65a3dbe5,   // Like bss, but not immutable.
   PT_OPENBSD_RANDOMIZE = 0x65a3dbe6, // Fill with random data.
   PT_OPENBSD_WXNEEDED = 0x65a3dbe7,  // Program does W^X violations.
   PT_OPENBSD_BOOTDATA = 0x65a41be6,  // Section for boot arguments.
@@ -1799,7 +1799,6 @@ struct Elf64_Nhdr {
 // Legal values for ch_type field of compressed section header.
 enum {
   ELFCOMPRESS_ZLIB = 1,            // ZLIB/DEFLATE algorithm.
-  ELFCOMPRESS_ZSTD = 2,            // Zstandard algorithm
   ELFCOMPRESS_LOOS = 0x60000000,   // Start of OS-specific.
   ELFCOMPRESS_HIOS = 0x6fffffff,   // End of OS-specific.
   ELFCOMPRESS_LOPROC = 0x70000000, // Start of processor-specific.

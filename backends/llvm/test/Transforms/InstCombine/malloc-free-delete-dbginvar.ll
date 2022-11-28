@@ -5,15 +5,16 @@
 ; RUN: opt < %s -debugify-each -instcombine -S > %t.ll
 ; RUN: diff %t.no_dbg.ll %t.ll
 
-declare void @free(ptr)
+declare void @free(i8*)
 
-define void @test12(ptr %foo) minsize {
+define void @test12(i32* %foo) minsize {
 entry:
-  %tobool = icmp eq ptr %foo, null
+  %tobool = icmp eq i32* %foo, null
   br i1 %tobool, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @free(ptr %foo)
+  %bitcast = bitcast i32* %foo to i8*
+  tail call void @free(i8* %bitcast)
   br label %if.end
 
 if.end:                                           ; preds = %entry, %if.then

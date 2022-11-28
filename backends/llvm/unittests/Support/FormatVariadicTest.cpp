@@ -528,14 +528,15 @@ TEST(FormatVariadicTest, BigTest) {
 
   std::string S;
   llvm::raw_string_ostream Stream(S);
-  Stream << formatv(Intro, std::tuple_size<Tuple>::value, std::size(Ts))
+  Stream << formatv(Intro, std::tuple_size<Tuple>::value,
+                    llvm::array_lengthof(Ts))
          << "\n";
   Stream << formatv(Header, "Char", "HexInt", "Str", "Ref", "std::str",
                     "double", "float", "pointer", "comma", "exp", "bigint",
                     "bigint2", "limit", "byte")
          << "\n";
   for (auto &Item : Ts) {
-    Stream << std::apply(format_tuple(Line), Item) << "\n";
+    Stream << llvm::apply_tuple(format_tuple(Line), Item) << "\n";
   }
   Stream.flush();
   const char *Expected =
@@ -697,31 +698,3 @@ TEST(FormatVariadicTest, FormatError) {
   EXPECT_EQ("X", formatv("{0}", fmt_consume(std::move(E1))).str());
   EXPECT_FALSE(E1.isA<StringError>()); // consumed
 }
-
-TEST(FormatVariadicTest, FormatFilterRange) {
-  std::vector<int> Vec{0, 1, 2};
-  auto Range = map_range(Vec, [](int V) { return V + 1; });
-  EXPECT_EQ("1, 2, 3", formatv("{0}", Range).str());
-}
-
-namespace {
-
-class IntegerValuesRange final
-    : public indexed_accessor_range<IntegerValuesRange, NoneType, int, int *,
-                                    int> {
-public:
-  using indexed_accessor_range<IntegerValuesRange, NoneType, int, int *,
-                               int>::indexed_accessor_range;
-
-  static int dereference(const NoneType &, ptrdiff_t Index) {
-    return static_cast<int>(Index);
-  }
-};
-
-TEST(FormatVariadicTest, FormatRangeNonRef) {
-  IntegerValuesRange Range(None, 0, 3);
-  EXPECT_EQ("0, 1, 2",
-            formatv("{0}", make_range(Range.begin(), Range.end())).str());
-}
-
-} // namespace

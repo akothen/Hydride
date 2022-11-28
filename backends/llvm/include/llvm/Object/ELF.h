@@ -14,7 +14,6 @@
 #define LLVM_OBJECT_ELF_H
 
 #include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallString.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/BinaryFormat/ELF.h"
@@ -183,7 +182,6 @@ public:
 private:
   StringRef Buf;
   std::vector<Elf_Shdr> FakeSections;
-  SmallString<0> FakeSectionStrings;
 
   ELFFile(StringRef Object);
 
@@ -650,11 +648,8 @@ ELFFile<ELFT>::getSectionStringTable(Elf_Shdr_Range Sections,
     Index = Sections[0].sh_link;
   }
 
-  // There is no section name string table. Return FakeSectionStrings which
-  // is non-empty if we have created fake sections.
-  if (!Index)
-    return FakeSectionStrings;
-
+  if (!Index) // no section string table.
+    return "";
   if (Index >= Sections.size())
     return createError("section header string table index " + Twine(Index) +
                        " does not exist");
@@ -775,9 +770,8 @@ template <class ELFT> void ELFFile<ELFT>::createFakeSections() {
   if (!PhdrsOrErr)
     return;
 
-  FakeSectionStrings += '\0';
-  for (auto [Idx, Phdr] : llvm::enumerate(*PhdrsOrErr)) {
-    if (Phdr.p_type != ELF::PT_LOAD || !(Phdr.p_flags & ELF::PF_X))
+  for (auto Phdr : *PhdrsOrErr) {
+    if (!(Phdr.p_type & ELF::PT_LOAD) || !(Phdr.p_flags & ELF::PF_X))
       continue;
     Elf_Shdr FakeShdr = {};
     FakeShdr.sh_type = ELF::SHT_PROGBITS;
@@ -785,10 +779,6 @@ template <class ELFT> void ELFFile<ELFT>::createFakeSections() {
     FakeShdr.sh_addr = Phdr.p_vaddr;
     FakeShdr.sh_size = Phdr.p_memsz;
     FakeShdr.sh_offset = Phdr.p_offset;
-    // Create a section name based on the p_type and index.
-    FakeShdr.sh_name = FakeSectionStrings.size();
-    FakeSectionStrings += ("PT_LOAD#" + Twine(Idx)).str();
-    FakeSectionStrings += '\0';
     FakeSections.push_back(FakeShdr);
   }
 }
@@ -1231,16 +1221,6 @@ inline unsigned hashSysV(StringRef SymbolName) {
     h &= ~g;
   }
   return h;
-}
-
-/// This function returns the hash value for a symbol in the .dynsym section
-/// for the GNU hash table. The implementation is defined in the GNU hash ABI.
-/// REF : https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l222
-inline uint32_t hashGnu(StringRef Name) {
-  uint32_t H = 5381;
-  for (uint8_t C : Name)
-    H = (H << 5) + H + C;
-  return H;
 }
 
 } // end namespace object

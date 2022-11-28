@@ -387,7 +387,7 @@ static Attribute parseInterfaceVarABIAttr(DialectAsmParser &parser) {
     uint32_t descriptorSet = 0;
     auto descriptorSetParseResult = parser.parseOptionalInteger(descriptorSet);
 
-    if (!descriptorSetParseResult.has_value() ||
+    if (!descriptorSetParseResult.hasValue() ||
         failed(*descriptorSetParseResult)) {
       parser.emitError(loc, "missing descriptor set");
       return {};
@@ -404,7 +404,7 @@ static Attribute parseInterfaceVarABIAttr(DialectAsmParser &parser) {
     uint32_t binding = 0;
     auto bindingParseResult = parser.parseOptionalInteger(binding);
 
-    if (!bindingParseResult.has_value() || failed(*bindingParseResult)) {
+    if (!bindingParseResult.hasValue() || failed(*bindingParseResult)) {
       parser.emitError(loc, "missing binding");
       return {};
     }
@@ -580,7 +580,7 @@ Attribute SPIRVDialect::parseAttribute(DialectAsmParser &parser,
   Attribute attr;
   OptionalParseResult result =
       generatedAttributeParser(parser, &attrKind, type, attr);
-  if (result.has_value())
+  if (result.hasValue())
     return attr;
 
   if (attrKind == spirv::TargetEnvAttr::getKindName())
@@ -614,7 +614,7 @@ static void print(spirv::VerCapExtAttr triple, DialectAsmPrinter &printer) {
 }
 
 static void print(spirv::TargetEnvAttr targetEnv, DialectAsmPrinter &printer) {
-  printer << spirv::TargetEnvAttr::getKindName() << "<#spirv.";
+  printer << spirv::TargetEnvAttr::getKindName() << "<#spv.";
   print(targetEnv.getTripleAttr(), printer);
   spirv::Vendor vendorID = targetEnv.getVendorID();
   spirv::DeviceType deviceType = targetEnv.getDeviceType();

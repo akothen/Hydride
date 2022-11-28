@@ -282,9 +282,6 @@ public:
                                         unsigned NumStridedMemAccesses,
                                         unsigned NumPrefetches,
                                         bool HasCall) const;
-
-  /// \return if target want to issue a prefetch in address space \p AS.
-  virtual bool shouldPrefetchAddressSpace(unsigned AS) const;
 };
 
 } // end namespace llvm

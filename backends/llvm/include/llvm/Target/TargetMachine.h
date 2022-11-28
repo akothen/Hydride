@@ -447,13 +447,13 @@ public:
                                      raw_pwrite_stream &, raw_pwrite_stream *,
                                      CodeGenFileType, CGPassBuilderOption,
                                      PassInstrumentationCallbacks *) {
-    return make_error<StringError>("buildCodeGenPipeline is not overridden",
+    return make_error<StringError>("buildCodeGenPipeline is not overriden",
                                    inconvertibleErrorCode());
   }
 
   virtual std::pair<StringRef, bool> getPassNameFromLegacyName(StringRef) {
     llvm_unreachable(
-        "getPassNameFromLegacyName parseMIRPipeline is not overridden");
+        "getPassNameFromLegacyName parseMIRPipeline is not overriden");
   }
 
   /// Add passes to the specified pass manager to get machine code emitted with

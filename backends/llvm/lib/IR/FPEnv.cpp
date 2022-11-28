@@ -34,7 +34,7 @@ Optional<RoundingMode> convertStrToRoundingMode(StringRef RoundingArg) {
 }
 
 Optional<StringRef> convertRoundingModeToStr(RoundingMode UseRounding) {
-  Optional<StringRef> RoundingStr;
+  Optional<StringRef> RoundingStr = None;
   switch (UseRounding) {
   case RoundingMode::Dynamic:
     RoundingStr = "round.dynamic";
@@ -71,7 +71,7 @@ convertStrToExceptionBehavior(StringRef ExceptionArg) {
 
 Optional<StringRef>
 convertExceptionBehaviorToStr(fp::ExceptionBehavior UseExcept) {
-  Optional<StringRef> ExceptStr;
+  Optional<StringRef> ExceptStr = None;
   switch (UseExcept) {
   case fp::ebStrict:
     ExceptStr = "fpexcept.strict";

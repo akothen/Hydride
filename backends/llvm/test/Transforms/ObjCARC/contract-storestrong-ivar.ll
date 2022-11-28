@@ -1,4 +1,4 @@
-; RUN: opt -passes=objc-arc-contract -S < %s | FileCheck %s
+; RUN: opt -objc-arc-contract -S < %s | FileCheck %s
 
 ; CHECK: tail call void @llvm.objc.storeStrong(i8**
 

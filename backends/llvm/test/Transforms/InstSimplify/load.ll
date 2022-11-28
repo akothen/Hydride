@@ -2,21 +2,21 @@
 ; RUN: opt < %s -passes=instsimplify -S | FileCheck %s
 
 @zeroinit = constant {} zeroinitializer
-@poison = constant {} poison
+@undef = constant {} undef
 
 define i32 @crash_on_zeroinit() {
 ; CHECK-LABEL: @crash_on_zeroinit(
-; CHECK-NEXT:    ret i32 poison
+; CHECK-NEXT:    ret i32 undef
 ;
   %load = load i32, ptr @zeroinit
   ret i32 %load
 }
 
-define i32 @crash_on_poison() {
-; CHECK-LABEL: @crash_on_poison(
-; CHECK-NEXT:    ret i32 poison
+define i32 @crash_on_undef() {
+; CHECK-LABEL: @crash_on_undef(
+; CHECK-NEXT:    ret i32 undef
 ;
-  %load = load i32, ptr @poison
+  %load = load i32, ptr @undef
   ret i32 %load
 }
 
@@ -35,7 +35,7 @@ define <8 x i32> @partial_load() {
 ; This does an out of bounds load from the global constant
 define <3 x float> @load_vec3() {
 ; CHECK-LABEL: @load_vec3(
-; CHECK-NEXT:    ret <3 x float> poison
+; CHECK-NEXT:    ret <3 x float> undef
 ;
   %1 = load <3 x float>, ptr getelementptr inbounds (<3 x float>, ptr @constvec, i64 1)
   ret <3 x float> %1

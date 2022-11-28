@@ -48,6 +48,5 @@ void PseudoProbeHandler::emitPseudoProbe(uint64_t Guid, uint64_t Index,
   }
 
   SmallVector<InlineSite, 8> InlineStack(llvm::reverse(ReversedInlineStack));
-  Asm->OutStreamer->emitPseudoProbe(Guid, Index, Type, Attr, InlineStack,
-                                    Asm->CurrentFnSym);
+  Asm->OutStreamer->emitPseudoProbe(Guid, Index, Type, Attr, InlineStack);
 }

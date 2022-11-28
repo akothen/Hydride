@@ -132,7 +132,6 @@ class VectorLegalizer {
   SDValue ExpandVSELECT(SDNode *Node);
   SDValue ExpandVP_SELECT(SDNode *Node);
   SDValue ExpandVP_MERGE(SDNode *Node);
-  SDValue ExpandVP_REM(SDNode *Node);
   SDValue ExpandSELECT(SDNode *Node);
   std::pair<SDValue, SDValue> ExpandLoad(SDNode *N);
   SDValue ExpandStore(SDNode *N);
@@ -493,7 +492,7 @@ SDValue VectorLegalizer::LegalizeOp(SDValue Op) {
     if (LowerOperationWrapper(Node, ResultVals))
       break;
     LLVM_DEBUG(dbgs() << "Could not custom legalize node\n");
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case TargetLowering::Expand:
     LLVM_DEBUG(dbgs() << "Expanding\n");
     Expand(Node, ResultVals);
@@ -595,8 +594,7 @@ void VectorLegalizer::Promote(SDNode *Node, SmallVectorImpl<SDValue> &Results) {
   if ((VT.isFloatingPoint() && NVT.isFloatingPoint()) ||
       (VT.isVector() && VT.getVectorElementType().isFloatingPoint() &&
        NVT.isVector() && NVT.getVectorElementType().isFloatingPoint()))
-    Res = DAG.getNode(ISD::FP_ROUND, dl, VT, Res,
-                      DAG.getIntPtrConstant(0, dl, /*isTarget=*/true));
+    Res = DAG.getNode(ISD::FP_ROUND, dl, VT, Res, DAG.getIntPtrConstant(0, dl));
   else
     Res = DAG.getNode(ISD::BITCAST, dl, VT, Res);
 
@@ -736,13 +734,6 @@ void VectorLegalizer::Expand(SDNode *Node, SmallVectorImpl<SDValue> &Results) {
   case ISD::VP_SELECT:
     Results.push_back(ExpandVP_SELECT(Node));
     return;
-  case ISD::VP_SREM:
-  case ISD::VP_UREM:
-    if (SDValue Expanded = ExpandVP_REM(Node)) {
-      Results.push_back(Expanded);
-      return;
-    }
-    break;
   case ISD::SELECT:
     Results.push_back(ExpandSELECT(Node));
     return;
@@ -856,13 +847,6 @@ void VectorLegalizer::Expand(SDNode *Node, SmallVectorImpl<SDValue> &Results) {
       return;
     }
     break;
-  case ISD::USHLSAT:
-  case ISD::SSHLSAT:
-    if (SDValue Expanded = TLI.expandShlSat(Node, DAG)) {
-      Results.push_back(Expanded);
-      return;
-    }
-    break;
   case ISD::FP_TO_SINT_SAT:
   case ISD::FP_TO_UINT_SAT:
     // Expand the fpsosisat if it is scalable to prevent it from unrolling below.
@@ -970,7 +954,10 @@ SDValue VectorLegalizer::ExpandSELECT(SDNode *Node) {
                        DAG.getConstant(0, DL, BitTy));
 
   // Broadcast the mask so that the entire vector is all one or all zero.
-  Mask = DAG.getSplat(MaskTy, DL, Mask);
+  if (VT.isFixedLengthVector())
+    Mask = DAG.getSplatBuildVector(MaskTy, DL, Mask);
+  else
+    Mask = DAG.getSplatVector(MaskTy, DL, Mask);
 
   // Bitcast the operands to be the same type as the mask.
   // This is needed when we select between FP types because
@@ -1313,36 +1300,13 @@ SDValue VectorLegalizer::ExpandVP_MERGE(SDNode *Node) {
     return DAG.UnrollVectorOp(Node);
 
   SDValue StepVec = DAG.getStepVector(DL, EVLVecVT);
-  SDValue SplatEVL = DAG.getSplat(EVLVecVT, DL, EVL);
+  SDValue SplatEVL = IsFixedLen ? DAG.getSplatBuildVector(EVLVecVT, DL, EVL)
+                                : DAG.getSplatVector(EVLVecVT, DL, EVL);
   SDValue EVLMask =
       DAG.getSetCC(DL, MaskVT, StepVec, SplatEVL, ISD::CondCode::SETULT);
 
   SDValue FullMask = DAG.getNode(ISD::AND, DL, MaskVT, Mask, EVLMask);
   return DAG.getSelect(DL, Node->getValueType(0), FullMask, Op1, Op2);
-}
-
-SDValue VectorLegalizer::ExpandVP_REM(SDNode *Node) {
-  // Implement VP_SREM/UREM in terms of VP_SDIV/VP_UDIV, VP_MUL, VP_SUB.
-  EVT VT = Node->getValueType(0);
-
-  unsigned DivOpc = Node->getOpcode() == ISD::VP_SREM ? ISD::VP_SDIV : ISD::VP_UDIV;
-
-  if (!TLI.isOperationLegalOrCustom(DivOpc, VT) ||
-      !TLI.isOperationLegalOrCustom(ISD::VP_MUL, VT) ||
-      !TLI.isOperationLegalOrCustom(ISD::VP_SUB, VT))
-    return SDValue();
-
-  SDLoc DL(Node);
-
-  SDValue Dividend = Node->getOperand(0);
-  SDValue Divisor = Node->getOperand(1);
-  SDValue Mask = Node->getOperand(2);
-  SDValue EVL = Node->getOperand(3);
-
-  // X % Y -> X-X/Y*Y
-  SDValue Div = DAG.getNode(DivOpc, DL, VT, Dividend, Divisor, Mask, EVL);
-  SDValue Mul = DAG.getNode(ISD::VP_MUL, DL, VT, Divisor, Div, Mask, EVL);
-  return DAG.getNode(ISD::VP_SUB, DL, VT, Dividend, Mul, Mask, EVL);
 }
 
 void VectorLegalizer::ExpandFP_TO_UINT(SDNode *Node,

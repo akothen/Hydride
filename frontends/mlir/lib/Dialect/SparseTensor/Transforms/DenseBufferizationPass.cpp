@@ -36,7 +36,8 @@ class BufferizeDenseOpsPass
 public:
   BufferizeDenseOpsPass(
       const bufferization::OneShotBufferizationOptions &options)
-      : options(options) {}
+      : PassWrapper<BufferizeDenseOpsPass, OperationPass<ModuleOp>>(),
+        options(options) {}
 
   void runOnOperation() override {
     // Disallow all sparse tensor ops, so that only dense tensor ops are

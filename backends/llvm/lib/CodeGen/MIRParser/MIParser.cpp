@@ -495,7 +495,6 @@ public:
                                          MachineOperand &Dest,
                                          Optional<unsigned> &TiedDefIdx);
   bool parseOffset(int64_t &Offset);
-  bool parseIRBlockAddressTaken(BasicBlock *&BB);
   bool parseAlignment(uint64_t &Alignment);
   bool parseAddrspace(unsigned &Addrspace);
   bool parseSectionID(Optional<MBBSectionID> &SID);
@@ -509,7 +508,6 @@ public:
   bool parseMachineMemoryOperand(MachineMemOperand *&Dest);
   bool parsePreOrPostInstrSymbol(MCSymbol *&Symbol);
   bool parseHeapAllocMarker(MDNode *&Node);
-  bool parsePCSections(MDNode *&Node);
 
   bool parseTargetImmMnemonic(const unsigned OpCode, const unsigned OpIdx,
                               MachineOperand &Dest, const MIRFormatter &MF);
@@ -671,8 +669,7 @@ bool MIParser::parseBasicBlockDefinition(
   auto Loc = Token.location();
   auto Name = Token.stringValue();
   lex();
-  bool MachineBlockAddressTaken = false;
-  BasicBlock *AddressTakenIRBlock = nullptr;
+  bool HasAddressTaken = false;
   bool IsLandingPad = false;
   bool IsInlineAsmBrIndirectTarget = false;
   bool IsEHFuncletEntry = false;
@@ -683,13 +680,9 @@ bool MIParser::parseBasicBlockDefinition(
     do {
       // TODO: Report an error when multiple same attributes are specified.
       switch (Token.kind()) {
-      case MIToken::kw_machine_block_address_taken:
-        MachineBlockAddressTaken = true;
+      case MIToken::kw_address_taken:
+        HasAddressTaken = true;
         lex();
-        break;
-      case MIToken::kw_ir_block_address_taken:
-        if (parseIRBlockAddressTaken(AddressTakenIRBlock))
-          return true;
         break;
       case MIToken::kw_landing_pad:
         IsLandingPad = true;
@@ -708,7 +701,6 @@ bool MIParser::parseBasicBlockDefinition(
           return true;
         break;
       case MIToken::IRBlock:
-      case MIToken::NamedIRBlock:
         // TODO: Report an error when both name and ir block are specified.
         if (parseIRBlock(BB, MF.getFunction()))
           return true;
@@ -744,10 +736,8 @@ bool MIParser::parseBasicBlockDefinition(
                           Twine(ID));
   if (Alignment)
     MBB->setAlignment(Align(Alignment));
-  if (MachineBlockAddressTaken)
-    MBB->setMachineBlockAddressTaken();
-  if (AddressTakenIRBlock)
-    MBB->setAddressTakenIRBlock(AddressTakenIRBlock);
+  if (HasAddressTaken)
+    MBB->setHasAddressTaken();
   MBB->setIsEHPad(IsLandingPad);
   MBB->setIsInlineAsmBrIndirectTarget(IsInlineAsmBrIndirectTarget);
   MBB->setIsEHFuncletEntry(IsEHFuncletEntry);
@@ -1017,8 +1007,6 @@ bool MIParser::parse(MachineInstr *&MI) {
   while (!Token.isNewlineOrEOF() && Token.isNot(MIToken::kw_pre_instr_symbol) &&
          Token.isNot(MIToken::kw_post_instr_symbol) &&
          Token.isNot(MIToken::kw_heap_alloc_marker) &&
-         Token.isNot(MIToken::kw_pcsections) &&
-         Token.isNot(MIToken::kw_cfi_type) &&
          Token.isNot(MIToken::kw_debug_location) &&
          Token.isNot(MIToken::kw_debug_instr_number) &&
          Token.isNot(MIToken::coloncolon) && Token.isNot(MIToken::lbrace)) {
@@ -1048,24 +1036,6 @@ bool MIParser::parse(MachineInstr *&MI) {
   if (Token.is(MIToken::kw_heap_alloc_marker))
     if (parseHeapAllocMarker(HeapAllocMarker))
       return true;
-  MDNode *PCSections = nullptr;
-  if (Token.is(MIToken::kw_pcsections))
-    if (parsePCSections(PCSections))
-      return true;
-
-  unsigned CFIType = 0;
-  if (Token.is(MIToken::kw_cfi_type)) {
-    lex();
-    if (Token.isNot(MIToken::IntegerLiteral))
-      return error("expected an integer literal after 'cfi-type'");
-    // getUnsigned is sufficient for 32-bit integers.
-    if (getUnsigned(CFIType))
-      return true;
-    lex();
-    // Lex past trailing comma if present.
-    if (Token.is(MIToken::comma))
-      lex();
-  }
 
   unsigned InstrNum = 0;
   if (Token.is(MIToken::kw_debug_instr_number)) {
@@ -1146,10 +1116,6 @@ bool MIParser::parse(MachineInstr *&MI) {
     MI->setPostInstrSymbol(MF, PostInstrSymbol);
   if (HeapAllocMarker)
     MI->setHeapAllocMarker(MF, HeapAllocMarker);
-  if (PCSections)
-    MI->setPCSections(MF, PCSections);
-  if (CFIType)
-    MI->setCFIType(MF, CFIType);
   if (!MemOperands.empty())
     MI->setMemRefs(MF, MemOperands);
   if (InstrNum)
@@ -2882,7 +2848,7 @@ bool MIParser::parseMachineOperand(const unsigned OpCode, const unsigned OpIdx,
     if (const auto *Formatter = TII->getMIRFormatter()) {
       return parseTargetImmMnemonic(OpCode, OpIdx, Dest, *Formatter);
     }
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   }
   default:
     // FIXME: Parse the MCSymbol machine operand.
@@ -2948,19 +2914,6 @@ bool MIParser::parseOffset(int64_t &Offset) {
   Offset = Token.integerValue().getExtValue();
   if (IsNegative)
     Offset = -Offset;
-  lex();
-  return false;
-}
-
-bool MIParser::parseIRBlockAddressTaken(BasicBlock *&BB) {
-  assert(Token.is(MIToken::kw_ir_block_address_taken));
-  lex();
-  if (Token.isNot(MIToken::IRBlock) && Token.isNot(MIToken::NamedIRBlock))
-    return error("expected basic block after 'ir_block_address_taken'");
-
-  if (parseIRBlock(BB, MF.getFunction()))
-    return true;
-
   lex();
   return false;
 }
@@ -3416,22 +3369,6 @@ bool MIParser::parseHeapAllocMarker(MDNode *&Node) {
   parseMDNode(Node);
   if (!Node)
     return error("expected a MDNode after 'heap-alloc-marker'");
-  if (Token.isNewlineOrEOF() || Token.is(MIToken::coloncolon) ||
-      Token.is(MIToken::lbrace))
-    return false;
-  if (Token.isNot(MIToken::comma))
-    return error("expected ',' before the next machine operand");
-  lex();
-  return false;
-}
-
-bool MIParser::parsePCSections(MDNode *&Node) {
-  assert(Token.is(MIToken::kw_pcsections) &&
-         "Invalid token for a PC sections!");
-  lex();
-  parseMDNode(Node);
-  if (!Node)
-    return error("expected a MDNode after 'pcsections'");
   if (Token.isNewlineOrEOF() || Token.is(MIToken::coloncolon) ||
       Token.is(MIToken::lbrace))
     return false;

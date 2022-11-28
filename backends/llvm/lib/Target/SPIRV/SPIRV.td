@@ -11,7 +11,6 @@ include "llvm/Target/Target.td"
 include "SPIRVRegisterInfo.td"
 include "SPIRVRegisterBanks.td"
 include "SPIRVInstrInfo.td"
-include "SPIRVBuiltins.td"
 
 def SPIRVInstrInfo : InstrInfo;
 

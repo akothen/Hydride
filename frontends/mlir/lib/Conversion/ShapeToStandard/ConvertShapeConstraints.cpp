@@ -8,6 +8,7 @@
 
 #include "mlir/Conversion/ShapeToStandard/ShapeToStandard.h"
 
+#include "../PassDetail.h"
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/Dialect/Shape/IR/Shape.h"
@@ -17,13 +18,7 @@
 #include "mlir/Pass/PassRegistry.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTSHAPECONSTRAINTS
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
-
 using namespace mlir;
-
 namespace {
 #include "ShapeToStandard.cpp.inc"
 } // namespace
@@ -54,7 +49,7 @@ namespace {
 // is emitted, witnesses are satisfied, so they are replace with
 // `shape.const_witness true`.
 class ConvertShapeConstraints
-    : public impl::ConvertShapeConstraintsBase<ConvertShapeConstraints> {
+    : public ConvertShapeConstraintsBase<ConvertShapeConstraints> {
   void runOnOperation() override {
     auto *func = getOperation();
     auto *context = &getContext();

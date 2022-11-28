@@ -44,7 +44,7 @@ class raw_ostream;
 struct KnownBits;
 
 /// This class represents a range of values.
-class [[nodiscard]] ConstantRange {
+class LLVM_NODISCARD ConstantRange {
   APInt Lower, Upper;
 
   /// Create empty constant range with same bitwidth.

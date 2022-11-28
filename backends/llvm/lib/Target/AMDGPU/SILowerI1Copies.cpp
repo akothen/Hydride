@@ -124,7 +124,6 @@ private:
 ///
 class PhiIncomingAnalysis {
   MachinePostDominatorTree &PDT;
-  const SIInstrInfo *TII;
 
   // For each reachable basic block, whether it is a source in the induced
   // subgraph of the CFG.
@@ -134,8 +133,7 @@ class PhiIncomingAnalysis {
   SmallVector<MachineBasicBlock *, 4> Predecessors;
 
 public:
-  PhiIncomingAnalysis(MachinePostDominatorTree &PDT, const SIInstrInfo *TII)
-      : PDT(PDT), TII(TII) {}
+  PhiIncomingAnalysis(MachinePostDominatorTree &PDT) : PDT(PDT) {}
 
   /// Returns whether \p MBB is a source in the induced subgraph of reachable
   /// blocks.
@@ -168,7 +166,18 @@ public:
 
       // If this block has a divergent terminator and the def block is its
       // post-dominator, the wave may first visit the other successors.
-      if (TII->hasDivergentBranch(MBB) && PDT.dominates(&DefBlock, MBB))
+      bool Divergent = false;
+      for (MachineInstr &MI : MBB->terminators()) {
+        if (MI.getOpcode() == AMDGPU::SI_NON_UNIFORM_BRCOND_PSEUDO ||
+            MI.getOpcode() == AMDGPU::SI_IF ||
+            MI.getOpcode() == AMDGPU::SI_ELSE ||
+            MI.getOpcode() == AMDGPU::SI_LOOP) {
+          Divergent = true;
+          break;
+        }
+      }
+
+      if (Divergent && PDT.dominates(&DefBlock, MBB))
         append_range(Stack, MBB->successors());
     }
 
@@ -532,7 +541,7 @@ bool SILowerI1Copies::lowerCopiesFromI1() {
 bool SILowerI1Copies::lowerPhis() {
   MachineSSAUpdater SSAUpdater(*MF);
   LoopFinder LF(*DT, *PDT);
-  PhiIncomingAnalysis PIA(*PDT, TII);
+  PhiIncomingAnalysis PIA(*PDT);
   SmallVector<MachineInstr *, 4> Vreg1Phis;
   SmallVector<MachineBasicBlock *, 4> IncomingBlocks;
   SmallVector<unsigned, 4> IncomingRegs;

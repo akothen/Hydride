@@ -6,17 +6,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/Shape/Transforms/Passes.h"
-
-#include "mlir/Dialect/Func/IR/FuncOps.h"
+#include "PassDetail.h"
 #include "mlir/Dialect/Shape/IR/Shape.h"
+#include "mlir/Dialect/Shape/Transforms/Passes.h"
 #include "mlir/Transforms/DialectConversion.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_REMOVESHAPECONSTRAINTS
-#include "mlir/Dialect/Shape/Transforms/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 
@@ -47,7 +41,7 @@ public:
 
 /// Removal pass.
 class RemoveShapeConstraintsPass
-    : public impl::RemoveShapeConstraintsBase<RemoveShapeConstraintsPass> {
+    : public RemoveShapeConstraintsBase<RemoveShapeConstraintsPass> {
 
   void runOnOperation() override {
     MLIRContext &ctx = getContext();

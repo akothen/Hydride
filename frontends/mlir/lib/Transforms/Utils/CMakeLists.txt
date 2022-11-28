@@ -1,5 +1,4 @@
 add_mlir_library(MLIRTransformUtils
-  CommutativityUtils.cpp
   ControlFlowSinkUtils.cpp
   DialectConversion.cpp
   FoldUtils.cpp

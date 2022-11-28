@@ -72,10 +72,13 @@ LogicalResult DataFlowSolver::initializeAndRun(Operation *top) {
   }
 
   // Run the analysis until fixpoint.
+  ProgramPoint point;
+  DataFlowAnalysis *analysis;
+
   do {
     // Exhaust the worklist.
     while (!worklist.empty()) {
-      auto [point, analysis] = worklist.front();
+      std::tie(point, analysis) = worklist.front();
       worklist.pop();
 
       DATAFLOW_DEBUG(llvm::dbgs() << "Invoking '" << analysis->debugName

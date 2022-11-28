@@ -1,15 +1,16 @@
-; RUN: opt -passes=dse -S < %s | FileCheck %s
+; RUN: opt -basic-aa -dse -S < %s | FileCheck %s
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 
 %t = type { i32 }
 
 @g = global i32 42
 
-define void @test1(ptr noalias %pp) {
+define void @test1(%t* noalias %pp) {
+  %p = getelementptr inbounds %t, %t* %pp, i32 0, i32 0
 
-  store i32 1, ptr %pp; <-- This is dead
-  %x = load i32, ptr inttoptr (i32 12345 to ptr)
-  store i32 %x, ptr %pp
+  store i32 1, i32* %p; <-- This is dead
+  %x = load i32, i32* inttoptr (i32 12345 to i32*)
+  store i32 %x, i32* %p
   ret void
 ; CHECK-LABEL: define void @test1(
 ; CHECK: store
@@ -18,8 +19,8 @@ define void @test1(ptr noalias %pp) {
 }
 
 define void @test3() {
-  store i32 1, ptr @g; <-- This is dead.
-  store i32 42, ptr @g
+  store i32 1, i32* @g; <-- This is dead.
+  store i32 42, i32* @g
   ret void
 ; CHECK-LABEL: define void @test3(
 ; CHECK: store
@@ -27,10 +28,10 @@ define void @test3() {
 ; CHECK: ret void
 }
 
-define void @test4(ptr %p) {
-  store i32 1, ptr %p
-  %x = load i32, ptr @g; <-- %p and @g could alias
-  store i32 %x, ptr %p
+define void @test4(i32* %p) {
+  store i32 1, i32* %p
+  %x = load i32, i32* @g; <-- %p and @g could alias
+  store i32 %x, i32* %p
   ret void
 ; CHECK-LABEL: define void @test4(
 ; CHECK: store

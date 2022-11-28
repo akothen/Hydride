@@ -310,12 +310,9 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
                         << " SID: " << SectionID
                         << " Offset: " << format("%p", (uintptr_t)Addr)
                         << " flags: " << *FlagsOrErr << "\n");
-      // Skip absolute symbol relocations.
-      if (!Name.empty()) {
-        auto Result = GlobalSymbolTable.insert_or_assign(
-            Name, SymbolTableEntry(SectionID, Addr, *JITSymFlags));
-        processNewSymbol(*I, Result.first->getValue());
-      }
+      if (!Name.empty()) // Skip absolute symbol relocations.
+        GlobalSymbolTable[Name] =
+            SymbolTableEntry(SectionID, Addr, *JITSymFlags);
     } else if (SymType == object::SymbolRef::ST_Function ||
                SymType == object::SymbolRef::ST_Data ||
                SymType == object::SymbolRef::ST_Unknown ||
@@ -347,12 +344,9 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
                         << " SID: " << SectionID
                         << " Offset: " << format("%p", (uintptr_t)SectOffset)
                         << " flags: " << *FlagsOrErr << "\n");
-      // Skip absolute symbol relocations.
-      if (!Name.empty()) {
-        auto Result = GlobalSymbolTable.insert_or_assign(
-            Name, SymbolTableEntry(SectionID, SectOffset, *JITSymFlags));
-        processNewSymbol(*I, Result.first->getValue());
-      }
+      if (!Name.empty()) // Skip absolute symbol relocations
+        GlobalSymbolTable[Name] =
+            SymbolTableEntry(SectionID, SectOffset, *JITSymFlags);
     }
   }
 
@@ -636,11 +630,6 @@ Error RuntimeDyldImpl::computeTotalAllocSize(const ObjectFile &Obj,
   if (CommonSize != 0) {
     RWSectionSizes.push_back(CommonSize);
     RWDataAlign = std::max(RWDataAlign, CommonAlign);
-  }
-
-  if (!CodeSectionSizes.empty()) {
-    // Add 64 bytes for a potential IFunc resolver stub
-    CodeSectionSizes.push_back(64);
   }
 
   // Compute the required allocation space for each different type of sections

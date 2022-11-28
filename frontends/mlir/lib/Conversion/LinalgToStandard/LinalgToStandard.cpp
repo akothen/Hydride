@@ -8,6 +8,7 @@
 
 #include "mlir/Conversion/LinalgToStandard/LinalgToStandard.h"
 
+#include "../PassDetail.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
@@ -15,22 +16,9 @@
 #include "mlir/Dialect/Linalg/Transforms/Transforms.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
-#include "mlir/Pass/Pass.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTLINALGTOSTANDARD
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 using namespace mlir::linalg;
-
-static MemRefType makeStridedLayoutDynamic(MemRefType type) {
-  return MemRefType::Builder(type).setLayout(StridedLayoutAttr::get(
-      type.getContext(), ShapedType::kDynamicStrideOrOffset,
-      SmallVector<int64_t>(type.getRank(),
-                           ShapedType::kDynamicStrideOrOffset)));
-}
 
 /// Helper function to extract the operand types that are passed to the
 /// generated CallOp. MemRefTypes have their layout canonicalized since the
@@ -44,7 +32,7 @@ static SmallVector<Type, 4> extractOperandTypes(Operation *op) {
     // information. Canonicalizing the type at the level of std when going into
     // a library call avoids needing to introduce DialectCastOp.
     if (auto memrefType = type.dyn_cast<MemRefType>())
-      result.push_back(makeStridedLayoutDynamic(memrefType));
+      result.push_back(eraseStridedLayout(memrefType));
     else
       result.push_back(type);
   }
@@ -102,7 +90,7 @@ createTypeCanonicalizedMemRefOperands(OpBuilder &b, Location loc,
       continue;
     }
     Value cast =
-        b.create<memref::CastOp>(loc, makeStridedLayoutDynamic(memrefType), op);
+        b.create<memref::CastOp>(loc, eraseStridedLayout(memrefType), op);
     res.push_back(cast);
   }
   return res;
@@ -133,7 +121,7 @@ void mlir::linalg::populateLinalgToStandardConversionPatterns(
 
 namespace {
 struct ConvertLinalgToStandardPass
-    : public impl::ConvertLinalgToStandardBase<ConvertLinalgToStandardPass> {
+    : public ConvertLinalgToStandardBase<ConvertLinalgToStandardPass> {
   void runOnOperation() override;
 };
 } // namespace
@@ -141,8 +129,9 @@ struct ConvertLinalgToStandardPass
 void ConvertLinalgToStandardPass::runOnOperation() {
   auto module = getOperation();
   ConversionTarget target(getContext());
-  target.addLegalDialect<AffineDialect, arith::ArithDialect, func::FuncDialect,
-                         memref::MemRefDialect, scf::SCFDialect>();
+  target.addLegalDialect<AffineDialect, arith::ArithmeticDialect,
+                         func::FuncDialect, memref::MemRefDialect,
+                         scf::SCFDialect>();
   target.addLegalOp<ModuleOp, func::FuncOp, func::ReturnOp>();
   RewritePatternSet patterns(&getContext());
   populateLinalgToStandardConversionPatterns(patterns);

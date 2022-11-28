@@ -309,14 +309,14 @@ void LinkGraph::dump(raw_ostream &OS) {
   }
 
   OS << "Absolute symbols:\n";
-  if (!absolute_symbols().empty()) {
+  if (!llvm::empty(absolute_symbols())) {
     for (auto *Sym : absolute_symbols())
       OS << "  " << Sym->getAddress() << ": " << *Sym << "\n";
   } else
     OS << "  none\n";
 
   OS << "\nExternal symbols:\n";
-  if (!external_symbols().empty()) {
+  if (!llvm::empty(external_symbols())) {
     for (auto *Sym : external_symbols())
       OS << "  " << Sym->getAddress() << ": " << *Sym << "\n";
   } else

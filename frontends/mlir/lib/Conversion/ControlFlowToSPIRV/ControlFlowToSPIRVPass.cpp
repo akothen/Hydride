@@ -11,46 +11,41 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/Conversion/ControlFlowToSPIRV/ControlFlowToSPIRVPass.h"
-
+#include "../PassDetail.h"
 #include "mlir/Conversion/ControlFlowToSPIRV/ControlFlowToSPIRV.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVDialect.h"
 #include "mlir/Dialect/SPIRV/Transforms/SPIRVConversion.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_CONVERTCONTROLFLOWTOSPIRV
-#include "mlir/Conversion/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 
 namespace {
 /// A pass converting MLIR ControlFlow operations into the SPIR-V dialect.
 class ConvertControlFlowToSPIRVPass
-    : public impl::ConvertControlFlowToSPIRVBase<
-          ConvertControlFlowToSPIRVPass> {
+    : public ConvertControlFlowToSPIRVBase<ConvertControlFlowToSPIRVPass> {
   void runOnOperation() override;
 };
 } // namespace
 
 void ConvertControlFlowToSPIRVPass::runOnOperation() {
   MLIRContext *context = &getContext();
-  Operation *op = getOperation();
+  ModuleOp module = getOperation();
 
-  auto targetAttr = spirv::lookupTargetEnvOrDefault(op);
+  auto targetAttr = spirv::lookupTargetEnvOrDefault(module);
   std::unique_ptr<ConversionTarget> target =
       SPIRVConversionTarget::get(targetAttr);
 
-  SPIRVConversionOptions options;
-  options.emulateLT32BitScalarTypes = this->emulateLT32BitScalarTypes;
+  SPIRVTypeConverter::Options options;
+  options.emulateNon32BitScalarTypes = this->emulateNon32BitScalarTypes;
   SPIRVTypeConverter typeConverter(targetAttr, options);
 
   RewritePatternSet patterns(context);
   cf::populateControlFlowToSPIRVPatterns(typeConverter, patterns);
 
-  if (failed(applyPartialConversion(op, *target, std::move(patterns))))
+  if (failed(applyPartialConversion(module, *target, std::move(patterns))))
     return signalPassFailure();
 }
 
-std::unique_ptr<OperationPass<>> mlir::createConvertControlFlowToSPIRVPass() {
+std::unique_ptr<OperationPass<ModuleOp>>
+mlir::createConvertControlFlowToSPIRVPass() {
   return std::make_unique<ConvertControlFlowToSPIRVPass>();
 }

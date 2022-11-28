@@ -2,54 +2,54 @@
 ; RUN: opt < %s -passes=instcombine -S | FileCheck %s
 
 
-declare ptr @memrchr(ptr, i32, i32)
+declare i8* @memrchr(i8*, i32, i32)
 
-define ptr @test1(ptr %str, i32 %c, i32 %n) {
+define i8* @test1(i8* %str, i32 %c, i32 %n) {
 ; CHECK-LABEL: @test1(
-; CHECK-NEXT:    [[RET:%.*]] = call ptr @memrchr(ptr [[STR:%.*]], i32 [[C:%.*]], i32 [[N:%.*]])
-; CHECK-NEXT:    ret ptr [[RET]]
+; CHECK-NEXT:    [[RET:%.*]] = call i8* @memrchr(i8* [[STR:%.*]], i32 [[C:%.*]], i32 [[N:%.*]])
+; CHECK-NEXT:    ret i8* [[RET]]
 ;
 
-  %ret = call ptr @memrchr(ptr %str, i32 %c, i32 %n)
-  ret ptr %ret
+  %ret = call i8* @memrchr(i8* %str, i32 %c, i32 %n)
+  ret i8* %ret
 }
 
-define ptr @test2(ptr %str, i32 %c, i32 %n) {
+define i8* @test2(i8* %str, i32 %c, i32 %n) {
 ; CHECK-LABEL: @test2(
-; CHECK-NEXT:    [[RET:%.*]] = call ptr @memrchr(ptr nonnull [[STR:%.*]], i32 [[C:%.*]], i32 [[N:%.*]])
-; CHECK-NEXT:    ret ptr [[RET]]
+; CHECK-NEXT:    [[RET:%.*]] = call i8* @memrchr(i8* nonnull [[STR:%.*]], i32 [[C:%.*]], i32 [[N:%.*]])
+; CHECK-NEXT:    ret i8* [[RET]]
 ;
 
-  %ret = call ptr @memrchr(ptr nonnull %str, i32 %c, i32 %n)
-  ret ptr %ret
+  %ret = call i8* @memrchr(i8* nonnull %str, i32 %c, i32 %n)
+  ret i8* %ret
 }
 
-define ptr @test3(ptr %str, i32 %c) {
+define i8* @test3(i8* %str, i32 %c) {
 ; CHECK-LABEL: @test3(
-; CHECK-NEXT:    [[RET:%.*]] = call ptr @memrchr(ptr [[STR:%.*]], i32 [[C:%.*]], i32 5)
-; CHECK-NEXT:    ret ptr [[RET]]
+; CHECK-NEXT:    [[RET:%.*]] = call i8* @memrchr(i8* [[STR:%.*]], i32 [[C:%.*]], i32 5)
+; CHECK-NEXT:    ret i8* [[RET]]
 ;
 
-  %ret = call ptr @memrchr(ptr %str, i32 %c, i32 5)
-  ret ptr %ret
+  %ret = call i8* @memrchr(i8* %str, i32 %c, i32 5)
+  ret i8* %ret
 }
 
-define ptr @test4(ptr %str, i32 %c) null_pointer_is_valid {
+define i8* @test4(i8* %str, i32 %c) null_pointer_is_valid {
 ; CHECK-LABEL: @test4(
-; CHECK-NEXT:    [[RET:%.*]] = call ptr @memrchr(ptr [[STR:%.*]], i32 [[C:%.*]], i32 5)
-; CHECK-NEXT:    ret ptr [[RET]]
+; CHECK-NEXT:    [[RET:%.*]] = call i8* @memrchr(i8* [[STR:%.*]], i32 [[C:%.*]], i32 5)
+; CHECK-NEXT:    ret i8* [[RET]]
 ;
 
-  %ret = call ptr @memrchr(ptr %str, i32 %c, i32 5)
-  ret ptr %ret
+  %ret = call i8* @memrchr(i8* %str, i32 %c, i32 5)
+  ret i8* %ret
 }
 
-define ptr @test5(ptr %str, i32 %c) {
+define i8* @test5(i8* %str, i32 %c) {
 ; CHECK-LABEL: @test5(
-; CHECK-NEXT:    [[RET:%.*]] = call ptr @memrchr(ptr [[STR:%.*]], i32 [[C:%.*]], i32 0)
-; CHECK-NEXT:    ret ptr [[RET]]
+; CHECK-NEXT:    [[RET:%.*]] = call i8* @memrchr(i8* [[STR:%.*]], i32 [[C:%.*]], i32 0)
+; CHECK-NEXT:    ret i8* [[RET]]
 ;
 
-  %ret = call ptr @memrchr(ptr %str, i32 %c, i32 0)
-  ret ptr %ret
+  %ret = call i8* @memrchr(i8* %str, i32 %c, i32 0)
+  ret i8* %ret
 }

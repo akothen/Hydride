@@ -580,10 +580,6 @@ void GIMatchTreeOpcodePartitioner::applyForPartition(
     }
   }
   for (auto &Leaf : NewLeaves) {
-    // Skip any leaves that don't care about this instruction.
-    if (!Leaf.getInstrInfo(InstrID))
-      continue;
-
     for (unsigned OpIdx : ReferencedOperands.set_bits()) {
       Leaf.declareOperand(InstrID, OpIdx);
     }
@@ -701,10 +697,8 @@ void GIMatchTreeVRegDefPartitioner::repartition(
   for (const auto &Leaf : enumerate(Leaves)) {
     GIMatchTreeInstrInfo *InstrInfo = Leaf.value().getInstrInfo(InstrID);
     if (!InstrInfo)
-      for (auto &Partition : Partitions) {
-        Partition.second.resize(Leaf.index() + 1);
+      for (auto &Partition : Partitions)
         Partition.second.set(Leaf.index());
-      }
   }
 }
 
@@ -768,18 +762,17 @@ void GIMatchTreeVRegDefPartitioner::emitPartitionResults(
 
 void GIMatchTreeVRegDefPartitioner::generatePartitionSelectorCode(
     raw_ostream &OS, StringRef Indent) const {
-  OS << Indent << "Partition = -1;\n"
-     << Indent << "if (MIs.size() <= " << NewInstrID << ") MIs.resize("
-     << (NewInstrID + 1) << ");\n"
+  OS << Indent << "Partition = -1\n"
+     << Indent << "if (MIs.size() <= NewInstrID) MIs.resize(NewInstrID + 1);\n"
      << Indent << "MIs[" << NewInstrID << "] = nullptr;\n"
-     << Indent << "if (MIs[" << InstrID << "]->getOperand(" << OpIdx
-     << ").isReg())\n"
+     << Indent << "if (MIs[" << InstrID << "].getOperand(" << OpIdx
+     << ").isReg()))\n"
      << Indent << "  MIs[" << NewInstrID << "] = MRI.getVRegDef(MIs[" << InstrID
-     << "]->getOperand(" << OpIdx << ").getReg());\n";
+     << "].getOperand(" << OpIdx << ").getReg()));\n";
 
   for (const auto &Pair : ResultToPartition)
     OS << Indent << "if (MIs[" << NewInstrID << "] "
-       << (Pair.first ? "!=" : "==")
+       << (Pair.first ? "==" : "!=")
        << " nullptr) Partition = " << Pair.second << ";\n";
 
   OS << Indent << "if (Partition == -1) return false;\n";

@@ -80,13 +80,10 @@ TEST_F(MipsBenchmarkResultTest, WriteToAndReadFromDisk) {
   errs() << Filename << "-------\n";
   ExitOnErr(ToDisk.writeYaml(State, Filename));
 
-  const std::unique_ptr<MemoryBuffer> Buffer =
-      std::move(*MemoryBuffer::getFile(Filename));
-
   {
     // One-element version.
     const auto FromDisk =
-        ExitOnErr(InstructionBenchmark::readYaml(State, *Buffer));
+        ExitOnErr(InstructionBenchmark::readYaml(State, Filename));
 
     EXPECT_THAT(FromDisk.Key.Instructions,
                 Pointwise(EqMCInst(), ToDisk.Key.Instructions));
@@ -102,7 +99,7 @@ TEST_F(MipsBenchmarkResultTest, WriteToAndReadFromDisk) {
   {
     // Vector version.
     const auto FromDiskVector =
-        ExitOnErr(InstructionBenchmark::readYamls(State, *Buffer));
+        ExitOnErr(InstructionBenchmark::readYamls(State, Filename));
     ASSERT_EQ(FromDiskVector.size(), size_t{1});
     const auto FromDisk = FromDiskVector[0];
     EXPECT_THAT(FromDisk.Key.Instructions,

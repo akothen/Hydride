@@ -6,7 +6,7 @@
 
 source_filename = "test/DebugInfo/X86/pointer-type-size.ll"
 
-%struct.crass = type { ptr }
+%struct.crass = type { i8* }
 
 @crass = common global %struct.crass zeroinitializer, align 8, !dbg !0
 

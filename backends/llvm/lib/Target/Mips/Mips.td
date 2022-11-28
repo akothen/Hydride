@@ -223,8 +223,7 @@ include "MipsCombine.td"
 include "MipsScheduleP5600.td"
 include "MipsScheduleGeneric.td"
 
-def MipsInstrInfo : InstrInfo {
-}
+def MipsInstrInfo : InstrInfo;
 
 //===----------------------------------------------------------------------===//
 // Mips processors supported.

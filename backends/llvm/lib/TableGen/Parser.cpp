@@ -28,9 +28,7 @@ bool llvm::TableGenParseFile(SourceMgr &InputSrcMgr, RecordKeeper &Records) {
   auto *MainFileBuffer = SrcMgr.getMemoryBuffer(SrcMgr.getMainFileID());
   Records.saveInputFilename(MainFileBuffer->getBufferIdentifier().str());
 
-  TGParser Parser(SrcMgr, /*Macros=*/None, Records,
-                  /*NoWarnOnUnusedTemplateArgs=*/false,
-                  /*TrackReferenceLocs=*/true);
+  TGParser Parser(SrcMgr, /*Macros=*/None, Records);
   bool ParseResult = Parser.ParseFile();
 
   // After parsing, reclaim the source manager buffers from TableGen's global

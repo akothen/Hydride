@@ -13,7 +13,7 @@ entry:
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:
-  tail call void @callv()
+  tail call void bitcast (void (...)* @callv to void ()*)()
   br label %if.end
 
 if.end:
@@ -37,7 +37,7 @@ entry:
   br i1 %cmp, label %if.then, label %if.else
 
 if.then:
-  tail call void @callv()
+  tail call void bitcast (void (...)* @callv to void ()*)()
   br label %if.end4
 
 if.else:
@@ -45,7 +45,7 @@ if.else:
   br i1 %cmp1, label %if.then2, label %if.end4
 
 if.then2:
-  tail call void @callv()
+  tail call void bitcast (void (...)* @callv to void ()*)()
   br label %if.end4
 
 if.end4:

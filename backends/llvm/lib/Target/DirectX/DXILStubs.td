@@ -1,13 +1,13 @@
 // DXIL doesn't actually use registers, but this gets the boilerplate code
 // generated through tablegen.
-let Namespace = "dxil" in {
-def DXIL : Register<"dxil">;
-def DXILClass : RegisterClass<"dxil", [i32], 32, (add DXIL)>;
+let Namespace = "DXIL" in {
+def DXIL : Register<"DXIL">;
+def DXILClass : RegisterClass<"DXIL", [i32], 32, (add DXIL)>;
 }
 
 class DXILInst : Instruction {
-  let Namespace = "dxil";
-  let DecoderNamespace = "dxil";
+  let Namespace = "DXIL";
+  let DecoderNamespace = "DXIL";
 
   dag OutOperandList = (outs);
   dag InOperandList =  (ins);

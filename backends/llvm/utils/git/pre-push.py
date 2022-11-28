@@ -27,11 +27,14 @@ From the git doc:
 """
 
 import argparse
+import collections
 import os
+import re
 import shutil
 import subprocess
 import sys
 import time
+import getpass
 from shlex import quote
 
 VERBOSE = False

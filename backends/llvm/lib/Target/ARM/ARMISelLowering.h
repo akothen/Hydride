@@ -470,6 +470,14 @@ class VectorType;
                                Type *Ty, unsigned AS,
                                Instruction *I = nullptr) const override;
 
+    /// getScalingFactorCost - Return the cost of the scaling used in
+    /// addressing mode represented by AM.
+    /// If the AM is supported, the return value must be >= 0.
+    /// If the AM is not supported, the return value must be negative.
+    InstructionCost getScalingFactorCost(const DataLayout &DL,
+                                         const AddrMode &AM, Type *Ty,
+                                         unsigned AS) const override;
+
     bool isLegalT2ScaledAddressingMode(const AddrMode &AM, EVT VT) const;
 
     /// Returns true if the addressing mode representing by AM is legal
@@ -584,8 +592,6 @@ class VectorType;
 
     bool preferZeroCompareBranch() const override { return true; }
 
-    bool isMaskAndCmp0FoldingBeneficial(const Instruction &AndI) const override;
-
     bool
     isShuffleMaskLegal(ArrayRef<int> M, EVT VT) const override;
     bool isOffsetFoldingLegal(const GlobalAddressSDNode *GA) const override;
@@ -681,8 +687,8 @@ class VectorType;
       return (MemVT.getSizeInBits() <= 32);
     }
 
-    bool isCheapToSpeculateCttz(Type *Ty) const override;
-    bool isCheapToSpeculateCtlz(Type *Ty) const override;
+    bool isCheapToSpeculateCttz() const override;
+    bool isCheapToSpeculateCtlz() const override;
 
     bool convertSetCCLogicToBitwiseLogic(EVT VT) const override {
       return VT.isScalarInteger();
@@ -735,15 +741,6 @@ class VectorType;
     bool preferIncOfAddToSubOfNot(EVT VT) const override;
 
     bool shouldConvertFpToSat(unsigned Op, EVT FPVT, EVT VT) const override;
-
-    bool isComplexDeinterleavingSupported() const override;
-    bool isComplexDeinterleavingOperationSupported(
-        ComplexDeinterleavingOperation Operation, Type *Ty) const override;
-
-    Value *createComplexDeinterleavingIR(
-        Instruction *I, ComplexDeinterleavingOperation OperationType,
-        ComplexDeinterleavingRotation Rotation, Value *InputA, Value *InputB,
-        Value *Accumulator = nullptr) const override;
 
   protected:
     std::pair<const TargetRegisterClass *, uint8_t>

@@ -584,11 +584,6 @@ public:
   /// multiple uses.
   bool hasOneNonDBGUser(Register RegNo) const;
 
-
-  /// hasAtMostUses - Return true if the given register has at most \p MaxUsers
-  /// non-debug user instructions.
-  bool hasAtMostUserInstrs(Register Reg, unsigned MaxUsers) const;
-
   /// replaceRegWith - Replace all instances of FromReg with ToReg in the
   /// machine function.  This is like llvm-level X->replaceAllUsesWith(Y),
   /// except that it also changes any definitions of the register as well.

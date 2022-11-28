@@ -22,66 +22,66 @@ define hidden void @hf() {
 
 ; Test loads of external variables.  There is no guarantee that the
 ; variable will be in range of LARL.
-define ptr@f1() {
+define i32 *@f1() {
 ; CHECK-LABEL: f1:
 ; CHECK: lgrl %r2, ev@GOT
 ; CHECK: br %r14
-  ret ptr@ev
+  ret i32 *@ev
 }
 
 ; ...likewise locally-defined normal-visibility variables.
-define ptr@f2() {
+define i32 *@f2() {
 ; CHECK-LABEL: f2:
 ; CHECK: lgrl %r2, dv@GOT
 ; CHECK: br %r14
-  ret ptr@dv
+  ret i32 *@dv
 }
 
 ; ...likewise protected variables.
-define ptr@f3() {
+define i32 *@f3() {
 ; CHECK-LABEL: f3:
 ; CHECK: lgrl %r2, pv@GOT
 ; CHECK: br %r14
-  ret ptr@pv
+  ret i32 *@pv
 }
 
 ; ...likewise hidden variables.
-define ptr@f4() {
+define i32 *@f4() {
 ; CHECK-LABEL: f4:
 ; CHECK: lgrl %r2, hv@GOT
 ; CHECK: br %r14
-  ret ptr@hv
+  ret i32 *@hv
 }
 
 ; Check loads of external functions.  This could use LARL, but we don't have
 ; code to detect that yet.
-define ptr@f5() {
+define void() *@f5() {
 ; CHECK-LABEL: f5:
 ; CHECK: lgrl %r2, ef@GOT
 ; CHECK: br %r14
-  ret ptr@ef
+  ret void() *@ef
 }
 
 ; ...likewise locally-defined normal-visibility functions.
-define ptr@f6() {
+define void() *@f6() {
 ; CHECK-LABEL: f6:
 ; CHECK: lgrl %r2, df@GOT
 ; CHECK: br %r14
-  ret ptr@df
+  ret void() *@df
 }
 
 ; ...likewise protected functions.
-define ptr@f7() {
+define void() *@f7() {
 ; CHECK-LABEL: f7:
 ; CHECK: lgrl %r2, pf@GOT
 ; CHECK: br %r14
-  ret ptr@pf
+  ret void() *@pf
 }
 
 ; ...likewise hidden functions.
-define ptr@f8() {
+define void() *@f8() {
 ; CHECK-LABEL: f8:
 ; CHECK: lgrl %r2, hf@GOT
 ; CHECK: br %r14
-  ret ptr@hf
+  ret void() *@hf
 }

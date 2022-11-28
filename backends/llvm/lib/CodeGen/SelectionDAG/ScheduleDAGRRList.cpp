@@ -24,7 +24,7 @@
 #include "llvm/CodeGen/ISDOpcodes.h"
 #include "llvm/CodeGen/MachineFunction.h"
 #include "llvm/CodeGen/MachineOperand.h"
-#include "llvm/CodeGen/Register.h"
+#include "llvm/CodeGen/MachineRegisterInfo.h"
 #include "llvm/CodeGen/ScheduleDAG.h"
 #include "llvm/CodeGen/ScheduleHazardRecognizer.h"
 #include "llvm/CodeGen/SchedulerRegistry.h"
@@ -321,7 +321,7 @@ static void GetCostForDef(const ScheduleDAGSDNodes::RegDefIter &RegDefPos,
 
     // Special handling for CopyFromReg of untyped values.
     if (!Node->isMachineOpcode() && Node->getOpcode() == ISD::CopyFromReg) {
-      Register Reg = cast<RegisterSDNode>(Node->getOperand(1))->getReg();
+      unsigned Reg = cast<RegisterSDNode>(Node->getOperand(1))->getReg();
       const TargetRegisterClass *RC = MF.getRegInfo().getRegClass(Reg);
       RegClass = RC->getID();
       Cost = 1;
@@ -1089,7 +1089,7 @@ SUnit *ScheduleDAGRRList::TryUnfoldSU(SUnit *SU) {
     RemovePred(SU, Pred);
     AddPredQueued(NewSU, Pred);
   }
-  for (SDep &D : NodeSuccs) {
+  for (SDep D : NodeSuccs) {
     SUnit *SuccDep = D.getSUnit();
     D.setSUnit(SU);
     RemovePred(SuccDep, D);
@@ -1100,7 +1100,7 @@ SUnit *ScheduleDAGRRList::TryUnfoldSU(SUnit *SU) {
         !D.isCtrl() && NewSU->NumRegDefsLeft > 0)
       --NewSU->NumRegDefsLeft;
   }
-  for (SDep &D : ChainSuccs) {
+  for (SDep D : ChainSuccs) {
     SUnit *SuccDep = D.getSUnit();
     D.setSUnit(SU);
     RemovePred(SuccDep, D);
@@ -1204,11 +1204,11 @@ SUnit *ScheduleDAGRRList::CopyAndMoveSuccessors(SUnit *SU) {
       D.setSUnit(NewSU);
       AddPredQueued(SuccSU, D);
       D.setSUnit(SU);
-      DelDeps.emplace_back(SuccSU, D);
+      DelDeps.push_back(std::make_pair(SuccSU, D));
     }
   }
-  for (const auto &[DelSU, DelD] : DelDeps)
-    RemovePred(DelSU, DelD);
+  for (auto &DelDep : DelDeps)
+    RemovePred(DelDep.first, DelDep.second);
 
   AvailableQueue->updateNode(SU);
   AvailableQueue->addNode(NewSU);
@@ -1242,17 +1242,17 @@ void ScheduleDAGRRList::InsertCopiesAndMoveSuccs(SUnit *SU, unsigned Reg,
       SDep D = Succ;
       D.setSUnit(CopyToSU);
       AddPredQueued(SuccSU, D);
-      DelDeps.emplace_back(SuccSU, Succ);
+      DelDeps.push_back(std::make_pair(SuccSU, Succ));
     }
     else {
-      // Avoid scheduling the def-side copy before other successors. Otherwise,
+      // Avoid scheduling the def-side copy before other successors. Otherwise
       // we could introduce another physreg interference on the copy and
       // continue inserting copies indefinitely.
       AddPredQueued(SuccSU, SDep(CopyFromSU, SDep::Artificial));
     }
   }
-  for (const auto &[DelSU, DelD] : DelDeps)
-    RemovePred(DelSU, DelD);
+  for (auto &DelDep : DelDeps)
+    RemovePred(DelDep.first, DelDep.second);
 
   SDep FromDep(SU, SDep::Data, Reg);
   FromDep.setLatency(SU->Latency);
@@ -1381,7 +1381,7 @@ DelayForLiveRegsBottomUp(SUnit *SU, SmallVectorImpl<unsigned> &LRegs) {
             InlineAsm::isClobberKind(Flags)) {
           // Check for def of register or earlyclobber register.
           for (; NumVals; --NumVals, ++i) {
-            Register Reg = cast<RegisterSDNode>(Node->getOperand(i))->getReg();
+            unsigned Reg = cast<RegisterSDNode>(Node->getOperand(i))->getReg();
             if (Register::isPhysicalRegister(Reg))
               CheckForLiveRegDef(SU, Reg, LiveRegDefs.get(), RegAdded, LRegs, TRI);
           }
@@ -1431,7 +1431,7 @@ DelayForLiveRegsBottomUp(SUnit *SU, SmallVectorImpl<unsigned> &LRegs) {
       for (unsigned i = 0; i < MCID.getNumDefs(); ++i)
         if (MCID.OpInfo[i].isOptionalDef()) {
           const SDValue &OptionalDef = Node->getOperand(i - Node->getNumValues());
-          Register Reg = cast<RegisterSDNode>(OptionalDef)->getReg();
+          unsigned Reg = cast<RegisterSDNode>(OptionalDef)->getReg();
           CheckForLiveRegDef(SU, Reg, LiveRegDefs.get(), RegAdded, LRegs, TRI);
         }
     }
@@ -1484,15 +1484,16 @@ SUnit *ScheduleDAGRRList::PickNodeToScheduleBottomUp() {
                  if (LRegs[0] == TRI->getNumRegs()) dbgs() << "CallResource";
                  else dbgs() << printReg(LRegs[0], TRI);
                  dbgs() << " SU #" << CurSU->NodeNum << '\n');
-      auto [LRegsIter, LRegsInserted] = LRegsMap.try_emplace(CurSU, LRegs);
-      if (LRegsInserted) {
+      std::pair<LRegsMapT::iterator, bool> LRegsPair =
+        LRegsMap.insert(std::make_pair(CurSU, LRegs));
+      if (LRegsPair.second) {
         CurSU->isPending = true;  // This SU is not in AvailableQueue right now.
         Interferences.push_back(CurSU);
       }
       else {
         assert(CurSU->isPending && "Interferences are pending");
         // Update the interference with current live regs.
-        LRegsIter->second = LRegs;
+        LRegsPair.first->second = LRegs;
       }
       CurSU = AvailableQueue->pop();
     }
@@ -2375,8 +2376,8 @@ static bool hasOnlyLiveInOpers(const SUnit *SU) {
     const SUnit *PredSU = Pred.getSUnit();
     if (PredSU->getNode() &&
         PredSU->getNode()->getOpcode() == ISD::CopyFromReg) {
-      Register Reg =
-          cast<RegisterSDNode>(PredSU->getNode()->getOperand(1))->getReg();
+      unsigned Reg =
+        cast<RegisterSDNode>(PredSU->getNode()->getOperand(1))->getReg();
       if (Register::isVirtualRegister(Reg)) {
         RetVal = true;
         continue;
@@ -2396,8 +2397,8 @@ static bool hasOnlyLiveOutUses(const SUnit *SU) {
     if (Succ.isCtrl()) continue;
     const SUnit *SuccSU = Succ.getSUnit();
     if (SuccSU->getNode() && SuccSU->getNode()->getOpcode() == ISD::CopyToReg) {
-      Register Reg =
-          cast<RegisterSDNode>(SuccSU->getNode()->getOperand(1))->getReg();
+      unsigned Reg =
+        cast<RegisterSDNode>(SuccSU->getNode()->getOperand(1))->getReg();
       if (Register::isVirtualRegister(Reg)) {
         RetVal = true;
         continue;
@@ -2907,13 +2908,13 @@ static bool canClobberPhysRegDefs(const SUnit *SuccSU, const SUnit *SU,
         continue;
       if (!N->hasAnyUseOfValue(i))
         continue;
-      MCPhysReg Reg = ImpDefs[i - NumDefs];
+      unsigned Reg = ImpDefs[i - NumDefs];
       if (SURegMask && MachineOperand::clobbersPhysReg(SURegMask, Reg))
         return true;
       if (!SUImpDefs)
         continue;
       for (;*SUImpDefs; ++SUImpDefs) {
-        MCPhysReg SUReg = *SUImpDefs;
+        unsigned SUReg = *SUImpDefs;
         if (TRI->regsOverlap(Reg, SUReg))
           return true;
       }

@@ -37,7 +37,6 @@
 .section s_w,"w"; .long 1
 .section s_x,"x"; .long 1
 .section s_y,"y"; .long 1
-.section s_i,"i"; .long 1
 
 // CHECK:        Section {
 // CHECK:          Name: s
@@ -142,15 +141,6 @@
 // CHECK:          Name: s_y
 // CHECK:          Characteristics [
 // CHECK-NEXT:       IMAGE_SCN_ALIGN_1BYTES
-// CHECK-NEXT:     ]
-// CHECK:        }
-// CHECK:        Section {
-// CHECK:          Name: s_i
-// CHECK:          Characteristics [
-// CHECK-NEXT:       IMAGE_SCN_ALIGN_1BYTES
-// CHECK-NEXT:       IMAGE_SCN_LNK_INFO
-// CHECK-NEXT:       IMAGE_SCN_MEM_READ
-// CHECK-NEXT:       IMAGE_SCN_MEM_WRITE
 // CHECK-NEXT:     ]
 // CHECK:        }
 

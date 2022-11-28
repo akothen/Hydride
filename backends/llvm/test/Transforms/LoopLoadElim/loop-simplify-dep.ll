@@ -1,3 +1,4 @@
+; RUN: opt -loop-load-elim -S < %s -enable-new-pm=0 | FileCheck %s
 ; New PM does not allow a pass to require another pass to have been run
 ; RUN: opt -passes=loop-simplify,loop-load-elim -S < %s | FileCheck %s
 

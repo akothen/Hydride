@@ -1,4 +1,4 @@
-import("//third-party/unittest/unittest.gni")
+import("//llvm/utils/unittest/unittest.gni")
 
 unittest("UtilsTests") {
   deps = [
@@ -26,7 +26,6 @@ unittest("UtilsTests") {
     "LoopUtilsTest.cpp",
     "MemTransferLowering.cpp",
     "ModuleUtilsTest.cpp",
-    "ProfDataUtilTest.cpp",
     "SSAUpdaterBulkTest.cpp",
     "ScalarEvolutionExpanderTest.cpp",
     "SizeOptsTest.cpp",

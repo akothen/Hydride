@@ -122,11 +122,11 @@ void llvm::createMemCpyLoopKnownSize(Instruction *InsertBefore, Value *SrcAddr,
                                           SrcAS, DstAS, SrcAlign.value(),
                                           DstAlign.value(), AtomicElementSize);
 
-    for (auto *OpTy : RemainingOps) {
+    for (auto OpTy : RemainingOps) {
       Align PartSrcAlign(commonAlignment(SrcAlign, BytesCopied));
       Align PartDstAlign(commonAlignment(DstAlign, BytesCopied));
 
-      // Calculate the new index
+      // Calaculate the new index
       unsigned OperandSize = DL.getTypeStoreSize(OpTy);
       assert(
           (!AtomicElementSize || OperandSize % *AtomicElementSize == 0) &&

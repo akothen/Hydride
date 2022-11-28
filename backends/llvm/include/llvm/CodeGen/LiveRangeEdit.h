@@ -210,14 +210,12 @@ public:
 
   /// rematerializeAt - Rematerialize RM.ParentVNI into DestReg by inserting an
   /// instruction into MBB before MI. The new instruction is mapped, but
-  /// liveness is not updated. If ReplaceIndexMI is not null it will be replaced
-  /// by new MI in the index map.
+  /// liveness is not updated.
   /// Return the SlotIndex of the new instruction.
   SlotIndex rematerializeAt(MachineBasicBlock &MBB,
                             MachineBasicBlock::iterator MI, unsigned DestReg,
                             const Remat &RM, const TargetRegisterInfo &,
-                            bool Late = false, unsigned SubIdx = 0,
-                            MachineInstr *ReplaceIndexMI = nullptr);
+                            bool Late = false);
 
   /// markRematerialized - explicitly mark a value as rematerialized after doing
   /// it manually.

@@ -22,25 +22,12 @@ namespace llvm {
 class SIMachineFunctionInfo;
 class SIRegisterInfo;
 class GCNSubtarget;
-class GCNSchedStage;
-
-enum class GCNSchedStageID : unsigned {
-  OccInitialSchedule = 0,
-  UnclusteredHighRPReschedule = 1,
-  ClusteredLowOccupancyReschedule = 2,
-  PreRARematerialize = 3,
-  ILPInitialSchedule = 4
-};
-
-#ifndef NDEBUG
-raw_ostream &operator<<(raw_ostream &OS, const GCNSchedStageID &StageID);
-#endif
 
 /// This is a minimal scheduler strategy.  The main difference between this
 /// and the GenericScheduler is that GCNSchedStrategy uses different
-/// heuristics to determine excess/critical pressure sets.
-class GCNSchedStrategy : public GenericScheduler {
-protected:
+/// heuristics to determine excess/critical pressure sets.  Its goal is to
+/// maximize kernel occupancy (i.e. maximum number of waves per simd).
+class GCNMaxOccupancySchedStrategy final : public GenericScheduler {
   SUnit *pickNodeBidirectional(bool &IsTopNode);
 
   void pickNodeFromQueue(SchedBoundary &Zone, const CandPolicy &ZonePolicy,
@@ -64,31 +51,20 @@ protected:
 
   MachineFunction *MF;
 
-  // Scheduling stages for this strategy.
-  SmallVector<GCNSchedStageID, 4> SchedStages;
-
-  // Pointer to the current SchedStageID.
-  SmallVectorImpl<GCNSchedStageID>::iterator CurrentStage = nullptr;
-
 public:
-  // schedule() have seen register pressure over the critical limits and had to
-  // track register pressure for actual scheduling heuristics.
-  bool HasHighPressure;
+  // schedule() have seen a clustered memory operation. Set it to false
+  // before a region scheduling to know if the region had such clusters.
+  bool HasClusteredNodes;
 
-  // An error margin is necessary because of poor performance of the generic RP
-  // tracker and can be adjusted up for tuning heuristics to try and more
-  // aggressively reduce register pressure.
-  const unsigned DefaultErrorMargin = 3;
-
-  const unsigned HighRPErrorMargin = 10;
-
-  unsigned ErrorMargin = DefaultErrorMargin;
+  // schedule() have seen an excess register pressure and had to track
+  // register pressure for actual scheduling heuristics.
+  bool HasExcessPressure;
 
   unsigned SGPRCriticalLimit;
 
   unsigned VGPRCriticalLimit;
 
-  GCNSchedStrategy(const MachineSchedContext *C);
+  GCNMaxOccupancySchedStrategy(const MachineSchedContext *C);
 
   SUnit *pickNode(bool &IsTopNode) override;
 
@@ -97,42 +73,40 @@ public:
   unsigned getTargetOccupancy() { return TargetOccupancy; }
 
   void setTargetOccupancy(unsigned Occ) { TargetOccupancy = Occ; }
-
-  GCNSchedStageID getCurrentStage();
-
-  // Advances stage. Returns true if there are remaining stages.
-  bool advanceStage();
-
-  bool hasNextStage() const;
-
-  GCNSchedStageID getNextStage() const;
 };
 
-/// The goal of this scheduling strategy is to maximize kernel occupancy (i.e.
-/// maximum number of waves per simd).
-class GCNMaxOccupancySchedStrategy final : public GCNSchedStrategy {
-public:
-  GCNMaxOccupancySchedStrategy(const MachineSchedContext *C);
+enum class GCNSchedStageID : unsigned {
+  InitialSchedule = 0,
+  UnclusteredReschedule = 1,
+  ClusteredLowOccupancyReschedule = 2,
+  PreRARematerialize = 3,
+  LastStage = PreRARematerialize
 };
 
-/// The goal of this scheduling strategy is to maximize ILP for a single wave
-/// (i.e. latency hiding).
-class GCNMaxILPSchedStrategy final : public GCNSchedStrategy {
-protected:
-  bool tryCandidate(SchedCandidate &Cand, SchedCandidate &TryCand,
-                    SchedBoundary *Zone) const override;
+#ifndef NDEBUG
+raw_ostream &operator<<(raw_ostream &OS, const GCNSchedStageID &StageID);
+#endif
 
-public:
-  GCNMaxILPSchedStrategy(const MachineSchedContext *C);
-};
+inline GCNSchedStageID &operator++(GCNSchedStageID &Stage, int) {
+  assert(Stage != GCNSchedStageID::PreRARematerialize);
+  Stage = static_cast<GCNSchedStageID>(static_cast<unsigned>(Stage) + 1);
+  return Stage;
+}
+
+inline GCNSchedStageID nextStage(const GCNSchedStageID Stage) {
+  return static_cast<GCNSchedStageID>(static_cast<unsigned>(Stage) + 1);
+}
+
+inline bool operator>(GCNSchedStageID &LHS, GCNSchedStageID &RHS) {
+  return static_cast<unsigned>(LHS) > static_cast<unsigned>(RHS);
+}
 
 class GCNScheduleDAGMILive final : public ScheduleDAGMILive {
   friend class GCNSchedStage;
-  friend class OccInitialScheduleStage;
-  friend class UnclusteredHighRPStage;
+  friend class InitialScheduleStage;
+  friend class UnclusteredRescheduleStage;
   friend class ClusteredLowOccStage;
   friend class PreRARematStage;
-  friend class ILPInitialScheduleStage;
 
   const GCNSubtarget &ST;
 
@@ -152,18 +126,14 @@ class GCNScheduleDAGMILive final : public ScheduleDAGMILive {
   // or we generally desire to reschedule it.
   BitVector RescheduleRegions;
 
+  // Record regions which use clustered loads/stores.
+  BitVector RegionsWithClusters;
+
   // Record regions with high register pressure.
   BitVector RegionsWithHighRP;
 
-  // Record regions with excess register pressure over the physical register
-  // limit. Register pressure in these regions usually will result in spilling.
-  BitVector RegionsWithExcessRP;
-
   // Regions that has the same occupancy as the latest MinOccupancy
   BitVector RegionsWithMinOcc;
-
-  // Regions that have IGLP instructions (SCHED_GROUP_BARRIER or IGLP_OPT).
-  BitVector RegionsWithIGLPInstrs;
 
   // Region live-in cache.
   SmallVector<GCNRPTracker::LiveRegSet, 32> LiveIns;
@@ -193,8 +163,6 @@ class GCNScheduleDAGMILive final : public ScheduleDAGMILive {
 
   void runSchedStages();
 
-  std::unique_ptr<GCNSchedStage> createSchedStage(GCNSchedStageID SchedStageID);
-
 public:
   GCNScheduleDAGMILive(MachineSchedContext *C,
                        std::unique_ptr<MachineSchedStrategy> S);
@@ -209,7 +177,7 @@ class GCNSchedStage {
 protected:
   GCNScheduleDAGMILive &DAG;
 
-  GCNSchedStrategy &S;
+  GCNMaxOccupancySchedStrategy &S;
 
   MachineFunction &MF;
 
@@ -234,8 +202,6 @@ protected:
   // RP after scheduling the current region.
   GCNRegPressure PressureAfter;
 
-  std::vector<std::unique_ptr<ScheduleDAGMutation>> SavedMutations;
-
   GCNSchedStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG);
 
 public:
@@ -254,7 +220,7 @@ public:
   void setupNewBlock();
 
   // Finalize state after scheudling a region.
-  void finalizeGCNRegion();
+  virtual void finalizeGCNRegion();
 
   // Check result of scheduling.
   void checkScheduling();
@@ -273,18 +239,19 @@ public:
   virtual ~GCNSchedStage() = default;
 };
 
-class OccInitialScheduleStage : public GCNSchedStage {
+class InitialScheduleStage : public GCNSchedStage {
 public:
+  void finalizeGCNRegion() override;
+
   bool shouldRevertScheduling(unsigned WavesAfter) override;
 
-  OccInitialScheduleStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG)
+  InitialScheduleStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG)
       : GCNSchedStage(StageID, DAG) {}
 };
 
-class UnclusteredHighRPStage : public GCNSchedStage {
+class UnclusteredRescheduleStage : public GCNSchedStage {
 private:
-  // Save the initial occupancy before starting this stage.
-  unsigned InitialOccupancy;
+  std::vector<std::unique_ptr<ScheduleDAGMutation>> SavedMutations;
 
 public:
   bool initGCNSchedStage() override;
@@ -295,7 +262,7 @@ public:
 
   bool shouldRevertScheduling(unsigned WavesAfter) override;
 
-  UnclusteredHighRPStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG)
+  UnclusteredRescheduleStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG)
       : GCNSchedStage(StageID, DAG) {}
 };
 
@@ -348,30 +315,6 @@ public:
 
   PreRARematStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG)
       : GCNSchedStage(StageID, DAG) {}
-};
-
-class ILPInitialScheduleStage : public GCNSchedStage {
-public:
-  bool shouldRevertScheduling(unsigned WavesAfter) override;
-
-  ILPInitialScheduleStage(GCNSchedStageID StageID, GCNScheduleDAGMILive &DAG)
-      : GCNSchedStage(StageID, DAG) {}
-};
-
-class GCNPostScheduleDAGMILive final : public ScheduleDAGMI {
-private:
-  std::vector<std::unique_ptr<ScheduleDAGMutation>> SavedMutations;
-
-  bool HasIGLPInstrs = false;
-
-public:
-  void schedule() override;
-
-  void finalizeSchedule() override;
-
-  GCNPostScheduleDAGMILive(MachineSchedContext *C,
-                           std::unique_ptr<MachineSchedStrategy> S,
-                           bool RemoveKillFlags);
 };
 
 } // End namespace llvm

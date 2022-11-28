@@ -1,5 +1,5 @@
 ; RUN: llc --filetype=asm %s -o - | FileCheck %s
-target triple = "dxil-unknown-shadermodel6.7-library"
+target triple = "dxil-unknown-unknown"
 
 define i64 @test(ptr %p) {
   %v = load i64, ptr %p

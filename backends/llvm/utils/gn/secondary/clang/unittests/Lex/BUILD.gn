@@ -1,4 +1,4 @@
-import("//third-party/unittest/unittest.gni")
+import("//llvm/utils/unittest/unittest.gni")
 
 unittest("LexTests") {
   configs += [ "//llvm/utils/gn/build:clang_code" ]
@@ -9,7 +9,6 @@ unittest("LexTests") {
     "//clang/lib/Parse",
     "//clang/lib/Sema",
     "//llvm/lib/Support",
-    "//llvm/lib/Testing/Support",
   ]
   sources = [
     "DependencyDirectivesScannerTest.cpp",
@@ -18,7 +17,6 @@ unittest("LexTests") {
     "LexerTest.cpp",
     "PPCallbacksTest.cpp",
     "PPConditionalDirectiveRecordTest.cpp",
-    "PPDependencyDirectivesTest.cpp",
     "PPMemoryAllocationsTest.cpp",
   ]
 }

@@ -7,10 +7,10 @@
 
 define ghccc void @foo() nounwind {
 entry:
-  call void @bar(ptr@x)
+  call void @bar(i32 *@x)
   ret void
 }
 
-declare void @bar(ptr)
+declare void @bar(i32*)
 
 ; CHECK: LLVM ERROR: In GHC calling convention TLS is not supported

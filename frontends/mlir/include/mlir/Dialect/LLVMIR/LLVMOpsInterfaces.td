@@ -23,28 +23,8 @@ def FastmathFlagsInterface : OpInterface<"FastmathFlagsInterface"> {
   let cppNamespace = "::mlir::LLVM";
 
   let methods = [
-    InterfaceMethod<
-      /*desc=*/        "Returns a FastmathFlagsAttr attribute for the operation",
-      /*returnType=*/  "FastmathFlagsAttr",
-      /*methodName=*/  "getFastmathAttr",
-      /*args=*/        (ins),
-      /*methodBody=*/  [{}],
-      /*defaultImpl=*/ [{
-        ConcreteOp op = cast<ConcreteOp>(this->getOperation());
-        return op.getFastmathFlagsAttr();
-      }]
-      >,
-    StaticInterfaceMethod<
-      /*desc=*/        [{Returns the name of the FastmathFlagsAttr attribute
-                         for the operation}],
-      /*returnType=*/  "StringRef",
-      /*methodName=*/  "getFastmathAttrName",
-      /*args=*/        (ins),
-      /*methodBody=*/  [{}],
-      /*defaultImpl=*/ [{
-        return "fastmathFlags";
-      }]
-      >
+    InterfaceMethod<"Get fastmath flags", "::mlir::LLVM::FastmathFlags",
+                    "getFastmathFlags">,
   ];
 }
 

@@ -789,7 +789,7 @@ RecurrenceDescriptor::isRecurrenceInstr(Loop *L, PHINode *OrigPhi,
   case Instruction::Select:
     if (Kind == RecurKind::FAdd || Kind == RecurKind::FMul)
       return isConditionalRdxPattern(Kind, I);
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Instruction::FCmp:
   case Instruction::ICmp:
   case Instruction::Call:
@@ -921,7 +921,7 @@ bool RecurrenceDescriptor::isReductionPHI(PHINode *Phi, Loop *TheLoop,
   return false;
 }
 
-bool RecurrenceDescriptor::isFixedOrderRecurrence(
+bool RecurrenceDescriptor::isFirstOrderRecurrence(
     PHINode *Phi, Loop *TheLoop,
     MapVector<Instruction *, Instruction *> &SinkAfter, DominatorTree *DT) {
 
@@ -945,20 +945,6 @@ bool RecurrenceDescriptor::isFixedOrderRecurrence(
   // Get the previous value. The previous value comes from the latch edge while
   // the initial value comes form the preheader edge.
   auto *Previous = dyn_cast<Instruction>(Phi->getIncomingValueForBlock(Latch));
-
-  // If Previous is a phi in the header, go through incoming values from the
-  // latch until we find a non-phi value. Use this as the new Previous, all uses
-  // in the header will be dominated by the original phi, but need to be moved
-  // after the non-phi previous value.
-  SmallPtrSet<PHINode *, 4> SeenPhis;
-  while (auto *PrevPhi = dyn_cast_or_null<PHINode>(Previous)) {
-    if (PrevPhi->getParent() != Phi->getParent())
-      return false;
-    if (!SeenPhis.insert(PrevPhi).second)
-      return false;
-    Previous = dyn_cast<Instruction>(PrevPhi->getIncomingValueForBlock(Latch));
-  }
-
   if (!Previous || !TheLoop->contains(Previous) || isa<PHINode>(Previous) ||
       SinkAfter.count(Previous)) // Cannot rely on dominance due to motion.
     return false;
@@ -1000,7 +986,7 @@ bool RecurrenceDescriptor::isFixedOrderRecurrence(
       return false;
 
     // Avoid sinking an instruction multiple times (if multiple operands are
-    // fixed order recurrences) by sinking once - after the latest 'previous'
+    // first order recurrences) by sinking once - after the latest 'previous'
     // instruction.
     auto It = SinkAfter.find(SinkCandidate);
     if (It != SinkAfter.end()) {
@@ -1025,16 +1011,6 @@ bool RecurrenceDescriptor::isFixedOrderRecurrence(
       // Previous. Nothing left to do.
       if (DT->dominates(Previous, OtherPrev) || Previous == OtherPrev)
         return true;
-
-      // If there are other instructions to be sunk after SinkCandidate, remove
-      // and re-insert SinkCandidate can break those instructions. Bail out for
-      // simplicity.
-      if (any_of(SinkAfter,
-          [SinkCandidate](const std::pair<Instruction *, Instruction *> &P) {
-            return P.second == SinkCandidate;
-          }))
-        return false;
-
       // Otherwise, Previous comes after OtherPrev and SinkCandidate needs to be
       // re-sunk to Previous, instead of sinking to OtherPrev. Remove
       // SinkCandidate from SinkAfter to ensure it's insert position is updated.
@@ -1111,13 +1087,9 @@ Value *RecurrenceDescriptor::getRecurrenceIdentity(RecurKind K, Type *Tp,
     return ConstantInt::get(Tp,
                             APInt::getSignedMinValue(Tp->getIntegerBitWidth()));
   case RecurKind::FMin:
-    assert((FMF.noNaNs() && FMF.noSignedZeros()) &&
-           "nnan, nsz is expected to be set for FP min reduction.");
-    return ConstantFP::getInfinity(Tp, false /*Negative*/);
+    return ConstantFP::getInfinity(Tp, true);
   case RecurKind::FMax:
-    assert((FMF.noNaNs() && FMF.noSignedZeros()) &&
-           "nnan, nsz is expected to be set for FP max reduction.");
-    return ConstantFP::getInfinity(Tp, true /*Negative*/);
+    return ConstantFP::getInfinity(Tp, false);
   case RecurKind::SelectICmp:
   case RecurKind::SelectFCmp:
     return getRecurrenceStartValue();

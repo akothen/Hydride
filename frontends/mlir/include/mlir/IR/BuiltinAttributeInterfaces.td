@@ -54,36 +54,33 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     using NonContiguousIterableTypesT = std::tuple<APInt, Attribute>;
     ```
 
-    * Provide a `FailureOr<iterator> try_value_begin_impl(OverloadToken<T>) const`
-      overload for each iterable type
+    * Provide a `iterator value_begin_impl(OverloadToken<T>) const` overload for
+      each iterable type
 
     These overloads should return an iterator to the start of the range for the
-    respective iterable type or fail if the type cannot be iterated. Consider
-    the example i64 elements attribute described in the previous section. This
-    attribute may define the value_begin_impl overloads like so:
+    respective iterable type. Consider the example i64 elements attribute
+    described in the previous section. This attribute may define the
+    value_begin_impl overloads like so:
 
     ```c++
     /// Provide begin iterators for the various iterable types.
     /// * uint64_t
-    FailureOr<const uint64_t *>
-    value_begin_impl(OverloadToken<uint64_t>) const {
+    auto value_begin_impl(OverloadToken<uint64_t>) const {
       return getElements().begin();
     }
     /// * APInt
     auto value_begin_impl(OverloadToken<llvm::APInt>) const {
-      auto it = llvm::map_range(getElements(), [=](uint64_t value) {
+      return llvm::map_range(getElements(), [=](uint64_t value) {
         return llvm::APInt(/*numBits=*/64, value);
       }).begin();
-      return FailureOr<decltype(it)>(std::move(it));
     }
     /// * Attribute
     auto value_begin_impl(OverloadToken<mlir::Attribute>) const {
       mlir::Type elementType = getType().getElementType();
-      auto it = llvm::map_range(getElements(), [=](uint64_t value) {
+      return llvm::map_range(getElements(), [=](uint64_t value) {
         return mlir::IntegerAttr::get(elementType,
                                       llvm::APInt(/*numBits=*/64, value));
       }).begin();
-      return FailureOr<decltype(it)>(std::move(it));
     }
     ```
 
@@ -157,10 +154,7 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     }], "bool", "isSplat", (ins), /*defaultImplementation=*/[{}], [{
         // By default, only check for a single element splat.
         return $_attr.getNumElements() == 1;
-    }]>,
-    InterfaceMethod<[{
-      Returns the shaped type of the elements attribute.
-    }], "::mlir::ShapedType", "getType">
+    }]>
   ];
 
   string ElementsAttrInterfaceAccessors = [{
@@ -247,22 +241,18 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
           /*isSplat=*/false, nullptr);
       }
 
-      auto valueIt = $_attr.try_value_begin_impl(OverloadToken<T>());
-      if (::mlir::failed(valueIt))
-        return ::mlir::failure();
+      auto valueIt = $_attr.value_begin_impl(OverloadToken<T>());
       return ::mlir::detail::ElementsAttrIndexer::contiguous(
-        $_attr.isSplat(), &**valueIt);
+        $_attr.isSplat(), &*valueIt);
     }
     /// Build an indexer for the given type `T`, which is represented via a
     /// non-contiguous range.
     template <typename T>
     ::mlir::FailureOr<::mlir::detail::ElementsAttrIndexer> buildValueResult(
         /*isContiguous*/std::false_type) const {
-      auto valueIt = $_attr.try_value_begin_impl(OverloadToken<T>());
-      if (::mlir::failed(valueIt))
-        return ::mlir::failure();
+      auto valueIt = $_attr.value_begin_impl(OverloadToken<T>());
       return ::mlir::detail::ElementsAttrIndexer::nonContiguous(
-        $_attr.isSplat(), *valueIt);
+        $_attr.isSplat(), valueIt);
     }
 
   public:
@@ -282,7 +272,7 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     /// type `T`.
     template <typename T>
     auto value_begin() const {
-      return *$_attr.try_value_begin_impl(OverloadToken<T>());
+      return $_attr.value_begin_impl(OverloadToken<T>());
     }
 
     /// Return the elements of this attribute as a value of type 'T'.
@@ -290,7 +280,7 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     auto getValues() const {
       auto beginIt = $_attr.template value_begin<T>();
       return detail::ElementsAttrRange<decltype(beginIt)>(
-        $_attr.getType(), beginIt, std::next(beginIt, size()));
+        Attribute($_attr).getType(), beginIt, std::next(beginIt, size()));
     }
   }] # ElementsAttrInterfaceAccessors;
 
@@ -304,17 +294,19 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     // Accessors
     //===------------------------------------------------------------------===//
 
+    /// Return the type of this attribute.
+    ShapedType getType() const;
+
     /// Return the element type of this ElementsAttr.
     Type getElementType() const { return getElementType(*this); }
-    static Type getElementType(ElementsAttr elementsAttr);
+    static Type getElementType(Attribute elementsAttr);
 
     /// Return if the given 'index' refers to a valid element in this attribute.
     bool isValidIndex(ArrayRef<uint64_t> index) const {
       return isValidIndex(*this, index);
     }
     static bool isValidIndex(ShapedType type, ArrayRef<uint64_t> index);
-    static bool isValidIndex(ElementsAttr elementsAttr,
-                             ArrayRef<uint64_t> index);
+    static bool isValidIndex(Attribute elementsAttr, ArrayRef<uint64_t> index);
 
     /// Return the 1 dimensional flattened row-major index from the given
     /// multi-dimensional index.
@@ -323,14 +315,14 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     }
     static uint64_t getFlattenedIndex(Type type,
                                       ArrayRef<uint64_t> index);
-    static uint64_t getFlattenedIndex(ElementsAttr elementsAttr,
+    static uint64_t getFlattenedIndex(Attribute elementsAttr,
                                       ArrayRef<uint64_t> index) {
       return getFlattenedIndex(elementsAttr.getType(), index);
     }
 
     /// Returns the number of elements held by this attribute.
     int64_t getNumElements() const { return getNumElements(*this); }
-    static int64_t getNumElements(ElementsAttr elementsAttr);
+    static int64_t getNumElements(Attribute elementsAttr);
 
     //===------------------------------------------------------------------===//
     // Value Iteration
@@ -338,13 +330,13 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
 
     template <typename T>
     using DerivedAttrValueCheckT =
-        std::enable_if_t<std::is_base_of<Attribute, T>::value &&
-                         !std::is_same<Attribute, T>::value>;
+        typename std::enable_if_t<std::is_base_of<Attribute, T>::value &&
+                                  !std::is_same<Attribute, T>::value>;
     template <typename T, typename ResultT>
     using DefaultValueCheckT =
-        std::enable_if_t<std::is_same<Attribute, T>::value ||
-                             !std::is_base_of<Attribute, T>::value,
-                         ResultT>;
+        typename std::enable_if_t<std::is_same<Attribute, T>::value ||
+                                  !std::is_base_of<Attribute, T>::value,
+                                  ResultT>;
 
     /// Return the splat value for this attribute. This asserts that the
     /// attribute corresponds to a splat.
@@ -357,7 +349,7 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     /// Return the elements of this attribute as a value of type 'T'.
     template <typename T>
     DefaultValueCheckT<T, iterator_range<T>> getValues() const {
-      return {getType(), value_begin<T>(), value_end<T>()};
+      return {Attribute::getType(), value_begin<T>(), value_end<T>()};
     }
     template <typename T>
     DefaultValueCheckT<T, iterator<T>> value_begin() const;
@@ -377,8 +369,8 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     template <typename T, typename = DerivedAttrValueCheckT<T>>
     DerivedAttrValueIteratorRange<T> getValues() const {
       auto castFn = [](Attribute attr) { return attr.template cast<T>(); };
-      return {getType(), llvm::map_range(getValues<Attribute>(),
-              static_cast<T (*)(Attribute)>(castFn))};
+      return {Attribute::getType(), llvm::map_range(getValues<Attribute>(),
+                             static_cast<T (*)(Attribute)>(castFn))};
     }
     template <typename T, typename = DerivedAttrValueCheckT<T>>
     DerivedAttrValueIterator<T> value_begin() const {
@@ -396,8 +388,10 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
     /// return the iterable range. Otherwise, return llvm::None.
     template <typename T>
     DefaultValueCheckT<T, Optional<iterator_range<T>>> tryGetValues() const {
-      if (Optional<iterator<T>> beginIt = try_value_begin<T>())
-        return iterator_range<T>(getType(), *beginIt, value_end<T>());
+      if (Optional<iterator<T>> beginIt = try_value_begin<T>()) {
+        return iterator_range<T>(Attribute::getType(), *beginIt,
+                                 value_end<T>());
+      }
       return llvm::None;
     }
     template <typename T>
@@ -413,7 +407,7 @@ def ElementsAttrInterface : AttrInterface<"ElementsAttr"> {
 
       auto castFn = [](Attribute attr) { return attr.template cast<T>(); };
       return DerivedAttrValueIteratorRange<T>(
-        getType(),
+        Attribute::getType(),
         llvm::map_range(*values, static_cast<T (*)(Attribute)>(castFn))
       );
     }
@@ -472,25 +466,6 @@ def MemRefLayoutAttrInterface : AttrInterface<"MemRefLayoutAttrInterface"> {
       }]
     >
   ];
-}
-
-//===----------------------------------------------------------------------===//
-// TypedAttrInterface
-//===----------------------------------------------------------------------===//
-
-def TypedAttrInterface : AttrInterface<"TypedAttr"> {
-  let cppNamespace = "::mlir";
-
-  let description = [{
-    This interface is used for attributes that have a type. The type of an
-    attribute is understood to represent the type of the data contained in the
-    attribute and is often used as the type of a value with this data.
-  }];
-
-  let methods = [InterfaceMethod<
-    "Get the attribute's type",
-    "::mlir::Type", "getType"
-  >];
 }
 
 #endif // MLIR_IR_BUILTINATTRIBUTEINTERFACES_TD_

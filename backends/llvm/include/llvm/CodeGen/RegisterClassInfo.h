@@ -52,9 +52,10 @@ class RegisterClassInfo {
   const MachineFunction *MF = nullptr;
   const TargetRegisterInfo *TRI = nullptr;
 
-  // Callee saved registers of last MF.
-  // Used only to determine if an update for CalleeSavedAliases is necessary.
-  SmallVector<MCPhysReg, 16> LastCalleeSavedRegs;
+  // Callee saved registers of last MF. Assumed to be valid until the next
+  // runOnFunction() call.
+  // Used only to determine if an update was made to CalleeSavedAliases.
+  const MCPhysReg *CalleeSavedRegs = nullptr;
 
   // Map register alias to the callee saved Register.
   SmallVector<MCPhysReg, 4> CalleeSavedAliases;

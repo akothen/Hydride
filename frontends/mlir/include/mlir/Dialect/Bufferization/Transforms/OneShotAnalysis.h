@@ -21,17 +21,11 @@ class OneShotAnalysisState;
 
 /// Options for analysis-enabled bufferization.
 struct OneShotBufferizationOptions : public BufferizationOptions {
-  enum class AnalysisHeuristic { BottomUp, TopDown };
-
   OneShotBufferizationOptions() = default;
 
   /// Specifies whether returning newly allocated memrefs should be allowed.
   /// Otherwise, a pass failure is triggered.
   bool allowReturnAllocs = false;
-
-  /// The heuristic controls the order in which ops are traversed during the
-  /// analysis.
-  AnalysisHeuristic analysisHeuristic = AnalysisHeuristic::BottomUp;
 };
 
 /// The BufferizationAliasInfo class maintains a list of buffer aliases and
@@ -136,7 +130,7 @@ public:
 
   OneShotAnalysisState(const OneShotAnalysisState &) = delete;
 
-  ~OneShotAnalysisState() override = default;
+  virtual ~OneShotAnalysisState() = default;
 
   /// Return a reference to the BufferizationAliasInfo.
   BufferizationAliasInfo &getAliasInfo() { return aliasInfo; }

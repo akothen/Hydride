@@ -90,7 +90,6 @@ StringRef Pass::getDescription() const {
 StringRef Pass::getConstructor() const {
   return def->getValueAsString("constructor");
 }
-
 ArrayRef<StringRef> Pass::getDependentDialects() const {
   return dependentDialects;
 }

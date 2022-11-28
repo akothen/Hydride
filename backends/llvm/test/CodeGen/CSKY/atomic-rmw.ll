@@ -17,6 +17,7 @@ define i8 @atomicrmw_xchg_i8_monotonic(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI0_0:
 ; CSKY-NEXT:    .long __atomic_exchange_1
+;
   %1 = atomicrmw xchg i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -36,6 +37,7 @@ define i8 @atomicrmw_xchg_i8_acquire(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI1_0:
 ; CSKY-NEXT:    .long __atomic_exchange_1
+;
   %1 = atomicrmw xchg i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -55,6 +57,7 @@ define i8 @atomicrmw_xchg_i8_release(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI2_0:
 ; CSKY-NEXT:    .long __atomic_exchange_1
+;
   %1 = atomicrmw xchg i8* %a, i8 %b release
   ret i8 %1
 }
@@ -74,6 +77,7 @@ define i8 @atomicrmw_xchg_i8_acq_rel(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI3_0:
 ; CSKY-NEXT:    .long __atomic_exchange_1
+;
   %1 = atomicrmw xchg i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -93,6 +97,7 @@ define i8 @atomicrmw_xchg_i8_seq_cst(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI4_0:
 ; CSKY-NEXT:    .long __atomic_exchange_1
+;
   %1 = atomicrmw xchg i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -112,6 +117,7 @@ define i8 @atomicrmw_add_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI5_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_1
+;
   %1 = atomicrmw add i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -131,6 +137,7 @@ define i8 @atomicrmw_add_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI6_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_1
+;
   %1 = atomicrmw add i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -150,6 +157,7 @@ define i8 @atomicrmw_add_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI7_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_1
+;
   %1 = atomicrmw add i8* %a, i8 %b release
   ret i8 %1
 }
@@ -169,6 +177,7 @@ define i8 @atomicrmw_add_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI8_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_1
+;
   %1 = atomicrmw add i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -188,6 +197,7 @@ define i8 @atomicrmw_add_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI9_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_1
+;
   %1 = atomicrmw add i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -207,6 +217,7 @@ define i8 @atomicrmw_sub_i8_monotonic(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI10_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_1
+;
   %1 = atomicrmw sub i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -226,6 +237,7 @@ define i8 @atomicrmw_sub_i8_acquire(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI11_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_1
+;
   %1 = atomicrmw sub i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -245,6 +257,7 @@ define i8 @atomicrmw_sub_i8_release(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI12_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_1
+;
   %1 = atomicrmw sub i8* %a, i8 %b release
   ret i8 %1
 }
@@ -264,6 +277,7 @@ define i8 @atomicrmw_sub_i8_acq_rel(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI13_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_1
+;
   %1 = atomicrmw sub i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -283,6 +297,7 @@ define i8 @atomicrmw_sub_i8_seq_cst(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI14_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_1
+;
   %1 = atomicrmw sub i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -302,6 +317,7 @@ define i8 @atomicrmw_and_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI15_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_1
+;
   %1 = atomicrmw and i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -321,6 +337,7 @@ define i8 @atomicrmw_and_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI16_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_1
+;
   %1 = atomicrmw and i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -340,6 +357,7 @@ define i8 @atomicrmw_and_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI17_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_1
+;
   %1 = atomicrmw and i8* %a, i8 %b release
   ret i8 %1
 }
@@ -359,6 +377,7 @@ define i8 @atomicrmw_and_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI18_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_1
+;
   %1 = atomicrmw and i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -378,6 +397,7 @@ define i8 @atomicrmw_and_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI19_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_1
+;
   %1 = atomicrmw and i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -397,6 +417,7 @@ define i8 @atomicrmw_nand_i8_monotonic(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI20_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_1
+;
   %1 = atomicrmw nand i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -416,6 +437,7 @@ define i8 @atomicrmw_nand_i8_acquire(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI21_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_1
+;
   %1 = atomicrmw nand i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -435,6 +457,7 @@ define i8 @atomicrmw_nand_i8_release(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI22_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_1
+;
   %1 = atomicrmw nand i8* %a, i8 %b release
   ret i8 %1
 }
@@ -454,6 +477,7 @@ define i8 @atomicrmw_nand_i8_acq_rel(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI23_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_1
+;
   %1 = atomicrmw nand i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -473,6 +497,7 @@ define i8 @atomicrmw_nand_i8_seq_cst(i8* %a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI24_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_1
+;
   %1 = atomicrmw nand i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -492,6 +517,7 @@ define i8 @atomicrmw_or_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI25_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_1
+;
   %1 = atomicrmw or i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -511,6 +537,7 @@ define i8 @atomicrmw_or_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI26_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_1
+;
   %1 = atomicrmw or i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -530,6 +557,7 @@ define i8 @atomicrmw_or_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI27_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_1
+;
   %1 = atomicrmw or i8* %a, i8 %b release
   ret i8 %1
 }
@@ -549,6 +577,7 @@ define i8 @atomicrmw_or_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI28_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_1
+;
   %1 = atomicrmw or i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -568,6 +597,7 @@ define i8 @atomicrmw_or_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI29_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_1
+;
   %1 = atomicrmw or i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -587,6 +617,7 @@ define i8 @atomicrmw_xor_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI30_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_1
+;
   %1 = atomicrmw xor i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -606,6 +637,7 @@ define i8 @atomicrmw_xor_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI31_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_1
+;
   %1 = atomicrmw xor i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -625,6 +657,7 @@ define i8 @atomicrmw_xor_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI32_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_1
+;
   %1 = atomicrmw xor i8* %a, i8 %b release
   ret i8 %1
 }
@@ -644,6 +677,7 @@ define i8 @atomicrmw_xor_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI33_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_1
+;
   %1 = atomicrmw xor i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -663,6 +697,7 @@ define i8 @atomicrmw_xor_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI34_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_1
+;
   %1 = atomicrmw xor i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -671,10 +706,10 @@ define i8 @atomicrmw_max_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i8_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -700,10 +735,10 @@ define i8 @atomicrmw_max_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -711,6 +746,7 @@ define i8 @atomicrmw_max_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI35_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw max i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -719,10 +755,10 @@ define i8 @atomicrmw_max_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i8_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -748,10 +784,10 @@ define i8 @atomicrmw_max_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -759,6 +795,7 @@ define i8 @atomicrmw_max_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI36_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw max i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -767,10 +804,10 @@ define i8 @atomicrmw_max_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i8_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -796,10 +833,10 @@ define i8 @atomicrmw_max_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -807,6 +844,7 @@ define i8 @atomicrmw_max_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI37_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw max i8* %a, i8 %b release
   ret i8 %1
 }
@@ -815,10 +853,10 @@ define i8 @atomicrmw_max_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i8_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -844,10 +882,10 @@ define i8 @atomicrmw_max_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -855,6 +893,7 @@ define i8 @atomicrmw_max_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI38_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw max i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -863,10 +902,10 @@ define i8 @atomicrmw_max_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i8_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -892,10 +931,10 @@ define i8 @atomicrmw_max_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -903,6 +942,7 @@ define i8 @atomicrmw_max_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI39_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw max i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -911,10 +951,10 @@ define i8 @atomicrmw_min_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i8_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -940,10 +980,10 @@ define i8 @atomicrmw_min_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -951,6 +991,7 @@ define i8 @atomicrmw_min_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI40_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw min i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -959,10 +1000,10 @@ define i8 @atomicrmw_min_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i8_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -988,10 +1029,10 @@ define i8 @atomicrmw_min_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -999,6 +1040,7 @@ define i8 @atomicrmw_min_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI41_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw min i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -1007,10 +1049,10 @@ define i8 @atomicrmw_min_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i8_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1036,10 +1078,10 @@ define i8 @atomicrmw_min_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1047,6 +1089,7 @@ define i8 @atomicrmw_min_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI42_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw min i8* %a, i8 %b release
   ret i8 %1
 }
@@ -1055,10 +1098,10 @@ define i8 @atomicrmw_min_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i8_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1084,10 +1127,10 @@ define i8 @atomicrmw_min_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1095,6 +1138,7 @@ define i8 @atomicrmw_min_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI43_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw min i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -1103,10 +1147,10 @@ define i8 @atomicrmw_min_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i8_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1132,10 +1176,10 @@ define i8 @atomicrmw_min_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1143,6 +1187,7 @@ define i8 @atomicrmw_min_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI44_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw min i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -1151,10 +1196,10 @@ define i8 @atomicrmw_umax_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i8_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1180,10 +1225,10 @@ define i8 @atomicrmw_umax_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1191,6 +1236,7 @@ define i8 @atomicrmw_umax_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI45_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umax i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -1199,10 +1245,10 @@ define i8 @atomicrmw_umax_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i8_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1228,10 +1274,10 @@ define i8 @atomicrmw_umax_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1239,6 +1285,7 @@ define i8 @atomicrmw_umax_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI46_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umax i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -1247,10 +1294,10 @@ define i8 @atomicrmw_umax_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i8_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1276,10 +1323,10 @@ define i8 @atomicrmw_umax_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1287,6 +1334,7 @@ define i8 @atomicrmw_umax_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI47_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umax i8* %a, i8 %b release
   ret i8 %1
 }
@@ -1295,10 +1343,10 @@ define i8 @atomicrmw_umax_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i8_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1324,10 +1372,10 @@ define i8 @atomicrmw_umax_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1335,6 +1383,7 @@ define i8 @atomicrmw_umax_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI48_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umax i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -1343,10 +1392,10 @@ define i8 @atomicrmw_umax_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i8_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1372,10 +1421,10 @@ define i8 @atomicrmw_umax_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1383,6 +1432,7 @@ define i8 @atomicrmw_umax_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI49_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umax i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -1391,10 +1441,10 @@ define i8 @atomicrmw_umin_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i8_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1420,10 +1470,10 @@ define i8 @atomicrmw_umin_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1431,6 +1481,7 @@ define i8 @atomicrmw_umin_i8_monotonic(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI50_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umin i8* %a, i8 %b monotonic
   ret i8 %1
 }
@@ -1439,10 +1490,10 @@ define i8 @atomicrmw_umin_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i8_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1468,10 +1519,10 @@ define i8 @atomicrmw_umin_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1479,6 +1530,7 @@ define i8 @atomicrmw_umin_i8_acquire(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI51_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umin i8* %a, i8 %b acquire
   ret i8 %1
 }
@@ -1487,10 +1539,10 @@ define i8 @atomicrmw_umin_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i8_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1516,10 +1568,10 @@ define i8 @atomicrmw_umin_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1527,6 +1579,7 @@ define i8 @atomicrmw_umin_i8_release(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI52_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umin i8* %a, i8 %b release
   ret i8 %1
 }
@@ -1535,10 +1588,10 @@ define i8 @atomicrmw_umin_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i8_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1564,10 +1617,10 @@ define i8 @atomicrmw_umin_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1575,6 +1628,7 @@ define i8 @atomicrmw_umin_i8_acq_rel(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI53_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umin i8* %a, i8 %b acq_rel
   ret i8 %1
 }
@@ -1583,10 +1637,10 @@ define i8 @atomicrmw_umin_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i8_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -1612,10 +1666,10 @@ define i8 @atomicrmw_umin_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -1623,6 +1677,7 @@ define i8 @atomicrmw_umin_i8_seq_cst(i8 *%a, i8 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI54_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_1
+;
   %1 = atomicrmw umin i8* %a, i8 %b seq_cst
   ret i8 %1
 }
@@ -1642,6 +1697,7 @@ define i16 @atomicrmw_xchg_i16_monotonic(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI55_0:
 ; CSKY-NEXT:    .long __atomic_exchange_2
+;
   %1 = atomicrmw xchg i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -1661,6 +1717,7 @@ define i16 @atomicrmw_xchg_i16_acquire(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI56_0:
 ; CSKY-NEXT:    .long __atomic_exchange_2
+;
   %1 = atomicrmw xchg i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -1680,6 +1737,7 @@ define i16 @atomicrmw_xchg_i16_release(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI57_0:
 ; CSKY-NEXT:    .long __atomic_exchange_2
+;
   %1 = atomicrmw xchg i16* %a, i16 %b release
   ret i16 %1
 }
@@ -1699,6 +1757,7 @@ define i16 @atomicrmw_xchg_i16_acq_rel(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI58_0:
 ; CSKY-NEXT:    .long __atomic_exchange_2
+;
   %1 = atomicrmw xchg i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -1718,6 +1777,7 @@ define i16 @atomicrmw_xchg_i16_seq_cst(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI59_0:
 ; CSKY-NEXT:    .long __atomic_exchange_2
+;
   %1 = atomicrmw xchg i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -1737,6 +1797,7 @@ define i16 @atomicrmw_add_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI60_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_2
+;
   %1 = atomicrmw add i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -1756,6 +1817,7 @@ define i16 @atomicrmw_add_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI61_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_2
+;
   %1 = atomicrmw add i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -1775,6 +1837,7 @@ define i16 @atomicrmw_add_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI62_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_2
+;
   %1 = atomicrmw add i16* %a, i16 %b release
   ret i16 %1
 }
@@ -1794,6 +1857,7 @@ define i16 @atomicrmw_add_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI63_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_2
+;
   %1 = atomicrmw add i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -1813,6 +1877,7 @@ define i16 @atomicrmw_add_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI64_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_2
+;
   %1 = atomicrmw add i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -1832,6 +1897,7 @@ define i16 @atomicrmw_sub_i16_monotonic(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI65_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_2
+;
   %1 = atomicrmw sub i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -1851,6 +1917,7 @@ define i16 @atomicrmw_sub_i16_acquire(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI66_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_2
+;
   %1 = atomicrmw sub i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -1870,6 +1937,7 @@ define i16 @atomicrmw_sub_i16_release(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI67_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_2
+;
   %1 = atomicrmw sub i16* %a, i16 %b release
   ret i16 %1
 }
@@ -1889,6 +1957,7 @@ define i16 @atomicrmw_sub_i16_acq_rel(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI68_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_2
+;
   %1 = atomicrmw sub i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -1908,6 +1977,7 @@ define i16 @atomicrmw_sub_i16_seq_cst(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI69_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_2
+;
   %1 = atomicrmw sub i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -1927,6 +1997,7 @@ define i16 @atomicrmw_and_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI70_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_2
+;
   %1 = atomicrmw and i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -1946,6 +2017,7 @@ define i16 @atomicrmw_and_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI71_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_2
+;
   %1 = atomicrmw and i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -1965,6 +2037,7 @@ define i16 @atomicrmw_and_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI72_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_2
+;
   %1 = atomicrmw and i16* %a, i16 %b release
   ret i16 %1
 }
@@ -1984,6 +2057,7 @@ define i16 @atomicrmw_and_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI73_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_2
+;
   %1 = atomicrmw and i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2003,6 +2077,7 @@ define i16 @atomicrmw_and_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI74_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_2
+;
   %1 = atomicrmw and i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -2022,6 +2097,7 @@ define i16 @atomicrmw_nand_i16_monotonic(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI75_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_2
+;
   %1 = atomicrmw nand i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -2041,6 +2117,7 @@ define i16 @atomicrmw_nand_i16_acquire(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI76_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_2
+;
   %1 = atomicrmw nand i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -2060,6 +2137,7 @@ define i16 @atomicrmw_nand_i16_release(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI77_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_2
+;
   %1 = atomicrmw nand i16* %a, i16 %b release
   ret i16 %1
 }
@@ -2079,6 +2157,7 @@ define i16 @atomicrmw_nand_i16_acq_rel(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI78_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_2
+;
   %1 = atomicrmw nand i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2098,6 +2177,7 @@ define i16 @atomicrmw_nand_i16_seq_cst(i16* %a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI79_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_2
+;
   %1 = atomicrmw nand i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -2117,6 +2197,7 @@ define i16 @atomicrmw_or_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI80_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_2
+;
   %1 = atomicrmw or i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -2136,6 +2217,7 @@ define i16 @atomicrmw_or_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI81_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_2
+;
   %1 = atomicrmw or i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -2155,6 +2237,7 @@ define i16 @atomicrmw_or_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI82_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_2
+;
   %1 = atomicrmw or i16* %a, i16 %b release
   ret i16 %1
 }
@@ -2174,6 +2257,7 @@ define i16 @atomicrmw_or_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI83_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_2
+;
   %1 = atomicrmw or i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2193,6 +2277,7 @@ define i16 @atomicrmw_or_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI84_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_2
+;
   %1 = atomicrmw or i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -2212,6 +2297,7 @@ define i16 @atomicrmw_xor_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI85_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_2
+;
   %1 = atomicrmw xor i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -2231,6 +2317,7 @@ define i16 @atomicrmw_xor_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI86_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_2
+;
   %1 = atomicrmw xor i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -2250,6 +2337,7 @@ define i16 @atomicrmw_xor_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI87_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_2
+;
   %1 = atomicrmw xor i16* %a, i16 %b release
   ret i16 %1
 }
@@ -2269,6 +2357,7 @@ define i16 @atomicrmw_xor_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI88_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_2
+;
   %1 = atomicrmw xor i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2288,6 +2377,7 @@ define i16 @atomicrmw_xor_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI89_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_2
+;
   %1 = atomicrmw xor i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -2296,10 +2386,10 @@ define i16 @atomicrmw_max_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i16_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2325,10 +2415,10 @@ define i16 @atomicrmw_max_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2336,6 +2426,7 @@ define i16 @atomicrmw_max_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI90_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw max i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -2344,10 +2435,10 @@ define i16 @atomicrmw_max_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i16_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2373,10 +2464,10 @@ define i16 @atomicrmw_max_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2384,6 +2475,7 @@ define i16 @atomicrmw_max_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI91_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw max i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -2392,10 +2484,10 @@ define i16 @atomicrmw_max_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i16_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2421,10 +2513,10 @@ define i16 @atomicrmw_max_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2432,6 +2524,7 @@ define i16 @atomicrmw_max_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI92_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw max i16* %a, i16 %b release
   ret i16 %1
 }
@@ -2440,10 +2533,10 @@ define i16 @atomicrmw_max_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i16_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2469,10 +2562,10 @@ define i16 @atomicrmw_max_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2480,6 +2573,7 @@ define i16 @atomicrmw_max_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI93_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw max i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2488,10 +2582,10 @@ define i16 @atomicrmw_max_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i16_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2517,10 +2611,10 @@ define i16 @atomicrmw_max_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2528,6 +2622,7 @@ define i16 @atomicrmw_max_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI94_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw max i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -2536,10 +2631,10 @@ define i16 @atomicrmw_min_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i16_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2565,10 +2660,10 @@ define i16 @atomicrmw_min_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2576,6 +2671,7 @@ define i16 @atomicrmw_min_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI95_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw min i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -2584,10 +2680,10 @@ define i16 @atomicrmw_min_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i16_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2613,10 +2709,10 @@ define i16 @atomicrmw_min_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2624,6 +2720,7 @@ define i16 @atomicrmw_min_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI96_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw min i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -2632,10 +2729,10 @@ define i16 @atomicrmw_min_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i16_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2661,10 +2758,10 @@ define i16 @atomicrmw_min_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2672,6 +2769,7 @@ define i16 @atomicrmw_min_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI97_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw min i16* %a, i16 %b release
   ret i16 %1
 }
@@ -2680,10 +2778,10 @@ define i16 @atomicrmw_min_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i16_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2709,10 +2807,10 @@ define i16 @atomicrmw_min_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2720,6 +2818,7 @@ define i16 @atomicrmw_min_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI98_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw min i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2728,10 +2827,10 @@ define i16 @atomicrmw_min_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i16_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2757,10 +2856,10 @@ define i16 @atomicrmw_min_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2768,6 +2867,7 @@ define i16 @atomicrmw_min_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI99_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw min i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -2776,10 +2876,10 @@ define i16 @atomicrmw_umax_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i16_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2805,10 +2905,10 @@ define i16 @atomicrmw_umax_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2816,6 +2916,7 @@ define i16 @atomicrmw_umax_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI100_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umax i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -2824,10 +2925,10 @@ define i16 @atomicrmw_umax_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i16_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2853,10 +2954,10 @@ define i16 @atomicrmw_umax_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2864,6 +2965,7 @@ define i16 @atomicrmw_umax_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI101_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umax i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -2872,10 +2974,10 @@ define i16 @atomicrmw_umax_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i16_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2901,10 +3003,10 @@ define i16 @atomicrmw_umax_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2912,6 +3014,7 @@ define i16 @atomicrmw_umax_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI102_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umax i16* %a, i16 %b release
   ret i16 %1
 }
@@ -2920,10 +3023,10 @@ define i16 @atomicrmw_umax_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i16_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2949,10 +3052,10 @@ define i16 @atomicrmw_umax_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -2960,6 +3063,7 @@ define i16 @atomicrmw_umax_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI103_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umax i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -2968,10 +3072,10 @@ define i16 @atomicrmw_umax_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i16_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -2997,10 +3101,10 @@ define i16 @atomicrmw_umax_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3008,6 +3112,7 @@ define i16 @atomicrmw_umax_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI104_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umax i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -3016,10 +3121,10 @@ define i16 @atomicrmw_umin_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i16_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3045,10 +3150,10 @@ define i16 @atomicrmw_umin_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3056,6 +3161,7 @@ define i16 @atomicrmw_umin_i16_monotonic(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI105_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umin i16* %a, i16 %b monotonic
   ret i16 %1
 }
@@ -3064,10 +3170,10 @@ define i16 @atomicrmw_umin_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i16_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3093,10 +3199,10 @@ define i16 @atomicrmw_umin_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3104,6 +3210,7 @@ define i16 @atomicrmw_umin_i16_acquire(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI106_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umin i16* %a, i16 %b acquire
   ret i16 %1
 }
@@ -3112,10 +3219,10 @@ define i16 @atomicrmw_umin_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i16_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3141,10 +3248,10 @@ define i16 @atomicrmw_umin_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3152,6 +3259,7 @@ define i16 @atomicrmw_umin_i16_release(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI107_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umin i16* %a, i16 %b release
   ret i16 %1
 }
@@ -3160,10 +3268,10 @@ define i16 @atomicrmw_umin_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i16_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3189,10 +3297,10 @@ define i16 @atomicrmw_umin_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3200,6 +3308,7 @@ define i16 @atomicrmw_umin_i16_acq_rel(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI108_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umin i16* %a, i16 %b acq_rel
   ret i16 %1
 }
@@ -3208,10 +3317,10 @@ define i16 @atomicrmw_umin_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i16_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3237,10 +3346,10 @@ define i16 @atomicrmw_umin_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3248,6 +3357,7 @@ define i16 @atomicrmw_umin_i16_seq_cst(i16 *%a, i16 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI109_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_2
+;
   %1 = atomicrmw umin i16* %a, i16 %b seq_cst
   ret i16 %1
 }
@@ -3267,6 +3377,7 @@ define i32 @atomicrmw_xchg_i32_monotonic(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI110_0:
 ; CSKY-NEXT:    .long __atomic_exchange_4
+;
   %1 = atomicrmw xchg i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3286,6 +3397,7 @@ define i32 @atomicrmw_xchg_i32_acquire(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI111_0:
 ; CSKY-NEXT:    .long __atomic_exchange_4
+;
   %1 = atomicrmw xchg i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3305,6 +3417,7 @@ define i32 @atomicrmw_xchg_i32_release(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI112_0:
 ; CSKY-NEXT:    .long __atomic_exchange_4
+;
   %1 = atomicrmw xchg i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3324,6 +3437,7 @@ define i32 @atomicrmw_xchg_i32_acq_rel(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI113_0:
 ; CSKY-NEXT:    .long __atomic_exchange_4
+;
   %1 = atomicrmw xchg i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3343,6 +3457,7 @@ define i32 @atomicrmw_xchg_i32_seq_cst(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI114_0:
 ; CSKY-NEXT:    .long __atomic_exchange_4
+;
   %1 = atomicrmw xchg i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3362,6 +3477,7 @@ define i32 @atomicrmw_add_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI115_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_4
+;
   %1 = atomicrmw add i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3381,6 +3497,7 @@ define i32 @atomicrmw_add_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI116_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_4
+;
   %1 = atomicrmw add i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3400,6 +3517,7 @@ define i32 @atomicrmw_add_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI117_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_4
+;
   %1 = atomicrmw add i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3419,6 +3537,7 @@ define i32 @atomicrmw_add_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI118_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_4
+;
   %1 = atomicrmw add i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3438,6 +3557,7 @@ define i32 @atomicrmw_add_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI119_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_4
+;
   %1 = atomicrmw add i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3457,6 +3577,7 @@ define i32 @atomicrmw_sub_i32_monotonic(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI120_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_4
+;
   %1 = atomicrmw sub i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3476,6 +3597,7 @@ define i32 @atomicrmw_sub_i32_acquire(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI121_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_4
+;
   %1 = atomicrmw sub i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3495,6 +3617,7 @@ define i32 @atomicrmw_sub_i32_release(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI122_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_4
+;
   %1 = atomicrmw sub i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3514,6 +3637,7 @@ define i32 @atomicrmw_sub_i32_acq_rel(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI123_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_4
+;
   %1 = atomicrmw sub i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3533,6 +3657,7 @@ define i32 @atomicrmw_sub_i32_seq_cst(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI124_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_4
+;
   %1 = atomicrmw sub i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3552,6 +3677,7 @@ define i32 @atomicrmw_and_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI125_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_4
+;
   %1 = atomicrmw and i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3571,6 +3697,7 @@ define i32 @atomicrmw_and_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI126_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_4
+;
   %1 = atomicrmw and i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3590,6 +3717,7 @@ define i32 @atomicrmw_and_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI127_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_4
+;
   %1 = atomicrmw and i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3609,6 +3737,7 @@ define i32 @atomicrmw_and_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI128_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_4
+;
   %1 = atomicrmw and i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3628,6 +3757,7 @@ define i32 @atomicrmw_and_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI129_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_4
+;
   %1 = atomicrmw and i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3647,6 +3777,7 @@ define i32 @atomicrmw_nand_i32_monotonic(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI130_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_4
+;
   %1 = atomicrmw nand i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3666,6 +3797,7 @@ define i32 @atomicrmw_nand_i32_acquire(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI131_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_4
+;
   %1 = atomicrmw nand i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3685,6 +3817,7 @@ define i32 @atomicrmw_nand_i32_release(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI132_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_4
+;
   %1 = atomicrmw nand i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3704,6 +3837,7 @@ define i32 @atomicrmw_nand_i32_acq_rel(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI133_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_4
+;
   %1 = atomicrmw nand i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3723,6 +3857,7 @@ define i32 @atomicrmw_nand_i32_seq_cst(i32* %a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI134_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_4
+;
   %1 = atomicrmw nand i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3742,6 +3877,7 @@ define i32 @atomicrmw_or_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI135_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_4
+;
   %1 = atomicrmw or i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3761,6 +3897,7 @@ define i32 @atomicrmw_or_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI136_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_4
+;
   %1 = atomicrmw or i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3780,6 +3917,7 @@ define i32 @atomicrmw_or_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI137_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_4
+;
   %1 = atomicrmw or i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3799,6 +3937,7 @@ define i32 @atomicrmw_or_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI138_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_4
+;
   %1 = atomicrmw or i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3818,6 +3957,7 @@ define i32 @atomicrmw_or_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI139_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_4
+;
   %1 = atomicrmw or i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3837,6 +3977,7 @@ define i32 @atomicrmw_xor_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI140_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_4
+;
   %1 = atomicrmw xor i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3856,6 +3997,7 @@ define i32 @atomicrmw_xor_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI141_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_4
+;
   %1 = atomicrmw xor i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -3875,6 +4017,7 @@ define i32 @atomicrmw_xor_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI142_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_4
+;
   %1 = atomicrmw xor i32* %a, i32 %b release
   ret i32 %1
 }
@@ -3894,6 +4037,7 @@ define i32 @atomicrmw_xor_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI143_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_4
+;
   %1 = atomicrmw xor i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -3913,6 +4057,7 @@ define i32 @atomicrmw_xor_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI144_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_4
+;
   %1 = atomicrmw xor i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -3921,9 +4066,9 @@ define i32 @atomicrmw_max_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i32_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3947,9 +4092,9 @@ define i32 @atomicrmw_max_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -3957,6 +4102,7 @@ define i32 @atomicrmw_max_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI145_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw max i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -3965,9 +4111,9 @@ define i32 @atomicrmw_max_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i32_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -3991,9 +4137,9 @@ define i32 @atomicrmw_max_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4001,6 +4147,7 @@ define i32 @atomicrmw_max_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI146_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw max i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -4009,9 +4156,9 @@ define i32 @atomicrmw_max_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i32_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4035,9 +4182,9 @@ define i32 @atomicrmw_max_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4045,6 +4192,7 @@ define i32 @atomicrmw_max_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI147_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw max i32* %a, i32 %b release
   ret i32 %1
 }
@@ -4053,9 +4201,9 @@ define i32 @atomicrmw_max_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i32_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4079,9 +4227,9 @@ define i32 @atomicrmw_max_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4089,6 +4237,7 @@ define i32 @atomicrmw_max_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI148_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw max i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -4097,9 +4246,9 @@ define i32 @atomicrmw_max_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i32_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4123,9 +4272,9 @@ define i32 @atomicrmw_max_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4133,6 +4282,7 @@ define i32 @atomicrmw_max_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI149_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw max i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -4141,9 +4291,9 @@ define i32 @atomicrmw_min_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i32_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4167,9 +4317,9 @@ define i32 @atomicrmw_min_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4177,6 +4327,7 @@ define i32 @atomicrmw_min_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI150_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw min i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -4185,9 +4336,9 @@ define i32 @atomicrmw_min_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i32_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4211,9 +4362,9 @@ define i32 @atomicrmw_min_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4221,6 +4372,7 @@ define i32 @atomicrmw_min_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI151_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw min i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -4229,9 +4381,9 @@ define i32 @atomicrmw_min_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i32_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4255,9 +4407,9 @@ define i32 @atomicrmw_min_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4265,6 +4417,7 @@ define i32 @atomicrmw_min_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI152_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw min i32* %a, i32 %b release
   ret i32 %1
 }
@@ -4273,9 +4426,9 @@ define i32 @atomicrmw_min_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i32_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4299,9 +4452,9 @@ define i32 @atomicrmw_min_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4309,6 +4462,7 @@ define i32 @atomicrmw_min_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI153_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw min i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -4317,9 +4471,9 @@ define i32 @atomicrmw_min_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i32_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4343,9 +4497,9 @@ define i32 @atomicrmw_min_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4353,6 +4507,7 @@ define i32 @atomicrmw_min_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI154_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw min i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -4361,9 +4516,9 @@ define i32 @atomicrmw_umax_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i32_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4387,9 +4542,9 @@ define i32 @atomicrmw_umax_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4397,6 +4552,7 @@ define i32 @atomicrmw_umax_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI155_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umax i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -4405,9 +4561,9 @@ define i32 @atomicrmw_umax_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i32_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4431,9 +4587,9 @@ define i32 @atomicrmw_umax_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4441,6 +4597,7 @@ define i32 @atomicrmw_umax_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI156_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umax i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -4449,9 +4606,9 @@ define i32 @atomicrmw_umax_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i32_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4475,9 +4632,9 @@ define i32 @atomicrmw_umax_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4485,6 +4642,7 @@ define i32 @atomicrmw_umax_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI157_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umax i32* %a, i32 %b release
   ret i32 %1
 }
@@ -4493,9 +4651,9 @@ define i32 @atomicrmw_umax_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i32_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4519,9 +4677,9 @@ define i32 @atomicrmw_umax_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4529,6 +4687,7 @@ define i32 @atomicrmw_umax_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI158_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umax i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -4537,9 +4696,9 @@ define i32 @atomicrmw_umax_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i32_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4563,9 +4722,9 @@ define i32 @atomicrmw_umax_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4573,6 +4732,7 @@ define i32 @atomicrmw_umax_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI159_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umax i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -4581,9 +4741,9 @@ define i32 @atomicrmw_umin_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i32_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4607,9 +4767,9 @@ define i32 @atomicrmw_umin_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4617,6 +4777,7 @@ define i32 @atomicrmw_umin_i32_monotonic(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI160_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umin i32* %a, i32 %b monotonic
   ret i32 %1
 }
@@ -4625,9 +4786,9 @@ define i32 @atomicrmw_umin_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i32_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4651,9 +4812,9 @@ define i32 @atomicrmw_umin_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4661,6 +4822,7 @@ define i32 @atomicrmw_umin_i32_acquire(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI161_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umin i32* %a, i32 %b acquire
   ret i32 %1
 }
@@ -4669,9 +4831,9 @@ define i32 @atomicrmw_umin_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i32_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4695,9 +4857,9 @@ define i32 @atomicrmw_umin_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4705,6 +4867,7 @@ define i32 @atomicrmw_umin_i32_release(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI162_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umin i32* %a, i32 %b release
   ret i32 %1
 }
@@ -4713,9 +4876,9 @@ define i32 @atomicrmw_umin_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i32_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4739,9 +4902,9 @@ define i32 @atomicrmw_umin_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4749,6 +4912,7 @@ define i32 @atomicrmw_umin_i32_acq_rel(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI163_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umin i32* %a, i32 %b acq_rel
   ret i32 %1
 }
@@ -4757,9 +4921,9 @@ define i32 @atomicrmw_umin_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i32_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 16
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 8
 ; CSKY-NEXT:    mov16 l0, a1
@@ -4783,9 +4947,9 @@ define i32 @atomicrmw_umin_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 8
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
 ; CSKY-NEXT:    addi16 sp, sp, 16
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -4793,6 +4957,7 @@ define i32 @atomicrmw_umin_i32_seq_cst(i32 *%a, i32 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI164_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_4
+;
   %1 = atomicrmw umin i32* %a, i32 %b seq_cst
   ret i32 %1
 }
@@ -4812,6 +4977,7 @@ define i64 @atomicrmw_xchg_i64_monotonic(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI165_0:
 ; CSKY-NEXT:    .long __atomic_exchange_8
+;
   %1 = atomicrmw xchg i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -4831,6 +4997,7 @@ define i64 @atomicrmw_xchg_i64_acquire(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI166_0:
 ; CSKY-NEXT:    .long __atomic_exchange_8
+;
   %1 = atomicrmw xchg i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -4850,6 +5017,7 @@ define i64 @atomicrmw_xchg_i64_release(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI167_0:
 ; CSKY-NEXT:    .long __atomic_exchange_8
+;
   %1 = atomicrmw xchg i64* %a, i64 %b release
   ret i64 %1
 }
@@ -4869,6 +5037,7 @@ define i64 @atomicrmw_xchg_i64_acq_rel(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI168_0:
 ; CSKY-NEXT:    .long __atomic_exchange_8
+;
   %1 = atomicrmw xchg i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -4888,6 +5057,7 @@ define i64 @atomicrmw_xchg_i64_seq_cst(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI169_0:
 ; CSKY-NEXT:    .long __atomic_exchange_8
+;
   %1 = atomicrmw xchg i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -4907,6 +5077,7 @@ define i64 @atomicrmw_add_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI170_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_8
+;
   %1 = atomicrmw add i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -4926,6 +5097,7 @@ define i64 @atomicrmw_add_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI171_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_8
+;
   %1 = atomicrmw add i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -4945,6 +5117,7 @@ define i64 @atomicrmw_add_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI172_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_8
+;
   %1 = atomicrmw add i64* %a, i64 %b release
   ret i64 %1
 }
@@ -4964,6 +5137,7 @@ define i64 @atomicrmw_add_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI173_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_8
+;
   %1 = atomicrmw add i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -4983,6 +5157,7 @@ define i64 @atomicrmw_add_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI174_0:
 ; CSKY-NEXT:    .long __atomic_fetch_add_8
+;
   %1 = atomicrmw add i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5002,6 +5177,7 @@ define i64 @atomicrmw_sub_i64_monotonic(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI175_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_8
+;
   %1 = atomicrmw sub i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5021,6 +5197,7 @@ define i64 @atomicrmw_sub_i64_acquire(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI176_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_8
+;
   %1 = atomicrmw sub i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5040,6 +5217,7 @@ define i64 @atomicrmw_sub_i64_release(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI177_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_8
+;
   %1 = atomicrmw sub i64* %a, i64 %b release
   ret i64 %1
 }
@@ -5059,6 +5237,7 @@ define i64 @atomicrmw_sub_i64_acq_rel(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI178_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_8
+;
   %1 = atomicrmw sub i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -5078,6 +5257,7 @@ define i64 @atomicrmw_sub_i64_seq_cst(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI179_0:
 ; CSKY-NEXT:    .long __atomic_fetch_sub_8
+;
   %1 = atomicrmw sub i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5097,6 +5277,7 @@ define i64 @atomicrmw_and_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI180_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_8
+;
   %1 = atomicrmw and i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5116,6 +5297,7 @@ define i64 @atomicrmw_and_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI181_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_8
+;
   %1 = atomicrmw and i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5135,6 +5317,7 @@ define i64 @atomicrmw_and_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI182_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_8
+;
   %1 = atomicrmw and i64* %a, i64 %b release
   ret i64 %1
 }
@@ -5154,6 +5337,7 @@ define i64 @atomicrmw_and_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI183_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_8
+;
   %1 = atomicrmw and i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -5173,6 +5357,7 @@ define i64 @atomicrmw_and_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI184_0:
 ; CSKY-NEXT:    .long __atomic_fetch_and_8
+;
   %1 = atomicrmw and i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5192,6 +5377,7 @@ define i64 @atomicrmw_nand_i64_monotonic(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI185_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_8
+;
   %1 = atomicrmw nand i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5211,6 +5397,7 @@ define i64 @atomicrmw_nand_i64_acquire(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI186_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_8
+;
   %1 = atomicrmw nand i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5230,6 +5417,7 @@ define i64 @atomicrmw_nand_i64_release(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI187_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_8
+;
   %1 = atomicrmw nand i64* %a, i64 %b release
   ret i64 %1
 }
@@ -5249,6 +5437,7 @@ define i64 @atomicrmw_nand_i64_acq_rel(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI188_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_8
+;
   %1 = atomicrmw nand i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -5268,6 +5457,7 @@ define i64 @atomicrmw_nand_i64_seq_cst(i64* %a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI189_0:
 ; CSKY-NEXT:    .long __atomic_fetch_nand_8
+;
   %1 = atomicrmw nand i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5287,6 +5477,7 @@ define i64 @atomicrmw_or_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI190_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_8
+;
   %1 = atomicrmw or i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5306,6 +5497,7 @@ define i64 @atomicrmw_or_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI191_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_8
+;
   %1 = atomicrmw or i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5325,6 +5517,7 @@ define i64 @atomicrmw_or_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI192_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_8
+;
   %1 = atomicrmw or i64* %a, i64 %b release
   ret i64 %1
 }
@@ -5344,6 +5537,7 @@ define i64 @atomicrmw_or_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI193_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_8
+;
   %1 = atomicrmw or i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -5363,6 +5557,7 @@ define i64 @atomicrmw_or_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI194_0:
 ; CSKY-NEXT:    .long __atomic_fetch_or_8
+;
   %1 = atomicrmw or i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5382,6 +5577,7 @@ define i64 @atomicrmw_xor_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI195_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_8
+;
   %1 = atomicrmw xor i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5401,6 +5597,7 @@ define i64 @atomicrmw_xor_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI196_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_8
+;
   %1 = atomicrmw xor i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5420,6 +5617,7 @@ define i64 @atomicrmw_xor_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI197_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_8
+;
   %1 = atomicrmw xor i64* %a, i64 %b release
   ret i64 %1
 }
@@ -5439,6 +5637,7 @@ define i64 @atomicrmw_xor_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI198_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_8
+;
   %1 = atomicrmw xor i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -5458,6 +5657,7 @@ define i64 @atomicrmw_xor_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI199_0:
 ; CSKY-NEXT:    .long __atomic_fetch_xor_8
+;
   %1 = atomicrmw xor i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5466,10 +5666,10 @@ define i64 @atomicrmw_max_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i64_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
 ; CSKY-NEXT:    mov16 l0, a2
@@ -5489,12 +5689,12 @@ define i64 @atomicrmw_max_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmphs16 l1, a0
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5513,10 +5713,10 @@ define i64 @atomicrmw_max_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5524,6 +5724,7 @@ define i64 @atomicrmw_max_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI200_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw max i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5532,10 +5733,10 @@ define i64 @atomicrmw_max_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i64_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
 ; CSKY-NEXT:    mov16 l0, a2
@@ -5555,12 +5756,12 @@ define i64 @atomicrmw_max_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmphs16 l1, a0
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5579,10 +5780,10 @@ define i64 @atomicrmw_max_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5590,6 +5791,7 @@ define i64 @atomicrmw_max_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI201_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw max i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5598,10 +5800,10 @@ define i64 @atomicrmw_max_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i64_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
@@ -5623,12 +5825,12 @@ define i64 @atomicrmw_max_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmphs16 l1, a0
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5648,10 +5850,10 @@ define i64 @atomicrmw_max_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5659,6 +5861,7 @@ define i64 @atomicrmw_max_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI202_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw max i64* %a, i64 %b release
   ret i64 %1
 }
@@ -5667,10 +5870,10 @@ define i64 @atomicrmw_max_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i64_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
@@ -5692,12 +5895,12 @@ define i64 @atomicrmw_max_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmphs16 l1, a0
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5717,10 +5920,10 @@ define i64 @atomicrmw_max_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5728,6 +5931,7 @@ define i64 @atomicrmw_max_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI203_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw max i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -5736,10 +5940,10 @@ define i64 @atomicrmw_max_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_max_i64_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
 ; CSKY-NEXT:    mov16 l0, a2
@@ -5759,12 +5963,12 @@ define i64 @atomicrmw_max_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmphs16 l1, a0
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5783,10 +5987,10 @@ define i64 @atomicrmw_max_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5794,6 +5998,7 @@ define i64 @atomicrmw_max_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI204_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw max i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -5802,10 +6007,10 @@ define i64 @atomicrmw_min_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i64_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
 ; CSKY-NEXT:    mov16 l0, a2
@@ -5825,12 +6030,12 @@ define i64 @atomicrmw_min_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmplt16 l0, a1
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a2, a3
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5849,10 +6054,10 @@ define i64 @atomicrmw_min_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5860,6 +6065,7 @@ define i64 @atomicrmw_min_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI205_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw min i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -5868,10 +6074,10 @@ define i64 @atomicrmw_min_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i64_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
 ; CSKY-NEXT:    mov16 l0, a2
@@ -5891,12 +6097,12 @@ define i64 @atomicrmw_min_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmplt16 l0, a1
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a2, a3
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5915,10 +6121,10 @@ define i64 @atomicrmw_min_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5926,6 +6132,7 @@ define i64 @atomicrmw_min_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI206_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw min i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -5934,10 +6141,10 @@ define i64 @atomicrmw_min_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i64_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
@@ -5959,12 +6166,12 @@ define i64 @atomicrmw_min_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmplt16 l0, a1
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a2, a3
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -5984,10 +6191,10 @@ define i64 @atomicrmw_min_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -5995,6 +6202,7 @@ define i64 @atomicrmw_min_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI207_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw min i64* %a, i64 %b release
   ret i64 %1
 }
@@ -6003,10 +6211,10 @@ define i64 @atomicrmw_min_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i64_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
@@ -6028,12 +6236,12 @@ define i64 @atomicrmw_min_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmplt16 l0, a1
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a2, a3
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6053,10 +6261,10 @@ define i64 @atomicrmw_min_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6064,6 +6272,7 @@ define i64 @atomicrmw_min_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI208_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw min i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -6072,10 +6281,10 @@ define i64 @atomicrmw_min_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_min_i64_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 28
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6095,12 +6304,12 @@ define i64 @atomicrmw_min_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    cmplt16 l0, a1
 ; CSKY-NEXT:    mvcv16 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 16)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a2, a3
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6119,10 +6328,10 @@ define i64 @atomicrmw_min_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 28
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6130,6 +6339,7 @@ define i64 @atomicrmw_min_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI209_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw min i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -6138,10 +6348,10 @@ define i64 @atomicrmw_umax_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i64_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 24
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6162,7 +6372,7 @@ define i64 @atomicrmw_umax_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    ld32.w t0, (sp, 12)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6181,10 +6391,10 @@ define i64 @atomicrmw_umax_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6192,6 +6402,7 @@ define i64 @atomicrmw_umax_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI210_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umax i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -6200,10 +6411,10 @@ define i64 @atomicrmw_umax_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i64_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 24
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6224,7 +6435,7 @@ define i64 @atomicrmw_umax_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    ld32.w t0, (sp, 12)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6243,10 +6454,10 @@ define i64 @atomicrmw_umax_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6254,6 +6465,7 @@ define i64 @atomicrmw_umax_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI211_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umax i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -6262,10 +6474,10 @@ define i64 @atomicrmw_umax_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i64_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 24
@@ -6288,7 +6500,7 @@ define i64 @atomicrmw_umax_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    ld32.w t0, (sp, 12)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6308,10 +6520,10 @@ define i64 @atomicrmw_umax_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6319,6 +6531,7 @@ define i64 @atomicrmw_umax_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI212_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umax i64* %a, i64 %b release
   ret i64 %1
 }
@@ -6327,10 +6540,10 @@ define i64 @atomicrmw_umax_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i64_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 24
@@ -6353,7 +6566,7 @@ define i64 @atomicrmw_umax_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    ld32.w t0, (sp, 12)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6373,10 +6586,10 @@ define i64 @atomicrmw_umax_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6384,6 +6597,7 @@ define i64 @atomicrmw_umax_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI213_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umax i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -6392,10 +6606,10 @@ define i64 @atomicrmw_umax_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umax_i64_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 24
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6416,7 +6630,7 @@ define i64 @atomicrmw_umax_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    ld32.w t0, (sp, 12)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6435,10 +6649,10 @@ define i64 @atomicrmw_umax_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6446,6 +6660,7 @@ define i64 @atomicrmw_umax_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI214_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umax i64* %a, i64 %b seq_cst
   ret i64 %1
 }
@@ -6454,10 +6669,10 @@ define i64 @atomicrmw_umin_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i64_monotonic:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 32
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6478,15 +6693,15 @@ define i64 @atomicrmw_umin_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    st16.w a2, (sp, 20)
 ; CSKY-NEXT:    ld16.w a2, (sp, 16)
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 20)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6505,10 +6720,10 @@ define i64 @atomicrmw_umin_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 32
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6516,6 +6731,7 @@ define i64 @atomicrmw_umin_i64_monotonic(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI215_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umin i64* %a, i64 %b monotonic
   ret i64 %1
 }
@@ -6524,10 +6740,10 @@ define i64 @atomicrmw_umin_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i64_acquire:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 32
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6548,15 +6764,15 @@ define i64 @atomicrmw_umin_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    st16.w a2, (sp, 20)
 ; CSKY-NEXT:    ld16.w a2, (sp, 16)
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 20)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6575,10 +6791,10 @@ define i64 @atomicrmw_umin_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 32
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6586,6 +6802,7 @@ define i64 @atomicrmw_umin_i64_acquire(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI216_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umin i64* %a, i64 %b acquire
   ret i64 %1
 }
@@ -6594,10 +6811,10 @@ define i64 @atomicrmw_umin_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i64_release:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 32
@@ -6620,15 +6837,15 @@ define i64 @atomicrmw_umin_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    st16.w a2, (sp, 20)
 ; CSKY-NEXT:    ld16.w a2, (sp, 16)
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 20)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6648,10 +6865,10 @@ define i64 @atomicrmw_umin_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 32
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6659,6 +6876,7 @@ define i64 @atomicrmw_umin_i64_release(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI217_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umin i64* %a, i64 %b release
   ret i64 %1
 }
@@ -6667,10 +6885,10 @@ define i64 @atomicrmw_umin_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i64_acq_rel:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 24
-; CSKY-NEXT:    st16.w l3, (sp, 20) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 8) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 20)
+; CSKY-NEXT:    st16.w l2, (sp, 16)
+; CSKY-NEXT:    st16.w l1, (sp, 12)
+; CSKY-NEXT:    st16.w l0, (sp, 8)
 ; CSKY-NEXT:    st32.w lr, (sp, 4) # 4-byte Folded Spill
 ; CSKY-NEXT:    st32.w l4, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 32
@@ -6693,15 +6911,15 @@ define i64 @atomicrmw_umin_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    st16.w a2, (sp, 20)
 ; CSKY-NEXT:    ld16.w a2, (sp, 16)
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 20)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6721,10 +6939,10 @@ define i64 @atomicrmw_umin_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    addi16 sp, sp, 32
 ; CSKY-NEXT:    ld32.w l4, (sp, 0) # 4-byte Folded Reload
 ; CSKY-NEXT:    ld32.w lr, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 16) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 20) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 8)
+; CSKY-NEXT:    ld16.w l1, (sp, 12)
+; CSKY-NEXT:    ld16.w l2, (sp, 16)
+; CSKY-NEXT:    ld16.w l3, (sp, 20)
 ; CSKY-NEXT:    addi16 sp, sp, 24
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6732,6 +6950,7 @@ define i64 @atomicrmw_umin_i64_acq_rel(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI218_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umin i64* %a, i64 %b acq_rel
   ret i64 %1
 }
@@ -6740,10 +6959,10 @@ define i64 @atomicrmw_umin_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-LABEL: atomicrmw_umin_i64_seq_cst:
 ; CSKY:       # %bb.0:
 ; CSKY-NEXT:    subi16 sp, sp, 20
-; CSKY-NEXT:    st16.w l3, (sp, 16) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l2, (sp, 12) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l1, (sp, 8) # 4-byte Folded Spill
-; CSKY-NEXT:    st16.w l0, (sp, 4) # 4-byte Folded Spill
+; CSKY-NEXT:    st16.w l3, (sp, 16)
+; CSKY-NEXT:    st16.w l2, (sp, 12)
+; CSKY-NEXT:    st16.w l1, (sp, 8)
+; CSKY-NEXT:    st16.w l0, (sp, 4)
 ; CSKY-NEXT:    st32.w lr, (sp, 0) # 4-byte Folded Spill
 ; CSKY-NEXT:    subi16 sp, sp, 32
 ; CSKY-NEXT:    mov16 l0, a2
@@ -6764,15 +6983,15 @@ define i64 @atomicrmw_umin_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    st16.w a2, (sp, 20)
 ; CSKY-NEXT:    ld16.w a2, (sp, 16)
-; CSKY-NEXT:    btsti16 a2, 0
+; CSKY-NEXT:    btsti32 a2, 0
 ; CSKY-NEXT:    mvc32 a2
 ; CSKY-NEXT:    ld16.w a3, (sp, 12)
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mvc32 a3
 ; CSKY-NEXT:    ld32.w t0, (sp, 20)
 ; CSKY-NEXT:    btsti32 t0, 0
 ; CSKY-NEXT:    movf32 a3, a2
-; CSKY-NEXT:    btsti16 a3, 0
+; CSKY-NEXT:    btsti32 a3, 0
 ; CSKY-NEXT:    mov16 a2, l1
 ; CSKY-NEXT:    movt32 a2, a0
 ; CSKY-NEXT:    mov16 a3, l0
@@ -6791,10 +7010,10 @@ define i64 @atomicrmw_umin_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:  # %bb.2: # %atomicrmw.end
 ; CSKY-NEXT:    addi16 sp, sp, 32
 ; CSKY-NEXT:    ld32.w lr, (sp, 0) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l0, (sp, 4) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l1, (sp, 8) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l2, (sp, 12) # 4-byte Folded Reload
-; CSKY-NEXT:    ld16.w l3, (sp, 16) # 4-byte Folded Reload
+; CSKY-NEXT:    ld16.w l0, (sp, 4)
+; CSKY-NEXT:    ld16.w l1, (sp, 8)
+; CSKY-NEXT:    ld16.w l2, (sp, 12)
+; CSKY-NEXT:    ld16.w l3, (sp, 16)
 ; CSKY-NEXT:    addi16 sp, sp, 20
 ; CSKY-NEXT:    rts16
 ; CSKY-NEXT:    .p2align 1
@@ -6802,6 +7021,7 @@ define i64 @atomicrmw_umin_i64_seq_cst(i64 *%a, i64 %b) nounwind {
 ; CSKY-NEXT:    .p2align 2
 ; CSKY-NEXT:  .LCPI219_0:
 ; CSKY-NEXT:    .long __atomic_compare_exchange_8
+;
   %1 = atomicrmw umin i64* %a, i64 %b seq_cst
   ret i64 %1
 }

@@ -23,7 +23,6 @@
 #include "llvm/ADT/DenseSet.h"
 #include "llvm/ADT/SmallPtrSet.h"
 #include "llvm/ADT/SmallString.h"
-#include <numeric>
 #include <type_traits>
 
 using namespace mlir;
@@ -134,7 +133,7 @@ uint64_t mlir::getLargestDivisorOfTripCount(AffineForOp forOp) {
       thisGcd = resultExpr.getLargestKnownDivisor();
     }
     if (gcd.has_value())
-      gcd = std::gcd(gcd.value(), thisGcd);
+      gcd = llvm::GreatestCommonDivisor64(gcd.value(), thisGcd);
     else
       gcd = thisGcd;
   }

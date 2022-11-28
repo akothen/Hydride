@@ -16,7 +16,6 @@
 
 #include "mlir/Dialect/PDL/IR/PDLTypes.h"
 #include "mlir/Dialect/Transform/IR/TransformInterfaces.h"
-#include "mlir/Dialect/Transform/IR/TransformTypes.h"
 #include "mlir/IR/OpImplementation.h"
 
 namespace mlir {
@@ -25,9 +24,6 @@ class DialectRegistry;
 
 #define GET_OP_CLASSES
 #include "TestTransformDialectExtension.h.inc"
-
-#define GET_TYPEDEF_CLASSES
-#include "TestTransformDialectExtensionTypes.h.inc"
 
 namespace test {
 /// Registers the test extension to the Transform dialect.

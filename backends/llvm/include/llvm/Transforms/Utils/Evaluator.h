@@ -101,7 +101,7 @@ public:
 
   DenseMap<GlobalVariable *, Constant *> getMutatedInitializers() const {
     DenseMap<GlobalVariable *, Constant *> Result;
-    for (const auto &Pair : MutatedMemory)
+    for (auto &Pair : MutatedMemory)
       Result[Pair.first] = Pair.second.toConstant();
     return Result;
   }

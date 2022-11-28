@@ -60,7 +60,8 @@ protected:
                                     msgpack::ArrayDocNode Args) = 0;
 };
 
-class MetadataStreamerMsgPackV3 : public MetadataStreamer {
+// TODO: Rename MetadataStreamerV3 -> MetadataStreamerMsgPackV3.
+class MetadataStreamerV3 : public MetadataStreamer {
 protected:
   std::unique_ptr<msgpack::Document> HSAMetadataDoc =
       std::make_unique<msgpack::Document>();
@@ -115,8 +116,8 @@ protected:
   }
 
 public:
-  MetadataStreamerMsgPackV3() = default;
-  ~MetadataStreamerMsgPackV3() = default;
+  MetadataStreamerV3() = default;
+  ~MetadataStreamerV3() = default;
 
   bool emitTo(AMDGPUTargetStreamer &TargetStreamer) override;
 
@@ -129,32 +130,34 @@ public:
                   const SIProgramInfo &ProgramInfo) override;
 };
 
-class MetadataStreamerMsgPackV4 : public MetadataStreamerMsgPackV3 {
+// TODO: Rename MetadataStreamerV4 -> MetadataStreamerMsgPackV4.
+class MetadataStreamerV4 : public MetadataStreamerV3 {
 protected:
   void emitVersion() override;
   void emitTargetID(const IsaInfo::AMDGPUTargetID &TargetID);
 
 public:
-  MetadataStreamerMsgPackV4() = default;
-  ~MetadataStreamerMsgPackV4() = default;
+  MetadataStreamerV4() = default;
+  ~MetadataStreamerV4() = default;
 
   void begin(const Module &Mod,
              const IsaInfo::AMDGPUTargetID &TargetID) override;
 };
 
-class MetadataStreamerMsgPackV5 final : public MetadataStreamerMsgPackV4 {
+// TODO: Rename MetadataStreamerV5 -> MetadataStreamerMsgPackV5.
+class MetadataStreamerV5 final : public MetadataStreamerV4 {
 protected:
   void emitVersion() override;
   void emitHiddenKernelArgs(const MachineFunction &MF, unsigned &Offset,
                             msgpack::ArrayDocNode Args) override;
 
 public:
-  MetadataStreamerMsgPackV5() = default;
-  ~MetadataStreamerMsgPackV5() = default;
+  MetadataStreamerV5() = default;
+  ~MetadataStreamerV5() = default;
 };
 
 // TODO: Rename MetadataStreamerV2 -> MetadataStreamerYamlV2.
-class MetadataStreamerYamlV2 final : public MetadataStreamer {
+class MetadataStreamerV2 final : public MetadataStreamer {
 private:
   Metadata HSAMetadata;
 
@@ -210,8 +213,8 @@ protected:
   }
 
 public:
-  MetadataStreamerYamlV2() = default;
-  ~MetadataStreamerYamlV2() = default;
+  MetadataStreamerV2() = default;
+  ~MetadataStreamerV2() = default;
 
   bool emitTo(AMDGPUTargetStreamer &TargetStreamer) override;
 

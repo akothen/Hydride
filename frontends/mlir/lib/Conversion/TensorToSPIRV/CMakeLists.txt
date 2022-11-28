@@ -10,7 +10,7 @@ add_mlir_conversion_library(MLIRTensorToSPIRV
   MLIRConversionPassIncGen
 
   LINK_LIBS PUBLIC
-  MLIRArithToSPIRV
+  MLIRArithmeticToSPIRV
   MLIRFuncToSPIRV
   MLIRIR
   MLIRPass

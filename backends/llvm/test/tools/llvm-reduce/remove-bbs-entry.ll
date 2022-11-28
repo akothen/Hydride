@@ -1,14 +1,18 @@
-; Test that llvm-reduce does not remove the entry block of functions.
+; Test that llvm-reduce correctly removes the entry block of functions for
+; linkages other than external and weak.
 ;
 ; RUN: llvm-reduce --abort-on-invalid-reduction --delta-passes=basic-blocks --test FileCheck --test-arg --check-prefixes=CHECK-INTERESTINGNESS --test-arg %s --test-arg --input-file %s -o %t
-; RUN: FileCheck %s < %t
+; RUN: cat %t | FileCheck %s
 
-; CHECK-INTERESTINGNESS: foo
+; CHECK-INTERESTINGNESS: interesting1:
 
-; CHECK: add i32
-define i32 @foo() {
+; CHECK-NOT: uninteresting
+define linkonce_odr i32 @foo() {
 uninteresting:
-  %a = add i32 0, 0
   ret i32 0
 }
 
+define i32 @main(i1 %c) {
+interesting1:
+  ret i32 0
+}

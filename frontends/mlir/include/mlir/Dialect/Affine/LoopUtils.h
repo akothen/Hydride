@@ -45,12 +45,9 @@ LogicalResult loopUnrollFull(AffineForOp forOp);
 /// if the loop cannot be unrolled either due to restrictions or due to invalid
 /// unroll factors. Requires positive loop bounds and step. If specified,
 /// annotates the Ops in each unrolled iteration by applying `annotateFn`.
-/// When `cleanUpUnroll` is true, we can ensure the cleanup loop is unrolled
-/// regardless of the unroll factor.
 LogicalResult loopUnrollByFactor(
     AffineForOp forOp, uint64_t unrollFactor,
-    function_ref<void(unsigned, Operation *, OpBuilder)> annotateFn = nullptr,
-    bool cleanUpUnroll = false);
+    function_ref<void(unsigned, Operation *, OpBuilder)> annotateFn = nullptr);
 
 /// Unrolls this loop by the specified unroll factor or its trip count,
 /// whichever is lower.

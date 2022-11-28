@@ -19,8 +19,7 @@ using namespace mlir;
 
 extern "C" MlirExecutionEngine
 mlirExecutionEngineCreate(MlirModule op, int optLevel, int numPaths,
-                          const MlirStringRef *sharedLibPaths,
-                          bool enableObjectDump) {
+                          const MlirStringRef *sharedLibPaths) {
   static bool initOnce = [] {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmParser(); // needed for inline_asm
@@ -55,7 +54,6 @@ mlirExecutionEngineCreate(MlirModule op, int optLevel, int numPaths,
   jitOptions.transformer = transformer;
   jitOptions.jitCodeGenOptLevel = llvmOptLevel;
   jitOptions.sharedLibPaths = libPaths;
-  jitOptions.enableObjectDump = enableObjectDump;
   auto jitOrError = ExecutionEngine::create(unwrap(op), jitOptions);
   if (!jitOrError) {
     consumeError(jitOrError.takeError());

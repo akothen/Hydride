@@ -105,8 +105,10 @@ public:
 
   /// Erase the argument at 'index' and remove it from the argument list.
   void eraseArgument(unsigned index);
-  /// Erases 'num' arguments from the index 'start'.
-  void eraseArguments(unsigned start, unsigned num);
+  /// Erases the arguments listed in `argIndices` and removes them from the
+  /// argument list.
+  /// `argIndices` is allowed to have duplicates and can be in any order.
+  void eraseArguments(ArrayRef<unsigned> argIndices);
   /// Erases the arguments that have their corresponding bit set in
   /// `eraseIndices` and removes them from the argument list.
   void eraseArguments(const BitVector &eraseIndices);
@@ -284,7 +286,7 @@ public:
   /// See Operation::walk for more details.
   template <WalkOrder Order = WalkOrder::PostOrder, typename FnT,
             typename RetT = detail::walkResultType<FnT>>
-  std::enable_if_t<std::is_same<RetT, void>::value, RetT>
+  typename std::enable_if<std::is_same<RetT, void>::value, RetT>::type
   walk(Block::iterator begin, Block::iterator end, FnT &&callback) {
     for (auto &op : llvm::make_early_inc_range(llvm::make_range(begin, end)))
       detail::walk<Order>(&op, callback);
@@ -303,7 +305,7 @@ public:
   /// See Operation::walk for more details.
   template <WalkOrder Order = WalkOrder::PostOrder, typename FnT,
             typename RetT = detail::walkResultType<FnT>>
-  std::enable_if_t<std::is_same<RetT, WalkResult>::value, RetT>
+  typename std::enable_if<std::is_same<RetT, WalkResult>::value, RetT>::type
   walk(Block::iterator begin, Block::iterator end, FnT &&callback) {
     for (auto &op : llvm::make_early_inc_range(llvm::make_range(begin, end)))
       if (detail::walk<Order>(&op, callback).wasInterrupted())

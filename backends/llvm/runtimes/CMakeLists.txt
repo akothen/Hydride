@@ -3,6 +3,16 @@
 # similar although simpler functionality. We should figure out how to merge
 # the two files.
 
+# TODO: Selecting runtimes should be always performed inside the runtimes
+# build, see runtimes/CMakeLists.txt, except that we currently check whether
+# compiler-rt is being built to determine whether to first build builtins
+# or not so we need that information in this file as well.
+set(LLVM_ALL_RUNTIMES "compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp")
+set(LLVM_ENABLE_RUNTIMES "" CACHE STRING
+  "Semicolon-separated list of runtimes to build (${LLVM_ALL_RUNTIMES}), or \"all\".")
+if(LLVM_ENABLE_RUNTIMES STREQUAL "all" )
+  set(LLVM_ENABLE_RUNTIMES ${LLVM_ALL_RUNTIMES})
+endif()
 set(COMMON_CMAKE_ARGS "-DHAVE_LLVM_LIT=ON")
 foreach(proj ${LLVM_ENABLE_RUNTIMES})
   set(proj_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../${proj}")
@@ -209,7 +219,7 @@ function(runtime_default_target)
   endforeach()
 
   if(LLVM_INCLUDE_TESTS)
-    set_property(GLOBAL APPEND PROPERTY LLVM_ALL_LIT_TESTSUITES "@${LLVM_BINARY_DIR}/runtimes/runtimes-bins/lit.tests")
+    set_property(GLOBAL APPEND PROPERTY LLVM_ALL_LIT_TESTSUITES "@${LLVM_BINARY_DIR}/runtimes/Tests.rsp")
     list(APPEND test_targets runtimes-test-depends check-runtimes)
   endif()
 
@@ -285,7 +295,7 @@ function(runtime_register_target name target)
   endforeach()
 
   if(LLVM_INCLUDE_TESTS)
-    set_property(GLOBAL APPEND PROPERTY LLVM_ALL_LIT_TESTSUITES "@${LLVM_BINARY_DIR}/runtimes/runtimes-${name}-bins/lit.tests")
+    set_property(GLOBAL APPEND PROPERTY LLVM_ALL_LIT_TESTSUITES "@${LLVM_BINARY_DIR}/runtimes/${name}/Tests.rsp")
     set(runtimes-test-depends-${name} runtimes-test-depends)
     set(check-runtimes-${name} check-runtimes)
     list(APPEND ${name}_test_targets runtimes-test-depends-${name} check-runtimes-${name})
@@ -324,10 +334,6 @@ function(runtime_register_target name target)
     list(APPEND ${name}_extra_args -DLLVM_ENABLE_RUNTIMES=${LLVM_ENABLE_RUNTIMES_PASSTHROUGH})
   endif()
 
-  if(NOT RUNTIMES_${name}_LLVM_USE_LINKER AND NOT RUNTIMES_${target}_LLVM_USE_LINKER)
-    list(APPEND ${name}_extra_args -DLLVM_USE_LINKER=${LLVM_USE_LINKER})
-  endif()
-
   llvm_ExternalProject_Add(runtimes-${name}
                            ${CMAKE_CURRENT_SOURCE_DIR}/../../runtimes
                            DEPENDS ${${name}_deps}
@@ -344,6 +350,7 @@ function(runtime_register_target name target)
                                       -DLLVM_RUNTIMES_TARGET=${name}
                                       ${COMMON_CMAKE_ARGS}
                                       ${${name}_extra_args}
+                           PASSTHROUGH_PREFIXES LLVM_USE_LINKER
                            EXTRA_TARGETS ${${name}_extra_targets}
                                          ${${name}_test_targets}
                            USE_TOOLCHAIN
@@ -354,7 +361,7 @@ endfunction()
 if(runtimes)
   # Create a runtimes target that uses this file as its top-level CMake file.
   # The runtimes target is a configuration of all the runtime libraries
-  # together in a single CMake invocation.
+  # together in a single CMake invocaiton.
   set(extra_deps "")
   if("openmp" IN_LIST LLVM_ENABLE_RUNTIMES)
     if(TARGET opt)

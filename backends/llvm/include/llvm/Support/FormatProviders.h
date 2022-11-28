@@ -21,8 +21,8 @@
 #include "llvm/Support/FormatVariadicDetails.h"
 #include "llvm/Support/NativeFormatting.h"
 
-#include <array>
 #include <type_traits>
+#include <vector>
 
 namespace llvm {
 namespace detail {
@@ -355,6 +355,7 @@ struct range_item_has_provider
 
 template <typename IterT> class format_provider<llvm::iterator_range<IterT>> {
   using value = typename std::iterator_traits<IterT>::value_type;
+  using reference = typename std::iterator_traits<IterT>::reference;
 
   static StringRef consumeOneOption(StringRef &Style, char Indicator,
                                     StringRef Default) {
@@ -368,7 +369,7 @@ template <typename IterT> class format_provider<llvm::iterator_range<IterT>> {
       return Default;
     }
 
-    for (const char *D : std::array<const char *, 3>{"[]", "<>", "()"}) {
+    for (const char *D : {"[]", "<>", "()"}) {
       if (Style.front() != D[0])
         continue;
       size_t End = Style.find_first_of(D[1]);
@@ -402,13 +403,15 @@ public:
     auto Begin = V.begin();
     auto End = V.end();
     if (Begin != End) {
-      auto Adapter = detail::build_format_adapter(*Begin);
+      auto Adapter =
+          detail::build_format_adapter(std::forward<reference>(*Begin));
       Adapter.format(Stream, ArgStyle);
       ++Begin;
     }
     while (Begin != End) {
       Stream << Sep;
-      auto Adapter = detail::build_format_adapter(*Begin);
+      auto Adapter =
+          detail::build_format_adapter(std::forward<reference>(*Begin));
       Adapter.format(Stream, ArgStyle);
       ++Begin;
     }

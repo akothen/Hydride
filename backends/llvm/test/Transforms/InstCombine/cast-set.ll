@@ -66,11 +66,12 @@ define i1 @test6a(i1 %A) {
   ret i1 %C
 }
 
-define i1 @test7(ptr %A) {
+define i1 @test7(i8* %A) {
 ; CHECK-LABEL: @test7(
-; CHECK-NEXT:    [[C:%.*]] = icmp eq ptr %A, null
+; CHECK-NEXT:    [[C:%.*]] = icmp eq i8* %A, null
 ; CHECK-NEXT:    ret i1 [[C]]
 ;
-  %C = icmp eq ptr %A, null
+  %B = bitcast i8* %A to i32*
+  %C = icmp eq i32* %B, null
   ret i1 %C
 }

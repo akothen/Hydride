@@ -203,8 +203,9 @@ void DagNode::print(raw_ostream &os) const {
 //===----------------------------------------------------------------------===//
 
 StringRef SymbolInfoMap::getValuePackName(StringRef symbol, int *index) {
+  StringRef name, indexStr;
   int idx = -1;
-  auto [name, indexStr] = symbol.rsplit("__");
+  std::tie(name, indexStr) = symbol.rsplit("__");
 
   if (indexStr.consumeInteger(10, idx)) {
     // The second part is not an index; we return the whole symbol as-is.

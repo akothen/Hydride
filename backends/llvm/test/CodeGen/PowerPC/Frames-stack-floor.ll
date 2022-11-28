@@ -30,24 +30,24 @@
 ; - PPC32 AIX ABI:
 ;   220 bytes = 18*8 (FPRs) + 19*4 (GPRs);
 
-define ptr @in_stack_floor_32() {
+define i32* @in_stack_floor_32() {
         %tmp = alloca i32, i32 55
-        ret ptr %tmp
+        ret i32* %tmp
 }
 
-define ptr @out_stack_floor_32() {
+define i32* @out_stack_floor_32() {
         %tmp = alloca i32, i32 56
-        ret ptr %tmp
+        ret i32* %tmp
 }
 
-define ptr @in_stack_floor_64() {
+define i32* @in_stack_floor_64() {
         %tmp = alloca i32, i32 72
-        ret ptr %tmp
+        ret i32* %tmp
 }
 
-define ptr @out_stack_floor_64() {
+define i32* @out_stack_floor_64() {
         %tmp = alloca i32, i32 73
-        ret ptr %tmp
+        ret i32* %tmp
 }
 
 ; PPC32-LINUX-NOFP-LABEL: in_stack_floor_32

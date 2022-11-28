@@ -629,7 +629,7 @@ bool SystemZInstrInfo::FoldImmediate(MachineInstr &UseMI, MachineInstr &DefMI,
   switch (UseOpc) {
   case SystemZ::SELRMux:
     TieOps = true;
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case SystemZ::LOCRMux:
     if (!STI.hasLoadStoreOnCond2())
       return false;
@@ -643,7 +643,7 @@ bool SystemZInstrInfo::FoldImmediate(MachineInstr &UseMI, MachineInstr &DefMI,
     break;
   case SystemZ::SELGR:
     TieOps = true;
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case SystemZ::LOCGR:
     if (!STI.hasLoadStoreOnCond2())
       return false;
@@ -1878,15 +1878,16 @@ prepareCompareSwapOperands(MachineBasicBlock::iterator const MBBI) const {
   MachineBasicBlock *MBB = MBBI->getParent();
   bool CCLive = true;
   SmallVector<MachineInstr *, 4> CCUsers;
-  for (MachineInstr &MI : llvm::make_range(std::next(MBBI), MBB->end())) {
-    if (MI.readsRegister(SystemZ::CC)) {
-      unsigned Flags = MI.getDesc().TSFlags;
+  for (MachineBasicBlock::iterator Itr = std::next(MBBI);
+       Itr != MBB->end(); ++Itr) {
+    if (Itr->readsRegister(SystemZ::CC)) {
+      unsigned Flags = Itr->getDesc().TSFlags;
       if ((Flags & SystemZII::CCMaskFirst) || (Flags & SystemZII::CCMaskLast))
-        CCUsers.push_back(&MI);
+        CCUsers.push_back(&*Itr);
       else
         return false;
     }
-    if (MI.definesRegister(SystemZ::CC)) {
+    if (Itr->definesRegister(SystemZ::CC)) {
       CCLive = false;
       break;
     }

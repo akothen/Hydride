@@ -53,7 +53,6 @@ class MachOWriter {
   void writeDataInCodeData();
   void writeLinkerOptimizationHint();
   void writeFunctionStartsData();
-  void writeDylibCodeSignDRsData();
   void writeChainedFixupsData();
   void writeExportsTrieData();
   void writeTail();

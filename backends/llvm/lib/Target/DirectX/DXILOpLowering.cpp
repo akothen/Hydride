@@ -27,9 +27,9 @@
 #define DEBUG_TYPE "dxil-op-lower"
 
 using namespace llvm;
-using namespace llvm::dxil;
+using namespace llvm::DXIL;
 
-static void lowerIntrinsic(dxil::OpCode DXILOp, Function &F, Module &M) {
+static void lowerIntrinsic(DXIL::OpCode DXILOp, Function &F, Module &M) {
   IRBuilder<> B(M.getContext());
   Value *DXILOpArg = B.getInt32(static_cast<unsigned>(DXILOp));
   DXILOpBuilder DXILB(M, B);

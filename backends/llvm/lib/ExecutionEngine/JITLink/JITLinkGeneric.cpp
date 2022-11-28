@@ -51,9 +51,6 @@ void JITLinkerBase::linkPhase1(std::unique_ptr<JITLinkerBase> Self) {
   Ctx->getMemoryManager().allocate(
       Ctx->getJITLinkDylib(), *G,
       [S = std::move(Self)](AllocResult AR) mutable {
-        // FIXME: Once MSVC implements c++17 order of evaluation rules for calls
-        // this can be simplified to
-        //          S->linkPhase2(std::move(S), std::move(AR));
         auto *TmpSelf = S.get();
         TmpSelf->linkPhase2(std::move(S), std::move(AR));
       });
@@ -91,8 +88,8 @@ void JITLinkerBase::linkPhase2(std::unique_ptr<JITLinkerBase> Self,
       dbgs() << "No external symbols for " << G->getName()
              << ". Proceeding immediately with link phase 3.\n";
     });
-    // FIXME: Once MSVC implements c++17 order of evaluation rules for calls
-    // this can be simplified. See below.
+    // FIXME: Once callee expressions are defined to be sequenced before
+    //        argument expressions (c++17) we can simplify this. See below.
     auto &TmpSelf = *Self;
     TmpSelf.linkPhase3(std::move(Self), AsyncLookupResult());
     return;
@@ -107,8 +104,8 @@ void JITLinkerBase::linkPhase2(std::unique_ptr<JITLinkerBase> Self,
   // We're about to hand off ownership of ourself to the continuation. Grab a
   // pointer to the context so that we can call it to initiate the lookup.
   //
-  // FIXME: Once MSVC implements c++17 order of evaluation rules for calls this
-  // can be simplified to:
+  // FIXME: Once callee expressions are defined to be sequenced before argument
+  // expressions (c++17) we can simplify all this to:
   //
   // Ctx->lookup(std::move(UnresolvedExternals),
   //             [Self=std::move(Self)](Expected<AsyncLookupResult> Result) {
@@ -164,9 +161,6 @@ void JITLinkerBase::linkPhase3(std::unique_ptr<JITLinkerBase> Self,
     return abandonAllocAndBailOut(std::move(Self), std::move(Err));
 
   Alloc->finalize([S = std::move(Self)](FinalizeResult FR) mutable {
-    // FIXME: Once MSVC implements c++17 order of evaluation rules for calls
-    // this can be simplified to
-    //          S->linkPhase2(std::move(S), std::move(AR));
     auto *TmpSelf = S.get();
     TmpSelf->linkPhase4(std::move(S), std::move(FR));
   });
@@ -203,8 +197,9 @@ JITLinkContext::LookupMap JITLinkerBase::getExternalSymbolNames() const {
     assert(Sym->getName() != StringRef() && Sym->getName() != "" &&
            "Externals must be named");
     SymbolLookupFlags LookupFlags =
-        Sym->isWeaklyReferenced() ? SymbolLookupFlags::WeaklyReferencedSymbol
-                                  : SymbolLookupFlags::RequiredSymbol;
+        Sym->getLinkage() == Linkage::Weak
+            ? SymbolLookupFlags::WeaklyReferencedSymbol
+            : SymbolLookupFlags::RequiredSymbol;
     UnresolvedExternals[Sym->getName()] = LookupFlags;
   }
   return UnresolvedExternals;
@@ -217,41 +212,19 @@ void JITLinkerBase::applyLookupResult(AsyncLookupResult Result) {
     assert(!Sym->getAddress() && "Symbol already resolved");
     assert(!Sym->isDefined() && "Symbol being resolved is already defined");
     auto ResultI = Result.find(Sym->getName());
-    if (ResultI != Result.end()) {
+    if (ResultI != Result.end())
       Sym->getAddressable().setAddress(
           orc::ExecutorAddr(ResultI->second.getAddress()));
-      Sym->setLinkage(ResultI->second.getFlags().isWeak() ? Linkage::Weak
-                                                          : Linkage::Strong);
-      Sym->setScope(ResultI->second.getFlags().isExported() ? Scope::Default
-                                                            : Scope::Hidden);
-    } else
-      assert(Sym->isWeaklyReferenced() &&
+    else
+      assert(Sym->getLinkage() == Linkage::Weak &&
              "Failed to resolve non-weak reference");
   }
 
   LLVM_DEBUG({
     dbgs() << "Externals after applying lookup result:\n";
-    for (auto *Sym : G->external_symbols()) {
+    for (auto *Sym : G->external_symbols())
       dbgs() << "  " << Sym->getName() << ": "
-             << formatv("{0:x16}", Sym->getAddress().getValue());
-      switch (Sym->getLinkage()) {
-      case Linkage::Strong:
-        break;
-      case Linkage::Weak:
-        dbgs() << " (weak)";
-        break;
-      }
-      switch (Sym->getScope()) {
-      case Scope::Local:
-        llvm_unreachable("External symbol should not have local linkage");
-      case Scope::Hidden:
-        break;
-      case Scope::Default:
-        dbgs() << " (exported)";
-        break;
-      }
-      dbgs() << "\n";
-    }
+             << formatv("{0:x16}", Sym->getAddress().getValue()) << "\n";
   });
 }
 

@@ -84,7 +84,6 @@ LoopPassManager::runWithLoopNestPasses(Loop &L, LoopAnalysisManager &AM,
   // invalid when encountering a loop-nest pass.
   std::unique_ptr<LoopNest> LoopNestPtr;
   bool IsLoopNestPtrValid = false;
-  Loop *OuterMostLoop = &L;
 
   for (size_t I = 0, E = IsLoopNestPass.size(); I != E; ++I) {
     Optional<PreservedAnalyses> PassPA;
@@ -98,18 +97,10 @@ LoopPassManager::runWithLoopNestPasses(Loop &L, LoopAnalysisManager &AM,
 
       // If the loop-nest object calculated before is no longer valid,
       // re-calculate it here before running the loop-nest pass.
-      //
-      // FIXME: PreservedAnalysis should not be abused to tell if the
-      // status of loopnest has been changed. We should use and only
-      // use LPMUpdater for this purpose.
-      if (!IsLoopNestPtrValid || U.isLoopNestChanged()) {
-        while (auto *ParentLoop = OuterMostLoop->getParentLoop())
-          OuterMostLoop = ParentLoop;
-        LoopNestPtr = LoopNest::getLoopNest(*OuterMostLoop, AR.SE);
+      if (!IsLoopNestPtrValid) {
+        LoopNestPtr = LoopNest::getLoopNest(L, AR.SE);
         IsLoopNestPtrValid = true;
-        U.markLoopNestChanged(false);
       }
-
       PassPA = runSinglePass(*LoopNestPtr, Pass, AM, AR, U, PI);
     }
 
@@ -127,7 +118,7 @@ LoopPassManager::runWithLoopNestPasses(Loop &L, LoopAnalysisManager &AM,
 
     // Update the analysis manager as each pass runs and potentially
     // invalidates analyses.
-    AM.invalidate(IsLoopNestPass[I] ? *OuterMostLoop : L, *PassPA);
+    AM.invalidate(L, *PassPA);
 
     // Finally, we intersect the final preserved analyses to compute the
     // aggregate preserved set for this pass manager.
@@ -139,7 +130,7 @@ LoopPassManager::runWithLoopNestPasses(Loop &L, LoopAnalysisManager &AM,
     // After running the loop pass, the parent loop might change and we need to
     // notify the updater, otherwise U.ParentL might gets outdated and triggers
     // assertion failures in addSiblingLoops and addChildLoops.
-    U.setParentLoop((IsLoopNestPass[I] ? *OuterMostLoop : L).getParentLoop());
+    U.setParentLoop(L.getParentLoop());
   }
   return PA;
 }
@@ -300,7 +291,11 @@ PreservedAnalyses FunctionToLoopPassAdaptor::run(Function &F,
     if (!PI.runBeforePass<Loop>(*Pass, *L))
       continue;
 
-    PreservedAnalyses PassPA = Pass->run(*L, LAM, LAR, Updater);
+    PreservedAnalyses PassPA;
+    {
+      TimeTraceScope TimeScope(Pass->name());
+      PassPA = Pass->run(*L, LAM, LAR, Updater);
+    }
 
     // Do not pass deleted Loop into the instrumentation.
     if (Updater.skipCurrentLoop())

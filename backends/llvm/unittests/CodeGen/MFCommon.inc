@@ -116,9 +116,8 @@ private:
   BogusSubtarget ST;
 };
 
-BogusTargetMachine *createTargetMachine() {
-  static BogusTargetMachine BogusTM;
-  return &BogusTM;
+std::unique_ptr<BogusTargetMachine> createTargetMachine() {
+  return std::make_unique<BogusTargetMachine>();
 }
 
 std::unique_ptr<MachineFunction> createMachineFunction(LLVMContext &Ctx,
@@ -128,7 +127,7 @@ std::unique_ptr<MachineFunction> createMachineFunction(LLVMContext &Ctx,
 
   auto TM = createTargetMachine();
   unsigned FunctionNum = 42;
-  MachineModuleInfo MMI(TM);
+  MachineModuleInfo MMI(TM.get());
   const TargetSubtargetInfo &STI = *TM->getSubtargetImpl(*F);
 
   return std::make_unique<MachineFunction>(*F, *TM, STI, FunctionNum, MMI);

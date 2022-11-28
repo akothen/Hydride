@@ -30,9 +30,10 @@ class GCNTargetMachine;
 
 class GCNSubtarget final : public AMDGPUGenSubtargetInfo,
                            public AMDGPUSubtarget {
-public:
+
   using AMDGPUSubtarget::getMaxWavesPerEU;
 
+public:
   // Following 2 enums are documented at:
   //   - https://llvm.org/docs/AMDGPUUsage.html#trap-handler-abi
   enum class TrapHandlerAbi {
@@ -71,7 +72,6 @@ protected:
   // Dynamically set bits that enable features.
   bool FlatForGlobal = false;
   bool AutoWaitcntBeforeBarrier = false;
-  bool BackOffBarrier = false;
   bool UnalignedScratchAccess = false;
   bool UnalignedAccessMode = false;
   bool HasApertureRegs = false;
@@ -150,7 +150,6 @@ protected:
   bool HasAtomicFaddRtnInsts = false;
   bool HasAtomicFaddNoRtnInsts = false;
   bool HasAtomicPkFaddNoRtnInsts = false;
-  bool HasFlatAtomicFaddF32Inst = false;
   bool SupportsSRAMECC = false;
 
   // This should not be used directly. 'TargetID' tracks the dynamic settings
@@ -192,7 +191,6 @@ protected:
   bool HasFlatSegmentOffsetBug = false;
   bool HasImageStoreD16Bug = false;
   bool HasImageGather4D16Bug = false;
-  bool HasGFX11FullVGPRs = false;
   bool HasVOPDInsts = false;
 
   // Dummy feature to use for assembler in tablegen.
@@ -509,12 +507,6 @@ public:
     return AutoWaitcntBeforeBarrier;
   }
 
-  /// \returns true if the target supports backing off of s_barrier instructions
-  /// when an exception is raised.
-  bool supportsBackOffBarrier() const {
-    return BackOffBarrier;
-  }
-
   bool hasUnalignedBufferAccess() const {
     return UnalignedBufferAccess;
   }
@@ -747,8 +739,6 @@ public:
   bool hasAtomicFaddNoRtnInsts() const { return HasAtomicFaddNoRtnInsts; }
 
   bool hasAtomicPkFaddNoRtnInsts() const { return HasAtomicPkFaddNoRtnInsts; }
-
-  bool hasFlatAtomicFaddF32Inst() const { return HasFlatAtomicFaddF32Inst; }
 
   bool hasNoSdstCMPX() const {
     return HasNoSdstCMPX;
@@ -1012,12 +1002,6 @@ public:
     return HasLdsBranchVmemWARHazard;
   }
 
-  // Shift amount of a 64 bit shift cannot be a highest allocated register
-  // if also at the end of the allocation block.
-  bool hasShift64HighRegBug() const {
-    return GFX90AInsts && !GFX940Insts;
-  }
-
   // Has one cycle hazard on transcendental instruction feeding a
   // non transcendental VALU.
   bool hasTransForwardingHazard() const { return GFX940Insts; }
@@ -1044,10 +1028,6 @@ public:
 
   bool hasGFX90AInsts() const { return GFX90AInsts; }
 
-  bool hasFPAtomicToDenormModeHazard() const {
-    return getGeneration() == GFX10;
-  }
-
   bool hasVOP3DPP() const { return getGeneration() >= GFX11; }
 
   bool hasLdsDirect() const { return getGeneration() >= GFX11; }
@@ -1057,8 +1037,6 @@ public:
   }
 
   bool hasVALUTransUseHazard() const { return getGeneration() >= GFX11; }
-
-  bool hasVALUMaskWriteHazard() const { return getGeneration() >= GFX11; }
 
   /// Return if operations acting on VGPR tuples require even alignment.
   bool needsAlignedVGPRs() const { return GFX90AInsts; }
@@ -1073,8 +1051,6 @@ public:
   /// Return true if the target's EXP instruction supports the NULL export
   /// target.
   bool hasNullExportTarget() const { return !GFX11Insts; }
-
-  bool hasGFX11FullVGPRs() const { return HasGFX11FullVGPRs; }
 
   bool hasVOPDInsts() const { return HasVOPDInsts; }
 
@@ -1307,10 +1283,6 @@ public:
   // \returns true if it's beneficial on this subtarget for the scheduler to
   // cluster stores as well as loads.
   bool shouldClusterStores() const { return getGeneration() >= GFX11; }
-
-  // \returns the number of address arguments from which to enable MIMG NSA
-  // on supported architectures.
-  unsigned getNSAThreshold(const MachineFunction &MF) const;
 };
 
 } // end namespace llvm

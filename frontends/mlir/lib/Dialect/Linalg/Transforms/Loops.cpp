@@ -6,13 +6,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/Linalg/Passes.h"
-
-#include "mlir/Dialect/Affine/IR/AffineOps.h"
-#include "mlir/Dialect/Arith/IR/Arith.h"
-#include "mlir/Dialect/Arith/Utils/Utils.h"
-#include "mlir/Dialect/Func/IR/FuncOps.h"
+#include "PassDetail.h"
+#include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
+#include "mlir/Dialect/Arithmetic/Utils/Utils.h"
 #include "mlir/Dialect/Linalg/IR/Linalg.h"
+#include "mlir/Dialect/Linalg/Passes.h"
 #include "mlir/Dialect/Linalg/Transforms/Transforms.h"
 #include "mlir/Dialect/Linalg/Utils/Utils.h"
 #include "mlir/Dialect/SCF/Transforms/Transforms.h"
@@ -25,13 +23,6 @@
 #include "mlir/Transforms/FoldUtils.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "llvm/ADT/TypeSwitch.h"
-
-namespace mlir {
-#define GEN_PASS_DEF_LINALGLOWERTOAFFINELOOPS
-#define GEN_PASS_DEF_LINALGLOWERTOLOOPS
-#define GEN_PASS_DEF_LINALGLOWERTOPARALLELLOOPS
-#include "mlir/Dialect/Linalg/Passes.h.inc"
-} // namespace mlir
 
 using namespace mlir;
 using namespace mlir::linalg;
@@ -131,27 +122,27 @@ static void emitScalarImplementation(OpBuilder &b, Location loc,
   assert(linalgOp.hasBufferSemantics() &&
          "expected linalg op with buffer semantics");
   SmallVector<Value> indexedValues;
-  indexedValues.reserve(linalgOp->getNumOperands());
+  indexedValues.reserve(linalgOp.getNumInputsAndOutputs());
 
   auto allIvsPlusDims = SmallVector<Value>(allIvs.begin(), allIvs.end());
 
   // TODO: Avoid the loads if the corresponding argument of the
   // region has no uses.
   // 1.a. Emit load from input operand or for scalars access the operand itself.
-  for (OpOperand *inputOperand : linalgOp.getDpsInputOperands()) {
+  for (OpOperand *inputOperand : linalgOp.getInputOperands()) {
     if (linalgOp.isScalar(inputOperand)) {
       indexedValues.push_back(inputOperand->get());
       continue;
     }
     auto indexing = makeCanonicalAffineApplies(
-        b, loc, linalgOp.getMatchingIndexingMap(inputOperand), allIvsPlusDims);
+        b, loc, linalgOp.getTiedIndexingMap(inputOperand), allIvsPlusDims);
     indexedValues.push_back(
         b.create<LoadOpTy>(loc, inputOperand->get(), indexing));
   }
   // 1.b. Emit load from output views.
-  for (OpOperand *outputOperand : linalgOp.getDpsInitOperands()) {
+  for (OpOperand *outputOperand : linalgOp.getOutputOperands()) {
     SmallVector<Value> indexing = makeCanonicalAffineApplies(
-        b, loc, linalgOp.getMatchingIndexingMap(outputOperand), allIvsPlusDims);
+        b, loc, linalgOp.getTiedIndexingMap(outputOperand), allIvsPlusDims);
     indexedValues.push_back(
         b.create<LoadOpTy>(loc, outputOperand->get(), indexing));
   }
@@ -161,12 +152,9 @@ static void emitScalarImplementation(OpBuilder &b, Location loc,
   // 3. Emit store.
   SmallVector<SmallVector<Value>, 8> indexing;
   SmallVector<Value> outputBuffers;
-  for (OpOperand *outputOperand : linalgOp.getDpsInitOperands()) {
-    if (!outputOperand->get().getType().isa<MemRefType>())
-      continue;
+  for (OpOperand *outputOperand : linalgOp.getOutputBufferOperands()) {
     indexing.push_back(makeCanonicalAffineApplies(
-        b, loc, linalgOp.getMatchingIndexingMap(outputOperand),
-        allIvsPlusDims));
+        b, loc, linalgOp.getTiedIndexingMap(outputOperand), allIvsPlusDims));
     outputBuffers.push_back(outputOperand->get());
   }
   inlineRegionAndEmitStore<LoadOpTy, StoreOpTy>(b, loc, linalgOp, indexedValues,
@@ -201,17 +189,19 @@ static void replaceIndexOpsByInductionVariables(LinalgOp linalgOp,
     LoopLikeOpInterface loopOp = loopOps.back();
     for (IndexOp indexOp :
          llvm::make_early_inc_range(loopOp.getLoopBody().getOps<IndexOp>()))
-      rewriter.replaceOp(indexOp, allIvs[indexOp.getDim()]);
+      rewriter.replaceOp(indexOp, allIvs[indexOp.dim()]);
   }
 }
 
 template <typename LoopTy>
 static FailureOr<LinalgLoops> linalgOpToLoopsImpl(PatternRewriter &rewriter,
                                                   LinalgOp linalgOp) {
-  using LoadOpTy = std::conditional_t<std::is_same<LoopTy, AffineForOp>::value,
-                                      AffineLoadOp, memref::LoadOp>;
-  using StoreOpTy = std::conditional_t<std::is_same<LoopTy, AffineForOp>::value,
-                                       AffineStoreOp, memref::StoreOp>;
+  using LoadOpTy =
+      typename std::conditional<std::is_same<LoopTy, AffineForOp>::value,
+                                AffineLoadOp, memref::LoadOp>::type;
+  using StoreOpTy =
+      typename std::conditional<std::is_same<LoopTy, AffineForOp>::value,
+                                AffineStoreOp, memref::StoreOp>::type;
 
   // The flattened loopToOperandRangesMaps is expected to be an invertible
   // permutation map (which is asserted in the inverse calculation).
@@ -219,7 +209,7 @@ static FailureOr<LinalgLoops> linalgOpToLoopsImpl(PatternRewriter &rewriter,
          "expected linalg op with buffer semantics");
 
   auto loopRanges = linalgOp.createLoopRanges(rewriter, linalgOp.getLoc());
-  auto iteratorTypes = linalgOp.getIteratorTypesArray();
+  auto iteratorTypes = llvm::to_vector<4>(linalgOp.iterator_types().getValue());
 
   SmallVector<Value> allIvs;
   GenerateLoopNest<LoopTy>::doit(
@@ -321,7 +311,7 @@ static void lowerLinalgToLoopsImpl(func::FuncOp funcOp) {
 }
 
 struct LowerToAffineLoops
-    : public impl::LinalgLowerToAffineLoopsBase<LowerToAffineLoops> {
+    : public LinalgLowerToAffineLoopsBase<LowerToAffineLoops> {
   void getDependentDialects(DialectRegistry &registry) const override {
     registry.insert<memref::MemRefDialect>();
   }
@@ -330,7 +320,7 @@ struct LowerToAffineLoops
   }
 };
 
-struct LowerToLoops : public impl::LinalgLowerToLoopsBase<LowerToLoops> {
+struct LowerToLoops : public LinalgLowerToLoopsBase<LowerToLoops> {
   void getDependentDialects(DialectRegistry &registry) const override {
     registry.insert<memref::MemRefDialect, scf::SCFDialect>();
   }
@@ -340,7 +330,7 @@ struct LowerToLoops : public impl::LinalgLowerToLoopsBase<LowerToLoops> {
 };
 
 struct LowerToParallelLoops
-    : public impl::LinalgLowerToParallelLoopsBase<LowerToParallelLoops> {
+    : public LinalgLowerToParallelLoopsBase<LowerToParallelLoops> {
   void runOnOperation() override {
     lowerLinalgToLoopsImpl<scf::ParallelOp>(getOperation());
   }

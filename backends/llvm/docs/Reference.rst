@@ -33,7 +33,6 @@ LLVM and API reference documentation.
    MarkedUpDisassembly
    MIRLangRef
    OptBisect
-   PCSectionsMetadata
    PDB/index
    PointerAuth
    ScudoHardenedAllocator

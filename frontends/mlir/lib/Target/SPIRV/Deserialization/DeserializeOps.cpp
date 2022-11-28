@@ -12,7 +12,6 @@
 
 #include "Deserializer.h"
 
-#include "mlir/Dialect/SPIRV/IR/SPIRVEnums.h"
 #include "mlir/Dialect/SPIRV/IR/SPIRVOps.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/IR/Location.h"
@@ -40,26 +39,26 @@ static inline spirv::Opcode extractOpcode(uint32_t word) {
 
 Value spirv::Deserializer::getValue(uint32_t id) {
   if (auto constInfo = getConstant(id)) {
-    // Materialize a `spirv.Constant` op at every use site.
+    // Materialize a `spv.Constant` op at every use site.
     return opBuilder.create<spirv::ConstantOp>(unknownLoc, constInfo->second,
                                                constInfo->first);
   }
   if (auto varOp = getGlobalVariable(id)) {
     auto addressOfOp = opBuilder.create<spirv::AddressOfOp>(
-        unknownLoc, varOp.getType(), SymbolRefAttr::get(varOp.getOperation()));
-    return addressOfOp.getPointer();
+        unknownLoc, varOp.type(), SymbolRefAttr::get(varOp.getOperation()));
+    return addressOfOp.pointer();
   }
   if (auto constOp = getSpecConstant(id)) {
     auto referenceOfOp = opBuilder.create<spirv::ReferenceOfOp>(
-        unknownLoc, constOp.getDefaultValue().getType(),
+        unknownLoc, constOp.default_value().getType(),
         SymbolRefAttr::get(constOp.getOperation()));
-    return referenceOfOp.getReference();
+    return referenceOfOp.reference();
   }
   if (auto constCompositeOp = getSpecConstantComposite(id)) {
     auto referenceOfOp = opBuilder.create<spirv::ReferenceOfOp>(
-        unknownLoc, constCompositeOp.getType(),
+        unknownLoc, constCompositeOp.type(),
         SymbolRefAttr::get(constCompositeOp.getOperation()));
-    return referenceOfOp.getReference();
+    return referenceOfOp.reference();
   }
   if (auto specConstOperationInfo = getSpecConstantOperation(id)) {
     return materializeSpecConstantOperation(
@@ -149,7 +148,7 @@ LogicalResult spirv::Deserializer::processInstruction(
   case spirv::Opcode::OpSourceContinued:
   case spirv::Opcode::OpSourceExtension:
     // TODO: This is debug information embedded in the binary which should be
-    // translated into the spirv.module.
+    // translated into the spv.module.
     return success();
   case spirv::Opcode::OpTypeVoid:
   case spirv::Opcode::OpTypeBool:
@@ -168,8 +167,6 @@ LogicalResult spirv::Deserializer::processInstruction(
     return processType(opcode, operands);
   case spirv::Opcode::OpTypeForwardPointer:
     return processTypeForwardPointer(operands);
-  case spirv::Opcode::OpTypeJointMatrixINTEL:
-    return processType(opcode, operands);
   case spirv::Opcode::OpConstant:
     return processConstant(operands, /*isSpec=*/false);
   case spirv::Opcode::OpSpecConstant:
@@ -411,6 +408,35 @@ Deserializer::processOp<spirv::ExecutionModeOp>(ArrayRef<uint32_t> words) {
 
 template <>
 LogicalResult
+Deserializer::processOp<spirv::ControlBarrierOp>(ArrayRef<uint32_t> operands) {
+  if (operands.size() != 3) {
+    return emitError(
+        unknownLoc,
+        "OpControlBarrier must have execution scope <id>, memory scope <id> "
+        "and memory semantics <id>");
+  }
+
+  SmallVector<IntegerAttr, 3> argAttrs;
+  for (auto operand : operands) {
+    auto argAttr = getConstantInt(operand);
+    if (!argAttr) {
+      return emitError(unknownLoc,
+                       "expected 32-bit integer constant from <id> ")
+             << operand << " for OpControlBarrier";
+    }
+    argAttrs.push_back(argAttr);
+  }
+
+  opBuilder.create<spirv::ControlBarrierOp>(
+      unknownLoc, argAttrs[0].cast<spirv::ScopeAttr>(),
+      argAttrs[1].cast<spirv::ScopeAttr>(),
+      argAttrs[2].cast<spirv::MemorySemanticsAttr>());
+
+  return success();
+}
+
+template <>
+LogicalResult
 Deserializer::processOp<spirv::FunctionCallOp>(ArrayRef<uint32_t> operands) {
   if (operands.size() < 3) {
     return emitError(unknownLoc,
@@ -453,6 +479,31 @@ Deserializer::processOp<spirv::FunctionCallOp>(ArrayRef<uint32_t> operands) {
 
 template <>
 LogicalResult
+Deserializer::processOp<spirv::MemoryBarrierOp>(ArrayRef<uint32_t> operands) {
+  if (operands.size() != 2) {
+    return emitError(unknownLoc, "OpMemoryBarrier must have memory scope <id> "
+                                 "and memory semantics <id>");
+  }
+
+  SmallVector<IntegerAttr, 2> argAttrs;
+  for (auto operand : operands) {
+    auto argAttr = getConstantInt(operand);
+    if (!argAttr) {
+      return emitError(unknownLoc,
+                       "expected 32-bit integer constant from <id> ")
+             << operand << " for OpMemoryBarrier";
+    }
+    argAttrs.push_back(argAttr);
+  }
+
+  opBuilder.create<spirv::MemoryBarrierOp>(
+      unknownLoc, argAttrs[0].cast<spirv::ScopeAttr>(),
+      argAttrs[1].cast<spirv::MemorySemanticsAttr>());
+  return success();
+}
+
+template <>
+LogicalResult
 Deserializer::processOp<spirv::CopyMemoryOp>(ArrayRef<uint32_t> words) {
   SmallVector<Type, 1> resultTypes;
   size_t wordIndex = 0;
@@ -487,9 +538,8 @@ Deserializer::processOp<spirv::CopyMemoryOp>(ArrayRef<uint32_t> words) {
 
   if (wordIndex < words.size()) {
     auto attrValue = words[wordIndex++];
-    auto attr = opBuilder.getAttr<spirv::MemoryAccessAttr>(
-        static_cast<spirv::MemoryAccess>(attrValue));
-    attributes.push_back(opBuilder.getNamedAttr("memory_access", attr));
+    attributes.push_back(opBuilder.getNamedAttr(
+        "memory_access", opBuilder.getI32IntegerAttr(attrValue)));
     isAlignedAttr = (attrValue == 2);
   }
 
@@ -499,10 +549,9 @@ Deserializer::processOp<spirv::CopyMemoryOp>(ArrayRef<uint32_t> words) {
   }
 
   if (wordIndex < words.size()) {
-    auto attrValue = words[wordIndex++];
-    auto attr = opBuilder.getAttr<spirv::MemoryAccessAttr>(
-        static_cast<spirv::MemoryAccess>(attrValue));
-    attributes.push_back(opBuilder.getNamedAttr("source_memory_access", attr));
+    attributes.push_back(opBuilder.getNamedAttr(
+        "source_memory_access",
+        opBuilder.getI32IntegerAttr(words[wordIndex++])));
   }
 
   if (wordIndex < words.size()) {
@@ -520,38 +569,6 @@ Deserializer::processOp<spirv::CopyMemoryOp>(ArrayRef<uint32_t> words) {
   Location loc = createFileLineColLoc(opBuilder);
   opBuilder.create<spirv::CopyMemoryOp>(loc, resultTypes, operands, attributes);
 
-  return success();
-}
-
-template <>
-LogicalResult Deserializer::processOp<spirv::GenericCastToPtrExplicitOp>(
-    ArrayRef<uint32_t> words) {
-  if (words.size() != 4) {
-    return emitError(unknownLoc,
-                     "expected 4 words in GenericCastToPtrExplicitOp"
-                     " but got : ")
-           << words.size();
-  }
-  SmallVector<Type, 1> resultTypes;
-  SmallVector<Value, 4> operands;
-  uint32_t valueID = 0;
-  auto type = getType(words[0]);
-
-  if (!type)
-    return emitError(unknownLoc, "unknown type result <id> : ") << words[0];
-  resultTypes.push_back(type);
-
-  valueID = words[1];
-
-  auto arg = getValue(words[2]);
-  if (!arg)
-    return emitError(unknownLoc, "unknown result <id> : ") << words[2];
-  operands.push_back(arg);
-
-  Location loc = createFileLineColLoc(opBuilder);
-  Operation *op = opBuilder.create<spirv::GenericCastToPtrExplicitOp>(
-      loc, resultTypes, operands);
-  valueMap[valueID] = op->getResult(0);
   return success();
 }
 

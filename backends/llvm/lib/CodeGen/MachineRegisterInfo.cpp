@@ -79,10 +79,10 @@ constrainRegClass(MachineRegisterInfo &MRI, Register Reg,
   return NewRC;
 }
 
-const TargetRegisterClass *MachineRegisterInfo::constrainRegClass(
-    Register Reg, const TargetRegisterClass *RC, unsigned MinNumRegs) {
-  if (Reg.isPhysical())
-    return nullptr;
+const TargetRegisterClass *
+MachineRegisterInfo::constrainRegClass(Register Reg,
+                                       const TargetRegisterClass *RC,
+                                       unsigned MinNumRegs) {
   return ::constrainRegClass(*this, Reg, getRegClass(Reg), RC, MinNumRegs);
 }
 
@@ -418,12 +418,6 @@ bool MachineRegisterInfo::hasOneNonDBGUse(Register RegNo) const {
 
 bool MachineRegisterInfo::hasOneNonDBGUser(Register RegNo) const {
   return hasSingleElement(use_nodbg_instructions(RegNo));
-}
-
-bool MachineRegisterInfo::hasAtMostUserInstrs(Register Reg,
-                                              unsigned MaxUsers) const {
-  return hasNItemsOrLess(use_instr_nodbg_begin(Reg), use_instr_nodbg_end(),
-                         MaxUsers);
 }
 
 /// clearKillFlags - Iterate over all the uses of the given register and

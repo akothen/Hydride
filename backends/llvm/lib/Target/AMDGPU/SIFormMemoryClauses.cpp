@@ -393,11 +393,13 @@ bool SIFormMemoryClauses::runOnMachineFunction(MachineFunction &MF) {
         Ind->insertMachineInstrInMaps(*Kill);
       }
 
-      // Restore the state after processing the end of the bundle.
-      RPT.reset(MI, &LiveRegsCopy);
-
-      if (!Kill)
+      if (!Kill) {
+        RPT.reset(MI, &LiveRegsCopy);
         continue;
+      }
+
+      // Restore the state after processing the end of the bundle.
+      RPT.reset(*Kill, &LiveRegsCopy);
 
       for (auto &&R : Defs) {
         Register Reg = R.first;

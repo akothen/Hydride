@@ -19,6 +19,7 @@
 #include "mlir/Dialect/SPIRV/Utils/LayoutUtils.h"
 #include "mlir/IR/AffineMap.h"
 #include "mlir/Support/LogicalResult.h"
+#include "llvm/ADT/SetVector.h"
 #include "llvm/Support/Debug.h"
 
 #define DEBUG_TYPE "func-to-spirv-pattern"
@@ -35,7 +36,7 @@ using namespace mlir;
 
 namespace {
 
-/// Converts func.return to spirv.Return.
+/// Converts func.return to spv.Return.
 class ReturnOpPattern final : public OpConversionPattern<func::ReturnOp> {
 public:
   using OpConversionPattern<func::ReturnOp>::OpConversionPattern;
@@ -56,7 +57,7 @@ public:
   }
 };
 
-/// Converts func.call to spirv.FunctionCall.
+/// Converts func.call to spv.FunctionCall.
 class CallOpPattern final : public OpConversionPattern<func::CallOp> {
 public:
   using OpConversionPattern<func::CallOp>::OpConversionPattern;
@@ -64,7 +65,7 @@ public:
   LogicalResult
   matchAndRewrite(func::CallOp callOp, OpAdaptor adaptor,
                   ConversionPatternRewriter &rewriter) const override {
-    // multiple results func was not converted to spirv.func
+    // multiple results func was not converted to spv.func
     if (callOp.getNumResults() > 1)
       return failure();
     if (callOp.getNumResults() == 1) {

@@ -585,7 +585,7 @@ WebAssemblyTargetMachine::createDefaultFuncInfoYAML() const {
 yaml::MachineFunctionInfo *WebAssemblyTargetMachine::convertFuncInfoToYAML(
     const MachineFunction &MF) const {
   const auto *MFI = MF.getInfo<WebAssemblyFunctionInfo>();
-  return new yaml::WebAssemblyFunctionInfo(MF, *MFI);
+  return new yaml::WebAssemblyFunctionInfo(*MFI);
 }
 
 bool WebAssemblyTargetMachine::parseMachineFunctionInfo(
@@ -593,6 +593,6 @@ bool WebAssemblyTargetMachine::parseMachineFunctionInfo(
     SMDiagnostic &Error, SMRange &SourceRange) const {
   const auto &YamlMFI = static_cast<const yaml::WebAssemblyFunctionInfo &>(MFI);
   MachineFunction &MF = PFS.MF;
-  MF.getInfo<WebAssemblyFunctionInfo>()->initializeBaseYamlFields(MF, YamlMFI);
+  MF.getInfo<WebAssemblyFunctionInfo>()->initializeBaseYamlFields(YamlMFI);
   return false;
 }

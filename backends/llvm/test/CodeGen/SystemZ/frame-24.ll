@@ -2,8 +2,8 @@
 ;
 ; Test saving of vararg registers and backchain with packed stack.
 
-%struct.__va_list_tag = type { i64, i64, ptr, ptr }
-declare void @llvm.va_start(ptr)
+%struct.__va_list_tag = type { i64, i64, i8*, i8* }
+declare void @llvm.va_start(i8*)
 
 attributes #0 = { nounwind "packed-stack"="true" }
 define void @fun0(i64 %g0, double %d0, i64 %n, ...) #0 {
@@ -23,7 +23,8 @@ define void @fun0(i64 %g0, double %d0, i64 %n, ...) #0 {
 ; CHECK-NEXT: br	%r14
 entry:
   %vl = alloca [1 x %struct.__va_list_tag], align 8
-  call void @llvm.va_start(ptr nonnull %vl)
+  %0 = bitcast [1 x %struct.__va_list_tag]* %vl to i8*
+  call void @llvm.va_start(i8* nonnull %0)
   ret void
 }
 
@@ -42,7 +43,8 @@ define void @fun1(i64 %g0, double %d0, i64 %n, ...) #1 {
 ; CHECK-NEXT: br	%r14
 entry:
   %vl = alloca [1 x %struct.__va_list_tag], align 8
-  call void @llvm.va_start(ptr nonnull %vl)
+  %0 = bitcast [1 x %struct.__va_list_tag]* %vl to i8*
+  call void @llvm.va_start(i8* nonnull %0)
   ret void
 }
 
@@ -63,7 +65,8 @@ define void @fun2(i64 %g0, double %d0, i64 %n, ...) #2 {
 ; CHECK-NEXT: br	%r14
 entry:
   %vl = alloca [1 x %struct.__va_list_tag], align 8
-  call void @llvm.va_start(ptr nonnull %vl)
+  %0 = bitcast [1 x %struct.__va_list_tag]* %vl to i8*
+  call void @llvm.va_start(i8* nonnull %0)
   ret void
 }
 

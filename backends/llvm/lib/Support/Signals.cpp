@@ -30,7 +30,6 @@
 #include "llvm/Support/StringSaver.h"
 #include "llvm/Support/raw_ostream.h"
 #include <array>
-#include <cmath>
 #include <vector>
 
 //===----------------------------------------------------------------------===//

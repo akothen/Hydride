@@ -51,6 +51,7 @@ def Bufferization_Dialect : Dialect {
         kEscapeAttrName = "bufferization.escape";
   }];
   let hasOperationAttrVerify = 1;
+  let emitAccessorPrefix = kEmitAccessorPrefix_Prefixed;
 }
 
 #endif // BUFFERIZATION_BASE

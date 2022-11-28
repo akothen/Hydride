@@ -8,7 +8,7 @@
 
 #include "mlir/Dialect/Tensor/IR/TensorTilingInterfaceImpl.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
-#include "mlir/Dialect/Arith/Utils/Utils.h"
+#include "mlir/Dialect/Arithmetic/Utils/Utils.h"
 #include "mlir/Dialect/Linalg/IR/Linalg.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/Dialect/Tensor/IR/Tensor.h"
@@ -21,10 +21,23 @@ namespace {
 
 struct PadOpTiling : public TilingInterface::ExternalModel<PadOpTiling, PadOp> {
 
-  SmallVector<utils::IteratorType> getLoopIteratorTypes(Operation *op) const {
+  SmallVector<Value> getDestinationOperands(Operation *op, OpBuilder &b) const {
+    ReifiedRankedShapedTypeDims reifiedShapes;
+    ReifyRankedShapedTypeOpInterface reifyShapedTypeInterface =
+        dyn_cast<ReifyRankedShapedTypeOpInterface>(op);
+    (void)reifyShapedTypeInterface.reifyResultShapes(b, reifiedShapes);
+
     auto padOp = cast<PadOp>(op);
-    SmallVector<utils::IteratorType> iteratorTypes(
-        padOp.getResultType().getRank(), utils::IteratorType::parallel);
+    SmallVector<OpFoldResult> mixedSizes = getAsOpFoldResult(reifiedShapes[0]);
+    Value initTensor = b.create<linalg::InitTensorOp>(
+        op->getLoc(), mixedSizes, padOp.getResultType().getElementType());
+    return {initTensor};
+  }
+
+  SmallVector<StringRef> getLoopIteratorTypes(Operation *op) const {
+    auto padOp = cast<PadOp>(op);
+    SmallVector<StringRef> iteratorTypes(padOp.getResultType().getRank(),
+                                         getParallelIteratorTypeName());
     return iteratorTypes;
   }
 
@@ -46,25 +59,15 @@ struct PadOpTiling : public TilingInterface::ExternalModel<PadOpTiling, PadOp> {
   }
 
   SmallVector<Operation *>
-  getTiledImplementation(Operation *op, OpBuilder &b,
+  getTiledImplementation(Operation *op, OpBuilder &b, ValueRange dest,
                          ArrayRef<OpFoldResult> offsets,
-                         ArrayRef<OpFoldResult> sizes) const {
+                         ArrayRef<OpFoldResult> sizes,
+                         bool /*tileDestOperands*/) const {
     Operation *result =
         tensor::bubbleUpPadSlice(b, cast<PadOp>(op), offsets, sizes);
     if (!result)
       return {};
     return {result};
-  }
-
-  LogicalResult
-  getResultTilePosition(Operation *op, OpBuilder &b, unsigned resultNumber,
-                        ArrayRef<OpFoldResult> offsets,
-                        ArrayRef<OpFoldResult> sizes,
-                        SmallVector<OpFoldResult> &resultOffsets,
-                        SmallVector<OpFoldResult> &resultSizes) const {
-    resultOffsets.assign(offsets.begin(), offsets.end());
-    resultSizes.assign(sizes.begin(), sizes.end());
-    return success();
   }
 };
 
@@ -278,7 +281,7 @@ Operation *tensor::bubbleUpPadSlice(OpBuilder &b, tensor::PadOp padOp,
   return createPadOfExtractSlice();
 }
 
-void mlir::tensor::registerTilingInterfaceExternalModels(
+void mlir::tensor::registerTilingOpInterfaceExternalModels(
     DialectRegistry &registry) {
   registry.addExtension(+[](MLIRContext *ctx, TensorDialect *dialect) {
     tensor::PadOp::attachInterface<PadOpTiling>(*ctx);

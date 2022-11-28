@@ -36,7 +36,7 @@ public:
   }
 
   template <typename InputIt>
-  void insert(InputIt begin, InputIt end) {
+  void insert(const InputIt &begin, const InputIt &end) {
     for (auto it = begin; it != end; ++it)
       insert(*it);
   }

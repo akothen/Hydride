@@ -13,7 +13,8 @@
 
 #undef RISCV
 
-namespace llvm::RISCV {
+namespace llvm {
+namespace RISCV {
 enum Fixups {
   // 20-bit fixup corresponding to %hi(foo) for instructions like lui
   fixup_riscv_hi20 = FirstTargetFixupKind,
@@ -108,6 +109,7 @@ enum Fixups {
   fixup_riscv_invalid,
   NumTargetFixupKinds = fixup_riscv_invalid - FirstTargetFixupKind
 };
-} // end namespace llvm::RISCV
+} // end namespace RISCV
+} // end namespace llvm
 
 #endif

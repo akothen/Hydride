@@ -494,7 +494,7 @@ bool DwarfExpression::addExpression(
   // and not any other parts of the following DWARF expression.
   assert(!IsEmittingEntryValue && "Can't emit entry value around expression");
 
-  Optional<DIExpression::ExprOperand> PrevConvertOp;
+  Optional<DIExpression::ExprOperand> PrevConvertOp = None;
 
   while (ExprCursor) {
     auto Op = ExprCursor.take();

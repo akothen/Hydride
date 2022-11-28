@@ -166,27 +166,25 @@ struct CachingVPExpander {
   /// length of the operation.
   void discardEVLParameter(VPIntrinsic &PI);
 
-  /// Lower this VP binary operator to a unpredicated binary operator.
+  /// \brief Lower this VP binary operator to a unpredicated binary operator.
   Value *expandPredicationInBinaryOperator(IRBuilder<> &Builder,
                                            VPIntrinsic &PI);
 
-  /// Lower this VP reduction to a call to an unpredicated reduction intrinsic.
+  /// \brief Lower this VP reduction to a call to an unpredicated reduction
+  /// intrinsic.
   Value *expandPredicationInReduction(IRBuilder<> &Builder,
                                       VPReductionIntrinsic &PI);
 
-  /// Lower this VP memory operation to a non-VP intrinsic.
+  /// \brief Lower this VP memory operation to a non-VP intrinsic.
   Value *expandPredicationInMemoryIntrinsic(IRBuilder<> &Builder,
                                             VPIntrinsic &VPI);
 
-  /// Lower this VP comparison to a call to an unpredicated comparison.
-  Value *expandPredicationInComparison(IRBuilder<> &Builder,
-                                       VPCmpIntrinsic &PI);
-
-  /// Query TTI and expand the vector predication in \p P accordingly.
+  /// \brief Query TTI and expand the vector predication in \p P accordingly.
   Value *expandPredication(VPIntrinsic &PI);
 
-  /// Determine how and whether the VPIntrinsic \p VPI shall be expanded. This
-  /// overrides TTI with the cl::opts listed at the top of this file.
+  /// \brief  Determine how and whether the VPIntrinsic \p VPI shall be
+  /// expanded. This overrides TTI with the cl::opts listed at the top of this
+  /// file.
   VPLegalization getVPLegalizationStrategy(const VPIntrinsic &VPI) const;
   bool UsingTTIOverrides;
 
@@ -295,7 +293,7 @@ static Value *getNeutralReductionElement(const VPReductionIntrinsic &VPI,
                             APInt::getSignedMinValue(EltBits));
   case Intrinsic::vp_reduce_fmax:
     Negative = true;
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case Intrinsic::vp_reduce_fmin: {
     FastMathFlags Flags = VPI.getFastMathFlags();
     const fltSemantics &Semantics = EltTy->getFltSemantics();
@@ -464,24 +462,6 @@ CachingVPExpander::expandPredicationInMemoryIntrinsic(IRBuilder<> &Builder,
   return NewMemoryInst;
 }
 
-Value *CachingVPExpander::expandPredicationInComparison(IRBuilder<> &Builder,
-                                                        VPCmpIntrinsic &VPI) {
-  assert((maySpeculateLanes(VPI) || VPI.canIgnoreVectorLengthParam()) &&
-         "Implicitly dropping %evl in non-speculatable operator!");
-
-  assert(*VPI.getFunctionalOpcode() == Instruction::ICmp ||
-         *VPI.getFunctionalOpcode() == Instruction::FCmp);
-
-  Value *Op0 = VPI.getOperand(0);
-  Value *Op1 = VPI.getOperand(1);
-  auto Pred = VPI.getPredicate();
-
-  auto *NewCmp = Builder.CreateCmp(Pred, Op0, Op1);
-
-  replaceOperation(*NewCmp, VPI);
-  return NewCmp;
-}
-
 void CachingVPExpander::discardEVLParameter(VPIntrinsic &VPI) {
   LLVM_DEBUG(dbgs() << "Discard EVL parameter in " << VPI << "\n");
 
@@ -558,9 +538,6 @@ Value *CachingVPExpander::expandPredication(VPIntrinsic &VPI) {
   if (auto *VPRI = dyn_cast<VPReductionIntrinsic>(&VPI))
     return expandPredicationInReduction(Builder, *VPRI);
 
-  if (auto *VPCmp = dyn_cast<VPCmpIntrinsic>(&VPI))
-    return expandPredicationInComparison(Builder, *VPCmp);
-
   switch (VPI.getIntrinsicID()) {
   default:
     break;
@@ -621,7 +598,7 @@ CachingVPExpander::getVPLegalizationStrategy(const VPIntrinsic &VPI) const {
   return VPStrat;
 }
 
-/// Expand llvm.vp.* intrinsics as requested by \p TTI.
+/// \brief Expand llvm.vp.* intrinsics as requested by \p TTI.
 bool CachingVPExpander::expandVectorPredication() {
   SmallVector<TransformJob, 16> Worklist;
 

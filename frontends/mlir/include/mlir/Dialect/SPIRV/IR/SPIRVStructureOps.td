@@ -16,7 +16,6 @@
 #define MLIR_DIALECT_SPIRV_IR_STRUCTURE_OPS
 
 include "mlir/Dialect/SPIRV/IR/SPIRVBase.td"
-include "mlir/IR/BuiltinAttributeInterfaces.td"
 include "mlir/IR/FunctionInterfaces.td"
 include "mlir/IR/OpAsmInterface.td"
 include "mlir/IR/SymbolInterfaces.td"
@@ -25,9 +24,9 @@ include "mlir/Interfaces/SideEffectInterfaces.td"
 
 // -----
 
-def SPIRV_AddressOfOp : SPIRV_Op<"mlir.addressof",
+def SPV_AddressOfOp : SPV_Op<"mlir.addressof",
     [DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
-     InFunctionScope, Pure]> {
+     InFunctionScope, NoSideEffect]> {
   let summary = "Get the address of a global variable.";
 
   let description = [{
@@ -42,14 +41,14 @@ def SPIRV_AddressOfOp : SPIRV_Op<"mlir.addressof",
     <!-- End of AutoGen section -->
 
     ```
-    spv-address-of-op ::= ssa-id `=` `spirv.mlir.addressof` symbol-ref-id
+    spv-address-of-op ::= ssa-id `=` `spv.mlir.addressof` symbol-ref-id
                                      `:` spirv-pointer-type
     ```
 
     #### Example:
 
     ```mlir
-    %0 = spirv.mlir.addressof @global_var : !spirv.ptr<f32, Input>
+    %0 = spv.mlir.addressof @global_var : !spv.ptr<f32, Input>
     ```
   }];
 
@@ -58,7 +57,7 @@ def SPIRV_AddressOfOp : SPIRV_Op<"mlir.addressof",
   );
 
   let results = (outs
-    SPIRV_AnyPtr:$pointer
+    SPV_AnyPtr:$pointer
   );
 
   let hasOpcode = 0;
@@ -72,13 +71,11 @@ def SPIRV_AddressOfOp : SPIRV_Op<"mlir.addressof",
 
 // -----
 
-def SPIRV_ConstantOp : SPIRV_Op<"Constant",
+def SPV_ConstantOp : SPV_Op<"Constant",
     [ConstantLike,
      DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
-     Pure]> {
-  let summary = [{
-    Declare a new integer-type or floating-point-type scalar constant.
-  }];
+     NoSideEffect]> {
+  let summary = "The op that declares a SPIR-V normal constant";
 
   let description = [{
     This op declares a SPIR-V normal constant. SPIR-V has multiple constant
@@ -91,7 +88,7 @@ def SPIRV_ConstantOp : SPIRV_Op<"Constant",
     * ...
 
     Having such a plethora of constant instructions renders IR transformations
-    more tedious. Therefore, we use a single `spirv.Constant` op to represent
+    more tedious. Therefore, we use a single `spv.Constant` op to represent
     them all. Note that conversion between those SPIR-V constant instructions
     and this op is purely mechanical; so it can be scoped to the binary
     (de)serialization process.
@@ -99,16 +96,16 @@ def SPIRV_ConstantOp : SPIRV_Op<"Constant",
     <!-- End of AutoGen section -->
 
     ```
-    spirv.Constant-op ::= ssa-id `=` `spirv.Constant` attribute-value
+    spv.Constant-op ::= ssa-id `=` `spv.Constant` attribute-value
                         (`:` spirv-type)?
     ```
 
     #### Example:
 
     ```mlir
-    %0 = spirv.Constant true
-    %1 = spirv.Constant dense<[2, 3]> : vector<2xf32>
-    %2 = spirv.Constant [dense<3.0> : vector<2xf32>] : !spirv.array<1xvector<2xf32>>
+    %0 = spv.Constant true
+    %1 = spv.Constant dense<[2, 3]> : vector<2xf32>
+    %2 = spv.Constant [dense<3.0> : vector<2xf32>] : !spv.array<1xvector<2xf32>>
     ```
 
     TODO: support constant structs
@@ -119,7 +116,7 @@ def SPIRV_ConstantOp : SPIRV_Op<"Constant",
   );
 
   let results = (outs
-    SPIRV_Type:$constant
+    SPV_Type:$constant
   );
 
   let hasFolder = 1;
@@ -143,7 +140,7 @@ def SPIRV_ConstantOp : SPIRV_Op<"Constant",
 
 // -----
 
-def SPIRV_EntryPointOp : SPIRV_Op<"EntryPoint", [InModuleScope]> {
+def SPV_EntryPointOp : SPV_Op<"EntryPoint", [InModuleScope]> {
   let summary = [{
     Declare an entry point, its execution model, and its interface.
   }];
@@ -158,11 +155,11 @@ def SPIRV_EntryPointOp : SPIRV_Op<"EntryPoint", [InModuleScope]> {
     OpEntryPoint instructions with the same Execution Model and the same
     Name string.
 
-    Interface is a list of symbol references to `spirv.GlobalVariable`
+    Interface is a list of symbol references to `spv.GlobalVariable`
     operations. These declare the set of global variables from a
     module that form the interface of this entry point. The set of
     Interface symbols must be equal to or a superset of the
-    `spirv.GlobalVariable`s referenced by the entry point’s static call
+    `spv.GlobalVariable`s referenced by the entry point’s static call
     tree, within the interface’s storage classes.  Before version 1.4,
     the interface’s storage classes are limited to the Input and
     Output storage classes. Starting with version 1.4, the interface’s
@@ -175,21 +172,21 @@ def SPIRV_EntryPointOp : SPIRV_Op<"EntryPoint", [InModuleScope]> {
     execution-model ::= "Vertex" | "TesellationControl" |
                         <and other SPIR-V execution models...>
 
-    entry-point-op ::= ssa-id `=` `spirv.EntryPoint` execution-model
+    entry-point-op ::= ssa-id `=` `spv.EntryPoint` execution-model
                        symbol-reference (`, ` symbol-reference)*
     ```
 
     #### Example:
 
     ```mlir
-    spirv.EntryPoint "GLCompute" @foo
-    spirv.EntryPoint "Kernel" @foo, @var1, @var2
+    spv.EntryPoint "GLCompute" @foo
+    spv.EntryPoint "Kernel" @foo, @var1, @var2
 
     ```
   }];
 
   let arguments = (ins
-    SPIRV_ExecutionModelAttr:$execution_model,
+    SPV_ExecutionModelAttr:$execution_model,
     FlatSymbolRefAttr:$fn,
     SymbolRefArrayAttr:$interface
   );
@@ -205,7 +202,7 @@ def SPIRV_EntryPointOp : SPIRV_Op<"EntryPoint", [InModuleScope]> {
 
 // -----
 
-def SPIRV_ExecutionModeOp : SPIRV_Op<"ExecutionMode", [InModuleScope]> {
+def SPV_ExecutionModeOp : SPV_Op<"ExecutionMode", [InModuleScope]> {
   let summary = "Declare an execution mode for an entry point.";
 
   let description = [{
@@ -224,21 +221,21 @@ def SPIRV_ExecutionModeOp : SPIRV_Op<"ExecutionMode", [InModuleScope]> {
     execution-mode ::= "Invocations" | "SpacingEqual" |
                        <and other SPIR-V execution modes...>
 
-    execution-mode-op ::= `spirv.ExecutionMode ` ssa-use execution-mode
+    execution-mode-op ::= `spv.ExecutionMode ` ssa-use execution-mode
                           (integer-literal (`, ` integer-literal)* )?
     ```
 
     #### Example:
 
     ```mlir
-    spirv.ExecutionMode @foo "ContractionOff"
-    spirv.ExecutionMode @bar "LocalSizeHint", 3, 4, 5
+    spv.ExecutionMode @foo "ContractionOff"
+    spv.ExecutionMode @bar "LocalSizeHint", 3, 4, 5
     ```
   }];
 
   let arguments = (ins
     FlatSymbolRefAttr:$fn,
-    SPIRV_ExecutionModeAttr:$execution_mode,
+    SPV_ExecutionModeAttr:$execution_mode,
     I32ArrayAttr:$values
   );
 
@@ -255,7 +252,7 @@ def SPIRV_ExecutionModeOp : SPIRV_Op<"ExecutionMode", [InModuleScope]> {
 
 // -----
 
-def SPIRV_FuncOp : SPIRV_Op<"func", [
+def SPV_FuncOp : SPV_Op<"func", [
     AutomaticAllocationScope, DeclareOpInterfaceMethods<CallableOpInterface>,
     FunctionOpInterface, InModuleScope, IsolatedFromAbove, Symbol
   ]> {
@@ -277,22 +274,22 @@ def SPIRV_FuncOp : SPIRV_Op<"func", [
 
     ```
     spv-function-control ::= "None" | "Inline" | "DontInline" | ...
-    spv-function-op ::= `spirv.func` function-signature
+    spv-function-op ::= `spv.func` function-signature
                          spv-function-control region
     ```
 
     #### Example:
 
     ```mlir
-    spirv.func @foo() -> () "None" { ... }
-    spirv.func @bar() -> () "Inline|Pure" { ... }
+    spv.func @foo() -> () "None" { ... }
+    spv.func @bar() -> () "Inline|Pure" { ... }
     ```
   }];
 
   let arguments = (ins
     TypeAttrOf<FunctionType>:$function_type,
     StrAttr:$sym_name,
-    SPIRV_FunctionControlAttr:$function_control
+    SPV_FunctionControlAttr:$function_control
   );
 
   let results = (outs);
@@ -311,6 +308,10 @@ def SPIRV_FuncOp : SPIRV_Op<"func", [
   let autogenSerialization = 0;
 
   let extraClassDeclaration = [{
+    /// Returns the type of this function.
+    /// FIXME: Remove when SPIRV uses prefixed accessors.
+    FunctionType getFunctionType() { return function_type(); }
+
     /// Returns the argument types of this function.
     ArrayRef<Type> getArgumentTypes() { return getFunctionType().getInputs(); }
 
@@ -331,7 +332,7 @@ def SPIRV_FuncOp : SPIRV_Op<"func", [
 
 // -----
 
-def SPIRV_GlobalVariableOp : SPIRV_Op<"GlobalVariable", [InModuleScope, Symbol]> {
+def SPV_GlobalVariableOp : SPV_Op<"GlobalVariable", [InModuleScope, Symbol]> {
   let summary = [{
     Allocate an object in memory at module scope. The object is
     referenced using a symbol name.
@@ -349,13 +350,13 @@ def SPIRV_GlobalVariableOp : SPIRV_Op<"GlobalVariable", [InModuleScope, Symbol]>
     Initializer is optional.  If Initializer is present, it will be
     the initial value of the variable’s memory content. Initializer
     must be an symbol defined from a constant instruction or other
-    `spirv.GlobalVariable` operation in module scope. Initializer must
+    `spv.GlobalVariable` operation in module scope. Initializer must
     have the same type as the type of the defined symbol.
 
     <!-- End of AutoGen section -->
 
     ```
-    variable-op ::= `spirv.GlobalVariable` spirv-type symbol-ref-id
+    variable-op ::= `spv.GlobalVariable` spirv-type symbol-ref-id
                     (`initializer(` symbol-ref-id `)`)?
                     (`bind(` integer-literal, integer-literal `)`)?
                     (`built_in(` string-literal `)`)?
@@ -369,10 +370,10 @@ def SPIRV_GlobalVariableOp : SPIRV_Op<"GlobalVariable", [InModuleScope, Symbol]>
     #### Example:
 
     ```mlir
-    spirv.GlobalVariable @var0 : !spirv.ptr<f32, Input> @var0
-    spirv.GlobalVariable @var1 initializer(@var0) : !spirv.ptr<f32, Output>
-    spirv.GlobalVariable @var2 bind(1, 2) : !spirv.ptr<f32, Uniform>
-    spirv.GlobalVariable @var3 built_in("GlobalInvocationId") : !spirv.ptr<vector<3xi32>, Input>
+    spv.GlobalVariable @var0 : !spv.ptr<f32, Input> @var0
+    spv.GlobalVariable @var1 initializer(@var0) : !spv.ptr<f32, Output>
+    spv.GlobalVariable @var2 bind(1, 2) : !spv.ptr<f32, Uniform>
+    spv.GlobalVariable @var3 built_in("GlobalInvocationId") : !spv.ptr<vector<3xi32>, Input>
     ```
   }];
 
@@ -394,9 +395,9 @@ def SPIRV_GlobalVariableOp : SPIRV_Op<"GlobalVariable", [InModuleScope, Symbol]>
                    CArg<"FlatSymbolRefAttr", "nullptr">:$initializer),
     [{
       $_state.addAttribute("type", type);
-      $_state.addAttribute(getSymNameAttrName($_state.name), sym_name);
+      $_state.addAttribute(sym_nameAttrName($_state.name), sym_name);
       if (initializer)
-        $_state.addAttribute(getInitializerAttrName($_state.name), initializer);
+        $_state.addAttribute(initializerAttrName($_state.name), initializer);
     }]>,
     OpBuilder<(ins "TypeAttr":$type, "ArrayRef<NamedAttribute>":$namedAttrs),
     [{
@@ -412,9 +413,9 @@ def SPIRV_GlobalVariableOp : SPIRV_Op<"GlobalVariable", [InModuleScope, Symbol]>
                     CArg<"FlatSymbolRefAttr", "{}">:$initializer),
     [{
       $_state.addAttribute("type", TypeAttr::get(type));
-      $_state.addAttribute(getSymNameAttrName($_state.name), $_builder.getStringAttr(sym_name));
+      $_state.addAttribute(sym_nameAttrName($_state.name), $_builder.getStringAttr(sym_name));
       if (initializer)
-        $_state.addAttribute(getInitializerAttrName($_state.name), initializer);
+        $_state.addAttribute(initializerAttrName($_state.name), initializer);
     }]>
   ];
 
@@ -424,14 +425,14 @@ def SPIRV_GlobalVariableOp : SPIRV_Op<"GlobalVariable", [InModuleScope, Symbol]>
 
   let extraClassDeclaration = [{
     ::mlir::spirv::StorageClass storageClass() {
-      return this->getType().cast<::mlir::spirv::PointerType>().getStorageClass();
+      return this->type().cast<::mlir::spirv::PointerType>().getStorageClass();
     }
   }];
 }
 
 // -----
 
-def SPIRV_ModuleOp : SPIRV_Op<"module",
+def SPV_ModuleOp : SPV_Op<"module",
     [IsolatedFromAbove, NoRegionArguments, NoTerminator,
      SingleBlock, SymbolTable, Symbol]> {
   let summary = "The top-level op that defines a SPIR-V module";
@@ -457,7 +458,7 @@ def SPIRV_ModuleOp : SPIRV_Op<"module",
     ```
     addressing-model ::= `Logical` | `Physical32` | `Physical64` | ...
     memory-model ::= `Simple` | `GLSL450` | `OpenCL` | `Vulkan` | ...
-    spv-module-op ::= `spirv.module` addressing-model memory-model
+    spv-module-op ::= `spv.module` addressing-model memory-model
                       (requires  spirv-vce-attribute)?
                       (`attributes` attribute-dict)?
                       region
@@ -466,22 +467,22 @@ def SPIRV_ModuleOp : SPIRV_Op<"module",
     #### Example:
 
     ```mlir
-    spirv.module Logical GLSL450  {}
+    spv.module Logical GLSL450  {}
 
-    spirv.module Logical Vulkan
-        requires #spirv.vce<v1.0, [Shader], [SPV_KHR_vulkan_memory_model]>
+    spv.module Logical Vulkan
+        requires #spv.vce<v1.0, [Shader], [SPV_KHR_vulkan_memory_model]>
         attributes { some_additional_attr = ... } {
-      spirv.func @do_nothing() -> () {
-        spirv.Return
+      spv.func @do_nothing() -> () {
+        spv.Return
       }
     }
     ```
   }];
 
   let arguments = (ins
-    SPIRV_AddressingModelAttr:$addressing_model,
-    SPIRV_MemoryModelAttr:$memory_model,
-    OptionalAttr<SPIRV_VerCapExtAttr>:$vce_triple,
+    SPV_AddressingModelAttr:$addressing_model,
+    SPV_MemoryModelAttr:$memory_model,
+    OptionalAttr<SPV_VerCapExtAttr>:$vce_triple,
     OptionalAttr<StrAttr>:$sym_name
   );
 
@@ -509,7 +510,7 @@ def SPIRV_ModuleOp : SPIRV_Op<"module",
 
     bool isOptionalSymbol() { return true; }
 
-    Optional<StringRef> getName() { return getSymName(); }
+    Optional<StringRef> getName() { return sym_name(); }
 
     static StringRef getVCETripleAttrName() { return "vce_triple"; }
   }];
@@ -520,7 +521,7 @@ def SPIRV_ModuleOp : SPIRV_Op<"module",
 
 // -----
 
-def SPIRV_ReferenceOfOp : SPIRV_Op<"mlir.referenceof", [Pure]> {
+def SPV_ReferenceOfOp : SPV_Op<"mlir.referenceof", [NoSideEffect]> {
   let summary = "Reference a specialization constant.";
 
   let description = [{
@@ -534,14 +535,14 @@ def SPIRV_ReferenceOfOp : SPIRV_Op<"mlir.referenceof", [Pure]> {
     <!-- End of AutoGen section -->
 
     ```
-    spv-reference-of-op ::= ssa-id `=` `spirv.mlir.referenceof` symbol-ref-id
+    spv-reference-of-op ::= ssa-id `=` `spv.mlir.referenceof` symbol-ref-id
                                        `:` spirv-scalar-type
     ```
 
     #### Example:
 
     ```mlir
-    %0 = spirv.mlir.referenceof @spec_const : f32
+    %0 = spv.mlir.referenceof @spec_const : f32
     ```
 
     TODO Add support for composite specialization constants.
@@ -552,7 +553,7 @@ def SPIRV_ReferenceOfOp : SPIRV_Op<"mlir.referenceof", [Pure]> {
   );
 
   let results = (outs
-    SPIRV_Type:$reference
+    SPV_Type:$reference
   );
 
   let hasOpcode = 0;
@@ -564,11 +565,8 @@ def SPIRV_ReferenceOfOp : SPIRV_Op<"mlir.referenceof", [Pure]> {
 
 // -----
 
-def SPIRV_SpecConstantOp : SPIRV_Op<"SpecConstant", [InModuleScope, Symbol]> {
-  let summary = [{
-    Declare a new integer-type or floating-point-type scalar specialization
-    constant.
-  }];
+def SPV_SpecConstantOp : SPV_Op<"SpecConstant", [InModuleScope, Symbol]> {
+  let summary = "The op that declares a SPIR-V specialization constant";
 
   let description = [{
     This op declares a SPIR-V scalar specialization constant. SPIR-V has
@@ -577,14 +575,14 @@ def SPIRV_SpecConstantOp : SPIRV_Op<"SpecConstant", [InModuleScope, Symbol]> {
     * `OpSpecConstantTrue` and `OpSpecConstantFalse` for boolean constants
     * `OpSpecConstant` for scalar constants
 
-    Similar as `spirv.Constant`, this op represents all of the above cases.
+    Similar as `spv.Constant`, this op represents all of the above cases.
     `OpSpecConstantComposite` and `OpSpecConstantOp` are modelled with
     separate ops.
 
     <!-- End of AutoGen section -->
 
     ```
-    spv-spec-constant-op ::= `spirv.SpecConstant` symbol-ref-id
+    spv-spec-constant-op ::= `spv.SpecConstant` symbol-ref-id
                              `spec_id(` integer `)`
                              `=` attribute-value (`:` spirv-type)?
     ```
@@ -595,14 +593,14 @@ def SPIRV_SpecConstantOp : SPIRV_Op<"SpecConstant", [InModuleScope, Symbol]> {
     #### Example:
 
     ```mlir
-    spirv.SpecConstant @spec_const1 = true
-    spirv.SpecConstant @spec_const2 spec_id(5) = 42 : i32
+    spv.SpecConstant @spec_const1 = true
+    spv.SpecConstant @spec_const2 spec_id(5) = 42 : i32
     ```
   }];
 
   let arguments = (ins
     StrAttr:$sym_name,
-    TypedAttrInterface:$default_value
+    AnyAttr:$default_value
   );
 
   let results = (outs);
@@ -614,37 +612,37 @@ def SPIRV_SpecConstantOp : SPIRV_Op<"SpecConstant", [InModuleScope, Symbol]> {
 
 // -----
 
-def SPIRV_SpecConstantCompositeOp : SPIRV_Op<"SpecConstantComposite", [
+def SPV_SpecConstantCompositeOp : SPV_Op<"SpecConstantComposite", [
     InModuleScope, Symbol]> {
   let summary = "Declare a new composite specialization constant.";
 
   let description = [{
     This op declares a SPIR-V composite specialization constant. This covers
     the `OpSpecConstantComposite` SPIR-V instruction. Scalar constants are
-    covered by `spirv.SpecConstant`.
+    covered by `spv.SpecConstant`.
 
     A constituent of a spec constant composite can be:
     - A symbol referring of another spec constant.
     - The SSA ID of a non-specialization constant (i.e. defined through
-      `spirv.SpecConstant`).
-    - The SSA ID of a `spirv.Undef`.
+      `spv.SpecConstant`).
+    - The SSA ID of a `spv.Undef`.
 
     ```
-    spv-spec-constant-composite-op ::= `spirv.SpecConstantComposite` symbol-ref-id ` (`
+    spv-spec-constant-composite-op ::= `spv.SpecConstantComposite` symbol-ref-id ` (`
                                        symbol-ref-id (`, ` symbol-ref-id)*
                                        `) :` composite-type
     ```
 
      where `composite-type` is some non-scalar type that can be represented in the `spv`
-     dialect: `spirv.struct`, `spirv.array`, or `vector`.
+     dialect: `spv.struct`, `spv.array`, or `vector`.
 
      #### Example:
 
      ```mlir
-     spirv.SpecConstant @sc1 = 1   : i32
-     spirv.SpecConstant @sc2 = 2.5 : f32
-     spirv.SpecConstant @sc3 = 3.5 : f32
-     spirv.SpecConstantComposite @scc (@sc1, @sc2, @sc3) : !spirv.struct<i32, f32, f32>
+     spv.SpecConstant @sc1 = 1   : i32
+     spv.SpecConstant @sc2 = 2.5 : f32
+     spv.SpecConstant @sc3 = 3.5 : f32
+     spv.SpecConstantComposite @scc (@sc1, @sc2, @sc3) : !spv.struct<i32, f32, f32>
      ```
 
     TODO Add support for constituents that are:
@@ -668,8 +666,8 @@ def SPIRV_SpecConstantCompositeOp : SPIRV_Op<"SpecConstantComposite", [
 
 // -----
 
-def SPIRV_SpecConstantOperationOp : SPIRV_Op<"SpecConstantOperation", [
-       Pure, InFunctionScope,
+def SPV_SpecConstantOperationOp : SPV_Op<"SpecConstantOperation", [
+       NoSideEffect, InFunctionScope,
        SingleBlockImplicitTerminator<"YieldOp">]> {
   let summary = [{
     Declare a new specialization constant that results from doing an operation.
@@ -682,15 +680,15 @@ def SPIRV_SpecConstantOperationOp : SPIRV_Op<"SpecConstantOperation", [
     In the `spv` dialect, this op is modelled as follows:
 
     ```
-    spv-spec-constant-operation-op ::= `spirv.SpecConstantOperation` `wraps`
+    spv-spec-constant-operation-op ::= `spv.SpecConstantOperation` `wraps`
                                          generic-spirv-op `:` function-type
     ```
 
-    In particular, an `spirv.SpecConstantOperation` contains exactly one
+    In particular, an `spv.SpecConstantOperation` contains exactly one
     region. In turn, that region, contains exactly 2 instructions:
     - One of SPIR-V's instructions that are allowed within an
     OpSpecConstantOp.
-    - An `spirv.mlir.yield` instruction as the terminator.
+    - An `spv.mlir.yield` instruction as the terminator.
 
     The following SPIR-V instructions are valid:
     - OpSConvert,
@@ -736,10 +734,10 @@ def SPIRV_SpecConstantOperationOp : SPIRV_Op<"SpecConstantOperation", [
 
     #### Example:
     ```mlir
-    %0 = spirv.Constant 1: i32
-    %1 = spirv.Constant 1: i32
+    %0 = spv.Constant 1: i32
+    %1 = spv.Constant 1: i32
 
-    %2 = spirv.SpecConstantOperation wraps "spirv.IAdd"(%0, %1) : (i32, i32) -> i32
+    %2 = spv.SpecConstantOperation wraps "spv.IAdd"(%0, %1) : (i32, i32) -> i32
     ```
   }];
 
@@ -759,28 +757,28 @@ def SPIRV_SpecConstantOperationOp : SPIRV_Op<"SpecConstantOperation", [
 
 // -----
 
-def SPIRV_YieldOp : SPIRV_Op<"mlir.yield", [
-    HasParent<"SpecConstantOperationOp">, Pure, Terminator]> {
+def SPV_YieldOp : SPV_Op<"mlir.yield", [
+    HasParent<"SpecConstantOperationOp">, NoSideEffect, Terminator]> {
   let summary = [{
-    Yields the result computed in `spirv.SpecConstantOperation`'s
+    Yields the result computed in `spv.SpecConstantOperation`'s
     region back to the parent op.
   }];
 
   let description = [{
     This op is a special terminator whose only purpose is to terminate
-    an `spirv.SpecConstantOperation`'s enclosed region. It accepts a
+    an `spv.SpecConstantOperation`'s enclosed region. It accepts a
     single operand produced by the preceeding (and only other) instruction
-    in its parent block (see SPIRV_SpecConstantOperation for further
+    in its parent block (see SPV_SpecConstantOperation for further
     details). This op has no corresponding SPIR-V instruction.
 
     ```
-    spirv.mlir.yield ::= `spirv.mlir.yield` ssa-id : spirv-type
+    spv.mlir.yield ::= `spv.mlir.yield` ssa-id : spirv-type
     ```
 
     #### Example:
     ```mlir
     %0 = ... (some op supported by SPIR-V OpSpecConstantOp)
-    spirv.mlir.yield %0
+    spv.mlir.yield %0
     ```
   }];
 

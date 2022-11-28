@@ -23,12 +23,9 @@ struct OneShotBufferizationOptions;
 LogicalResult analyzeModuleOp(ModuleOp moduleOp, OneShotAnalysisState &state);
 
 /// Bufferize `op` and its nested ops that implement `BufferizableOpInterface`.
-///
-/// Note: This function does not run One-Shot Analysis. No buffer copies are
-/// inserted unless `options.copyBeforeWrite` is set, in which case buffers are
-/// copied before every write.
+/// Whether buffer copies are needed or not is queried from the given state.
 LogicalResult bufferizeModuleOp(ModuleOp moduleOp,
-                                const OneShotBufferizationOptions &options);
+                                const OneShotAnalysisState &analysisState);
 
 /// Run One-Shot Module Bufferization on the given module. Performs a simple
 /// function call analysis to determine which function arguments are

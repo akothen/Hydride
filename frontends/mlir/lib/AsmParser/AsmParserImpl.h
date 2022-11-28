@@ -114,11 +114,6 @@ public:
     return success(parser.consumeIf(Token::comma));
   }
 
-  /// Parses a `...`.
-  ParseResult parseEllipsis() override {
-    return parser.parseToken(Token::ellipsis, "expected '...'");
-  }
-
   /// Parses a `...` if present.
   ParseResult parseOptionalEllipsis() override {
     return success(parser.consumeIf(Token::ellipsis));
@@ -439,12 +434,14 @@ public:
 
   /// Parse an optional @-identifier and store it (without the '@' symbol) in a
   /// string attribute named 'attrName'.
-  ParseResult parseOptionalSymbolName(StringAttr &result) override {
+  ParseResult parseOptionalSymbolName(StringAttr &result, StringRef attrName,
+                                      NamedAttrList &attrs) override {
     Token atToken = parser.getToken();
     if (atToken.isNot(Token::at_identifier))
       return failure();
 
     result = getBuilder().getStringAttr(atToken.getSymbolReference());
+    attrs.push_back(getBuilder().getNamedAttr(attrName, result));
     parser.consumeToken();
 
     // If we are populating the assembly parser state, record this as a symbol
@@ -463,7 +460,7 @@ public:
   /// Parse a handle to a resource within the assembly format.
   FailureOr<AsmDialectResourceHandle>
   parseResourceHandle(Dialect *dialect) override {
-    const auto *interface = dyn_cast<OpAsmDialectInterface>(dialect);
+    const auto *interface = dyn_cast_or_null<OpAsmDialectInterface>(dialect);
     if (!interface) {
       return parser.emitError() << "dialect '" << dialect->getNamespace()
                                 << "' does not expect resource handles";

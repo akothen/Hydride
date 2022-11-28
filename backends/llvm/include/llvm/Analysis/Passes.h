@@ -21,6 +21,15 @@ namespace llvm {
 
   //===--------------------------------------------------------------------===//
   //
+  // createObjCARCAAWrapperPass - This pass implements ObjC-ARC-based
+  // alias analysis.
+  //
+  ImmutablePass *createObjCARCAAWrapperPass();
+
+  FunctionPass *createPAEvalPass();
+
+  //===--------------------------------------------------------------------===//
+  //
   /// createLazyValueInfoPass - This creates an instance of the LazyValueInfo
   /// pass.
   FunctionPass *createLazyValueInfoPass();

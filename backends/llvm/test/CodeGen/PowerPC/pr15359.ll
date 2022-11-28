@@ -8,7 +8,7 @@ target triple = "powerpc64-unknown-linux-gnu"
 
 define fastcc void @func() nounwind {
 entry:
-  store i32 42, ptr @nextIdx
+  store i32 42, i32* @nextIdx
   ret void
 }
 

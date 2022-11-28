@@ -34,8 +34,6 @@ public:
       : OS(OS), ThinLinkOS(ThinLinkOS) {}
 
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
-
-  static bool isRequired() { return true; }
 };
 
 } // namespace llvm

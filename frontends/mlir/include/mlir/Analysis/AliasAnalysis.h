@@ -87,7 +87,7 @@ inline raw_ostream &operator<<(raw_ostream &os, const AliasResult &result) {
 /// The possible results of whether a memory access modifies or references
 /// a memory location. The possible results are: no access at all, a
 /// modification, a reference, or both a modification and a reference.
-class [[nodiscard]] ModRefResult {
+class LLVM_NODISCARD ModRefResult {
   /// Note: This is a simplified version of the ModRefResult in
   /// `llvm/Analysis/AliasAnalysis.h`, and namely removes the `Must` concept. If
   /// this becomes useful/necessary we should add it here.
@@ -123,23 +123,23 @@ public:
   static ModRefResult getModAndRef() { return Kind::ModRef; }
 
   /// Returns if this result does not modify or reference memory.
-  [[nodiscard]] bool isNoModRef() const { return kind == Kind::NoModRef; }
+  LLVM_NODISCARD bool isNoModRef() const { return kind == Kind::NoModRef; }
 
   /// Returns if this result modifies memory.
-  [[nodiscard]] bool isMod() const {
+  LLVM_NODISCARD bool isMod() const {
     return static_cast<int>(kind) & static_cast<int>(Kind::Mod);
   }
 
   /// Returns if this result references memory.
-  [[nodiscard]] bool isRef() const {
+  LLVM_NODISCARD bool isRef() const {
     return static_cast<int>(kind) & static_cast<int>(Kind::Ref);
   }
 
   /// Returns if this result modifies *or* references memory.
-  [[nodiscard]] bool isModOrRef() const { return kind != Kind::NoModRef; }
+  LLVM_NODISCARD bool isModOrRef() const { return kind != Kind::NoModRef; }
 
   /// Returns if this result modifies *and* references memory.
-  [[nodiscard]] bool isModAndRef() const { return kind == Kind::ModRef; }
+  LLVM_NODISCARD bool isModAndRef() const { return kind == Kind::ModRef; }
 
   /// Merge this ModRef result with `other` and return the result.
   ModRefResult merge(const ModRefResult &other) {

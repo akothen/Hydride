@@ -27,7 +27,6 @@ void MachineIRBuilder::setMF(MachineFunction &MF) {
   State.MRI = &MF.getRegInfo();
   State.TII = MF.getSubtarget().getInstrInfo();
   State.DL = DebugLoc();
-  State.PCSections = nullptr;
   State.II = MachineBasicBlock::iterator();
   State.Observer = nullptr;
 }
@@ -37,7 +36,8 @@ void MachineIRBuilder::setMF(MachineFunction &MF) {
 //------------------------------------------------------------------------------
 
 MachineInstrBuilder MachineIRBuilder::buildInstrNoInsert(unsigned Opcode) {
-  return BuildMI(getMF(), {getDL(), getPCSections()}, getTII().get(Opcode));
+  MachineInstrBuilder MIB = BuildMI(getMF(), getDL(), getTII().get(Opcode));
+  return MIB;
 }
 
 MachineInstrBuilder MachineIRBuilder::insertInstr(MachineInstrBuilder MIB) {
@@ -96,23 +96,13 @@ MachineInstrBuilder MachineIRBuilder::buildConstDbgValue(const Constant &C,
       cast<DILocalVariable>(Variable)->isValidLocationForIntrinsic(getDL()) &&
       "Expected inlined-at fields to agree");
   auto MIB = buildInstrNoInsert(TargetOpcode::DBG_VALUE);
-
-  auto *NumericConstant = [&] () -> const Constant* {
-    if (const auto *CE = dyn_cast<ConstantExpr>(&C))
-      if (CE->getOpcode() == Instruction::IntToPtr)
-        return CE->getOperand(0);
-    return &C;
-  }();
-
-  if (auto *CI = dyn_cast<ConstantInt>(NumericConstant)) {
+  if (auto *CI = dyn_cast<ConstantInt>(&C)) {
     if (CI->getBitWidth() > 64)
       MIB.addCImm(CI);
     else
       MIB.addImm(CI->getZExtValue());
-  } else if (auto *CFP = dyn_cast<ConstantFP>(NumericConstant)) {
+  } else if (auto *CFP = dyn_cast<ConstantFP>(&C)) {
     MIB.addFPImm(CFP);
-  } else if (isa<ConstantPointerNull>(NumericConstant)) {
-    MIB.addImm(0);
   } else {
     // Insert $noreg if we didn't find a usable constant and had to drop it.
     MIB.addReg(Register());

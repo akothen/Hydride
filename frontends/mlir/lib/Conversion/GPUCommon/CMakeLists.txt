@@ -29,7 +29,7 @@ add_mlir_conversion_library(MLIRGPUToGPURuntimeTransforms
   ${NVPTX_LIBS}
 
   LINK_LIBS PUBLIC
-  MLIRArithToLLVM
+  MLIRArithmeticToLLVM
   MLIRAsyncToLLVM
   MLIRControlFlowToLLVM
   MLIRFuncToLLVM

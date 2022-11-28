@@ -307,7 +307,7 @@ InductiveRangeCheck::parseRangeCheckICmp(Loop *L, ICmpInst *ICI,
 
   case ICmpInst::ICMP_SLE:
     std::swap(LHS, RHS);
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case ICmpInst::ICMP_SGE:
     IsSigned = true;
     if (match(RHS, m_ConstantInt<0>())) {
@@ -318,7 +318,7 @@ InductiveRangeCheck::parseRangeCheckICmp(Loop *L, ICmpInst *ICI,
 
   case ICmpInst::ICMP_SLT:
     std::swap(LHS, RHS);
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case ICmpInst::ICMP_SGT:
     IsSigned = true;
     if (match(RHS, m_ConstantInt<-1>())) {
@@ -335,7 +335,7 @@ InductiveRangeCheck::parseRangeCheckICmp(Loop *L, ICmpInst *ICI,
 
   case ICmpInst::ICMP_ULT:
     std::swap(LHS, RHS);
-    [[fallthrough]];
+    LLVM_FALLTHROUGH;
   case ICmpInst::ICMP_UGT:
     IsSigned = false;
     if (IsLoopInvariant(LHS)) {
@@ -845,10 +845,6 @@ LoopStructure::parseLoopStructure(ScalarEvolution &SE, Loop &L,
   // induction variable satisfies some constraint.
 
   const SCEVAddRecExpr *IndVarBase = cast<SCEVAddRecExpr>(LeftSCEV);
-  if (IndVarBase->getLoop() != &L) {
-    FailureReason = "LHS in cmp is not an AddRec for this loop";
-    return None;
-  }
   if (!IndVarBase->isAffine()) {
     FailureReason = "LHS in icmp not induction variable";
     return None;
@@ -1188,7 +1184,6 @@ void LoopConstrainer::cloneLoop(LoopConstrainer::ClonedLoop &Result,
       for (PHINode &PN : SBB->phis()) {
         Value *OldIncoming = PN.getIncomingValueForBlock(OriginalBB);
         PN.addIncoming(GetClonedValue(OldIncoming), ClonedBB);
-        SE.forgetValue(&PN);
       }
     }
   }
@@ -1587,11 +1582,8 @@ InductiveRangeCheck::computeSafeIterationSpace(
     bool IsLatchSigned) const {
   // We can deal when types of latch check and range checks don't match in case
   // if latch check is more narrow.
-  auto *IVType = dyn_cast<IntegerType>(IndVar->getType());
-  auto *RCType = dyn_cast<IntegerType>(getBegin()->getType());
-  // Do not work with pointer types.
-  if (!IVType || !RCType)
-    return None;
+  auto *IVType = cast<IntegerType>(IndVar->getType());
+  auto *RCType = cast<IntegerType>(getBegin()->getType());
   if (IVType->getBitWidth() > RCType->getBitWidth())
     return None;
   // IndVar is of the form "A + B * I" (where "I" is the canonical induction
@@ -1906,7 +1898,7 @@ bool InductiveRangeCheckElimination::run(
   LLVMContext &Context = Preheader->getContext();
   SmallVector<InductiveRangeCheck, 16> RangeChecks;
 
-  for (auto *BBI : L->getBlocks())
+  for (auto BBI : L->getBlocks())
     if (BranchInst *TBI = dyn_cast<BranchInst>(BBI->getTerminator()))
       InductiveRangeCheck::extractRangeChecksFromBranch(TBI, L, SE, BPI,
                                                         RangeChecks);

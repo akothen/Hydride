@@ -289,9 +289,6 @@ ELFDebugObject::CreateArchType(MemoryBufferRef Buffer,
       continue;
     HasDwarfSection |= isDwarfSection(*Name);
 
-    if (!(Header.sh_flags & ELF::SHF_ALLOC))
-      continue;
-
     auto Wrapped = std::make_unique<ELFDebugObjectSection<ELFT>>(&Header);
     if (Error Err = DebugObj->recordSection(*Name, std::move(Wrapped)))
       return std::move(Err);
@@ -373,9 +370,7 @@ Error ELFDebugObject::recordSection(
     return Err;
   auto ItInserted = Sections.try_emplace(Name, std::move(Section));
   if (!ItInserted.second)
-    return make_error<StringError>("In " + Buffer->getBufferIdentifier() +
-				   ", encountered duplicate section \"" +
-				   Name + "\" while building debug object",
+    return make_error<StringError>("Duplicate section",
                                    inconvertibleErrorCode());
   return Error::success();
 }

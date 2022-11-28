@@ -216,14 +216,7 @@ template <typename T> struct ArchNames {
   StringRef getCPUAttr() const { return StringRef(CPUAttrCStr, CPUAttrLength); }
 
   // Sub-Arch name.
-  StringRef getSubArch() const {
-    return getArchFeature().substr(1, SubArchLength);
-  }
-
-  // Arch Feature name.
-  StringRef getArchFeature() const {
-    return StringRef(SubArchCStr, SubArchLength);
-  }
+  StringRef getSubArch() const { return StringRef(SubArchCStr, SubArchLength); }
 };
 
 static const ArchNames<ArchKind> ARCHNames[] = {
@@ -231,25 +224,11 @@ static const ArchNames<ArchKind> ARCHNames[] = {
                  ARCH_BASE_EXT)                                                \
   {NAME,         sizeof(NAME) - 1,                                             \
    CPU_ATTR,     sizeof(CPU_ATTR) - 1,                                         \
-   "+" SUB_ARCH, sizeof(SUB_ARCH),                                             \
+   SUB_ARCH,     sizeof(SUB_ARCH) - 1,                                         \
    ARCH_FPU,     ARCH_BASE_EXT,                                                \
    ArchKind::ID, ARCH_ATTR},
 #include "llvm/Support/ARMTargetParser.def"
 };
-
-inline ArchKind &operator--(ArchKind &Kind) {
-  assert((Kind >= ArchKind::ARMV8A && Kind <= ArchKind::ARMV9_3A) &&
-         "We only expect operator-- to be called with ARMV8/V9");
-  if (Kind == ArchKind::INVALID || Kind == ArchKind::ARMV8A ||
-      Kind == ArchKind::ARMV8_1A || Kind == ArchKind::ARMV9A ||
-      Kind == ArchKind::ARMV8R)
-    Kind = ArchKind::INVALID;
-  else {
-    unsigned KindAsInteger = static_cast<unsigned>(Kind);
-    Kind = static_cast<ArchKind>(--KindAsInteger);
-  }
-  return Kind;
-}
 
 // Information by ID
 StringRef getFPUName(unsigned FPUKind);
@@ -272,7 +251,6 @@ StringRef getArchExtFeature(StringRef ArchExt);
 bool appendArchExtFeatures(StringRef CPU, ARM::ArchKind AK, StringRef ArchExt,
                            std::vector<StringRef> &Features,
                            unsigned &ArgFPUKind);
-ArchKind convertV9toV8(ArchKind AK);
 
 // Information by Name
 unsigned getDefaultFPU(StringRef CPU, ArchKind AK);
@@ -295,12 +273,6 @@ unsigned parseArchVersion(StringRef Arch);
 
 void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values);
 StringRef computeDefaultTargetABI(const Triple &TT, StringRef CPU);
-
-/// Get the (LLVM) name of the minimum ARM CPU for the arch we are targeting.
-///
-/// \param Arch the architecture name (e.g., "armv7s"). If it is an empty
-/// string then the triple's arch name is used.
-StringRef getARMCPUForArch(const llvm::Triple &Triple, StringRef MArch = {});
 
 } // namespace ARM
 } // namespace llvm

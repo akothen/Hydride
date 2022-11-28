@@ -322,7 +322,7 @@ SubtargetFeatures ELFObjectFileBase::getRISCVFeatures() const {
         break;
       case 'd':
         Features.AddFeature("f"); // D-ext will imply F-ext.
-        [[fallthrough]];
+        LLVM_FALLTHROUGH;
       case 'e':
       case 'm':
       case 'a':
@@ -624,7 +624,7 @@ ELFObjectFileBase::getPltAddresses() const {
       T->createMCInstrAnalysis(MII.get()));
   if (!MIA)
     return {};
-  Optional<SectionRef> Plt, RelaPlt, GotPlt;
+  Optional<SectionRef> Plt = None, RelaPlt = None, GotPlt = None;
   for (const SectionRef &Section : sections()) {
     Expected<StringRef> NameOrErr = Section.getName();
     if (!NameOrErr) {

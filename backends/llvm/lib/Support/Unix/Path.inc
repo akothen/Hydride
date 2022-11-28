@@ -676,17 +676,11 @@ static void expandTildeExpr(SmallVectorImpl<char> &Path) {
 
   // This is a string of the form ~username/, look up this user's entry in the
   // password database.
-  std::unique_ptr<char[]> Buf;
-  long BufSize = sysconf(_SC_GETPW_R_SIZE_MAX);
-  if (BufSize <= 0)
-    BufSize = 16384;
-  Buf = std::make_unique<char[]>(BufSize);
-  struct passwd Pwd;
-  std::string User = Expr.str();
   struct passwd *Entry = nullptr;
-  getpwnam_r(User.c_str(), &Pwd, Buf.get(), BufSize, &Entry);
+  std::string User = Expr.str();
+  Entry = ::getpwnam(User.c_str());
 
-  if (!Entry || !Entry->pw_dir) {
+  if (!Entry) {
     // Unable to look up the entry, just return back the original path.
     return;
   }
@@ -1279,19 +1273,18 @@ static std::error_code remove_directories_impl(const T &Entry,
   while (Begin != End) {
     auto &Item = *Begin;
     ErrorOr<basic_file_status> st = Item.status();
-    if (st) {
-      if (is_directory(*st)) {
-        EC = remove_directories_impl(Item, IgnoreErrors);
-        if (EC && !IgnoreErrors)
-          return EC;
-      }
+    if (!st && !IgnoreErrors)
+      return st.getError();
 
-      EC = fs::remove(Item.path(), true);
+    if (is_directory(*st)) {
+      EC = remove_directories_impl(Item, IgnoreErrors);
       if (EC && !IgnoreErrors)
         return EC;
-    } else if (!IgnoreErrors) {
-      return st.getError();
     }
+
+    EC = fs::remove(Item.path(), true);
+    if (EC && !IgnoreErrors)
+      return EC;
 
     Begin.increment(EC);
     if (EC && !IgnoreErrors)
@@ -1345,16 +1338,9 @@ std::error_code changeFileOwnership(int FD, uint32_t Owner, uint32_t Group) {
 namespace path {
 
 bool home_directory(SmallVectorImpl<char> &result) {
-  std::unique_ptr<char[]> Buf;
   char *RequestedDir = getenv("HOME");
   if (!RequestedDir) {
-    long BufSize = sysconf(_SC_GETPW_R_SIZE_MAX);
-    if (BufSize <= 0)
-      BufSize = 16384;
-    Buf = std::make_unique<char[]>(BufSize);
-    struct passwd Pwd;
-    struct passwd *pw = nullptr;
-    getpwuid_r(getuid(), &Pwd, Buf.get(), BufSize, &pw);
+    struct passwd *pw = getpwuid(getuid());
     if (pw && pw->pw_dir)
       RequestedDir = pw->pw_dir;
   }

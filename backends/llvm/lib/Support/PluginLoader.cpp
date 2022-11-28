@@ -13,46 +13,34 @@
 #define DONT_GET_PLUGIN_LOADER_OPTION
 #include "llvm/Support/PluginLoader.h"
 #include "llvm/Support/DynamicLibrary.h"
+#include "llvm/Support/ManagedStatic.h"
 #include "llvm/Support/Mutex.h"
 #include "llvm/Support/raw_ostream.h"
 #include <vector>
 using namespace llvm;
 
-namespace {
-
-struct Plugins {
-  sys::SmartMutex<true> Lock;
-  std::vector<std::string> List;
-};
-
-Plugins &getPlugins() {
-  static Plugins P;
-  return P;
-}
-
-} // anonymous namespace
+static ManagedStatic<std::vector<std::string> > Plugins;
+static ManagedStatic<sys::SmartMutex<true> > PluginsLock;
 
 void PluginLoader::operator=(const std::string &Filename) {
-  auto &P = getPlugins();
-  sys::SmartScopedLock<true> Lock(P.Lock);
+  sys::SmartScopedLock<true> Lock(*PluginsLock);
   std::string Error;
   if (sys::DynamicLibrary::LoadLibraryPermanently(Filename.c_str(), &Error)) {
     errs() << "Error opening '" << Filename << "': " << Error
            << "\n  -load request ignored.\n";
   } else {
-    P.List.push_back(Filename);
+    Plugins->push_back(Filename);
   }
 }
 
 unsigned PluginLoader::getNumPlugins() {
-  auto &P = getPlugins();
-  sys::SmartScopedLock<true> Lock(P.Lock);
-  return P.List.size();
+  sys::SmartScopedLock<true> Lock(*PluginsLock);
+  return Plugins.isConstructed() ? Plugins->size() : 0;
 }
 
 std::string &PluginLoader::getPlugin(unsigned num) {
-  auto &P = getPlugins();
-  sys::SmartScopedLock<true> Lock(P.Lock);
-  assert(num < P.List.size() && "Asking for an out of bounds plugin");
-  return P.List[num];
+  sys::SmartScopedLock<true> Lock(*PluginsLock);
+  assert(Plugins.isConstructed() && num < Plugins->size() &&
+         "Asking for an out of bounds plugin");
+  return (*Plugins)[num];
 }

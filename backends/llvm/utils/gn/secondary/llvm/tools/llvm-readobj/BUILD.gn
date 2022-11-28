@@ -1,6 +1,5 @@
 import("//llvm/tools/binutils_symlinks.gni")
 import("//llvm/utils/TableGen/tablegen.gni")
-import("//llvm/utils/gn/build/driver_executable.gni")
 import("//llvm/utils/gn/build/symlink_or_copy.gni")
 
 tablegen("Opts") {
@@ -28,7 +27,7 @@ group("symlinks") {
   }
 }
 
-driver_executable("llvm-readobj") {
+executable("llvm-readobj") {
   deps = [
     ":Opts",
     "//llvm/lib/BinaryFormat",

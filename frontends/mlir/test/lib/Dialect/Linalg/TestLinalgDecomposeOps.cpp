@@ -23,7 +23,8 @@ struct TestLinalgDecomposeOps
   MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(TestLinalgDecomposeOps)
 
   TestLinalgDecomposeOps() = default;
-  TestLinalgDecomposeOps(const TestLinalgDecomposeOps &pass) = default;
+  TestLinalgDecomposeOps(const TestLinalgDecomposeOps &pass)
+      : PassWrapper(pass) {}
   void getDependentDialects(DialectRegistry &registry) const override {
     registry.insert<AffineDialect, linalg::LinalgDialect>();
   }

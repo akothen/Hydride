@@ -9,6 +9,7 @@
 #include "mlir/Dialect/SCF/TransformOps/SCFTransformOps.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
+#include "mlir/Dialect/PDL/IR/PDL.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/Dialect/SCF/Transforms/Patterns.h"
 #include "mlir/Dialect/SCF/Transforms/Transforms.h"
@@ -46,7 +47,6 @@ transform::GetParentForOp::apply(transform::TransformResults &results,
                                            << scf::ForOp::getOperationName()
                                            << "' parent";
         diag.attachNote(target->getLoc()) << "target op";
-        results.set(getResult().cast<OpResult>(), {});
         return diag;
       }
       current = loop;
@@ -100,7 +100,6 @@ transform::LoopOutlineOp::apply(transform::TransformResults &results,
       DiagnosedSilenceableFailure diag = emitSilenceableError()
                                          << "failed to outline";
       diag.attachNote(target->getLoc()) << "target op";
-      results.set(getTransformed().cast<OpResult>(), {});
       return diag;
     }
     func::CallOp call;
@@ -238,6 +237,8 @@ public:
   using Base::Base;
 
   void init() {
+    declareDependentDialect<pdl::PDLDialect>();
+
     declareGeneratedDialect<AffineDialect>();
     declareGeneratedDialect<func::FuncDialect>();
 

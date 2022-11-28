@@ -12,9 +12,6 @@
 
 namespace mlir {
 
-#define GEN_PASS_DECL
-#include "mlir/Reducer/Passes.h.inc"
-
 std::unique_ptr<Pass> createReductionTreePass();
 
 std::unique_ptr<Pass> createOptReductionPass();

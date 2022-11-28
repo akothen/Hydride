@@ -150,24 +150,24 @@ static uint64_t adjustFixupValue(const MCFixup &Fixup, uint64_t Value,
 
     return (Value >> 1) & 0x3ff;
   case CSKY::fixup_csky_pcrel_uimm7_scale4:
-    if ((Value >> 2) > 0xfe)
+    if (!isUIntN(9, Value))
       Ctx.reportError(Fixup.getLoc(), "out of range pc-relative fixup value.");
     if (Value & 0x3)
       Ctx.reportError(Fixup.getLoc(), "fixup value must be 4-byte aligned.");
 
-    if ((Value >> 2) <= 0x7f) {
+    if ((Value & 0xff) <= 0b111111100) {
       unsigned IMM5L = (Value >> 2) & 0x1f;
       unsigned IMM2H = (Value >> 7) & 0x3;
 
       Value = (1 << 12) | (IMM2H << 8) | IMM5L;
     } else {
-      unsigned IMM5L = (~Value >> 2) & 0x1f;
-      unsigned IMM2H = (~Value >> 7) & 0x3;
+      unsigned IMM5L = (!Value >> 2) & 0x1f;
+      unsigned IMM2H = (!Value >> 7) & 0x3;
 
       Value = (IMM2H << 8) | IMM5L;
     }
 
-    return Value;
+    return Value & 0xffff;
   }
 }
 
@@ -194,7 +194,7 @@ bool CSKYAsmBackend::fixupNeedsRelaxationAdvanced(const MCFixup &Fixup,
   case CSKY::fixup_csky_pcrel_imm26_scale2:
     return !isShiftedInt<26, 1>(Offset);
   case CSKY::fixup_csky_pcrel_uimm7_scale4:
-    return ((Value >> 2) > 0xfe) || (Value & 0x3);
+    return !isShiftedUInt<8, 2>(Offset);
   }
 }
 

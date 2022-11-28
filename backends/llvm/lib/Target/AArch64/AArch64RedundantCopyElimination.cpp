@@ -176,7 +176,7 @@ bool AArch64RedundantCopyElimination::knownRegValInBlock(
     case AArch64::ADDSWri:
     case AArch64::ADDSXri:
       IsCMN = true;
-      [[fallthrough]];
+      LLVM_FALLTHROUGH;
     // CMP is an alias for SUBS with a dead destination register.
     case AArch64::SUBSWri:
     case AArch64::SUBSXri: {
