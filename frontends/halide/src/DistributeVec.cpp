@@ -530,18 +530,103 @@ namespace Halide {
         }
 
 
+#define DISTRIBUTE_CALL_CLAUSE(OP_NAME) \
+            if(op->is_intrinsic(Call::OP_NAME)){ \
+                distrib = true; \
+                std::vector<Expr> distributed_op_0 = dispatch(op->args[0], num_chunks); \
+                std::vector<Expr> distributed_op_1 = dispatch(op->args[1], num_chunks); \
+                for(unsigned i = 0; i < num_chunks; i++){\
+                    Expr call_op_i = OP_NAME(distributed_op_0[i], distributed_op_1[i]); \
+                    exprs.push_back(call_op_i); \
+                } \
+            }
+
+        std::vector<Expr> DistributeVec::visit(const int op, unsigned num_chunks){
+            std::vector<Expr> exprs;
+
+            for(unsigned i = 0; i < num_chunks; i++){
+                exprs.push_back(Expr(op));
+            }
+
+            return exprs;
+
+        }
+
         std::vector<Expr> DistributeVec::visit(const Call* op, unsigned num_chunks){
             std::vector<Expr> exprs;
 
-            Expr CallExpr;
-            if(op->is_intrinsic()){
-                // TODO: Figure out how to get intrinsic
-                CallExpr = Call::make(op->type, op->name, op->args, op->call_type, op->func, op->value_index, op->image, op->param);
-            } else {
-                CallExpr = Call::make(op->type, op->name, op->args, op->call_type, op->func, op->value_index, op->image, op->param);
+            Expr  CallExpr = Call::make(op->type, op->name, op->args, op->call_type, op->func, op->value_index, op->image, op->param);
+
+
+            if(op->type.is_scalar() || num_chunks <= 1){
+                exprs.push_back(CallExpr);
+                return exprs;
             }
 
-            exprs.push_back(CallExpr);
+            unsigned num_bits = op->type.bits() * op->type.lanes();
+
+            bool divisible = (bitvector_size % num_bits) == 0;
+
+            bool distrib = false;
+
+            DISTRIBUTE_CALL_CLAUSE(saturating_add)
+            DISTRIBUTE_CALL_CLAUSE(saturating_sub)
+            DISTRIBUTE_CALL_CLAUSE(halving_add)
+            DISTRIBUTE_CALL_CLAUSE(halving_sub)
+            DISTRIBUTE_CALL_CLAUSE(rounding_halving_add)
+            DISTRIBUTE_CALL_CLAUSE(rounding_halving_sub)
+            DISTRIBUTE_CALL_CLAUSE(absd)
+            DISTRIBUTE_CALL_CLAUSE(rounding_shift_right)
+            DISTRIBUTE_CALL_CLAUSE(widening_mul)
+            DISTRIBUTE_CALL_CLAUSE(widening_add)
+            DISTRIBUTE_CALL_CLAUSE(widening_sub)
+            DISTRIBUTE_CALL_CLAUSE(widening_shift_right)
+            DISTRIBUTE_CALL_CLAUSE(widening_shift_left)
+
+            if(op->is_intrinsic(Call::rounding_mul_shift_right)){
+                distrib = true; 
+                std::vector<Expr> distributed_op_0 = dispatch(op->args[0], num_chunks); 
+                std::vector<Expr> distributed_op_1 = dispatch(op->args[1], num_chunks); 
+                std::vector<Expr> distributed_op_2 = dispatch(op->args[2], num_chunks); 
+                for(unsigned i = 0; i < num_chunks; i++){
+                    Expr call_op_i = rounding_mul_shift_right(distributed_op_0[i], distributed_op_1[i], distributed_op_2[i]); 
+                    exprs.push_back(call_op_i); 
+                } 
+            }
+
+
+            if(op->is_intrinsic(Call::mul_shift_right)){
+                distrib = true; 
+                std::vector<Expr> distributed_op_0 = dispatch(op->args[0], num_chunks); 
+                std::vector<Expr> distributed_op_1 = dispatch(op->args[1], num_chunks); 
+                std::vector<Expr> distributed_op_2 = dispatch(op->args[2], num_chunks); 
+                for(unsigned i = 0; i < num_chunks; i++){
+                    Expr call_op_i = mul_shift_right(distributed_op_0[i], distributed_op_1[i], distributed_op_2[i]); 
+                    exprs.push_back(call_op_i); 
+                } 
+            }
+
+
+            if(!distrib){
+                int step_size = op->type.lanes() / (int) num_chunks;
+
+                for(unsigned i = 0; i < num_chunks; i++){
+                    Expr new_shuffle = Shuffle::make_slice(CallExpr, (int) i * step_size, 1, step_size);
+                    exprs.push_back(new_shuffle);
+
+                }
+            }
+
+            // Add new DistributeInfo entry to avoid re-calculation
+            DistributeInfo* DI = new DistributeInfo;
+            DI->expr_node = op;
+            DI->distributed_expressions = exprs;
+            DI->distributed_size = bitvector_size;
+            DI->equally_distributed = !divisible;
+            DistribMap[op] = DI;
+
+
+
             return exprs;
         }
 

@@ -92,6 +92,8 @@ namespace Halide {
                 std::vector<Expr> visit(const VectorReduce *op , unsigned num_chunks);
                 std::vector<Expr> visit(const Let *op , unsigned num_chunks);
 
+                std::vector<Expr> visit(const int , unsigned num_chunks);
+
 
                 // Statements
                 Stmt visit(const Store *op);
