@@ -299,9 +299,20 @@ public:
     return false;
   }
 
+  bool isNameMatch(CallInst *TargetAgnoticInst, std::vector<std::string> &NameList) {
+    for (auto Name : NameList) {
+      if (TargetAgnoticInst->getCalledFunction()->getName().contains(Name)) {
+        errs() << "NAME MATCH!!\n";
+        return true;
+      }
+    }
+    return false;
+  }
+
 };
 
 }   // end of namespace llvm
 
 #endif  // HYDRIDE_LEGALIZER_H
+
 
