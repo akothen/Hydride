@@ -1515,27 +1515,34 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
   return CompiledValue
 
 
-def CompileDimLookup(LookupExpr, Context : x86RoseContext):
-  # LookupExpr tracks types of variables
-  assert type(LookupExpr.obj) == Var
-  # Check if the variable is already defined and cached. If yes, just return that.
-  if Context.isVariableDefined(LookupExpr.obj.name):
-    ID = Context.getVariableID(LookupExpr.obj.name)
-    FoundValue = Context.getCompiledAbstractionForID(ID)
-    # See if the element type of this variable is known, if not add it.
-    if Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False:
-      Context.addElemTypeOfVariable(FoundValue.getName(), x86Dims[LookupExpr.key])
-    return FoundValue
-  # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  CompiledValue = RoseValue.create(LookupExpr.obj.name, Context.getMaxVectorLength())
-  # Add the element type info to the context
-  assert Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False
-  Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
-  # Add the variable info to the context
-  Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
-  # Add the typelookup to context
-  Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
-  return CompiledValue
+def CompileDimLookup(LookupExpr, Context: x86RoseContext):
+    assert type(LookupExpr.obj) == Var
+    obj = RoseValue.create(LookupExpr.obj.name, RoseTileType.create(
+        x86Dims['rows'].getValue(), x86Dims['colsb'].getValue()
+    ))
+    # Check if the variable is already defined and cached. If yes, just return that.
+    if not Context.isVariableDefined(obj.getName()):
+        Context.addVariable(obj.getName(), LookupExpr.obj.id)
+        Context.addCompiledAbstraction(LookupExpr.obj.id, obj)
+    abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+    if not Context.isElemTypeOfVariableKnown(obj.getName()):
+        Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+        Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
+
+    dim = x86Dims[LookupExpr.key]
+    assert type(dim) == RoseConstant
+    # Check if the variable is already defined and cached. If yes, just return that.
+    if Context.isVariableDefined(dim.getName()):
+        ID = Context.getVariableID(dim.getName())
+        return Context.getCompiledAbstractionForID(ID)
+
+    assert Context.isElemTypeOfVariableKnown(dim.getName()) == False
+
+    # Add the constant info to the context
+    Context.addVariable(dim.getName(), dim.ID)
+    Context.addElemTypeOfVariable(dim.getName(), dim.getType())
+    Context.addCompiledAbstraction(dim.ID, dim)
+    return dim
 
 
 def CompileMatch(MatchExpr, Context : x86RoseContext):
