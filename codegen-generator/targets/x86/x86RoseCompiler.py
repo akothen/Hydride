@@ -861,11 +861,12 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
    and BinaryExpr.b.funcname in ZeroExtendsSize:
       # Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
-      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
-                          Operand1, OperandBitwidth)
-      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
-                          Operand2, OperandBitwidth)      
+      # todo: KUNAL — this breaks my first-draft amx implementation because AMX does 32-bit X 32-bit => 32-bit multiplications, not ... => 64-bit
+      # OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      # Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+      #                     Operand1, OperandBitwidth)
+      # Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+      #                     Operand2, OperandBitwidth)
       # Add signedness info
       Context.addSignednessInfoForValue(Operand1, IsSigned=False)
       Context.addSignednessInfoForValue(Operand2, IsSigned=False)
