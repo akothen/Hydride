@@ -277,6 +277,8 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
   if isinstance(Low, RoseConstant):
     assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
   if isinstance(High, RoseConstant):
+    # todo: KUNAL — This breaks on _mm256_alignr_epi8 because of `((a[i+127:i] << 128)[255:0]`
+    #  `[255:0]` is really used as a type specifier for `a[i+127:i]`... not a bit slice
     assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
   if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
     assert High.getValue() >= Low.getValue()
