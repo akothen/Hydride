@@ -25,6 +25,7 @@ class RoseType:
         Undefined = auto()
         Void = auto()
         Function = auto()
+        Tile = auto()
 
     # SubClassData is data necessary for different types
     # Its used by different derived types differently.
@@ -48,5 +49,6 @@ class RoseType:
 
     def clone(self):
         return deepcopy(self)
+
 
 

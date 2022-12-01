@@ -32,6 +32,15 @@ class RoseContext:
         return "%" + Name
       return Name
   
+    def print(self):
+      print("CONTEXT NAME MAP")
+      for Prefix, Counter in self.NameMap.items():
+        print("PREFIX:")
+        print(Prefix)
+        print("COUNTER:")
+        print(Counter)
+      return
+  
   def __init__(self):
     self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
     # Track the contexts we encounter
@@ -85,7 +94,9 @@ class RoseContext:
   
   def isValueSigned(self, Value : RoseValue):
     assert not isinstance(Value, RoseUndefValue)
-    assert Value in self.CompiledValToSignedness
+    if Value not in self.CompiledValToSignedness:
+      # By default assume that the value is signed
+      return 1
     return self.CompiledValToSignedness[Value]
 
   def isValueSignKnown(self, Value : RoseValue):
@@ -210,6 +221,11 @@ class RoseContext:
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
     # Copy over the name generator to the parent
     self.NameGenerator = self.ParentContext.getNameGenerator()
+  
+  def print(self):
+    print("PRINTING CONTEXT:")
+    self.NameGenerator.print()
+
 
 
 
