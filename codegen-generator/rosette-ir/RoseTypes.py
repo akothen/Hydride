@@ -171,38 +171,37 @@ class RoseStringType(RoseType):
         NotImplemented
 
 
-class RoseTileType(RoseType):
+class RoseTileType(RoseBitVectorType):
     
     # '__tile': RoseListType.create(RoseBitVectorType.create(512, 16),
     # 'rows': RoseBitVectorType.create(8),
     # 'colsb': RoseBitVectorType.create(16),
-    def __init__(self, Rows: int, Cols: int):
-        SubClassData = {}
-        SubClassData["rows"] = Rows
-        SubClassData["cols"] = Cols
-        super().__init__(RoseType.RoseTypeEnum.Tile, SubClassData)
+    def __init__(self, Rows: int, Colsb: int):
+        super().__init__(16 * 64 * 8)
+        self.SubClassData["colsb"] = Colsb
+        self.SubClassData["rows"] = Rows
 
     @staticmethod
-    def create(Rows: int, Cols: int):
-        return RoseTileType(Rows, Cols)
+    def create(Rows: int, Colsb: int):
+        return RoseTileType(Rows, Colsb)
 
     def getRows(self):
         Rows = self.getSubClassData()["rows"]
         return Rows
 
     def getColsb(self):
-        Cols = self.getSubClassData()["cols"]
+        Cols = self.getSubClassData()["colsb"]
         return Cols
 
     def __str__(self):
         Rows = self.getSubClassData()["rows"]
-        Cols = self.getSubClassData()["cols"]
-        return "tile.r" + str(Rows) + ".c" + str(Cols)
+        Colsb = self.getSubClassData()["colsb"]
+        return "tile.r" + str(Rows) + ".c" + str(Colsb)
     
     def print(self):
         Rows = self.getSubClassData()["rows"]
-        Cols = self.getSubClassData()["cols"]
-        print("tile.r" + str(Rows) + ".c" + str(Cols))
+        Colsb = self.getSubClassData()["colsb"]
+        print("tile.r" + str(Rows) + ".c" + str(Colsb))
 
     def to_llvm_ir(self):
         assert False, "Rose IR to LLVM IR type conversion not supported."
