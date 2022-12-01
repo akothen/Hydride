@@ -15,6 +15,7 @@ export PYTHONPATH=$CUR_DIR/codegen-generator/tools/similarity-checker:$PYTHONPAT
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/validity-checker:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/transform:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/llvmlite:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/code-synthesizer/dsl-ir:$PYTHONPATH
 
 export PATH=$CUR_DIR/llvm-project/build/bin/:$PATH
 export PATH=$CUR_DIR/rosette/bin/:$PATH

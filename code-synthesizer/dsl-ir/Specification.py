@@ -1,5 +1,5 @@
-from Types import *
-from Instructions import *
+from common.Types import *
+from common.Instructions import *
 
 class Specification:
 

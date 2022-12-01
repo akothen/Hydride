@@ -1,25 +1,24 @@
 import sys
 import time
 import subprocess as sb
-from DSLParser import parse_dict
+from common.DSLParser import parse_dict
 #from LatestSemantics import semantcs
 from merged_dict import semantcs
-from PredefinedDSL import *
-from StructDef import StructDef
-from InterpreterDef import InterpreterDef
-from CostDef import CostDef
-from GetLengthDef import GetLengthDef
-from GetOutPrecDef import GetOutPrecDef
-from IRPrinter import IRPrinter
-from BindDef import BindDef
+from common.PredefinedDSL import *
+from common.StructDef import StructDef
+from interpreter.InterpreterDef import InterpreterDef
+from utils.CostDef import CostDef
+from utils.GetLengthDef import GetLengthDef
+from utils.GetOutPrecDef import GetOutPrecDef
+from utils.IRPrinter import IRPrinter
+from utils.BindDef import BindDef
 from Specification import Specification, parse_spec
-from VisitorDef import VisitorDef
+from utils.VisitorDef import VisitorDef
 
 from hvx_sema import hvx_semantics
-from GrammarGenerator import GrammarGenerator
 
-from Synthesizer import Synthesizer
-from ConstFold import ConstFold
+from synthesizer.Synthesizer import Synthesizer
+from utils.ConstFold import ConstFold
 
 dsl_list = []
 
@@ -38,7 +37,6 @@ sd = StructDef()
 idd = InterpreterDef()
 cd = CostDef()
 #sp = parse_spec(specification)
-gg = GrammarGenerator()
 gl = GetLengthDef(get_len_name = "hvx:get-length")
 gp = GetOutPrecDef(get_prec_name = "hvx:get-prec")
 ip = IRPrinter(printer_name = "hvx:hydride-printer")

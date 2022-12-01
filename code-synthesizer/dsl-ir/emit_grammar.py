@@ -2,26 +2,23 @@ import sys
 import time
 import json
 import subprocess as sb
-from DSLParser import parse_dict
+from common.DSLParser import parse_dict
 #from LatestSemantics import semantcs
 from merged_dict import semantcs
-from PredefinedDSL import *
-from StructDef import StructDef
-from InterpreterDef import InterpreterDef
-from CostDef import CostDef
-from GetLengthDef import GetLengthDef
+from common.PredefinedDSL import *
+from common.StructDef import StructDef
+from interpreter.InterpreterDef import InterpreterDef
+from utils.CostDef import CostDef
+from utils.GetLengthDef import GetLengthDef
 from legal_insts import legal_map
 from Specification import Specification, parse_spec
 
 from hvx_sema import hvx_semantics
 
 
-from GrammarGenerator import GrammarGenerator
-from TypedGrammarGenerator import TypedGrammarGenerator
-from TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
-from SimpleGrammarGenerator import SimpleGrammarGenerator
+from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
 
-from Synthesizer import Synthesizer
+from synthesizer.Synthesizer import Synthesizer
 
 INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
@@ -116,7 +113,6 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     dsl_subset = syn.dsl_subset
 
-    print(dsl_subset)
 
     subset_interpreter = idd.emit_interpreter(dsl_subset, sd, add_assertions = False, interpret_name = grammar_name+":interpret")
 
