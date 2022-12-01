@@ -881,6 +881,10 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # There are cases where bitvectors are multiplied to larger numbers
   # TODO: Make this more general if need be. Right now, we deal with this
   # as a special case.
+  # todo: KUNAL — don't use type(BinaryExpr.a) ??  Should instead use OperandX.getType()
+    #  Otherwise we break e.g. _mm256_mpsadbw_epu8 and a bunch of other instructions where
+    #  an integer (e.g. RoseMulOp) is multiplied by a bitvector (e.g. RoseBVZeroExtendOp)
+    #  but in the AST they are both Vars
   if type(BinaryExpr.a) == Number \
   and (type(BinaryExpr.b) == BitSlice or type(BinaryExpr.b) == BitIndex):
     NumIntBits = BinaryExpr.a.val.bit_length()
