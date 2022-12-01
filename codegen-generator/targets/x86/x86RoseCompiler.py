@@ -766,6 +766,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   Context.addAbstractionToIR(LHSOp)
   
   # Add the operation to the context
+  Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
   Context.addCompiledAbstraction(Update.lhs.id, LHSOp)
 
   return LHSOp
@@ -1177,6 +1178,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       assert ArgType.getBitwidth() == ParamWidth
       ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue())
       ChildContext.addVariable(ParamName, Param.id)
+      ChildContext.addElemTypeOfVariable(ParamName, ArgType)
       FuncArgList.append(ArgVal)
     
     # Compile the function and its arguments
@@ -1300,7 +1302,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     # Add this op to the IR
     Context.addAbstractionToIR(End)
     # Add this updated value to the context
-    Context.updateCompiledAbstraction(ForStmt.end, End)
+    Context.addCompiledAbstraction(ForStmt.end, End)
 
   # Generate the loop
   Loop = RoseForLoop.create(Context.genName(ForStmt.iterator.name), Begin, End, Step)
