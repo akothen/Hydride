@@ -73,6 +73,7 @@ def GetSemaFromXML(node, InstName : str = None):
     return CPUID
   
   CheckInstName = node.attrib['name']
+  print(CheckInstName)
   if InstName != None:
     if CheckInstName == None:
       return None
@@ -258,6 +259,8 @@ def t_not(t):
 
 def t_and(t):
   r'&&'
+  # todo: KUNAL — the above line caused problems at some point and was fixed by the line below
+  # r'&&|and|AND'
   t.type = 'AND'
   return t
 
@@ -298,6 +301,12 @@ def t_NUMBER(t):
   except:
     t.value = float(t.value)
   return t
+
+# todo: KUNAL — Case-Sensitive `to` caused problems on, for example, _mm256_abs_epi8
+# def t_TO(t):
+#   r'to|TO'
+#   t.type = 'TO'
+#   return t
 
 def t_newline(t):
   r'\n|\\\n'
@@ -345,9 +354,7 @@ def parse_binary(op, p):
 
 def parse_unary(op, p):
   expr_id = "unaryexpr." + GenUniqueID(Parser)
-  print("PARSING UNARY")
   p[0] = UnaryExpr(op, p[2], expr_id)
-  print(p[0])
 
 if __name__ != '__main__':
   def p_error(p):
@@ -401,6 +408,7 @@ def p_expr_assign(p):
   'expr : expr UPDATE expr'
   #expr_id = GenUniqueID(Parser)
   p[0] = Update(p[1], p[3])
+  # print(p[0])
 
 #def p_expr_assign_op(p):
 #  'expr : OP UPDATE ID'
@@ -422,18 +430,58 @@ def p_stmt_while(p):
   p[0] = While(p[3], p[4], expr_id)
 
 def p_stmt_for(p):
-  'stmt : FOR ID UPDATE expr TO expr stmts ENDFOR'
+  'stmt : FOR ID UPDATE loopbound stmts ENDFOR'
   it_id = "iterator." + GenUniqueID(Parser)
   expr_id = "for." + GenUniqueID(Parser)
-  print("PARSING LOOP")
-  p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], True, expr_id)
-  print(p[0])
+  lb_lhs, lb_rhs = p[4]
+  p[0] = For(Var(p[2], it_id), lb_lhs, lb_rhs, p[5], True, expr_id)
+  # print(p[0])
 
 def p_stmt_for_dec(p):
   'stmt : FOR ID UPDATE expr DOWNTO expr stmts ENDFOR'
   it_id = "iterator." + GenUniqueID(Parser)
   expr_id = "for." + GenUniqueID(Parser)
   p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], False, expr_id)
+
+def p_expr_loop_bound0(p):
+  'loopbound : expr TO NUMBER'
+  p[0] = (p[1], Number(p[3]))
+
+def p_expr_loop_bound1(p):
+  'loopbound : expr TO expr DOT ID MINUS expr'
+  rhs = DimLookup(p[3], p[5])
+  rhs = new_binary_expr(Parser, '-',  rhs, p[7])
+  lhs = p[1]
+  p[0] = (lhs, rhs)
+
+def p_expr_loop_bound2(p):
+  'loopbound : expr TO LPAREN expr DOT ID DIV expr RPAREN MINUS expr'
+  rhs = DimLookup(p[4], p[6])
+  rhs = new_binary_expr(Parser, '/', rhs, p[8])
+  rhs = new_binary_expr(Parser, '-', rhs, p[11])
+  lhs = p[1]
+  p[0] = (lhs, rhs)
+
+def p_expr_loop_bound3(p):
+  'loopbound : expr TO ID MINUS NUMBER'
+  expr_id = "var." + GenUniqueID(Parser)
+  rhs = new_binary_expr(Parser, '-', Var(p[3], expr_id), Number(p[5]))
+  lhs = p[1]
+  p[0] = (lhs, rhs)
+
+def p_expr_loop_bound4(p):
+  'loopbound : expr TO LPAREN ID MINUS NUMBER RPAREN'
+  expr_id = "var." + GenUniqueID(Parser)
+  rhs = new_binary_expr(Parser, '-', Var(p[4], expr_id), Number(p[6]))
+  lhs = p[1]
+  p[0] = (lhs, rhs)
+
+def p_expr_loop_bound5(p):
+  'loopbound : expr TO ID'
+  expr_id = "var." + GenUniqueID(Parser)
+  rhs = Var(p[3], expr_id)
+  lhs = p[1]
+  p[0] = (lhs, rhs)
 
 def p_stmt_if(p):
   'stmt : IF expr THEN stmts FI'
@@ -447,7 +495,6 @@ def p_stmt_if2(p):
 
 def p_stmt_if3(p):
   'stmt : IF expr FI'
-  print("here")
   p[0] = None
 
 def p_stmt_if_elseif_else(p):
@@ -482,12 +529,10 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
-  print("PARSING LOOKUP")
   if p[3] in x86Types:
     p[0] = TypeLookup(p[1], p[3])
   else:
     p[0] = DimLookup(p[1], p[3])
-  print(p[0])
 
 def p_args(p):
   '''args : expr
@@ -520,15 +565,7 @@ def p_expr_not(p):
 
 def p_expr_neg(p):
   'expr : MINUS expr %prec NEG'
-  print("PARSING NEG")
   parse_unary('-', p)
-  
-def p_expr_loop_bound(p):
-  'expr : expr DOT ID MINUS expr'
-  print("PARSING LOOP BOUND")
-  PartialLoopBound = DimLookup(p[1], p[3])
-  p[0] = new_binary_expr(Parser, '-', PartialLoopBound, p[5])
-  print(p[0])
 
 def p_expr_bitwise_not(p):
   'expr : BITWISE_NOT expr'
