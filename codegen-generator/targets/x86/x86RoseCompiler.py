@@ -1700,7 +1700,7 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
     CompileStatement(Stmt, RootContext)
   
   # Add padding handling call if not already added
-  if PaddingHandled == False:
+  if PaddingHandled == False and not isinstance(RetType, RoseVoidType):
     NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
     Operation = RoseBVPadHighBitsOp.create(RootFunction.getReturnValue(), NumPadBits)
     RootContext.addAbstractionToIR(Operation)
