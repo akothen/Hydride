@@ -61,14 +61,16 @@ class RoseBitVectorType(RoseType):
         if isinstance(Bitwidth, int):
             # Bitwidth of a bitvector must be more than 1.
             assert Bitwidth >= 1
-        super().__init__(RoseType.RoseTypeEnum.BitVector, Bitwidth)
+        SubClassData = {}
+        SubClassData['Bitwidth'] = Bitwidth
+        super().__init__(RoseType.RoseTypeEnum.BitVector, SubClassData)
     
     @staticmethod
     def create(Bitwidth):
       return RoseBitVectorType(Bitwidth)
 
     def getBitwidth(self):
-      Bitwidth = self.getSubClassData()
+      Bitwidth = self.getSubClassData()['Bitwidth']
       assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
       if isinstance(Bitwidth, int):
         assert Bitwidth >= 1
