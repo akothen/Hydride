@@ -307,8 +307,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(IndexExpr.id):
     return Context.getCompiledAbstractionForID(IndexExpr.id)
-  
-  if type(IndexExpr.obj) == Lookup:
+
+  if type(IndexExpr.obj) == TypeLookup:
     # Compile the low index first
     ElemType =x86Types[IndexExpr.obj.key]
     IndexVal = CompileIndex(IndexExpr.idx, Context)
@@ -457,7 +457,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
         return RoseUndefinedType.create()
   
   if type(Expr) == BitIndex:
-    if type(Expr.obj) != Lookup:
+    if type(Expr.obj) != TypeLookup:
       return RoseBitVectorType.create(1)
     else:
       # Bitindex could be indexing into a variable or another bitslice
@@ -647,7 +647,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
     Context.addVariable(Update.lhs.name, ID)
     return RHSExprVal
 
-  if type(Update.lhs) == Lookup and type(Update.lhs.obj) == Var:
+  if type(Update.lhs) == TypeLookup and type(Update.lhs.obj) == Var:
     # Get the ID associated with the RHS value
     ID = Update.rhs.id
     # Update the ID associated with this variable name
@@ -717,7 +717,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   else:
     # This could be a mask generator
     assert type(Update.lhs) == BitIndex
-    if type(Update.lhs.obj) == Lookup:
+    if type(Update.lhs.obj) == TypeLookup:
       # Compile the low index
       ElemType =x86Types[Update.lhs.obj.key]
       IndexVal = CompileIndex(Update.lhs.idx, Context)
