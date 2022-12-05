@@ -26,7 +26,8 @@ BV_OPS = [
     "bvsmax", "bvumax", "bvsmin", "bvumin",
     "bvrol", "bvror",
     "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
-    "bvsubnw"
+    "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
+    "bvlt", "bvle", "bvgt", "bvge",
 ]
 
 BV_OP_VARIANTS = [
@@ -106,6 +107,10 @@ SIGN_VARIANTS = {
     'bvmax': {'signed': 'bvsmax', "unsigned": 'bvumax'},
     'bvaddnw' : {'signed': 'bvaddnsw', 'unsigned': 'bvaddnuw'},
     'bvsubnw' : {'signed': 'bvsubnsw', 'unsigned': 'bvsubnuw'},
+    'bvlt' : {'signed': 'bvslt', 'unsigned': 'bvult'},
+    'bvle' : {'signed': 'bvsle', 'unsigned': 'bvule'},
+    'bvgt' : {'signed': 'bvsgt', 'unsigned': 'bvugt'},
+    'bvge' : {'signed': 'bvsge', 'unsigned': 'bvuge'},
 }
 
 SIGN_AGNOSTIC_MAP = {
@@ -156,6 +161,44 @@ class Context:
         self.parse_args(args)
 
 
+    # To scale the arguments of the context, we must have a defined
+    # in_vectsize index and out_vectsize_index
+    def can_scale_context(self):
+        has_defined_io = self.has_output_size() and self.has_input_size()
+        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None)
+
+    # Update context parameters to down scale the vector sizes parameters
+    def scale_context(self, scale_factor):
+        assert self.can_scale_context(), "Context must be scalable to perform the operation scaling"
+        scaled_args = []
+
+        for idx, arg in enumerate(self.context_args):
+            if isinstance(arg, BitVector):
+                assert arg.size % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
+
+                scaled_bv_arg = BitVector(arg.name, arg.size / scale_factor)
+                scaled_args.append(arg)
+            elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
+                assert arg.value % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
+                scaled_vectsize_arg = Integer(arg.name, value = arg.value / scale_factor)
+                scaled_args.append(scaled_vectsize_arg)
+            else:
+                scaled_args.append(arg)
+
+        assert self.in_vectsize % scale_factor == 0, "scale_factor must evenly divide the input vector sizes"
+
+        assert self.out_vectsize % scale_factor == 0, "scale_factor must evenly divide the input vector sizes"
+
+        self.in_vectsize = self.in_vectsize / scale_factor
+        self.out_vectsize = self.out_vectsize / scale_factor
+
+
+        self.context_args = scaled_args
+
+
+
+
+
     def is_signed(self):
         return (self.signedness != None) and self.signedness == 1
 
@@ -165,14 +208,14 @@ class Context:
     def is_nonsigned(self):
         return (self.signedness == None)
 
-    def get_input_size(self):
+    def get_input_size(self, scale_factor = 1):
         assert (self.in_precision != None) and (self.in_vectsize != None) , "Unable to process input size for instruction"
-        return self.in_vectsize
+        return self.in_vectsize / scale_factor
 
 
-    def get_output_size(self):
+    def get_output_size(self, scale_factor = 1):
         assert (self.out_vectsize != None) , "Unable to process output size for instruction"+" "+self.name
-        return self.out_vectsize
+        return self.out_vectsize / scale_factor
 
     def has_output_size(self):
         return self.out_vectsize != None
@@ -188,39 +231,39 @@ class Context:
         return self.out_precision == prec
 
 
-    def get_max_arg_size(self):
+    def get_max_arg_size(self, scale_factor = 1):
         max_arg_size = 0
         for arg in self.context_args:
             if isinstance(arg, BitVector):
                 if arg.size >= max_arg_size:
                     max_arg_size = arg.size
 
-        return max_arg_size
+        return max_arg_size / scale_factor
 
 
-    def get_min_arg_size(self):
+    def get_min_arg_size(self, scale_factor = 1):
         min_arg_size = self.get_max_arg_size()
         for arg in self.context_args:
             if isinstance(arg, BitVector):
                 if arg.size <= min_arg_size:
                     min_arg_size = arg.size
 
-        return min_arg_size
+        return min_arg_size / scale_factor
 
-    def supports_input_size(self, input_size):
+    def supports_input_size(self, input_size, scale_factor = 1):
         for arg in self.context_args:
             if isinstance(arg, BitVector):
-                if arg.size == input_size:
+                if (arg.size / scale_factor) == input_size:
                     return True
 
         return False
 
 
-    def supports_output_size(self, output_size):
+    def supports_output_size(self, output_size, scale_factor = 1):
         #print("check if outvectsize for {} : {} supports {}".format(self.name, self.get_output_size(), output_size))
         if self.out_vectsize == None:
             return False
-        return self.get_output_size() == output_size
+        return self.get_output_size(scale_factor = scale_factor) == output_size
 
 
 
@@ -493,11 +536,11 @@ class DSLInstruction(InstructionType):
 
 
 
-    def supports_input_size(self, input_size):
-        return any([ctx.supports_input_size(input_size) for ctx in self.contexts])
+    def supports_input_size(self, input_size, scale_factor = 1):
+        return any([ctx.supports_input_size(input_size, scale_factor = scale_factor) for ctx in self.contexts])
 
-    def supports_output_size(self, output_size):
-        return any([ctx.supports_output_size(output_size) for ctx in self.contexts])
+    def supports_output_size(self, output_size, scale_factor = 1):
+        return any([ctx.supports_output_size(output_size, scale_factor = scale_factor) for ctx in self.contexts])
 
     def supports_lane_size(self, lane_size):
         return any([ctx.supports_lane_size(lane_size) for ctx in self.contexts])
@@ -537,6 +580,21 @@ class DSLInstruction(InstructionType):
             return True
 
         return any([supports(ctx) for ctx in self.contexts])
+
+
+    def supports_scaling(self):
+        return any([ctx.can_scale_context() for ctx in self.contexts])
+
+    def scale_context(self, scale_factor):
+
+        scaled_contexts = []
+        for ctx in self.contexts:
+            if ctx.can_scale_context():
+                ctx.scale_context(scale_factor)
+                scaled_contexts.append(ctx)
+
+        self.contexts = scaled_contexts
+
 
 
 

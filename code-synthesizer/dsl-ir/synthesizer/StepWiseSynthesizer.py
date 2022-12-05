@@ -24,7 +24,7 @@ through the grammar.
 
 
 DEBUG = True
-DEBUG_LIST = []
+DEBUG_LIST = ["hexagon_V6_vadduwsat_128B"]
 SKIP_LIST = []
 
 MUST_INCLUDE = [ ]
@@ -72,6 +72,41 @@ class StepWiseSynthesizer(SynthesizerBase):
                          legal_map = legal_map)
         self.step = step
         print("Using Stepwise Synthesizer!")
+
+        self.set_target_settings()
+
+        print("Pre Scaling")
+        self.print_dsl_stats()
+        self.dsl_operators = self.scale_down_dsl(self.dsl_operators)
+        print("Post Scaling")
+        self.print_dsl_stats()
+
+
+
+
+    def set_target_settings(self):
+        super().set_target_settings()
+
+        if self.target == "x86":
+            self.scale_factor = 4
+        elif self.target == "hvx":
+            self.scale_factor = 16
+
+
+
+    def scale_down_dsl(self, dsl_operators):
+        scaled_down_dsl = []
+        for dsl_inst in dsl_operators:
+
+            if dsl_inst.supports_scaling():
+                dsl_inst.scale_down(self.scale_factor)
+                scaled_down_dsl.append(dsl_inst)
+
+        return scaled_down_dsl
+
+
+
+
 
 
     def partition_ops_into_buckets(self, ops, ctxs , partition_by_ops = True, partition_by_size = True, partition_by_prec = True):
@@ -211,11 +246,12 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
         print("Number of grammar combinations:", len(grammar_combs))
-        for i in range(5):
+        for i in range(min(5, len(grammar_combs))):
             print(grammar_combs[i])
 
 
-        step_combination = grammar_combs[i]
+
+        step_combination = grammar_combs[step]
 
         keys = [key for key in bucket]
 
@@ -334,7 +370,9 @@ class StepWiseSynthesizer(SynthesizerBase):
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
 
-        if ENABLE_PRUNING:
+        print("Number of possible instructions in Grammar before pruning:",len(operation_dsl_insts))
+
+        if False and ENABLE_PRUNING:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
 

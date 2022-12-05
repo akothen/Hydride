@@ -351,3 +351,63 @@
   result
 )
 
+(define (bvlt a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvslt a b)
+      )
+      (begin
+        (bvult a b)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvle a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsle a b)
+      )
+      (begin
+        (bvule a b)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvgt a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsgt a b)
+      )
+      (begin
+        (bvugt a b)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvge a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsge a b)
+      )
+      (begin
+        (bvuge a b)
+      )
+    )
+  )
+  result
+)
+
+

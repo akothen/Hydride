@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = []
+DEBUG_LIST = ["hexagon_V6_vadduwsat_128B"]
 SKIP_LIST = []
 
 MUST_INCLUDE = [ ]
@@ -90,6 +90,18 @@ class SynthesizerBase:
 
 
 
+    # Prints the number number of target agnostic
+    # classes and the total number of contexts
+    # associated with each target agnostic class
+    def print_dsl_stats(self):
+        num_operations = len(self.dsl_operators)
+
+        num_ctxs = sum([len(dsl_inst.contexts) for dsl_inst in self.dsl_operators])
+
+        print("="*20, "DSL Stats", "="*20)
+        print("Number of Target Agnostic Classes:", num_operations)
+        print("Number of Concrete contexts:", num_ctxs)
+        print("="*40)
 
 
     def is_instruction_legal(self, name):
