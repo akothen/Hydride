@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["hexagon_V6_vadduwsat_128B"]
+DEBUG_LIST = ["hexagon_V6_vcombine_128B"]
 SKIP_LIST = []
 
 MUST_INCLUDE = [ ]
@@ -73,20 +73,19 @@ class SynthesizerBase:
 
     def set_target_settings(self):
 
-        global_var = globals()
         if self.target == 'x86':
-            global_var['FLEXIBLE_CASTING'] = False
-            global_var['ENABLE_PRUNING'] = True
-            global_var['MAX_BW_SIZE'] = 1024
-            global_var['BASE_VECT_SIZE'] = None
-            global_var['SWIZZLE_BOUND'] = 5
+            self.FLEXIBLE_CASTING = False
+            self.ENABLE_PRUNING = True
+            self.MAX_BW_SIZE = 512
+            self.BASE_VECT_SIZE = None
+            self.SWIZZLE_BOUND = 5
         elif self.target == "hvx":
             print("Setting hvx target settings")
-            global_var['FLEXIBLE_CASTING'] = True
-            global_var['ENABLE_PRUNING'] = True
-            global_var['MAX_BW_SIZE'] = 2048
-            global_var['BASE_VECT_SIZE'] = 1024
-            global_var['SWIZZLE_BOUND'] = 6
+            self.FLEXIBLE_CASTING = True
+            self.ENABLE_PRUNING = True
+            self.MAX_BW_SIZE = 2048
+            self.BASE_VECT_SIZE = 1024
+            self.SWIZZLE_BOUND = 5
 
 
 
@@ -260,7 +259,7 @@ class SynthesizerBase:
             if number_elems == 1:
                 continue
 
-            if input_size * 2 > MAX_BW_SIZE:
+            if input_size * 2 > self.MAX_BW_SIZE:
                 continue
 
             datum = (input_size,precision)
@@ -580,8 +579,8 @@ class SynthesizerBase:
 
         smallest_bv_size = min(smallest_input, smallest_output, smallest_imm)
 
-        if BASE_VECT_SIZE != None:
-            smallest_bv_size = min(smallest_bv_size, BASE_VECT_SIZE)
+        if self.BASE_VECT_SIZE != None:
+            smallest_bv_size = min(smallest_bv_size, self.BASE_VECT_SIZE)
 
         pruned_ops = []
         pruned_ctxs = []
@@ -759,7 +758,7 @@ class SynthesizerBase:
                 # add complexity to the synthesis without really
                 # improving the types of expressions which can be
                 # synthesized
-                if not FLEXIBLE_CASTING and self.score_context(ops[idx], ctxs[idx]) <= 2:
+                if not self.FLEXIBLE_CASTING and self.score_context(ops[idx], ctxs[idx]) <= 2:
                     continue
 
 
@@ -879,8 +878,8 @@ class SynthesizerBase:
             supports_inputs_prec = any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
             lane_size_cond = False
 
-            if BASE_VECT_SIZE != None:
-                lane_size_cond = (ctx.lane_size == BASE_VECT_SIZE) or (ctx.lane_size == MAX_BW_SIZE) or any([ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
+            if self.BASE_VECT_SIZE != None:
+                lane_size_cond = (ctx.lane_size == self.BASE_VECT_SIZE) or (ctx.lane_size == self.MAX_BW_SIZE) or any([ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
                 supports_inputs_prec = supports_inputs_prec and lane_size_cond
 
 
@@ -1013,10 +1012,10 @@ class SynthesizerBase:
 
             # For targets which prefer distributing computation
             # over a base vector size
-            if BASE_VECT_SIZE != None :
-                score += int(ctx.supports_output_size(BASE_VECT_SIZE)) * 3
+            if self.BASE_VECT_SIZE != None :
+                score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 3
 
-                score +=  int(([ctx.supports_input_size(input_size) for input_size in [MAX_BW_SIZE]].count(True)))
+                score +=  int(([ctx.supports_input_size(input_size) for input_size in [self.MAX_BW_SIZE]].count(True)))
 
                 if ctx.name == "hexagon_V6_hi_128B":
                     print(ctx.name, "score" ,score)

@@ -175,13 +175,25 @@ class Context:
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
                 assert arg.size % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
-
-                scaled_bv_arg = BitVector(arg.name, arg.size / scale_factor)
-                scaled_args.append(arg)
+                scaled_bv_arg = BitVector(arg.name, int(arg.size // scale_factor))
+                scaled_args.append(scaled_bv_arg)
             elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
                 assert arg.value % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
-                scaled_vectsize_arg = Integer(arg.name, value = arg.value / scale_factor)
+                scaled_vectsize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_vectsize_arg)
+            elif idx == self.lanesize_index and (arg.value == self.in_vectsize or arg.value == self.out_vectsize):
+                scaled_lanesize_arg = LaneSize(arg.name, value = int(arg.value // scale_factor),
+                                               input_precision = arg.input_precision,
+                                               output_precision = arg.output_precision
+                                               )
+                self.lane_size = self.lane_size // scale_factor
+                scaled_args.append(scaled_lanesize_arg)
+            elif isinstance(arg, Integer):
+                if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
+                    scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
+                    scaled_args.append(scaled_int)
+                else:
+                    scaled_args.append(arg)
             else:
                 scaled_args.append(arg)
 
@@ -189,11 +201,13 @@ class Context:
 
         assert self.out_vectsize % scale_factor == 0, "scale_factor must evenly divide the input vector sizes"
 
-        self.in_vectsize = self.in_vectsize / scale_factor
-        self.out_vectsize = self.out_vectsize / scale_factor
+        self.in_vectsize = int(self.in_vectsize // scale_factor)
+        self.out_vectsize = int(self.out_vectsize // scale_factor)
+
 
 
         self.context_args = scaled_args
+
 
 
 
@@ -210,12 +224,12 @@ class Context:
 
     def get_input_size(self, scale_factor = 1):
         assert (self.in_precision != None) and (self.in_vectsize != None) , "Unable to process input size for instruction"
-        return self.in_vectsize / scale_factor
+        return self.in_vectsize // scale_factor
 
 
     def get_output_size(self, scale_factor = 1):
         assert (self.out_vectsize != None) , "Unable to process output size for instruction"+" "+self.name
-        return self.out_vectsize / scale_factor
+        return self.out_vectsize // scale_factor
 
     def has_output_size(self):
         return self.out_vectsize != None
@@ -238,7 +252,7 @@ class Context:
                 if arg.size >= max_arg_size:
                     max_arg_size = arg.size
 
-        return max_arg_size / scale_factor
+        return max_arg_size // scale_factor
 
 
     def get_min_arg_size(self, scale_factor = 1):
@@ -248,12 +262,12 @@ class Context:
                 if arg.size <= min_arg_size:
                     min_arg_size = arg.size
 
-        return min_arg_size / scale_factor
+        return min_arg_size // scale_factor
 
     def supports_input_size(self, input_size, scale_factor = 1):
         for arg in self.context_args:
             if isinstance(arg, BitVector):
-                if (arg.size / scale_factor) == input_size:
+                if (arg.size // scale_factor) == input_size:
                     return True
 
         return False
@@ -585,7 +599,7 @@ class DSLInstruction(InstructionType):
     def supports_scaling(self):
         return any([ctx.can_scale_context() for ctx in self.contexts])
 
-    def scale_context(self, scale_factor):
+    def scale_contexts(self, scale_factor):
 
         scaled_contexts = []
         for ctx in self.contexts:

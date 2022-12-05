@@ -9,6 +9,7 @@ from synthesizer.SynthesizerBase import SynthesizerBase
 import json
 
 import itertools
+import sys
 
 
 
@@ -24,7 +25,7 @@ through the grammar.
 
 
 DEBUG = True
-DEBUG_LIST = ["hexagon_V6_vadduwsat_128B"]
+DEBUG_LIST = ["hexagon_V6_vcombine_128B"]
 SKIP_LIST = []
 
 MUST_INCLUDE = [ ]
@@ -34,18 +35,11 @@ UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 PRUNE_BVOP_VARIANTS = True
 
-ENABLE_PRUNING = False # True
-FLEXIBLE_CASTING =  True
 
 
 
-# Any shuffle operation producing bitvectors more than
-# this size can be pruned earlier without the solver
-# having to worry about it
-MAX_BW_SIZE =  2048
 
 
-BASE_VECT_SIZE = 1024
 
 # Bound the number of swizzle operations in the
 # grammar
@@ -81,6 +75,12 @@ class StepWiseSynthesizer(SynthesizerBase):
         print("Post Scaling")
         self.print_dsl_stats()
 
+        with open("tmp.txt", "w+") as Temp:
+            Temp.write("ctxs\n")
+            for d in self.dsl_operators :
+                for c in d.contexts:
+                    Temp.write(c.name+"\n")
+
 
 
 
@@ -89,17 +89,23 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         if self.target == "x86":
             self.scale_factor = 4
+            self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
         elif self.target == "hvx":
             self.scale_factor = 16
+            self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
+            self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
 
 
 
     def scale_down_dsl(self, dsl_operators):
+        if self.scale_factor == 1:
+            return dsl_operators
+
         scaled_down_dsl = []
         for dsl_inst in dsl_operators:
 
             if dsl_inst.supports_scaling():
-                dsl_inst.scale_down(self.scale_factor)
+                dsl_inst.scale_contexts(self.scale_factor)
                 scaled_down_dsl.append(dsl_inst)
 
         return scaled_down_dsl
@@ -251,7 +257,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
-        step_combination = grammar_combs[step]
+        step_combination = grammar_combs[step % len(grammar_combs)]
 
         keys = [key for key in bucket]
 
@@ -320,12 +326,12 @@ class StepWiseSynthesizer(SynthesizerBase):
             memory_shuffle_args_list = []
 
         else:
-            if len(memory_shuffle_insts) > SWIZZLE_BOUND:
-                (msi, msa) = ([],[])#self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = SWIZZLE_BOUND)
+            if len(memory_shuffle_insts) > self.SWIZZLE_BOUND:
+                (msi, msa) = ([],[])#self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = self.SWIZZLE_BOUND)
 
                 if len(msi) == 0:
-                    memory_shuffle_insts = memory_shuffle_insts[:SWIZZLE_BOUND]
-                    memory_shuffle_args_list = memory_shuffle_args_list[:SWIZZLE_BOUND]
+                    memory_shuffle_insts = memory_shuffle_insts[:self.SWIZZLE_BOUND]
+                    memory_shuffle_args_list = memory_shuffle_args_list[:self.SWIZZLE_BOUND]
                 else:
                     (memory_shuffle_insts, memory_shuffle_args_list) = (msi,msa)
 
@@ -372,7 +378,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         print("Number of possible instructions in Grammar before pruning:",len(operation_dsl_insts))
 
-        if False and ENABLE_PRUNING:
+        if self.ENABLE_PRUNING:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
 
@@ -399,6 +405,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             BOUND = 25
 
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
+
+
 
         bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
         self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2)

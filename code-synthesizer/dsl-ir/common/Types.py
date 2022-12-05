@@ -55,6 +55,8 @@ class BitVector(OperandType):
 
         return (label, def_str)
 
+    def get_rkt_value(self):
+        return "BV_"+str(self.size)
 
     def get_rkt_comment(self):
         return ";; {}-bit Bitvector operand".format(self.size)

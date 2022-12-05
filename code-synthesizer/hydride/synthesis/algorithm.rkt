@@ -72,6 +72,7 @@
       )
     )
 
+  (displayln sol)
   (displayln (printer-functor sol))
 
   )
@@ -514,7 +515,7 @@
 (define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver)
   (debug-log (format "Invoked step-wise-synthesis!\n"))
 
-  (define step-limit 15)
+  (define step-limit 5)
 
   (define solved? #f)
   (define expr-VF (halide:vec-len spec-expr))
@@ -553,8 +554,8 @@
                            ;; perform synthesis
                            (define-values (sat? mat el) 
                                           (synthesize-sol-with-depth 
-                                            starting-depth
-                                            depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                                            d 
+                                            d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
                                             optimize? interpreter cost-model  symbolic? cost-bound solver) 
                                           )
                            ;; if sat set solution? to be true
