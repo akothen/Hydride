@@ -170,9 +170,9 @@
 
   (define actual-expr-depth 
     (cond
-       [(ramp? halide-expr) 
-        ;; Immediate expression is ramp, we can use the provided depth
-        expr-depth
+      [(ramp? halide-expr) 
+       ;; Immediate expression is ramp, we can use the provided depth
+       expr-depth
        ]
       [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
        (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n" expr-depth (max 1 (- expr-depth 1))))
@@ -275,7 +275,7 @@
                        3
                        ]
                       )
-                    
+
                     )
                   (define optimize? opt?)
                   (define symbolic? sym?)
@@ -304,14 +304,14 @@
                         ;; of the cost upper bound. We want to provide synthesis at larger
                         ;; depths a bound on cost so it may exit early if the solution
                         ;; can't be optimized further than with depth 1.
-                        
+
 
                         (define mat1 
-                                 (if (eq? expr-depth 1)
-                                   '()
-                                    '();(synthesize-halide-expr-step expr-extract 1 VF sub-id-map solver)
-                                  )
-                                )
+                          (if (eq? expr-depth 1)
+                            '()
+                            '();(synthesize-halide-expr-step expr-extract 1 VF sub-id-map solver)
+                            )
+                          )
 
                         (define sat?1 (not (equal? mat1 '())))
 
@@ -349,19 +349,28 @@
                               (cost-model mat1)
                               ]
                             [else 30]
-                            
+
                             )
                           )
 
 
-                  (displayln "Hashed expression")
-                  (println hashed-expr)
+                        (displayln "Hashed expression")
+                        (println hashed-expr)
 
-                        (define-values (sat? mat el) 
-                                       (synthesize-sol-with-depth 
-                                         (max (+ -1 actual-expr-depth) 1) 
-                                                                  depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
-                                                                  optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                        ;(define-values (sat? mat el) 
+                                       ;(synthesize-sol-with-depth 
+                                        ; (max (+ -1 actual-expr-depth) 1) 
+                                        ; depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                                        ; optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                                       ;)
+
+                        (define-values (sat? mat el)
+                                       (step-wise-synthesis expr-extract leaves 
+                                                            (max (+ -1 actual-expr-depth) 1)
+                                                            depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver
+                                                            
+                                                            )
+                                       
                                        )
 
                         (define test-end (current-seconds))
@@ -382,7 +391,7 @@
                           )
 
                         (displayln "Here")
-                        
+
                         (define result
                           (cond
                             [sat? 
@@ -489,3 +498,78 @@
   (debug-log "========================================")
   synthesized-sol
   )
+
+
+
+
+
+
+
+
+
+
+
+;; Perform iterative synthesis by partitioning relavent operations
+;; into buckets and sampling operations from buckets in the grammar. 
+(define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver)
+  (debug-log (format "Invoked step-wise-synthesis!\n"))
+
+  (define step-limit 15)
+
+  (define solved? #f)
+  (define expr-VF (halide:vec-len spec-expr))
+  (define leaves-sizes (halide:get-expr-bv-sizes leaves))
+  (define cost-bound 30)
+
+  (define sol '())
+
+  (define solutions 
+
+    ;; Traversal order first searchs the breadth of grammars
+    ;; at the depth d before incrementing d.
+    (for/list ([d (range starting-depth depth-limit)])
+              (for/list ([s (range step-limit)])
+                        (clear-vc!)
+                        (clear-terms!)
+                        (collect-garbage)
+
+                        ;; if solution already found in previous
+                        ;; iteration, do nothing.
+
+                        (cond
+                          [(not solved?)
+                           (define base_name (string-append "base_" (~s (random 10000)) "_s" (~s s) "_d" (~s d)))
+                           ;; get-grammar step-i, depth d
+                           ;; get-interpreter step-i, depth d
+                           ;; get-cost-model step-i, depth d
+                           (define-values (grammar interpreter cost-model) 
+                                          (get-expr-grammar-step spec-expr leaves base_name expr-VF s d))
+
+                        (define (grammar-fn i)
+                            (grammar i)
+                          )
+
+
+                           ;; perform synthesis
+                           (define-values (sat? mat el) 
+                                          (synthesize-sol-with-depth 
+                                            starting-depth
+                                            depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                                            optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                                          )
+                           ;; if sat set solution? to be true
+                           (if sat?
+                             (begin
+                               (set! solved? #t)
+                               (set! sol mat)
+                               )
+                             '()
+                             )
+                           ]
+                          )
+                        )
+              )
+    )
+
+  (values solved? sol 0)
+)

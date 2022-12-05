@@ -19,12 +19,23 @@ from hvx_sema import hvx_semantics
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
 
 from synthesizer.Synthesizer import Synthesizer
+from synthesizer.StepWiseSynthesizer import StepWiseSynthesizer
 
 INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
 IS_SHUFFLE = int(sys.argv[4]) == 1
 TARGET = sys.argv[5]
+
+STEP=0
+DEPTH=3
+
+if len(sys.argv) >= 7:
+    STEP = int(sys.argv[6])
+
+
+if len(sys.argv) >= 8:
+    DEPTH = int(sys.argv[7])
 
 
 
@@ -96,14 +107,15 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
     write_to_file(hydride_header)
 
 
-    syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
+    syn = StepWiseSynthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
                   contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
-                  depth = 3,
+                  depth = DEPTH,
                   is_shuffle = IS_SHUFFLE,
                   legal_map = legal_map,
                   target = TARGET,
+                  step = STEP
                   )
 
 
