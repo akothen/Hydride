@@ -139,19 +139,21 @@ class Context:
                  lane_size = None, in_precision = None,
                  out_precision = None, SIMD = False, args = [],
                  in_vectsize_index = None, out_vectsize_index = None,
-                 lanesize_index = None, in_precision_index = None,
+                 in_precision_index = None,
                  out_precision_index = None, cost = None,
-                 signedness = None):
+                 signedness = None, in_lanesize_index = None,
+                 out_lanesize_index = None):
         self.name= name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
+        self.in_lanesize_index = in_lanesize_index
+        self.out_lanesize_index = out_lanesize_index
         self.lane_size = lane_size
         self.in_precision = in_precision
         self.out_precision = out_precision
         self.SIMD = SIMD
         self.in_vectsize_index = in_vectsize_index
         self.out_vectsize_index = out_vectsize_index
-        self.lanesize_index = lanesize_index
         self.in_precision_index = in_precision_index
         self.out_precision_index = out_precision_index
         self.cost = cost
@@ -165,7 +167,8 @@ class Context:
     # in_vectsize index and out_vectsize_index
     def can_scale_context(self):
         has_defined_io = self.has_output_size() and self.has_input_size()
-        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None)
+        has_defined_lanesize = (self.in_lanesize_index != None) and (self.out_lanesize_index != None)
+        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize
 
     # Update context parameters to down scale the vector sizes parameters
     def scale_context(self, scale_factor):
@@ -181,13 +184,19 @@ class Context:
                 assert arg.value % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
                 scaled_vectsize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_vectsize_arg)
-            elif idx == self.lanesize_index and (arg.value == self.in_vectsize or arg.value == self.out_vectsize):
-                scaled_lanesize_arg = LaneSize(arg.name, value = int(arg.value // scale_factor),
-                                               input_precision = arg.input_precision,
-                                               output_precision = arg.output_precision
-                                               )
-                self.lane_size = self.lane_size // scale_factor
+
+            # For scaling down of lane sizes , we only scale down the values if the scaled down lane
+            # size is greater than or equal to the input  (output) precisions.
+            elif idx == self.in_lanesize_index  and arg.value // scale_factor >=  self.in_precision:
+                scaled_lanesize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_lanesize_arg)
+                self.lane_size = self.lane_size // scale_factor
+
+
+            elif idx == self.out_lanesize_index  and arg.value // scale_factor  >= self.out_precision:
+                scaled_lanesize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
+                scaled_args.append(scaled_lanesize_arg)
+
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
                     scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
@@ -358,11 +367,11 @@ class Context:
 
                 context_arg = Integer("size{}{}".format(in_str,out_str), value = int(arg))
 
-            elif idx == self.lanesize_index:
-                lane_size = int(arg)
-                is_in = (idx == self.in_precision_index)
-                is_out = (idx == self.out_precision_index)
-                context_arg = LaneSize("lane_size", value =  lane_size, input_precision = is_in, output_precision = is_out)
+            #elif idx == self.lanesize_index:
+            #    lane_size = int(arg)
+            #    is_in = (idx == self.in_precision_index)
+            #    is_out = (idx == self.out_precision_index)
+            #    context_arg = LaneSize("lane_size", value =  lane_size, input_precision = is_in, output_precision = is_out)
             elif idx == self.in_precision_index or  idx == self.out_precision_index:
                 precision_value = int(arg)
 
@@ -452,9 +461,10 @@ class DSLInstruction(InstructionType):
                     lane_size = None, in_precision = None,
                     out_precision = None, SIMD = False, args = [],
                     in_vectsize_index = None, out_vectsize_index = None,
-                    lanesize_index = None, in_precision_index = None,
+                    in_precision_index = None,
                     out_precision_index = None, cost = None,
-                    signedness = None):
+                    signedness = None, in_lanesize_index = None,
+                    out_lanesize_index = None):
 
         self.contexts.append(
             Context(name = name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
@@ -462,10 +472,11 @@ class DSLInstruction(InstructionType):
                     out_precision = out_precision, SIMD = SIMD, args = args,
                     in_vectsize_index = in_vectsize_index,
                     out_vectsize_index = out_vectsize_index,
-                    lanesize_index = lanesize_index,
                     in_precision_index = in_precision_index,
                     out_precision_index = out_precision_index,
-                    cost = cost, signedness = signedness)
+                    cost = cost, signedness = signedness,
+                    in_lanesize_index = in_lanesize_index,
+                    out_lanesize_index = out_lanesize_index)
         )
 
     def print_instruction(self):

@@ -15,7 +15,7 @@ from utils.BindDef import BindDef
 from Specification import Specification, parse_spec
 from utils.VisitorDef import VisitorDef
 
-from hvx_sema import hvx_semantics
+from hexsemantics import hvx_semantics
 
 from synthesizer.Synthesizer import Synthesizer
 from utils.ConstFold import ConstFold

@@ -91,9 +91,10 @@ class StepWiseSynthesizer(SynthesizerBase):
             self.scale_factor = 4
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
         elif self.target == "hvx":
-            self.scale_factor = 16
+            self.scale_factor = 8
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
+            self.SWIZZLE_BOUND = 10
 
 
 
@@ -221,9 +222,24 @@ class StepWiseSynthesizer(SynthesizerBase):
         return buckets
 
 
-    def get_ops_from_bucket_at_step(self, bucket, step = 1, items_per_bucket = 1):
+    def get_ops_from_bucket_at_step(self, bucket, step = 1, items_per_bucket = 1, max_num_clauses = 10):
+
 
         indices_set_per_key = []
+        shuffle_width = 3
+
+        actual_max_width = 0
+
+        for key in bucket:
+            if key != '[]':
+                actual_max_width += items_per_bucket
+            else:
+                actual_max_width += min(len(bucket[key]['ops']), shuffle_width)
+
+
+
+
+        max_num_clauses = min(actual_max_width, max_num_clauses)
 
         def findsubsets(s, n):
             combinations =  list(itertools.combinations(set(s), n))
@@ -242,11 +258,41 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             return prod
 
+
+
         # List of tuples of indices into buckets
         grammar_combs = [[]]
-        for key in bucket:
+
+        # Traverse shuffle combinations first before
+        # shuffling other buckets
+
+        sorted_keys =  [key for key in bucket if key != '[]'] + ['[]']
+
+        sample_key_sizes = min(len(sorted_keys) -1, max_num_clauses // 2)
+        print("Sample key sizes:", sample_key_sizes)
+        print("Total buckets without shuffle:", len(sorted_keys)-1)
+
+        # For higher depths, to maintain tractability during synthesis, we only include
+        # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
+        # is sampled at every interval
+        sample_keys = list(itertools.combinations(set([key for key in bucket if key != '[]']), sample_key_sizes))
+
+        print(sample_keys)
+
+        # Switch sample keys after 3 steps
+        key_subset_index = (step  // 4) % len(sample_keys)
+
+        print(len(sample_keys), key_subset_index, sample_keys)
+        sorted_keys = list(sample_keys[key_subset_index]) + ['[]']
+        print('sorted_keys', sorted_keys)
+        for key in sorted_keys:
+            print(key)
             idx_range = range(0,len(bucket[key]['ops']))
-            idx_subsets = findsubsets(idx_range, min(items_per_bucket, len(idx_range)))
+            limit = items_per_bucket
+            if key == '[]':
+                limit = 3
+
+            idx_subsets = findsubsets(idx_range, min(limit, len(idx_range)))
 
             grammar_combs = cross_product(grammar_combs, idx_subsets)
 
@@ -255,15 +301,17 @@ class StepWiseSynthesizer(SynthesizerBase):
         for i in range(min(5, len(grammar_combs))):
             print(grammar_combs[i])
 
+        print("Current Step: ",step, ", depth:", self.depth)
+
 
 
         step_combination = grammar_combs[step % len(grammar_combs)]
 
-        keys = [key for key in bucket]
+
 
         comb_ops = []
         comb_ctxs = []
-        for idx, key in enumerate(keys):
+        for idx, key in enumerate(sorted_keys):
             key_subset = step_combination[idx]
 
             for key_idx in key_subset:
@@ -398,22 +446,38 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
-        BOUND = 15
+        BOUND = 16
         if self.target == 'hvx':
             BOUND = 20
         if self.spec.contains_conditional():
             BOUND = 25
 
+        if self.depth >= 4:
+            BOUND = 16
+
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
 
 
 
+        operation_dsl_insts += memory_shuffle_insts
+        operation_dsl_args_list += memory_shuffle_args_list
+        memory_shuffle_insts = []
+        memory_shuffle_args_list = []
+
+        for idx, dsl_inst in enumerate(operation_dsl_insts):
+            print("Pool Of operations: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+
+        MAX_NUM_CLAUSES = 16
+        if self.depth >= 4:
+            MAX_NUM_CLAUSES = 10
+
         bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-        self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2)
+        (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):
             print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+
 
 
 
@@ -467,10 +531,6 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         self.dsl_subset = unique_target_agnostic_ops
 
-        operation_dsl_insts += memory_shuffle_insts
-        operation_dsl_args_list += memory_shuffle_args_list
-        memory_shuffle_insts = []
-        memory_shuffle_args_list = []
 
 
 

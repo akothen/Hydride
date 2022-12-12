@@ -43,11 +43,14 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict):
                              args = sub_obj['args'],
                              in_vectsize_index = sub_obj['in_vectsize_index'],
                              out_vectsize_index = sub_obj['out_vectsize_index'],
-                             lanesize_index = sub_obj['lanesize_index'],
+                             #lanesize_index = sub_obj['lanesize_index'],
                              in_precision_index = sub_obj['in_precision_index'],
                              out_precision_index = sub_obj['out_precision_index'],
                              signedness = signedness,
-                             cost = parse_cost(sub_obj['Cost'])
+                             cost = parse_cost(sub_obj['Cost']),
+                             in_lanesize_index = sub_obj['in_lanesize_index'],
+                             out_lanesize_index = sub_obj['out_lanesize_index'],
+
                              )
 
     return dsl_inst

@@ -524,12 +524,34 @@
 
   (define sol '())
 
+
+  ;(set! starting-depth 4)
+
   (define solutions 
 
     ;; Traversal order first searchs the breadth of grammars
     ;; at the depth d before incrementing d.
     (for/list ([d (range starting-depth depth-limit)])
-              (for/list ([s (range step-limit)])
+
+              (define steps-per-depth
+                (cond
+                  [(<= d 3) step-limit]
+                  [(equal? d 4) 
+                   ;(* 1 step-limit)
+                   40
+                   ]
+                  [else
+                    40
+                    ]
+                  )
+                
+                )
+              (for/list ([s (range steps-per-depth)])
+
+                        ;(parameterize 
+                        ;  ([current-solver (z3)] 
+                           ;[term-cache (hash-copy (term-cache))]
+                        ;   )
                         (clear-vc!)
                         (clear-terms!)
                         (collect-garbage)
@@ -569,8 +591,15 @@
                            ]
                           )
                         )
+                        ;)
               )
     )
 
-  (values solved? sol 0)
-)
+  (if (not solved?)
+    (begin
+      (debug-log "Synthesis failed!")
+      (exit)
+      )
+    (values solved? sol 0)
+    )
+  )
