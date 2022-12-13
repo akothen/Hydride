@@ -11,6 +11,8 @@ import json
 import itertools
 import sys
 
+import ast
+
 
 from hashlib import md5
 
@@ -279,7 +281,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         #print("sorted keys lexo", sorted_keys_lexo)
         sorted_keys =  sorted_keys_lexo + ['[]']
 
-        sample_key_sizes = min(len(sorted_keys) -1, int(max_num_clauses / 3))
+        sample_key_sizes = min(len(sorted_keys) -1, int(max_num_clauses / 2))
         #print("Sample key sizes:", sample_key_sizes)
         #print("Total buckets without shuffle:", len(sorted_keys)-1)
 
@@ -287,16 +289,37 @@ class StepWiseSynthesizer(SynthesizerBase):
         # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
         # is sampled at every interval
         sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
+        sample_keys = [list(ele) for ele in sample_keys]
+
+        # Certain combinations may not span the entire set of operations
+        # that are present in the spec. We can trivially remove those combinatons
+
+        spec_ops = self.spec.get_semantics_ops_list()
+        def spans_spec(comb):
+            eval_str = [ast.literal_eval(ele) for ele in comb]
+            fold_ops = []
+            for ops in eval_str:
+                fold_ops += ops
 
 
-        print("sample_keys")
+            for op in spec_ops:
+                if op not in fold_ops:
+                    return False
+            return True
+
+        print(sample_keys)
+        sample_keys = list(filter(spans_spec, sample_keys))
+        print("Filtered sample keys")
         print(sample_keys)
 
-        # Switch sample keys after 5 steps
-        key_subset_index = (step  // 5) % len(sample_keys)
-        print("key subset index: ", key_subset_index, "key subset into step", step % 5)
+
+        # Switch sample keys after 4 steps
+        key_subset_index = (step  // 4) % len(sample_keys)
+        print("key subset index: ", key_subset_index, "key subset into step", step % 4)
         #print("Head of sample keys")
         #print(sample_keys[:5])
+
+        print("Current combination: ",sample_keys[key_subset_index])
 
         #print(len(sample_keys), key_subset_index, sample_keys)
         sorted_keys = list(sample_keys[key_subset_index]) + ['[]']
