@@ -57,6 +57,7 @@
 (require hydride/ir/hvx/binder)
 (require hydride/ir/hvx/const_fold)
 (require hydride/ir/hvx/visitor)
+(require hydride/ir/hvx/scale)
 
 
 ;; CPP IR
@@ -106,6 +107,7 @@
   (all-from-out hydride/ir/hvx/binder)
   (all-from-out hydride/ir/hvx/const_fold)
   (all-from-out hydride/ir/hvx/visitor)
+  (all-from-out hydride/ir/hvx/scale)
 
 
   (all-from-out hydride/cpp)

@@ -14,6 +14,7 @@ from utils.IRPrinter import IRPrinter
 from utils.BindDef import BindDef
 from Specification import Specification, parse_spec
 from utils.VisitorDef import VisitorDef
+from utils.ScaleDef import ScaleDef
 
 from hexsemantics import hvx_semantics
 
@@ -42,6 +43,7 @@ gp = GetOutPrecDef(get_prec_name = "hvx:get-prec")
 ip = IRPrinter(printer_name = "hvx:hydride-printer")
 bd = BindDef()
 vd = VisitorDef()
+scd = ScaleDef()
 
 cf = ConstFold()
 
@@ -94,6 +96,8 @@ with open("gen.rkt","w+") as RacketFile:
     write_to_file(ip.emit_dsl_printer(dsl_list, sd, prog_name = "prog"))
 
     write_to_file(bd.emit_binder(dsl_list ,sd))
+
+    write_to_file(scd.emit_scale(dsl_list, sd, scale_name = "hvx:scale-expr"))
 
     write_to_file(cf.emit_const_fold(dsl_list, sd, const_fold_name = "hvx:const-fold", interpret_name = "hvx:interpret"))
 

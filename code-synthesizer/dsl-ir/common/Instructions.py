@@ -220,6 +220,28 @@ class Context:
 
 
 
+    def get_scalable_args_idx(self):
+        assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
+
+        sample_scale_factor = 8
+        scalable_idx = []
+        for idx, arg in enumerate(self.context_args):
+            if isinstance(arg, BitVector):
+                pass
+            elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
+                scalable_idx.append(idx)
+
+            # For scaling down of lane sizes , we only scale down the values if the scaled down lane
+            # size is greater than or equal to the input  (output) precisions.
+            elif idx == self.in_lanesize_index  and arg.value // sample_scale_factor >=  self.in_precision:
+                scalable_idx.append(idx)
+            elif idx == self.out_lanesize_index  and arg.value // sample_scale_factor  >= self.out_precision:
+                scalable_idx.append(idx)
+            elif isinstance(arg, Integer):
+                if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
+                    scalable_idx.append(idx)
+
+        return scalable_idx
 
 
     def is_signed(self):
@@ -608,7 +630,7 @@ class DSLInstruction(InstructionType):
 
 
     def supports_scaling(self):
-        return any([ctx.can_scale_context() for ctx in self.contexts])
+        return all([ctx.can_scale_context() for ctx in self.contexts])
 
     def scale_contexts(self, scale_factor):
 

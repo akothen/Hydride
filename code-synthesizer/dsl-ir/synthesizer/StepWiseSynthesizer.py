@@ -12,6 +12,10 @@ import itertools
 import sys
 
 
+from hashlib import md5
+
+def string_hash(string):
+    return md5(string.encode()).hexdigest()
 
 """
 Given a specification, the possible set of relavent instructions
@@ -129,7 +133,9 @@ class StepWiseSynthesizer(SynthesizerBase):
                 dsl_ops = dsl_inst.get_semantics_ops_list()
                 ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
 
-                key = str(ctx_ops)
+                key = str(sorted(ctx_ops, key = lambda x : BV_OPS.index(x)))
+
+                ctx_ops = sorted(ctx_ops, key = lambda x : BV_OPS.index(x))
 
                 if key not in ops_bucket:
                     ops_bucket[key] = {"count": 0, "ops": ctx_ops}
@@ -196,6 +202,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             dsl_ops = dsl_inst.get_semantics_ops_list()
             ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
 
+            ctx_ops = sorted(ctx_ops, key = lambda x : BV_OPS.index(x))
+
             key = str(ctx_ops)
 
             if key not in buckets:
@@ -242,7 +250,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         max_num_clauses = min(actual_max_width, max_num_clauses)
 
         def findsubsets(s, n):
-            combinations =  list(itertools.combinations(set(s), n))
+            combinations =  list(itertools.combinations(s, n))
 
 
             # Wrap combination in another list so that
@@ -266,25 +274,33 @@ class StepWiseSynthesizer(SynthesizerBase):
         # Traverse shuffle combinations first before
         # shuffling other buckets
 
-        sorted_keys =  [key for key in bucket if key != '[]'] + ['[]']
+        sorted_keys_lexo = sorted([key for key in bucket if key != '[]'], key = lambda x : string_hash(x))
+        #print("keys in bucket:", [key for key in bucket if key != '[]'])
+        #print("sorted keys lexo", sorted_keys_lexo)
+        sorted_keys =  sorted_keys_lexo + ['[]']
 
-        sample_key_sizes = min(len(sorted_keys) -1, max_num_clauses // 2)
-        print("Sample key sizes:", sample_key_sizes)
-        print("Total buckets without shuffle:", len(sorted_keys)-1)
+        sample_key_sizes = min(len(sorted_keys) -1, int(max_num_clauses / 3))
+        #print("Sample key sizes:", sample_key_sizes)
+        #print("Total buckets without shuffle:", len(sorted_keys)-1)
 
         # For higher depths, to maintain tractability during synthesis, we only include
         # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
         # is sampled at every interval
-        sample_keys = list(itertools.combinations(set([key for key in bucket if key != '[]']), sample_key_sizes))
+        sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
 
+
+        print("sample_keys")
         print(sample_keys)
 
-        # Switch sample keys after 3 steps
-        key_subset_index = (step  // 4) % len(sample_keys)
+        # Switch sample keys after 5 steps
+        key_subset_index = (step  // 5) % len(sample_keys)
+        print("key subset index: ", key_subset_index, "key subset into step", step % 5)
+        #print("Head of sample keys")
+        #print(sample_keys[:5])
 
-        print(len(sample_keys), key_subset_index, sample_keys)
+        #print(len(sample_keys), key_subset_index, sample_keys)
         sorted_keys = list(sample_keys[key_subset_index]) + ['[]']
-        print('sorted_keys', sorted_keys)
+        #print('sorted_keys', sorted_keys)
         for key in sorted_keys:
             print(key)
             idx_range = range(0,len(bucket[key]['ops']))
@@ -472,6 +488,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             MAX_NUM_CLAUSES = 10
 
         bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
+        print("Bucket return from parititioning")
+        print(bucket.keys())
         (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
 
