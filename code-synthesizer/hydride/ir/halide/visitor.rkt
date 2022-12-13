@@ -29,6 +29,8 @@
     [(buffer data elemT buffsize) (handler expr)]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) (handler (cast-int (visit vec handler) olane oprec))]
+    [(cast-uint vec olane oprec) (handler (cast-uint (visit vec handler) olane oprec))]
     [(uint8x1 sca) (handler (uint8x1 (visit sca handler)))]
     [(uint16x1 sca) (handler (uint16x1 (visit sca handler)))]
     [(uint32x1 sca) (handler (uint32x1 (visit sca handler)))]

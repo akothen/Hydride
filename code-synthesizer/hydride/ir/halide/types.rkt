@@ -135,6 +135,10 @@
 (struct int64x256 (vec) #:transparent)
 (struct int64x512 (vec) #:transparent)
 
+;; Generalized Cast
+(struct cast-int  (vec olane oprec) #:transparent)
+(struct cast-uint (vec olane oprec) #:transparent)
+
 ;; Operations
 (struct sca-add (v1 v2) #:transparent)
 (struct sca-sub (v1 v2) #:transparent)
