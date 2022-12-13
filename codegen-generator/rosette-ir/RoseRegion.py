@@ -5,7 +5,7 @@
 #
 ##############################################################
 
-from RoseTypes import RoseVoidType
+
 import RoseAbstractions
 
 from copy import deepcopy
@@ -24,7 +24,7 @@ class RoseRegion:
     self.Keys = Keys
     self.Children = Children
     if self.Children is not None:
-      assert self.areChildrenValid()
+      assert self.areChildrenValid() == True
       if type(self.Children) == list:
         # Set the parents of the children
         for Child in self.Children:
@@ -77,6 +77,9 @@ class RoseRegion:
       return self.getChild(self.ChildIndex)
   
   def areChildrenValid(self):
+    # Undefined regions have no children
+    if isinstance(self, RoseAbstractions.RoseUndefRegion):
+      return (self.Children == None)
     # Children do not have to be instances of regions
     if self.Keys != None:
       for Key in self.Keys:
@@ -90,6 +93,8 @@ class RoseRegion:
     return True
 
   def isChildValid(self, Child):
+    if isinstance(self, RoseAbstractions.RoseUndefRegion):
+      return False
     if not isinstance(self, RoseAbstractions.RoseBlock):
       if isinstance(Child, RoseAbstractions.RoseFunction) \
       or isinstance(Child, RoseAbstractions.RoseForLoop) \
@@ -103,8 +108,7 @@ class RoseRegion:
       return False
 
   def isParentValid(self, Parent):
-    if isinstance(self, RoseAbstractions.RoseUndefRegion):
-      return True
+    assert isinstance(self, RoseAbstractions.RoseUndefRegion)
     if isinstance(Parent, RoseAbstractions.RoseForLoop) \
     or isinstance(Parent, RoseAbstractions.RoseFunction) \
     or isinstance(Parent, RoseAbstractions.RoseCond):
@@ -113,14 +117,27 @@ class RoseRegion:
       return True
     return False
 
+  def areKeysValid(self):
+    # Functions, blocks and loops have no keys
+    if isinstance(self, RoseAbstractions.RoseFunction) \
+      or isinstance(self, RoseAbstractions.RoseBlock) \
+      or isinstance(self, RoseAbstractions.RoseForLoop) \
+      or isinstance(self, RoseAbstractions.RoseUndefRegion):
+        return (self.Keys() == None)
+    assert isinstance(self, RoseAbstractions.RoseCond)
+    return (self.Keys() != None)
+    
   def getRegionID(self):
     # Sanity check
-    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    if isinstance(self, RoseAbstractions.RoseUndefRegion):
+      return None
     return self.ID
   
   def getKeys(self):
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    # Make sure the keys are valid
+    self.areKeysValid()
     return self.Keys
   
   def getChildren(self, Key = None):
@@ -638,6 +655,33 @@ class RoseRegion:
               return True
     return False
 
+  # This is the base function that verifies the region
+  def verify(self):
+    # This region should have valid children
+    if self.areChildrenValid() == False:
+      return False
+    # Verify that the region has valid parent
+    if self.isParentValid() == False:
+      return False
+    # Verify the keys are valid
+    if self.areKeysValid() == False:
+      return False
+    # For undefined regions, we have nothing else to verify
+    if isinstance(self, RoseAbstractions.RoseUndefRegion):
+      return True
+    if self.getKeys == True:
+      for Key in self.getKeys():
+        # Verify each child
+        for Child in self.getChildren(Key):
+          if Child.verify() == False:
+            return False
+    else:
+      # Verify each child
+      for Child in self.getChildren():
+        if Child.verify() == False:
+          return False
+    return True
+
   def print(self, NumSpace = 0):
     for Child in self.Children:
       assert Child.getParent() == self
@@ -649,6 +693,3 @@ class RoseRegion:
       assert Child.getParent() == self
       String += Child.__str__(NumSpace)
     return String
-
-
-
