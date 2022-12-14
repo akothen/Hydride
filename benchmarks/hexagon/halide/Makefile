@@ -21,6 +21,11 @@ bin_dirs = $(addsuffix /bin,$(benchmarks))
 out_dirs = $(addsuffix /out,$(benchmarks))
 prof_dirs = $(addsuffix /profile,$(benchmarks))
 
+
+ENABLE_HYDRIDE ?= 1
+EXPR_DEPTH ?=2
+INT_BW ?= 16
+
 hannk = hannk/common_halide.cpp
 
 sim=true
@@ -37,7 +42,8 @@ $(benchmarks): %: %/bin %/out %/profile
 		-o $@/bin/$@_generator \
 		-L $(HALIDE_DIR)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
 
-	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HL_RAKE_BENCHMARK_NAME=$@; ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HL_RAKE_BENCHMARK_NAME=$@; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_SYNTH_BW=$(INT_BW) ./$@/bin/$@_generator \
+	    -t 0 \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
@@ -68,6 +74,7 @@ fully_connected: %: %/bin %/out %/profile
 		-L $(HALIDE_DIR)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
 
 	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HL_RAKE_BENCHMARK_NAME=$@; ./$@/bin/$@_generator \
+	    -t 0 \
 		-o $@/bin \
 		-g $@ output.type=uint8 \
 		-e static_library,stmt,h,llvm_assembly,assembly \

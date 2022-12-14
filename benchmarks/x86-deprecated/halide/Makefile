@@ -50,6 +50,7 @@ $(benchmarks): %: %/bin
 # 	Use the generator (to get a manual schedule which is the default)
 #
 	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_SYNTH_BW=$(INT_BW) ./$@/bin/$@_generator \
+		-t 0 \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
@@ -69,3 +70,4 @@ $(bin_dirs): %:
 
 clean:
 	rm -rf $(bin_dirs)
+	rm halide_expr*
