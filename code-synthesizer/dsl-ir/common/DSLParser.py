@@ -33,6 +33,14 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict):
         if 'Signedness' in sub_obj:
             signedness = sub_obj['Signedness']
 
+        # Support generation using legacy dictionaries
+        if 'in_lanesize_index' not in sub_obj:
+            sub_obj['in_lanesize_index'] = sub_obj['lanesize_index']
+
+        if 'out_lanesize_index' not in sub_obj:
+            sub_obj['out_lanesize_index'] = sub_obj['lanesize_index']
+
+
         dsl_inst.add_context(name = subinst_name,
                              in_vectsize = sub_obj['in_vectsize'],
                              out_vectsize = sub_obj['out_vectsize'],

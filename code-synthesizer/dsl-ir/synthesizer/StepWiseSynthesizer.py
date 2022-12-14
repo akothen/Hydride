@@ -49,7 +49,6 @@ PRUNE_BVOP_VARIANTS = True
 
 # Bound the number of swizzle operations in the
 # grammar
-SWIZZLE_BOUND = 5
 
 class StepWiseSynthesizer(SynthesizerBase):
 
@@ -94,10 +93,11 @@ class StepWiseSynthesizer(SynthesizerBase):
         super().set_target_settings()
 
         if self.target == "x86":
-            self.scale_factor = 4
+            self.scale_factor = 1
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
+            self.SWIZZLE_BOUND = 10
         elif self.target == "hvx":
-            self.scale_factor = 8
+            self.scale_factor = 16
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
@@ -276,10 +276,15 @@ class StepWiseSynthesizer(SynthesizerBase):
         # Traverse shuffle combinations first before
         # shuffling other buckets
 
+
+        shuffle_key = []
+        if '[]' in  bucket:
+            shuffle_key = ['[]']
+
         sorted_keys_lexo = sorted([key for key in bucket if key != '[]'], key = lambda x : string_hash(x))
         #print("keys in bucket:", [key for key in bucket if key != '[]'])
         #print("sorted keys lexo", sorted_keys_lexo)
-        sorted_keys =  sorted_keys_lexo + ['[]']
+        sorted_keys =  sorted_keys_lexo + shuffle_key
 
         sample_key_sizes = min(len(sorted_keys) -1, int(max_num_clauses / 2))
         #print("Sample key sizes:", sample_key_sizes)
@@ -288,6 +293,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         # For higher depths, to maintain tractability during synthesis, we only include
         # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
         # is sampled at every interval
+
         sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
         sample_keys = [list(ele) for ele in sample_keys]
 
@@ -295,22 +301,40 @@ class StepWiseSynthesizer(SynthesizerBase):
         # that are present in the spec. We can trivially remove those combinatons
 
         spec_ops = self.spec.get_semantics_ops_list()
-        def spans_spec(comb):
+        def spans_spec(comb, non_matching_lim = 1):
             eval_str = [ast.literal_eval(ele) for ele in comb]
             fold_ops = []
             for ops in eval_str:
                 fold_ops += ops
 
+            non_matching_count = 0
 
             for op in spec_ops:
                 if op not in fold_ops:
-                    return False
-            return True
+                    non_matching_count += 1
+            return  (non_matching_count < non_matching_lim)
 
-        print(sample_keys)
-        sample_keys = list(filter(spans_spec, sample_keys))
+        print(sample_key_sizes)
+
+        for flexibility in range(0,3):
+            helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
+            test_flex = list(filter(helper_fn, sample_keys))
+
+            if test_flex != []:
+                sample_keys = test_flex
+                break
+            elif flexibility == 2:
+                assert False, "Current set of operations not sufficient to support partitioning grammar"
+
+
+
+
+        print("spec_ops:", spec_ops)
         print("Filtered sample keys")
         print(sample_keys)
+
+        print(sample_keys)
+        assert sample_keys != [] , "Key's after filtering are empty"
 
 
         # Switch sample keys after 4 steps
@@ -321,9 +345,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         print("Current combination: ",sample_keys[key_subset_index])
 
-        #print(len(sample_keys), key_subset_index, sample_keys)
-        sorted_keys = list(sample_keys[key_subset_index]) + ['[]']
-        #print('sorted_keys', sorted_keys)
+        sorted_keys = list(sample_keys[key_subset_index]) + shuffle_key
         for key in sorted_keys:
             print(key)
             idx_range = range(0,len(bucket[key]['ops']))

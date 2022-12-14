@@ -828,7 +828,7 @@
 		(_mm256_set_m128i (hydride:interpret v0 env) (hydride:interpret v1 env) num_2 
 		 prec_i_o num_4)
 	]
-	[v (error "Unrecognized Term in Interpreterv")]
+	[v (error "Unrecognized Term in Interpreter" v)]
  )
 )
 ;; ================================================================================

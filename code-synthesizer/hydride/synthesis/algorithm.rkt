@@ -116,7 +116,17 @@
   (printf "Number of instructions: ~a\n" (halide:count-number-instructions halide-expr))
 
   ;(define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt? sym?))
-  (define scale-factor 8)
+  (define scale-factor 
+  (cond
+    [(equal? arch "x86" )
+     1 ;; Currently not doing any scaling for x86
+     ]
+
+    [(equal? arch "hvx" )
+     16 
+     ]
+    )
+    )
   (define synthesized-sol (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
@@ -759,7 +769,7 @@
                   (define synthesized-leaves 
 
                     (for/list  ([leaf leaves])
-                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver opt? sym?)
+                               (scale-down-synthesis leaf expr-depth VF id-map solver opt? sym? scale-factor)
                                )
                     ;)
                     )
@@ -777,7 +787,16 @@
                       )
                     )
 
-                  (define upscaled-mat (hvx:scale-expr materialize scale-factor))
+                  (define upscaled-mat 
+                    (cond 
+                      [(equal? scale-factor 1)
+                       materialize
+                       ]
+                      [else 
+                        (hvx:scale-expr materialize scale-factor)
+                        ]
+                      )
+                    )
 
                   (bind-functor upscaled-mat (list->vector synthesized-leaves))
                   )]

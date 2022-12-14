@@ -503,7 +503,20 @@ namespace Halide {
                             indent.push(indent.top() + 1);
                             const std::string rkt_val = dispatch(op->value);
                             indent.pop();
-                            return tabs() + "(" + type_string + "\n" + rkt_val + ")";
+                            bool use_generalized_cast = false;
+
+                            if (use_generalized_cast) {
+                                std::string lanes_str = std::to_string(op->type.lanes());
+                                std::string bits_str = std::to_string(op->type.bits());
+                                if(op->type.is_uint()){
+                                    return tabs() + "(cast-uint" + "\n" + rkt_val +" "+ lanes_str + " " + bits_str + ")";
+                                } else {
+                                    return tabs() + "(cast-int" + "\n" + rkt_val +" "+ lanes_str + " " + bits_str + ")";
+                                }
+                            } else {
+                                return tabs() + "(" + type_string + "\n" + rkt_val + ")";
+                            }
+
                         }
                     }
 
@@ -3103,16 +3116,14 @@ namespace Halide {
             debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(0) << "Printing Pruned Stmt:\n";
-            debug(0) << pruned <<"\n";
+            debug(1) << "Printing Pruned Stmt:\n";
+            debug(1) << pruned <<"\n";
 
-            /*
-            auto distributed = distribute_vector_exprs(pruned, 512);
-            debug(0) << "Distributed Stmt:\n";
-            debug(0) << distributed <<"\n";
-            */
+            auto distributed = distribute_vector_exprs(pruned, 256);
+            debug(1) << "Distributed Stmt:\n";
+            debug(1) << distributed <<"\n";
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(distributed);
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");

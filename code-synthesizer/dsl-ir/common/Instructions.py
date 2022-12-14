@@ -170,6 +170,7 @@ class Context:
         has_defined_lanesize = (self.in_lanesize_index != None) and (self.out_lanesize_index != None)
         return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize
 
+
     # Update context parameters to down scale the vector sizes parameters
     def scale_context(self, scale_factor):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling"
