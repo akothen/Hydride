@@ -71,3 +71,6 @@ $(bin_dirs): %:
 clean:
 	rm -rf $(bin_dirs)
 	rm halide_expr*
+	rm -rf /tmp/hydride_exprs.rkt
+	rm -rf /tmp/hydride.node.*
+	rm -rf /tmp/base_*

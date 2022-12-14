@@ -104,3 +104,8 @@ fully_connected/profile fully_connected/out fully_connected/bin: %:
 
 clean:
 	rm -rf $(bin_dirs) $(out_dirs) $(prof_dirs) pmu_statsfile.txt stats_dump.iss.0
+	rm halide_expr*
+	rm -rf /tmp/hydride_exprs.rkt
+	rm -rf /tmp/hydride.node.*
+	rm -rf /tmp/base_*
+
