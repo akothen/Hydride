@@ -16,7 +16,6 @@ from RoseContext import *
 
 from x86AST import *
 from x86Types import x86Types
-from x86Dims import x86Dims
 
 import math
 
@@ -1515,34 +1514,51 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
   return CompiledValue
 
 
-def CompileDimLookup(LookupExpr, Context: x86RoseContext):
-    assert type(LookupExpr.obj) == Var
-    obj = RoseValue.create(LookupExpr.obj.name, RoseTileType.create(
-        x86Dims['rows'].getValue(), x86Dims['colsb'].getValue()
-    ))
-    # Check if the variable is already defined and cached. If yes, just return that.
-    if not Context.isVariableDefined(obj.getName()):
-        Context.addVariable(obj.getName(), LookupExpr.obj.id)
-        Context.addCompiledAbstraction(LookupExpr.obj.id, obj)
-    abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
-    if not Context.isElemTypeOfVariableKnown(obj.getName()):
-        Context.addElemTypeOfVariable(obj.getName(), obj.getType())
-        Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
 
-    dim = x86Dims[LookupExpr.key]
-    assert type(dim) == RoseConstant
-    # Check if the variable is already defined and cached. If yes, just return that.
-    if Context.isVariableDefined(dim.getName()):
-        ID = Context.getVariableID(dim.getName())
-        return Context.getCompiledAbstractionForID(ID)
+def CompileDimLookup(expr, Context: x86RoseContext):
+  assert type(expr.obj) == Var
+  obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
+  # Check if the tile object is already defined and cached. If yes, just use that.
+  if not Context.isVariableDefined(obj.getName()):
+    Context.addVariable(obj.getName(), expr.obj.id)
+    Context.addCompiledAbstraction(expr.obj.id, obj)
+  abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+  if not Context.isElemTypeOfVariableKnown(obj.getName()):
+    Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+    Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
 
-    assert Context.isElemTypeOfVariableKnown(dim.getName()) == False
+  param_name = f'{expr.obj.name}_{expr.key}'
+  # Check if the variable is already defined and cached. If yes, just return that.
+  if Context.isVariableDefined(param_name):
+    ID = Context.getVariableID(param_name)
+    return Context.getCompiledAbstractionForID(ID)
 
-    # Add the constant info to the context
-    Context.addVariable(dim.getName(), dim.ID)
-    Context.addElemTypeOfVariable(dim.getName(), dim.getType())
-    Context.addCompiledAbstraction(dim.ID, dim)
-    return dim
+  assert not Context.isElemTypeOfVariableKnown(param_name)
+
+  RootContext, root_function = Context.getFirsRootAbstractionsOfType(RoseFunction)
+
+  # From old x86Dims.py:
+  #   'rows': RoseConstant.create(10, RoseIntegerType.create(8)),  # for testing...
+  #   'colsb': RoseConstant.create(10, RoseIntegerType.create(16)),  # for testing...
+  # param_type = RoseIntegerType.create({'rows': 8, 'colsb': 16}[expr.key])
+  param_type = RoseIntegerType.create(32)  # todo: Kunal — yeah.. not to spec but whatever, makes everything easier..
+  param_value = RoseArgument.create(param_name, param_type, root_function)
+
+  # Add the variable to the parent function definition
+  assert isinstance(root_function.Type, RoseFunctionType)
+  root_function.ArgList.append(param_value)  # todo: Kunal — should the order of rows and colsb params be deterministic?
+  root_function.Type.SubClassData['arglist'].append(param_type)
+
+  # Add the variables to all the parent contexts as if its been there the whole time
+  ctx = Context
+  while ctx is not None:
+    ctx.addSignednessInfoForValue(param_value, False)
+    ctx.addVariable(param_name, param_value.ID)
+    ctx.addElemTypeOfVariable(param_name, param_type)
+    ctx.addCompiledAbstraction(param_value.ID, param_value)
+    ctx = None if ctx == RootContext else ctx.ParentContext
+
+  return param_value
 
 
 def CompileMatch(MatchExpr, Context : x86RoseContext):
@@ -1973,7 +1989,7 @@ def HandleAmxZeroUpperRows(Name : str, Args : list, Context : x86RoseContext):
   max_rows = RoseConstant.create(16, RoseIntegerType.create(8))
   colsb = x86Dims['colsb']
 
-  assert isinstance(treg.getType(), RoseTileType)
+  assert isinstance(treg.getType(), RoseMatrixType)
   assert isinstance(r, RoseConstant)
   assert isinstance(rows, RoseConstant)
   assert isinstance(colsb, RoseConstant)
