@@ -16,7 +16,7 @@ from Specification import Specification, parse_spec
 from utils.VisitorDef import VisitorDef
 from utils.ScaleDef import ScaleDef
 
-from hexsemantics import hvx_semantics
+from HexSemanticsAllArgs import hvx_semantics
 
 from synthesizer.Synthesizer import Synthesizer
 from utils.ConstFold import ConstFold

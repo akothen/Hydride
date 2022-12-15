@@ -13,9 +13,8 @@ from utils.GetLengthDef import GetLengthDef
 from legal_insts import legal_map
 from Specification import Specification, parse_spec
 
-#from hvx_sema import hvx_semantics
 
-from hexsemantics import hvx_semantics
+from HexSemanticsAllArgs import hvx_semantics
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
