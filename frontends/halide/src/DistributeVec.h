@@ -52,9 +52,23 @@ namespace Halide {
         class DistributeVec : public VariadicVisitor<DistributeVec, std::vector<Expr>, Stmt>{
 
             public:
-                DistributeVec(unsigned bitvector_size) : bitvector_size(bitvector_size) {}
+                DistributeVec(unsigned bitvector_size)   {
+                    bitvector_sizes.push_back(bitvector_size);
 
-                unsigned bitvector_size;
+                }
+
+                DistributeVec(std::vector<unsigned> bv_sizes) {
+                    std::sort(bv_sizes.begin(), bv_sizes.end());
+                    for(unsigned bv_size : bv_sizes){
+                        bitvector_sizes.insert( bitvector_sizes.begin() ,bv_size);
+                    }
+
+                    debug(0) << "Distribute number of bitvector sizes:\t" << bitvector_sizes.size() <<"\n";
+                }
+
+                // Supported vector sizes to distribute into. Sorted in descending order
+                // with a preference of using larger vector sizes when possible.
+                std::vector<unsigned> bitvector_sizes;
                 std::map<const IRNode*, DistributeInfo*> DistribMap;
 
 
@@ -113,6 +127,10 @@ namespace Halide {
                 Stmt visit(const IfThenElse *op);
                 Stmt visit(const Atomic *op);
 
+                // Helpers
+                bool can_type_fit_vector_sizes(Type t);
+
+
 
 
 
@@ -121,6 +139,7 @@ namespace Halide {
         };
 
         Stmt distribute_vector_exprs(Stmt S, unsigned bitwidth);
+        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bitwidths);
 
     }  // namespace Internal
 

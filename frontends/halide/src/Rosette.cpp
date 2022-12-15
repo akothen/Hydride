@@ -1509,8 +1509,8 @@ namespace Halide {
                             HVX, ARM, X86
                         };
 
-                        IROptimizer(FuncValueBounds fvb, Architecture _arch, std::set<const BaseExprNode *> &ms)
-                            : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms) {
+                        IROptimizer(FuncValueBounds fvb, Architecture _arch, std::set<const BaseExprNode *> &ms, int oid)
+                            : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms), optimizer_id(oid) {
                             }
 
                         bool isConstantValue(const Expr v){
@@ -1750,6 +1750,7 @@ namespace Halide {
                 Architecture arch;
                 FuncValueBounds func_value_bounds;
                 std::set<const BaseExprNode *> &mutated_exprs;
+                int optimizer_id;
                 Scope<Interval> bounds;
 
                 std::map<std::string, Expr> let_vars;
@@ -3093,8 +3094,19 @@ namespace Halide {
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
+            
+            /*
+            std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
+            auto distributed = distribute_vector_exprs(pruned, hvx_vector_sizes);
+            debug(0) << "Distributed Stmt:\n";
+            debug(0) << distributed <<"\n";
+            */
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs).mutate(pruned);
+
+            srand(time(0));
+            int random_seed = rand() % 1024;
+
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs, random_seed).mutate(pruned);
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::Hexagon, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
@@ -3119,11 +3131,16 @@ namespace Halide {
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
 
+            /*
             auto distributed = distribute_vector_exprs(pruned, 256);
             debug(1) << "Distributed Stmt:\n";
             debug(1) << distributed <<"\n";
+            */
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(distributed);
+            srand(time(0));
+            int random_seed = rand() % 1024;
+
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs, random_seed).mutate(pruned);
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
