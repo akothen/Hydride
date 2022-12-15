@@ -22,13 +22,11 @@ class RoseAliasAnalysis:
     Alias = auto()
     PartialAlias = auto()
     Contiguous = auto()
+    NonContiguous = auto()
     Unknown = auto()
   
-  def alias(self, BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp):
-    return self.analyze(BVOp1, BVOp2)
-
-  # Assumption here is that BVOp1 accesses lower indices than BVOp2
-  def analyze(self, BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp):
+  @staticmethod
+  def alias(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp):
     print("CHECK IF BIT SLICES ARE CONTIGUOUS")
     # Some sanity checks
     assert isinstance(BVOp1, RoseBVInsertSliceOp) or isinstance(BVOp1, RoseBVExtractSliceOp)
@@ -61,9 +59,9 @@ class RoseAliasAnalysis:
     # Handle easiest case first
     if isinstance(Low1, RoseConstant) and isinstance(Low2, RoseConstant):
       if (Low2.getValue() - Low1.getValue()) == Bitwidth:
-        return self.AnalysisResults.Contiguous
+        return RoseAliasAnalysis.AnalysisResults.Contiguous
       print("^^^^FALSE1")
-      return self.AnalysisResults.Unknown
+      return RoseAliasAnalysis.AnalysisResults.Unknown
     
     # Either both low indices are constants or both are variables/operations.
     # Other cases are not taken into account.
@@ -77,7 +75,7 @@ class RoseAliasAnalysis:
       #assert isinstance(Low2, RoseAddOp)
       if not isinstance(Low2, RoseAddOp):
         print("^^^^FALSE2")
-        return self.AnalysisResults.Unknown
+        return RoseAliasAnalysis.AnalysisResults.Unknown
       print("LOW1:")
       Low1.print()
       print("LOW2:")
@@ -104,14 +102,14 @@ class RoseAliasAnalysis:
       if isinstance(Low2IndexValue, RoseOperation) and isinstance(Low1, RoseOperation):
         if Low1.isSameAs(Low2IndexValue):
           if ConstantLow2Index.getValue() == Bitwidth:
-            return self.AnalysisResults.Contiguous
+            return RoseAliasAnalysis.AnalysisResults.Contiguous
           print("^^^^FALSE3")
-          return self.AnalysisResults.Unknown
+          return RoseAliasAnalysis.AnalysisResults.Unknown
         # Now handle a rare case where low1 = i + some_constant
         #assert isinstance(Low1, RoseAddOp)
         if not isinstance(Low1, RoseAddOp):
           print("^^^^FALSE4")
-          return self.AnalysisResults.Unknown
+          return RoseAliasAnalysis.AnalysisResults.Unknown
         if isinstance(Low1.getOperand(0), RoseConstant):
           Low1IndexValue = Low1.getOperand(1)
           ConstantLow1Index = Low1.getOperand(0)
@@ -124,15 +122,15 @@ class RoseAliasAnalysis:
         assert Low1IndexValue.isSameAs(Low2IndexValue)
         assert ConstantLow2Index.getValue() >= ConstantLow1Index.getValue()
         if (ConstantLow2Index.getValue() - ConstantLow1Index.getValue()) == Bitwidth:
-          return self.AnalysisResults.Contiguous
+          return RoseAliasAnalysis.AnalysisResults.Contiguous
         print("^^^^FALSE5")
-        return self.AnalysisResults.Unknown
+        return RoseAliasAnalysis.AnalysisResults.Unknown
       
       # Check if Low2IndexValue and low1 are equal
       if Low1 == Low2IndexValue and ConstantLow2Index.getValue() == Bitwidth:
-        return True
+        return RoseAliasAnalysis.AnalysisResults.Contiguous
       print("^^^^FALSE6")
-      return self.AnalysisResults.Unknown
+      return RoseAliasAnalysis.AnalysisResults.Unknown
     
     # Now trace back to see if the operations in both cases match
     FullTrace1 = list()
@@ -151,7 +149,7 @@ class RoseAliasAnalysis:
       FullTrace2.append(Trace2Op)
       if type(Trace1Op) != type(Trace2Op):
         print("^^^^FALSE7")
-        return self.AnalysisResults.Unknown
+        return RoseAliasAnalysis.AnalysisResults.Unknown
       # The types of the operands of these ops must be the same too
       assert Trace1Op.getOpcode().typesOfInputsAndOutputEqual() \
         or Trace1Op.getOpcode().typesOfOperandsAreEqual()
@@ -163,10 +161,10 @@ class RoseAliasAnalysis:
         # Try again
         if type(Trace1Op.getOperand(0)) != type(Trace2Op.getOperand(1)):
           print("^^^^FALSE8")
-          return self.AnalysisResults.Unknown
+          return RoseAliasAnalysis.AnalysisResults.Unknown
         if type(Trace1Op.getOperand(1)) != type(Trace2Op.getOperand(2)):
           print("^^^^FALSE9")
-          return self.AnalysisResults.Unknown
+          return RoseAliasAnalysis.AnalysisResults.Unknown
         if isinstance(Trace1Op.getOperand(0), RoseOperation):
           assert isinstance(Trace2Op.getOperand(1), RoseOperation)
           OpTrace1.append(Trace1Op.getOperand(0))
@@ -178,7 +176,7 @@ class RoseAliasAnalysis:
       else:
         if type(Trace1Op.getOperand(1)) != type(Trace2Op.getOperand(1)):
           print("^^^^FALSE10")
-          return self.AnalysisResults.Unknown
+          return RoseAliasAnalysis.AnalysisResults.Unknown
         if isinstance(Trace1Op.getOperand(0), RoseOperation):
           assert isinstance(Trace2Op.getOperand(0), RoseOperation)
           OpTrace1.append(Trace1Op.getOperand(0))
@@ -228,14 +226,14 @@ class RoseAliasAnalysis:
           if SimplifiedClonedTrace1Op.getValue() \
               - SimplifiedClonedTrace2Op.getValue() == BVOp2.getOutputBitwidth():
             print("CONTIGUOUS!!!!")
-            return self.AnalysisResults.Contiguous
+            return RoseAliasAnalysis.AnalysisResults.Contiguous
         if SimplifiedClonedTrace1Op.getValue() < SimplifiedClonedTrace2Op.getValue():
           if SimplifiedClonedTrace2Op.getValue() \
                 - SimplifiedClonedTrace1Op.getValue() == BVOp2.getOutputBitwidth():
             print("CONTIGUOUS!!!!")
-            return self.AnalysisResults.Contiguous
+            return RoseAliasAnalysis.AnalysisResults.Contiguous
         print("^^^^FALSE11")
-        return self.AnalysisResults.Unknown
+        return RoseAliasAnalysis.AnalysisResults.NonContiguous
     print("^^^^FALSE12")
-    return self.AnalysisResults.Unknown
+    return RoseAliasAnalysis.AnalysisResults.Unknown
 
