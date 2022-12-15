@@ -172,37 +172,42 @@ class RoseStringType(RoseType):
         NotImplemented
 
 
-class RoseTileType(RoseBitVectorType):
-    
-    # '__tile': RoseListType.create(RoseBitVectorType.create(512, 16),
-    # 'rows': RoseBitVectorType.create(8),
-    # 'colsb': RoseBitVectorType.create(16),
-    def __init__(self, Rows: int, Colsb: int):
-        super().__init__(16 * 64 * 8)
-        self.SubClassData["colsb"] = Colsb
-        self.SubClassData["rows"] = Rows
+class RoseMatrixType(RoseBitVectorType):  # todo: make straight up RoseValue
+
+    # For AMX—
+    #   '__tile': RoseListType.create(RoseBitVectorType.create(512, 16),
+    #   'rows': RoseBitVectorType.create(8),
+    #   'colsb': RoseBitVectorType.create(16),
+    def __init__(self, max_rows: int, max_cols: int, element_bitwidth: int):
+        # todo: Kunal — Yikes, do we also need to take in signed-ness info??  There's like 4 permutations of tiled multiply for different signed/unsigned combos.
+        # super().__init__(RoseType.RoseTypeEnum.Matrix, {
+        #     'max_rows': max_rows,
+        #     'max_cols': max_cols,
+        #     'element_bitwidth': element_bitwidth
+        # })
+        super().__init__(max_rows * max_cols * element_bitwidth)
+        self.SubClassData['max_rows'] = max_rows
+        self.SubClassData['max_cols'] = max_cols
+        self.SubClassData['element_bitwidth'] = element_bitwidth
 
     @staticmethod
-    def create(Rows: int, Colsb: int):
-        return RoseTileType(Rows, Colsb)
+    def create(max_rows: int, max_cols: int, element_bitwidth: int):
+        return RoseMatrixType(max_rows, max_cols, element_bitwidth)
 
-    def getRows(self):
-        Rows = self.getSubClassData()["rows"]
-        return Rows
+    def getMaxRows(self):
+        return self.getSubClassData()["max_rows"]
 
-    def getColsb(self):
-        Cols = self.getSubClassData()["colsb"]
-        return Cols
+    def getMaxCols(self):
+        return self.getSubClassData()["max_cols"]
+
+    def getElementBitwidth(self):
+        return self.getSubClassData()["element_bitwidth"]
 
     def __str__(self):
-        Rows = self.getSubClassData()["rows"]
-        Colsb = self.getSubClassData()["colsb"]
-        return "tile.r" + str(Rows) + ".c" + str(Colsb)
-    
+        return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
+
     def print(self):
-        Rows = self.getSubClassData()["rows"]
-        Colsb = self.getSubClassData()["colsb"]
-        print("tile.r" + str(Rows) + ".c" + str(Colsb))
+        print(self.__str__())
 
     def to_llvm_ir(self):
         assert False, "Rose IR to LLVM IR type conversion not supported."
