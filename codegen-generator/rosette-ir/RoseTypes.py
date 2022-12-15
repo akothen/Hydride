@@ -56,7 +56,7 @@ class RoseVoidType(RoseType):
 class RoseBitVectorType(RoseType):
     def __init__(self, Bitwidth):
         # Some sanity checks
-        print(type(Bitwidth))
+        # print(type(Bitwidth))  todo: Kunal — these make a million annoying "<class 'int'>" prints on startup
         assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
         if isinstance(Bitwidth, int):
             # Bitwidth of a bitvector must be more than 1.
@@ -99,7 +99,8 @@ class RoseBitVectorType(RoseType):
 class RoseIntegerType(RoseType):
     def __init__(self, Bitwidth : int):
         # Bitwidth of an integer must be more than 1.
-        print(type(Bitwidth))
+        # print(type(Bitwidth))   todo: Kunal — these make a million annoying "<class 'int'>" prints on startup
+        assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
         assert Bitwidth > 1
         super().__init__(RoseType.RoseTypeEnum.Integer, Bitwidth)
     
