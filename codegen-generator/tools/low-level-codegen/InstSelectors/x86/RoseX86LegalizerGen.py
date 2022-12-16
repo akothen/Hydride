@@ -41,31 +41,33 @@ class RoseInstSelectorGenerator():
   
   def generateLegalizerPassDeclaration(self):
     String = '''
-      namespace llvm {
+namespace llvm {
 
-      class X86LegalizationPass : public FunctionPass {
-      public:
-          static char ID;
+class X86LegalizationPass : public FunctionPass {
+public:
+    static char ID;
 
-          X86LegalizationPass() : FunctionPass(ID) {}
+    X86LegalizationPass() : FunctionPass(ID) {}
 
-          bool runOnFunction(Function &F);
+    bool runOnFunction(Function &F);
 
-          void getAnalysisUsage(AnalysisUsage &AU) const {}
-      };
+    void getAnalysisUsage(AnalysisUsage &AU) const {}
+};
 
-      }
+}
     '''
     return String
   
 
   def generateAPattern(self, TargetAgnosticInst : str, InstDict : dict):
+    InstNames = list()
     String = ""
     for InstName, InstInfo in InstDict.items():
       ValidityChecker = RoseISAValidityChecker()
       if ValidityChecker.checkValidityOnTarget(InstName, "x86") == False:
         if "div" not in InstName and "rem" not in InstName:
           continue
+      InstNames.append("\"llvm.hydride." + InstName + "_dsl\"")
       Checks = list()
       for Idx, ArgVal in enumerate(InstInfo["args"]):
         if "SYMBOLIC_BV" not in ArgVal and InstInfo["arg_permute_map"][Idx] == -1:
@@ -226,11 +228,15 @@ class RoseInstSelectorGenerator():
             }} 
           '''.format(InstName + "_wrapper", ",".join(Permutation))
       String += Pattern
+
     FinalPattern = '''
-      if(CI->getCalledFunction()->getName().contains(\"llvm.hydride.{}_dsl\")) {{ 
+    {{
+      std::vector<std::string> InstNames = {{{}}};
+      if(isNameMatch(CI, InstNames)) {{ 
         {} 
       }} 
-    '''.format(TargetAgnosticInst, String)
+    }}
+    '''.format(",\n".join(InstNames), String)
     print("FinalPattern:")
     print(FinalPattern)
     return FinalPattern
@@ -247,49 +253,52 @@ class RoseInstSelectorGenerator():
 
   def generateInstSelector(self):
     Content = '''
-    virtual bool legalize(Instruction *I) {{
-      auto *CI = dyn_cast<CallInst>(I);
-      if (CI == nullptr)
-        return false;
-      if (InstToInstMap[CI] != nullptr)
-        return false;
-      {}
-    }}
+virtual bool legalize(Instruction *I) {{
+  auto *CI = dyn_cast<CallInst>(I);
+  if (CI == nullptr) {{
+    return false;
+  }}
+  if (InstToInstMap[CI] != nullptr) {{
+    return false;
+  }}
+  {}
+}}
     '''.format(self.generateInstSelectorForAllInsts())
     return Content
     
   def generatePassToRunOnFunction(self):
     String = '''
-    bool X86LegalizationPass::runOnFunction(Function &F) {
-      if (F.getName().contains("hydride") == false)
-        return false;
-      // Initialize the legalizer
-      errs() << "LEGALIZATION BEGIN\\n";
-      Legalizer *L = new X86Legalizer();
-      return L->legalize(F);
-    }
+bool X86LegalizationPass::runOnFunction(Function &F) {
+  if (F.getName().contains("hydride") == false) {
+    return false;
+  }
+  // Initialize the legalizer
+  errs() << "LEGALIZATION BEGIN\\n";
+  Legalizer *L = new X86Legalizer();
+  return L->legalize(F);
+}
     '''
     return String
 
   def generateLegalizerPassDefinition(self):
     String = '''
-    using namespace llvm;
+using namespace llvm;
 
-    class X86Legalizer : public Legalizer {{
-    public:
-    {}
+class X86Legalizer : public Legalizer {{
+public:
+{}
 
-    }};
+}};
 
-    {}
+{}
     '''.format(self.generateInstSelector(), self.generatePassToRunOnFunction())
     return String
 
   def generateCodeForRegisteringPass(self):
     String = '''
-    char X86LegalizationPass::ID = 0;
-    static RegisterPass<X86LegalizationPass> X("x86-hydride-legalize", 
-                                              "Pass to legalize tensor intrinsics");
+char X86LegalizationPass::ID = 0;
+static RegisterPass<X86LegalizationPass> X("x86-hydride-legalize", 
+                                          "Pass to legalize tensor intrinsics");
     '''
     return String
 
@@ -312,7 +321,7 @@ class RoseInstSelectorGenerator():
     
 
 if __name__ == '__main__':
-  from semantics import semantics
+  from x86semantics import semantics
   InstSelectorGenerator = RoseInstSelectorGenerator(semantics)
   InstSelectorGenerator.generateFileWithInstSelector()
 

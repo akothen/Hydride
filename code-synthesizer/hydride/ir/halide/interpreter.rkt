@@ -35,6 +35,8 @@
     [else (error "halide/ir/interpreter.rkt: Unexpected buffer type in intr-elemT-size" elemT )])
 )
 
+
+
 (define (is-signed-expr? e1 e2)
   (define outT (infer-out-type ((interpret e1) 0) ((interpret e2) 0)) )
   (cpp:signed-type? outT)
@@ -81,6 +83,11 @@
     [(buffer data elemT buffsize) (/ buffsize (intr-elemT-size elemT)) ]
 
     ;; Type Casts
+
+    [(cast-int vec olane oprec) olane]
+    [(cast-uint vec olane oprec) olane]
+
+
     [(uint8x1 sca) 1]
     [(uint16x1 sca) 1]
     [(uint32x1 sca) 1]
@@ -228,6 +235,8 @@
     [(buffer data elemT buffsize) (list expr)]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) (list vec)]
+    [(cast-uint vec olane oprec) (list vec)]
     [(uint8x1 sca) (list sca)]
     [(uint16x1 sca) (list sca)]
     [(uint32x1 sca) (list sca)]
@@ -395,6 +404,25 @@
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
     ;; Type Casts
+
+    [(cast-int vec olane oprec) (lambda (i) (cpp:cast ((interpret vec) i) 
+        (cond
+            [(eq? oprec 8)  'int8]
+            [(eq? oprec 16)  'int16]
+            [(eq? oprec 32)  'int32]
+            [(eq? oprec 64)  'int64]
+            [else (error "halide/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+        )
+    ))]
+    [(cast-uint vec olane oprec) (lambda (i) (cpp:cast ((interpret vec) i) 
+        (cond
+            [(eq? oprec 8)  'uint8]
+            [(eq? oprec 16)  'uint16]
+            [(eq? oprec 32)  'uint32]
+            [(eq? oprec 64)  'uint64]
+            [else (error "halide/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+        )
+    ))]
     [(uint8x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint8))]
     [(uint16x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint16))]    
     [(uint32x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint32))]
@@ -595,6 +623,8 @@
     [(load-sca buf idx) empty-list]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) (append signed-casting-list (get-bv-ops vec))]
+    [(cast-uint vec olane oprec) (append unsigned-casting-list (get-bv-ops vec))]
     [(uint8x1 sca) (list extract  zero-extend)]
     [(uint16x1 sca) (list  extract  zero-extend)]    
     [(uint32x1 sca) (list  extract  zero-extend)]
@@ -711,7 +741,7 @@
     [(vec-sat-add v1 v2) (append (list extract ) (if (is-signed-expr? v1 v2) (list  bvaddnsw 'bvssat) (list  bvaddnuw 'bvusat )) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list bvshl sign-extend zero-extend) (list bvshl zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list bvshl sign-extend ) (list bvshl zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvslt  bvsmin) (list bvult bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]

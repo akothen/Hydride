@@ -28,15 +28,15 @@ Hydride has two major components:
     sh racket-8.6-x86_64-linux-cs.sh
     ```
 
-## Directory Structure (WIP)
+## Directory Structure
 - `code-syntheizer` contains the experimental files for adding the notion of cost for different benchmark kernels and code for grammar generator.
 - `codegen-generator` contains the custom compiler to generate target-agnostic semantics for target ISAs in Rosette for synthesis, LLVM IR extensions and legalization code for generating low-level code executable on a given supported target.
+- `frontends` contains modified versions of DSL compilers Hydride supports (Halide and MLIR).
+- `backends` contains modified version of low-level compilers like LLVM that contains backends to different targets.
 - `rosette` is the modified version of Rosette necessary for Hydride.
-- `llvmlite` is the modified version of llvmlite necessary for Hydride.
-- `halide-hydride` is the modified version of Halide. Modifications to Halide required to integrate Hydride with Halide.
-- `benchmarks` contains the benchmarks synthesized for which Hydride generates vector instructions. It also contains Halide basline kernels.
+- `benchmarks` contains the benchmarks on which Hydride is evaluated against other mainline DSL compilers.
 
 ## Targets Supported (WIP)
-- x86 (AVX, SSE, VNNI, AMX)
+- x86 (SSE, AVX (includes VNNI, AMX, etc.), MMX, FMA)
 - Hexagon (HVX)
 - ARM A64

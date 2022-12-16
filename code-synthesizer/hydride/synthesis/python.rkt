@@ -28,6 +28,25 @@
 (define GEN-GRAMMAR-SCRIPT (string-append CODE-SYNTH-PATH GEN-GRAMMAR-SCRIPT-NAME))
 (define PYTHON "python3")
 
+(define (generate-grammar-file-step grammar-spec grammar-file-name base_name VF is_shuffle step-idx depth)
+  (define target-str
+    (cond 
+      [(equal? target 'x86)
+       "x86"
+       ]
+      [(equal? target 'hvx)
+       "hvx"
+       ]
+      )
+    )
+  (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
+  (write-str-to-file grammar-spec spec-file-name)
+  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF) " " (~s is_shuffle) " " target-str " " (~s step-idx) " " (~s depth)))
+  (debug-log gen-grammar-cmd)
+  (system gen-grammar-cmd)
+  )
+
+
 (define (generate-grammar-file grammar-spec grammar-file-name base_name VF is_shuffle)
   (define target-str
     (cond 
@@ -41,7 +60,7 @@
     )
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)
-  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF) " " (~s is_shuffle) " " target-str))
+  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF) " " (~s is_shuffle) " " target-str ))
   (debug-log gen-grammar-cmd)
   (system gen-grammar-cmd)
   )
@@ -124,6 +143,28 @@
   (define mod-path (build-path gen (string->path grammar-file-name)))
   (debug-log mod-path)
   (generate-grammar-file spec-contents mod-path base_name VF 0) ;; IS_SHUFFLE = 0
+  (debug-log "Generated Grammar File")
+  (define (get-grammar mod name)
+    (debug-log (format "Dynamically importing from ~a ... \n" name))
+    (dynamic-require mod (string->symbol name))
+    )
+
+  (define grammar (get-grammar mod-path (string-append base_name "")))
+  (define interpreter (get-grammar mod-path (string-append base_name ":interpret")))
+  (define cost-model (get-grammar mod-path (string-append base_name ":cost")))
+  (values grammar interpreter cost-model)
+  )
+
+
+
+(define (get-expr-grammar-step expr sub-expr-ls base_name VF step-idx depth)
+  (debug-log (format "get-expr-grammar (step-wise synthesis) with base_name: ~a\n" base_name))
+  (define spec-contents (gen-synthesis-spec expr sub-expr-ls base_name))
+  (define grammar-file-name (string-append base_name "_grammar.rkt"))
+  (debug-log grammar-file-name)
+  (define mod-path (build-path gen (string->path grammar-file-name)))
+  (debug-log mod-path)
+  (generate-grammar-file-step spec-contents mod-path base_name VF 0 step-idx depth) ;; IS_SHUFFLE = 0
   (debug-log "Generated Grammar File")
   (define (get-grammar mod name)
     (debug-log (format "Dynamically importing from ~a ... \n" name))

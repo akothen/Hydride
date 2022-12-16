@@ -126,6 +126,24 @@
       ]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) 
+       (if is-leaf-depth
+        (values (cast-int (arg 0) olane oprec) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (cast-int leaf-sol olane oprec) args-used)
+        )
+        )
+     ]
+    [(cast-uint vec olane oprec) 
+       (if is-leaf-depth
+        (values (cast-uint (arg 0) olane oprec) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (cast-uint leaf-sol olane oprec) args-used)
+        )
+        )
+     ]
     [(uint8x1 sca) 
        (if is-leaf-depth
         (values (uint8x1 (arg 0)) 1)
@@ -1288,6 +1306,8 @@
     [(buffer data elemT buffsize) buffsize]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) (* olane oprec)]
+    [(cast-uint vec olane oprec) (* olane oprec)]
     [(uint8x1 sca) 8]
     [(uint16x1 sca) 16]
     [(uint32x1 sca) 32]
@@ -1419,6 +1439,105 @@
 
 
 (define id-map (make-hash))
+
+
+
+
+;; Reduce the number of vector lanes in the 
+;; halide factor by scale-factor x
+(define (scale-down-expr expr scale-factor)
+
+  (define (visitor-fn e)
+    (destruct e
+              [(buffer data elemT buffsize) 
+               (define scaled-size (/ buffsize scale-factor))
+               (halide:create-buffer (bv 0 (bitvector scaled-size)) elemT)
+               ]
+              [(cast-int vec olane oprec)
+               (cast-int vec (/ olane scale-factor) oprec)
+               ]
+              [(cast-uint vec olane oprec)
+               (cast-uint vec (/ olane scale-factor) oprec)
+               ]
+              [(x128 sca)
+               (cond
+                 [(equal? scale-factor 2)
+                  (x64 sca)
+                  ]
+                 [(equal? scale-factor 4)
+                  (x32 sca)
+                  ]
+                 [(equal? scale-factor 8)
+                  (x16 sca)
+                  ]
+                 [(equal? scale-factor 16)
+                  (x8 sca)
+                  ]
+                 [else
+                   (error "Unsupported scaling size: " scale-factor)
+                   ]
+                 )
+               ]
+
+              [(x64 sca)
+               (cond
+                 [(equal? scale-factor 2)
+                  (x32 sca)
+                  ]
+                 [(equal? scale-factor 4)
+                  (x16 sca)
+                  ]
+                 [(equal? scale-factor 8)
+                  (x8 sca)
+                  ]
+                 [else
+                   (error "Unsupported scaling size: " scale-factor)
+                   ]
+                 )
+               ]
+              [(x32 sca)
+               (cond
+                 [(equal? scale-factor 2)
+                  (x16 sca)
+                  ]
+                 [(equal? scale-factor 4)
+                  (x8 sca)
+                  ]
+                 [else
+                   (error "Unsupported scaling size: " scale-factor)
+                   ]
+                 )
+               ]
+
+              [(x16 sca)
+               (cond
+                 [(equal? scale-factor 2)
+                  (x8 sca)
+                  ]
+                 [else
+                   (error "Unsupported scaling size: " scale-factor)
+                   ]
+                 )
+               ]
+              [v 
+                v]
+              )
+    )
+
+  (define result 
+    (cond
+      [(equal? scale-factor 1)
+       expr
+       ]
+      [else
+        (halide:visit expr visitor-fn)
+       ]
+      )
+  )
+
+  result
+  
+  )
 
 
 (define (count-number-instructions expr)
@@ -1615,6 +1734,8 @@
     [(buffer data elemT buffsize) elemT]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) (size-to-elemT-signed oprec #t)]
+    [(cast-uint vec olane oprec) (size-to-elemT-signed oprec #f)]
     [(uint8x1 sca) 'uint8]
     [(uint16x1 sca) 'uint16]
     [(uint32x1 sca) 'uint32]
@@ -1767,6 +1888,8 @@
     [(buffer data elemT buffsize) (elemT-size elemT)]
 
     ;; Type Casts
+    [(cast-int vec olane oprec) oprec]
+    [(cast-uint vec olane oprec) oprec]
     [(uint8x1 sca) 8]
     [(uint16x1 sca) 16]
     [(uint32x1 sca) 32]

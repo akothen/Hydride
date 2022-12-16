@@ -29,6 +29,7 @@
 (require hydride/utils/misc)
 (require hydride/utils/debug)
 (require hydride/utils/llvm_impl)
+(require hydride/utils/target)
 
 
 ;; Hydride IR
@@ -56,6 +57,7 @@
 (require hydride/ir/hvx/binder)
 (require hydride/ir/hvx/const_fold)
 (require hydride/ir/hvx/visitor)
+(require hydride/ir/hvx/scale)
 
 
 ;; CPP IR
@@ -81,6 +83,7 @@
   (all-from-out hydride/utils/misc)
   (all-from-out hydride/utils/debug)
   (all-from-out hydride/utils/llvm_impl)
+  (all-from-out hydride/utils/target)
 
   (all-from-out hydride/ir/hydride/semantics)
   (all-from-out hydride/ir/hydride/definition)
@@ -104,6 +107,7 @@
   (all-from-out hydride/ir/hvx/binder)
   (all-from-out hydride/ir/hvx/const_fold)
   (all-from-out hydride/ir/hvx/visitor)
+  (all-from-out hydride/ir/hvx/scale)
 
 
   (all-from-out hydride/cpp)

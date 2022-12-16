@@ -48,7 +48,7 @@ Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params',
   'spec', 'rettype', 'ret_is_signed',
   'inst_form',
-  'cpuids',
+  'extensions',
   'imm_width',
   'xed',
   'elem_type',

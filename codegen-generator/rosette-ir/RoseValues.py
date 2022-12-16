@@ -227,6 +227,13 @@ class RoseArgument(RoseValue):
       or isinstance(Function, RoseAbstractions.RoseUndefRegion))
     self.Callee = Function
   
+  def verify(self):
+    if not isinstance(self.Callee, RoseUndefValue):
+      if self != self.Callee.getArg(self.getArgIndex()):
+        return False
+    # Nothing more to verify
+    return True
+  
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     return self.getName()
@@ -433,6 +440,14 @@ class RoseOperation(RoseValue):
   # Subclass must implement this
   def solve(self):
     NotImplemented
+
+  def verify(self):
+    # Verify the input operations
+    if self.getOpcode().inputsAreValid(self.getOperands()) == False:
+      return False
+    if self.getType() != self.getOpcode().getOutputType():
+      return False
+    return True
 
   # There are situations where value being extracted is defined
   # outside a loop. In Rosette, the indexing into bitvectors takes

@@ -33,7 +33,14 @@ class RoseSimilarityCheckerSummaryGen():
     ArgList = list()
     for Arg in Function.getArgs():
       if FunctionInfo.argHasConcreteVal(Arg) == False:
-        ArgList.append("\"SYMBOLIC_BV_" + str(Arg.getType().getBitwidth()) + "\"")
+        Bitwidth = Arg.getType().getBitwidth()
+        if isinstance(Bitwidth, RoseValue):
+          if isinstance(Bitwidth, RoseConstant):
+            Bitwidth = Bitwidth.getValue()
+          else:
+            # There better be a concrete value
+            Bitwidth = FunctionInfo.getConcreteValFor(Bitwidth).getValue()
+        ArgList.append("\"SYMBOLIC_BV_" + str(Bitwidth) + "\"")
       else:
         ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
         ArgList.append("\"" + GenConcreteValue(ConcreteVal) + "\"")
@@ -70,6 +77,7 @@ class RoseSimilarityCheckerSummaryGen():
                   "Signedness" : {str(FunctionInfo.getSignedness())},
                   "Cost" : "{Cost}",
                   "SIMD" : "{str(FunctionInfo.isSIMD())}",
+                  "Extensions" : "{SemaInfo.extensions}",
       '''
     TempEntryString = "{" + TempEntryString + "}"
     return TempEntryString

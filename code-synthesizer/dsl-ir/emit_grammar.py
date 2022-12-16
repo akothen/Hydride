@@ -2,33 +2,54 @@ import sys
 import time
 import json
 import subprocess as sb
-from DSLParser import parse_dict
+from common.DSLParser import parse_dict
 #from LatestSemantics import semantcs
 from merged_dict import semantcs
-from PredefinedDSL import *
-from StructDef import StructDef
-from InterpreterDef import InterpreterDef
-from CostDef import CostDef
-from GetLengthDef import GetLengthDef
+from common.PredefinedDSL import *
+from common.StructDef import StructDef
+from interpreter.InterpreterDef import InterpreterDef
+from utils.CostDef import CostDef
+from utils.GetLengthDef import GetLengthDef
 from legal_insts import legal_map
 from Specification import Specification, parse_spec
 
-from hvx_sema import hvx_semantics
+
+from HexSemanticsAllArgs import hvx_semantics
 
 
-from GrammarGenerator import GrammarGenerator
-from TypedGrammarGenerator import TypedGrammarGenerator
-from TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
-from SimpleGrammarGenerator import SimpleGrammarGenerator
+from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
 
-from Synthesizer import Synthesizer
+from synthesizer.Synthesizer import Synthesizer
+from synthesizer.StepWiseSynthesizer import StepWiseSynthesizer
 
 INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
 IS_SHUFFLE = int(sys.argv[4]) == 1
+TARGET = sys.argv[5]
 
-dsl_list = parse_dict(hvx_semantics)
+STEP=0
+DEPTH=3
+
+if len(sys.argv) >= 7:
+    STEP = int(sys.argv[6])
+
+
+if len(sys.argv) >= 8:
+    DEPTH = int(sys.argv[7])
+
+
+
+print("TARGET:", TARGET)
+
+
+
+
+if TARGET == 'x86':
+    dsl_list = parse_dict(semantcs)
+else:
+    dsl_list = parse_dict(hvx_semantics)
+
 
 #print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
 #print("Number of Target Specific Instructions:\t",sum([len(inst.contexts) for inst in dsl_list]))
@@ -87,13 +108,15 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
     write_to_file(hydride_header)
 
 
-    syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
+    syn = StepWiseSynthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 1,
+                  contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
-                  depth = 3,
+                  depth = DEPTH,
                   is_shuffle = IS_SHUFFLE,
-                  legal_map = legal_map
+                  legal_map = legal_map,
+                  target = TARGET,
+                  step = STEP
                   )
 
 
@@ -103,7 +126,6 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     dsl_subset = syn.dsl_subset
 
-    print(dsl_subset)
 
     subset_interpreter = idd.emit_interpreter(dsl_subset, sd, add_assertions = False, interpret_name = grammar_name+":interpret")
 

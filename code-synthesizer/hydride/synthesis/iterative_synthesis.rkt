@@ -113,20 +113,21 @@
 ;; the solution is not true for all
 ;; values we return the counter example
 ;; which it failed on
-(define (verify-synth-sol  sol bw-list invoke_ref solver)
+(define (verify-synth-sol  sol bw-list invoke_ref solver interpreter)
 
+  (debug-log "Invoked verifier main!\n")
   (clear-vc!)
 
-  (define interpreter
-    (cond
-      [(equal? target 'x86)
-       hydride:interpret
-       ]
-      [(equal? target 'hvx)
-       hvx:interpret
-       ]
-      )
-    )
+  ;(define interpreter
+  ;  (cond
+  ;    [(equal? target 'x86)
+  ;     hydride:interpret
+  ;     ]
+  ;    [(equal? target 'hvx)
+  ;     hvx:interpret
+  ;     ]
+  ;    )
+  ;  )
   ;(current-solver (z3)) ;; timeout verification after 5 mins
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
@@ -165,16 +166,6 @@
         (define spec_res (invoke_ref new-bvs))
         (debug-log spec_res)
 
-      (define interpreter
-        (cond
-          [(equal? target 'x86)
-           hydride:interpret
-           ]
-          [(equal? target 'hvx)
-           hvx:interpret
-           ]
-          )
-        )
 
 
         (define synth_res  (interpreter sol new-bvs))
@@ -427,18 +418,8 @@
   )
 
 
-(define (get-failing-lanes invoke_ref synth-sol cex-ls word-size)
+(define (get-failing-lanes invoke_ref synth-sol cex-ls word-size interpreter)
 
-  (define interpreter
-    (cond
-      [(equal? target 'x86)
-       hydride:interpret
-       ]
-      [(equal? target 'hvx)
-       hvx:interpret
-       ]
-      )
-    )
 
   (define difference-predicate
   (for/list ([cex cex-ls])
@@ -632,12 +613,12 @@
               (define verify-individual-lanes (verify-across-lanes bitwidth-list invoke_ref_lane invoke_sol_lane solver word-size output-size))
               (if verify-individual-lanes
                 (values #t '())
-                (verify-synth-sol  materialize bitwidth-list invoke_ref solver)
+                (verify-synth-sol  materialize bitwidth-list invoke_ref solver interpreter-fn)
                 )
               )
             ]
           [else 
-            (verify-synth-sol  materialize bitwidth-list invoke_ref solver)
+            (verify-synth-sol  materialize bitwidth-list invoke_ref solver interpreter-fn)
             ]
           )
         )
@@ -701,7 +682,7 @@
               new-cex
               )
             )
-          (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-failing-cex) word-size))
+          (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-failing-cex) word-size interpreter-fn))
 
             (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn  
                                       (append cex-ls (list new-failing-cex)) ;; Append new cex into accumulated inputs

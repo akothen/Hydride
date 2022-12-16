@@ -229,6 +229,35 @@ class RoseFunction(RoseValue, RoseRegion):
     assert ArgIndex < len(self.ArgsList)
     self.ArgsList[ArgIndex].setName(Name)
 
+  def verify(self):
+    # Verify the basic abstractions in the function
+    if RoseRegion.verify() == False:
+      return False
+    # Verify the function type
+    if not isinstance(self.getType(), RoseFunctionType):
+      return False
+    if self.getType().getNumArgs() != self.getNumArgs():
+      return False
+    # Verify the arguments
+    for Index, Arg in enumerate(self.getArgs()):
+      if Arg.getFunction() != self:
+        return False
+      if Arg.verify() == False:
+        return False
+      if self.getType().getArgType(Index) != Arg.getType():
+        return False
+    # Verify return value and type
+    if self.getType().getReturnType() != self.getReturnValue().getType():
+      return False
+    BlockList = self.getRegionsOfType(RoseBlock)
+    for Block in reversed(BlockList):
+      for Op in Block:
+        if isinstance(Op, RoseReturnOp):
+          if Op.getOperand(0) != self.getReturnValue():
+            return False
+          break
+    return True
+
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -605,6 +634,21 @@ class RoseForLoop(RoseRegion):
       self.setEndIndexVal(NewAbstraction)
     super().replaceUsesWith(Abstraction, NewAbstraction)
 
+  def verify(self):
+    # Verify the basic abstractions in the loop
+    if RoseRegion.verify() == False:
+      return False
+    # Verify the step and loop bounds
+    if self.getIterator().getType() != self.getStartIndex().getType():
+      return False
+    if self.getStartIndex().getType() == self.getEndIndex().getType():
+      return False
+    if self.getStartIndex().getType() == self.getStep().getType():
+      return False
+    if isinstance(self.getStartIndex().getType(), RoseIntegerType):
+      return False
+    return True
+
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -796,6 +840,21 @@ class RoseCond(RoseRegion):
         NumUsers += 1
     return NumUsers
 
+  def verify(self):
+    # Verify the basic abstractions in the cond region
+    if RoseRegion.verify() == False:
+      return False
+    # Verify conditions
+    if len(self.getConditions()) == 0:
+      return False
+    for Condition in self.getConditions():
+      if not isinstance(Condition, RoseBooleanType) \
+        and not isinstance(Condition, RoseBitVectorType):
+        return False
+      if Condition.getType().getBitwidth() != 1:
+        return False
+    return True
+
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -870,7 +929,4 @@ class RoseCond(RoseRegion):
           String += Region.__str__(NumSpace + 1)
     String += Spaces + "}\n"
     return String
-
-
-
 

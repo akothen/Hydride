@@ -470,7 +470,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
       else:
         assert type(Expr.obj.obj) == BitIndex
         BitIndexVar = Expr.obj.obj
-        assert type(BitIndexVar.obj) == Lookup
+        assert type(BitIndexVar.obj) == TypeLookup
         assert type(BitIndexVar.obj.obj) == Var
         Variable = BitIndexVar.obj.obj
         if not Context.isVariableDefined(Variable.name):
@@ -1487,7 +1487,7 @@ def CompileIfElseIfElse(IfStmt, Context : x86RoseContext):
 def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
   # LookupExpr tracks types of variables
   if type(LookupExpr.obj) == Var:
-    # Check if the variable is already defined and cached. If yes, just return that.
+    # Check if the variable is already defined and cached. If so, just return that.
     if Context.isVariableDefined(LookupExpr.obj.name):
       ID = Context.getVariableID(LookupExpr.obj.name)
       FoundValue = Context.getCompiledAbstractionForID(ID)
