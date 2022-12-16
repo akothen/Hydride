@@ -203,11 +203,12 @@ class RoseMatrixType(RoseBitVectorType):  # todo: make straight up RoseValue
     def getElementBitwidth(self):
         return self.getSubClassData()["element_bitwidth"]
 
-    def __str__(self):
-        return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
-
-    def print(self):
-        print(self.__str__())
+    # FOR NOW JUST INHERIT THESE TO MAKE STUFF WORK...
+    # def __str__(self):
+    #     return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
+    #
+    # def print(self):
+    #     print(self.__str__())
 
     def to_llvm_ir(self):
         assert False, "Rose IR to LLVM IR type conversion not supported."

@@ -322,8 +322,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     Vector = CompileExpression(IndexExpr.obj, Context)
     # Get the high index
     assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
-    ElemType = Context.getElemTypeOfVariable(Vector.getName())
-    assert isinstance(ElemType, RoseBitVectorType)
+    # ElemType = Context.getElemTypeOfVariable(Vector.getName())  # todo: Kunal — No??  this makes tile.rows return bv8192 which is WRONG
+    assert isinstance(Context.getElemTypeOfVariable(Vector.getName()), RoseBitVectorType)
     IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
     HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
     Context.addAbstractionToIR(HighIndex)
@@ -1932,49 +1932,46 @@ def HandleAmxWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
   #       ENDFOR
   #   }
   [treg, r, data, nbytes] = Args
-  # max_colsb = x86Dims['max_colsb']
-  max_colsb = RoseConstant.create(512 // 8, RoseIntegerType.create(16))
 
-  assert isinstance(treg.getType(), RoseTileType)
+  assert isinstance(treg.getType(), RoseMatrixType)
   assert isinstance(data.getType(), RoseBitVectorType)
-  assert isinstance(nbytes, RoseConstant)
-  assert isinstance(max_colsb, RoseConstant)
-  assert nbytes.getValue() <= max_colsb.getValue() * 8
+  assert isinstance(nbytes, RoseArgument)
 
-  nbits = RoseConstant.create(nbytes.getValue()*8, r.getType())
-  row_bitwidth = RoseConstant.create(x86Types['row'].getBitwidth(), r.getType())
-  write_lo_idx = RoseMulOp.create(Context.genName(), [row_bitwidth, r])
-  write_index_diff = RoseConstant.create(nbits.getValue() - 1, r.getType())
-  write_hi_idx = RoseAddOp.create(Context.genName(), [write_lo_idx, write_index_diff])
+  _name = Context.genName
 
-  write_ops = [write_lo_idx, write_hi_idx]
+  _type = RoseIntegerType.create(32)
+  assert nbytes.getType() == _type
+  assert r.getType() == _type
 
-  if nbits.getValue() < data.getType().getBitwidth():
-    write_bv = RoseBVTruncateLowOp.create(Context.genName(), data, nbits.getValue())
-    write_ops += [write_bv]
-  else:
-    write_bv = data
+  _1 = RoseConstant.create(1, _type)
+  _8 = RoseConstant.create(8, _type)
+  row_bitwidth = RoseConstant.create(x86Types['row'].getBitwidth(), _type)
 
-  write_bvinsert = RoseBVInsertSliceOp.create(write_bv, treg, write_lo_idx, write_hi_idx, nbits)
-  write_ops += [write_bvinsert]
+  nbits = RoseMulOp.create(_name(), [nbytes, _8])
 
-  zero_width = RoseConstant.create(max_colsb.getValue()*8 - nbits.getValue(), nbits.getType())
-  if zero_width.getValue() >= 1:
-    zero_lo_idx = RoseAddOp.create(Context.genName(), [write_lo_idx, nbits])
-    zero_index_diff = RoseConstant.create(zero_width.getValue() - 1, r.getType())
-    zero_hi_idx = RoseAddOp.create(Context.genName(), [zero_lo_idx, zero_index_diff])
+  max_cols_bits = RoseConstant.create(treg.getType().getMaxCols() * treg.getType().getElementBitwidth(), _type)
+  assert data.getType().getBitwidth() == max_cols_bits.getValue()
+  # else do this `data_ext = RoseBVZeroExtendOp.create(_name(), data, max_cols_bits)`
+  _neg1 = RoseConstant.create(0, RoseBitVectorType.create(max_cols_bits.getValue()))
+  _neg1 = RoseBVNotOp.create(_name(), _neg1)
+  zero_width = RoseSubOp.create(_name(), [max_cols_bits, nbits])
+  zero_width_bv = RoseCastOp.create(_name(), zero_width, RoseBitVectorType.create(_type.getBitwidth()))
+  mask_bv = RoseBVShlOp.create(_name(), _neg1, zero_width_bv)
+  write_bv = RoseBVAndOp.create(_name(), [data, mask_bv])
 
-    zero_bv = RoseConstant.create(0, RoseBitVectorType.create(zero_width.getValue()))
-    zero_bvinsert = RoseBVInsertSliceOp.create(zero_bv, treg, zero_lo_idx, zero_hi_idx, zero_width)
-    zero_ops = [zero_lo_idx, zero_hi_idx, zero_bvinsert]
-  else:
-    zero_ops = []
+  write_lo_idx = RoseMulOp.create(_name(), [row_bitwidth, r])
+  write_index_diff = RoseConstant.create(max_cols_bits.getValue() - 1, _type)
+  write_hi_idx = RoseAddOp.create(_name(), [write_lo_idx, write_index_diff])
+
+  write_bv_insert = RoseBVInsertSliceOp.create(write_bv, treg, write_lo_idx, write_hi_idx, max_cols_bits)
+
+  return [
+    nbits, _neg1, zero_width, zero_width_bv, mask_bv, write_bv,
+    write_lo_idx, write_hi_idx, write_bv_insert
+  ]
 
 
-  return write_ops + zero_ops
-
-
-def HandleAmxZeroUpperRows(Name : str, Args : list, Context : x86RoseContext):
+def HandleAmxZeroUpperRows(Name: str, Args: list, Context: x86RoseContext):
   # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
   #   DEFINE zero_upper_rows(treg, r) {
   #       FOR i := r TO treg.max_rows - 1
@@ -1984,29 +1981,38 @@ def HandleAmxZeroUpperRows(Name : str, Args : list, Context : x86RoseContext):
   #       ENDFOR
   #   }
   [treg, r] = Args
-  rows = x86Dims['rows']
-  # max_rows = x86Dims['max_rows']
-  max_rows = RoseConstant.create(16, RoseIntegerType.create(8))
-  colsb = x86Dims['colsb']
 
   assert isinstance(treg.getType(), RoseMatrixType)
-  assert isinstance(r, RoseConstant)
-  assert isinstance(rows, RoseConstant)
-  assert isinstance(colsb, RoseConstant)
-  assert r.getValue() <= rows.getValue()
+  assert isinstance(r, RoseArgument)
 
-  row_bitwidth = RoseConstant.create(x86Types['row'].getBitwidth(), r.getType())
-  nbits = (max_rows.getValue() - r.getValue()) * row_bitwidth.getValue()
-  if nbits <= 0: return []  # return void
-  else: nbits = RoseConstant.create(nbits, r.getType())
+  _name = Context.genName
 
-  zero_lo_idx = RoseConstant.create(r.getValue() * row_bitwidth.getValue(), r.getType())
-  zero_hi_idx = RoseConstant.create(max_rows.getValue() * row_bitwidth.getValue() - 1, r.getType())
+  _type = RoseIntegerType.create(32)
+  assert r.getType() == _type
 
-  zero_bv = RoseConstant.create(0, RoseBitVectorType.create(nbits.getValue()))
-  zero_bvinsert = RoseBVInsertSliceOp.create(zero_bv, treg, zero_lo_idx, zero_hi_idx, nbits)
+  _0 = RoseConstant.create(0, _type)
+  _1 = RoseConstant.create(1, _type)
+  _8 = RoseConstant.create(8, _type)
+  max_rows = RoseConstant.create(treg.getType().getMaxRows(), _type)
+  row_bitwidth = RoseConstant.create(x86Types['row'].getBitwidth(), _type)
+  tile_bitwidth = RoseConstant.create(treg.getType().getBitwidth(), _type)
 
-  return [zero_bvinsert]
+  nrows = RoseSubOp.create(_name(), [max_rows, r])
+  nbits = RoseMulOp.create(_name(), [nrows, row_bitwidth])
+
+  _neg1 = RoseConstant.create(0, treg.getType())
+  _neg1 = RoseBVNotOp.create(_name(), _neg1)
+  zero_width = RoseSubOp.create(_name(), [tile_bitwidth, nbits])
+  zero_width_bv = RoseCastOp.create(_name(), zero_width, RoseBitVectorType.create(_type.getBitwidth()))
+  mask_bv = RoseBVShlOp.create(_name(), _neg1, zero_width_bv)
+  write_bv = RoseBVAndOp.create(_name(), [treg, mask_bv])
+
+  write_hi_idx = RoseConstant.create(tile_bitwidth.getValue() - 1, _type)
+
+  write_bv_insert = RoseBVInsertSliceOp.create(write_bv, treg, _0, write_hi_idx, tile_bitwidth)
+
+  return [nrows, nbits, _neg1, zero_width, zero_width_bv, mask_bv, write_bv, write_bv_insert]
+
 
 def HandleAmxZeroTileConfigStart(Name : str, Args : list, Context : x86RoseContext):
   # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
