@@ -1515,7 +1515,7 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
 
 
 
-def CompileDimLookup(expr, Context: x86RoseContext):
+def CompileMatrixDimLookup(expr, Context: x86RoseContext):
   assert type(expr.obj) == Var
   obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
   # Check if the tile object is already defined and cached. If yes, just use that.
@@ -1764,7 +1764,7 @@ CompileAbstractions = {
   BinaryExpr: CompileBinaryExpr,
   BitIndex: CompileBitIndex,
   TypeLookup: CompileTypeLookup,
-  DimLookup: CompileDimLookup,
+  MatrixDimLookup: CompileMatrixDimLookup,
   Match: CompileMatch,
 }
 

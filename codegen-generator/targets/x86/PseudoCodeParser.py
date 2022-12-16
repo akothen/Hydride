@@ -449,14 +449,14 @@ def p_expr_loop_bound0(p):
 
 def p_expr_loop_bound1(p):
   'loopbound : expr TO expr DOT ID MINUS expr'
-  rhs = DimLookup(p[3], p[5])
+  rhs = MatrixDimLookup(p[3], p[5])
   rhs = new_binary_expr(Parser, '-',  rhs, p[7])
   lhs = p[1]
   p[0] = (lhs, rhs)
 
 def p_expr_loop_bound2(p):
   'loopbound : expr TO LPAREN expr DOT ID DIV expr RPAREN MINUS expr'
-  rhs = DimLookup(p[4], p[6])
+  rhs = MatrixDimLookup(p[4], p[6])
   rhs = new_binary_expr(Parser, '/', rhs, p[8])
   rhs = new_binary_expr(Parser, '-', rhs, p[11])
   lhs = p[1]
@@ -532,7 +532,7 @@ def p_expr_lookup(p):
   if p[3] in x86Types:
     p[0] = TypeLookup(p[1], p[3])
   else:
-    p[0] = DimLookup(p[1], p[3])
+    p[0] = MatrixDimLookup(p[1], p[3])
 
 def p_args(p):
   '''args : expr
