@@ -123,16 +123,17 @@ def InitX86Parser():
   global precedence
   # Initialize the tokens
   tokens = [
-    'PSEUDO', 'ID', 'COMMENT', 'DE', 'NUMBER',
-    'LBRACE', 'RBRACE', 'COLON',
-    'UPDATE', 'SEMICOLON',
-    'LPAREN', 'RPAREN', 'COMMA',
-    'DOT',
-    'LBRACKET', 'RBRACKET',
-    'QUEST',
-    'CASE_HEADER',
-    'NEG'
-    ] + list(x86BinaryOps.values()) + list(x86Reserved)
+             'PSEUDO', 'ID', 'COMMENT', 'DE', 'NUMBER',
+             'LBRACE', 'RBRACE', 'COLON',
+             'UPDATE', 'SEMICOLON',
+             'LPAREN', 'RPAREN', 'COMMA',
+             'DOT',
+             'LBRACKET', 'RBRACKET',
+             'MATRIX_ROW', 'MATRIX_DIM',
+             'QUEST',
+             'CASE_HEADER',
+             'NEG'
+           ] + list(x86BinaryOps.values()) + list(x86Reserved)
   binary_regexp = r'|'.join(x86BinaryOps)
   # in increasing order
   precedence = (
@@ -148,6 +149,7 @@ def InitX86Parser():
       ('left', 'TIMES', 'DIV', 'MOD'),
       ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
       ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE'),
+      ('left', 'MATRIX_ROW', 'MATRIX_DIM'),
   )
   print("INTIALIZE PARSER")
   lexer = lex.lex()
@@ -281,6 +283,10 @@ def t_ID(t):
   if lexed in x86Reserved:
     t.type = lexed
     t.value = lexed
+  if lexed in {'ROWS', 'COLSB'}:
+    t.type = 'MATRIX_DIM'
+  if lexed in {'ROW'}:
+    t.type = 'MATRIX_ROW'
   return t
 
 def t_COMMENT(t):
@@ -447,18 +453,22 @@ def p_expr_loop_bound0(p):
   'loopbound : expr TO NUMBER'
   p[0] = (p[1], Number(p[3]))
 
-def p_expr_loop_bound1(p):
-  'loopbound : expr TO expr DOT ID MINUS expr'
-  rhs = MatrixDimLookup(p[3], p[5])
-  rhs = new_binary_expr(Parser, '-',  rhs, p[7])
+def p_expr_loop_bound1(p):  # AMX
+  'loopbound : expr TO ID DOT MATRIX_DIM MINUS NUMBER'
+  expr_id = "var." + GenUniqueID(Parser)
+  tile = Var(p[3], expr_id)
+  rhs = MatrixDimLookup(tile, p[5])
+  rhs = new_binary_expr(Parser, '-',  rhs, Number(p[7]))
   lhs = p[1]
   p[0] = (lhs, rhs)
 
-def p_expr_loop_bound2(p):
-  'loopbound : expr TO LPAREN expr DOT ID DIV expr RPAREN MINUS expr'
-  rhs = MatrixDimLookup(p[4], p[6])
-  rhs = new_binary_expr(Parser, '/', rhs, p[8])
-  rhs = new_binary_expr(Parser, '-', rhs, p[11])
+def p_expr_loop_bound2(p):  # AMX
+  'loopbound : expr TO LPAREN ID DOT MATRIX_DIM DIV NUMBER RPAREN MINUS NUMBER'
+  expr_id = "var." + GenUniqueID(Parser)
+  tile = Var(p[4], expr_id)
+  rhs = MatrixDimLookup(tile, p[6])
+  rhs = new_binary_expr(Parser, '/', rhs, Number(p[8]))
+  rhs = new_binary_expr(Parser, '-', rhs, Number(p[11]))
   lhs = p[1]
   p[0] = (lhs, rhs)
 
@@ -527,12 +537,21 @@ def p_expr_call_no_args(p):
   expr_id = "call." + GenUniqueID(Parser)
   p[0] = Call(p[1], [], expr_id)
 
-def p_expr_lookup(p):
+def p_expr_type_lookup(p):
   'expr : expr DOT ID'
-  if p[3] in x86Types:
-    p[0] = TypeLookup(p[1], p[3])
-  else:
-    p[0] = MatrixDimLookup(p[1], p[3])
+  assert p[3] in x86Types, f"Unrecognized TypeLookup to `{p[3]}`"
+  p[0] = TypeLookup(p[1], p[3])
+
+
+def p_expr_matrix_dim_lookup(p):
+  'expr : expr DOT MATRIX_DIM'
+  p[0] = MatrixDimLookup(p[1], p[3])
+
+
+def p_expr_matrix_row_lookup(p):
+  'expr : expr DOT MATRIX_ROW LBRACE expr RBRACE'
+  p[0] = MatrixRowLookup(p[1], p[5])
+
 
 def p_args(p):
   '''args : expr
