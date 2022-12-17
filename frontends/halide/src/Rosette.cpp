@@ -503,7 +503,7 @@ namespace Halide {
                             indent.push(indent.top() + 1);
                             const std::string rkt_val = dispatch(op->value);
                             indent.pop();
-                            bool use_generalized_cast = false;
+                            bool use_generalized_cast = true;
 
                             if (use_generalized_cast) {
                                 std::string lanes_str = std::to_string(op->type.lanes());
@@ -1645,6 +1645,7 @@ namespace Halide {
                                 return IRMutator::mutate(expr);
                             }
 
+                            // If the expression is a shuffle , optimize the operands individually
                             if (base_e.node_type() == IRNodeType::Shuffle){
                                 return IRMutator::mutate(expr);
 
@@ -3129,16 +3130,15 @@ namespace Halide {
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
 
-            /*
-            auto distributed = distribute_vector_exprs(pruned, 256);
+            std::vector<unsigned> x86_vector_sizes = { 512, 256, 128 };
+            auto distributed = distribute_vector_exprs(pruned, x86_vector_sizes);
             debug(1) << "Distributed Stmt:\n";
             debug(1) << distributed <<"\n";
-            */
 
             srand(time(0));
             int random_seed = rand() % 1024;
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs, random_seed).mutate(pruned);
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs, random_seed).mutate(distributed);
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
