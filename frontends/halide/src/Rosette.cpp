@@ -3095,18 +3095,16 @@ namespace Halide {
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
             
-            /*
             std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
             auto distributed = distribute_vector_exprs(pruned, hvx_vector_sizes);
             debug(0) << "Distributed Stmt:\n";
             debug(0) << distributed <<"\n";
-            */
 
 
             srand(time(0));
             int random_seed = rand() % 1024;
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs, random_seed).mutate(pruned);
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs, random_seed).mutate(distributed);
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::Hexagon, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
