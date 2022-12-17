@@ -74,6 +74,10 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         self.set_target_settings()
 
+        # Lowering of swizzles stages happens at ful bitwidth
+        if is_shuffle:
+            self.scale_factor = 1
+
         print("Pre Scaling")
         self.print_dsl_stats()
         self.dsl_operators = self.scale_down_dsl(self.dsl_operators)
@@ -111,8 +115,12 @@ class StepWiseSynthesizer(SynthesizerBase):
         scaled_down_dsl = []
         for dsl_inst in dsl_operators:
 
+            BASE_SIZE = None
+            if self.BASE_VECT_SIZE != None:
+                BASE_SIZE = self.BASE_VECT_SIZE * self.scale_factor
+
             if dsl_inst.supports_scaling():
-                dsl_inst.scale_contexts(self.scale_factor)
+                dsl_inst.scale_contexts(self.scale_factor, base_vector_size = BASE_SIZE)
                 scaled_down_dsl.append(dsl_inst)
 
         return scaled_down_dsl

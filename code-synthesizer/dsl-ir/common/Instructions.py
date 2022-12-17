@@ -172,7 +172,7 @@ class Context:
 
 
     # Update context parameters to down scale the vector sizes parameters
-    def scale_context(self, scale_factor):
+    def scale_context(self, scale_factor, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling"
         scaled_args = []
 
@@ -202,6 +202,9 @@ class Context:
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
                     scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
                     scaled_args.append(scaled_int)
+                elif base_vector_size != None and arg.value == base_vector_size:
+                    scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
+                    scaled_args.append(scaled_int)
                 else:
                     scaled_args.append(arg)
             else:
@@ -221,7 +224,7 @@ class Context:
 
 
 
-    def get_scalable_args_idx(self):
+    def get_scalable_args_idx(self, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
 
         sample_scale_factor = 8
@@ -240,6 +243,8 @@ class Context:
                 scalable_idx.append(idx)
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
+                    scalable_idx.append(idx)
+                elif base_vector_size != None and arg.value == base_vector_size:
                     scalable_idx.append(idx)
 
         return scalable_idx
@@ -633,12 +638,12 @@ class DSLInstruction(InstructionType):
     def supports_scaling(self):
         return all([ctx.can_scale_context() for ctx in self.contexts])
 
-    def scale_contexts(self, scale_factor):
+    def scale_contexts(self, scale_factor, base_vector_size = None):
 
         scaled_contexts = []
         for ctx in self.contexts:
             if ctx.can_scale_context():
-                ctx.scale_context(scale_factor)
+                ctx.scale_context(scale_factor, base_vector_size = base_vector_size)
                 scaled_contexts.append(ctx)
 
         self.contexts = scaled_contexts

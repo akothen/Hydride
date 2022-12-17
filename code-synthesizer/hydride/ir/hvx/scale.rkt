@@ -17,7 +17,7 @@
 (define (hvx:scale-expr prog scale-factor)
   (destruct prog
             [(reg id) (reg id) ]
-            [(lit v) (lit v)]
+            [(lit v) (lit (integer->bitvector (bitvector->integer v) (bitvector (* scale-factor (bvlength v)))))]
             [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
              (
               vector-two-input-swizzle_dsl
@@ -86,12 +86,12 @@
               num_12
               num_13
               num_14
-              num_15
+              (* scale-factor num_15)
               num_16
               num_17
               num_18
               prec_o
-              num_20
+              (* scale-factor num_20)
               num_21
               num_22
               num_23
@@ -278,13 +278,13 @@
               num_13
               num_14
               num_15
-              num_16
+              (* scale-factor num_16)
               num_17
               num_18
               num_19
               num_20
               prec_o
-              num_22
+              (* scale-factor num_22)
               num_23
               num_24
               num_25
@@ -501,7 +501,7 @@
               num_16
               num_17
               num_18
-              num_19
+              (* scale-factor num_19)
               num_20
               num_21
               num_22
@@ -520,7 +520,7 @@
               num_35
               num_36
               num_37
-              num_38
+              (* scale-factor num_38)
               num_39
               num_40
               )
@@ -579,7 +579,7 @@
               num_20
               num_21
               num_22
-              num_23
+              (* scale-factor num_23)
               num_24
               num_25
               )
@@ -682,7 +682,7 @@
               num_18
               num_19
               num_20
-              num_21
+              (* scale-factor num_21)
               num_22
               num_23
               )
@@ -968,7 +968,7 @@
               num_23
               num_24
               num_25
-              num_26
+              (* scale-factor num_26)
               num_27
               num_28
               )
@@ -1016,14 +1016,14 @@
               num_14
               num_15
               num_16
-              num_17
+              (* scale-factor num_17)
               num_18
               num_19
               num_20
               num_21
               num_22
               prec_o
-              num_24
+              (* scale-factor num_24)
               num_25
               num_26
               num_27
@@ -1223,14 +1223,14 @@
               (* scale-factor size_i_o)
               (* scale-factor num_3)
               num_4
-              num_5
+              (* scale-factor num_5)
               num_6
               num_7
               (* scale-factor num_8)
               prec_i_o
               num_10
               num_11
-              num_12
+              (* scale-factor num_12)
               num_13
               )
              ]
@@ -1476,7 +1476,7 @@
               num_15
               num_16
               num_17
-              num_18
+              (* scale-factor num_18)
               num_19
               num_20
               num_21
@@ -1492,7 +1492,7 @@
               num_31
               num_32
               num_33
-              num_34
+              (* scale-factor num_34)
               num_35
               num_36
               )
@@ -1585,14 +1585,14 @@
               (* scale-factor size_i_o)
               (* scale-factor num_3)
               num_4
-              num_5
+              (* scale-factor num_5)
               num_6
               num_7
               (* scale-factor num_8)
               prec_i_o
               num_10
               num_11
-              num_12
+              (* scale-factor num_12)
               num_13
               )
              ]
@@ -1736,7 +1736,7 @@
               num_18
               num_19
               num_20
-              num_21
+              (* scale-factor num_21)
               num_22
               num_23
               )

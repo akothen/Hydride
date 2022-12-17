@@ -4,8 +4,8 @@ from common.PredefinedDSL import *
 
 class ScaleDef:
 
-    def __init__(self):
-        return
+    def __init__(self, base_vect_size = None):
+        self.base_vect_size = base_vect_size
 
 
     def emit_default_def(self, struct_definer ,  scale_name = "hydride:scale-expr"):
@@ -13,7 +13,7 @@ class ScaleDef:
 
         defaults.append("[(reg id) (reg id) ]")
 
-        defaults.append("[(lit v) (lit v)]")
+        defaults.append("[(lit v) (lit (integer->bitvector (bitvector->integer v) (bitvector (* scale-factor (bvlength v)))))]")
 
 
         for structs in default_structs:
@@ -42,7 +42,7 @@ class ScaleDef:
 
         new_expr = ["(", dsl_inst.get_dsl_name()]
 
-        context_scalable_args_idx = sample_ctx.get_scalable_args_idx()
+        context_scalable_args_idx = sample_ctx.get_scalable_args_idx(base_vector_size = self.base_vect_size)
         for idx,arg in enumerate(sample_ctx.context_args):
             if idx in context_scalable_args_idx:
                 new_expr.append("(* scale-factor {})".format(arg.name))

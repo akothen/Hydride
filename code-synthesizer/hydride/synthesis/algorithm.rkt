@@ -569,7 +569,7 @@
               [_ 
                 (begin
 
-                  (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args actual-expr-depth))
+                  (define-values (expr-extract num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) dummy-args actual-expr-depth))
 
                   (debug-log expr-extract)
 
@@ -592,13 +592,12 @@
 
                   (define (invoke-spec env-full)
                     (printf "invoke-spec with env: ~a\n" env-full)
-                    (define synth-buffers-full (halide:create-buffers leaves env-full))
+                    (define synth-buffers-full (halide:create-buffers scaled-leaves env-full))
+                    (println scaled-leaves)
 
 
-
-
-                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args halide-expr synth-buffers-full actual-expr-depth))
-
+                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-full actual-expr-depth))
+                    (displayln "Scaled expression:")
                     (println _expr-extract-full)
 
 
@@ -612,8 +611,8 @@
                   ;; Calculate result for last most lane
                   (define (invoke-spec-lane lane-idx env-lane)
                     (printf "invoke-spec-lane with env: ~a\n" env-lane)
-                    (define synth-buffers-lane (halide:create-buffers leaves env-lane))
-                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers-lane actual-expr-depth))
+                    (define synth-buffers-lane (halide:create-buffers scaled-leaves env-lane))
+                    (define-values (_expr-extract _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-lane actual-expr-depth))
                     (define output-idx (- expr-VF 1 lane-idx))
                     (define _result_lane (cpp:eval ((halide:interpret _expr-extract) output-idx)))
                     _result_lane

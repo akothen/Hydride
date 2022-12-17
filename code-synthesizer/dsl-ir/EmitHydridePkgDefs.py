@@ -43,7 +43,7 @@ gp = GetOutPrecDef(get_prec_name = "hvx:get-prec")
 ip = IRPrinter(printer_name = "hvx:hydride-printer")
 bd = BindDef()
 vd = VisitorDef()
-scd = ScaleDef()
+scd = ScaleDef(base_vect_size = 1024)
 
 cf = ConstFold()
 

@@ -698,7 +698,7 @@
     ;; Found a solution, but it contains a symbolic
     ;; union term as one of the sub-trees. Add another
     ;; counter example and re-attempt synthesis.
-    [satisfiable? 
+    [(and satisfiable? (<= (length cex-ls) 15))
       (begin
         (debug-log "Contains symbolic union, retry synthesis")
         (debug-log "Union solution:")
@@ -714,6 +714,11 @@
         
         )
       ]
+    ;; Found union-solutions and exceed number of CEXs
+    ;; , return failure
+    [satisfiable?
+        (values #f materialize elapsed_time)
+     ]
     [else (values satisfiable? materialize elapsed_time) ;; If not satisfiable just return current state
           ]
     )
