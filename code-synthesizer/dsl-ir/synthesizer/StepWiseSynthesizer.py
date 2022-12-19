@@ -73,6 +73,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         print("Using Stepwise Synthesizer!")
 
         self.set_target_settings()
+        self.partition_flexibility = 4
 
         # Lowering of swizzles stages happens at ful bitwidth
         if is_shuffle:
@@ -101,7 +102,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
         elif self.target == "hvx":
-            self.scale_factor = 16
+            self.scale_factor =  16
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
@@ -294,7 +295,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         #print("sorted keys lexo", sorted_keys_lexo)
         sorted_keys =  sorted_keys_lexo + shuffle_key
 
-        sample_key_sizes = min(len(sorted_keys) -1, int(max_num_clauses / 2))
+        sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2)), 0)
         #print("Sample key sizes:", sample_key_sizes)
         #print("Total buckets without shuffle:", len(sorted_keys)-1)
 
@@ -319,19 +320,21 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             for op in spec_ops:
                 if op not in fold_ops:
+
                     non_matching_count += 1
             return  (non_matching_count < non_matching_lim)
 
         print(sample_key_sizes)
 
-        for flexibility in range(0,3):
+        for flexibility in range(0,self.partition_flexibility):
             helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
             test_flex = list(filter(helper_fn, sample_keys))
 
             if test_flex != []:
                 sample_keys = test_flex
                 break
-            elif flexibility == 2:
+            elif flexibility == self.partition_flexibility - 1:
+                print("Spec:", spec_ops)
                 assert False, "Current set of operations not sufficient to support partitioning grammar"
 
 
