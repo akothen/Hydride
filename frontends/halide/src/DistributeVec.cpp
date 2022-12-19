@@ -1,4 +1,5 @@
 #include "DistributeVec.h"
+#include "VectorInfo.h"
 
 
 using namespace std;
@@ -871,13 +872,20 @@ namespace Halide {
 
             unsigned num_lanes = op->value.type().lanes();
             unsigned bits = op->value.type().bits();
+            VectorInfo VI;
+            op->value.accept(&VI);
+
+
             unsigned expr_bitwidth = bits * num_lanes;
 
+            unsigned max_bitwidth = VI.max_width; //bits * num_lanes;
 
 
 
 
-            debug(0) << "DistributeVec on store "<<OrigStore  << " producing bitvectors of size "<< expr_bitwidth <<" \n";
+
+            debug(0) << "DistributeVec on store "<<OrigStore  << " producing bitvectors of size "<< expr_bitwidth 
+             << " with maximum bitwidth "<<max_bitwidth<<" \n";
 
             OrigStore = substitute_in_all_lets(OrigStore);
 
@@ -888,19 +896,19 @@ namespace Halide {
             
             for(unsigned bitvector_size : bitvector_sizes){
 
-                if(expr_bitwidth < bitvector_size){
+                if(max_bitwidth < bitvector_size){
                     debug(0) << "Store smaller than "<< bitvector_size<<"\n";
                     continue;
                 }
 
                 // First handle cases when equally divisible
-                if(expr_bitwidth % bitvector_size != 0){
+                if(max_bitwidth % bitvector_size != 0){
                     debug(0) << "Store not fully divisible\n";
                     continue;
                 }
 
 
-                unsigned num_chunks = expr_bitwidth / bitvector_size;
+                unsigned num_chunks = max_bitwidth / bitvector_size;
 
                 debug(0) << "Need to distribute stores into "<<num_chunks <<" chunks!\n";
 
@@ -912,12 +920,13 @@ namespace Halide {
 
                 for(unsigned i = 0; i < num_chunks; i++){
                     Stores.push_back(
-                            Store::make(op->name, distributed_value[i], distributed_index[i], op->param, distributed_predicate[i], op->alignment)
-                            );
+                            (Store::make(op->name, distributed_value[i], distributed_index[i], op->param, distributed_predicate[i], op->alignment)
+                            ));
                 }
 
                 for(auto e : Stores){
                     debug(0) << "New Store: "<< e <<"\n";
+                    debug(0) << "New Simplified Store: "<< simplify(e) <<"\n";
                 }
 
                 // Create a block of statements
