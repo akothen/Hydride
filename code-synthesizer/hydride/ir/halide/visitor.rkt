@@ -20,6 +20,7 @@
     [(x128 sca) (handler (x128 (visit sca handler)))]
     [(x256 sca) (handler (x256 (visit sca handler)))]
     [(x512 sca) (handler (x512 (visit sca handler)))]
+    [(xBroadcast sca factor) (handler (xBroadcast (visit sca handler) factor))]
 
     [(int-imm data signed?) (handler expr)]
 

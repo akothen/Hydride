@@ -33,6 +33,7 @@
     [(x128 sca) #t]
     [(x256 sca) #t]
     [(x512 sca) #t]
+    [(xBroadcast sca factor) #t]
     [_ #f]
    )
 )
@@ -78,6 +79,20 @@
      ]
     [(x512 sca) 
       (broadcast-helper x512 sca)
+     ]
+    [(xBroadcast sca factor) 
+     (if (int-imm? sca)
+       (values (xBroadcast sca factor) 0)
+       (if is-leaf-depth
+         (begin
+           (values (xBroadcast (arg 0) factor) 1)
+           )
+         (begin
+           (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+           (values (xBroadcast leaf-sol factor) args-used)
+           )
+         )
+       )
      ]
 
     [(ramp base stride len) 
@@ -1298,6 +1313,7 @@
     [(x128 sca) (* 128 (vec-size sca))]
     [(x256 sca) (* 256 (vec-size sca))]
     [(x512 sca) (* 512 (vec-size sca))]
+    [(xBroadcast sca factor) (* factor (vec-size sca))]
 
     [(ramp base stride len) (* len (vec-size base))]
     [(load buf idxs alignment) (vec-size idxs)]
@@ -1459,6 +1475,9 @@
               [(cast-uint vec olane oprec)
                (cast-uint vec (/ olane scale-factor) oprec)
                ]
+              [(xBroadcast sca factor) 
+               (xBroadcast sca (/ factor scale-factor))
+               ]
               [(x128 sca)
                (cond
                  [(equal? scale-factor 2)
@@ -1486,6 +1505,9 @@
                   ]
                  [(equal? scale-factor 4)
                   (x16 sca)
+                  ]
+                 [(equal? scale-factor 8)
+                  (x8 sca)
                   ]
                  [(equal? scale-factor 8)
                   (x8 sca)
@@ -1726,6 +1748,7 @@
     [(x128 sca)  (get-elemT sca)]
     [(x256 sca)  (get-elemT sca)]
     [(x512 sca)  (get-elemT sca)]
+    [(xBroadcast sca factor) (get-elemT sca)]
 
     [(ramp base stride len) (get-elemT base)]
     [(load buf idxs alignment) (size-to-elemT (vec-precision idxs))]
@@ -1880,6 +1903,7 @@
     [(x128 sca) (vec-precision sca)]
     [(x256 sca) (vec-precision sca)]
     [(x512 sca) (vec-precision sca)]
+    [(xBroadcast sca factor) (vec-precision sca)]
 
     [(ramp base stride len) (vec-precision base)]
     [(load buf idxs alignment) (vec-precision idxs)]

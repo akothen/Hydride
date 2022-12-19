@@ -75,6 +75,7 @@
     [(x128 sca) 128]
     [(x256 sca) 256]
     [(x512 sca) 512]
+    [(xBroadcast sca factor) factor]
 
     [(ramp base stride len) len]
     [(load buf idxs alignment) (vec-len idxs)]
@@ -227,6 +228,7 @@
     [(x128 sca) (if (int-imm? sca) (list ) (list sca))]
     [(x256 sca) (if (int-imm? sca) (list ) (list sca))]
     [(x512 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(xBroadcast sca factor) (if (int-imm? sca) (list ) (list sca)) ]
 
     [(ramp base stride len) (list base stride)]
     [(load buf idxs alignment) (list buf)]
@@ -380,6 +382,8 @@
     [(x128 sca) (lambda (i) ((interpret sca) 0))]
     [(x256 sca) (lambda (i) ((interpret sca) 0))]
     [(x512 sca) (lambda (i) ((interpret sca) 0))]
+    [(xBroadcast sca factor) (lambda (i) ((interpret sca) 0))]
+
 
     [(ramp base stride len)
      (define intr-base (interpret base))
@@ -414,15 +418,19 @@
             [else (error "halide/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
         )
     ))]
-    [(cast-uint vec olane oprec) (lambda (i) (cpp:cast ((interpret vec) i) 
-        (cond
-            [(eq? oprec 8)  'uint8]
-            [(eq? oprec 16)  'uint16]
-            [(eq? oprec 32)  'uint32]
-            [(eq? oprec 64)  'uint64]
-            [else (error "halide/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
-        )
-    ))]
+    [(cast-uint vec olane oprec) 
+     (lambda (i) 
+       (cpp:cast ((interpret vec) i) 
+                 (cond
+                   [(eq? oprec 8)  'uint8]
+                   [(eq? oprec 16)  'uint16]
+                   [(eq? oprec 32)  'uint32]
+                   [(eq? oprec 64)  'uint64]
+                   [else (error "halide/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+                   )
+                 )
+       )
+     ]
     [(uint8x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint8))]
     [(uint16x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint16))]    
     [(uint32x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint32))]
@@ -612,6 +620,7 @@
     [(x128 sca) empty-list]
     [(x256 sca) empty-list]
     [(x512 sca) empty-list]
+    [(xBroadcast sca factor) empty-list]
 
     [(ramp base stride len)
      (list extract bvmul bvadd sign-extend zero-extend 'ramp)

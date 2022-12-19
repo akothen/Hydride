@@ -36,6 +36,9 @@
 (struct x256 (sca) #:transparent)
 (struct x512 (sca) #:transparent)
 
+;; Generalized Broadcast
+(struct xBroadcast (sca factor) #:transparent)
+
 
 (struct int-imm (data signed?) #:transparent #:mutable)
 
