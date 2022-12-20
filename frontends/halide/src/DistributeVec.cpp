@@ -12,11 +12,14 @@ namespace Halide {
         // ==================== Expressions ===========================
 
         std::vector<Expr> DistributeVec::visit(const Ramp* op, unsigned num_chunks){
+            debug(0) << "Distribute ramp into "<<num_chunks << " chunks \n";
 
             if(DistribMap.find(op) != DistribMap.end()){
                 return  DistribMap[op]->distributed_expressions;
             }
 
+
+            Expr OrigRamp = Ramp::make(op->base, op->stride, op->lanes);
 
             std::vector<Expr> exprs;
 
@@ -50,14 +53,6 @@ namespace Halide {
                     exprs.push_back(Ramp::make(new_start, new_stride, lanes_per_chunk));
                 }
 
-                // Epilogue code to create < bitvector_size expression.
-                if(!divisible){
-                    Expr new_start = start + ((int) num_chunks * lanes_per_chunk * stride);
-                    Expr new_stride = stride;
-                    int new_lanes = (bitvector_sizes[0] % num_bits) / op->type.bits();
-
-                    exprs.push_back(Ramp::make(new_start, new_stride, new_lanes));
-                }
 
                 // Add new DistributeInfo entry to avoid re-calculation
                 DistributeInfo* DI = new DistributeInfo;
@@ -85,7 +80,7 @@ namespace Halide {
             std::vector<Expr> exprs;
 
 
-            if(op->type.is_scalar() || num_chunks <= 1){
+            if(op->type.is_scalar() ){
                 exprs.push_back(Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment));
                 return exprs;
             }
@@ -94,7 +89,7 @@ namespace Halide {
             unsigned num_bits = op->type.bits() * op->type.lanes();
 
 
-            if(num_chunks > 1){
+            if(num_chunks >= 1){
 
                 bool divisible = (bitvector_sizes[0] % num_bits) == 0;
 
@@ -152,6 +147,7 @@ namespace Halide {
                 exprs.push_back(OP_NAME::make(op->a, op->b));\
                 return exprs;\
             }\
+            Expr OrigBOP = OP_NAME::make(op->a, op->b); \
             \
             unsigned num_bits = op->type.bits() * op->type.lanes(); \
                 bool divisible = (bitvector_sizes[0] % num_bits) == 0; \
@@ -159,6 +155,17 @@ namespace Halide {
                 \
                 std::vector<Expr> distributed_a = dispatch(op->a, num_chunks); \
                 std::vector<Expr> distributed_b = dispatch(op->b, num_chunks); \
+                if(distributed_a.size() != distributed_b.size()) { \
+                    debug(0) << "Orig op"<< OrigBOP << "\n"; \
+                    debug(0) << "Distributed a size:" << distributed_a.size() << "\n"; \
+                    debug(0) << "Distributed b size:" << distributed_b.size() << "\n"; \
+                    for(auto A : distributed_a){ \
+                        debug(0) << "A:" << A <<"\n";\
+                    }\
+                    for(auto B : distributed_b){ \
+                        debug(0) << "B:" << B <<"\n";\
+                    }\
+                }\
                 internal_assert(distributed_a.size() == distributed_b.size()) << "Distributed arguments require same number of operands\n"; \
                 internal_assert(distributed_a.size() == num_chunks) << "Distributed arguments must have required  number of operands\n"; \
                 \
@@ -896,7 +903,7 @@ namespace Halide {
             
             for(unsigned bitvector_size : bitvector_sizes){
 
-                if(max_bitwidth < bitvector_size){
+                if(max_bitwidth <= bitvector_size){
                     debug(0) << "Store smaller than "<< bitvector_size<<"\n";
                     continue;
                 }
