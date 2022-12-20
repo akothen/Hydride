@@ -1503,7 +1503,7 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
     # Add the variable info to the context
     Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
   else:
-    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice
+    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice or type(LookupExpr.obj) == MatrixRowLookup
     # Compile the bit slice
     CompiledValue = CompileExpression(LookupExpr.obj, Context)
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
@@ -1561,7 +1561,27 @@ def CompileMatrixDimLookup(expr, Context: x86RoseContext):
   return param_value
 
 
-def CompileMatch(MatchExpr, Context : x86RoseContext):
+def CompileMatrixRowLookup(expr, Context: x86RoseContext):
+  assert type(expr.obj) == Var
+  obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
+  # Check if the tile object is already defined and cached. If yes, just use that.
+  if not Context.isVariableDefined(obj.getName()):
+    Context.addVariable(obj.getName(), expr.obj.id)
+    Context.addCompiledAbstraction(expr.obj.id, obj)
+  abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+  if not Context.isElemTypeOfVariableKnown(obj.getName()):
+    Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+    Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
+
+  idx = CompileIndex(expr.idx, Context)
+  op = RoseMatrixExtractRowOp.create(Context.genName(), obj, idx)
+  Context.addElemTypeOfVariable(op.getName(), RoseBitVectorType.create(op.getOutputBitwidth()))
+  Context.addSignednessInfoForValue(op, False)
+  Context.addAbstractionToIR(op)
+  Context.addCompiledAbstraction(expr.id, op)
+  return op
+
+def CompileMatch(MatchExpr, Context: x86RoseContext):
   assert type(MatchExpr.val) == BitIndex or type(MatchExpr.val) == BitSlice
   # Compile the bit slice
   CompiledValue = CompileExpression(MatchExpr.val, Context)
@@ -1765,6 +1785,7 @@ CompileAbstractions = {
   BitIndex: CompileBitIndex,
   TypeLookup: CompileTypeLookup,
   MatrixDimLookup: CompileMatrixDimLookup,
+  MatrixRowLookup: CompileMatrixRowLookup,
   Match: CompileMatch,
 }
 
