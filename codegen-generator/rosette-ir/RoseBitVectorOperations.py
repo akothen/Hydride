@@ -630,8 +630,6 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   def getBitwidthPos(self):
     return 4
 
-  # todo: KUNAL — fixes _mm256_set_m128i
-  # AttributeError: 'RoseVoidType' object has no attribute 'getBitwidth'
   def getType(self):
     return self.getInputBitVector().getType()
 

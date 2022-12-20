@@ -308,12 +308,6 @@ def t_NUMBER(t):
     t.value = float(t.value)
   return t
 
-# todo: KUNAL — Case-Sensitive `to` caused problems on, for example, _mm256_abs_epi8
-# def t_TO(t):
-#   r'to|TO'
-#   t.type = 'TO'
-#   return t
-
 def t_newline(t):
   r'\n|\\\n'
   t.lexer.lineno += 1

@@ -178,7 +178,6 @@ class RoseMatrixType(RoseType):
     #   'rows': RoseBitVectorType.create(8),
     #   'colsb': RoseBitVectorType.create(16),
     def __init__(self, max_rows: int, max_cols: int, element_bitwidth: int):
-        # todo: Kunal — Yikes, do we also need to take in signed-ness info??  There's like 4 permutations of tiled multiply for different signed/unsigned combos.
         super().__init__(RoseType.RoseTypeEnum.Matrix, {
             'max_rows': max_rows,
             'max_cols': max_cols,
