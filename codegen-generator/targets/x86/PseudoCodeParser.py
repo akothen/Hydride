@@ -550,7 +550,8 @@ def p_expr_matrix_dim_lookup(p):
 
 def p_expr_matrix_row_lookup(p):
   'expr : expr DOT MATRIX_ROW LBRACE expr RBRACE'
-  p[0] = MatrixRowLookup(p[1], p[5])
+  expr_id = "row." + GenUniqueID(Parser)
+  p[0] = MatrixRowLookup(p[1], p[5], expr_id)
 
 
 def p_args(p):
