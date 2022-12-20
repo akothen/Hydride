@@ -172,23 +172,18 @@ class RoseStringType(RoseType):
         NotImplemented
 
 
-class RoseMatrixType(RoseBitVectorType):  # todo: make straight up RoseValue
+class RoseMatrixType(RoseType):
 
     # For AMX—
-    #   '__tile': RoseListType.create(RoseBitVectorType.create(512, 16),
     #   'rows': RoseBitVectorType.create(8),
     #   'colsb': RoseBitVectorType.create(16),
     def __init__(self, max_rows: int, max_cols: int, element_bitwidth: int):
         # todo: Kunal — Yikes, do we also need to take in signed-ness info??  There's like 4 permutations of tiled multiply for different signed/unsigned combos.
-        # super().__init__(RoseType.RoseTypeEnum.Matrix, {
-        #     'max_rows': max_rows,
-        #     'max_cols': max_cols,
-        #     'element_bitwidth': element_bitwidth
-        # })
-        super().__init__(max_rows * max_cols * element_bitwidth)
-        self.SubClassData['max_rows'] = max_rows
-        self.SubClassData['max_cols'] = max_cols
-        self.SubClassData['element_bitwidth'] = element_bitwidth
+        super().__init__(RoseType.RoseTypeEnum.Matrix, {
+            'max_rows': max_rows,
+            'max_cols': max_cols,
+            'element_bitwidth': element_bitwidth
+        })
 
     @staticmethod
     def create(max_rows: int, max_cols: int, element_bitwidth: int):
@@ -203,12 +198,11 @@ class RoseMatrixType(RoseBitVectorType):  # todo: make straight up RoseValue
     def getElementBitwidth(self):
         return self.getSubClassData()["element_bitwidth"]
 
-    # FOR NOW JUST INHERIT THESE TO MAKE STUFF WORK...
-    # def __str__(self):
-    #     return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
-    #
-    # def print(self):
-    #     print(self.__str__())
+    def __str__(self):
+        return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
+
+    def print(self):
+        print(self.__str__())
 
     def to_llvm_ir(self):
         assert False, "Rose IR to LLVM IR type conversion not supported."

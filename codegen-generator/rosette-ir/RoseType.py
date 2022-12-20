@@ -21,6 +21,7 @@ class RoseType:
         String = auto()
         BitVector = auto()
         Vector = auto()
+        Matrix = auto()
         List = auto()
         Undefined = auto()
         Void = auto()
