@@ -288,11 +288,8 @@ namespace Halide {
                         }
 
 
-                        debug(0) << "Emitting add to rosette\n";
-
 
                         std::string add_str = print_binary_op("add", "+", op->a, op->b, op->type.is_vector());
-                        debug(0) << "add_str: "<<add_str <<"\n";
 
                         return add_str;
                     }
@@ -474,7 +471,7 @@ namespace Halide {
                         std::string rkt_val = dispatch(op->value);
                         //std::cout << "Broadcast "<<rkt_val << "to x"<<rkt_type <<"\n";
                         indent.pop();
-                        return tabs() + "(x" + rkt_type + " " + rkt_val + ")";
+                        return tabs() + "(xBroadcast " + rkt_val +" " + rkt_type + ")\n";
                     }
 
                     std::string get_type_string(Type t) {
@@ -1647,12 +1644,20 @@ namespace Halide {
 
                             // If the expression is a shuffle , optimize the operands individually
                             if (base_e.node_type() == IRNodeType::Shuffle){
+                                debug(0) << "Encountered shuffle: " << base_e <<"\n";
+                                const Shuffle* shuff = base_e.as<Shuffle>();
+
+                                if(shuff->is_concat()){
+                                    debug(0) << "Encountered concat: " << base_e <<"\n";
+                                }
+
+
                                 return IRMutator::mutate(expr);
 
                             }
 
 
-                            std::cout << "Starting synthesis for expr: "<< expr_id <<"\n";
+                            std::cout << "Starting synthesis for expr_id: "<< expr_id <<"\n";
 
 
                             std::cout << "Expression before lower intrinsic: "<< expr <<"\n";
@@ -1707,13 +1712,19 @@ namespace Halide {
                                 skipped_synthesis = true;
                             } else {
                                 // Re-write expression using synthesis
-                                 optimized_expr = synthesize_impl(spec_expr, expr);
+                                optimized_expr = synthesize_impl(spec_expr, expr);
 
                             }
 
 
                             // Replace abstracted abstractions
                             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
+
+                            if(skipped_synthesis){
+                                debug(0) << "After abstraction, entire expression replaced with single variable-> try synthesizing it's operands recursively.\n";
+                                return IRMutator::mutate(expr);
+
+                            }
 
 
                             std::cout << "Expression after replacae abstraction: "<< final_expr <<"\n";
@@ -1839,9 +1850,13 @@ namespace Halide {
                     // method to rewrite division in terms of other intrinsics
                     Expr visit(const Div *op) override{
 
+
+
                         if(!op->type.is_float() && op->type.is_vector() && _arch == Architecture::HVX){
+
                             auto lowered_div =  lower_int_uint_div(op->a, op->b);
-                            debug(0) << "Halide Lowered Div to: "<<lowered_div <<"\n";
+                            Expr DivExpr = Div::make(op->a, op->b);
+                            debug(0) << "Halide Lowered Div "<< DivExpr <<" to: "<<lowered_div <<"\n";
                             return mutate(lowered_div);
                         }
 
@@ -1861,9 +1876,9 @@ namespace Halide {
                             size_t element_bits = op->args[0].type().bits();
 
                             if(_arch ==  Architecture::HVX){
-                                if(element_bits >= 64){
-                                   lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
-                                       op->args[0].type().min(), op->args[0].type().max()));
+                                if(element_bits < 64){
+                                   //lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
+                                   //    op->args[0].type().min(), op->args[0].type().max()));
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -1880,8 +1895,8 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::saturating_sub)) {
 
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
-                                       op->args[0].type().min(), op->args[0].type().max()));
+                                //lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
+                                //       op->args[0].type().min(), op->args[0].type().max()));
                             } else if (_arch == Architecture::X86){
 
                                 size_t element_bits = op->args[0].type().bits();
@@ -2002,16 +2017,22 @@ namespace Halide {
                             }
                         } 
                         else if (op->is_intrinsic(Call::rounding_shift_right)){
-
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
                             } else if (_arch == Architecture::X86){
                                 lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
                             }
                         } 
                         else if (op->is_intrinsic(Call::widening_mul)) {
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = (widen(op->args[0]) * widen(op->args[1]));
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
@@ -2023,7 +2044,13 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::widening_add)) {
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = (widen(op->args[0]) + widen(op->args[1]));
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
@@ -2035,7 +2062,13 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::widening_sub)) {
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = (widen(op->args[0]) - widen(op->args[1]));
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
 
                                 size_t element_bits = op->args[0].type().bits();
@@ -2049,7 +2082,13 @@ namespace Halide {
                         }
                         else if(op->is_intrinsic(Call::widening_shift_left)) {
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = widen(op->args[0]) << op->args[1];
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
@@ -2062,7 +2101,13 @@ namespace Halide {
                         else if(op->is_intrinsic(Call::widening_shift_right)) {
 
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = widen(op->args[0]) >> op->args[1];
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
 
                                 size_t element_bits = op->args[0].type().bits();
@@ -2076,7 +2121,13 @@ namespace Halide {
                         } 
                         else if( op->is_intrinsic(Call::rounding_mul_shift_right)) {
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
@@ -2092,7 +2143,13 @@ namespace Halide {
                         else if(op->is_intrinsic(Call::mul_shift_right)) {
 
                             if(_arch ==  Architecture::HVX){
-                                lower_using_halide = true;
+                                //lower_using_halide = true;
+                                size_t element_bits = op->args[0].type().bits();
+                                if(element_bits < 64){
+                                    lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
@@ -2396,7 +2453,8 @@ namespace Halide {
 
 
                     Expr visit(const Shuffle *op) override{
-                        if (op->is_concat()){
+                        bool disable_shuffles = true;
+                        if (op->is_concat() && disable_shuffles){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2489,11 +2547,13 @@ namespace Halide {
 
                         };
 
+
+
                         bool supported = false;
                         for(int vec_len : vec_lens){
                             debug(1) << "Testing for vector length: "<<vec_len <<"\n";
                             if (v.type().is_vector() && (v.type().bits() * v.type().lanes() % vec_len != 0) && (v.type().bits() > 1)) {
-                            } else if (v.type().is_vector() && (v.type().bits() > 1)) {
+                            } else if (v.type().is_vector() && (v.type().bits() > 1) && (v.type().bits() * v.type().lanes()  == vec_len)) {
                                 debug(1) << "True!"<<"\n";
                                 debug(1) << "v.bits(): "<<v.type().bits() << "\n";
                                 debug(1) << "v.lanes(): "<<v.type().lanes() << "\n";
@@ -2621,6 +2681,7 @@ namespace Halide {
 
 
                     Expr visit(const Div *op) override{
+
 
                         if(!op->type.is_float() && op->type.is_vector() ){
                             auto lowered_div =  lower_int_uint_div(op->a, op->b);
@@ -2929,7 +2990,6 @@ namespace Halide {
                 auto spec_dispatch = get_expr_racket_dispatch(spec_expr, encoding, let_vars);
                 std::string expr = spec_dispatch(spec_expr, false /* set_mode */, false /* int_mode */);
 
-                debug(0) << "Rosette expr:" <<expr <<"\n";
 
 
 

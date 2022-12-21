@@ -205,6 +205,9 @@ class Context:
                 elif base_vector_size != None and arg.value == base_vector_size:
                     scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
                     scaled_args.append(scaled_int)
+                elif base_vector_size != None and arg.value == (base_vector_size // 2):
+                    scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
+                    scaled_args.append(scaled_int)
                 else:
                     scaled_args.append(arg)
             else:
@@ -245,6 +248,8 @@ class Context:
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
                     scalable_idx.append(idx)
                 elif base_vector_size != None and arg.value == base_vector_size:
+                    scalable_idx.append(idx)
+                elif base_vector_size != None and arg.value == (base_vector_size // 2):
                     scalable_idx.append(idx)
 
         return scalable_idx
@@ -551,15 +556,15 @@ class DSLInstruction(InstructionType):
                 # but the other saturating operations
                 # arent
                 if bvop == "bvmul" and bvop in line:
-                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw"]])
+                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw", "bvmulnw"]])
                     if insert_bvmul:
                         operations.append(bvop)
                 elif bvop == "bvadd" and bvop in line:
-                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw"]])
+                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw", "bvaddnw"]])
                     if insert_bvadd:
                         operations.append(bvop)
                 elif bvop == "bvsub" and bvop in line:
-                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw"]])
+                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw","bvsubnw" ]])
                     if insert_bvsub:
                         operations.append(bvop)
                 elif bvop in line:

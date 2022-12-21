@@ -142,7 +142,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 dsl_inst = ops[idx]
                 ctx = ctxs[idx]
                 dsl_ops = dsl_inst.get_semantics_ops_list()
-                ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+                ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
 
                 key = str(sorted(ctx_ops, key = lambda x : BV_OPS.index(x)))
 
@@ -211,7 +211,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             dsl_inst = ops[idx]
             ctx = ctxs[idx]
             dsl_ops = dsl_inst.get_semantics_ops_list()
-            ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+            ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
 
             ctx_ops = sorted(ctx_ops, key = lambda x : BV_OPS.index(x))
 
@@ -539,14 +539,15 @@ class StepWiseSynthesizer(SynthesizerBase):
         for idx, dsl_inst in enumerate(operation_dsl_insts):
             print("Pool Of operations: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
 
-        MAX_NUM_CLAUSES = 16
-        if self.depth >= 4:
-            MAX_NUM_CLAUSES = 10
+        if not self.is_shuffle:
+            MAX_NUM_CLAUSES = 16
+            if self.depth >= 4:
+                MAX_NUM_CLAUSES = 10
 
-        bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-        print("Bucket return from parititioning")
-        print(bucket.keys())
-        (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
+            bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
+            print("Bucket return from parititioning")
+            print(bucket.keys())
+            (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):

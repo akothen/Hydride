@@ -15,7 +15,6 @@
 (require hydride/synthesis/iterative_synthesis)
 (require hydride/synthesis/synth_main)
 (require hydride/synthesis/python)
-(require hydride/synthesis/lower_swizzle)
 
 (require hydride/halide)
 (require hydride/cpp)
@@ -33,7 +32,6 @@
 (require hydride/ir/hvx/scale)
 
 
-(require hydride/synthesis/scalable_synthesis)
 
 (provide (all-defined-out))
 
@@ -42,146 +40,13 @@
 
 ;; Defines the utilities to perform synthesis on Halide IR expressions
 
-(define synth-log (make-hash))
-
-(define (create-n-reg n)
-  (for/list ([i (range n)])
-            (reg (bv i 4))
-            )
-  )
 
 
-(define (dump-synth-res-with-typeinfo sol id-map)
-
-  (define (print-helper k v)
-    (display "; (reg ")
-    (display (~s  v))
-    (display ") ")
-    (displayln (halide:print-buffer-type-info k))
-    v
-    )
-  (define printed-map (hash-map id-map print-helper))
 
 
-  (define printer-functor
-    (cond
-      [(equal? target 'hvx)
-       hvx:hydride-printer
-       ]
-      [(equal? target 'x86)
-       hydride-printer
-       ]
-      )
-    )
-
-  (displayln sol)
-  (displayln (printer-functor sol))
-
-  )
 
 
-(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver opt? sym? prev-hash-file prev-hash-name arch)
-  (debug-log id-map)
-  (if (equal? prev-hash-file "")
-    '()
-    (begin
-      (debug-log "Found previous hash!\n")
-      (define prev-hash (import-synth-map prev-hash-file prev-hash-name))
-      (set! synth-log (hash-copy prev-hash))
-      (debug-log synth-log)
-
-      )
-
-    )
-
-  (cond
-    [(equal? arch "x86" )
-     (set-target-x86)
-     ]
-
-    [(equal? arch "hvx" )
-     (set-target-hvx)
-     ]
-    )
-
-  (cond 
-    [(equal? solver 'boolector)
-     (current-solver (boolector))
-     ]
-
-    [(equal? solver 'z3)
-     (current-solver (z3))
-     ]
-    )
-
-  (printf "Number of instructions: ~a\n" (halide:count-number-instructions halide-expr))
-
-  ;(define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt? sym?))
-  (define scale-factor 
-  (cond
-    [(equal? arch "x86" )
-     1 ;; Currently not doing any scaling for x86
-     ]
-
-    [(equal? arch "hvx" )
-     16 
-     ]
-    )
-    )
-  (define synthesized-sol (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
-  (displayln "========================================")
-  (displayln "Original Halide Expression:")
-  (pretty-print halide-expr)
-  (displayln "Synthesis completed:")
-
-  ;; Synthesis completed with Hydride Target Agnostic 
-  ;; Operations, check if further simplification can 
-  ;; be performed. E.g. if the bitvector operands of
-  ;; any operation are all literals then that operation
-  ;; can instead be replaced with it's result. Traverse
-  ;; bottom up and incrementally simplify operations.
-
-  (define const-fold-functor
-    (cond
-      [(equal? target 'hvx)
-       hvx:const-fold
-       ]
-      [(equal? target 'x86)
-       hydride:const-fold
-       ]
-      )
-    )
-
-
-  (define cost-functor
-    (cond
-      [(equal? target 'hvx)
-       hvx:cost
-       ]
-      [(equal? target 'x86)
-       hydride:cost
-       ]
-      )
-    )
-
-  (define folded (const-fold-functor synthesized-sol))
-
-  ;; Lower target agnostic specialized shuffles to sequences
-  ;; of target specific shuffle operations.
-  (define swizzle-start (current-seconds))
-  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log cost-functor #t #f))
-  (define swizzle-end (current-seconds))
-  (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
-  (pretty-print id-map)
-  (displayln "========================================")
-  ;; Apply constant folding again after lowering swizzles
-  ;; as additional simplfication oppurtunities may have resulted
-  (const-fold-functor legalized-shuffles-expr) 
-  )
-
-
-(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt? sym?)
-
+(define (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log)
 
   (define actual-expr-depth 
     (cond
@@ -208,13 +73,17 @@
 
 
 
+  ;; Dummy args contains the scaled down arguments for the expression to be
+  ;; synthesized
+  (define (map-functor ele)
+    (halide:scale-down-expr ele scale-factor)
+    )
+  (define scaled-leaves (map map-functor leaves))
+  (define scaled-leaves-sizes (halide:get-expr-bv-sizes scaled-leaves))
+  (define scaled-leaves-elemT (halide:get-expr-elemT scaled-leaves))
+  (define scaled-bvs (create-concrete-bvs scaled-leaves-sizes)) ;; Can this be concrete
 
-
-
-  ;(clear-vc!)
-  ;(clear-terms!)
-
-  (define dummy-args (halide:create-buffers leaves sym-bvs))
+  (define dummy-args (halide:create-buffers scaled-leaves scaled-bvs))
 
 
 
@@ -228,11 +97,9 @@
               [_ 
                 (begin
 
-                  (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args actual-expr-depth))
+                  (define-values (expr-extract num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) dummy-args actual-expr-depth))
 
                   (debug-log expr-extract)
-                  (define base_name (string-append "base_" (~s (random 10000))))
-
 
                   ;; The extracted sub-expression is to be treated
                   ;; as synthesis of some un-seen new expression
@@ -253,13 +120,12 @@
 
                   (define (invoke-spec env-full)
                     (printf "invoke-spec with env: ~a\n" env-full)
-                    (define synth-buffers-full (halide:create-buffers leaves env-full))
+                    (define synth-buffers-full (halide:create-buffers scaled-leaves env-full))
+                    (println scaled-leaves)
 
 
-
-
-                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args halide-expr synth-buffers-full actual-expr-depth))
-
+                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-full actual-expr-depth))
+                    (displayln "Scaled expression:")
                     (println _expr-extract-full)
 
 
@@ -273,8 +139,8 @@
                   ;; Calculate result for last most lane
                   (define (invoke-spec-lane lane-idx env-lane)
                     (printf "invoke-spec-lane with env: ~a\n" env-lane)
-                    (define synth-buffers-lane (halide:create-buffers leaves env-lane))
-                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers-lane actual-expr-depth))
+                    (define synth-buffers-lane (halide:create-buffers scaled-leaves env-lane))
+                    (define-values (_expr-extract _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-lane actual-expr-depth))
                     (define output-idx (- expr-VF 1 lane-idx))
                     (define _result_lane (cpp:eval ((halide:interpret _expr-extract) output-idx)))
                     _result_lane
@@ -287,7 +153,7 @@
                        5
                        ]
                       [(equal? target 'x86)
-                       3
+                       5
                        ]
                       )
 
@@ -315,56 +181,15 @@
                       (begin
 
 
-                        ;; First synthesize the expression with depth 1 to get an estimate
-                        ;; of the cost upper bound. We want to provide synthesis at larger
-                        ;; depths a bound on cost so it may exit early if the solution
-                        ;; can't be optimized further than with depth 1.
 
 
-                        (define mat1 
-                          (if (eq? expr-depth 1)
-                            '()
-                            '();(synthesize-halide-expr-step expr-extract 1 VF sub-id-map solver)
-                            )
-                          )
-
-                        (define sat?1 (not (equal? mat1 '())))
-
-
-                        (define-values (grammar interpreter cost-model) 
-                                       (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
-                        (debug-log "Grammar:")
-                        (debug-log grammar)
-
-                        (debug-log "Interpreter:")
-                        (debug-log interpreter)
-
-
-                        (debug-log "Cost-Model:")
-                        (debug-log cost-model)
-
-
-                        (define regs (create-n-reg (length leaves)))
-                        (debug-log regs)
-                        (define (grammar-fn i)
-                          (define use-simple-grammar #t)
-                          (if use-simple-grammar
-                            (grammar i)
-                            (grammar regs #:depth i)
-                            )
-                          )
                         (define test-start (current-seconds))
 
 
 
                         (define cost-bound 
                           (cond 
-                            [sat?1 
-                              (debug-log "Found tighter cost bound at depth 1, use that")
-                              (cost-model mat1)
-                              ]
                             [else 30]
-
                             )
                           )
 
@@ -372,15 +197,9 @@
                         (displayln "Hashed expression")
                         (println hashed-expr)
 
-                        ;(define-values (sat? mat el) 
-                                       ;(synthesize-sol-with-depth 
-                                        ; (max (+ -1 actual-expr-depth) 1) 
-                                        ; depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
-                                        ; optimize? interpreter cost-model  symbolic? cost-bound solver) 
-                                       ;)
 
                         (define-values (sat? mat el)
-                                       (step-wise-synthesis expr-extract leaves 
+                                       (step-wise-synthesis expr-extract scaled-leaves 
                                                             (max (+ -1 actual-expr-depth) 1)
                                                             depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver
                                                             
@@ -400,9 +219,6 @@
                         (cond 
                           [sat? 
                             (hash-set! synth-log hashed-expr (vector sat? mat (- test-end test-start)) )]
-                          [(and (not sat?) sat?1)
-                           (hash-set! synth-log hashed-expr (vector sat?1 mat1 (- test-end test-start)) )
-                           ]
                           )
 
                         (displayln "Here")
@@ -411,9 +227,6 @@
                           (cond
                             [sat? 
                               (vector sat? mat (- test-end test-start))]
-                            [(and (not sat?) sat?1)
-                             (vector sat?1 mat1 (- test-end test-start)) 
-                             ]
                             [else
                               (vector #f '() 0)
                               ]
@@ -445,7 +258,7 @@
                           )
                         '()
                         )
-                      (define recalculate (synthesize-halide-expr-step expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt? sym?))
+                      (define recalculate (scale-down-synthesis expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt? sym? scale-factor synth-log))
                       (debug-log "Smaller window synthesis returned:")
                       (debug-log recalculate)
                       (set! satisfiable? #t)
@@ -481,7 +294,7 @@
                   (define synthesized-leaves 
 
                     (for/list  ([leaf leaves])
-                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver opt? sym?)
+                               (scale-down-synthesis leaf expr-depth VF id-map solver opt? sym? scale-factor synth-log)
                                )
                     ;)
                     )
@@ -499,7 +312,18 @@
                       )
                     )
 
-                  (bind-functor materialize (list->vector synthesized-leaves))
+                  (define upscaled-mat 
+                    (cond 
+                      [(equal? scale-factor 1)
+                       materialize
+                       ]
+                      [else 
+                        (hvx:scale-expr materialize scale-factor)
+                        ]
+                      )
+                    )
+
+                  (bind-functor upscaled-mat (list->vector synthesized-leaves))
                   )]
               )
     )
@@ -514,3 +338,105 @@
   synthesized-sol
   )
 
+
+
+
+
+;; Perform iterative synthesis by partitioning relavent operations
+;; into buckets and sampling operations from buckets in the grammar. 
+(define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver)
+  (debug-log (format "Invoked step-wise-synthesis!\n"))
+
+  (define step-limit 5)
+
+  (define solved? #f)
+  (define expr-VF (halide:vec-len spec-expr))
+  (define leaves-sizes (halide:get-expr-bv-sizes leaves))
+  (define cost-bound 30)
+
+  (define sol '())
+
+
+  ;(set! starting-depth 4)
+
+  (define start-time (current-seconds))
+  (define solutions 
+
+    ;; Traversal order first searchs the breadth of grammars
+    ;; at the depth d before incrementing d.
+    (for/list ([d (range starting-depth depth-limit)])
+
+              (define steps-per-depth
+                (cond
+                  [(<= d 3) step-limit]
+                  [(equal? d 4) 
+                   ;(* 1 step-limit)
+                   40
+                   ]
+                  [else
+                    40
+                    ]
+                  )
+                
+                )
+              (for/list ([s (range steps-per-depth)])
+
+                        ;(parameterize 
+                        ;  ([current-solver (z3)] 
+                           ;[term-cache (hash-copy (term-cache))]
+                        ;   )
+                        (clear-vc!)
+                        (clear-terms!)
+                        (collect-garbage)
+
+                        ;; if solution already found in previous
+                        ;; iteration, do nothing.
+
+                        (cond
+                          [(not solved?)
+                           (define base_name (string-append "base_" (~s (random 10000)) "_s" (~s s) "_d" (~s d)))
+                           ;; get-grammar step-i, depth d
+                           ;; get-interpreter step-i, depth d
+                           ;; get-cost-model step-i, depth d
+                           (define-values (grammar interpreter cost-model) 
+                                          (get-expr-grammar-step spec-expr leaves base_name expr-VF s d))
+
+                        (define (grammar-fn i)
+                            (grammar i)
+                          )
+
+                         (debug-log (format "Specification: ~a\n" spec-expr ))
+
+                           ;; perform synthesis
+                           (define-values (sat? mat el) 
+                                          (synthesize-sol-with-depth 
+                                            d 
+                                            d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                                            optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                                          )
+                           ;; if sat set solution? to be true
+                           (if sat?
+                             (begin
+                               (set! solved? #t)
+                               (set! sol mat)
+                               )
+                             '()
+                             )
+                           ]
+                          )
+                        )
+                        ;)
+              )
+    )
+
+
+  (define end-time (current-seconds))
+
+  (if (not solved?)
+    (begin
+      (debug-log "Synthesis failed!")
+      (exit)
+      )
+    (values solved? sol (- end-time start-time))
+    )
+  )

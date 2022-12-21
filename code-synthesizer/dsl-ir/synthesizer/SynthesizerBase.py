@@ -849,9 +849,18 @@ class SynthesizerBase:
 
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
-                    if v in ctx_ops and v not in spec_ops:
+                    if v in ctx_ops and v not in spec_ops and not skip:
                         print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
                         skip = True
+
+                        if ctx.name == "hexagon_V6_vaddh_128B":
+                            print("dsl ops:", dsl_ops)
+                            print("ctx is signed:", ctx.is_signed())
+                            print("ctx is unsigned:", ctx.is_unsigned())
+                            print("ctx_ops", ctx_ops)
+                            print("spec_ops", spec_ops)
+                            import sys
+                            sys.exit(1)
 
 
 
@@ -1008,17 +1017,14 @@ class SynthesizerBase:
             score += int(ctx.supports_output_size(self.output_slice_length))
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
-            score += int(ctx.supports_output_size(self.output_slice_length))
+            #score += int(ctx.supports_output_size(self.output_slice_length))
 
             # For targets which prefer distributing computation
             # over a base vector size
             if self.BASE_VECT_SIZE != None :
-                score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 3
+                score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 2
 
                 score +=  int(([ctx.supports_input_size(input_size) for input_size in [self.MAX_BW_SIZE]].count(True)))
-
-                if ctx.name == "hexagon_V6_hi_128B":
-                    print(ctx.name, "score" ,score)
 
 
             # In the case where we have inputs of varying sizes, we want also want
@@ -1041,18 +1047,17 @@ class SynthesizerBase:
 
         return score
 
-    def convert_ops_to_signedness(self, ops, get_signed = False, get_unsigned = False):
+    def convert_ops_to_signedness(self, ops, get_signed = False, get_unsigned = False, non_signed = False):
         ops_list = []
 
         for op in ops:
             if get_signed:
                 ops_list.append(get_variant_by_sign(op, 1))
-
             if get_unsigned:
                 ops_list.append(get_variant_by_sign(op, 0))
-
-
-            ops_list.append(op)
+            if non_signed:
+                ops_list.append(op)
+                ops_list.append(get_variant_by_sign(op, None))
 
         linear = list(set(ops_list))
 
@@ -1073,7 +1078,7 @@ class SynthesizerBase:
 
         # When checking if ops overlap, check for both signedness
         # , when sorting based on score check for signedness explicitly
-        dsl_ops = self.convert_ops_to_signedness(dsl_ops, get_signed = True, get_unsigned = True)
+        dsl_ops = self.convert_ops_to_signedness(dsl_ops, get_signed = True, get_unsigned = True, non_signed = True)
 
 
         if dsl_inst.name in DEBUG_LIST and DEBUG :
@@ -1101,7 +1106,7 @@ class SynthesizerBase:
             ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            EXPENSIVE_OPS = [] #["bvmul", "bvsdiv", "bvudiv",  "sign-extend", "zero-extend", "abs", ]
+            EXPENSIVE_OPS = ["bvsdiv", "bvudiv", "abs"] #["bvmul", "bvsdiv", "bvudiv",  "sign-extend", "zero-extend", "abs", ]
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
