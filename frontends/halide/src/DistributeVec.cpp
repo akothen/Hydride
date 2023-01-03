@@ -891,7 +891,7 @@ namespace Halide {
 
 
 
-            debug(0) << "DistributeVec on store "<<OrigStore  << " producing bitvectors of size "<< expr_bitwidth 
+            debug(0) << "DistributeVec on store \n"<<OrigStore  << " producing bitvectors of size "<< expr_bitwidth 
              << " with maximum bitwidth "<<max_bitwidth<<" \n";
 
             OrigStore = substitute_in_all_lets(OrigStore);
@@ -900,10 +900,16 @@ namespace Halide {
 
 
 
+
             
             for(unsigned bitvector_size : bitvector_sizes){
 
-                if(max_bitwidth <= bitvector_size){
+                if(max_bitwidth == bitvector_size){
+                    debug(0) << "Store expression fits entirely into supported vector register! " << "\n";
+                    break;
+                }
+
+                if(max_bitwidth < bitvector_size){
                     debug(0) << "Store smaller than "<< bitvector_size<<"\n";
                     continue;
                 }

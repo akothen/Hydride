@@ -471,7 +471,7 @@ namespace Halide {
                         std::string rkt_val = dispatch(op->value);
                         //std::cout << "Broadcast "<<rkt_val << "to x"<<rkt_type <<"\n";
                         indent.pop();
-                        return tabs() + "(xBroadcast " + rkt_val +" " + rkt_type + ")\n";
+                        return tabs() + "(xBroadcast " + rkt_val +" " + rkt_type + ")";
                     }
 
                     std::string get_type_string(Type t) {
