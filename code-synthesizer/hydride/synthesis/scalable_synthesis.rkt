@@ -124,6 +124,9 @@
                     (println scaled-leaves)
 
 
+                    (halide:assume-buffers-signedness synth-buffers-full)
+
+
                     (define-values (_expr-extract-full _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-full actual-expr-depth))
                     (displayln "Scaled expression:")
                     (println _expr-extract-full)
@@ -140,6 +143,11 @@
                   (define (invoke-spec-lane lane-idx env-lane)
                     (printf "invoke-spec-lane with env: ~a\n" env-lane)
                     (define synth-buffers-lane (halide:create-buffers scaled-leaves env-lane))
+
+                    (halide:assume-buffers-signedness synth-buffers-lane)
+                    
+
+
                     (define-values (_expr-extract _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-lane actual-expr-depth))
                     (define output-idx (- expr-VF 1 lane-idx))
                     (define _result_lane (cpp:eval ((halide:interpret _expr-extract) output-idx)))

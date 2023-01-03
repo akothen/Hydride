@@ -39,6 +39,21 @@
 )
 
 
+;; Add buffer signed assumptions
+(define (assume-buffer-signedness buf)
+  (define is-signed (halide:is-buffer-signed buf))
+  (define buffer-bv (halide:assemble-bitvector (halide:interpret buf) (halide:vec-len buf)))
+  (assume-signedness buffer-bv (vec-precision buf) is-signed)
+  )
+
+;; wrapper to apply buffer signedness to list of buffers
+(define (assume-buffers-signedness bufs)
+  (for/list ([buf bufs])
+            (assume-buffer-signedness buf)
+            )
+  )
+
+
 ;; Binds
 (define (bind-expr-args expr args depth)
   (define (arg i) (vector-ref args i))
