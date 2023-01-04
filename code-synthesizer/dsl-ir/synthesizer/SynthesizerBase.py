@@ -197,6 +197,7 @@ class SynthesizerBase:
             input_vector_sizes.append(input_size)
             precisions.append(precision)
 
+
         return create_interleave_dsl(
             input_vector_sizes = input_vector_sizes,
             precisions = precisions
@@ -232,6 +233,7 @@ class SynthesizerBase:
 
             input_vector_sizes.append(input_size)
             precisions.append(precision)
+
 
         return create_deinterleave_dsl(
             input_vector_sizes = input_vector_sizes,
@@ -784,8 +786,19 @@ class SynthesizerBase:
 
         # Divide upcasts and downcasts evenly when both exceed 50% of
         # the allocated number of rules for broadcast instructions
-        num_upcasts = min(len(upcast_ops), int(0.4 * num_broadcasts))
+        num_upcasts = min(len(upcast_ops), int(0.5 * num_broadcasts))
         num_downcasts = num_broadcasts - num_upcasts
+
+        if (num_upcasts + num_downcasts) < num_broadcasts:
+            num_downcasts = min(len(downcast_ops), int(0.5 * num_broadcasts))
+            num_upcasts = num_broadcasts - num_downcasts
+
+        print("Num Upcasts allocation:", num_upcasts)
+        print("Num Downcasts allocation:", num_downcasts)
+
+        print("Num Upcasts actual:", len(upcast_ops))
+        print("Num Downcasts actual:", len(downcast_ops))
+
 
         upcasts = get_top_N_ops(upcast_ops,upcast_ctxs, num_upcasts)
         downcasts = get_top_N_ops(downcast_ops,downcast_ctxs, num_downcasts)
@@ -1021,9 +1034,8 @@ class SynthesizerBase:
 
             # For targets which prefer distributing computation
             # over a base vector size
-            if self.BASE_VECT_SIZE != None :
+            if self.BASE_VECT_SIZE != None:
                 score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 2
-
                 score +=  int(([ctx.supports_input_size(input_size) for input_size in [self.MAX_BW_SIZE]].count(True)))
 
 
@@ -1106,7 +1118,7 @@ class SynthesizerBase:
             ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            EXPENSIVE_OPS = ["bvsdiv", "bvudiv", "abs"] #["bvmul", "bvsdiv", "bvudiv",  "sign-extend", "zero-extend", "abs", ]
+            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"]] #["bvmul", "bvsdiv", "bvudiv",  "sign-extend", "zero-extend", "abs", ]
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
@@ -1115,7 +1127,11 @@ class SynthesizerBase:
             # EXPENSIVE_OPS += ["bvadd"]
 
             for expensive_op in EXPENSIVE_OPS:
-                if expensive_op in dsl_ops and expensive_op not in spec_ops:
+
+                expensive_cond = all([(op not in spec_ops) and (op in dsl_ops) for op in expensive_op])
+                if  expensive_cond : #expensive_op in dsl_ops and expensive_op not in spec_ops:
+                    if dsl_inst.name in DEBUG_LIST and DEBUG :
+                        print("Ops overlap failed due to expensive op in DSL")
                     return False
 
 
@@ -1126,11 +1142,10 @@ class SynthesizerBase:
                 #if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]:
                 #    return False
 
-
                 cond = bv_op in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]
 
                 overlap = overlap or cond
-            #return True
+
             return overlap or (is_cast_expr(spec_ops) and is_cast_expr(dsl_ops))   or is_cast_expr(dsl_ops)
 
 

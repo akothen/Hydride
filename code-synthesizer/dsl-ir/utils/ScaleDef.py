@@ -13,7 +13,12 @@ class ScaleDef:
 
         defaults.append("[(reg id) (reg id) ]")
 
-        defaults.append("[(lit v) (lit (integer->bitvector (bitvector->integer v) (bitvector (* scale-factor (bvlength v)))))]")
+        # Replace literal with the same exact value represented in higher bitwidth
+        # defaults.append("[(lit v) (lit (integer->bitvector (bitvector->integer v) (bitvector (* scale-factor (bvlength v)))))]")
+
+        # Replace literal with the same value concatenated scale-factor times to itself
+        defaults.append("[(lit v) (lit (apply concat (for/list ([i (range scale-factor)]) v) ) )]")
+
 
 
         for structs in default_structs:

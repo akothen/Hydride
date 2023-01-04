@@ -17,7 +17,7 @@
 (define (hvx:scale-expr prog scale-factor)
  (destruct prog
 	[(reg id) (reg id) ]
-	[(lit v) (lit (integer->bitvector (bitvector->integer v) (bitvector (* scale-factor (bvlength v)))))]
+	[(lit v) (lit (apply concat (for/list ([i (range scale-factor)]) v) ) )]
 	[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
 		(
 		vector-two-input-swizzle_dsl

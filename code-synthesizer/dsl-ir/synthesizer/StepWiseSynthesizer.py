@@ -105,7 +105,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             self.scale_factor =  16
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
-            self.SWIZZLE_BOUND = 10
+            self.SWIZZLE_BOUND = 15
 
 
 
@@ -341,10 +341,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
         print("spec_ops:", spec_ops)
-        print("Filtered sample keys")
-        print(sample_keys)
-
-        print(sample_keys)
+        #print("Filtered sample keys")
+        #print(sample_keys)
+        #print(sample_keys)
         assert sample_keys != [] , "Key's after filtering are empty"
 
 
@@ -446,6 +445,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             memory_shuffle_args_list = []
 
         else:
+
+            print("total number of shuffles:", len(memory_shuffle_insts))
             if len(memory_shuffle_insts) > self.SWIZZLE_BOUND:
                 (msi, msa) = ([],[])#self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = self.SWIZZLE_BOUND)
 
@@ -520,12 +521,14 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         BOUND = 16
         if self.target == 'hvx':
-            BOUND = 20
+            BOUND = 25
         if self.spec.contains_conditional():
             BOUND = 25
 
         if self.depth >= 4:
-            BOUND = 16
+            BOUND = 30
+
+
 
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
 
@@ -545,7 +548,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 MAX_NUM_CLAUSES = 10
 
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-            print("Bucket return from parititioning")
+            print("Bucket return from partitioning")
             print(bucket.keys())
             (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
