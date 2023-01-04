@@ -108,7 +108,7 @@ class RoseRegion:
       return False
 
   def isParentValid(self, Parent):
-    assert isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     if isinstance(Parent, RoseAbstractions.RoseForLoop) \
     or isinstance(Parent, RoseAbstractions.RoseFunction) \
     or isinstance(Parent, RoseAbstractions.RoseCond):
