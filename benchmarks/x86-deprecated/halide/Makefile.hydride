@@ -53,7 +53,7 @@ $(benchmarks): %: %/bin
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
 		-f $@ target=$(TARGET)
-	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
+	HL_DEBUG_CODEGEN=1  ./$@/bin/$@_generator \
 		-r halide_runtime_x86 \
 		-o $@/bin \
 		-e object,c_header \
