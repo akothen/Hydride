@@ -1913,17 +1913,26 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::halving_add)) {
 
+                            Expr Two, One;
+                            if(op->args[1].type().is_uint()){
+                                Two = make_const(UInt(op->args[1].type().bits() ), 2);
+                                One = make_const(UInt(op->args[1].type().bits() ), 1);
+                            } else {
+                                Two = make_const(Int(op->args[1].type().bits() ), 2);
+                                One = make_const(Int(op->args[1].type().bits() ), 1);
+                            }
+
                             size_t element_bits = op->args[0].type().bits();
 
                             if(_arch ==  Architecture::HVX){
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -1932,18 +1941,27 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::halving_sub)) {
 
+                            Expr Two, One;
+                            if(op->args[1].type().is_uint()){
+                                Two = make_const(UInt(op->args[1].type().bits() ), 2);
+                                One = make_const(UInt(op->args[1].type().bits() ), 1);
+                            } else {
+                                Two = make_const(Int(op->args[1].type().bits() ), 2);
+                                One = make_const(Int(op->args[1].type().bits() ), 1);
+                            }
+
                             size_t element_bits = op->args[0].type().bits();
                             if(_arch ==  Architecture::HVX){
 
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
 
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -1952,19 +1970,28 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::rounding_halving_add)) {
 
+                            Expr Two, One;
+                            if(op->args[1].type().is_uint()){
+                                Two = make_const(UInt(op->args[1].type().bits() ), 2);
+                                One = make_const(UInt(op->args[1].type().bits() ), 1);
+                            } else {
+                                Two = make_const(Int(op->args[1].type().bits() ), 2);
+                                One = make_const(Int(op->args[1].type().bits() ), 1);
+                            }
+
                             size_t element_bits = op->args[0].type().bits();
 
                             if(_arch ==  Architecture::HVX){
 
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
 
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -1974,13 +2001,22 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::rounding_halving_sub)) {
 
+                            Expr Two, One;
+                            if(op->args[1].type().is_uint()){
+                                Two = make_const(UInt(op->args[1].type().bits() ), 2);
+                                One = make_const(UInt(op->args[1].type().bits() ), 1);
+                            } else {
+                                Two = make_const(Int(op->args[1].type().bits() ), 2);
+                                One = make_const(Int(op->args[1].type().bits() ), 1);
+                            }
+
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
+                                lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + One) / Two);
                             } else if (_arch == Architecture::X86){
 
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
+                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + One) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -1990,15 +2026,22 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::sorted_avg)) {
 
                             size_t element_bits = op->args[0].type().bits();
+                            Expr Two;
+                            if(op->args[1].type().is_uint()){
+                                Two = make_const(UInt(op->args[1].type().bits() * 2), 2);
+                            } else {
+                                Two = make_const(Int(op->args[1].type().bits() * 2), 2);
+                            }
+
                             if(_arch ==  Architecture::HVX){
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
                                 if(element_bits < 64){
-                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -2017,16 +2060,28 @@ namespace Halide {
                             }
                         } 
                         else if (op->is_intrinsic(Call::rounding_shift_right)){
+                                Expr Zero, One, Two;
+                                if(op->args[1].type().is_uint()){
+                                    Zero = make_const(UInt(op->args[1].type().bits()), 0);
+                                    Two = make_const(UInt(op->args[1].type().bits()), 2);
+                                } else {
+                                    Zero = make_const(Int(op->args[1].type().bits()), 0);
+                                    Two = make_const(Int(op->args[1].type().bits()), 2);
+                                }
+
+                                if(op->args[0].type().is_uint()){
+                                    One = make_const(UInt(op->args[0].type().bits()), 1);
+                                } else {
+                                    One = make_const(Int(op->args[0].type().bits()), 1);
+                                }
                             if(_arch ==  Architecture::HVX){
-                                //lower_using_halide = true;
-                                lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
+                                lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1]; 
                             } else if (_arch == Architecture::X86){
-                                lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
+                                lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1]; 
                             }
                         } 
                         else if (op->is_intrinsic(Call::widening_mul)) {
                             if(_arch ==  Architecture::HVX){
-                                //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = (widen(op->args[0]) * widen(op->args[1]));
