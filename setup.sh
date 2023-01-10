@@ -5,7 +5,8 @@ export HYDRIDE_ROOT=$CUR_DIR
 export LLVM_ROOT=$CUR_DIR/backends/llvm/build/
 export LLVM_DIS_ROOT=$LLVM_ROOT
 export LLVM_CONFIG=$LLVM_DIS_ROOT/bin/llvm-config
-export HALIDE_DISTRIB=$CUR_DIR/frontends/halide/build
+export HALIDE_SRC=$CUR_DIR/frontends/halide/
+export HALIDE_DISTRIB=$HALIDE_SRC/build
 
 export INTRINSICS_LL=$CUR_DIR/code-synthesizer/dsl-ir/x86_wrappers.c.ll
 export LEGALIZER_PATH=$CUR_DIR/backends/llvm/build/lib/LLVMX86Legalizer.so
