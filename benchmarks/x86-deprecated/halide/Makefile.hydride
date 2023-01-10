@@ -1,4 +1,6 @@
-HALIDE_DISTRIB ?= /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib/
+HALIDE_DISTRIB ?= $(HALIDE_DISTRIB)
+HALIDE_SRC ?= $(HALIDE_SRC)
+
 LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 
 benchmarks = gaussian3x3 \
@@ -40,19 +42,21 @@ $(benchmarks): %: %/bin
 # 	Compile the generator
 	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
-		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
+		-g $@/src/$@_generator.cpp $(HALIDE_SRC)/tools/GenGen.cpp \
 		$(hannk) \
 		-o $@/bin/$@_generator \
-		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_ROOT)/bin/llvm-config --system-libs --link-static)
+		-L $(HALIDE_DISTRIB)/lib -L $(HALIDE_DISTRIB)/src -lHalide $(shell $(LLVM_ROOT)/bin/llvm-config --system-libs --link-static)
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/src; \
+	HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
 		-f $@ target=$(TARGET)
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/src \
 	HL_DEBUG_CODEGEN=1  ./$@/bin/$@_generator \
 		-r halide_runtime_x86 \
 		-o $@/bin \
