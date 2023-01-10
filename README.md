@@ -16,10 +16,6 @@ Hydride has two major components:
     - MacOS: `brew install z3`
     - Linux example: `sudo apt-get install -y z3`
 
-### LLVM
-- Install [LLVM](https://github.com/llvm/llvm-project.git) >= 12.0:
-    - Source: `git clone -b release/12.x https://github.com/llvm/llvm-project.git`
-
 ### Racket 
 - Install [Racket](https://download.racket-lang.org/)
     - Linux example (works for all versions of Racket): 
@@ -35,6 +31,17 @@ Hydride has two major components:
 - `backends` contains modified version of low-level compilers like LLVM that contains backends to different targets.
 - `rosette` is the modified version of Rosette necessary for Hydride.
 - `benchmarks` contains the benchmarks on which Hydride is evaluated against other mainline DSL compilers.
+
+## Instructions to install Hydride
+From the root directory, run the setup bash script to set up appropriate paths first.
+```
+source setup.sh
+```
+Install the frontends and backends, and Rosette and Hydride code synthesizer by running the following install script. 
+```
+bash install.sh
+```
+Now you are ready to use Hydride!
 
 ## Targets Supported (WIP)
 - x86 (SSE, AVX (includes VNNI, AMX, etc.), MMX, FMA)
