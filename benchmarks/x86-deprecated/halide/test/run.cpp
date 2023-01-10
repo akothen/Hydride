@@ -14,12 +14,22 @@
 #include "gaussian3x3.h"
 #elif benchmark_gaussian5x5
 #include "gaussian5x5.h"
+#elif benchmark_gaussian7x7
+#include "gaussian7x7.h"
 #elif benchmark_sobel3x3
 #include "sobel3x3.h"
 #elif benchmark_blur3x3
 #include "blur3x3.h"
+#elif benchmark_blur5x5
+#include "blur5x5.h"
+#elif benchmark_blur7x7
+#include "blur7x7.h"
 #elif benchmark_dilate3x3
 #include "dilate3x3.h"
+#elif benchmark_dilate5x5
+#include "dilate5x5.h"
+#elif benchmark_dilate7x7
+#include "dilate7x7.h"
 #elif benchmark_median3x3
 #include "median3x3.h"
 #elif benchmark_add
@@ -614,6 +624,57 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - blur3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+
+#if benchmark_blur5x5
+    halide_dimension_t x_dim{ 0, width/2, 1 };
+    halide_dimension_t y_dim{ 0, height, width/2 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint16_t> input_buf((uint16_t*)input, dims, shape);
+    Halide::Runtime::Buffer<uint16_t> output_buf((uint16_t*)output, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = blur5x5(input_buf, output_buf);
+            if (error != 0) {
+            printf("blur5x5 pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+#endif
+
+    printf("AppReported (): Image %dx%d - blur5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+#if benchmark_blur7x7
+    halide_dimension_t x_dim{ 0, width/2, 1 };
+    halide_dimension_t y_dim{ 0, height, width/2 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint16_t> input_buf((uint16_t*)input, dims, shape);
+    Halide::Runtime::Buffer<uint16_t> output_buf((uint16_t*)output, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = blur7x7(input_buf, output_buf);
+            if (error != 0) {
+            printf("blur7x7 pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+#endif
+
+    printf("AppReported (): Image %dx%d - blur7x7(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
 #if benchmark_dilate3x3
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
@@ -636,6 +697,56 @@ int main(int argc, char **argv) {
 #endif
 
     printf("AppReported (): Image %dx%d - dilate3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_dilate5x5
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+     benchmark([&]() {
+            int error = dilate5x5(input_buf, output_buf);
+            if (error != 0) {
+            printf("dilate5x5 pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - dilate5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_dilate7x7
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+     benchmark([&]() {
+            int error = dilate7x7(input_buf, output_buf);
+            if (error != 0) {
+            printf("dilate7x7 pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - dilate7x7(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 
@@ -910,7 +1021,30 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - gaussian5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles/(width*height));
 #endif
 
+#if benchmark_gaussian7x7
+    halide_dimension_t x_dim{0, width, 1};
+    halide_dimension_t y_dim{0, height, width};
+    halide_dimension_t shape[2] = {x_dim, y_dim};
 
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+    // Run in 128 byte mode
+    cycles = benchmark([&]() {
+            int error = gaussian7x7(input_buf, output_buf);
+            if (error != 0) {
+            printf("gaussian7x7 pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x=0; x<10; x++)
+        for (int y=0; y<10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - gaussian7x7(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles/(width*height));
+#endif
 
 #if benchmark_median3x3
     printf("\t*** median3x3\n");
