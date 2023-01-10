@@ -419,6 +419,10 @@ void CodeGen_LLVM::add_hydride_code() {
     llvm::SMDiagnostic error;
     std::unique_ptr<llvm::Module> hydride_module = llvm::parseIRFile(sb, error, *context);
 
+    if(!hydride_module){
+        internal_error << "Failure parsing "<<hydride_bitcode_name << " \n";
+    }
+
     // Set it to the linked hydride module has the same target information
     // has the currently compiled module
     hydride_module->setDataLayout(module->getDataLayout());
