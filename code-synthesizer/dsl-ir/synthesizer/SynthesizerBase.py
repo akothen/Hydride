@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["hexagon_V6_vcombine_128B"]
+DEBUG_LIST = ["hexagon_V6_vmpyih_128B" ]
 SKIP_LIST = []
 
 MUST_INCLUDE = [ ]
@@ -508,8 +508,6 @@ class SynthesizerBase:
 
 
     def prune_low_score_ops(self, ops, ctxs, score = 2):
-        if self.target == 'hvx':
-            return (ops, ctxs)
         indices = [i for i in range(len(ops)) if self.score_context(ops[i], ctxs[i]) > score ]
         pruned_ops = [ops[i] for i in indices]
         pruned_ctxs = [ctxs[i] for i in indices]
@@ -863,7 +861,7 @@ class SynthesizerBase:
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
                     if v in ctx_ops and v not in spec_ops and not skip:
-                        print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
+                        #print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
                         skip = True
 
                         if ctx.name == "hexagon_V6_vaddh_128B":
@@ -910,6 +908,13 @@ class SynthesizerBase:
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
             supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
 
+            supports_input_basevect = False
+            supports_output_basevect = False
+
+            if self.BASE_VECT_SIZE != None:
+                supports_input_basevect = ctx.supports_input_size(self.BASE_VECT_SIZE)
+                supports_output_basevect = ctx.supports_output_size(self.BASE_VECT_SIZE)
+
             if UPCAST_OPERATIONS:
                 # One precision higher
                 supports_inputs_prec = supports_inputs_prec or  any([ctx.supports_input_precision(2 * input_precision) for  input_precision in self.spec.input_precision])
@@ -943,7 +948,12 @@ class SynthesizerBase:
 
 
             # Hexagon condition for distribution:
-            hexagon_cond = ((supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length) ) and lane_size_cond
+            #hexagon_cond = ((supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length) ) and lane_size_cond
+            # TEMP:
+            hexagon_precision_cond_op =  (supports_inputs_prec or supports_outputs_prec)  and (not is_broadcast_like)
+            hexagon_precision_cond_br =  (supports_input_length or supports_output_length) and  is_broadcast_like
+            hexagon_precision_cond = hexagon_precision_cond_op or hexagon_precision_cond_br
+            hexagon_cond = (hexagon_precision_cond and (supports_input_length or supports_output_length or supports_input_basevect or supports_output_basevect ) ) and lane_size_cond
             hexagon_cond = hexagon_cond and (self.target == "hvx")
 
             if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:

@@ -104,11 +104,12 @@
                   ;; The extracted sub-expression is to be treated
                   ;; as synthesis of some un-seen new expression
                   ;; and so we must create a new id-map for the registers to bind to
-                  (define sub-id-map (make-hash))
-                  (for/list ([i (range (vector-length dummy-args))])
-                            (define dummy-buf (vector-ref dummy-args i))
-                            (hash-set! sub-id-map dummy-buf (bv i (bitvector 8)) )
 
+                  (define recalculate-args (halide:create-buffers leaves sym-bvs))
+                  (define sub-id-map (make-hash))
+                  (for/list ([i (range (vector-length recalculate-args))])
+                            (define dummy-buf (vector-ref recalculate-args i))
+                            (hash-set! sub-id-map dummy-buf (bv i (bitvector 8)) )
                             )
 
 
@@ -229,7 +230,6 @@
                             (hash-set! synth-log hashed-expr (vector sat? mat (- test-end test-start)) )]
                           )
 
-                        (displayln "Here")
 
                         (define result
                           (cond
@@ -256,7 +256,7 @@
                       )
                     (begin
                       (debug-log "Unsatisfiable, try smaller window within given sub-expression")
-                      (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args actual-expr-depth))
+                      (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr recalculate-args actual-expr-depth))
                       (define expr-VF (halide:vec-len expr-extract))
 
                       (if (eq? actual-expr-depth 1)
@@ -266,7 +266,9 @@
                           )
                         '()
                         )
-                      (define recalculate (scale-down-synthesis expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt? sym? scale-factor synth-log))
+                      (define recalculate (scale-down-synthesis expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt? sym? 
+                                                                scale-factor ; scale-factor = 1, since we've already scaled down the expression
+                                                                synth-log))
                       (debug-log "Smaller window synthesis returned:")
                       (debug-log recalculate)
                       (set! satisfiable? #t)
@@ -297,6 +299,7 @@
                   ;; we can clear the symbolic heap
                   (clear-terms!)
                   (collect-garbage)
+                  ;(debug-log "Collected Garbage!")
 
 
                   (define synthesized-leaves 
@@ -366,6 +369,7 @@
 
 
   ;(set! starting-depth 4)
+  ;(set! depth-limit 4)
 
   (define start-time (current-seconds))
   (define solutions 
@@ -374,76 +378,139 @@
     ;; at the depth d before incrementing d.
     (for/list ([d (range starting-depth depth-limit)])
 
+              (debug-log (format "=====================\nSTARTING SYNTHESIS FOR DEPTH ~a\n=====================\n" d))
               (define steps-per-depth
                 (cond
                   [(<= d 3) step-limit]
                   [(equal? d 4) 
                    ;(* 1 step-limit)
-                   40
+                   64 
                    ]
                   [else
-                    40
+                    64
                     ]
                   )
                 
                 )
-              (for/list ([s (range steps-per-depth)])
 
-                        ;(parameterize 
-                        ;  ([current-solver (z3)] 
-                           ;[term-cache (hash-copy (term-cache))]
-                        ;   )
-                        (clear-vc!)
-                        (clear-terms!)
-                        (collect-garbage)
+              (define NUM_THREADS 
+                (cond 
+                  [(<= d 2) 1]
+                  [else
+                    1
+                    ]
+                  )
+                )
 
-                        ;; if solution already found in previous
-                        ;; iteration, do nothing.
+              (for/list ([s (range 0 steps-per-depth NUM_THREADS)])
 
-                        (cond
-                          [(not solved?)
-                           (define base_name (string-append "base_" (~s (random 10000)) "_s" (~s s) "_d" (~s d)))
-                           ;; get-grammar step-i, depth d
-                           ;; get-interpreter step-i, depth d
-                           ;; get-cost-model step-i, depth d
-                           (define-values (grammar interpreter cost-model) 
-                                          (get-expr-grammar-step spec-expr leaves base_name expr-VF s d))
+                        (cond 
+                          [solved? 
+                            ;; Already solved, no need to launch parallel threads
+                            ;; avoid overheads
+                            '()
+                            ]
+                          [else
 
-                        (define (grammar-fn i)
-                            (grammar i)
+                        (define step-low s)
+                        (define step-high (min (+ step-low NUM_THREADS) steps-per-depth))
+
+                        ;; If even one of the threads finds a valid solution,
+                        ;; we can kill all other threads. Use THREADS-REF variable
+                        ;; to 'hack' circular definition.
+                        (define THREADS-REF '())
+                        (define (kill-other-threads exclude-idx)
+                            (debug-log (format "Killing all other threads except ~a!, num threads currently executing: ~a\n" exclude-idx (length THREADS-REF)))
+                            (for/list ([t-idx (range (length THREADS-REF))])
+                                      (define actual-thread-idx (+ step-low t-idx))
+                                      (cond
+                                        [(equal? actual-thread-idx exclude-idx)
+                                         '()
+                                         ]
+                                        [else
+                                          (debug-log (format "Killing thread at relative index ~a\n" t-idx))
+                                          (kill-thread (list-ref THREADS-REF t-idx))
+                                          ]
+                                        )
+                                      )
                           )
 
-                         (debug-log (format "Specification: ~a\n" spec-expr ))
+                        (define thds  
+                              (for/list ([t (range step-low step-high )])
+                                (parameterize 
+                                  ([current-solver (z3)] 
+                                   )
+                                      (thread (thunk
+                                        (clear-vc!)
+                                        (clear-terms!)
+                                        (collect-garbage)
 
-                           ;; perform synthesis
-                           (define-values (sat? mat el) 
-                                          (synthesize-sol-with-depth 
-                                            d 
-                                            d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
-                                            optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                                        ;; if solution already found in previous
+                                        ;; iteration, do nothing.
+
+                                        (cond
+                                          [(not solved?)
+                                           (define base_name (string-append "base_" (~s (random 10000)) "_s" (~s t) "_d" (~s d)))
+                                           ;; get-grammar step-i, depth d
+                                           ;; get-interpreter step-i, depth d
+                                           ;; get-cost-model step-i, depth d
+                                           (define-values (grammar interpreter cost-model) 
+                                                          (get-expr-grammar-step spec-expr leaves base_name expr-VF t d))
+
+                                        (define (grammar-fn i)
+                                            (grammar i)
                                           )
-                           ;; if sat set solution? to be true
-                           (if sat?
-                             (begin
-                               (set! solved? #t)
-                               (set! sol mat)
-                               )
-                             '()
-                             )
-                           ]
+
+                                         (debug-log (format "Specification: ~a\n" spec-expr ))
+
+                                           ;; perform synthesis
+                                           (define-values (sat? mat el) 
+                                                          (synthesize-sol-with-depth 
+                                                            d 
+                                                            d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                                                            optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                                                          )
+                                           ;; if sat set solution? to be true
+                                           (if sat?
+                                             (begin
+                                               (set! solved? #t)
+                                               (set! sol mat)
+                                               ;(kill-other-threads t)
+                                               )
+                                             '()
+                                             )
+                                           ]
+                                          )
+                                        ) ) ; (thread thunk
+                                    ) ;; paramterize
+                                
+                            ) ;; threads list
+                        ) ;; thds
+
+                        (set! THREADS-REF thds)
+
+                        (debug-log (format "Waiting on parallel threads range ~a to ~a for synthesis depth ~a \n" step-low step-high d))
+                        (for/list ([thd thds])
+                                  (thread-wait thd)
+                                  )
+
+                            ]
                           )
-                        )
-                        ;)
+
+
+                    ) 
               )
     )
 
 
   (define end-time (current-seconds))
 
+  (debug-log "Stepwise synthesis completed!")
+
   (if (not solved?)
     (begin
       (debug-log "Synthesis failed!")
-      (exit)
+      (values #f sol (- end-time start-time))
       )
     (values solved? sol (- end-time start-time))
     )

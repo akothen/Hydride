@@ -13,6 +13,10 @@ import sys
 
 import ast
 
+def debug(*args):
+    PRINT_DEBUG = False
+    if PRINT_DEBUG:
+        print("\t".join([str(arg) for arg in args]))
 
 from hashlib import md5
 
@@ -70,7 +74,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                          is_shuffle = is_shuffle, target = target,
                          legal_map = legal_map)
         self.step = step
-        print("Using Stepwise Synthesizer!")
+        debug("Using Stepwise Synthesizer!")
 
         self.set_target_settings()
         self.partition_flexibility = 4
@@ -79,10 +83,10 @@ class StepWiseSynthesizer(SynthesizerBase):
         if is_shuffle:
             self.scale_factor = 1
 
-        print("Pre Scaling")
+        debug("Pre Scaling")
         self.print_dsl_stats()
         self.dsl_operators = self.scale_down_dsl(self.dsl_operators)
-        print("Post Scaling")
+        debug("Post Scaling")
         self.print_dsl_stats()
 
         with open("tmp.txt", "w+") as Temp:
@@ -91,6 +95,39 @@ class StepWiseSynthesizer(SynthesizerBase):
                 for c in d.contexts:
                     Temp.write(c.name+"\n")
 
+
+
+    def get_dsl_summary(self, dsl_list):
+
+        summary_obj = {
+            "max_input_prec" : 0,
+            "max_output_prec" : 0,
+            "min_input_prec" : 0,
+            "min_output_prec" : 0,
+            "max_input_lanesize" : 0,
+            "max_output_lanesize" : 0,
+            "min_input_lanesize" : 0,
+            "min_output_lanesize" : 0,
+        }
+
+        for dsl_inst in dsl_list:
+
+            for ctx in dsl_inst.contexts:
+
+                summary_obj['max_input_prec'] = max(summary_obj['max_input_prec'], ctx.in_precision)
+                summary_obj['max_output_prec'] = max(summary_obj['max_output_prec'], ctx.out_precision)
+
+                summary_obj['min_input_prec'] = min(summary_obj['min_input_prec'], ctx.in_precision)
+                summary_obj['min_output_prec'] = min(summary_obj['min_output_prec'], ctx.out_precision)
+
+
+                summary_obj['max_input_lanesize'] = max(summary_obj['max_input_lanesize'], ctx.in_precision)
+                summary_obj['max_output_lanesize'] = max(summary_obj['max_output_lanesize'], ctx.out_precision)
+
+                summary_obj['min_input_lanesize'] = min(summary_obj['min_input_lanesize'], ctx.in_precision)
+                summary_obj['min_output_lanesize'] = min(summary_obj['min_output_lanesize'], ctx.out_precision)
+
+        return summary_obj
 
 
 
@@ -102,7 +139,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
         elif self.target == "hvx":
-            self.scale_factor =  16
+            self.scale_factor = 32
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 15
@@ -178,30 +215,30 @@ class StepWiseSynthesizer(SynthesizerBase):
                     precs_bucket[key] = {"count": 0, "output_prec": out_prec}
                 precs_bucket[key]['count'] += 1
 
-        print("="*50)
+        debug("="*50)
 
         def print_total_count(bucket):
             count = 0
             for key in bucket:
                 count += bucket[key]['count']
 
-            print("Count: ",count)
-            print("Num Buckets: ", len(bucket.keys()))
+            debug("Count: ",count)
+            debug("Num Buckets: ", len(bucket.keys()))
 
-        print("OPs buckets:")
-        print(json.dumps(ops_bucket, indent = 2))
-        print_total_count(ops_bucket)
+        #print("OPs buckets:")
+        #print(json.dumps(ops_bucket, indent = 2))
+        #print_total_count(ops_bucket)
 
-        print("Lengths buckets:")
-        print(json.dumps(lengths_bucket, indent = 2))
-        print_total_count(lengths_bucket)
+        #print("Lengths buckets:")
+        #print(json.dumps(lengths_bucket, indent = 2))
+        #print_total_count(lengths_bucket)
 
 
-        print("Precs buckets:")
-        print(json.dumps(precs_bucket, indent = 2))
-        print_total_count(precs_bucket)
+        #print("Precs buckets:")
+        #print(json.dumps(precs_bucket, indent = 2))
+        #print_total_count(precs_bucket)
 
-        print("="*50)
+        #print("="*50)
 
 
         # Using ops wise bucket to partition operations
@@ -295,8 +332,8 @@ class StepWiseSynthesizer(SynthesizerBase):
         #print("sorted keys lexo", sorted_keys_lexo)
         sorted_keys =  sorted_keys_lexo + shuffle_key
 
-        sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2)), 0)
-        #print("Sample key sizes:", sample_key_sizes)
+        sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2) ), 0)
+        print("Sample key sizes:", sample_key_sizes)
         #print("Total buckets without shuffle:", len(sorted_keys)-1)
 
         # For higher depths, to maintain tractability during synthesis, we only include
@@ -304,27 +341,37 @@ class StepWiseSynthesizer(SynthesizerBase):
         # is sampled at every interval
 
         sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
+
+        print("sample_keys_pre:",sample_keys)
         sample_keys = [list(ele) for ele in sample_keys]
+
+        print("sample_keys:",sample_keys)
+
 
         # Certain combinations may not span the entire set of operations
         # that are present in the spec. We can trivially remove those combinatons
 
         spec_ops = self.spec.get_semantics_ops_list()
+        print("spec_ops:", spec_ops)
         def spans_spec(comb, non_matching_lim = 1):
             eval_str = [ast.literal_eval(ele) for ele in comb]
+            print("eval_str:" ,eval_str)
             fold_ops = []
             for ops in eval_str:
                 fold_ops += ops
+
+            print("fold_ops:", fold_ops)
 
             non_matching_count = 0
 
             for op in spec_ops:
                 if op not in fold_ops:
-
                     non_matching_count += 1
+
+            print("non_matching:", non_matching_count)
             return  (non_matching_count < non_matching_lim)
 
-        print(sample_key_sizes)
+        debug(sample_key_sizes)
 
         for flexibility in range(0,self.partition_flexibility):
             helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
@@ -332,32 +379,36 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             if test_flex != []:
                 sample_keys = test_flex
+                print("Flexibility: ", flexibility)
                 break
             elif flexibility == self.partition_flexibility - 1:
-                print("Spec:", spec_ops)
+                debug("Spec:", spec_ops)
                 assert False, "Current set of operations not sufficient to support partitioning grammar"
 
 
+        print("Sample keys after flexibility: ", sample_keys)
 
 
-        print("spec_ops:", spec_ops)
+        debug("spec_ops:", spec_ops)
         #print("Filtered sample keys")
         #print(sample_keys)
         #print(sample_keys)
         assert sample_keys != [] , "Key's after filtering are empty"
 
+        # key_switch_sample: Number of steps after which sampling should switch keys
+        key_switch_sample = 4
 
-        # Switch sample keys after 4 steps
-        key_subset_index = (step  // 4) % len(sample_keys)
-        print("key subset index: ", key_subset_index, "key subset into step", step % 4)
+        # Switch sample keys after 'key_switch_sample' steps
+        key_subset_index = (step  // key_switch_sample) % len(sample_keys)
+        debug("key subset index: ", key_subset_index, "key subset into step", step % key_switch_sample)
         #print("Head of sample keys")
         #print(sample_keys[:5])
 
-        print("Current combination: ",sample_keys[key_subset_index])
+        debug("Current combination: ",sample_keys[key_subset_index])
 
         sorted_keys = list(sample_keys[key_subset_index]) + shuffle_key
         for key in sorted_keys:
-            print(key)
+            debug(key)
             idx_range = range(0,len(bucket[key]['ops']))
             limit = items_per_bucket
             if key == '[]':
@@ -368,11 +419,16 @@ class StepWiseSynthesizer(SynthesizerBase):
             grammar_combs = cross_product(grammar_combs, idx_subsets)
 
 
-        print("Number of grammar combinations:", len(grammar_combs))
-        for i in range(min(5, len(grammar_combs))):
-            print(grammar_combs[i])
 
-        print("Current Step: ",step, ", depth:", self.depth)
+
+
+
+
+        debug("Number of grammar combinations:", len(grammar_combs))
+        for i in range(min(5, len(grammar_combs))):
+            debug(grammar_combs[i])
+
+        debug("Current Step: ",step, ", depth:", self.depth)
 
 
 
@@ -418,14 +474,15 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
         ## Memory Shuffle layer
-        spec_memory_shuffles = self.get_memory_two_input_shuffles()
-        memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
-        memory_shuffle_args_list = spec_memory_shuffles.contexts #[ctx.context_args for ctx in spec_memory_shuffles.contexts]
+        #spec_memory_shuffles = self.get_memory_two_input_shuffles()
+        #memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
+        #memory_shuffle_args_list = spec_memory_shuffles.contexts #[ctx.context_args for ctx in spec_memory_shuffles.contexts]
+
 
 
         spec_memory_shuffles = self.get_single_interleave_shuffles()
-        memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
-        memory_shuffle_args_list += spec_memory_shuffles.contexts #[ctx.context_args for ctx in spec_memory_shuffles.contexts]
+        memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
+        memory_shuffle_args_list = spec_memory_shuffles.contexts #[ctx.context_args for ctx in spec_memory_shuffles.contexts]
 
 
         spec_memory_shuffles = self.get_single_deinterleave_shuffles()
@@ -446,7 +503,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         else:
 
-            print("total number of shuffles:", len(memory_shuffle_insts))
+            debug("total number of shuffles:", len(memory_shuffle_insts))
             if len(memory_shuffle_insts) > self.SWIZZLE_BOUND:
                 (msi, msa) = ([],[])#self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = self.SWIZZLE_BOUND)
 
@@ -497,11 +554,12 @@ class StepWiseSynthesizer(SynthesizerBase):
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
 
-        print("Number of possible instructions in Grammar before pruning:",len(operation_dsl_insts))
+        debug("Number of possible instructions in Grammar before pruning:",len(operation_dsl_insts))
 
         if self.ENABLE_PRUNING:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
-            (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
+            if self.target not in ["hvx"]:
+                (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
 
 
             # When immediates are present in the specification, they are likely to be used in either broadcast operations or compute operations
@@ -526,7 +584,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             BOUND = 25
 
         if self.depth >= 4:
-            BOUND = 30
+            BOUND = 16
 
 
 
@@ -545,16 +603,23 @@ class StepWiseSynthesizer(SynthesizerBase):
         if not self.is_shuffle:
             MAX_NUM_CLAUSES = 16
             if self.depth >= 4:
-                MAX_NUM_CLAUSES = 10
+                MAX_NUM_CLAUSES = 7
 
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-            print("Bucket return from partitioning")
-            print(bucket.keys())
+            debug("Bucket return from partitioning")
+            debug(bucket.keys())
             (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
 
+        grammar_ops_str = []
         for idx, dsl_inst in enumerate(operation_dsl_insts):
-            print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+            grammar_ops_str.append(
+                " ".join(["[s{}_d{}]".format(self.step, self.depth), "Adding: ",operation_dsl_args_list[idx].name, "with score:", str(self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx])), "belonging to target agnostic class", dsl_inst.name ])
+                )
+
+
+            #print("[s{}_d{}]".format(self.step, self.depth), "Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+        print("\n".join(["="*50] + grammar_ops_str))
 
 
 
@@ -615,6 +680,13 @@ class StepWiseSynthesizer(SynthesizerBase):
         spec_ops = self.spec.get_semantics_ops_list()
         include_ramp_lit = "ramp" in spec_ops
 
+        imms = self.spec.imms
+
+        if self.is_shuffle:
+            imms.append((0, self.spec.output_precision))
+
+
+
 
         return self.grammar_generator.emit_grammar(
             operation_layer_name = main_grammar_name,
@@ -625,10 +697,17 @@ class StepWiseSynthesizer(SynthesizerBase):
             lit_holes = lit_holes,
             return_type = self.output_slice_length,
             input_sizes = self.input_sizes,
-            imms = self.spec.imms,
+            imms = imms,
             include_ramp_lit = include_ramp_lit
         )
 
+
+    def score_context(self, dsl_inst ,  ctx):
+
+        if self.target == 'hvx' and self.spec.get_output_size() == self.MAX_BW_SIZE and ctx.name == "hexagon_V6_vcombine_128B":
+            return 7
+        else:
+            return super().score_context(dsl_inst, ctx)
 
 
 

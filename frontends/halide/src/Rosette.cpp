@@ -3247,8 +3247,8 @@ namespace Halide {
 
             std::vector<unsigned> x86_vector_sizes = { 512, 256, 128 };
             auto distributed = distribute_vector_exprs(pruned, x86_vector_sizes);
-            debug(1) << "Distributed Stmt:\n";
-            debug(1) << distributed <<"\n";
+            debug(0) << "Distributed Stmt:\n";
+            debug(0) << distributed <<"\n";
 
             srand(time(0));
             int random_seed = rand() % 1024;

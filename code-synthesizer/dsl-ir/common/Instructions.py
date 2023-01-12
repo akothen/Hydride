@@ -165,10 +165,17 @@ class Context:
 
     # To scale the arguments of the context, we must have a defined
     # in_vectsize index and out_vectsize_index
-    def can_scale_context(self):
+    def can_scale_context(self, scale_factor = None):
         has_defined_io = self.has_output_size() and self.has_input_size()
         has_defined_lanesize = (self.in_lanesize_index != None) and (self.out_lanesize_index != None)
-        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize
+
+        scale_factor_cond = True
+        if scale_factor != None:
+            for idx, arg in enumerate(self.context_args):
+                if isinstance(arg, BitVector):
+                    scale_factor_cond = scale_factor_cond and (arg.size % scale_factor == 0)
+
+        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize and scale_factor_cond
 
 
     # Update context parameters to down scale the vector sizes parameters
@@ -178,7 +185,7 @@ class Context:
 
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
-                assert arg.size % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
+                assert arg.size % scale_factor == 0, "scale_factor {} must evenly divide the operand sizes {}".format(scale_factor, arg.size)
                 scaled_bv_arg = BitVector(arg.name, int(arg.size // scale_factor))
                 scaled_args.append(scaled_bv_arg)
             elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
@@ -647,7 +654,7 @@ class DSLInstruction(InstructionType):
 
         scaled_contexts = []
         for ctx in self.contexts:
-            if ctx.can_scale_context():
+            if ctx.can_scale_context(scale_factor = scale_factor):
                 ctx.scale_context(scale_factor, base_vector_size = base_vector_size)
                 scaled_contexts.append(ctx)
 
