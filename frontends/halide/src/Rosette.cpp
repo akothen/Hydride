@@ -3003,7 +3003,7 @@ namespace Halide {
                             solver = hydride_solver;
                         }
 
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " #f #f   \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " #t #f   \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
