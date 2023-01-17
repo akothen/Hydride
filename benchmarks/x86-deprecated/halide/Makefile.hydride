@@ -50,7 +50,7 @@ $(benchmarks): %: %/bin
 # 	Use the generator (to get a manual schedule which is the default)
 #
 	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/src; \
-	HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
+	HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_BENCHMARK=$@ ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \

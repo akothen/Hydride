@@ -1506,8 +1506,8 @@ namespace Halide {
                             HVX, ARM, X86
                         };
 
-                        IROptimizer(FuncValueBounds fvb, Architecture _arch, std::set<const BaseExprNode *> &ms, int oid)
-                            : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms), optimizer_id(oid) {
+                        IROptimizer(FuncValueBounds fvb, Architecture _arch, std::set<const BaseExprNode *> &ms, int oid, std::string name)
+                            : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms), optimizer_id(oid), benchmark_name(name) {
                             }
 
                         bool isConstantValue(const Expr v){
@@ -1733,7 +1733,7 @@ namespace Halide {
 
                             if(!skipped_synthesis){
 
-                                std::string fn_name = "hydride.node." + std::to_string(expr_id);
+                                std::string fn_name = "hydride.node." + benchmark_name + "."+ std::to_string(expr_id);
                                 Expr call_expr = ExtractIntoCall().generate_call(fn_name, final_expr, abstractions);
 
 
@@ -2806,12 +2806,17 @@ namespace Halide {
 
                 // synthesis
                 Expr synthesize_impl(Expr spec_expr, Expr orig_expr);
+
+
+                std::string benchmark_name; 
             };
 
 
             class HydrideSynthEmitter {
                 public:
-                    HydrideSynthEmitter() {};
+                    HydrideSynthEmitter(std::string benchmark_name) :  benchmark_name(benchmark_name) {}
+
+                    std::string benchmark_name;
 
 
                     std::string get_synthlog_hash_filepath(int id){
@@ -2827,7 +2832,7 @@ namespace Halide {
 
 
                         } else {
-                            return "hydride_hash_" + std::to_string(id) + ".rkt";
+                            return "hydride_hash_" + benchmark_name + "_"+ std::to_string(id) + ".rkt";
                         }
 
                     }
@@ -2843,7 +2848,7 @@ namespace Halide {
                                 return "";
                             }
                         } else {
-                            return "synth_hash_" + std::to_string(id);
+                            return "synth_hash_" + benchmark_name + "_"+ std::to_string(id);
                         }
 
                     }
@@ -2998,7 +3003,7 @@ namespace Halide {
                             solver = hydride_solver;
                         }
 
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " #t #f   \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " #f #f   \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
@@ -3049,12 +3054,12 @@ namespace Halide {
 
 
                 std::ofstream rkt;
-                std::string file_name = "halide_expr_"+std::to_string(expr_id)+".rkt";
+                std::string file_name = "halide_expr_"+benchmark_name +"_"+std::to_string(expr_id)+".rkt";
                 rkt.open(file_name);
 
 
 
-                HydrideSynthEmitter HSE;
+                HydrideSynthEmitter HSE(benchmark_name);
                 rkt << HSE.emit_racket_imports() << "\n";
                 rkt << HSE.emit_racket_debug() << "\n";
                 rkt << HSE.emit_set_current_bitwidth() << "\n";
@@ -3098,8 +3103,8 @@ namespace Halide {
                 rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
 
 
-                std::string fn_name = "hydride.node." + std::to_string(expr_id);
-                rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name , "/tmp/test.ll");
+                std::string fn_name = "hydride.node." +benchmark_name+ "." +  std::to_string(expr_id);
+                rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name , benchmark_name);
 
 
                 std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
@@ -3134,7 +3139,7 @@ namespace Halide {
 
         } // namespace Hydride
 
-        void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::string output_file){
+        void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::string output_file, std::string benchmark_name){
 
             std::string target_flag = "";
 
@@ -3182,8 +3187,7 @@ namespace Halide {
             std::cout << "Compilation took "<< elapsed_seconds.count() << "seconds ..."<<"\n";
 
             // TEMP CMD
-            std::string temp_cmd = "cp /tmp/hydride.ll.legalize.ll  " + output_file;
-
+            std::string temp_cmd = "cp /tmp/" + benchmark_name +".ll.legalize.ll  " + output_file;
             ret_code = system(temp_cmd.c_str());
 
             debug(0) << "Returned with return code: "<<ret_code <<"\n";
@@ -3220,10 +3224,13 @@ namespace Halide {
             srand(time(0));
             int random_seed = rand() % 1024;
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs, random_seed).mutate(distributed);
+
+            const char* benchmark_name = getenv("HYDRIDE_BENCHMARK");
+            std::string name = benchmark_name ? std::string(benchmark_name) : "hydride"; 
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs, random_seed, name).mutate(distributed);
 
             if(mutated_exprs.size()){
-               hydride_generate_llvm_bitcode(Target::Hexagon, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
+               hydride_generate_llvm_bitcode(Target::Hexagon, "/tmp/"+name+".rkt","/tmp/"+name+".ll", name);
             }
 
             return  Result;
@@ -3253,10 +3260,12 @@ namespace Halide {
             srand(time(0));
             int random_seed = rand() % 1024;
 
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs, random_seed).mutate(distributed);
+            const char* benchmark_name = getenv("HYDRIDE_BENCHMARK");
+            std::string name = benchmark_name ? std::string(benchmark_name) : "hydride"; 
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs, random_seed, name).mutate(distributed);
 
             if(mutated_exprs.size()){
-               hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
+               hydride_generate_llvm_bitcode(Target::X86, "/tmp/"+name+".rkt","/tmp/"+name+".ll", name);
             }
 
             return Result;

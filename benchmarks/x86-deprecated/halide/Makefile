@@ -32,7 +32,14 @@ hannk = hannk/common_halide.cpp
 
 ENABLE_HYDRIDE ?= 1
 EXPR_DEPTH ?=2
-INT_BW ?= 16
+SYNTH_BITWIDTH ?= 16 
+
+BENCHMARK ?=1
+
+CC=clang
+TARGET=host-x86-64 #host-noos-no_bounds_query-no_asserts
+STARTING_HASH_FLAG=#HYDRIDE_INITIAL_HASH=starting_hash
+
 
 .PHONY: clean all $(benchmarks)
 
@@ -49,20 +56,38 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_SYNTH_BW=$(INT_BW) ./$@/bin/$@_generator \
+	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@ HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
-		-f $@ target=host
+		-f $@ target=$(TARGET)
+	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
+		-r halide_runtime_x86 \
+		-o $@/bin \
+		-e object,c_header \
+		target=$(TARGET)
 
-fft:
-# 	Compile the generator
-	g++ -std=c++11 -fno-rtti -O3 \
-		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
-		-g -Wall $@/src/$@_generator.cpp $@/src/fft.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
-		-o $@/bin/$@_generator \
-		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_ROOT)/bin/llvm-config --system-libs --link-static)
+	$(CC) -Dbenchmark_$@ --std=c++17 \
+		-O0 -march=native -mavx512vl -mavx512ifma \
+		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
+		-lstdc++ -ldl -pthread \
+		test/run.cpp \
+		test/stubs.cpp \
+		$@/bin/$@.a \
+		$@/bin/halide_runtime_x86.o \
+		-o $@/bin/$@_run.out
+	
+ifeq ($(BENCHMARK),1) 
+
+# Benchmark the generated binary
+	$@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+
+endif
+
+#-lpng -lpthread -ldl -ljpeg 
+	
+
 
 # Make the bin dirs if needed
 $(bin_dirs): %:
@@ -70,7 +95,8 @@ $(bin_dirs): %:
 
 clean:
 	rm -rf $(bin_dirs)
-	rm halide_expr*
+	rm -rf halide_expr_*
 	rm -rf /tmp/hydride_exprs.rkt
-	rm -rf /tmp/hydride.node.*
 	rm -rf /tmp/base_*
+	rm -rf /tmp/hydride_hash*
+	rm -rf /tmp/hydride.node*

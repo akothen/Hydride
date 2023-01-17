@@ -414,7 +414,10 @@ void CustomInliner(llvm::CallInst* CI){
 void CodeGen_LLVM::add_hydride_code() {
 
     std::cout << "Linking Hydride module!" << "\n";
-    std::string hydride_bitcode_name = "/tmp/hydride.ll";
+
+    const char* benchmark_name = getenv("HYDRIDE_BENCHMARK");
+    std::string name = benchmark_name ? std::string(benchmark_name) : "hydride"; 
+    std::string hydride_bitcode_name = "/tmp/"+name+".ll";
     llvm::StringRef sb = llvm::StringRef(hydride_bitcode_name);
     llvm::SMDiagnostic error;
     std::unique_ptr<llvm::Module> hydride_module = llvm::parseIRFile(sb, error, *context);
