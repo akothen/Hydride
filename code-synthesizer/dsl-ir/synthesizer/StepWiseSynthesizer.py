@@ -135,7 +135,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         super().set_target_settings()
 
         if self.target == "x86":
-            self.scale_factor = 1
+            self.scale_factor = 4
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
         elif self.target == "hvx":
@@ -704,7 +704,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
     def score_context(self, dsl_inst ,  ctx):
 
-        if self.target == 'hvx' and self.spec.get_output_size() == self.MAX_BW_SIZE and ctx.name == "hexagon_V6_vcombine_128B":
+        if self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE  ) and ctx.name == "hexagon_V6_vcombine_128B":
             return 7
         else:
             return super().score_context(dsl_inst, ctx)

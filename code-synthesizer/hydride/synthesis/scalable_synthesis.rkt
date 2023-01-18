@@ -22,6 +22,7 @@
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/printer)
+(require hydride/ir/hydride/scale)
 
 
 (require hydride/ir/hvx/definition)
@@ -328,8 +329,11 @@
                       [(equal? scale-factor 1)
                        materialize
                        ]
-                      [else 
+                      [(equal? target 'hvx) 
                         (hvx:scale-expr materialize scale-factor)
+                        ]
+                      [(equal? target 'x86) 
+                        (hydride:scale-expr materialize scale-factor)
                         ]
                       )
                     )
@@ -438,7 +442,8 @@
                         (define thds  
                               (for/list ([t (range step-low step-high )])
                                 (parameterize 
-                                  ([current-solver (z3)] 
+                                  ([current-solver (if (equal? solver 'z3) (z3) (boolector))] 
+                                   [current-bitwidth 16]
                                    )
                                       (thread (thunk
                                         (clear-vc!)

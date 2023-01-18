@@ -4,7 +4,8 @@ import json
 import subprocess as sb
 from common.DSLParser import parse_dict
 #from LatestSemantics import semantcs
-from merged_dict import semantcs
+from  x86SemanticsAllArgs import semantcs
+
 from common.PredefinedDSL import *
 from common.StructDef import StructDef
 from interpreter.InterpreterDef import InterpreterDef

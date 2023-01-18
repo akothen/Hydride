@@ -69,7 +69,7 @@
        hvx:hydride-printer
        ]
       [(equal? target 'x86)
-       hydride-printer
+       hydride:hydride-printer
        ]
       )
     )
@@ -120,7 +120,7 @@
   (define scale-factor 
   (cond
     [(equal? arch "x86" )
-     1 ;; Currently not doing any scaling for x86
+     4 
      ]
 
     [(equal? arch "hvx" )

@@ -43,6 +43,7 @@
 (require hydride/ir/hydride/binder)
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/visitor)
+(require hydride/ir/hydride/scale)
 
 
 
@@ -75,6 +76,7 @@
 (require hydride/synthesis/algorithm)
 (require hydride/synthesis/llvm_codegen)
 (require hydride/synthesis/lower_swizzle)
+(require hydride/synthesis/scalable_synthesis)
 
 
 
@@ -95,6 +97,7 @@
   (all-from-out hydride/ir/hydride/binder)
   (all-from-out hydride/ir/hydride/const_fold)
   (all-from-out hydride/ir/hydride/visitor)
+  (all-from-out hydride/ir/hydride/scale)
 
 
   (all-from-out hydride/ir/hvx/semantics)
@@ -125,5 +128,7 @@
   (all-from-out hydride/synthesis/python)
   (all-from-out hydride/synthesis/llvm_codegen)
   (all-from-out hydride/synthesis/lower_swizzle)
+  (all-from-out hydride/synthesis/scalable_synthesis)
+
   )
 

@@ -44,7 +44,7 @@
        hvx:hydride-printer
        ]
       [(equal? target 'x86)
-       hydride-printer
+       hydride:hydride-printer
        ]
       )
     )

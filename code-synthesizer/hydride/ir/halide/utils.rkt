@@ -250,7 +250,7 @@
     [(vec-sat-add v1 v2) (append (list extract ) (if (halide:is-signed-expr? v1 v2) (list  bvaddnsw ) (list  bvaddnuw  )) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend zero-extend ) (list  zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
     [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list bvslt  bvsmin) (list bvult bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]

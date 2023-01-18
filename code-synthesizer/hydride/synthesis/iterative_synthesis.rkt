@@ -74,10 +74,16 @@
       #f
       (begin 
 
+        (define synth-sol-lane (invoke_sol_lane lane-idx symbols))
+        (displayln "Verify across lanes hydride:")
+        (displayln synth-sol-lane)
+        (displayln "Verify across lanes spec:")
+        (displayln (invoke_ref_lane lane-idx symbols))
+        (displayln "Is this printed?")
         (define cex 
           (verify 
             (begin
-              (assert (bveq   (invoke_ref_lane lane-idx symbols) (invoke_sol_lane lane-idx symbols)))
+              (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
               )
             )
           )

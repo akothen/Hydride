@@ -166,8 +166,8 @@
   ;; need the actual types of the input arguments
   ;; as they may not be inferable from the expr
   ;; itself. (Pass id-map?)
-  (define len (get-length e (vector))) 
-  (define prec (get-prec e (vector)))
+  (define len (hydride:get-length e (vector))) 
+  (define prec (hydride:get-prec e (vector)))
   (define num-elems (/ len prec))
   (string-append "[" (~s 1) "," (~s num-elems) "]")
   )
@@ -286,7 +286,7 @@
   (define input_shapes (get-swizzle-input-shapes expr))
   (define output_shape (get-swizzle-output-shape expr))
   (define input_precision (get-swizzle-input-precisions expr))
-  (define output_precision (~s (get-prec expr (vector))))
+  (define output_precision (~s (hydride:get-prec expr (vector))))
   (define args (get-swizzle-args-str expr))
   (define spec_invoke "\"\"")
   (define imm-ls "[]")
