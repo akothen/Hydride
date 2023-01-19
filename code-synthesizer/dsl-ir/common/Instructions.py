@@ -27,7 +27,7 @@ BV_OPS = [
     "bvrol", "bvror",
     "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
     "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
-    "bvlt", "bvle", "bvgt", "bvge",
+    "bvlt", "bvle", "bvgt", "bvge", "bvmulnw"
 ]
 
 BV_OP_VARIANTS = [
@@ -142,7 +142,7 @@ class Context:
                  in_precision_index = None,
                  out_precision_index = None, cost = None,
                  signedness = None, in_lanesize_index = None,
-                 out_lanesize_index = None):
+                 out_lanesize_index = None, semantics = None):
         self.name= name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
@@ -158,9 +158,103 @@ class Context:
         self.out_precision_index = out_precision_index
         self.cost = cost
         self.signedness = signedness
+        self.semantics = semantics
 
         self.num_args = len(args)
         self.parse_args(args)
+
+
+
+    def get_bv_ops(self):
+        function_prototype = self.semantics[0].replace("(define", "").lstrip()
+
+        # Map the formal parameter names to instructions
+        # formal argument index
+
+        formal_param_to_arg_idx  = {}
+
+        tokens = function_prototype.replace("\"","").replace(")","").replace("(","").strip().split(" ")
+        tokens = [tk for tk in tokens if tk != ""]
+
+        # token 0 is the name of the instruction
+        for idx, token in enumerate(tokens[1:]):
+            formal_param_to_arg_idx[token] = idx
+
+
+
+
+
+        # Helper method to handle higher level bvops with parameterized signedness
+        def handle_signed_variant_op(op_name, line):
+            substr = line.split(op_name)[-1].replace(")","").replace("\"","").strip()
+            # Check bvadd's signedness
+            signedness_val = substr.split(" ")[-1]
+
+            # Signedness could either be a constant value or a formal parameter
+
+            signedness = None
+
+            if signedness_val == "-1":
+                signedness = None
+            elif signedness_val == "0":
+                signedness = 0
+            elif signedness == "1":
+                signedness = 1
+            elif signedness_val in formal_param_to_arg_idx:
+                index = formal_param_to_arg_idx[signedness_val]
+                arg = self.context_args[index]
+                assert isinstance(arg, Integer), "Operation signedness must be of integer type"
+                assert arg.value in [0,-1,1], "Signedness of bvoperation must be in [0,-1,1]"
+
+                if arg.value == -1:
+                    signedness = None
+                else:
+                    signedness = arg.value
+
+            else:
+                assert False, "Unable to infer bvop signedness for  {} in line {}".format(self.name, line)
+
+            return get_variant_by_sign(op_name, signedness)
+
+        operations = []
+        for line in self.semantics:
+            for bvop in BV_OPS:
+
+
+                # only include bvmul when
+                # bvmul is in the line
+                # but the other saturating operations
+                # arent
+                if bvop == "bvmul" and bvop in line:
+                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw", "bvmulnw"]])
+                    if insert_bvmul:
+                        operations.append(bvop)
+                elif bvop == "bvadd" and bvop in line:
+                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw", "bvaddnw"]])
+                    if insert_bvadd:
+                        operations.append(bvop)
+                elif bvop == "bvsub" and bvop in line:
+                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw","bvsubnw" ]])
+                    if insert_bvsub:
+                        operations.append(bvop)
+                elif bvop in ["bvaddnw", "bvsubnw", "bvsizeext", "bvsaturate", "bvdiv",
+                              "bvrem", "bvmin", "bvmax", "bvlt", "bvle", "bvgt", "bvge"] and bvop in line:
+                    specialized_op = handle_signed_variant_op(bvop, line)
+                    operations.append(specialized_op)
+
+                elif bvop in line and bvop not in ["concat", "extract"]:
+                    operations.append(bvop)
+
+
+
+        return list(set(operations))
+
+
+
+
+
+
+
 
 
     # To scale the arguments of the context, we must have a defined
@@ -230,6 +324,7 @@ class Context:
 
 
         self.context_args = scaled_args
+
 
 
 
@@ -516,7 +611,9 @@ class DSLInstruction(InstructionType):
                     out_precision_index = out_precision_index,
                     cost = cost, signedness = signedness,
                     in_lanesize_index = in_lanesize_index,
-                    out_lanesize_index = out_lanesize_index)
+                    out_lanesize_index = out_lanesize_index,
+                    semantics = self.semantics
+                    )
         )
 
     def print_instruction(self):
