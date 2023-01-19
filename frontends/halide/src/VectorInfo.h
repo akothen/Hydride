@@ -37,8 +37,9 @@ namespace Halide {
                 using IRVisitor::visit;
 
                 unsigned max_width;
+                bool contains_dynamic_shuffle;
 
-                VectorInfo() : max_width(0){}
+                VectorInfo() : max_width(0), contains_dynamic_shuffle(false) {}
 
                 /*
                 void visit(const Variable* op) override;
@@ -93,12 +94,12 @@ namespace Halide {
 
 #define INFO_CALL_INTERNAL_WIDEN_CLAUSE(OP_NAME) \
             if(op->is_intrinsic(Call::OP_NAME)){ \
-                unsigned bitwidth = op->type.bits() * op->type.lanes() * 1;\
+                unsigned bitwidth = op->type.bits() * op->type.lanes() * 2;\
                 max_width = std::max(bitwidth, max_width);\
                 debug(0) << "Widenened maximum size: "<< max_width << "\n";\
                 }
 
-            #define INFO_CALL_CLAUSE(OP_NAME) \
+#define INFO_CALL_CLAUSE(OP_NAME) \
             if(op->is_intrinsic(Call::OP_NAME)){ \
                 unsigned bitwidth = op->type.bits() * op->type.lanes() * 1;\
                 max_width = std::max(bitwidth, max_width);\
@@ -122,6 +123,11 @@ namespace Halide {
             INFO_CALL_CLAUSE(widening_sub)
             INFO_CALL_CLAUSE(widening_shift_right)
             INFO_CALL_CLAUSE(widening_shift_left)
+            INFO_CALL_CLAUSE(dynamic_shuffle)
+
+            if(op->is_intrinsic(Call::dynamic_shuffle)){
+                contains_dynamic_shuffle = true;
+            }
 
 
             unsigned bitwidth = op->type.bits() * op->type.lanes() ;

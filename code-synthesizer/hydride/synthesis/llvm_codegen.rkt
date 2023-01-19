@@ -83,6 +83,12 @@
 
   (write-str-to-file serialized-method dump_file_name)
 
+  (if (file-exists? (string-append "/tmp/" bitcode-path ".rkt"))
+    '()
+    (write-str-to-file "" (string-append "/tmp/" bitcode-path ".rkt"))
+
+    )
+
   (define collect_file_name (string-append "/tmp/" bitcode-path ".rkt"))
   (append-str-to-file serialized-method collect_file_name)
   ;(invoke-code-generator dump_file_name bitcode-path)

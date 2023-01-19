@@ -894,6 +894,13 @@ namespace Halide {
             debug(0) << "DistributeVec on store \n"<<OrigStore  << " producing bitvectors of size "<< expr_bitwidth 
              << " with maximum bitwidth "<<max_bitwidth<<" \n";
 
+
+            if(VI.contains_dynamic_shuffle){
+                debug(0) << "Contains dynamic shuffle, skipping!" << "\n";
+                return OrigStore;
+
+            }
+
             OrigStore = substitute_in_all_lets(OrigStore);
 
 
