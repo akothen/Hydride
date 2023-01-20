@@ -28,6 +28,7 @@ OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
 IS_SHUFFLE = int(sys.argv[4]) == 1
 TARGET = sys.argv[5]
+SCALE_FACTOR = 1
 
 STEP=0
 DEPTH=3
@@ -38,6 +39,10 @@ if len(sys.argv) >= 7:
 
 if len(sys.argv) >= 8:
     DEPTH = int(sys.argv[7])
+
+
+if len(sys.argv) >= 9:
+    SCALE_FACTOR = int(sys.argv[8])
 
 
 
@@ -117,7 +122,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
                   is_shuffle = IS_SHUFFLE,
                   legal_map = legal_map,
                   target = TARGET,
-                  step = STEP
+                  step = STEP,
+                  scale_factor = SCALE_FACTOR
                   )
 
 

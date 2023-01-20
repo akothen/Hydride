@@ -1713,10 +1713,28 @@
 ;; halide factor by scale-factor x
 (define (scale-down-expr expr scale-factor)
 
+  (define scaled? #t)
+
   (define (visitor-fn e)
     (destruct e
               [(buffer data elemT buffsize) 
-               (define scaled-size (/ buffsize scale-factor))
+               (define prec (vec-precision e))
+               (define len (halide:vec-len e))
+
+                (define scaled-size
+                  (cond
+                    [(equal? (modulo len scale-factor) 0)
+                     (* prec (/ len scale-factor))
+                     ]
+                    [else
+
+                      (set! scaled? #f)
+                      ;(error "Unsupported scaling for " e)
+                      (* prec len)
+                      
+                      ]
+                    )
+                  )
                (halide:create-buffer (bv 0 (bitvector scaled-size)) elemT)
                ]
               [(cast-int vec olane oprec)
@@ -1743,7 +1761,8 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                    (set! scaled? #f)
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
@@ -1763,7 +1782,9 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                   (set! scaled? #f)
+                   e
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
@@ -1776,7 +1797,9 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                   (set! scaled? #f)
+                   e
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
@@ -1787,10 +1810,17 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                   (set! scaled? #f)
+                   e
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
+              [(ramp base stride len)
+                (set! scaled? #f)
+                (ramp base stride (/ len scale-factor))
+               ]
+
               [v 
                 v]
               )
@@ -1807,7 +1837,7 @@
       )
   )
 
-  result
+  (values scaled? result)
   
   )
 

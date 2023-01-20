@@ -64,8 +64,12 @@ class StepWiseSynthesizer(SynthesizerBase):
                  is_shuffle = False,
                  target = "x86",
                  legal_map = {},
-                 step = 1
+                 step = 1,
+                 scale_factor = 1
                  ):
+
+
+        self.scale_factor = scale_factor
 
         super().__init__(spec = spec, dsl_operators = dsl_operators,
                          struct_definer = struct_definer, grammar_generator = grammar_generator
@@ -76,12 +80,17 @@ class StepWiseSynthesizer(SynthesizerBase):
         self.step = step
         debug("Using Stepwise Synthesizer!")
 
+
         self.set_target_settings()
         self.partition_flexibility = 4
+
 
         # Lowering of swizzles stages happens at ful bitwidth
         if is_shuffle:
             self.scale_factor = 1
+
+        print("Scale factor used in synthesizer: ", self.scale_factor)
+
 
         debug("Pre Scaling")
         self.print_dsl_stats()
@@ -135,11 +144,9 @@ class StepWiseSynthesizer(SynthesizerBase):
         super().set_target_settings()
 
         if self.target == "x86":
-            self.scale_factor = 4
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
         elif self.target == "hvx":
-            self.scale_factor = 32
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 15
@@ -682,7 +689,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         imms = self.spec.imms
 
-        if self.is_shuffle:
+        if self.is_shuffle  :
             imms.append((0, self.spec.output_precision))
 
 

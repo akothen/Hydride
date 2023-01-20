@@ -72,19 +72,42 @@
   (define leaves-elemT (halide:get-expr-elemT leaves))
   (define sym-bvs (create-concrete-bvs leaves-sizes)) ;; Can this be concrete
 
+  (define effective-scale-factor scale-factor)
+  (displayln "Check leaves")
+  (println leaves)
+  (define (set-effective-scale-factor ele)
+    ;(define-values (can-scale? _ ) (halide:scale-down-expr ele scale-factor))
+    (define ele-lanes (halide:vec-len ele))
+    (cond 
+      [(not (equal? (modulo ele-lanes scale-factor) 0))
+       (set! effective-scale-factor 1)
+       ]
+      )
+    ele
+    )
+
+  (map set-effective-scale-factor leaves)
+
+  (debug-log (format "Setting effective scale-factor to ~a \n" effective-scale-factor))
+
+
+
 
 
   ;; Dummy args contains the scaled down arguments for the expression to be
   ;; synthesized
   (define (map-functor ele)
-    (halide:scale-down-expr ele scale-factor)
+    (define-values (_ scaled-ele) (halide:scale-down-expr ele effective-scale-factor))
+    scaled-ele
     )
+
   (define scaled-leaves (map map-functor leaves))
   (define scaled-leaves-sizes (halide:get-expr-bv-sizes scaled-leaves))
   (define scaled-leaves-elemT (halide:get-expr-elemT scaled-leaves))
   (define scaled-bvs (create-concrete-bvs scaled-leaves-sizes)) ;; Can this be concrete
 
   (define dummy-args (halide:create-buffers scaled-leaves scaled-bvs))
+
 
 
 
@@ -98,7 +121,8 @@
               [_ 
                 (begin
 
-                  (define-values (expr-extract num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) dummy-args actual-expr-depth))
+                  (define-values (_ scaled-down-expr) (halide:scale-down-expr halide-expr effective-scale-factor))
+                  (define-values (expr-extract num-used) (halide:bind-expr-args scaled-down-expr  dummy-args actual-expr-depth))
 
                   (debug-log expr-extract)
 
@@ -129,7 +153,9 @@
                     (halide:assume-buffers-signedness synth-buffers-full)
 
 
-                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-full actual-expr-depth))
+
+                    (define-values (_ scaled-down-expr-full ) (halide:scale-down-expr halide-expr effective-scale-factor))
+                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args scaled-down-expr-full  synth-buffers-full actual-expr-depth))
                     (displayln "Scaled expression:")
                     (println _expr-extract-full)
 
@@ -149,8 +175,8 @@
                     (halide:assume-buffers-signedness synth-buffers-lane)
                     
 
-
-                    (define-values (_expr-extract _num-used) (halide:bind-expr-args (halide:scale-down-expr halide-expr scale-factor) synth-buffers-lane actual-expr-depth))
+                    (define-values (_ scaled-down-expr-lane ) (halide:scale-down-expr halide-expr effective-scale-factor))
+                    (define-values (_expr-extract _num-used) (halide:bind-expr-args scaled-down-expr-lane synth-buffers-lane actual-expr-depth))
                     (define output-idx (- expr-VF 1 lane-idx))
                     (define _result_lane (cpp:eval ((halide:interpret _expr-extract) output-idx)))
                     _result_lane
@@ -212,6 +238,7 @@
                                        (step-wise-synthesis expr-extract scaled-leaves 
                                                             (max (+ -1 actual-expr-depth) 1)
                                                             depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver
+                                                            effective-scale-factor
                                                             
                                                             )
                                        
@@ -268,7 +295,7 @@
                         '()
                         )
                       (define recalculate (scale-down-synthesis expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver opt? sym? 
-                                                                scale-factor ; scale-factor = 1, since we've already scaled down the expression
+                                                                scale-factor 
                                                                 synth-log))
                       (debug-log "Smaller window synthesis returned:")
                       (debug-log recalculate)
@@ -326,14 +353,14 @@
 
                   (define upscaled-mat 
                     (cond 
-                      [(equal? scale-factor 1)
+                      [(equal? effective-scale-factor 1)
                        materialize
                        ]
                       [(equal? target 'hvx) 
-                        (hvx:scale-expr materialize scale-factor)
+                        (hvx:scale-expr materialize effective-scale-factor)
                         ]
                       [(equal? target 'x86) 
-                        (hydride:scale-expr materialize scale-factor)
+                        (hydride:scale-expr materialize effective-scale-factor)
                         ]
                       )
                     )
@@ -359,7 +386,7 @@
 
 ;; Perform iterative synthesis by partitioning relavent operations
 ;; into buckets and sampling operations from buckets in the grammar. 
-(define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver)
+(define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver scale-factor)
   (debug-log (format "Invoked step-wise-synthesis!\n"))
 
   (define step-limit 5)
@@ -460,7 +487,7 @@
                                            ;; get-interpreter step-i, depth d
                                            ;; get-cost-model step-i, depth d
                                            (define-values (grammar interpreter cost-model) 
-                                                          (get-expr-grammar-step spec-expr leaves base_name expr-VF t d))
+                                                          (get-expr-grammar-step spec-expr leaves base_name expr-VF t d scale-factor))
 
                                         (define (grammar-fn i)
                                             (grammar i)
