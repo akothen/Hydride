@@ -93,6 +93,45 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
         }
     }
 
+
+    // Simplify slice  contigous vectors of input into
+    // loading the specific slice indices 
+    if (const Load *first_load = new_vectors[0].as<Load>()) {
+
+        if(op->is_slice() && op->slice_stride() == 1){
+            debug(1) << "Load Index: " << first_load->index << "\n";
+            debug(1) << "Index lanes: " << first_load->index.type().lanes() << "\n";
+            debug(1) << "Load Predicate: " << first_load->predicate << "\n";
+            debug(1) << "Slice stride: "<< op->slice_stride() << "\n";
+            debug(1) << "Slice begin: " << op->slice_begin() << "\n";
+            debug(1) << "Slice lanes: " << op->type.lanes() << "\n";
+            Expr sliced_index = Shuffle::make_slice(first_load->index,  op->slice_begin(), op->slice_stride(), op->type.lanes());
+            Expr sliced_predicate = Shuffle::make_slice(first_load->predicate, op->slice_begin(), op->slice_stride(), op->type.lanes());
+
+            debug(1) << "Sliced_index:" << sliced_index << "\n";
+            debug(1) << "Sliced predicate: " << sliced_predicate << "\n";
+            Expr sliced_load =  Load::make(first_load->type.with_lanes(op->type.lanes()), first_load->name, mutate(sliced_index, nullptr), first_load->image, first_load->param, mutate(sliced_predicate, nullptr), first_load->alignment);
+
+            debug(1) << "Simplified sliced load to: " << sliced_load << "\n";
+            return mutate(sliced_load, nullptr);
+        }
+    }
+
+    if (const Ramp *first_ramp = new_vectors[0].as<Ramp>()) {
+
+        if(op->is_slice() && op->slice_stride() == 1){
+            Expr slice_before = Shuffle::make_slice(op->vectors[0], op->slice_begin(), op->slice_stride(), op->type.lanes());
+            debug(1) << "Slice Before: " << slice_before << "\n"; 
+            Expr new_base = first_ramp->base + (op->slice_begin() * first_ramp->stride);
+            Expr new_stride = first_ramp -> stride;
+            int new_lanes = op->type.lanes();
+            Expr new_ramp = Ramp::make(new_base, new_stride, new_lanes);
+            debug(1) << "New Ramp: "<< new_ramp << "\n";
+            return mutate(new_ramp, nullptr);
+        }
+    }
+
+
     // Try to collapse a shuffle of broadcasts into a single
     // broadcast. Note that it doesn't matter what the indices
     // are.
