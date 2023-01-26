@@ -1,4 +1,5 @@
 #include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/Vector/IR/VectorOps.h"
 #include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/BuiltinTypes.h"
@@ -6,6 +7,7 @@
 #include "llvm/Support/Debug.h"
 
 #include <fstream>
+#include <iostream>
 #include <map>
 #include <regex>
 #include <set>
@@ -16,6 +18,7 @@ using namespace mlir;
 
 namespace {
 struct HydrideRosettePass
+    //  : public PassWrapper<HydrideRosettePass, OperationPass<>> {
     : public PassWrapper<HydrideRosettePass, OperationPass<>> {
   MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(HydrideRosettePass)
 
@@ -108,24 +111,27 @@ struct HydrideRosettePass
                               bool is_vector_op) {
 
     if (is_vector_op) {
+
       indent.push(indent.top() + 1);
-      std::string rkt_lhs = MlirValVisit(&a);
-      std::string rkt_rhs = MlirValVisit(&b);
+      std::string rkt_lhs = MLIRValVisit(a);
+      std::string rkt_rhs = MLIRValVisit(b);
       indent.pop();
-      return tabs() + "(vec-" + bv_name + " " + rkt_lhs + rkt_rhs + ")";
+      return "(vec-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
     } else {
-      std::string rkt_lhs = MlirValVisit(&a);
-      std::string rkt_rhs = MlirValVisit(&b);
+
+      std::string rkt_lhs = MLIRValVisit(a);
+
+      std::string rkt_rhs = MLIRValVisit(b);
       return "(sca-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
     }
   }
 
-  std::string ValueToStr(Value *val, bool use_loc) {
+  std::string ValueToStr(Value val, bool use_loc) {
 
     if (use_loc) {
       std::string locStr;
       llvm::raw_string_ostream locOS(locStr);
-      locOS << val->getLoc();
+      locOS << val.getLoc();
       std::string loc_out = locOS.str();
       unsigned first = loc_out.find_last_of(':') + 1;
       unsigned last = loc_out.find_last_of(')');
@@ -134,18 +140,15 @@ struct HydrideRosettePass
     return "";
   }
 
-  std::string MlirValVisit(Value *val) {
-    std::string LocAsVarName = ValueToStr(val, true);
-    void *valAsOpaquePointer = val->getAsOpaquePointer();
-    auto valDefiningOp = val->getDefiningOp();
+  std::string MLIRValVisit(Value val) {
+    // std::string LocAsVarName = ValueToStr(val, true);
+    void *valAsOpaquePointer = val.getAsOpaquePointer();
+    auto valDefiningOp = val.getDefiningOp();
     if (valDefiningOp != NULL) {
       if (valDefiningOp->getDialect() != NULL &&
           valDefiningOp->getDialect()->getNamespace() == "arith") {
         return MLIROpVisit(valDefiningOp);
       } else {
-        if (defined.find(LocAsVarName) != defined.end()) {
-          return LocAsVarName;
-        }
 
         if (VariableToRegMap.find(valAsOpaquePointer) !=
             VariableToRegMap.end()) {
@@ -164,11 +167,7 @@ struct HydrideRosettePass
       }
     }
 
-    if (val->isa<BlockArgument>()) {
-
-      if (defined.find(LocAsVarName) != defined.end()) {
-        return LocAsVarName;
-      }
+    if (val.isa<BlockArgument>()) {
 
       if (VariableToRegMap.find(valAsOpaquePointer) != VariableToRegMap.end()) {
         std::string reg_name =
@@ -193,18 +192,13 @@ struct HydrideRosettePass
     if (isa<arith::AddIOp>(op)) {
       Value a = op->getOperand(0);
       Value b = op->getOperand(1);
-      /* if (SkipValues.find(op->dyn_cast<Value>()) != SkipValues.end()) {
-        SkipValues.insert(a);
-        SkipValues.insert(b);
-        return "";
-      } */
-      // llvm::outs() << "emitting add\n";
       bool is_vec = op->getResult(0).getType().isa<VectorType>();
       std::string ret_str = print_binary_op("add", a, b, is_vec);
       return ret_str;
     }
 
     if (isa<arith::AndIOp>(op)) {
+
       Value a = op->getOperand(0);
       Value b = op->getOperand(1);
       bool is_vec = op->getResult(0).getType().isa<VectorType>();
@@ -248,7 +242,7 @@ struct HydrideRosettePass
         return ret_str;
       }
       case (arith::CmpIPredicate::ne): {
-        ret_str = print_binary_op("eq", a, b, is_vec);
+        ret_str = print_binary_op("ne", a, b, is_vec);
         return ret_str;
       }
       case (arith::CmpIPredicate::uge): {
@@ -418,23 +412,23 @@ struct HydrideRosettePass
       Value false_val = op->getOperand(2);
       if (is_vec) {
         indent.push(indent.top() + 1);
-        std::string rkt_cond = MlirValVisit(&cond);
-        std::string rkt_true = MlirValVisit(&true_val);
-        std::string rkt_false = MlirValVisit(&false_val);
+        std::string rkt_cond = MLIRValVisit(cond);
+        std::string rkt_true = MLIRValVisit(true_val);
+        std::string rkt_false = MLIRValVisit(false_val);
         indent.pop();
         return tabs() + "(vec-if" + rkt_cond + "\n" + rkt_true + "\n" +
                rkt_false + ")";
       } else if (mode.top() == MLIRValueEncoding::Bitvector) {
-        std::string rkt_cond = MlirValVisit(&cond);
-        std::string rkt_true = MlirValVisit(&true_val);
-        std::string rkt_false = MlirValVisit(&false_val);
+        std::string rkt_cond = MLIRValVisit(cond);
+        std::string rkt_true = MLIRValVisit(true_val);
+        std::string rkt_false = MLIRValVisit(false_val);
         return tabs() + "(sca-if " + rkt_cond + " " + rkt_true + " " +
                rkt_false + ")";
 
       } else {
-        std::string rkt_cond = MlirValVisit(&cond);
-        std::string rkt_true = MlirValVisit(&true_val);
-        std::string rkt_false = MlirValVisit(&false_val);
+        std::string rkt_cond = MLIRValVisit(cond);
+        std::string rkt_true = MLIRValVisit(true_val);
+        std::string rkt_false = MLIRValVisit(false_val);
         return tabs() + "(if " + rkt_cond + " " + rkt_true + " " + rkt_false +
                ")";
       }
@@ -456,32 +450,71 @@ struct HydrideRosettePass
     return "";
   }
 
+  std::vector<Operation *> ret_and_store_vec;
+
+  std::string funcOpPrint(func::FuncOp funcOp) {
+
+    std::string expr = "(define " + funcOp.getName().str() + " \n";
+
+    funcOp.walk([&](Operation *op) {
+      if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
+
+        // iterate over operands using handler for return op
+        if (returnOp.getNumOperands() > 0) {
+          Value a = returnOp->getOperand(0);
+          expr += MLIRValVisit(a);
+        }
+        ret_and_store_vec.push_back(op);
+      }
+      if (auto store = dyn_cast<vector::StoreOp>(op)) {
+        expr += MLIROpVisit(op);
+        ret_and_store_vec.push_back(op);
+      }
+    });
+    return expr + ")\n\n";
+  }
+
+  void funcOpPrint3() {
+    for (auto op : ret_and_store_vec) {
+      llvm::outs() << "visiting op: '" << op->getName() << "\n";
+    }
+  }
+
   // <<<<<<<<<<<<<<<
 
   void runOnOperation() override {
     indent.push(1);
     mode.push(MLIRValueEncoding::Bitvector);
-    Operation *op = getOperation();
-    recurseOperation(op);
-  }
+    getOperation()->walk([&](func::FuncOp funcOp) {
+      /* llvm::outs() << "Visiting op '" << funcOp->getName() << "' with "
+                   << funcOp.getNumArguments() << " operands:\n"; */
+      llvm::outs() << "(define (" << funcOp.getName().str() << " ";
+      for (BlockArgument blockArg : funcOp.getArguments()) {
 
-  void recurseOperation(Operation *op) {
-    if (op->getDialect() != NULL &&
-        op->getDialect()->getNamespace() == "arith") {
-      llvm::outs() << MLIROpVisit(op) << "\n";
-    }
-    for (Region &region : op->getRegions())
-      recurseRegion(region);
-  }
+        llvm::outs() << MLIRValVisit(blockArg) << " ";
+      } 
+      llvm::outs() << ")\n";
+      funcOp.walk([&](Operation *op) {
+        if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
 
-  void recurseRegion(Region &region) {
-    for (Block &block : region.getBlocks())
-      recurseBlock(block);
-  }
+          /* llvm::outs() << " Visiting return op '" << returnOp->getName()
+                       << "' with " << returnOp.getNumOperands()
+                       << " operands:\n"; */
+          for (Value operand : op->getOperands()) {
+            if (Operation *producer = operand.getDefiningOp()) {
+               llvm::outs() << MLIROpVisit(producer) << "\n";
+            } else {
+      
+              auto blockArg = operand.cast<BlockArgument>();
+     
+              llvm::outs() << MLIRValVisit(blockArg) << "\n";
+            }
+          }
+        }
+      });
 
-  void recurseBlock(Block &block) {
-    for (Operation &op : block.getOperations())
-      recurseOperation(&op);
+      llvm::outs() << ")\n\n";
+    });
   }
 };
 
@@ -516,33 +549,34 @@ public:
     }
   }
 
-/*   std::string define_load_buffer(vector::LoadOp *op) {
-    std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
-    size_t bitwidth = 0;
-    auto vecType = type.dyn_cast<VectorType>();
-    if (vecType) {
-      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
-    }
+  /*   std::string define_load_buffer(vector::LoadOp *op) {
+      std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
+      size_t bitwidth = 0;
+      auto vecType = type.dyn_cast<VectorType>();
+      if (vecType) {
+        bitwidth = vecType.getElementTypeBitWidth() *
+    vecType.getNumElements();
+      }
 
-    std::string elemT = "'" + mlir_type_to_synth_elem(vecType.getElementType(), false, true);
+      std::string elemT = "'" +
+    mlir_type_to_synth_elem(vecType.getElementType(), false, true);
 
-   /*  if (elemT == "'") {
-      debug(0) << "Define_load_buffer escaping early for " << reg_name
-               << "of bitwidth " << bitwidth << "\n";
-      return "";
-    } 
+     /*  if (elemT == "'") {
+        debug(0) << "Define_load_buffer escaping early for " << reg_name
+                 << "of bitwidth " << bitwidth << "\n";
+        return "";
+      }
 
-    std::string define_bitvector_str = "(define " + reg_name + "_bitvector" +
-                                       " " + "(bv 0 (bitvector " +
-                                       std::to_string(bitwidth) + ")" + "))";
+      std::string define_bitvector_str = "(define " + reg_name + "_bitvector"
+    + " " + "(bv 0 (bitvector " + std::to_string(bitwidth) + ")" + "))";
 
-    // todo: mlir interpreter for create-buffer
-    std::string define_buffer_str = "(define " + reg_name +
-                                    " (mlir:create-buffer " + reg_name +
-                                    "_bitvector " + elemT + ")" + ")";
+      // todo: mlir interpreter for create-buffer
+      std::string define_buffer_str = "(define " + reg_name +
+                                      " (mlir:create-buffer " + reg_name +
+                                      "_bitvector " + elemT + ")" + ")";
 
-    return define_bitvector_str + "\n" + define_buffer_str;
-  } */
+      return define_bitvector_str + "\n" + define_buffer_str;
+    } */
 };
 } // namespace
 
