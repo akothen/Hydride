@@ -5,7 +5,9 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["hexagon_V6_vmpyih_128B" ]
+DEBUG_LIST = [] # ["hexagon_V6_vmpyiewuh_acc_128B", "hexagon_V6_vmpyieoh_128B"]
+
+
 SKIP_LIST = []
 
 MUST_INCLUDE = [ ]
@@ -72,7 +74,6 @@ class SynthesizerBase:
         self.set_target_settings()
 
     def set_target_settings(self):
-
         if self.target == 'x86':
             self.FLEXIBLE_CASTING = False
             self.ENABLE_PRUNING = True
@@ -197,6 +198,10 @@ class SynthesizerBase:
             input_vector_sizes.append(input_size)
             precisions.append(precision)
 
+        #if (self.output_slice_length, self.spec.output_precision) not in memo:
+        #    input_vector_sizes.append(self.output_slice_length)
+        #    precisions.append(self.spec.output_precision)
+
 
         return create_interleave_dsl(
             input_vector_sizes = input_vector_sizes,
@@ -233,6 +238,11 @@ class SynthesizerBase:
 
             input_vector_sizes.append(input_size)
             precisions.append(precision)
+
+
+        #if (self.output_slice_length, self.spec.output_precision) not in memo:
+        #    input_vector_sizes.append(self.output_slice_length)
+        #    precisions.append(self.spec.output_precision)
 
 
         return create_deinterleave_dsl(
@@ -549,7 +559,8 @@ class SynthesizerBase:
         pruned_ctxs = []
 
         for idx in range(len(ops)):
-            dsl_ops = ops[idx].get_semantics_ops_list()
+            #dsl_ops = ops[idx].get_semantics_ops_list()
+            dsl_ops = ctxs[idx].get_bv_ops()
 
             to_insert = True
             for op in dsl_ops:
@@ -842,7 +853,7 @@ class SynthesizerBase:
 
         for ctx in dsl_inst.contexts:
 
-            ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+            ctx_ops = ctx.get_bv_ops() #self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
 
             skip = False
 
@@ -864,14 +875,6 @@ class SynthesizerBase:
                         #print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
                         skip = True
 
-                        if ctx.name == "hexagon_V6_vaddh_128B":
-                            print("dsl ops:", dsl_ops)
-                            print("ctx is signed:", ctx.is_signed())
-                            print("ctx is unsigned:", ctx.is_unsigned())
-                            print("ctx_ops", ctx_ops)
-                            print("spec_ops", spec_ops)
-                            import sys
-                            sys.exit(1)
 
 
 
@@ -900,6 +903,13 @@ class SynthesizerBase:
 
             if self.BASE_VECT_SIZE != None:
                 lane_size_cond = (ctx.lane_size == self.BASE_VECT_SIZE) or (ctx.lane_size == self.MAX_BW_SIZE) or any([ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
+                if check:
+                    print(ctx.name)
+                    print("Contexts lane size: ", ctx.lane_size)
+                    print("Lane size cond:", lane_size_cond)
+                    print("Base vector size:", self.BASE_VECT_SIZE)
+                    print("Supported Input precision:", supports_inputs_prec)
+
                 supports_inputs_prec = supports_inputs_prec and lane_size_cond
 
 
@@ -1026,7 +1036,8 @@ class SynthesizerBase:
 
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
-        dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+        #dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+        dsl_ops = ctx.get_bv_ops()
 
         score += min(len(list (set(spec_ops) & set(dsl_ops))), 2)
 
@@ -1161,6 +1172,7 @@ class SynthesizerBase:
 
 
 
+
     # Check if the precisions of the specifications
     # and the DSL instruction overlap
     def does_dsl_configs_overlap(self, dsl_inst, match_all = False):
@@ -1193,6 +1205,12 @@ class SynthesizerBase:
 
             supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
 
+            if dsl_inst.name in DEBUG_LIST and DEBUG:
+                print("Supports input prec:", supports_inputs_prec)
+                print("Supports output prec:", supports_outputs_prec)
+                print("supports input length:", supports_input_length)
+                print("supports output length:", supports_output_length)
+
 
 
             old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
@@ -1208,6 +1226,7 @@ class SynthesizerBase:
 
             # Hexagon condition for distribution:
             hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length)
+            #hexagon_cond = (supports_outputs_prec) or (supports_input_length or supports_output_length)
             hexagon_cond = hexagon_cond and (self.target == "hvx")
 
 

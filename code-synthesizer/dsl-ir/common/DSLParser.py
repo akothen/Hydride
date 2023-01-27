@@ -27,7 +27,35 @@ def parse_cost(dsl_inst_cost, hw_name = "Skylake"):
     return None
 
 def populate_dsl_inst(dsl_inst , sub_inst_dict):
+
+    duplicate_context_names = []
     for subinst_name in sub_inst_dict:
+        if subinst_name in duplicate_context_names:
+            continue
+
+        for other_name in sub_inst_dict:
+            if subinst_name == other_name:
+                continue
+
+            subinst_args = sub_inst_dict[subinst_name]['args']
+            otherinst_args = sub_inst_dict[other_name]['args']
+
+            if subinst_args == otherinst_args:
+                duplicate_context_names.append(other_name)
+
+
+
+
+    if duplicate_context_names != []:
+        print("dropping Duplicate contexts:", duplicate_context_names)
+
+
+
+    for subinst_name in sub_inst_dict:
+
+        if subinst_name in duplicate_context_names:
+            continue
+
         sub_obj = sub_inst_dict[subinst_name]
         signedness = None
         if 'Signedness' in sub_obj:

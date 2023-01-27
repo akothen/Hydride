@@ -217,7 +217,7 @@ class Context:
             return get_variant_by_sign(op_name, signedness)
 
         operations = []
-        for line in self.semantics:
+        for line in self.semantics[1:]:
             for bvop in BV_OPS:
 
 
@@ -277,6 +277,8 @@ class Context:
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling"
         scaled_args = []
 
+        lane_size_scaled = False
+
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
                 assert arg.size % scale_factor == 0, "scale_factor {} must evenly divide the operand sizes {}".format(scale_factor, arg.size)
@@ -293,6 +295,7 @@ class Context:
                 scaled_lanesize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_lanesize_arg)
                 self.lane_size = self.lane_size // scale_factor
+                lane_size_scaled = True
 
 
             elif idx == self.out_lanesize_index  and arg.value // scale_factor  >= self.out_precision:
@@ -318,8 +321,12 @@ class Context:
 
         assert self.out_vectsize % scale_factor == 0, "scale_factor must evenly divide the input vector sizes"
 
+        if not lane_size_scaled:
+            self.lane_size = int(self.lane_size // scale_factor)
+
         self.in_vectsize = int(self.in_vectsize // scale_factor)
         self.out_vectsize = int(self.out_vectsize // scale_factor)
+
 
 
 
@@ -647,7 +654,7 @@ class DSLInstruction(InstructionType):
 
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True):
         operations = []
-        for line in self.semantics:
+        for line in self.semantics[1:]:
             for bvop in BV_OPS:
                 if bvop == "concat" and exclude_concat:
                     continue
@@ -742,6 +749,8 @@ class DSLInstruction(InstructionType):
             return True
 
         return any([supports(ctx) for ctx in self.contexts])
+
+
 
 
     def supports_scaling(self):

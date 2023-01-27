@@ -12,6 +12,7 @@ import itertools
 import sys
 
 import ast
+import time
 
 def debug(*args):
     PRINT_DEBUG = False
@@ -232,9 +233,9 @@ class StepWiseSynthesizer(SynthesizerBase):
             debug("Count: ",count)
             debug("Num Buckets: ", len(bucket.keys()))
 
-        #print("OPs buckets:")
-        #print(json.dumps(ops_bucket, indent = 2))
-        #print_total_count(ops_bucket)
+        print("OPs buckets:")
+        print(json.dumps(ops_bucket, indent = 2))
+        print_total_count(ops_bucket)
 
         #print("Lengths buckets:")
         #print(json.dumps(lengths_bucket, indent = 2))
@@ -349,10 +350,17 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
 
-        print("sample_keys_pre:",sample_keys)
+        #print("sample_keys_pre:",sample_keys)
         sample_keys = [list(ele) for ele in sample_keys]
 
-        print("sample_keys:",sample_keys)
+        #sample_keys = [sample for sample in sample_keys if sum([1  for ele in sample if "bvmul" in ele]) < 3]
+
+        #print("sample_keys:",sample_keys)
+        #print("Sample keys:")
+        #for sample in sample_keys:
+        #    print(sample)
+
+
 
 
         # Certain combinations may not span the entire set of operations
@@ -362,12 +370,10 @@ class StepWiseSynthesizer(SynthesizerBase):
         print("spec_ops:", spec_ops)
         def spans_spec(comb, non_matching_lim = 1):
             eval_str = [ast.literal_eval(ele) for ele in comb]
-            print("eval_str:" ,eval_str)
             fold_ops = []
             for ops in eval_str:
                 fold_ops += ops
 
-            print("fold_ops:", fold_ops)
 
             non_matching_count = 0
 
@@ -375,7 +381,8 @@ class StepWiseSynthesizer(SynthesizerBase):
                 if op not in fold_ops:
                     non_matching_count += 1
 
-            print("non_matching:", non_matching_count)
+            #print("non_matching:", non_matching_count)
+            #print("non_matching_lim: ", non_matching_lim)
             return  (non_matching_count < non_matching_lim)
 
         debug(sample_key_sizes)
@@ -390,13 +397,18 @@ class StepWiseSynthesizer(SynthesizerBase):
                 break
             elif flexibility == self.partition_flexibility - 1:
                 debug("Spec:", spec_ops)
+                print("effective step:", step)
+                #print(sample_keys)
                 assert False, "Current set of operations not sufficient to support partitioning grammar"
 
 
-        print("Sample keys after flexibility: ", sample_keys)
+        #print("Sample keys after flexibility: ", sample_keys)
+
+        #print("Got sample keys:" )
+        #for key in sample_keys:
+        #    print(key)
 
 
-        debug("spec_ops:", spec_ops)
         #print("Filtered sample keys")
         #print(sample_keys)
         #print(sample_keys)
@@ -411,7 +423,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         #print("Head of sample keys")
         #print(sample_keys[:5])
 
-        debug("Current combination: ",sample_keys[key_subset_index])
+        print("Current combination: ",sample_keys[key_subset_index])
 
         sorted_keys = list(sample_keys[key_subset_index]) + shuffle_key
         for key in sorted_keys:
@@ -428,14 +440,31 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
+        if step >= len(grammar_combs) and False:
+            print("Repeat step with incremeneted step")
+            return self.get_ops_from_bucket_at_step(bucket, step = step + 1, items_per_bucket = items_per_bucket,
+                                                    max_num_clauses = max_num_clauses)
 
 
 
-        debug("Number of grammar combinations:", len(grammar_combs))
+
+        print("Number of grammar combinations:", len(grammar_combs))
+
         for i in range(min(5, len(grammar_combs))):
             debug(grammar_combs[i])
 
         debug("Current Step: ",step, ", depth:", self.depth)
+
+
+        # Preserve ordering efficient deduplicator
+        def f7(seq):
+            seen = set()
+            seen_add = seen.add
+            return [x for x in seq if not (str(x) in seen or seen_add(str(x)))]
+
+        #print("Before:",len(grammar_combs))
+        #grammar_combs = f7(grammar_combs)
+        #print("After:",len(grammar_combs))
 
 
 
@@ -460,6 +489,189 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
+    # Identify set of key combinations which span (with flexibility) the spec
+    # For each key combination identify the set of concrete contexts (take 100 first combinations for bound)
+    #       - Each key combination get's at most k iterations
+    # Fold all ctx names combinations into the list and de-duplicate:
+    # Step simply indexes into this list instead: avoid multiple same combinations issues
+    def get_ops_from_bucket_at_step_alt(self, bucket, step = 1, items_per_bucket = 1, max_num_clauses = 10):
+        indices_set_per_key = []
+        shuffle_width = 3
+
+        actual_max_width = 0
+
+        for key in bucket:
+            if key != '[]':
+                actual_max_width += items_per_bucket
+            else:
+                actual_max_width += min(len(bucket[key]['ops']), shuffle_width)
+
+
+
+
+        max_num_clauses = min(actual_max_width, max_num_clauses)
+
+        def findsubsets(s, n):
+            combinations =  list(itertools.combinations(s, n))
+
+
+            # Wrap combination in another list so that
+            # we can do a cross product of indices by
+            # simply concatinating lists
+            return [[list(comb)] for comb in combinations]
+
+        def cross_product(l1, l2):
+            prod = []
+            for i1 in l1:
+                for i2 in l2:
+                    prod.append(i1 + i2)
+
+            return prod
+
+
+        shuffle_key = []
+        if '[]' in  bucket:
+            shuffle_key = ['[]']
+
+        sorted_keys_lexo = sorted([key for key in bucket if key != '[]'], key = lambda x : string_hash(x))
+        sorted_keys =  sorted_keys_lexo + shuffle_key
+
+        sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2) ), 0)
+        print("Sample key sizes:", sample_key_sizes)
+
+        # For higher depths, to maintain tractability during synthesis, we only include
+        # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
+        # is sampled at every interval
+        sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
+
+        sample_keys = [list(ele) for ele in sample_keys]
+
+
+
+        spec_ops = self.spec.get_semantics_ops_list()
+        print("spec_ops:", spec_ops)
+        def spans_spec(comb, non_matching_lim = 1):
+            eval_str = [ast.literal_eval(ele) for ele in comb]
+            fold_ops = []
+            for ops in eval_str:
+                fold_ops += ops
+
+
+            non_matching_count = 0
+
+            for op in spec_ops:
+                if op not in fold_ops:
+                    non_matching_count += 1
+
+            return  (non_matching_count < non_matching_lim)
+
+
+        for flexibility in range(0,self.partition_flexibility):
+            helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
+            test_flex = list(filter(helper_fn, sample_keys))
+
+            if test_flex != []:
+                sample_keys = test_flex
+                print("Flexibility: ", flexibility)
+                break
+            elif flexibility == self.partition_flexibility - 1:
+                debug("Spec:", spec_ops)
+                print("effective step:", step)
+                #print(sample_keys)
+                assert False, "Current set of operations not sufficient to support partitioning grammar"
+
+
+
+        # sample_keys contains those key combinations which span the spec with flexibility
+
+        assert sample_keys != [] , "Key's after filtering are empty"
+
+
+
+        # key_switch_sample: Number of steps after which sampling should switch keys
+        key_switch_sample = 4
+
+
+        filtered_sample_keys = sample_keys[: min(len(sample_keys), 100)]
+
+
+        print("filtered_sample_keys:")
+        for sample_key in filtered_sample_keys:
+            print(sample_key)
+
+
+        # Preserve ordering efficient deduplicator
+        def f7(seq):
+            seen = set()
+            seen_add = seen.add
+            return [x for x in seq if not (str(x) in seen or seen_add(str(x)))]
+
+        context_combinations = []
+        for sample_key in filtered_sample_keys:
+
+            key_grammar_combs = [[]]
+
+            sorted_keys = list(sample_key) + shuffle_key
+
+            for key in sorted_keys:
+                idx_range = range(0,len(bucket[key]['ops']))
+                limit = items_per_bucket
+                if key == '[]':
+                    limit = 3
+
+                idx_subsets = findsubsets(idx_range, min(limit, len(idx_range)))
+                key_grammar_combs = cross_product(key_grammar_combs, idx_subsets)
+
+
+            #print("Testing sample key:", sample_key)
+            #print(key_grammar_combs)
+            #sys.exit(1)
+
+            # At most 'key_switch_sample' combinations belong to given key combination
+            key_grammar_combs = key_grammar_combs[: min(len(key_grammar_combs), key_switch_sample)]
+            key_grammar_combs = f7(key_grammar_combs)
+
+            #print("Adding {} combinations for key sample {}".format(len(key_grammar_combs), sorted_keys))
+
+            for comb in (key_grammar_combs):
+                context_combinations.append((sorted_keys, comb))
+
+
+
+
+        # Context_Combinations contains the list of combinations with possible duplications
+
+
+        context_combinations = f7(context_combinations)
+
+        print("Number of context combinations at depth {} is {}".format(self.depth, len(context_combinations)))
+
+        #print("Context combinations")
+        #for cx in context_combinations[:10]:
+        #    print(cx[0])
+        #    print(cx[1])
+
+        # FIXME: Currently relying on this assertion failing when visiting the same
+        # grammar combination, which in turn fails to generate assertion, which causes
+        # traversals from this point onwards to not be visited, saving time from repeating
+        # visits. Better approach would be to first query the number of possible combinations
+        # and then limit the steps to be within those (if combinations is less than budget steps)
+        assert (step < len(context_combinations)) , "Repeating previously visited step"
+
+        step_combination = context_combinations[step % len(context_combinations)]
+
+        (step_keys, step_indices) = step_combination
+
+        comb_ops = []
+        comb_ctxs = []
+        for idx, key in enumerate(step_keys):
+            key_subset = step_indices[idx]
+
+            for key_idx in key_subset:
+                comb_ops.append(bucket[key]['ops'][key_idx])
+                comb_ctxs.append(bucket[key]['ctxs'][key_idx])
+
+        return (comb_ops, comb_ctxs)
 
 
 
@@ -536,6 +748,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         for dsl_inst in self.dsl_operators:
 
 
+
             if self.consider_dsl_inst(dsl_inst):
 
                 if (not self.is_shuffle) and dsl_inst.name in ShuffleList:
@@ -549,12 +762,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
                 continue
 
-            ## Including bitwise operations such as bitwise 'or',  'not', 'neg' & 'and'
-            ## may enable more novel arithemetic results
-            if  USE_BW_ALGO and  self.consider_bitwise_heuristic(dsl_inst):
-                operator_contexts = self.get_supported_bitwise_context_for_dsl(dsl_inst, limit = 1) # All elementwise operations of same total length are equivlanet
-                operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
-                operation_dsl_args_list += [ctx for ctx in operator_contexts]
+
 
 
         ## Due to the volume of instructions available, selecting contexts
@@ -575,6 +783,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
 
 
+            # Temporarily disabling
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_precision(operation_dsl_insts, operation_dsl_args_list)
 
 
@@ -615,7 +824,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
             debug("Bucket return from partitioning")
             debug(bucket.keys())
-            (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
+            (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
+            #(operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
 
         grammar_ops_str = []
@@ -693,6 +903,9 @@ class StepWiseSynthesizer(SynthesizerBase):
             imms.append((0, self.spec.output_precision))
 
 
+        assert len(operation_dsl_insts) != 0 or imms != [] , "Must have non-empty grammar"
+
+
 
 
         return self.grammar_generator.emit_grammar(
@@ -713,6 +926,13 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         if self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE  ) and ctx.name == "hexagon_V6_vcombine_128B":
             return 7
+        if self.target == 'hvx' and ctx.name == "hexagon_V6_hi_128B":
+            return 7
+        if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
+            return 7
+
+        #elif self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE  ) and self.spec.output_precision == 32 and  ctx.name == "hexagon_V6_vmpyieoh_128B_alt":
+        #    return 7
         else:
             return super().score_context(dsl_inst, ctx)
 
