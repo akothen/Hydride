@@ -1,4 +1,5 @@
 #include "DistributeVec.h"
+#include "CSE.h"
 #include "VectorInfo.h"
 
 
@@ -170,8 +171,8 @@ namespace Halide {
                 internal_assert(distributed_a.size() == num_chunks) << "Distributed arguments must have required  number of operands\n"; \
                 \
                 for(unsigned i = 0; i < num_chunks; i++){ \
-                    Expr new_bop = OP_NAME::make(distributed_a[i], distributed_b[i]); \
-                    exprs.push_back(new_bop); \
+                    Expr new_bop = OP_NAME::make(simplify(distributed_a[i]), simplify(distributed_b[i])); \
+                    exprs.push_back(simplify(new_bop)); \
                 } \
                 DistributeInfo* DI = new DistributeInfo; \
                 DI->expr_node = op; \
@@ -606,7 +607,7 @@ namespace Halide {
                     std::vector<Expr> distributed_op_1 = dispatch(op->args[1], operands_num_chunks); \
                     for(unsigned i = 0; i < operands_num_chunks; i++){\
                         Expr call_op_i = OP_NAME(distributed_op_0[i], distributed_op_1[i]); \
-                        exprs.push_back(call_op_i); \
+                        exprs.push_back(simplify(call_op_i)); \
                     } \
 \
                     if(operands_num_chunks != num_chunks){ \
@@ -1076,7 +1077,7 @@ namespace Halide {
             debug(0) << "Invoked distribute_vector_exprs with multiple bitwidths \n";
             Stmt inlined = substitute_in_all_lets(S);
 
-            return simplify(DistributeVec(bv_sizes).dispatch(inlined));
+            return common_subexpression_elimination(simplify(DistributeVec(bv_sizes).dispatch(inlined)));
 
 
         }

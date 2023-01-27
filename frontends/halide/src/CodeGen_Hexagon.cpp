@@ -528,8 +528,16 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
         body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
 
     } else {
-        debug(1) << "Hexagon: Optimizing Hexagon instructions...\n";
-        body = optimize_hexagon_instructions(body, target);
+
+        const char* disable_opt = getenv("HL_DISABLE_HEXAGON_OPT");
+
+        debug(0) << "Hexagon Code input before optimization:" << "\n";
+        debug(0) << body << "\n";
+        if(!disable_opt || strcmp(disable_opt, "0") != 0){
+            debug(0) << "Hexagon: Optimizing Hexagon instructions...\n";
+            body = optimize_hexagon_instructions(body, target);
+        }
+
     }
 
 
@@ -1841,13 +1849,28 @@ Expr maybe_scalar(Expr x) {
 }
 
 void CodeGen_Hexagon::visit(const Mul *op) {
+
+    Expr MulOp = Mul::make(op->a, op->b);
+
+
     if (op->type.is_vector()) {
+
+        debug(0) << "Hexagon Backend attemping to lower: " << MulOp << "\n";
+        debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
+        debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
+        debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
         value =
             call_intrin(op->type, "halide.hexagon.mul" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
         if (value) {
+            debug(0) << "Found an intrinsic:" << value << " for " << MulOp <<"\n";
+            debug(0) << "halide.hexagon.mul"+type_suffix(op->a, op->b) << "\n";
+            llvm::errs() << *value << "\n";
             return;
         }
+
+
+        debug(0) << "Failed to find value, try widening " <<   " for " << MulOp << "\n";
 
         // Hexagon has mostly widening multiplies. Try to find a
         // widening multiply we can use.
@@ -1865,6 +1888,10 @@ void CodeGen_Hexagon::visit(const Mul *op) {
             value = call_intrin(llvm_type_of(op->type),
                                 "halide.hexagon.trunc" + type_suffix(wide, false),
                                 {value});
+
+
+            debug(0) << "Found widening then truncating intrinsic " << value<< " for " << MulOp << "\n";
+            llvm::errs() << *value << "\n";
             return;
         }
 

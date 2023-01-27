@@ -1649,10 +1649,13 @@ namespace Halide {
 
                                 if(shuff->is_concat()){
                                     debug(0) << "Encountered concat: " << base_e <<"\n";
+                                } else if (shuff->is_slice()){
+                                    debug(0) << "Encountered slice: " << base_e <<"\n";
+                                } else {
+                                    return IRMutator::mutate(expr);
                                 }
 
 
-                                return IRMutator::mutate(expr);
 
                             }
 
@@ -1673,10 +1676,41 @@ namespace Halide {
                             //}
 
 
+
                             std::cout << "Expression after simplification: "<< spec_expr <<"\n";
 
+                            // After simplification we may create trivially simple expressions
+                            if (spec_expr.node_type() == IRNodeType::Ramp){
+                                debug(1) << "Single Ramp case"<<"\n";
+                                return IRMutator::mutate(spec_expr);
+                            }
+
+
+                            // If the expression is just a single broadcast instruction, ignore it
+                            if (spec_expr.node_type() == IRNodeType::Broadcast){
+                                debug(1) << "Single Broadcast case" << "\n";
+                                return IRMutator::mutate(spec_expr);
+                            }
+
+
                             if(arch == IROptimizer::HVX){
+
+                                Expr previous_expr = spec_expr;
+
+                                while(true){
+                                    spec_expr = ReplaceDiv().mutate(spec_expr);
+                                    // Lowering of division may introduce new intrinsics
+                                    spec_expr = LowerIntrinsics(arch).mutate(spec_expr);
+
+                                    if(equal(spec_expr,previous_expr)) break;
+
+                                    previous_expr = spec_expr;
+                                }
+
                                 spec_expr = ReplaceDiv().mutate(spec_expr);
+                                // Lowering of division may introduce new intrinsics
+                                spec_expr = LowerIntrinsics(arch).mutate(spec_expr);
+
                             }
 
                             std::cout << "Expression after legalizing division operations to target: "<< spec_expr <<"\n";
@@ -1686,7 +1720,13 @@ namespace Halide {
                             spec_expr = InlineLets().mutate(spec_expr);
 
 
+
                             std::cout << "Expression after InlineLets: "<< spec_expr <<"\n";
+
+
+                            // Lift cse for more readable specs
+                            //spec_expr = common_subexpression_elimination(spec_expr);
+                            //std::cout << "Expression after CSE: "<< spec_expr <<"\n";
 
                             std::cout << "Expression before abstraction: "<< spec_expr <<"\n";
 
@@ -1698,8 +1738,6 @@ namespace Halide {
 
 
 
-                            // Lift cse for more readable specs
-                            //spec_expr = common_subexpression_elimination(spec_expr);
 
                             Expr optimized_expr;
 
@@ -1720,14 +1758,9 @@ namespace Halide {
                             // Replace abstracted abstractions
                             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
 
-                            if(skipped_synthesis){
-                                debug(0) << "After abstraction, entire expression replaced with single variable-> try synthesizing it's operands recursively.\n";
-                                return IRMutator::mutate(expr);
-
-                            }
 
 
-                            std::cout << "Expression after replacae abstraction: "<< final_expr <<"\n";
+                            std::cout << "Expression after replace abstraction: "<< final_expr <<"\n";
 
                             Expr return_expr = final_expr;
 
@@ -1746,15 +1779,16 @@ namespace Halide {
                                 mutated_exprs.insert(call_expr.get());
                                 return_expr = call_expr;
 
-
                                 debug(0) << "\nOptimized expression: " << call_expr << "\n";
+
+
 
                             }
 
 
 
 
-                            return return_expr;
+                            return IRMutator::mutate(return_expr);
                         }                  
 
                 private:
@@ -1852,13 +1886,14 @@ namespace Halide {
 
 
 
+                        /*
                         if(!op->type.is_float() && op->type.is_vector() && _arch == Architecture::HVX){
 
                             auto lowered_div =  lower_int_uint_div(op->a, op->b);
                             Expr DivExpr = Div::make(op->a, op->b);
                             debug(0) << "Halide Lowered Div "<< DivExpr <<" to: "<<lowered_div <<"\n";
                             return mutate(lowered_div);
-                        }
+                        }*/
 
                         return IRMutator::visit(op);
 
@@ -2198,7 +2233,6 @@ namespace Halide {
                         else if(op->is_intrinsic(Call::mul_shift_right)) {
 
                             if(_arch ==  Architecture::HVX){
-                                //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
@@ -2283,6 +2317,32 @@ namespace Halide {
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
+                        else if (op->is_intrinsic(Call::shift_left) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+
+                        }
+
+                        else if (op->is_intrinsic(Call::shift_right) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+
+                        }
+                        else if (op->is_intrinsic(Call::saturating_add) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+
+                        }
+                        else if (op->is_intrinsic(Call::saturating_sub) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+
+                        }
+
                         else
                             return IRMutator::visit(op);
                     }
@@ -2291,7 +2351,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2306,7 +2366,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2322,7 +2382,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2337,7 +2397,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2351,7 +2411,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2366,7 +2426,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2381,7 +2441,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2395,7 +2455,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2409,7 +2469,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2423,7 +2483,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2437,7 +2497,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2451,7 +2511,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2466,7 +2526,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2481,7 +2541,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2496,7 +2556,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector()){
+                        if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2508,14 +2568,23 @@ namespace Halide {
 
 
                     Expr visit(const Shuffle *op) override{
-                        bool disable_shuffles = true;
+                        bool disable_shuffles = false;
                         if (op->is_concat() && disable_shuffles){
+                            debug(0) << "Abstracting concat vector!\n";
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
 
-                        if(op->is_slice()){
+                        if(op->is_slice() && disable_shuffles){
+                            debug(0) << "Abstracting slice vector!\n";
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        } 
+
+                        if(op->is_slice() && (op->slice_begin() != 0 && op->slice_begin() != op->vectors[0].type().lanes() / 2)){
+                            debug(0) << "Abstracting random access slice vector!\n";
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2566,7 +2635,7 @@ namespace Halide {
                         }
 
 
-                        if(!supported && !is_const(op->value)){
+                        if((!supported && !is_const(op->value))  || (_arch == Architecture::HVX && op->type.bits() >= 64)){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2615,6 +2684,11 @@ namespace Halide {
                                 supported = true;
                             }
 
+                        }
+
+
+                        if(_arch == Architecture::HVX && (op->type.bits() >= 64  || v.type().bits() >= 64)){
+                            supported = false;
                         }
 
                         if(!supported){
@@ -2738,10 +2812,38 @@ namespace Halide {
                     Expr visit(const Div *op) override{
 
 
-                        if(!op->type.is_float() && op->type.is_vector() ){
+                        if(!op->type.is_float() && op->type.is_vector() /* && !is_const(op->b, 2)*/){
                             auto lowered_div =  lower_int_uint_div(op->a, op->b);
                             debug(0) << "Halide Lowered Div to: "<<lowered_div <<"\n";
                             return mutate(lowered_div);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const Mul *op) override{
+
+                        size_t bits = op->type.bits();
+                        size_t lanes = op->type.lanes();
+
+                        if(!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)){
+                            debug(0) << "Found multiplication to slice!" << "\n";
+                            Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1 , 32));
+                            Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1 , 32));
+
+                            Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1 , 32));
+                            Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1 , 32));
+
+
+
+
+                            Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
+                            Expr right_mul =  (Mul::make(left_op_second_half, right_op_second_half));
+
+                            Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
+                            debug(0) << "Halide Lowered Mul to: "<<lowered_mul <<"\n";
+                            return mutate(lowered_mul);
                         }
 
                         return IRMutator::visit(op);
@@ -3003,7 +3105,10 @@ namespace Halide {
                             solver = hydride_solver;
                         }
 
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " #t #f   \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
+                        std::string optimize = "#t";
+                        std::string symbolic = "#f";
+
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + " " + optimize + " " + symbolic +"  \"" + synth_log_path + "\"  \"" + synth_log_name + "\"  \""+target+"\")";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
@@ -3220,6 +3325,7 @@ namespace Halide {
             debug(0) << "Distributed Stmt:\n";
             debug(0) << distributed <<"\n";
 
+            //return distributed;
 
             srand(time(0));
             int random_seed = rand() % 1024;
