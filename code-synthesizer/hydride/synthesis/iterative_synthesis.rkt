@@ -22,6 +22,7 @@
 
 (require (only-in racket build-vector))
 (require (only-in racket build-list))
+(require (only-in racket/sandbox with-deep-time-limit))
 
 (provide (all-defined-out))
 
@@ -81,12 +82,18 @@
         (displayln (invoke_ref_lane lane-idx symbols))
         (displayln "Is this printed?")
         (define cex 
-          (verify 
-            (begin
-              (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
-              )
-            )
+          (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                         (with-deep-time-limit 30
+                                               (verify 
+                                                 (begin
+                                                   (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
+                                                   )
+                                                 )
+                                               )
+
+                         )
           )
+
         (define verified? (not (sat? cex))) ;; True i verified equal on lane-idx
 
         (if (not verified?)
@@ -141,12 +148,16 @@
   (define symbols (create-symbolic-bvs bw-list))
   (debug-log (format "Symbols: ~a\n" symbols))
   (define cex 
-    (verify 
-      (begin
-          (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
+    (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                   (with-deep-time-limit 30
+                                         (verify 
+                                           (begin
+                                             (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
 
-           )
-      )
+                                             )
+                                           )
+                                         )
+                   )
     )
   (define end (current-seconds))
   (debug-log (format "Verification took ~a seconds\n" (- end start)))
@@ -257,6 +268,7 @@
 
 
 (define (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+  (displayln "get-concrete-asserts")
 
 
   (define (helper i)
@@ -294,6 +306,7 @@
 
 (define (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin 
+    (displayln "*** regular-concrete-synthesis ***")
     (synthesize 
       #:forall (list cex-ls)
       #:guarantee 
@@ -311,17 +324,22 @@
     (debug-log "*********** z3-optimize *****************")
 
     (define sol?
-            (optimize 
-              #:minimize (list (cost-fn grammar))
-              #:guarantee 
-                ;; loop over inputs and add asserts
-                (begin 
-                        (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-                        ;(assert (< (cost-fn grammar) cost-bound))
-                  )
+      ;(with-handlers ([exn:fail? (lambda (exn) (unsat))])
+      ;               (with-deep-time-limit 10000 ;7200 ; 2 hours timeout
+                                           (optimize 
+                                             #:minimize (list (cost-fn grammar))
+                                             #:guarantee 
+                                             ;; loop over inputs and add asserts
+                                             (begin 
+                                               (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                                               ;(assert (< (cost-fn grammar) cost-bound))
+                                               )
 
-                )
-              )
+                                             )
+       ;                                    )
+
+        ;             )
+      )
     (if (sat? sol?)
       (begin
         (define mat (evaluate grammar sol?))
@@ -529,6 +547,7 @@
     (define high (+ low  (- word-size 1)))
 
     (define interpret-res (extract high low full-interpret-res))
+
 
     (define halide-res 
         (invoke_ref_lane (+ random-idx 0) env)
@@ -768,14 +787,17 @@
 
 
 
-  (define (assert-query-fn env)
+  (define (assert-query-fn env idx)
     (define parameters (generate-params env))
     (assert (equal? (invoke_f1 parameters)  (invoke_f2 parameters)))
     )
 
+  (define failing-ls (for/list ([i (range (length cex-ls))])  0))
+
+
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-fn invoke_f1 cex-ls #f '() 0 solver)
+    (iterative-synth-query assert-query-fn invoke_f1 cex-ls failing-ls #f '() 0 solver '())
     )
 
   (define end_time (current-seconds))
