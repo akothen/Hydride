@@ -127,7 +127,7 @@ class RosetteLifter:
       print("RosetteAST[0]:")
       print(RosetteAST[0])
       if isinstance(RosetteAST[0], list):
-        if ";" in RosetteAST[0][0] and "reg" in  RosetteAST[0][0]:
+        if ";" in RosetteAST[0][0] and "reg" in RosetteAST[0][0]:
           # Get the reg info
           Comment = RosetteAST[0][0]
           Comment = Comment.strip()
@@ -146,8 +146,8 @@ class RosetteLifter:
           RegNo = int(RegInfo[3:])
           print("RegNo:")
           print(RegNo)
-          if RegNo + 1 > len(self.Params):
-            self.Params = [None] * (RegNo + 1)
+          #if RegNo + 1 > len(self.Params):
+          #  self.Params = [None] * (RegNo + 1)
           return self.liftRosetteAST(RosetteAST[1:])
         # Strip the list off
         RosetteAST = RosetteAST[0]
@@ -163,9 +163,14 @@ class RosetteLifter:
         return ConstantVal
       elif RosetteAST[0] == 'reg':
         print("REG")
+        print("--RosetteAST[1]:")
+        print(RosetteAST[1])
         # This register is a binding
-        if RosetteAST[1] in self.Params: 
-          return self.Params[RosetteAST[1]]
+        #if RosetteAST[1] in self.Params: 
+        #  return self.Params[RosetteAST[1]]
+        for Param in self.Params:
+          if Param == RosetteAST[1]:
+            return Param
         ParamName = "%" + RosetteAST[0] + str(RosetteAST[1])
         if ParamName in self.NameToRoseVal:
           return self.NameToRoseVal[ParamName]
@@ -177,7 +182,8 @@ class RosetteLifter:
           print(RosetteAST[1])
           print("CREATING ARGUMENT")
           NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
-          self.Params[RosetteAST[1]] = NewArg
+          #self.Params[RosetteAST[1]] = NewArg
+          self.Params.append(NewArg)
           self.RoseValToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
           self.NameToRoseVal[NewArg.getName()] = NewArg
           return NewArg
