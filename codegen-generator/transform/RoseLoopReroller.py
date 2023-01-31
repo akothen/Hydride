@@ -2337,14 +2337,6 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
 
   print("^^^^^FIXED BLOCK:")
   Block.print()
-  for Op in Block:
-    if isinstance(Op, RoseMulOp):
-      print("OP:")
-      Op.print()
-      for Operand in Op.getOperands():
-        print("Operand:")
-        Operand.print()
-        print(Operand.ID)
 
   # Insert bvinserts after TempValues
   for Op in TempValues:
@@ -2426,14 +2418,6 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
     
   print("---FIXED BLOCK:")
   Block.print()
-  for Op in Block:
-    if isinstance(Op, RoseMulOp):
-      print("OP:")
-      Op.print()
-      for Operand in Op.getOperands():
-        print("Operand:")
-        Operand.print()
-        print(Operand.ID)
 
   # Erase the bvinsert op
   print("ERASE INSERT OP")
@@ -2480,14 +2464,6 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
     IndexingVals = GatherIndexingValues(BVInsertOp)
     print("len(IndexingVals):")
     print(IndexingVals)
-    for IndexingVal in IndexingVals:
-      print("---INDEXING VAL:")
-      IndexingVal.print()
-      if isinstance(IndexingVal, RoseOperation):
-        for Operand in IndexingVal.getOperands():
-          print("OPERAND:")
-          Operand.print()
-          print(Operand.ID)
     ValueToValueMap = dict()
     ValueToValueMap[BVInsertOp.getInputBitVector()] = BVInsertOp.getInputBitVector()
     print("---FirstBlock:")
