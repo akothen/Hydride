@@ -123,9 +123,9 @@ class RoseRegion:
       or isinstance(self, RoseAbstractions.RoseBlock) \
       or isinstance(self, RoseAbstractions.RoseForLoop) \
       or isinstance(self, RoseAbstractions.RoseUndefRegion):
-        return (self.Keys() == None)
+        return (self.Keys == None)
     assert isinstance(self, RoseAbstractions.RoseCond)
-    return (self.Keys() != None)
+    return (self.Keys != None)
     
   def getRegionID(self):
     # Sanity check
@@ -137,7 +137,7 @@ class RoseRegion:
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     # Make sure the keys are valid
-    self.areKeysValid()
+    assert self.areKeysValid()
     return self.Keys
   
   def getChildren(self, Key = None):
