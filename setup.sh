@@ -25,6 +25,7 @@ export PYTHONPATH=$CUR_DIR/codegen-generator/tools/similarity-checker:$PYTHONPAT
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/validity-checker:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/transform:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/analysis:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/codegen-generator/transformations-verifier:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/llvmlite:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/code-synthesizer/dsl-ir:$PYTHONPATH
 
