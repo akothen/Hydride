@@ -22,7 +22,7 @@ class ScaleDef:
 
 
         for structs in default_structs:
-            defaults.append(self.emit_scale_def(structs, struct_definer, scale_name = scale_name )[1:])
+            defaults.append(self.emit_scale_def(structs, struct_definer, scale_name = scale_name , conditional = False )[1:])
 
 
         return ["\t{}".format(d) for d in defaults]
@@ -36,7 +36,7 @@ class ScaleDef:
 
 
 
-    def emit_scale_def(self, dsl_inst, struct_definer, scale_name = "hydride:scale-expr"):
+    def emit_scale_def(self, dsl_inst, struct_definer, scale_name = "hydride:scale-expr", conditional = True):
         interpret = [struct_definer.emit_dsl_struct_use(dsl_inst)]
 
         fold_subexpr = []
@@ -45,18 +45,50 @@ class ScaleDef:
 
         sample_ctx = dsl_inst.get_sample_context()
 
-        new_expr = ["(", dsl_inst.get_dsl_name()]
+        new_expr = []
 
-        context_scalable_args_idx = sample_ctx.get_scalable_args_idx(base_vector_size = self.base_vect_size)
-        for idx,arg in enumerate(sample_ctx.context_args):
-            if idx in context_scalable_args_idx:
-                new_expr.append("(* scale-factor {})".format(arg.name))
-            elif isinstance(arg, BitVector):
-                new_expr.append("({} {} scale-factor)".format(scale_name, arg.name))
-            else:
-                new_expr.append(arg.name)
+        if conditional:
+            clauses = []
+            for ctx in dsl_inst.contexts:
+                # Current knobs specific to X86
+                if ctx.can_scale_context(scale_factor = 4):
+                    condition = "[(and "
+                    scalable_arg_indices = ctx.get_scalable_args_idx(base_vector_size = None)
+                    for idx, arg in enumerate(ctx.context_args):
+                        if idx in scalable_arg_indices:
+                            condition += " (equal? {} {})".format(sample_ctx.context_args[idx].name, (arg.value // 4))
 
-        new_expr.append(")")
+                    condition += ")\n"
+
+                    condition+= "("+dsl_inst.get_dsl_name()+"\n"
+                    for idx,arg in enumerate(sample_ctx.context_args):
+                        if idx in scalable_arg_indices:
+                            condition += ("(* scale-factor {})\n".format(arg.name))
+                        elif isinstance(arg, BitVector):
+                            condition += ("({} {} scale-factor)\n".format(scale_name, arg.name))
+                        else:
+                            condition += (arg.name)+"\n"
+                    condition += ")\n"
+                    condition += "]"
+
+                    clauses.append(condition)
+
+
+            new_expr.append("(cond ")
+            new_expr += clauses
+            new_expr.append(")")
+
+        else:
+            new_expr = ["(", dsl_inst.get_dsl_name()]
+            context_scalable_args_idx = sample_ctx.get_scalable_args_idx(base_vector_size = self.base_vect_size)
+            for idx,arg in enumerate(sample_ctx.context_args):
+                if idx in context_scalable_args_idx:
+                    new_expr.append("(* scale-factor {})".format(arg.name))
+                elif isinstance(arg, BitVector):
+                    new_expr.append("({} {} scale-factor)".format(scale_name, arg.name))
+                else:
+                    new_expr.append(arg.name)
+            new_expr.append(")")
 
         interpret += new_expr
 

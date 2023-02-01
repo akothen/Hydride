@@ -1647,16 +1647,17 @@ namespace Halide {
                                 debug(0) << "Encountered shuffle: " << base_e <<"\n";
                                 const Shuffle* shuff = base_e.as<Shuffle>();
 
-                                if(shuff->is_concat()){
-                                    debug(0) << "Encountered concat: " << base_e <<"\n";
-                                } else if (shuff->is_slice()){
-                                    debug(0) << "Encountered slice: " << base_e <<"\n";
-                                } else {
+                                if(arch != IROptimizer::HVX){
                                     return IRMutator::mutate(expr);
+                                } else {
+                                    if(shuff->is_concat()){
+                                        debug(0) << "Encountered concat: " << base_e <<"\n";
+                                    } else if (shuff->is_slice()){
+                                        debug(0) << "Encountered slice: " << base_e <<"\n";
+                                    } else {
+                                        return IRMutator::mutate(expr);
+                                    }
                                 }
-
-
-
                             }
 
 
@@ -2568,7 +2569,7 @@ namespace Halide {
 
 
                     Expr visit(const Shuffle *op) override{
-                        bool disable_shuffles = false;
+                        bool disable_shuffles = (_arch != Architecture::HVX);
                         if (op->is_concat() && disable_shuffles){
                             debug(0) << "Abstracting concat vector!\n";
                             std::string uname = unique_name('t');
