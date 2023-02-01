@@ -572,7 +572,9 @@ def GatherIndexingValues(Operation : RoseOperation):
   return IndexingValues
 
 
-def HasReductionPattern(Block : RoseBlock):
+def HasReductionPattern2(Block : RoseBlock):
+  print("DOES BLOCK HAVE REDUCTION PATTERN")
+  Block.print()
   Loop = Block.getParentOfType(RoseForLoop)
   if isinstance(Loop, RoseUndefRegion):
     return False
@@ -593,10 +595,48 @@ def HasReductionPattern(Block : RoseBlock):
   if not isinstance(ReductionOp, RoseOperation):
     return False
   if ReductionOp.getOpcode().typesOfInputsAndOutputEqual() == False:
+    print("TYPES OF INPUT AND OUTPUT ARE NOT EQUAL")
+    ReductionOp.print()
     return False
   for Operand in ReductionOp.getOperands():
     if isinstance(Operand, RoseBVExtractSliceOp):
       if Operand.getInputBitVector() == Block.getFunction().getReturnValue():
+        print("RETURN TRUE")
+        return True
+  return False
+
+
+def HasReductionPattern(Block : RoseBlock):
+  print("DOES BLOCK HAVE REDUCTION PATTERN")
+  Block.print()
+  Loop = Block.getParentOfType(RoseForLoop)
+  if isinstance(Loop, RoseUndefRegion):
+    return False
+  Op = Block.getOperation(len(Block.getOperations()) - 1)
+  if not isinstance(Op, RoseBVInsertSliceOp):
+    return False
+  if Op.getInputBitVector() != Block.getFunction().getReturnValue():
+    return False
+  # The low index must be dependent on the outer loop if an outer loop
+  # exists.
+  ParentLoop = Loop.getParentOfType(RoseForLoop)
+  if not isinstance(ParentLoop, RoseUndefRegion):
+    if not isinstance(Op.getLowIndex(), RoseConstant):
+      if not isinstance(Op.getLowIndex(), RoseArgument):
+        if ParentLoop.getIterator() != Op.getLowIndex():
+          return False
+  ReductionOp = Op.getInsertValue()
+  if not isinstance(ReductionOp, RoseOperation):
+    return False
+  if ReductionOp.getOpcode().typesOfInputsAndOutputEqual() == False \
+    and not isinstance(ReductionOp, RoseGeneralSaturableBitVectorOp):
+    print("TYPES OF INPUT AND OUTPUT ARE NOT EQUAL")
+    ReductionOp.print()
+    return False
+  for Operand in ReductionOp.getOperands():
+    if isinstance(Operand, RoseBVExtractSliceOp):
+      if Operand.getInputBitVector() == Block.getFunction().getReturnValue():
+        print("RETURN TRUE")
         return True
   return False
 
