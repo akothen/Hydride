@@ -2056,6 +2056,243 @@ class RoseSimilarityChecker():
         print(self.FunctionToArgPermutationMap[Function])
 
 
+  def punchHolesInFunction(self, Function : RoseFunction, Context : RoseContext):
+    print("RUN ON OP SIMPLIFY FUNCTION")
+    print("FUNCTION:")
+    Function.print()
+    # Look for extracts
+    BlockList = Function.getRegionsOfType(RoseBlock)
+    HoleList = list()
+    HoleMap = dict()
+    for Block in BlockList:
+      OpList = list()
+      OpList.extend(Block.getOperations())
+      for Op in OpList:
+        if isinstance(Op, RoseBVExtractSliceOp):
+          if Op.getLowIndex() in HoleMap:
+            continue
+          HoleArgsList = [Op.getLowIndex()]
+          # Add all the iterators of parent loops to the hole arg list
+          Parent = Block.getParentOfType(RoseForLoop)
+          while Parent != RoseUndefRegion():
+            HoleArgsList.append(Parent.getIterator())
+            Parent = Parent.getParentOfType(RoseForLoop)
+          HoleFunction = Context.genName(".hole")
+          Hole = RoseOpaqueCallOp.create(Context.genName(),\
+                  RoseConstant(HoleFunction, RoseStringType.create(len(HoleFunction))), \
+                  HoleArgsList, Op.getLowIndex().getType())
+          # Replace all uses of low index with this hole
+          HoleMap[Op.getLowIndex()] = Hole
+          Users = Function.getUsersOf(Op.getLowIndex())
+          Users[0].getParent().addOperationBefore(Hole, Users[0])
+          Function.replaceUsesWith(Op.getLowIndex(), Hole)
+          HoleList.append(Hole)
+    return HoleList
+
+
+  def getRosetteCodeForHole(self, Hole : RoseOpaqueCallOp):
+    RosetteCode = "(define-grammar " + Hole.getCallee().getName()
+    for Operand in Hole.getCallOperands():
+      RosetteCode += Operand.getName() + " "
+    RosetteCode += ")\n"
+    RosetteCode += "[expr \n"
+    RosetteCode += "(choose\n"
+    for Operand in Hole.getCallOperands():
+      RosetteCode += Operand.getName() + "\n"
+    RosetteCode += "(+ (expr) (expr))\n"
+    RosetteCode += "(- (expr) (expr))\n"
+    RosetteCode += "(* (expr) (expr))\n"
+    RosetteCode += "(\ (expr) (expr))\n"
+    RosetteCode += ")]\n"
+    RosetteCode += ")\n"
+    return RosetteCode
+
+
+  def generateCodeForReferenceToSketch(self, Sketch : RoseFunction, RosetteSketch : str):
+    RosetteCode = ["(define (invoke_sketch k)"]
+    RosetteCode.append(RosetteSketch)
+    RosetteCode.append("(define (invoke_synth params)")
+    RosetteCode.append("(" + Sketch.getName())
+    for Idx in range(Sketch.getNumArgs()):
+      RosetteCode.append("(vector-ref params " + str(Idx) + ")")
+    RosetteCode.append(")")
+    RosetteCode.append(")")
+    RosetteCode.append("invoke_synth")
+    RosetteCode.append(")")
+    return "\n".join(RosetteCode)
+
+
+  def generateCodeForReferenceForRefImpl(self, RefImpl : RoseFunction):
+    RosetteCode = ["(define (invoke_ref params)"]
+    RosetteCode.append("(" + RefImpl.getName())
+    for Idx in range(RefImpl.getNumArgs()):
+      RosetteCode.append("(vector-ref params " + str(Idx) + ")")
+    RosetteCode.append(")")
+    RosetteCode.append(")")
+    return "\n".join(RosetteCode)
+
+
+  def generateCodeForParams(self, RefImpl : RoseFunction):
+    # Generate variables definitions for concrete inputs to the given functions
+    Code = ""
+    RefImplInfo = self.FunctionToFunctionInfo[RefImpl]
+    for Arg in  RefImpl.getArgs():
+      if RefImplInfo.argHasConcreteVal(Arg) == True:
+        ConcreteVal = RefImplInfo.getConcreteValFor(Arg)
+        Code += self.genConcreteInput(Arg, ConcreteVal, ".arg")
+    Code += "(define (generate-params env)\n"
+    Code += "(vector "
+    for Idx, Arg in  enumerate(RefImpl.getArgs()):
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        Code += "(vector-ref env" + str(Idx) + ") "
+      else:
+        Code += Arg.getName() + ".arg "
+    Code += ")\n"
+    Code += ")\n\n"
+    Code += "(define bitwidth-list (list "
+    for Arg in RefImpl.getArgs():
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        Code += str(Arg.getType().getBitwidth())  + " "
+    Code += "))\n"
+    return Code
+
+
+  def emitSynthesisCodeForSimilarityChecking(self, Sketch : RoseFunction, RefImpl : RoseFunction, \
+                                            HolesList : list):
+    # Generate a file for performing synthesis first
+    RosetteSketch = RosetteGen.CodeGen(Sketch)
+    RosetteRefImpl = RosetteGen.CodeGen(RefImpl)
+    # Rosette code headers
+    Content = [
+      "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
+      "(require racket/pretty)", "(require racket/serialize)", "(require hydride)",
+      "(require \"RosetteOpsImpl.rkt\")\n"
+    ]
+    Content.extend(["enable-debug", "(current-bitwidth 16)", \
+       "(custodian-limit-memory (current-custodian) (* 20000 1024 1024))",
+       "(define solver 'z3)"])
+    Content.append(self.generateCodeForParams(RefImpl))
+    Content.append(RosetteRefImpl)
+    Content.append(self.generateCodeForReferenceToSketch(Sketch, RosetteSketch))
+    for Hole in HolesList:
+      assert isinstance(Hole, RoseOpaqueCallOp)
+      Content.append(self.getRosetteCodeForHole(Hole))
+    Content.append(self.generateCodeForReferenceForRefImpl(RefImpl))
+    Content.append("(define test-depth 2)")
+    Content.append("(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative \
+                    (invoke_f1 2) invoke_f2 bitwidth-list generate-params '() solver)")
+    Content.append("(displayln \"is Satisfiable?\")")
+    Content.append("(println satisfiable?)")
+    return "\n".join(Content)
+
+
+  def verifyUsingSynthesis(self, Sketch : RoseFunction, RefImpl : RoseFunction, \
+                            HolesList : list):
+    RosetteCode = self.emitSynthesisCodeForSimilarityChecking(Sketch, RefImpl, HolesList)
+    FileName = "test_synthesis_" + Sketch.getName() + "_" + RefImpl.getName() + ".rkt"
+    try:
+      File = open(FileName, "w+")
+      File.write(RosetteCode)
+      File.close()
+      # Perform verification
+      Output, Err = RunCommand("racket {}".format(FileName))
+      RunCommand("killall z3")
+      RunCommand("killall racket")
+      #RunCommand("rm {}".format(FileName))
+      print("Output:")
+      print(Output)
+      print("Err:")
+      print(Err)
+      if Err == "":
+        Out = Output.split("\n")
+        print("Out[0]:")
+        print(Out[0])
+        print("Out[1]:")
+        print(Out[1])
+        if "unsat" in Out[0] and "unsat" in Out[1]:
+          return True
+      return False
+    except IOError:
+      print("Error making: {}.rkt".format(FileName))
+      return False
+
+
+  def synthesizeAndPerformSimilarityChecking(self):
+    # Track verification results
+    EQToEQMap = dict()
+    #RemovedEquivalenceClasses = set()
+    EquivalenceClasses = set()
+    EquivalenceClasses.update(self.EquivalenceClasses)
+    for EquivalenceClass in EquivalenceClasses:
+      #if EquivalenceClass in RemovedEquivalenceClasses:
+      #  continue
+      for CheckEquivalenceClass in EquivalenceClasses:
+        #if CheckEquivalenceClass in RemovedEquivalenceClasses:
+        #  continue
+        if EquivalenceClass in EQToEQMap:
+          EquivalenceClass = EQToEQMap[EquivalenceClass]
+        if CheckEquivalenceClass in EQToEQMap:
+          CheckEquivalenceClass = EQToEQMap[CheckEquivalenceClass]
+        if EquivalenceClass == CheckEquivalenceClass:
+          continue
+        Function = EquivalenceClass.getAFunction()
+        CheckFunction = CheckEquivalenceClass.getAFunction()
+        print("CHECKING AGAINST EQUIVALENCE CLASS {} and {}".format(str(Function), str(CheckFunction)))
+        FunctionInfo = self.FunctionToFunctionInfo[Function]
+        CheckFunctionInfo = self.FunctionToFunctionInfo[CheckFunction]
+        if self.qualifiesForSimilarityChecking(FunctionInfo, CheckFunctionInfo)  == False:
+          continue
+        # Punches holes in one function
+        ClonedCheckFunction = CheckFunction.clone()
+        HolesList = self.punchHolesInFunction(ClonedCheckFunction, CheckFunctionInfo.getContext())
+        VerifyResult = self.verifyUsingSynthesis(ClonedCheckFunction,Function, HolesList)
+        if VerifyResult == True:
+          # Now that synthesis has worked, we will now perform verification again to verify that
+          # the new sketch and the old sketch are equivalent on the old sketch's inputs.
+          # First the new sketch
+          print("Merged {} and {} eq class".format(Function.getName(), ClonedCheckFunction.getName()))
+
+
+          # Merge the two equivalent classes
+          CheckedEqFunctions = CheckEquivalenceClass.getEquivalentFunctions()
+          print("CheckedEqFunctions:")
+          print(CheckedEqFunctions)
+          PermutedCheckFunctions = list()
+          FunctionToArgsMapping = dict()
+          for OrgFunction in CheckedEqFunctions:
+            print("OrgFunction:")
+            OrgFunction.print()
+            print("CheckFunction:")
+            CheckFunction.print()
+            if OrgFunction == CheckFunction:
+              PermutedCheckFunctions.append(PermCheckFunction)
+              FunctionToArgsMapping[PermCheckFunction] = PermArgsToConcreteValMap
+              self.completeFunctionInfo(PermCheckFunctionInfo, CheckFunctionInfo, ArgPermutation)
+              self.FunctionToFunctionInfo[PermCheckFunction] = PermCheckFunctionInfo
+              continue
+            CopyFunction = self.createPermutatedFunction(OrgFunction, ArgPermutation)
+            PermutedCheckFunctions.append(CopyFunction)
+            OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
+            OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
+            CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction, \
+                                  OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+            FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
+            OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
+            CopyFunctionInfo = RoseFunctionInfo()
+            CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
+            CopyFunctionInfo.addArgsToConcreteMap(CopyFuncArgsToConcreteValMap)
+            self.completeFunctionInfo(CopyFunctionInfo, OrgFunctionInfo, ArgPermutation)
+            self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
+          EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
+          for EqFunction in PermutedCheckFunctions:
+            self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
+          self.EquivalenceClasses.remove(CheckEquivalenceClass)
+          #RemovedEquivalenceClasses.add(CheckEquivalenceClass)
+          EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
+          print("DONE MERGING")
+          break
+
+
 if __name__ == '__main__':
   #SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
   #SimilarityChecker = RoseSimilarityChecker(["Hexagon", "x86"])
