@@ -272,12 +272,39 @@ class Context:
         return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize and scale_factor_cond
 
 
+
+    def is_broadcast_like_operation(self):
+        ops = self.get_bv_ops()
+
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq" ,"if" ,"cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
+
+
+    def is_elementwise_logical_like_operation(self):
+
+        if self.is_broadcast_like_operation():
+            return False
+
+        ops = self.get_bv_ops()
+
+        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg", "extract", "concat"]
+
+        return all([ (op in bitwise_logical_ops) for op in ops ])
+
+
+
     # Update context parameters to down scale the vector sizes parameters
     def scale_context(self, scale_factor, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling"
         scaled_args = []
 
         lane_size_scaled = False
+
+        ## Generally we don't want to scale the precisions
+        ## however for bitwise operations where we have
+        ## lane_size = precision = vector_lengths we would
+        ## have to scale the precisions.
+
+        scale_io_prec = False
 
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
@@ -302,6 +329,13 @@ class Context:
                 scaled_lanesize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_lanesize_arg)
 
+
+            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation():
+                scaled_prec = Precision(arg.name, input_precision = arg.input_precision, output_precision = arg.output_precision, value = arg.value // scale_factor)
+
+                scaled_args.append(scaled_prec)
+                scale_io_prec = True
+
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
                     scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
@@ -324,8 +358,14 @@ class Context:
         if not lane_size_scaled:
             self.lane_size = int(self.lane_size // scale_factor)
 
+        if scale_io_prec:
+            assert self.in_precision == self.out_precision, "Only scale precision for elementwise bitwise operations"
+            self.in_precision = self.in_precision // scale_factor
+            self.out_precision = self.out_precision // scale_factor
+
         self.in_vectsize = int(self.in_vectsize // scale_factor)
         self.out_vectsize = int(self.out_vectsize // scale_factor)
+
 
 
 
@@ -339,7 +379,7 @@ class Context:
     def get_scalable_args_idx(self, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
 
-        sample_scale_factor = 8
+        sample_scale_factor = 4
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
@@ -352,6 +392,9 @@ class Context:
             elif idx == self.in_lanesize_index  and arg.value // sample_scale_factor >=  self.in_precision:
                 scalable_idx.append(idx)
             elif idx == self.out_lanesize_index  and arg.value // sample_scale_factor  >= self.out_precision:
+                scalable_idx.append(idx)
+
+            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation():
                 scalable_idx.append(idx)
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
@@ -759,11 +802,17 @@ class DSLInstruction(InstructionType):
     def scale_contexts(self, scale_factor, base_vector_size = None):
 
         scaled_contexts = []
+        #test_args = []
         for ctx in self.contexts:
             if ctx.can_scale_context(scale_factor = scale_factor):
+         #       test_args.append(str(ctx.get_scalable_args_idx(base_vector_size = base_vector_size)))
                 ctx.scale_context(scale_factor, base_vector_size = base_vector_size)
                 scaled_contexts.append(ctx)
 
+        #if 1 != len(list(set(test_args))):
+        #    print("Different scaling behavior for ", self.name)
+            #print(test_args)
+        # Discards contexts
         self.contexts = scaled_contexts
 
 

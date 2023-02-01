@@ -437,7 +437,7 @@
              ]
             [ (_mm512_or_epi32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
              (cond 
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 8))
                 (_mm512_or_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -445,11 +445,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 16))
                 (_mm512_or_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -457,11 +457,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 8))
                 (_mm512_or_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -469,11 +469,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 16))
                 (_mm512_or_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -481,11 +481,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 16))
                 (_mm512_or_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -493,11 +493,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 8))
                 (_mm512_or_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -505,7 +505,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
@@ -1381,7 +1381,7 @@
              ]
             [ (_mm256_xor_epi32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
              (cond 
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 8))
                 (_mm256_xor_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -1389,11 +1389,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 8))
                 (_mm256_xor_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -1401,11 +1401,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 16))
                 (_mm256_xor_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -1413,11 +1413,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 16))
                 (_mm256_xor_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -1425,11 +1425,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 8))
                 (_mm256_xor_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -1437,11 +1437,11 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 16))
                 (_mm256_xor_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -1449,7 +1449,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
@@ -2215,7 +2215,7 @@
              ]
             [ (_mm256_xor_si256_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 64))
                 (_mm256_xor_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -2223,12 +2223,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_mm256_xor_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -2236,12 +2236,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 32))
                 (_mm256_xor_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -2249,12 +2249,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_mm256_xor_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -2262,12 +2262,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 128))
                 (_mm256_xor_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -2275,7 +2275,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
@@ -15196,7 +15196,7 @@
              ]
             [ (_mm256_and_si256_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 64))
                 (_mm256_and_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -15204,12 +15204,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 128))
                 (_mm256_and_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -15217,12 +15217,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_mm256_and_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -15230,12 +15230,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 128))
                 (_mm256_and_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -15243,12 +15243,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_mm256_and_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -15256,12 +15256,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 32))
                 (_mm256_and_si256_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -15269,7 +15269,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
@@ -19341,7 +19341,7 @@
              ]
             [ (_mm_andnot_si128_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 32))
                 (_mm_andnot_si128_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -19349,12 +19349,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_mm_andnot_si128_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -19362,12 +19362,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_mm_andnot_si128_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -19375,12 +19375,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 128))
                 (_mm_andnot_si128_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -19388,12 +19388,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 64))
                 (_mm_andnot_si128_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -19401,12 +19401,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 128))
                 (_mm_andnot_si128_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -19414,7 +19414,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
@@ -23879,7 +23879,7 @@
              ]
             [ (_mm512_and_epi32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
              (cond 
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 8))
                 (_mm512_and_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -23887,7 +23887,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
@@ -24368,7 +24368,7 @@
              ]
             [ (_mm512_andnot_epi32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
              (cond 
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 8))
                 (_mm512_andnot_epi32_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -24376,7 +24376,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   )
                 ]
@@ -30497,7 +30497,7 @@
              ]
             [ (_m_por_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_m_por_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -30505,12 +30505,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
+               [(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64) (equal? prec_i_o 64))
                 (_m_por_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -30518,12 +30518,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
+               [(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 32))
                 (_m_por_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -30531,12 +30531,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16))
+               [(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_5 16) (equal? prec_i_o 16))
                 (_m_por_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -30544,12 +30544,12 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
                 ]
-               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128))
+               [(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_5 128) (equal? prec_i_o 128))
                 (_m_por_dsl
                   (hydride:scale-expr v0 scale-factor)
                   (hydride:scale-expr v1 scale-factor)
@@ -30557,7 +30557,7 @@
                   (* scale-factor num_3)
                   num_4
                   (* scale-factor num_5)
-                  prec_i_o
+                  (* scale-factor prec_i_o)
                   num_7
                   num_8
                   )
