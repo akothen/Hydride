@@ -466,7 +466,11 @@ class RoseSimilarityChecker():
     # Try another heuristic
     print("****TRY NEW HEURISTIC****")
     self.reorderArgsAndPerformSimilarityChecking()
+    print("****TRY ANOTHER HEURISTIC****")
+    self.refineSimilarityChecking()
+    print("****ELIMINATE ARGUMENTS****")
     self.eliminateUnecessaryArgs()
+    print("****SUMMARIZE****")
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
@@ -490,7 +494,7 @@ class RoseSimilarityChecker():
     if NumBVArgs1 != NumBVArgs2:
       return False
     # Number of mask and selet operations must be the same as well.
-    # TODO: Are there other weed out criteria?
+    # TODO: Are there other weed-out criteria?
     return True
 
 
@@ -2187,7 +2191,7 @@ class RoseSimilarityChecker():
 
 
   def verifyUsingSynthesis(self, Sketch : RoseFunction, RefImpl : RoseFunction, \
-                            HolesList : list):
+                            HolesList : list, Suffix : str = None):
     RosetteCode = self.emitSynthesisCodeForSimilarityChecking(Sketch, RefImpl, HolesList)
     FileName = "test_synthesis_" + Sketch.getName() + "_" + RefImpl.getName() + ".rkt"
     try:
@@ -2217,18 +2221,24 @@ class RoseSimilarityChecker():
       return False
 
 
-  def synthesizeAndPerformSimilarityChecking(self):
+  def refineSimilarityChecking(self):
     # Track verification results
     EQToEQMap = dict()
+    EQToResultMap = dict()
     #RemovedEquivalenceClasses = set()
     EquivalenceClasses = set()
     EquivalenceClasses.update(self.EquivalenceClasses)
+    Suffix = -1
     for EquivalenceClass in EquivalenceClasses:
       #if EquivalenceClass in RemovedEquivalenceClasses:
       #  continue
       for CheckEquivalenceClass in EquivalenceClasses:
         #if CheckEquivalenceClass in RemovedEquivalenceClasses:
         #  continue
+        if EquivalenceClass == CheckEquivalenceClass:
+          continue
+        if (CheckEquivalenceClass, EquivalenceClass) in EQToResultMap:
+            continue
         if EquivalenceClass in EQToEQMap:
           EquivalenceClass = EQToEQMap[EquivalenceClass]
         if CheckEquivalenceClass in EQToEQMap:
@@ -2237,22 +2247,20 @@ class RoseSimilarityChecker():
           continue
         Function = EquivalenceClass.getAFunction()
         CheckFunction = CheckEquivalenceClass.getAFunction()
-        print("CHECKING AGAINST EQUIVALENCE CLASS {} and {}".format(str(Function), str(CheckFunction)))
-        FunctionInfo = self.FunctionToFunctionInfo[Function]
-        CheckFunctionInfo = self.FunctionToFunctionInfo[CheckFunction]
-        if self.qualifiesForSimilarityChecking(FunctionInfo, CheckFunctionInfo)  == False:
+        print("CHECKING AGAINST EQUIVALENCE CLASS \n{} AND \n{}".format(str(Function), str(CheckFunction)))
+        if self.doFunctionsQualifyForSimilarityChecking(Function, CheckFunction)  == False:
           continue
         # Punches holes in one function
         ClonedCheckFunction = CheckFunction.clone()
+        CheckFunctionInfo = self.FunctionToFunctionInfo[CheckFunction]
         HolesList = self.punchHolesInFunction(ClonedCheckFunction, CheckFunctionInfo.getContext())
-        VerifyResult = self.verifyUsingSynthesis(ClonedCheckFunction,Function, HolesList)
+        Suffix += 1
+        VerifyResult = self.verifyUsingSynthesis(ClonedCheckFunction,Function, HolesList, Suffix)
         if VerifyResult == True:
           # Now that synthesis has worked, we will now perform verification again to verify that
           # the new sketch and the old sketch are equivalent on the old sketch's inputs.
           # First the new sketch
           print("Merged {} and {} eq class".format(Function.getName(), ClonedCheckFunction.getName()))
-
-
           # Merge the two equivalent classes
           CheckedEqFunctions = CheckEquivalenceClass.getEquivalentFunctions()
           print("CheckedEqFunctions:")
