@@ -533,9 +533,12 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
 
         debug(0) << "Hexagon Code input before optimization:" << "\n";
         debug(0) << body << "\n";
-        if(!disable_opt || strcmp(disable_opt, "0") != 0){
+        if(!disable_opt || strcmp(disable_opt, "1") != 0){
+            debug(0) << "Disable opt value:"<<disable_opt <<"\n";
             debug(0) << "Hexagon: Optimizing Hexagon instructions...\n";
             body = optimize_hexagon_instructions(body, target);
+        } else {
+            debug(0) << "Hexagon Optimization disabled!"<<"\n";
         }
 
     }

@@ -16,6 +16,8 @@ class Specification:
         self.spec_invokation = spec_invokation
         self.imms = imms
 
+    def set_target(self,target):
+        self.target = target
 
     def get_output_size(self):
         return self.output_precision * self.output_shape[0] * self.output_shape[1]
@@ -29,7 +31,7 @@ class Specification:
         return any([op in UNSIGNED_OPS for op in spec_ops])
 
 
-    def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True):
+    def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True, supports_absd = True):
         operations = []
         for line in self.semantics:
             for bvop in BV_OPS:
@@ -48,19 +50,30 @@ class Specification:
                     insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw"]])
                     if insert_bvmul:
                         operations.append(bvop)
+                    if "bvmul " in line:
+                        operations.append("bvmul")
                 elif bvop == "bvadd" and bvop in line:
                     insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw"]])
                     if insert_bvadd:
                         operations.append(bvop)
+                    if "bvadd " in line:
+                        operations.append("bvadd")
                 elif bvop == "bvsub" and bvop in line:
                     insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw"]])
                     if insert_bvsub:
                         operations.append(bvop)
+                    if "bvsub " in line:
+                        operations.append("bvsub")
                 elif bvop in line:
                     operations.append(bvop)
 
+        if self.target == 'hvx':
+            # remove maxs /mins as hvx implements max and mins with gt lt
+            operations = [op for op in operations if op not in ['bvsmax', 'bvumax', 'bvsmin', 'bvumin']]
 
-        return operations
+
+
+        return list(set(operations))
 
     def contains_conditional(self):
         CONDITIONAL_OPS = ["bveq", "if", "cond"]

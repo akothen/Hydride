@@ -47,6 +47,71 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
         new_vectors.push_back(new_vector);
     }
 
+
+    // Simplify slice  contigous vectors of input into
+    // loading the specific slice indices 
+    if (const Load *first_load = new_vectors[0].as<Load>()) {
+
+        // TODO: Add condition when target is HVX and the load is on 1024
+
+
+
+
+        /*
+        std::vector<unsigned> efficient_target_load_sizes;
+
+
+        const char* hydride_target = getenv("HYDRIDE_TARGET");
+        if(hydride_target && strcmp(hydride_target, "x86") == 0){
+            efficient_target_load_sizes.push_back(128);
+            efficient_target_load_sizes.push_back(256);
+            efficient_target_load_sizes.push_back(512);
+        }
+
+        if(hydride_target && strcmp(hydride_target, "hvx") == 0){
+            debug(1) << "================================\n\n";
+            debug(1) << "Hydride target = hvx!\n";
+            debug(1) << "================================\n\n";
+            efficient_target_load_sizes.push_back(1024);
+            efficient_target_load_sizes.push_back(2048);
+        }
+        
+
+        size_t sliced_bits = op->type.lanes() * op->type.bits();
+
+        bool simplify_load = false; 
+
+        for(unsigned size : efficient_target_load_sizes){
+            if (sliced_bits % size == 0){
+                simplify_load = true;
+            }
+        }*/
+
+
+
+        if(/*simplify_load &&*/ op->is_slice() && op->slice_stride() == 1){
+            debug(1) << "Load Index: " << first_load->index << "\n";
+            debug(1) << "Index lanes: " << first_load->index.type().lanes() << "\n";
+            debug(1) << "Load Predicate: " << first_load->predicate << "\n";
+            debug(1) << "Slice stride: "<< op->slice_stride() << "\n";
+            debug(1) << "Slice begin: " << op->slice_begin() << "\n";
+            debug(1) << "Slice lanes: " << op->type.lanes() << "\n";
+            Expr sliced_index = Shuffle::make_slice(first_load->index,  op->slice_begin(), op->slice_stride(), op->type.lanes());
+            Expr sliced_predicate = Shuffle::make_slice(first_load->predicate, op->slice_begin(), op->slice_stride(), op->type.lanes());
+
+            debug(1) << "Sliced_index:" << sliced_index << "\n";
+            debug(1) << "Sliced predicate: " << sliced_predicate << "\n";
+            Expr sliced_load =  Load::make(first_load->type.with_lanes(op->type.lanes()), first_load->name, mutate(sliced_index, nullptr), first_load->image, first_load->param, mutate(sliced_predicate, nullptr), first_load->alignment);
+
+            debug(1) << "Simplified sliced load to: " << sliced_load << "\n";
+            return mutate(sliced_load, nullptr);
+        }
+
+        /*if(!simplify_load){
+            return op;
+        }*/
+    }
+
     // Try to convert a load with shuffled indices into a
     // shuffle of a dense load.
     if (const Load *first_load = new_vectors[0].as<Load>()) {
@@ -94,28 +159,6 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
     }
 
 
-    // Simplify slice  contigous vectors of input into
-    // loading the specific slice indices 
-    if (const Load *first_load = new_vectors[0].as<Load>()) {
-
-        if(op->is_slice() && op->slice_stride() == 1){
-            debug(1) << "Load Index: " << first_load->index << "\n";
-            debug(1) << "Index lanes: " << first_load->index.type().lanes() << "\n";
-            debug(1) << "Load Predicate: " << first_load->predicate << "\n";
-            debug(1) << "Slice stride: "<< op->slice_stride() << "\n";
-            debug(1) << "Slice begin: " << op->slice_begin() << "\n";
-            debug(1) << "Slice lanes: " << op->type.lanes() << "\n";
-            Expr sliced_index = Shuffle::make_slice(first_load->index,  op->slice_begin(), op->slice_stride(), op->type.lanes());
-            Expr sliced_predicate = Shuffle::make_slice(first_load->predicate, op->slice_begin(), op->slice_stride(), op->type.lanes());
-
-            debug(1) << "Sliced_index:" << sliced_index << "\n";
-            debug(1) << "Sliced predicate: " << sliced_predicate << "\n";
-            Expr sliced_load =  Load::make(first_load->type.with_lanes(op->type.lanes()), first_load->name, mutate(sliced_index, nullptr), first_load->image, first_load->param, mutate(sliced_predicate, nullptr), first_load->alignment);
-
-            debug(1) << "Simplified sliced load to: " << sliced_load << "\n";
-            return mutate(sliced_load, nullptr);
-        }
-    }
 
     if (const Ramp *first_ramp = new_vectors[0].as<Ramp>()) {
 

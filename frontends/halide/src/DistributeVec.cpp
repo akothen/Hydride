@@ -72,7 +72,7 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const Load* op, unsigned num_chunks){
 
-            debug(0) << "Distribute Load!\n";
+            debug(0) << "Distribute Load into " << num_chunks << "!\n";
 
             if(DistribMap.find(op) != DistribMap.end()){
                 return  DistribMap[op]->distributed_expressions;
@@ -104,13 +104,21 @@ namespace Halide {
                 Type new_load_ty = Type(op->type.code(), op->type.bits(), lanes_per_chunk);
 
 
+                //int step_size = op->type.lanes() / (int) num_chunks;
+
+                Expr Combined = Load::make(op->type, op->name, op->index , op->image, op->param, op->predicate , op->alignment );
                 // Distribute load over 'chunks' number of equally sized
                 // expressions.
                 for(unsigned i = 0; i < num_chunks; i++){
                     Expr new_load = Load::make(new_load_ty, op->name, distributed_index[i], op->image, op->param, distributed_predicate[i], op->alignment );
+                    
+                    //Expr new_load_slice = Shuffle::make_slice(Combined, (int) i * lanes_per_chunk, 1, lanes_per_chunk);
                     exprs.push_back(new_load);
 
                 }
+
+                // TODO: This is expensive for when the load does not utilize the full vector length: Add a clause to simplify slice_vector 
+                // the given load
 
                 // Epilogue code to create < bitvector_size expression.
                 if(!divisible){
@@ -257,7 +265,7 @@ namespace Halide {
 
 
         std::vector<Expr> DistributeVec::visit(const Cast* op, unsigned num_chunks){
-            debug(0) << "Distribute Cast!\n";
+            debug(0) << "Distribute Cast into " << num_chunks<< "!\n";
 
             if(DistribMap.find(op) != DistribMap.end()){
                 return  DistribMap[op]->distributed_expressions;
@@ -299,6 +307,7 @@ namespace Halide {
                 // the results and then extract the slices accordingly.
                 if(operands_num_chunks != num_chunks){
                     Expr Combined = Shuffle::make_concat(distributed_value);
+                    
 
 
                     // Distribute not over 'chunks' number of equally sized
@@ -315,7 +324,7 @@ namespace Halide {
                     }
 
                     distributed_value = slice_casts;
-
+                    //break;
                 }
 
                 break;
@@ -332,7 +341,6 @@ namespace Halide {
             for(unsigned i = 0; i < num_chunks; i++){
                 Expr new_cast = Cast::make(new_cast_ty , distributed_value[i]);
                 exprs.push_back(new_cast);
-
             }
 
             // Epilogue code to create < bitvector_size expression.
@@ -931,6 +939,10 @@ namespace Halide {
 
                 unsigned num_chunks = max_bitwidth / bitvector_size;
 
+                if(!is_divisible_into_vector_size(num_chunks * bits)){
+                    num_chunks = 1; 
+                }
+
                 debug(0) << "Need to distribute stores into "<<num_chunks <<" chunks!\n";
 
                 std::vector<Expr> distributed_predicate = dispatch(op->predicate, num_chunks);
@@ -1059,6 +1071,14 @@ namespace Halide {
             return true;
         }
 
+        bool DistributeVec::is_divisible_into_vector_size(size_t sz){
+
+            for(unsigned bitvector_size : bitvector_sizes){
+                if(sz % bitvector_size == 0) return true;
+            }
+            return false;
+        }
+
 
         // High level driver for distributing vector expressions
         Stmt distribute_vector_exprs(Stmt S, unsigned bitwidth){
@@ -1077,7 +1097,7 @@ namespace Halide {
             debug(0) << "Invoked distribute_vector_exprs with multiple bitwidths \n";
             Stmt inlined = substitute_in_all_lets(S);
 
-            return common_subexpression_elimination(simplify(DistributeVec(bv_sizes).dispatch(inlined)));
+            return (simplify(DistributeVec(bv_sizes).dispatch(inlined)));
 
 
         }

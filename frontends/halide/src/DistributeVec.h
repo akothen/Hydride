@@ -130,6 +130,8 @@ namespace Halide {
                 // Helpers
                 bool can_type_fit_vector_sizes(Type t);
 
+                bool is_divisible_into_vector_size(size_t sz);
+
 
 
 

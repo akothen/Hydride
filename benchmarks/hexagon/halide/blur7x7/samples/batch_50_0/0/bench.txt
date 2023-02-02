@@ -1,0 +1,2 @@
+Benchmark for blur7x7_batch_0050_sample_0000 produces best case of 0.000183404 sec/iter (over 9 samples, 2088 iterations, accuracy 12%).
+Best output throughput is 5.4e+03 mpix/sec.

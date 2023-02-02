@@ -83,7 +83,7 @@
         (displayln "Is this printed?")
         (define cex 
           (with-handlers ([exn:fail? (lambda (exn) (unsat))])
-                         (with-deep-time-limit 30
+                         (with-deep-time-limit 60
                                                (verify 
                                                  (begin
                                                    (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))

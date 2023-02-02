@@ -256,6 +256,9 @@
                         (cond 
                           [sat? 
                             (hash-set! synth-log hashed-expr (vector sat? mat (- test-end test-start)) )]
+                          [else
+                                (hash-set! synth-log hashed-expr (vector sat? '() (- test-end test-start)) )
+                            ]
                           )
 
 
@@ -301,8 +304,8 @@
                       (debug-log recalculate)
                       (set! satisfiable? #t)
                       (set! materialize recalculate)
-
-                      (hash-set! synth-log hashed-expr (vector satisfiable? materialize 0))
+                      (set! effective-scale-factor 1)
+                      ;(hash-set! synth-log hashed-expr (vector satisfiable? materialize 0))
                       )
                     )
 
@@ -365,8 +368,12 @@
                       )
                     )
 
-                  (bind-functor upscaled-mat (list->vector synthesized-leaves))
+                  (define bound-expr (bind-functor upscaled-mat (list->vector synthesized-leaves)))
+                  (displayln "Bound expr")
+                  (println bound-expr)
+                  bound-expr
                   )]
+
               )
     )
 
@@ -470,12 +477,16 @@
                               (for/list ([t (range step-low step-high )])
                                 (parameterize 
                                   ([current-solver (if (equal? solver 'z3) (z3) (boolector))] 
+                                   ;[current-custodian (make-custodian)]
                                    [current-bitwidth 16]
                                    )
                                       (thread (thunk
                                         (clear-vc!)
                                         (clear-terms!)
                                         (collect-garbage)
+
+                                    ;    (custodian-limit-memory (current-custodian) (* 7000 1024 1024))
+
 
                                         ;; if solution already found in previous
                                         ;; iteration, do nothing.

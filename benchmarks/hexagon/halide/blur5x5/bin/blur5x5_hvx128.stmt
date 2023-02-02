@@ -1,0 +1,169 @@
+module name=blur5x5_hvx128, target=hexagon-32-noos-hvx-hvx_128-hvx_v66-no_asserts-no_bounds_query
+external func blur5x5_hvx128_par_for_blur_y_s0_y_y (__user_context, blur_y.s0.y.y, closure_arg) {
+let closure_prototype = (void *)make_struct((void *)reinterpret((uint64)0), (void *)reinterpret((uint64)0), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (uint1)0)
+let blur_y = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 0)
+let input = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 1)
+let blur_y.extent.0 = load_typed_struct_member((void *)closure_arg, closure_prototype, 2)
+let blur_y.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 3)
+let blur_y.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 4)
+let blur_y.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 5)
+let input.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 6)
+let input.min.0 = load_typed_struct_member((void *)closure_arg, closure_prototype, 7)
+let input.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 8)
+let input.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 9)
+let t298 = load_typed_struct_member((void *)closure_arg, closure_prototype, 10)
+let t307 = load_typed_struct_member((void *)closure_arg, closure_prototype, 11)
+let t314 = load_typed_struct_member((void *)closure_arg, closure_prototype, 12)
+let t316 = load_typed_struct_member((void *)closure_arg, closure_prototype, 13)
+let t318 = load_typed_struct_member((void *)closure_arg, closure_prototype, 14)
+let t319 = load_typed_struct_member((void *)closure_arg, closure_prototype, 15)
+let t320 = load_typed_struct_member((void *)closure_arg, closure_prototype, 16)
+let t321 = load_typed_struct_member((void *)closure_arg, closure_prototype, 17)
+let t322 = load_typed_struct_member((void *)closure_arg, closure_prototype, 18)
+let t323 = load_typed_struct_member((void *)closure_arg, closure_prototype, 19)
+let t326 = load_typed_struct_member((void *)closure_arg, closure_prototype, 20)
+let t327 = load_typed_struct_member((void *)closure_arg, closure_prototype, 21)
+let t329 = load_typed_struct_member((void *)closure_arg, closure_prototype, 22)
+let t330 = load_typed_struct_member((void *)closure_arg, closure_prototype, 23)
+let t331 = load_typed_struct_member((void *)closure_arg, closure_prototype, 24)
+let t336 = load_typed_struct_member((void *)closure_arg, closure_prototype, 25)
+let t337 = load_typed_struct_member((void *)closure_arg, closure_prototype, 26)
+let t335 = (uint1)load_typed_struct_member((void *)closure_arg, closure_prototype, 27)
+if ((max(min((min((blur_y.s0.y.y*128) + 384, blur_y.extent.1) + blur_y.min.1) + 4, t320), input.min.1 + 1) <= t320) && t335) {
+ let t228 = min((blur_y.s0.y.y*128) + 384, blur_y.extent.1)
+ let t362 = (blur_y.min.1 + t228) in (let t363 = max(min(t362, t320 + 127) + -128, input.min.1) in (uint16)prefetch(input, (input.stride.1*t363) + t336, t337 + 1, 1, max(min(t362 + 4, t320) - t363, 1), input.stride.1))
+}
+if ((t330 <= blur_y.s0.y.y) && (blur_y.s0.y.y < t298)) {
+ let blur_y.s0.y.yi.base.s = min(blur_y.s0.y.y*128, blur_y.extent.1 + -128)
+ allocate blur_x[uint16 * t323 * 8]
+ let t346 = t329 - t307
+ let t347 = t326 - t327
+ let t343 = (blur_y.min.1 - input.min.1) + blur_y.s0.y.yi.base.s
+ let t344 = blur_y.min.1 + blur_y.s0.y.yi.base.s
+ for (blur_y.s0.y.yi.$n.rebased, 0, 132) {
+  produce blur_x {
+   let t349 = (((blur_y.s0.y.yi.$n.rebased + t344) % 8)*t323) - t322
+   let t348 = ((blur_y.s0.y.yi.$n.rebased + t343)*input.stride.1) - input.min.0
+   for (blur_x.s0.x.x, 0, t331) {
+    let blur_x.s0.x.v1.base.s = min((blur_x.s0.x.x*64) + t322, t318)
+    let t284 = x64(t348)
+    blur_x[ramp(blur_x.s0.x.v1.base.s + t349, 1, 64)] = (input[max(min(ramp(blur_x.s0.x.v1.base.s + -63, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t284] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -64, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t284] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -62, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t284] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -60, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t284] + input[max(min(ramp(blur_x.s0.x.v1.base.s + -61, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t284]))))/x64((uint16)5)
+   }
+   let t352 = (((blur_y.s0.y.yi.$n.rebased + t344) % 8)*t323) - t322
+   let t351 = ((blur_y.s0.y.yi.$n.rebased + t343)*input.stride.1) - input.min.0
+   let t350 = t307 - t331
+   for (blur_x.s0.x.x.rebased, 0, t350) {
+    let blur_x.s0.x.v1.base.s = ((blur_x.s0.x.x.rebased + t331)*64) + t322
+    let t286 = blur_x.s0.x.v1.base.s + t351
+    blur_x[ramp(blur_x.s0.x.v1.base.s + t352, 1, 64)] = (input[ramp(t286 + -63, 1, 64)] + (input[ramp(t286 + -64, 1, 64)] + (input[ramp(t286 + -62, 1, 64)] + (input[ramp(t286 + -60, 1, 64)] + input[ramp(t286 + -61, 1, 64)]))))/x64((uint16)5)
+   }
+   let t354 = (((blur_y.s0.y.yi.$n.rebased + t344) % 8)*t323) - t322
+   let t353 = ((blur_y.s0.y.yi.$n.rebased + t343)*input.stride.1) - input.min.0
+   for (blur_x.s0.x.x.rebased, 0, t346) {
+    let blur_x.s0.x.v1.base.s = min(((blur_x.s0.x.x.rebased + t307)*64) + t322, t318)
+    let t287 = x64(t353)
+    blur_x[ramp(blur_x.s0.x.v1.base.s + t354, 1, 64)] = (input[max(min(ramp(blur_x.s0.x.v1.base.s + -63, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t287] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -64, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t287] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -62, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t287] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -60, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t287] + input[max(min(ramp(blur_x.s0.x.v1.base.s + -61, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t287]))))/x64((uint16)5)
+   }
+  }
+  if (4 <= blur_y.s0.y.yi.$n.rebased) {
+   consume blur_x {
+    let t355 = blur_y.s0.y.yi.$n.rebased + t344
+    for (blur_y.s0.x.x, 0, t327) {
+     let t246 = (blur_y.s0.x.x*64) - t321
+     blur_y[ramp((blur_y.s0.x.x*64) + (((t355 + -4)*blur_y.stride.1) + t314), 1, 64)] = (blur_x[ramp(((((t355 + 5) % 8)*t323) + t246) + 64, 1, 64)] + (blur_x[ramp(((((t355 + 4) % 8)*t323) + t246) + 64, 1, 64)] + (blur_x[ramp(((((t355 + 6) % 8)*t323) + t246) + 64, 1, 64)] + (blur_x[ramp((((t355 % 8)*t323) + t246) + 64, 1, 64)] + blur_x[ramp(((((t355 + 7) % 8)*t323) + t246) + 64, 1, 64)]))))/x64((uint16)5)
+    }
+    let t356 = blur_y.s0.y.yi.$n.rebased + t344
+    for (blur_y.s0.x.x, 0, t347) {
+     blur_y[ramp((((t356 + -4)*blur_y.stride.1) + t316) + -64, 1, 64)] = (blur_x[ramp(((((t356 + 5) % 8) + 1)*t323) + -64, 1, 64)] + (blur_x[ramp(((((t356 + 4) % 8) + 1)*t323) + -64, 1, 64)] + (blur_x[ramp(((((t356 + 6) % 8) + 1)*t323) + -64, 1, 64)] + (blur_x[ramp((((t356 % 8) + 1)*t323) + -64, 1, 64)] + blur_x[ramp(((((t356 + 7) % 8) + 1)*t323) + -64, 1, 64)]))))/x64((uint16)5)
+    }
+   }
+  }
+ }
+ free blur_x
+} else {
+ let blur_y.s0.y.yi.base.s = min(blur_y.s0.y.y*128, blur_y.extent.1 + -128)
+ allocate blur_x[uint16 * t323 * 8]
+ let t357 = (blur_y.min.1 - input.min.1) + blur_y.s0.y.yi.base.s
+ let t358 = blur_y.min.1 + blur_y.s0.y.yi.base.s
+ for (blur_y.s0.y.yi.$n.rebased, 0, 132) {
+  produce blur_x {
+   let t359 = min(blur_y.s0.y.yi.$n.rebased + t357, input.extent.1 + -1)
+   let t360 = (((blur_y.s0.y.yi.$n.rebased + t358) % 8)*t323) - t322
+   for (blur_x.s0.x.x, 0, t329) {
+    let blur_x.s0.x.v1.base.s = min((blur_x.s0.x.x*64) + t322, t318)
+    let t293 = x64((max(t359, 0)*input.stride.1) - input.min.0)
+    blur_x[ramp(blur_x.s0.x.v1.base.s + t360, 1, 64)] = (input[max(min(ramp(blur_x.s0.x.v1.base.s + -63, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t293] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -64, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t293] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -62, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t293] + (input[max(min(ramp(blur_x.s0.x.v1.base.s + -60, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t293] + input[max(min(ramp(blur_x.s0.x.v1.base.s + -61, 1, 64), x64(t319 + -1)), x64(input.min.0)) + t293]))))/x64((uint16)5)
+   }
+  }
+  if (4 <= blur_y.s0.y.yi.$n.rebased) {
+   consume blur_x {
+    let t361 = blur_y.s0.y.yi.$n.rebased + t358
+    for (blur_y.s0.x.x, 0, t326) {
+     let blur_y.s0.x.v0.base.s = min(blur_y.s0.x.x*64, blur_y.extent.0 + -64)
+     let t254 = blur_y.s0.x.v0.base.s - t321
+     blur_y[ramp((((t361 + -4)*blur_y.stride.1) + t314) + blur_y.s0.x.v0.base.s, 1, 64)] = (blur_x[ramp(((((t361 + 5) % 8)*t323) + t254) + 64, 1, 64)] + (blur_x[ramp(((((t361 + 4) % 8)*t323) + t254) + 64, 1, 64)] + (blur_x[ramp(((((t361 + 6) % 8)*t323) + t254) + 64, 1, 64)] + (blur_x[ramp((((t361 % 8)*t323) + t254) + 64, 1, 64)] + blur_x[ramp(((((t361 + 7) % 8)*t323) + t254) + 64, 1, 64)]))))/x64((uint16)5)
+    }
+   }
+  }
+ }
+ free blur_x
+}
+}
+
+
+external_plus_metadata func blur5x5_hvx128 (input, blur_y) {
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+assert((uint64)reinterpret((halide_buffer_t *)blur_y.buffer) != (uint64)0, halide_error_buffer_argument_is_null("blur_y"))
+let blur_y = (void *)_halide_buffer_get_host((halide_buffer_t *)blur_y.buffer)
+let blur_y.min.0 = _halide_buffer_get_min((halide_buffer_t *)blur_y.buffer, 0)
+let blur_y.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)blur_y.buffer, 0)
+let blur_y.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)blur_y.buffer, 0)
+let blur_y.min.1 = _halide_buffer_get_min((halide_buffer_t *)blur_y.buffer, 1)
+let blur_y.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)blur_y.buffer, 1)
+let blur_y.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)blur_y.buffer, 1)
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+assert(blur_y.stride.0 == 1, 0)
+assert(input.stride.0 == 1, 0)
+produce blur_y {
+ let t318 = blur_y.extent.0 + blur_y.min.0
+ let t319 = input.extent.0 + input.min.0
+ let t320 = input.extent.1 + input.min.1
+ let t321 = min(blur_y.extent.0, 64)
+ let t322 = blur_y.min.0 + t321
+ let t323 = max(blur_y.extent.0, 64)
+ let t324 = t323 + -1
+ let t325 = blur_y.min.1*blur_y.stride.1
+ let t326 = (blur_y.extent.0 + 63)/64
+ let t327 = max(blur_y.extent.0/64, 0)
+ let t328 = (blur_y.extent.1 + 127)/128
+ let t329 = (t323 + 63)/64
+ let t330 = min(max(((input.min.1 - blur_y.min.1) + 127)/128, 0), t328)
+ let t331 = min(max((((input.min.0 - t321) - blur_y.min.0) + 127)/64, 0), t329)
+ let t332 = t319 + 63
+ let t333 = t320 - blur_y.min.1
+ let t334 = (t319 - t321) - blur_y.min.0
+ let t307 = max((min(min(min(min(t334 + 60, t323) + -64, t334), (min(t318, t332) - t321) - blur_y.min.0), t324)/64) + 1, t331)
+ let t298 = max((min(min(min(t333 + 127, blur_y.extent.1) + 4, t333), blur_y.extent.1 + 131) + -4)/128, t330)
+ let t303 = max(min(min(min(t322, t332), min(min(t319 + 61, t322), min(min(t319 + 60, t322), min(t319 + 59, t322) + 1) + 1) + 2), min(t319 + 62, t322) + 1) + -64, input.min.0)
+ let t316 = blur_y.extent.0 - t325
+ let t314 = 0 - t325
+ let t301 = min(((t324/64)*64) + t321, blur_y.extent.0) + blur_y.min.0
+ for<Hexagon> (blur_y.s0.__outermost, 0, 1) {
+  let t342 = max(max(min(t319 + -1, t301), min(t301 + 4, t319) + -1), input.min.0)
+  let t335 = (t342 + 1) <= t319
+  let t337 = t342 - t303
+  let t336 = (t303 - (input.min.1*input.stride.1)) - input.min.0
+  let parallel_closure = (void *)make_struct(blur_y, input, blur_y.extent.0, blur_y.extent.1, blur_y.min.1, blur_y.stride.1, input.extent.1, input.min.0, input.min.1, input.stride.1, t298, t307, t314, t316, t318, t319, t320, t321, t322, t323, t326, t327, t329, t330, t331, t336, t337, t335)
+  let closure_result = halide_do_par_for((void *)::blur5x5_hvx128_par_for_blur_y_s0_y_y, 0, t328, (uint8_t *)(parallel_closure))
+  assert(closure_result == 0, closure_result)
+ }
+}
+}
+
+

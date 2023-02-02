@@ -525,6 +525,41 @@ class SynthesizerBase:
         return (pruned_ops, pruned_ctxs)
 
 
+    # HVX includes versions of operations which opertionally accumulate
+    #, we only need to include the version with the accumulation since that
+    # should capture both operations
+    def prune_using_hvx_acc_ops(self, ops, ctxs):
+        if self.target != 'hvx':
+            return (ops , ctxs)
+
+        acc_ops = [ctx.name for ctx in ctxs if '_acc' in ctx.name]
+
+        pruned_ops = []
+        pruned_ctxs = []
+
+        for i in range(0,len(ops)):
+
+            op_i = ops[i]
+            ctx_i = ctxs[i]
+
+            if 'acc' in ctx_i.name:
+                pruned_ops.append(op_i)
+                pruned_ctxs.append(ctx_i)
+                continue
+
+            discard = any([acc_name.replace("_acc","") == ctx_i.name for acc_name in acc_ops])
+
+            if not discard:
+                pruned_ops.append(op_i)
+                pruned_ctxs.append(ctx_i)
+
+
+
+        print("Pruned {} ops using hvx acc heuristic ...".format(len(ops) - len(pruned_ops)))
+        return (pruned_ops, pruned_ctxs)
+
+
+
     # If enabled, aggressively prunes those instructions
     # which contain a different variant of a bvop
     # from that present in the spec. For example,
@@ -1139,7 +1174,7 @@ class SynthesizerBase:
             ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"]] #["bvmul", "bvsdiv", "bvudiv",  "sign-extend", "zero-extend", "abs", ]
+            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"] ]
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication

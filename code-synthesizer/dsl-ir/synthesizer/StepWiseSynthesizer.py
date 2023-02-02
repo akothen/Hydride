@@ -595,9 +595,9 @@ class StepWiseSynthesizer(SynthesizerBase):
         filtered_sample_keys = sample_keys[: min(len(sample_keys), 100)]
 
 
-        print("filtered_sample_keys:")
-        for sample_key in filtered_sample_keys:
-            print(sample_key)
+        #print("filtered_sample_keys:")
+        #for sample_key in filtered_sample_keys:
+        #    print(sample_key)
 
 
         # Preserve ordering efficient deduplicator
@@ -795,7 +795,14 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         BOUND = 16
         if self.target == 'hvx':
-            BOUND = 25
+            delta = [0,0,0,0,1,3,4,4]
+            if self.depth <= 2:
+                BOUND = 25
+            elif self.depth == 3:
+                BOUND = 20 - delta[len(self.spec.input_precision)]
+            elif self.depth >= 4:
+                BOUND = 16
+
         if self.spec.contains_conditional():
             BOUND = 25
 
@@ -803,8 +810,12 @@ class StepWiseSynthesizer(SynthesizerBase):
             BOUND = 16
 
 
+        #(operation_dsl_insts, operation_dsl_args_list) = self.prune_using_hvx_acc_ops(operation_dsl_insts, operation_dsl_args_list)
+
 
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
+
+
 
 
 

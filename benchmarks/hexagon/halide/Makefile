@@ -6,16 +6,20 @@ HEXAGON_CLANG ?= /shared/akashk4/Hexagon_SDK/3.5.3/tools/HEXAGON_Tools/8.3.07/To
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
 			 dilate3x3 \
+			 dilate5x5 \
 			 median3x3 \
 			 sobel3x3 \
 			 blur3x3 \
+			 blur5x5 \
+			 blur7x7 \
 			 matmul \
 			 add \
 			 mul \
 			 l2norm \
 			 max_pool \
 			 average_pool \
-			 conv_nn
+			 conv_nn \
+			 simple
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 out_dirs = $(addsuffix /out,$(benchmarks))

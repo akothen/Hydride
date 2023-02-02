@@ -36,8 +36,14 @@
   #include "sobel3x3_sdk_hvx128.h"
 #elif blur3x3
   #include "blur3x3_hvx128.h"
+#elif blur5x5
+  #include "blur5x5_hvx128.h"
+#elif blur7x7
+  #include "blur7x7_hvx128.h"
 #elif dilate3x3
   #include "dilate3x3_hvx128.h"
+#elif dilate5x5
+  #include "dilate5x5_hvx128.h"
 #elif median3x3
   #include "median3x3_hvx128.h"
 #elif add
@@ -517,6 +523,60 @@ int main(int argc, char **argv) {
     printf("AppReported (HVX128B-mode): Image %dx%d - blur3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
   #endif
 
+
+#if blur5x5
+    halide_dimension_t x_dim{ 0, width/2, 1 };
+    halide_dimension_t y_dim{ 0, height, width/2 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<int16_t> input_buf((short*)input, dims, shape);
+    Halide::Runtime::Buffer<int16_t> output_buf((short*)output, dims, shape);
+
+    // Run in 128 byte mode
+    SIM_ACQUIRE_HVX;
+    SIM_SET_HVX_DOUBLE_MODE;
+    cycles = benchmark([&]() {
+        int error = blur5x5_hvx128(input_buf, output_buf);
+        if (error != 0) {
+            printf("blur5x5_hvx128 pipeline failed: %d\n", error);
+        }
+        });
+    SIM_RELEASE_HVX;
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+    printf("AppReported (HVX128B-mode): Image %dx%d - blur5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+  #endif
+
+
+#if blur7x7
+    halide_dimension_t x_dim{ 0, width/2, 1 };
+    halide_dimension_t y_dim{ 0, height, width/2 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<int16_t> input_buf((short*)input, dims, shape);
+    Halide::Runtime::Buffer<int16_t> output_buf((short*)output, dims, shape);
+
+    // Run in 128 byte mode
+    SIM_ACQUIRE_HVX;
+    SIM_SET_HVX_DOUBLE_MODE;
+    cycles = benchmark([&]() {
+        int error = blur7x7_hvx128(input_buf, output_buf);
+        if (error != 0) {
+            printf("blur7x7_hvx128 pipeline failed: %d\n", error);
+        }
+        });
+    SIM_RELEASE_HVX;
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+    printf("AppReported (HVX128B-mode): Image %dx%d - blur7x7(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+  #endif
+
   #if dilate3x3
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
@@ -541,6 +601,32 @@ int main(int argc, char **argv) {
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
 
     printf("AppReported (HVX128B-mode): Image %dx%d - dilate3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+  #endif
+
+  #if dilate5x5
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+    // Run in 128 byte mode
+    SIM_ACQUIRE_HVX;
+    SIM_SET_HVX_DOUBLE_MODE;
+    cycles = benchmark([&]() {
+        int error = dilate5x5_hvx128(input_buf, output_buf);
+        if (error != 0) {
+            printf("dilate5x5_hvx128 pipeline failed: %d\n", error);
+        }
+        });
+    SIM_RELEASE_HVX;
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+    printf("AppReported (HVX128B-mode): Image %dx%d - dilate5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
   #endif
 
   #if conv3x3a16
