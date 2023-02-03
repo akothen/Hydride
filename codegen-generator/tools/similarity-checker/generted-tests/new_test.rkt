@@ -13,8 +13,6 @@
 
 
 (define (function1  a b %arg0 %arg1)
-(assume (equal? (remainder %arg0 2) 0))
-(assume (equal? (remainder %arg1 2) 0))
 (apply
 concat
 (for/list ([%outer.iterator (reverse (range 0 256 128))])
@@ -91,6 +89,8 @@ concat
 
 
 (define (invoke_f1 params)
+  (assume (equal? (remainder %arg0_1 2) 0))
+  (assume (equal? (remainder %arg1_1 2) 0))
   (function1
     (vector-ref params 0) 
     (vector-ref params 1) 
