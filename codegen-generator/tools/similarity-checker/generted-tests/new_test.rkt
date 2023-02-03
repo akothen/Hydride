@@ -13,6 +13,8 @@
 
 
 (define (function1  a b %arg0 %arg1)
+(assume (equal? (remainder %arg0 2) 0))
+(assume (equal? (remainder %arg1 2) 0))
 (apply
 concat
 (for/list ([%outer.iterator (reverse (range 0 256 128))])
@@ -76,9 +78,14 @@ concat
 (define-symbolic %arg0_1 integer?)
 (define-symbolic %arg1_1 integer?)
 
-(define (generate-params env)
+(define (generate-params-f1 env)
   (vector (vector-ref env 0) (vector-ref env 1) %arg0_1 %arg1_1)
 )
+
+(define (generate-params-f2 env)
+  (vector (vector-ref env 0) (vector-ref env 1))
+)
+
 
 (define bitwidth-list (list 256 256))
 
@@ -101,7 +108,8 @@ concat
 )
 
 (define test-depth 2)
-(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative invoke_f1 invoke_f2 bitwidth-list generate-params '() solver))
+(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative invoke_f1 invoke_f2 
+                                      bitwidth-list generate-params-f1 generate-params-f2 '() solver))
 
 (displayln "is Satisfiable?")
 (println satisfiable?)
