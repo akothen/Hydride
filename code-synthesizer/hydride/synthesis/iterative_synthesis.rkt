@@ -207,7 +207,7 @@
   )
 
 
-(define (general-verify-synth-sol invoke_f1 invoke_f2  bw-list assert-query-fn generate-params solver)
+(define (general-verify-synth-sol invoke_f1 invoke_f2  bw-list assert-query-fn generate-params-f1 generate-params-f2 solver)
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
@@ -232,15 +232,13 @@
 
         (define new-bvs (build-vector num-bw helper))
         (debug-log new-bvs)
-        (define spec_res (invoke_f2 (generate-params new-bvs)))
+        (define spec_res (invoke_f2 (generate-params-f2 new-bvs)))
         (debug-log spec_res)
 
-        (define synth_res (invoke_f1 (generate-params new-bvs)))
+        (define synth_res (invoke_f1 (generate-params-f1 new-bvs)))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res))
         (values #f new-bvs)
-
         )
-
       (values #t '()) ;; No cex exists => Verified solution
 
       )
@@ -754,7 +752,7 @@
 
 
 
-(define (general-synthesize-sol-iterative invoke_f1 invoke_f2 bitwidth-list generate-params cexs solver)
+(define (general-synthesize-sol-iterative invoke_f1 invoke_f2 bitwidth-list generate-params-f1 generate-params-f2 cexs solver)
 
   
   (if (equal? solver 'boolector)
@@ -788,8 +786,9 @@
 
 
   (define (assert-query-fn env idx)
-    (define parameters (generate-params env))
-    (assert (equal? (invoke_f1 parameters)  (invoke_f2 parameters)))
+    (define parameters-f1 (generate-params-f1 env))
+    (define parameters-f2 (generate-params-f2 env))
+    (assert (equal? (invoke_f1 parameters-f1)  (invoke_f2 parameters-f2)))
     )
 
   (define failing-ls (for/list ([i (range (length cex-ls))])  0))
@@ -830,8 +829,8 @@
       (debug-log materialize)
       (print-forms sol?)
       (displayln "Testing materialized!")
-      (println (invoke_f2 (generate-params (list-ref cex-ls 0))))
-      (println (evaluate (materialize (generate-params (list-ref cex-ls 0))) sol?))
+      (println (invoke_f2 (generate-params-f2 (list-ref cex-ls 0))))
+      (println (evaluate (materialize (generate-params-f1 (list-ref cex-ls 0))) sol?))
 
 
       (define (exec-synth-sol env)
@@ -839,14 +838,15 @@
         )
 
       (define (assert-query-mat-fn env)
-        (define parameters (generate-params env))
+        (define parameters-f1 (generate-params-f1 env))
+        (define parameters-f2 (generate-params-f2 env))
 
-        (assert (equal? (exec-synth-sol parameters)  (invoke_f2 parameters)))
+        (assert (equal? (exec-synth-sol parameters-f1)  (invoke_f2 parameters-f2)))
         )
 
       (define-values 
         (verified? new-cex) 
-                (general-verify-synth-sol exec-synth-sol invoke_f2 bitwidth-list assert-query-mat-fn generate-params  solver)
+                (general-verify-synth-sol exec-synth-sol invoke_f2 bitwidth-list assert-query-mat-fn generate-params-f1 generate-params-f2  solver)
         )
 
 
@@ -860,7 +860,7 @@
 
 
             ;; If not verified then attempt synthesizing with appended counter example
-            (general-synthesize-sol-iterative invoke_f1 invoke_f2  bitwidth-list generate-params 
+            (general-synthesize-sol-iterative invoke_f1 invoke_f2  bitwidth-list generate-params-f1 generate-params-f2
                                       (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
                                       solver
                                       )
