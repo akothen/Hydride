@@ -131,13 +131,13 @@ public:
       if (vecType && vecType.getElementType()) {
         bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
         llvm::outs() << "bitwidth is: " << bitwidth << "\n";
-        elemT = mlir_type_to_synth_elem(vecType.getElementType(), false, true);
-        llvm::outs() << "elemT is: " << elemT << "\n";
+        elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
+        // llvm::outs() << "elemT is: " << elemT << "\n";
       }
 
       if (elemT == "'") {
-        llvm::outs() << "Define_load_buffer escaping early for " << reg_name
-                     << "of bitwidth " << bitwidth << "\n";
+        /* llvm::outs() << "Define_load_buffer escaping early for " << reg_name
+                     << "of bitwidth " << bitwidth << "\n"; */
         return "";
       }
 
@@ -188,7 +188,7 @@ public:
 
     std::string emit_buffer_id_map(std::string map_name) {
       std::string comment =
-          "; Creating a map between buffers and halide call node arguments\n";
+          "; Creating a map between buffers and mlir call node arguments\n";
       std::string define_buff_map =
           "(define " + map_name + " (make-hash))" + "\n";
       std::string add_entry = "";
@@ -246,6 +246,59 @@ public:
                             (require rosette/lib/destruct)\n \
                             (require rosette/solver/smt/boolector)\n \
                             (require hydride)\n ";
+    }
+
+    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth,
+                                       size_t VF, std::string id_map_name,
+                                       std::string synth_log_path,
+                                       std::string synth_log_name,
+                                       std::string target) {
+
+      std::string solver = "'z3";
+      const char *hydride_solver = getenv("HYDRIDE_SOLVER");
+
+      if (hydride_solver) {
+        solver = hydride_solver;
+      }
+
+      std::string optimize = "#t";
+      std::string symbolic = "#f";
+
+      return "(synthesize-mlir-expr " + expr_name + " " + id_map_name + " " +
+             std::to_string(expr_depth) + " " + std::to_string(VF) + " " +
+             solver + " " + optimize + " " + symbolic + "  \"" +
+             synth_log_path + "\"  \"" + synth_log_name + "\"  \"" + target +
+             "\")";
+    }
+
+    std::string emit_interpret_expr(std::string expr_name) {
+      return "(mlir:interpret " + expr_name + ")";
+    }
+
+    std::string emit_assemble_result(std::string result_name,
+                                     std::string expr_name, size_t lanes) {
+      return "(define " + result_name + " (mlir:assemble-bitvector " +
+             emit_interpret_expr(expr_name) + " " + std::to_string(lanes) +
+             ")" + ")";
+    }
+
+    std::string emit_write_synth_log_to_file(std::string fpath,
+                                             std::string hash_name) {
+      return "(save-synth-map \"" + fpath + "\" \"" + hash_name +
+             "\" synth-log)";
+    }
+
+    std::string emit_compile_to_llvm(std::string expr_name,
+                                     std::string map_name,
+                                     std::string call_name,
+                                     std::string bitcode_path) {
+      std::string comment =
+          "; Translate synthesized hydride-expression into LLVM-IR";
+      std::string command = "(compile-to-llvm " + expr_name + " " + map_name +
+                            " \"" + call_name + "\" \"" + bitcode_path +
+                            "\")\n";
+
+      return comment + "\n" + command;
     }
   };
 
@@ -696,6 +749,7 @@ public:
                    << funcOp.getNumArguments() << " operands:\n"; */
       std::string expr;
       std::string out_str;
+      unsigned op_lanes = 0;
       funcOp.walk([&](Operation *op) {
         if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
           for (Value operand : op->getOperands()) {
@@ -708,19 +762,24 @@ public:
               expr += MLIRValVisit(blockArg) + "\n";
             }
           }
+          /* auto vecType = op->getResult(0).getType().dyn_cast<VectorType>();
+          if (vecType && vecType.getElementType()) {
+            op_lanes = vecType.getNumElements();
+          } */
           ret_and_store_vec.push_back(op);
         }
         if (auto storeOp = dyn_cast<vector::StoreOp>(op)) {
           // get expression for the value to be stored and use as a hydride node
-          expr += MLIRValVisit(storeOp.getValueToStore()) + "\n";
+          // expr += MLIRValVisit(storeOp.getValueToStore()) + "\n";
           ret_and_store_vec.push_back(op);
         }
       });
 
+      std::string benchmark_name = "expr";
       // dummy becnhamrk name
-      HydrideSynthEmitter HSE("benchmark_name");
+      HydrideSynthEmitter HSE(benchmark_name);
 
-      outputFilename = std::string("halide_expr_") + "benchmark_name" +
+      outputFilename = std::string("mlir_expr_") + benchmark_name +
                        std::to_string(expr_id) + ".rkt";
 
       auto file = openOutputFile(outputFilename, &errorMessage);
@@ -733,23 +792,62 @@ public:
       out_str += HSE.emit_set_current_bitwidth() += "\n";
       out_str += HSE.emit_set_memory_limit(20000) += "\n";
       out_str += HSE.emit_symbolic_buffers() += "\n";
-      out_str += HSE.emit_buffer_id_map("id-map") += "\n\n"; 
+      out_str += HSE.emit_buffer_id_map("id-map") += "\n\n";
 
+      out_str += "(define mlir-expr \n";
+      out_str += expr + "\n";
+      out_str += ")\n\n";
 
-      out_str += "(define (" + funcOp.getName().str() + " ";
+      out_str += "(clear-vc!)\n";
 
+      std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
+      std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
 
-      unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+      const char *expr_depth_var = getenv("HL_EXPR_DEPTH");
 
-      for (unsigned i = 0; i < reg_counter; i++) {
-        out_str += "reg_" + std::to_string(i) + " ";
+      int expr_depth = 2;
+
+      if (expr_depth_var) {
+        expr_depth = (*expr_depth_var) - '0';
       }
 
-      out_str += ")\n";
+      std::string target_str = "X86";
 
-      out_str += expr + "\n";
+      out_str += "(define synth-res " +
+                 HSE.emit_hydride_synthesis(
+                     "mlir-expr", /* expr depth */ expr_depth,
+                     /* VF*/ op_lanes, /* Reg Hash map name */ "id-map",
+                     /* Previous hash file path */ prev_hash_path,
+                     /* Previous hash  name */ prev_hash_name,
+                     /* target id */ target_str) +
+                 ")" + "\n";
+      out_str += "(dump-synth-res-with-typeinfo synth-res id-map)\n";
 
-      out_str += ")\n";
+      std::string fn_name =
+          "hydride.node." + benchmark_name + "." + std::to_string(expr_id);
+      out_str += HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name,
+                                          benchmark_name);
+
+      std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
+      std::string cur_hash_name = HSE.get_synthlog_hash_name(expr_id);
+
+      out_str += HSE.emit_write_synth_log_to_file("/tmp/" + cur_hash_path,
+                                                  cur_hash_name);
+
+      /*    out_str += "(define (" + funcOp.getName().str() + " ";
+
+
+         unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+
+         for (unsigned i = 0; i < reg_counter; i++) {
+           out_str += "reg_" + std::to_string(i) + " ";
+         }
+
+         out_str += ")\n";
+
+         out_str += expr + "\n";
+
+         out_str += ")\n"; */
 
       file->os() << out_str;
       file->keep();
@@ -760,7 +858,6 @@ public:
       RegToLoadMap.clear();
       LoadToRegMap.clear();
     });
-
   }
 };
 

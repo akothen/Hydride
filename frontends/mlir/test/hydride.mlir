@@ -2,7 +2,7 @@
 #map1 = affine_map<(d0, d1, d2, d3) -> (d3, d2)>
 #map2 = affine_map<(d0, d1, d2, d3) -> (d0, d1, d2)>
 
-  func.func @conv1d_nwc_4x2x8_memref(%arg0: memref<4x6x3xi32>, %arg1: memref<2x3x8xi32>, %arg2: memref<4x2x8xi32>) -> vector<4x4x3xi32>{
+  func.func @conv1d_nwc_4x2x8_memref(%arg0: memref<4x6x3xi32>, %arg1: memref<2x3x8xi32>, %arg2: memref<4x2x8xi32>) -> vector<2x3x8xi32>{
     %c0 = arith.constant 0 : index
     %0 = vector.load %arg0[%c0, %c0, %c0] : memref<4x6x3xi32>, vector<4x4x3xi32>
     %1 = vector.load %arg1[%c0, %c0, %c0] : memref<2x3x8xi32>, vector<2x3x8xi32>
@@ -13,8 +13,8 @@
     %6 = vector.extract %1[1] : vector<2x3x8xi32>
     %7 = vector.contract {indexing_maps = [#map0, #map1, #map2], iterator_types = ["parallel", "parallel", "parallel", "reduction"], kind = #vector.kind<add>} %3, %5, %2 : vector<4x2x3xi32>, vector<3x8xi32> into vector<4x2x8xi32>
     %8 = vector.contract {indexing_maps = [#map0, #map1, #map2], iterator_types = ["parallel", "parallel", "parallel", "reduction"], kind = #vector.kind<add>} %4, %6, %7 : vector<4x2x3xi32>, vector<3x8xi32> into vector<4x2x8xi32>
-    vector.store %8, %arg2[%c0, %c0, %c0] : memref<4x2x8xi32>, vector<4x2x8xi32>
-    return %0 : vector<4x4x3xi32>
+    %9 = arith.addi %1, %1 : vector<2x3x8xi32>
+    return %9 : vector<2x3x8xi32>
   }
   func.func @depthwise_conv1d_nwc_wc_3x5x4_memref(%arg0: memref<3x5x4xi32>, %arg1: memref<2x4xi32>, %arg2: memref<3x2x4xi32>) {
     %c0 = arith.constant 0 : index
