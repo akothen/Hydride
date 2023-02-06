@@ -11,6 +11,7 @@ from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
 from RoseAbstractions import RoseUndefRegion
+from RoseMacro import RoseMacro
 from RoseValues import *
 from RoseLLVMContext import *
 
@@ -144,16 +145,18 @@ class RoseCallOp(RoseOperation):
 
 class RoseOpaqueCallOp(RoseOperation):
   def __init__(self, Name : str, Callee, OperandList : list, \
-                    ReturnType : RoseType, ParentBlock):
+                    ReturnType : RoseType, Macro: RoseMacro, ParentBlock):
     assert isinstance(Callee.getType(), RoseStringType)
+    assert isinstance(Macro, RoseMacro)
+    self.Macro = Macro
     Operands = [ReturnType, Callee]
     Operands.extend(OperandList)
     super().__init__(RoseOpcode.opaquecall, Name, Operands, ParentBlock)
     
   @staticmethod
   def create(Name : str, Callee, OperandList : list, ReturnType : RoseType, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseOpaqueCallOp(Name, Callee, OperandList, ReturnType, ParentBlock)
+            Macro: RoseMacro = None, ParentBlock = RoseUndefRegion()):
+    return RoseOpaqueCallOp(Name, Callee, OperandList, ReturnType, Macro, ParentBlock)
   
   def getCallee(self):
     return self.getOperands()[1]
@@ -162,6 +165,9 @@ class RoseOpaqueCallOp(RoseOperation):
     if len(self.getOperands()) > 2:
       return self.getOperands()[2:]
     return []
+
+  def getMacro(self):
+    return self.Macro
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -175,6 +181,8 @@ class RoseOpaqueCallOp(RoseOperation):
         String += " " + Operand.getName()
         if Index != len(self.getCallOperands()) - 1:
           String += " "
+    if self.getMacro() != None:
+      String += self.getMacro()
     String += " )))\n"
     return String
 
@@ -194,6 +202,8 @@ class RoseOpaqueCallOp(RoseOperation):
         String += " " + str(Operand.getType()) + " " + Operand.getName() 
         if Index != len(self.getCallOperands()) - 1:
           String += ","
+    if self.getMacro() != None:
+      String += self.getMacro()
     String += " )"
     print(String)
 
@@ -213,6 +223,8 @@ class RoseOpaqueCallOp(RoseOperation):
         String += " " + str(Operand.getType()) + " " + Operand.getName() 
         if Index != len(self.getCallOperands()) - 1:
           String += ","
+    if self.getMacro() != None:
+      String += self.getMacro()
     String += " )\n"
     return String
   
@@ -1344,7 +1356,4 @@ class RoseXorOp(RoseOperation):
     assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.xor(Operand1, Operand2, self.getName())
-
-
-
 
