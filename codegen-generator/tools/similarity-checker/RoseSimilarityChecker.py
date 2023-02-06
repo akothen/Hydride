@@ -23,11 +23,6 @@ from RoseTransformationsVerifier import *
 import threading
 from copy import deepcopy
 
-FunctionToEquivalenceClassMapLock = threading.Lock()
-EquivalenceClassesLock = threading.Lock()
-EQToEQMapLock = threading.Lock()
-RegionLock = threading.Lock()
-
 NumThreads = 1
 
 class RoseSimilarityChecker():
@@ -235,8 +230,11 @@ class RoseSimilarityChecker():
     Function2.print()
     # Rosette code headers
     Content = [
-      "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
-      "(require racket/pretty)", "(require \"RosetteOpsImpl.rkt\")\n"
+      "#lang rosette", \
+      "(require rosette/lib/synthax)", \
+      "(require rosette/lib/angelic)",
+      "(require racket/pretty)", \
+      "(require \"RosetteOpsImpl.rkt\")\n"
     ]
     #Content.append("(custodian-limit-memory (current-custodian) (* 1024 1024))")
     # Generate rosette code
@@ -826,10 +824,8 @@ class RoseSimilarityChecker():
     ArgPermutation = list()
     for Arg in NewArgsList:
       ArgPermutation.append(Function.getIndexOfArg(Arg))
-    #RegionLock.acquire()
     #self.CopyFunctionToOriginalFunction[FunctionCopy] = Function
     self.FunctionToArgPermutationMap[FunctionCopy] = ArgPermutation
-    #RegionLock.release()
     return FunctionCopy
 
 
@@ -2064,6 +2060,8 @@ class RoseSimilarityChecker():
     print("RUN ON OP SIMPLIFY FUNCTION")
     print("FUNCTION:")
     Function.print()
+    # Define a macro
+    Macro = self.create("depth", RoseConstant.create("K", RoseStringType(1)))
     # Look for extracts
     BlockList = Function.getRegionsOfType(RoseBlock)
     HoleList = list()
@@ -2112,79 +2110,106 @@ class RoseSimilarityChecker():
     return RosetteCode
 
 
-  def generateCodeForReferenceToSketch(self, Sketch : RoseFunction, RosetteSketch : str):
-    RosetteCode = ["(define (invoke_sketch k)"]
-    RosetteCode.append(RosetteSketch)
-    RosetteCode.append("(define (invoke_synth params)")
-    RosetteCode.append("(" + Sketch.getName())
-    for Idx in range(Sketch.getNumArgs()):
-      RosetteCode.append("(vector-ref params " + str(Idx) + ")")
-    RosetteCode.append(")")
-    RosetteCode.append(")")
-    RosetteCode.append("invoke_synth")
-    RosetteCode.append(")")
-    return "\n".join(RosetteCode)
-
-
-  def generateCodeForReferenceForRefImpl(self, RefImpl : RoseFunction):
-    RosetteCode = ["(define (invoke_ref params)"]
-    RosetteCode.append("(" + RefImpl.getName())
-    for Idx in range(RefImpl.getNumArgs()):
-      RosetteCode.append("(vector-ref params " + str(Idx) + ")")
-    RosetteCode.append(")")
-    RosetteCode.append(")")
-    return "\n".join(RosetteCode)
-
-
-  def generateCodeForParams(self, RefImpl : RoseFunction):
+  def generateCodeForParams(self, Function : RoseFunction, ParamListName : str):
     # Generate variables definitions for concrete inputs to the given functions
     Code = ""
-    RefImplInfo = self.FunctionToFunctionInfo[RefImpl]
-    for Arg in  RefImpl.getArgs():
-      if RefImplInfo.argHasConcreteVal(Arg) == True:
-        ConcreteVal = RefImplInfo.getConcreteValFor(Arg)
+    FunctionInfo = self.FunctionToFunctionInfo[Function]
+    for Arg in  Function.getArgs():
+      if FunctionInfo.argHasConcreteVal(Arg) == True:
+        ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
         Code += self.genConcreteInput(Arg, ConcreteVal, ".arg")
-    Code += "(define (generate-params env)\n"
+    Code += "(define (" + ParamListName + " env)\n"
     Code += "(vector "
-    for Idx, Arg in  enumerate(RefImpl.getArgs()):
+    for Idx, Arg in  enumerate(Function.getArgs()):
       if isinstance(Arg.getType(), RoseBitVectorType):
         Code += "(vector-ref env" + str(Idx) + ") "
       else:
         Code += Arg.getName() + ".arg "
     Code += ")\n"
     Code += ")\n\n"
-    Code += "(define bitwidth-list (list "
-    for Arg in RefImpl.getArgs():
-      if isinstance(Arg.getType(), RoseBitVectorType):
-        Code += str(Arg.getType().getBitwidth())  + " "
-    Code += "))\n"
     return Code
+
+
+  def generateCodeForSynthesis(self, Function : RoseFunction, RosetteImplCode : str, DepthVarName : str = None):
+    # Generate code for function in Rosette
+    RosetteFuncName = "invoke_ " + Function.getName()
+    OuterFuncName = RosetteFuncName
+    RosetteCode = ""
+    if DepthVarName != None:
+      assert isinstance(DepthVarName, str)
+      OuterFuncName = RosetteFuncName + "_sketch
+      RosetteCode.append("(define (" + OuterFuncName + "_sketch" + DepthVarName + ")")
+    RosetteCode.append("(define (" + RosetteFuncName + " params)")
+    RosetteCode.append(RosetteImplCode)
+    RosetteCode.append("(" + Function.getName())
+    for Idx in range(Function.getNumArgs()):
+      RosetteCode.append("(vector-ref params " + str(Idx) + ")")
+    RosetteCode.append(")")
+    RosetteCode.append(")")
+    if DepthVarName != None:
+      RosetteCode.append(RosetteFuncName)
+      RosetteCode.append(")")
+    RosetteCode.append("\n")
+    RosetteCode = "\n".join(RosetteCode)
+    # Generate code for parameters of this function
+    ParamListName = "generate_param_" + Function.getName()
+    RosetteCode += self.generateCodeForParams(Function, ParamListName)
+    RosetteCode += "\n"
+    return RosetteCode, OuterFuncName, ParamListName
 
 
   def emitSynthesisCodeForSimilarityChecking(self, Sketch : RoseFunction, RefImpl : RoseFunction, \
                                             HolesList : list):
+    # Sanity check
+    assert len(HolesList) > 0
     # Generate a file for performing synthesis first
     RosetteSketch = RosetteGen.CodeGen(Sketch)
     RosetteRefImpl = RosetteGen.CodeGen(RefImpl)
     # Rosette code headers
     Content = [
-      "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
-      "(require racket/pretty)", "(require racket/serialize)", "(require hydride)",
+      "#lang rosette", \
+      "(require rosette/lib/synthax)", \
+      "(require rosette/lib/angelic)",
+      "(require racket/pretty)", \
+      "(require racket/serialize)", \
+      "(require hydride)",
       "(require \"RosetteOpsImpl.rkt\")\n"
     ]
-    Content.extend(["enable-debug", "(current-bitwidth 16)", \
-       "(custodian-limit-memory (current-custodian) (* 20000 1024 1024))",
-       "(define solver 'z3)"])
-    Content.append(self.generateCodeForParams(RefImpl))
-    Content.append(RosetteRefImpl)
-    Content.append(self.generateCodeForReferenceToSketch(Sketch, RosetteSketch))
+    Content.extend(["enable-debug", \
+                    "(current-bitwidth 16)", \
+                    "(custodian-limit-memory (current-custodian) (* 20000 1024 1024))", \
+                    "(define solver 'z3)\n"])
+    # Generate rosette code for all holes
+    DepthVarName = None
     for Hole in HolesList:
       assert isinstance(Hole, RoseOpaqueCallOp)
+      if DepthVarName == None:
+        if Hole.getMacro() != None:
+          DepthVarName = Hole.getMacro().getName()
       Content.append(self.getRosetteCodeForHole(Hole))
-    Content.append(self.generateCodeForReferenceForRefImpl(RefImpl))
-    Content.append("(define test-depth 2)")
+    # Generate rosette code for the reference implementation
+    RefRosette, RefFunctionName, RefParamList = \
+                          self.generateCodeForSynthesis(RefImpl, RosetteRefImpl)
+    Content.append(RefRosette)
+    # Generate rosette code for the sketch implementation.
+    # For now we use the depth of 2.
+    Depth = 2
+    SketchRosette, SketchFunctionName, SketchParamList = \
+                    self.generateCodeForSynthesis(Sketch, RosetteSketch, DepthVarName)
+    Content.append(SketchRosette)
+    # Generate a list of bitwidths
+    Code = "(define bitwidth-list (list "
+    for Arg in RefImpl.getArgs():
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        Code += str(Arg.getType().getBitwidth())  + " "
+    Code += "))\n"
+    Content.append(Code)
+    # Generate code for performing synthesis
+    Content.append("(define test-depth " + Depth + ")")
     Content.append("(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative \
-                    (invoke_f1 2) invoke_f2 bitwidth-list generate-params '() solver)")
+                    ({} {}) {} bitwidth-list {} {} '() solver)") \
+                    .format(SketchFunctionName, str(Depth), RefFunctionName, \
+                            SketchParamList, RefParamList)
     Content.append("(displayln \"is Satisfiable?\")")
     Content.append("(println satisfiable?)")
     return "\n".join(Content)
