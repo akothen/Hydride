@@ -17,8 +17,8 @@ class RoseMacro:
       self.Value = Value
     
     @staticmethod
-    def create(Name : str, Type : RoseType):
-        return RoseValue(Name, Type)
+    def create(Name : str, Value : RoseConstant):
+        return RoseMacro(Name, Value)
     
     def __eq__(self, Other):
         assert isinstance(Other, RoseValue)
@@ -41,6 +41,6 @@ class RoseMacro:
       return deepcopy(self)
 
     def print(self, _):
-        print("#" + self.Name + " ")
+        print("#:" + self.Name + " ")
         Value.print()
 
