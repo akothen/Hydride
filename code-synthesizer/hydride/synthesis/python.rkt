@@ -136,7 +136,7 @@
 
 (define (get-expr-grammar expr sub-expr-ls base_name VF)
   (debug-log (format "get-expr-grammar with base_name: ~a\n" base_name))
-  (define spec-contents (gen-synthesis-spec expr sub-expr-ls base_name))
+  (define spec-contents (gen-synthesis-spec-halide expr sub-expr-ls base_name))
   (define grammar-file-name (string-append base_name "_grammar.rkt"))
   (debug-log grammar-file-name)
   (define mod-path (build-path gen (string->path grammar-file-name)))
@@ -158,7 +158,30 @@
 
 (define (get-expr-grammar-step expr sub-expr-ls base_name VF step-idx depth scale-factor)
   (debug-log (format "get-expr-grammar (step-wise synthesis) with base_name: ~a\n" base_name))
-  (define spec-contents (gen-synthesis-spec expr sub-expr-ls base_name))
+  (define spec-contents (gen-synthesis-spec-halide expr sub-expr-ls base_name))
+  (define grammar-file-name (string-append base_name "_grammar.rkt"))
+  (debug-log grammar-file-name)
+  (define mod-path (build-path gen (string->path grammar-file-name)))
+  (debug-log mod-path)
+  (generate-grammar-file-step spec-contents mod-path base_name VF 0 step-idx depth scale-factor) ;; IS_SHUFFLE = 0
+  (debug-log "Generated Grammar File")
+  (define (get-grammar mod name)
+    (debug-log (format "Dynamically importing from ~a ... \n" name))
+    (dynamic-require mod (string->symbol name))
+    )
+
+  (define grammar (get-grammar mod-path (string-append base_name "")))
+  (define interpreter (get-grammar mod-path (string-append base_name ":interpret")))
+  (define cost-model (get-grammar mod-path (string-append base_name ":cost")))
+  (values grammar interpreter cost-model)
+  )
+
+
+(define (get-expr-grammar-step-hydride expr  base_name get-ops-functor visitor-functor 
+                                       get-length-functor get-prec-functor
+                                       input-precs input-sizes VF step-idx depth scale-factor)
+  (debug-log (format "get-expr-grammar-hydride (step-wise synthesis) with base_name: ~a\n" base_name))
+  (define spec-contents (gen-synthesis-spec-hydride expr get-ops-functor visitor-functor get-length-functor get-prec-functor input-precs input-sizes  base_name))
   (define grammar-file-name (string-append base_name "_grammar.rkt"))
   (debug-log grammar-file-name)
   (define mod-path (build-path gen (string->path grammar-file-name)))

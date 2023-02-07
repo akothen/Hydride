@@ -44,6 +44,7 @@
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/visitor)
 (require hydride/ir/hydride/scale)
+(require hydride/ir/hydride/get_ops)
 
 
 
@@ -59,6 +60,7 @@
 (require hydride/ir/hvx/const_fold)
 (require hydride/ir/hvx/visitor)
 (require hydride/ir/hvx/scale)
+(require hydride/ir/hvx/get_ops)
 
 
 ;; CPP IR
@@ -68,6 +70,14 @@
 (require hydride/halide)
 
 
+;; ARITH Dialect IR
+(require hydride/ir/arith/types)
+(require hydride/ir/arith/interpreter)
+;(require hydride/ir/arith/utils)
+;(require hydride/ir/arith/visitor)
+
+
+;; Synthesis 
 (require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
 (require hydride/synthesis/synth_main)
@@ -77,6 +87,7 @@
 (require hydride/synthesis/llvm_codegen)
 (require hydride/synthesis/lower_swizzle)
 (require hydride/synthesis/scalable_synthesis)
+(require hydride/synthesis/ir_to_ir_transform)
 
 
 
@@ -98,6 +109,7 @@
   (all-from-out hydride/ir/hydride/const_fold)
   (all-from-out hydride/ir/hydride/visitor)
   (all-from-out hydride/ir/hydride/scale)
+  (all-from-out hydride/ir/hydride/get_ops)
 
 
   (all-from-out hydride/ir/hvx/semantics)
@@ -111,12 +123,18 @@
   (all-from-out hydride/ir/hvx/const_fold)
   (all-from-out hydride/ir/hvx/visitor)
   (all-from-out hydride/ir/hvx/scale)
+  (all-from-out hydride/ir/hvx/get_ops)
 
 
   (all-from-out hydride/cpp)
 
   (all-from-out hydride/halide)
 
+
+  (all-from-out hydride/ir/arith/types)
+  (all-from-out hydride/ir/arith/interpreter)
+  ;(all-from-out hydride/ir/arith/utils)
+  ;(all-from-out hydride/ir/arith/visitor)
 
 
 
@@ -129,6 +147,6 @@
   (all-from-out hydride/synthesis/llvm_codegen)
   (all-from-out hydride/synthesis/lower_swizzle)
   (all-from-out hydride/synthesis/scalable_synthesis)
-
+  (all-from-out hydride/synthesis/ir_to_ir_transform)
   )
 
