@@ -147,7 +147,8 @@ class RoseOpaqueCallOp(RoseOperation):
   def __init__(self, Name : str, Callee, OperandList : list, \
                     ReturnType : RoseType, Macro: RoseMacro, ParentBlock):
     assert isinstance(Callee.getType(), RoseStringType)
-    assert isinstance(Macro, RoseMacro)
+    if Macro != None:
+      assert isinstance(Macro, RoseMacro)
     self.Macro = Macro
     Operands = [ReturnType, Callee]
     Operands.extend(OperandList)
