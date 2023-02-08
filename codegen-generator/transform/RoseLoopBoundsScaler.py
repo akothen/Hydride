@@ -36,27 +36,37 @@ def ScaleBoundsOfLoop(Loop : RoseForLoop, Context : RoseContext):
       Loop.setStartIndex(Op.getOperand(0).getValue() * Loop.getStartIndex().getValue())
       Loop.setEndIndex(Op.getOperand(0).getValue() * Loop.getEndIndex().getValue())
       Loop.setStep(Op.getOperand(0).getValue() * Loop.getStep().getValue())
+      Loop.setIteratorName(Context.genName(Loop.getIterator().getName() + ".new"))
+      Loop.replaceUsesWith(Op, Loop.getIterator())
+      Op.getParent().eraseOperation(Op)
+      return True
     elif isinstance(Op.getOperand(1), RoseConstant):
       Loop.setStartIndex(Op.getOperand(1).getValue() * Loop.getStartIndex().getValue())
       Loop.setEndIndex(Op.getOperand(1).getValue() * Loop.getEndIndex().getValue())
       Loop.setStep(Op.getOperand(1).getValue() * Loop.getStep().getValue())
-    Loop.setIteratorName(Context.genName(Loop.getIterator().getName() + ".new"))
-    Loop.replaceUsesWith(Op, Loop.getIterator())
-    Op.getParent().eraseOperation(Op)
-    return True
+      Loop.setIteratorName(Context.genName(Loop.getIterator().getName() + ".new"))
+      Loop.replaceUsesWith(Op, Loop.getIterator())
+      Op.getParent().eraseOperation(Op)
+      return True
+    return False
   if isinstance(Op, RoseAddOp) and len(Op.getOperands()) == 2:
     if isinstance(Op.getOperand(0), RoseConstant):
       Loop.setStartIndex(Op.getOperand(0).getValue() + Loop.getStartIndex().getValue())
       Loop.setEndIndex(Op.getOperand(0).getValue() + Loop.getEndIndex().getValue())
       #Loop.setStep(Op.getOperand(0).getValue() + Loop.getStep().getValue())
+      Loop.setIteratorName(Context.genName(Loop.getIterator().getName() + ".new"))
+      Loop.replaceUsesWith(Op, Loop.getIterator())
+      Op.getParent().eraseOperation(Op)
+      return True
     elif isinstance(Op.getOperand(1), RoseConstant):
       Loop.setStartIndex(Op.getOperand(1).getValue() + Loop.getStartIndex().getValue())
       Loop.setEndIndex(Op.getOperand(1).getValue() + Loop.getEndIndex().getValue())
       #Loop.setStep(Op.getOperand(1).getValue() + Loop.getStep().getValue())
-    Loop.setIteratorName(Context.genName(Loop.getIterator().getName() + ".new"))
-    Loop.replaceUsesWith(Op, Loop.getIterator())
-    Op.getParent().eraseOperation(Op)
-    return True
+      Loop.setIteratorName(Context.genName(Loop.getIterator().getName() + ".new"))
+      Loop.replaceUsesWith(Op, Loop.getIterator())
+      Op.getParent().eraseOperation(Op)
+      return True
+    return False
   return False
   
 
