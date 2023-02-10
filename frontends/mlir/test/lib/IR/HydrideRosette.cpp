@@ -126,13 +126,49 @@ public:
       // std::string reg_name = "reg_";
       std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
       size_t bitwidth = 0;
+      std::string define_bitvector_str;
+      std::string define_buffer_str;
       auto vecType = op.getResult().getType().dyn_cast<VectorType>();
       std::string elemT = "'";
       if (vecType && vecType.getElementType()) {
         bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
-        llvm::outs() << "bitwidth is: " << bitwidth << "\n";
         elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
         // llvm::outs() << "elemT is: " << elemT << "\n";
+        unsigned rank = vecType.getRank();
+
+        define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
+                               "(bv 0 (bitvector " + std::to_string(bitwidth) +
+                               ")" + "))";
+
+        // todo: mlir interpreter for create-buffer
+        define_buffer_str = "(define " + reg_name + " (mlir:create-tensor " +
+                            reg_name + "_tensor " + "(vector";
+
+        for (unsigned d = 0; d < rank; d++) {
+
+          define_buffer_str += " " + std::to_string(vecType.getShape()[d]);
+        }
+
+        define_buffer_str += ") ";
+
+        define_buffer_str += "(shape";
+
+        for (unsigned d = 0; d < rank; d++) {
+
+          define_buffer_str += " " + std::to_string(d);
+        }
+
+        define_buffer_str += ") ";
+
+        define_buffer_str += elemT + ")" + ")";
+      } else {
+        define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
+                               "(bv 0 (bitvector " + std::to_string(bitwidth) +
+                               ")" + "))";
+
+        // todo: mlir interpreter for create-buffer
+        define_buffer_str = "(define " + reg_name + " (mlir:create-buffer " +
+                            reg_name + "_bitvector " + elemT + ")" + ")";
       }
 
       if (elemT == "'") {
@@ -140,15 +176,6 @@ public:
                      << "of bitwidth " << bitwidth << "\n"; */
         return "";
       }
-
-      std::string define_bitvector_str = "(define " + reg_name + "_bitvector" +
-                                         " " + "(bv 0 (bitvector " +
-                                         std::to_string(bitwidth) + ")" + "))";
-
-      // todo: mlir interpreter for create-buffer
-      std::string define_buffer_str = "(define " + reg_name +
-                                      " (mlir:create-buffer " + reg_name +
-                                      "_bitvector " + elemT + ")" + ")";
 
       return define_bitvector_str + "\n" + define_buffer_str;
     }
@@ -172,12 +199,13 @@ public:
         return "";
       }
 
-      std::string define_bitvector_str = "(define " + reg_name + "_bitvector" +
+      std::string define_bitvector_str = "(define " + reg_name + "_tensor" +
                                          " " + "(bv 0 (bitvector " +
                                          std::to_string(bitwidth) + ")" + "))";
+
       std::string define_buffer_str = "(define " + reg_name +
                                       " (mlir:create-buffer " + reg_name +
-                                      "_bitvector " + elemT + ")" + ")";
+                                      "_tensor " + elemT + ")" + ")";
 
       return define_bitvector_str + "\n" + define_buffer_str;
     }
@@ -348,17 +376,16 @@ public:
 
     if (is_vector_op) {
 
-      indent.push(indent.top() + 1);
+      // indent.push(indent.top() + 1);
       std::string rkt_lhs = MLIRValVisit(a);
       std::string rkt_rhs = MLIRValVisit(b);
-      indent.pop();
-      return "(vec-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
+      // indent.pop();
+      return "(arith:tensor-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
     } else {
 
       std::string rkt_lhs = MLIRValVisit(a);
-
       std::string rkt_rhs = MLIRValVisit(b);
-      return "(sca-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
+      return "(arith:sca-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
     }
   }
 
@@ -381,9 +408,11 @@ public:
     void *valAsOpaquePointer = val.getAsOpaquePointer();
     auto valDefiningOp = val.getDefiningOp();
     if (valDefiningOp != NULL) {
-      if (valDefiningOp->getDialect() != NULL &&
-          valDefiningOp->getDialect()->getNamespace() == "arith") {
-        return MLIROpVisit(valDefiningOp);
+      if (valDefiningOp->getDialect() != NULL) {
+        if (valDefiningOp->getDialect()->getNamespace() == "arith" ||
+            valDefiningOp->getDialect()->getNamespace() == "vector") {
+          return MLIROpVisit(valDefiningOp);
+        }
       } else {
 
         if (VariableToRegMap.find(valAsOpaquePointer) !=
@@ -466,6 +495,31 @@ public:
             // alignment
             // + ")";
           }
+        }
+        if (auto extractStridedSliceOp =
+                dyn_cast<vector::ExtractStridedSliceOp>(op)) {
+          // Value source = op->getOperand(0);
+          llvm::outs() << "Strided slice\n";
+          std::string ret_str = "(tensor-ext-stride a)\n";
+          return ret_str;
+        }
+
+        if (auto broadCastOp = dyn_cast<vector::BroadcastOp>(op)) {
+          Value source = op->getOperand(0);
+          std::string ret_str =
+              "(tensor-broadcast " + MLIRValVisit(source) + ")\n";
+          return ret_str;
+        }
+
+        if (auto fmaOp = dyn_cast<vector::FMAOp>(op)) {
+          Value lhs = op->getOperand(0);
+          Value rhs = op->getOperand(1);
+          Value acc = op->getOperand(2);
+          bool is_vec = op->getResult(0).getType().isa<VectorType>();
+          std::string mul_str = print_binary_op("mul", lhs, rhs, is_vec);
+          std::string ret_str =
+              "(tensor-add " + mul_str + " " + MLIRValVisit(acc) + ")\n";
+          return ret_str;
         }
       }
 
@@ -697,7 +751,7 @@ public:
             std::string rkt_true = MLIRValVisit(true_val);
             std::string rkt_false = MLIRValVisit(false_val);
             indent.pop();
-            return tabs() + "(vec-if" + rkt_cond + "\n" + rkt_true + "\n" +
+            return tabs() + "(tensor-if" + rkt_cond + "\n" + rkt_true + "\n" +
                    rkt_false + ")";
           } else if (mode.top() == MLIRValueEncoding::Bitvector) {
             std::string rkt_cond = MLIRValVisit(cond);
@@ -759,7 +813,9 @@ public:
 
               auto blockArg = operand.cast<BlockArgument>();
 
-              expr += MLIRValVisit(blockArg) + "\n";
+              if (blockArg) {
+                expr += MLIRValVisit(blockArg) + "\n";
+              }
             }
           }
           /* auto vecType = op->getResult(0).getType().dyn_cast<VectorType>();
@@ -770,7 +826,18 @@ public:
         }
         if (auto storeOp = dyn_cast<vector::StoreOp>(op)) {
           // get expression for the value to be stored and use as a hydride node
-          // expr += MLIRValVisit(storeOp.getValueToStore()) + "\n";
+          auto valToStore = storeOp.getValueToStore();
+          if (Operation *producer = valToStore.getDefiningOp()) {
+            expr += MLIROpVisit(producer) + "\n";
+          } else {
+
+            auto blockArg = valToStore.cast<BlockArgument>();
+            if (blockArg) {
+              expr += MLIRValVisit(blockArg) + "\n";
+            }
+          }
+
+          // expr += MLIRValVisit() + "\n";
           ret_and_store_vec.push_back(op);
         }
       });

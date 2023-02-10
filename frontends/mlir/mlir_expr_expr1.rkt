@@ -9,12 +9,22 @@
  
 
 (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
+(define reg_0_tensor (bv 0 (bitvector 768)))
+(define reg_0 (mlir:create-tensor reg_0_tensor (vector 3 2 4) (shape 0 1 2) 'int32))
 
 ; Creating a map between buffers and mlir call node arguments
 (define id-map (make-hash))
+(hash-set! id-map reg_0 (bv 0 (bitvector 8)))
 
 
 (define mlir-expr 
+(tensor-add (arith:tensor-mul (tensor-ext-stride a)
+ (tensor-broadcast )
+) (tensor-add (arith:tensor-mul (tensor-ext-stride a)
+ (tensor-broadcast )
+)  reg_0)
+)
+
 
 )
 
