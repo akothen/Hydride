@@ -140,8 +140,11 @@ class GetOutPrecDef:
         for ctx in dsl_inst.contexts:
             cond_clauses.append(self.emit_ctx_prec_clause(ctx, dsl_inst.get_sample_context()))
 
+        cond_clauses.append("[else (error \"Unable to infer prec for {}\")]".format(dsl_inst.name))
+
         cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
         clause.append(cond_expr)
+
 
 
 

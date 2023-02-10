@@ -109,6 +109,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     sp = parse_spec(spec)
 
+    sp.set_target(TARGET)
+
 
     write_to_file(rosette_imports.format(spec['name']))
     write_to_file(hydride_header)

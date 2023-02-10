@@ -66,6 +66,18 @@ namespace Halide {
                     debug(0) << "Distribute number of bitvector sizes:\t" << bitvector_sizes.size() <<"\n";
                 }
 
+
+
+                DistributeVec(std::vector<unsigned> bv_sizes, bool supports_sat) {
+                    supports_saturating_operations = supports_sat;
+                    std::sort(bv_sizes.begin(), bv_sizes.end());
+                    for(unsigned bv_size : bv_sizes){
+                        bitvector_sizes.insert( bitvector_sizes.begin() ,bv_size);
+                    }
+
+                    debug(0) << "Distribute number of bitvector sizes:\t" << bitvector_sizes.size() <<"\n";
+                }
+
                 // Supported vector sizes to distribute into. Sorted in descending order
                 // with a preference of using larger vector sizes when possible.
                 std::vector<unsigned> bitvector_sizes;
@@ -132,6 +144,8 @@ namespace Halide {
 
                 bool is_divisible_into_vector_size(size_t sz);
 
+                bool supports_saturating_operations = false;
+
 
 
 
@@ -141,7 +155,7 @@ namespace Halide {
         };
 
         Stmt distribute_vector_exprs(Stmt S, unsigned bitwidth);
-        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bitwidths);
+        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bitwidths, bool supports_sat);
 
     }  // namespace Internal
 

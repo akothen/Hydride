@@ -75,7 +75,7 @@
     [(x128 sca) 128]
     [(x256 sca) 256]
     [(x512 sca) 512]
-    [(xBroadcast sca factor) factor]
+    [(xBroadcast sca factor) (* factor (vec-len sca))]
 
     [(ramp base stride len) len]
     [(load buf idxs alignment) (vec-len idxs)]

@@ -2636,7 +2636,22 @@ namespace Halide {
                         }
 
 
-                        if((!supported && !is_const(op->value))  || (_arch == Architecture::HVX && op->type.bits() >= 64)){
+                        const Broadcast* inner_broadcast = op->value.as<Broadcast>();
+
+                        if(inner_broadcast){
+
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+
+                        }
+
+
+                        if((!supported && !is_const(op->value))  
+                                || (_arch == Architecture::HVX && op->type.bits() >= 64)
+                                //|| (_arch == Architecture::HVX && op->type.bits() == 16 && op->type.bits() == 2)
+                                
+                                ){
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2850,6 +2865,46 @@ namespace Halide {
                         return IRMutator::visit(op);
 
                     }
+                    
+                    // For certain targets, even when broadcasting elements of
+                    // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
+                    // Without loss of generality, depending on the target, we modify our broadcasts
+                    // to accomodate such behavior when needed.
+                    Expr visit(const Broadcast *op) override{
+
+                        size_t bits = op->type.bits();
+                        size_t lanes = op->type.lanes();
+
+                        if(lanes == 1){
+                            return op->value;
+                        }
+
+                        if(!op->type.is_float() && op->type.is_vector()){
+
+                            if(bits == 16 && op->value.type().lanes() != 2){
+
+
+
+                                debug(0) << "======"<<"\n";
+                                debug(0) << "Orignal bits: "<<bits << ", Original lanes: "<<lanes <<"\n";
+                                Expr Broadcast2 = Broadcast::make(op->value, 2);
+                                Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
+                                debug(0) << "Modified broadcast to "<< ModifiedBroadcast <<"\n";
+                                debug(0) << "Modified broadcast bits  "<< ModifiedBroadcast.type().bits() << " and lanes "<<ModifiedBroadcast.type().lanes() <<"\n";
+                                return ModifiedBroadcast;
+                            }
+                            else {
+                                return op;
+                            }
+
+
+                        }
+
+
+                        return IRMutator::visit(op);
+
+                    }
+
 
                     public:
                     ReplaceDiv(){}
@@ -3322,7 +3377,16 @@ namespace Halide {
             debug(1) << pruned <<"\n";
             
             std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
-            auto distributed = distribute_vector_exprs(pruned, hvx_vector_sizes);
+
+
+            bool model_sat_support = false;
+
+            const char* enable_hydride = getenv("HL_BENCH_MATMUL");
+            if(enable_hydride){
+                debug(0) << "Setting model saturating support true" << "\n";
+                model_sat_support = true;
+            }
+            auto distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
             debug(0) << "Distributed Stmt:\n";
             debug(0) << distributed <<"\n";
 
@@ -3338,7 +3402,10 @@ namespace Halide {
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::Hexagon, "/tmp/"+name+".rkt","/tmp/"+name+".ll", name);
+            } else {
+                debug(0) << "[Warning]: No hydride expressions synthesized (Make sure the input program is vectorized)\n";
             }
+
 
             return  Result;
         }
@@ -3360,7 +3427,7 @@ namespace Halide {
             debug(1) << pruned <<"\n";
 
             std::vector<unsigned> x86_vector_sizes = { 512, 256, 128 };
-            auto distributed = distribute_vector_exprs(pruned, x86_vector_sizes);
+            auto distributed = distribute_vector_exprs(pruned, x86_vector_sizes, false);
             debug(0) << "Distributed Stmt:\n";
             debug(0) << distributed <<"\n";
 
@@ -3373,6 +3440,8 @@ namespace Halide {
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::X86, "/tmp/"+name+".rkt","/tmp/"+name+".ll", name);
+            } else {
+                debug(0) << "[Warning]: No hydride expressions synthesized (Make sure the input program is vectorized)\n";
             }
 
             return Result;
@@ -3383,6 +3452,7 @@ namespace Halide {
 
             std::set<const BaseExprNode *> mutated_exprs;
             s = hydride_optimize_x86(fvb, s, mutated_exprs);
+
 
             return s;
 

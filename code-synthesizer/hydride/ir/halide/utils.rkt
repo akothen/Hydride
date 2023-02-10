@@ -238,7 +238,7 @@
     [(sca-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(sca-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(sca-absd v1 v2) (append (list abs bvsub bvor) (if (halide:is-signed-expr? v1 v2) (list bvsge sign-extend bvsmax bvsmin) (list bvuge zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list bvsge  bvsmax bvsmin) (list bvuge bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-shl v1 v2) (append (list bvshl) (if (halide:is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  sign-extend) (list bvlshr  zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-clz v1) (append empty-list (get-bv-ops v1) )]
@@ -262,9 +262,10 @@
     [(vec-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-absd v1 v2) (append (list  bvsub bvor) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvsmax bvsmin) (list  zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) )] ;(get-bv-ops v2))]
+    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)  )];  (get-bv-ops v2))]
+    ;[(vec-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list   bvsmax bvsmin ) (list   bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-absd v1 v2) (append (list  bvsub )  (get-bv-ops (vec-max v1 v2))  (get-bv-ops (vec-min v1 v2)) )]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
 
     [(vec-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
@@ -1819,6 +1820,11 @@
               [(ramp base stride len)
                 (set! scaled? #f)
                 (ramp base stride (/ len scale-factor))
+               ]
+
+              [(slice_vectors vec base stride len)
+               (slice_vectors vec (/ base scale-factor) stride (/ len scale-factor))
+                
                ]
 
               [v 

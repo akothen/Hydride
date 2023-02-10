@@ -15,9 +15,6 @@ namespace Halide {
         std::vector<Expr> DistributeVec::visit(const Ramp* op, unsigned num_chunks){
             debug(0) << "Distribute ramp into "<<num_chunks << " chunks \n";
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
 
             Expr OrigRamp = Ramp::make(op->base, op->stride, op->lanes);
@@ -74,9 +71,6 @@ namespace Halide {
 
             debug(0) << "Distribute Load into " << num_chunks << "!\n";
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -95,8 +89,9 @@ namespace Halide {
                 bool divisible = (bitvector_sizes[0] % num_bits) == 0;
 
 
-                std::vector<Expr> distributed_predicate = dispatch(op->predicate, num_chunks);
+
                 std::vector<Expr> distributed_index = dispatch(op->index, num_chunks);
+                std::vector<Expr> distributed_predicate = dispatch(op->predicate, num_chunks);
 
 
                 int lanes_per_chunk = op->type.lanes() / num_chunks ;
@@ -110,6 +105,13 @@ namespace Halide {
                 // Distribute load over 'chunks' number of equally sized
                 // expressions.
                 for(unsigned i = 0; i < num_chunks; i++){
+                    debug(0) << "Original Load: "<<Combined <<"\n";
+                    debug(0) << "Original predicate: " << op->predicate << "\n";
+                    debug(0) << "Original index: "<< op->index <<"\n";
+                    debug(0) << "Distributed Index size: "<< distributed_index.size() << "\n";
+                    debug(0) << "Distributed Predicate size: "<< distributed_predicate.size() << "\n";
+                    
+                    debug(0) << "Vector lanes of Load: "<< new_load_ty.lanes() << ", vector lanes of predicate: "<<distributed_predicate[i].type().lanes()<<"\n";
                     Expr new_load = Load::make(new_load_ty, op->name, distributed_index[i], op->image, op->param, distributed_predicate[i], op->alignment );
                     
                     //Expr new_load_slice = Shuffle::make_slice(Combined, (int) i * lanes_per_chunk, 1, lanes_per_chunk);
@@ -146,9 +148,6 @@ namespace Halide {
 #define DISTRIBUTE_BINARY_OP(OP_NAME) \
         std::vector<Expr> DistributeVec::visit(const OP_NAME* op, unsigned num_chunks){ \
             debug(0) << "Distributing Binary Op! into num chunks " << num_chunks << "\n";\
-            if(DistribMap.find(op) != DistribMap.end()){ \
-                return  DistribMap[op]->distributed_expressions; \
-            } \
             std::vector<Expr> exprs; \
             \
             \
@@ -214,9 +213,6 @@ namespace Halide {
         std::vector<Expr> DistributeVec::visit(const Not* op, unsigned num_chunks){
 
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -267,9 +263,6 @@ namespace Halide {
         std::vector<Expr> DistributeVec::visit(const Cast* op, unsigned num_chunks){
             debug(0) << "Distribute Cast into " << num_chunks<< "!\n";
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -360,9 +353,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const Variable* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -416,9 +406,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const Select* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -467,9 +454,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const VectorReduce* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -482,9 +466,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const IntImm* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -497,9 +478,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const UIntImm* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -511,9 +489,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const FloatImm* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -525,9 +500,6 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const StringImm* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -539,9 +511,8 @@ namespace Halide {
 
         std::vector<Expr> DistributeVec::visit(const Broadcast* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
+            
+            debug(0) << "Distribute Broadcast into " << num_chunks << "!\n";
 
             std::vector<Expr> exprs;
 
@@ -664,8 +635,14 @@ namespace Halide {
 
             bool distrib = false;
 
-            DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(saturating_add) // TODO: Widens internally, distribute differently
-            DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(saturating_sub) // TODO: Widens internally, distribute differently
+            if(supports_saturating_operations){
+                DISTRIBUTE_CALL_CLAUSE(saturating_add) // TODO: Widens internally, distribute differently
+                DISTRIBUTE_CALL_CLAUSE(saturating_sub) // TODO: Widens internally, distribute differently
+
+            } else {
+                DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(saturating_add) // TODO: Widens internally, distribute differently
+                DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(saturating_sub) // TODO: Widens internally, distribute differently
+            }
             DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(halving_add)// TODO: Widens internally, distribute differently
             DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(halving_sub)// TODO: Widens internally, distribute differently
             DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(rounding_halving_add)  // TODO: Widens internally, distribute differently
@@ -817,9 +794,6 @@ namespace Halide {
         // Cross lane operation, hence not as simple to distribute. Currently, we simplify extract the results of the expression
         std::vector<Expr> DistributeVec::visit(const Shuffle* op, unsigned num_chunks){
 
-            if(DistribMap.find(op) != DistribMap.end()){
-                return  DistribMap[op]->distributed_expressions;
-            }
 
             std::vector<Expr> exprs;
 
@@ -888,7 +862,7 @@ namespace Halide {
 
             unsigned num_lanes = op->value.type().lanes();
             unsigned bits = op->value.type().bits();
-            VectorInfo VI;
+            VectorInfo VI(supports_saturating_operations);
             op->value.accept(&VI);
 
 
@@ -1093,11 +1067,11 @@ namespace Halide {
         }
 
         // High level driver for distributing vector expressions
-        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bv_sizes){
+        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bv_sizes,bool supports_sat_operations){
             debug(0) << "Invoked distribute_vector_exprs with multiple bitwidths \n";
             Stmt inlined = substitute_in_all_lets(S);
 
-            return (simplify(DistributeVec(bv_sizes).dispatch(inlined)));
+            return (simplify(DistributeVec(bv_sizes,supports_sat_operations).dispatch(inlined)));
 
 
         }

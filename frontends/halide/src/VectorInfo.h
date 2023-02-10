@@ -38,8 +38,9 @@ namespace Halide {
 
                 unsigned max_width;
                 bool contains_dynamic_shuffle;
+                bool supports_saturating_operations;
 
-                VectorInfo() : max_width(0), contains_dynamic_shuffle(false) {}
+                VectorInfo(bool sup_sat) : max_width(0), contains_dynamic_shuffle(false), supports_saturating_operations(sup_sat) {}
 
                 /*
                 void visit(const Variable* op) override;
@@ -108,8 +109,18 @@ namespace Halide {
         void visit(const Call* op) override {
             debug(0) << "Vector info on Call node\n";
 
-            INFO_CALL_INTERNAL_WIDEN_CLAUSE(saturating_add) // TODO: Widens internally, distribute differently
-            INFO_CALL_INTERNAL_WIDEN_CLAUSE(saturating_sub) // TODO: Widens internally, distribute differently
+
+            if(supports_saturating_operations){
+
+                INFO_CALL_CLAUSE(saturating_add) // TODO: Widens internally, distribute differently
+                INFO_CALL_CLAUSE(saturating_sub) // TODO: Widens internally, distribute differently
+
+            } else {
+
+                INFO_CALL_INTERNAL_WIDEN_CLAUSE(saturating_add) // TODO: Widens internally, distribute differently
+                INFO_CALL_INTERNAL_WIDEN_CLAUSE(saturating_sub) // TODO: Widens internally, distribute differently
+
+            }
             INFO_CALL_INTERNAL_WIDEN_CLAUSE(halving_add)// TODO: Widens internally, distribute differently
             INFO_CALL_INTERNAL_WIDEN_CLAUSE(halving_sub)// TODO: Widens internally, distribute differently
             INFO_CALL_INTERNAL_WIDEN_CLAUSE(rounding_halving_add)  // TODO: Widens internally, distribute differently

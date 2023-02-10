@@ -73,6 +73,7 @@ class ScaleDef:
 
                     clauses.append(condition)
 
+            clauses.append("[else (error \"Unable to identify how to scale up \" prog)]")
 
             new_expr.append("(cond ")
             new_expr += clauses

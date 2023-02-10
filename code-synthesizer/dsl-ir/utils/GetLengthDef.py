@@ -162,7 +162,10 @@ class GetLengthDef:
         if len(cond_clauses) == 1 and output_size_arg != None and False:
             clause.append(output_size_arg.name)
         else:
+
+            cond_clauses.append("[else (error \"Unable to infer length for {}\")]".format(dsl_inst.name))
             cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
+
             clause.append(cond_expr)
 
 
