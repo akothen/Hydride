@@ -22,7 +22,7 @@
 #include "llvm/Support/Debug.h"
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/IR/IntrinsicsHexagon.h"
-#include "HexLegalizer.h"
+#include "Legalizer.h"
 
       namespace llvm {
       class HexLegalizationPass : public FunctionPass {
@@ -35,7 +35,7 @@
       }
     
     using namespace llvm;
-    class HexLegalizer : public HexBaseLegalizer {
+    class HexLegalizer : public Legalizer {
     public:
     
     virtual bool legalize(Instruction *I) {
@@ -47,7 +47,7 @@
       
       if (CI->getCalledFunction()->getName().contains("llvm_shuffle_vectors_dsl")) {
         errs() << "INST FUNCTION NAME: " << "llvm_shuffle_vectors" << "\n"; 
-        auto *Inst = new ShuffleVectorInst(V1, V2, Mask, "", CI);
+        auto *Inst = new ShuffleVectorInst(CI->getOperand(0), CI->getOperand(1), CI->getOperand(4), "", CI);
         errs() << "NEW INSTUCTION:" << *Inst << "\n"; 
         InstToInstMap[CI] = Inst;
         ToBeRemoved.insert(CI); 
@@ -7854,7 +7854,7 @@
         return false;
       // Initialize the legalizer
       errs() << "LEGALIZATION BEGIN\n";
-      HexBaseLegalizer *L = new HexLegalizer();
+      Legalizer *L = new HexLegalizer();
       return L->legalize(F);
     }
     
