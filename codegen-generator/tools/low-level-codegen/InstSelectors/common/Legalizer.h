@@ -151,6 +151,20 @@ public:
     errs() << "getArgsAfterPermutation:" << "\n";
     errs() << "OriginalInst:" << *OriginalInst << "\n";
     errs() << "InstFunction" << *InstFunction << "\n";
+    errs() << "Permutation[0]:" << Permutation[0] << "\n";
+    errs() << "Permutation.size():" << Permutation.size() << "\n";
+    // Get the required types
+    std::vector<Type *> RequiredTypes;
+    for (auto &Arg : InstFunction->args())
+      RequiredTypes.push_back(Arg.getType());
+    if (RequiredTypes.size() == 1) {
+      errs() << "OriginalInst->getOperand(0):" << *(OriginalInst->getOperand(0)) << "\n";
+      auto *Bitvector = getBitvectorOfRequiredType(OriginalInst->getOperand(0), 
+                                    RequiredTypes[0], InsertBefore);
+      if (Bitvector == nullptr)
+        return std::vector<Value *>();
+      return std::vector<Value *>{Bitvector};
+    }
     // Get bitvector list
     std::vector<Value *> BitvectorList;
     errs() << "OriginalInst->getNumOperands():" << OriginalInst->getNumOperands() << "\n";
@@ -158,10 +172,6 @@ public:
       errs() << "OriginalInst->getOperand(I):" << *Operand << "\n";
       BitvectorList.push_back(Operand);
     }
-    // Get the required types
-    std::vector<Type *> RequiredTypes;
-    for (auto &Arg : InstFunction->args())
-      RequiredTypes.push_back(Arg.getType());
     // Some sanity checks
     //assert(BitvectorList.size() == RequiredTypes.size() 
     //      && "Error: BitvectorList.size() != RequiredTypes.size()");
@@ -314,5 +324,3 @@ public:
 }   // end of namespace llvm
 
 #endif  // HYDRIDE_LEGALIZER_H
-
-
