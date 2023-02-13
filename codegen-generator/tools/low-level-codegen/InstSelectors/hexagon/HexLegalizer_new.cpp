@@ -22,7 +22,8 @@
 #include "llvm/Support/Debug.h"
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/IR/IntrinsicsHexagon.h"
-#include "Legalizer.h"
+#include "HexLegalizer.h"
+
       namespace llvm {
       class HexLegalizationPass : public FunctionPass {
       public:
@@ -34,7 +35,7 @@
       }
     
     using namespace llvm;
-    class HexLegalizer : public Legalizer {
+    class HexLegalizer : public HexBaseLegalizer {
     public:
     
     virtual bool legalize(Instruction *I) {
@@ -43,6 +44,15 @@
         return false;
       if (InstToInstMap[CI] != nullptr)
         return false;
+      
+      if (CI->getCalledFunction()->getName().contains("llvm_shuffle_vectors_dsl")) {
+        errs() << "INST FUNCTION NAME: " << "llvm_shuffle_vectors" << "\n"; 
+        auto *Inst = new ShuffleVectorInst(V1, V2, Mask, "", CI);
+        errs() << "NEW INSTUCTION:" << *Inst << "\n"; 
+        InstToInstMap[CI] = Inst;
+        ToBeRemoved.insert(CI); 
+        return true;
+      }
       
       if(CI->getCalledFunction()->getName().contains("llvm.hydride.hexagon_V6_vaslh_acc_128B_dsl")) { 
         
@@ -4150,6 +4160,7 @@
             std::vector<int> Permutation = {-1,-1,-1,-1,-1,-1,-1}; 
             std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
             if (Args.size() != 0) {
+              errs() << "*Args[0]:" << *Args[0] << "\n";
               auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
               errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
               InstToInstMap[CI] = NewCallInst; 
@@ -7843,7 +7854,7 @@
         return false;
       // Initialize the legalizer
       errs() << "LEGALIZATION BEGIN\n";
-      Legalizer *L = new HexLegalizer();
+      HexBaseLegalizer *L = new HexLegalizer();
       return L->legalize(F);
     }
     
