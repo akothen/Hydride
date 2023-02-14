@@ -20,8 +20,8 @@ from RoseValidityChecker import *
 from RoseTargetInfo import *
 from RoseTransformationsVerifier import *
 
-import threading
 from copy import deepcopy
+
 
 NumThreads = 1
 
@@ -38,7 +38,6 @@ class RoseSimilarityChecker():
     self.FunctionToArgPermutationMap = dict()
     self.FunctionToCopies = dict()
     self.EQToEQMap = dict()
-    #self.Pool = multiprocessing.Pool(NumThreads)
     self.initializeSimilarityChecker()
 
   def initializeSimilarityChecker(self):
@@ -109,12 +108,7 @@ class RoseSimilarityChecker():
         Verifier = RoseTransformationVerifier(TargetSpecificInfo, FunctionInfo)
         assert Verifier.verifyEquivalence() == True
         # Map the target agnostic funtion to target specific
-        ArgPermutation = list()
-        for Arg in FunctionInfo.getLatestFunction().getArgs():
-          if Arg in FunctionInfo.getTargetSpecificFunction().getArgs():
-            ArgPermutation.append(FunctionInfo.getTargetSpecificFunction().getIndexOfArg(Arg))
-          else:
-            ArgPermutation.append(-1)
+        ArgPermutation = self.getArgPermutation(FunctionInfo)
         self.FunctionToArgPermutationMap[FunctionInfo.getLatestFunction()] = ArgPermutation
         print("!!!!!!!!!!!!!!!!!ORIGINAL FUNCTION:")
         FunctionInfo.getTargetSpecificFunction().print()
@@ -123,6 +117,55 @@ class RoseSimilarityChecker():
       print("ALL VERIFICATION DONE")
 
   
+  def getArgPermutation(self, FunctionInfo : RoseFunctionInfo):
+    ArgPermutation = list()
+    for Arg in FunctionInfo.getLatestFunction().getArgs():
+      if not isinstance(Arg.getType(), RoseBitVectorType):
+        ArgPermutation.append(-1)
+        continue
+      if not isinstance(Arg.getType().getBitwidth(), RoseArgument):
+        if Arg in FunctionInfo.getTargetSpecificFunction().getArgs():
+          ArgPermutation.append(FunctionInfo.getTargetSpecificFunction().getIndexOfArg(Arg))
+        else:
+          ArgPermutation.append(-1)
+        continue
+      assert FunctionInfo.argHasConcreteVal(Arg.getType().getBitwidth()) == True
+      print("\n\n______________________________________________")
+      ClonedArg = Arg.clone()
+      print("Arg.getType().getBitwidth():")
+      print(Arg.getType().getBitwidth())
+      print("ClonedArg.getType().getBitwidth():")
+      print(ClonedArg.getType().getBitwidth())
+      print("FunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth():")
+      print(FunctionInfo.getConcreteValFor(Arg.getType().getBitwidth()))
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        ClonedArg.setType(RoseBitVectorType.create( \
+              FunctionInfo.getConcreteValFor(Arg.getType().getBitwidth()).getValue()))
+      else:
+        assert isinstance(Arg.getType(), RoseIntegerType)
+        ClonedArg.setType(RoseIntegerType.create( \
+              FunctionInfo.getConcreteValFor(Arg.getType().getBitwidth()).getValue()))
+      print("Arg:")
+      Arg.print()
+      Arg.getType().print()
+      print(Arg.getType())
+      print(Arg.getType().getBitwidth())
+      print("ARG ID:")
+      print(Arg.ID)
+      print("ClonedArg:")
+      ClonedArg.print()
+      ClonedArg.getType().print()
+      print(ClonedArg.getType())
+      print(ClonedArg.getType().getBitwidth())
+      print("CLONED ARG ID:")
+      print(ClonedArg.ID)
+      if ClonedArg in FunctionInfo.getTargetSpecificFunction().getArgs():
+        ArgPermutation.append(FunctionInfo.getTargetSpecificFunction().getIndexOfArg(ClonedArg))
+      else:
+        ArgPermutation.append(-1)
+    return ArgPermutation
+  
+
   def replaceUsesofConcreteArgsAndGetFunction(self, FunctionInfo : RoseFunctionInfo, DoNotCopy : bool = False):
     print("*****FunctionInfo.ArgsToConcreteValMap:")
     for Arg, Val in FunctionInfo.ArgsToConcreteValMap.items():
@@ -464,8 +507,8 @@ class RoseSimilarityChecker():
     # Try another heuristic
     print("****TRY NEW HEURISTIC****")
     self.reorderArgsAndPerformSimilarityChecking()
-    print("****TRY ANOTHER HEURISTIC****")
-    self.refineSimilarityChecking()
+    #print("****TRY ANOTHER HEURISTIC****")
+    #self.refineSimilarityChecking()
     print("****ELIMINATE ARGUMENTS****")
     self.eliminateUnecessaryArgs()
     print("****SUMMARIZE****")
@@ -2137,7 +2180,7 @@ class RoseSimilarityChecker():
     RosetteCode = ""
     if DepthVarName != None:
       assert isinstance(DepthVarName, str)
-      OuterFuncName = RosetteFuncName + "_sketch
+      OuterFuncName = RosetteFuncName + "_sketch"
       RosetteCode.append("(define (" + OuterFuncName + "_sketch" + DepthVarName + ")")
     RosetteCode.append("(define (" + RosetteFuncName + " params)")
     RosetteCode.append(RosetteImplCode)
@@ -2327,9 +2370,9 @@ class RoseSimilarityChecker():
 
 
 if __name__ == '__main__':
-  #SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
+  SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
   #SimilarityChecker = RoseSimilarityChecker(["Hexagon", "x86"])
-  SimilarityChecker = RoseSimilarityChecker(["x86"])
+  #SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.performSimilarityChecking()
   #SimilarityChecker.parallelizeSimilarityChecking()
 
