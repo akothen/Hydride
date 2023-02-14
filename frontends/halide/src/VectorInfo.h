@@ -38,9 +38,10 @@ namespace Halide {
 
                 unsigned max_width;
                 bool contains_dynamic_shuffle;
+                bool contains_vector_reduce;
                 bool supports_saturating_operations;
 
-                VectorInfo(bool sup_sat) : max_width(0), contains_dynamic_shuffle(false), supports_saturating_operations(sup_sat) {}
+                VectorInfo(bool sup_sat) : max_width(0), contains_dynamic_shuffle(false), contains_vector_reduce(false) ,supports_saturating_operations(sup_sat)  {}
 
                 /*
                 void visit(const Variable* op) override;
@@ -105,6 +106,13 @@ namespace Halide {
                 unsigned bitwidth = op->type.bits() * op->type.lanes() * 1;\
                 max_width = std::max(bitwidth, max_width);\
                 }
+
+
+        void visit(const VectorReduce *op) override{
+            contains_vector_reduce = true;
+
+        }
+
 
         void visit(const Call* op) override {
             debug(0) << "Vector info on Call node\n";

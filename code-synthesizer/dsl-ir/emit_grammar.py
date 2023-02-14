@@ -15,7 +15,7 @@ from legal_insts import legal_map
 from Specification import Specification, parse_spec
 
 
-from HexSemanticsAllArgs import hvx_semantics
+from hexsemantics_new import semantics as hvx_semantics
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator

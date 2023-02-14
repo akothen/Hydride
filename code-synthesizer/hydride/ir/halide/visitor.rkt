@@ -147,6 +147,8 @@
 
     [(vec-bwand v1 v2) (handler (vec-bwand (visit v1 handler) (visit v2 handler)))]
 
+    [(vec-bwnot v1) (handler (vec-bwnot (visit v1 handler) ))]
+
     [(vector_reduce op width vec) (handler (vector_reduce op width (visit vec handler)))]
 
     ;; Shuffles

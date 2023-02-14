@@ -203,6 +203,8 @@
 
     [(vec-bwand v1 v2) (vec-len v1)]
 
+    [(vec-bwnot v1 ) (vec-len v1)]
+
     [(vector_reduce op width vec) (quotient (vec-len vec) width)]
 
     ;; Shuffles
@@ -352,6 +354,7 @@
     [(vec-shr v1 v2) (list v1 v2)]
 
     [(vec-bwand v1 v2) (list v1 v2)]
+    [(vec-bwnot v1 ) (list v1 )]
 
     [(vector_reduce op width vec) (list vec)]
 
@@ -570,6 +573,8 @@
     [(vec-clz v1) (lambda (i) (do-clz ((interpret v1) i)))]
 
     [(vec-bwand v1 v2) (lambda (i) (do-bwand ((interpret v1) i) ((interpret v2) i)))]
+
+    [(vec-bwnot v1) (lambda (i) (do-bwnot ((interpret v1) i) ))]
 
     [(vector_reduce op width vec)
      (cond
@@ -953,6 +958,13 @@
     [else
      (define outT (infer-out-type lhs rhs))
      (mk-cpp-expr (bvand (cpp:eval lhs) (cpp:eval rhs)) outT)]))
+
+
+(define (do-bwnot lhs)
+  (cond
+    [else
+     (define outT (infer-out-type lhs lhs))
+     (mk-cpp-expr (bvnot (cpp:eval lhs) ) outT)]))
 
 (define (do-reduce vec op base width)
   (define outT (cpp:type (vec 0)))

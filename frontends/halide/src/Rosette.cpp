@@ -586,6 +586,9 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::bitwise_and)) {
                             return print_intrinsic("bwand", op->args, op->type.is_scalar());
                         } 
+                        else if (op->is_intrinsic(Call::bitwise_not)) {
+                            return print_intrinsic("bwnot", op->args, op->type.is_scalar());
+                        } 
                         else if (op->is_intrinsic(Call::bitwise_xor)) {
                             return print_intrinsic("bwxor", op->args, op->type.is_scalar());
                         } 
@@ -1961,7 +1964,7 @@ namespace Halide {
                             size_t element_bits = op->args[0].type().bits();
 
                             if(_arch ==  Architecture::HVX){
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
@@ -1989,7 +1992,7 @@ namespace Halide {
                             size_t element_bits = op->args[0].type().bits();
                             if(_arch ==  Architecture::HVX){
 
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
@@ -2019,7 +2022,7 @@ namespace Halide {
 
                             if(_arch ==  Architecture::HVX){
 
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                                 } else {
                                     lower_using_halide = true;
@@ -2070,7 +2073,7 @@ namespace Halide {
                             }
 
                             if(_arch ==  Architecture::HVX){
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                                 } else {
                                     lower_using_halide = true;
@@ -2119,7 +2122,7 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::widening_mul)) {
                             if(_arch ==  Architecture::HVX){
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = (widen(op->args[0]) * widen(op->args[1]));
                                 } else {
                                     lower_using_halide = true;
@@ -2137,7 +2140,7 @@ namespace Halide {
                             if(_arch ==  Architecture::HVX){
                                 //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = (widen(op->args[0]) + widen(op->args[1]));
                                 } else {
                                     lower_using_halide = true;
@@ -2155,7 +2158,7 @@ namespace Halide {
                             if(_arch ==  Architecture::HVX){
                                 //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = (widen(op->args[0]) - widen(op->args[1]));
                                 } else {
                                     lower_using_halide = true;
@@ -2175,7 +2178,7 @@ namespace Halide {
                             if(_arch ==  Architecture::HVX){
                                 //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = widen(op->args[0]) << op->args[1];
                                 } else {
                                     lower_using_halide = true;
@@ -2194,7 +2197,7 @@ namespace Halide {
                             if(_arch ==  Architecture::HVX){
                                 //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = widen(op->args[0]) >> op->args[1];
                                 } else {
                                     lower_using_halide = true;
@@ -2214,7 +2217,7 @@ namespace Halide {
                             if(_arch ==  Architecture::HVX){
                                 //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                                 } else {
                                     lower_using_halide = true;
@@ -2235,7 +2238,7 @@ namespace Halide {
 
                             if(_arch ==  Architecture::HVX){
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 64){
+                                if(element_bits < 32){
                                     lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                                 } else {
                                     lower_using_halide = true;
@@ -2302,7 +2305,34 @@ namespace Halide {
                     std::map<std::string, Expr> &abstractions;
                     Architecture _arch;
 
+                    std::vector<Call::IntrinsicOp> supported_calls = {
+                        Call::saturating_add,
+                        Call::saturating_sub,
+                        Call::shift_right,
+                        Call::shift_left,
+                        Call::absd,
+                        Call::bitwise_and,
+                        Call::bitwise_not,
+                        Call::bitwise_xor,
+                        Call::if_then_else
+                    };
+
                     Expr visit(const Call *op) override {
+
+                        bool supported = false;
+                        for(auto IntrinID : supported_calls){
+                            if(op->is_intrinsic(IntrinID)){
+                                supported = true;
+                            }
+                        }
+
+                        if(!supported){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+
                         if (op->is_intrinsic(Call::dynamic_shuffle)) {
                             std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
@@ -2343,6 +2373,7 @@ namespace Halide {
                             return Variable::make(op->type, uname);
 
                         }
+
 
                         else
                             return IRMutator::visit(op);

@@ -61,6 +61,7 @@
 (require hydride/ir/hvx/visitor)
 (require hydride/ir/hvx/scale)
 (require hydride/ir/hvx/get_ops)
+(require hydride/ir/hvx/get_name)
 
 
 ;; CPP IR
@@ -88,6 +89,7 @@
 (require hydride/synthesis/lower_swizzle)
 (require hydride/synthesis/scalable_synthesis)
 (require hydride/synthesis/ir_to_ir_transform)
+(require hydride/synthesis/hash_utils)
 
 
 
@@ -124,6 +126,7 @@
   (all-from-out hydride/ir/hvx/visitor)
   (all-from-out hydride/ir/hvx/scale)
   (all-from-out hydride/ir/hvx/get_ops)
+  (all-from-out hydride/ir/hvx/get_name)
 
 
   (all-from-out hydride/cpp)
@@ -148,5 +151,6 @@
   (all-from-out hydride/synthesis/lower_swizzle)
   (all-from-out hydride/synthesis/scalable_synthesis)
   (all-from-out hydride/synthesis/ir_to_ir_transform)
+  (all-from-out hydride/synthesis/hash_utils)
   )
 

@@ -127,7 +127,7 @@ class LaneSize(OperandType):
 
 
     def print_operand(self, prefix = ""):
-        print("{} {}\t| Lane Size {}".format(prefix, self.name, self.value))
+        print("{} {} {} \t| Lane Size {}".format(prefix, self.name, self.value, self.value))
 
 
 class Precision(OperandType):
@@ -182,7 +182,7 @@ class Integer(OperandType):
 
 
     def print_operand(self, prefix = ""):
-        print("{} {}\t| Integer {}".format(prefix, self.name, self.value))
+        print("{} {} {} \t| Integer {}".format(prefix, self.name, self.value,  self.value))
 
 
 class IndexVariable(OperandType):

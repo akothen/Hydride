@@ -884,6 +884,12 @@ namespace Halide {
 
             }
 
+            if(VI.contains_vector_reduce){
+                debug(0) << "Contains vector reduce, skipping!" << "\n";
+                return OrigStore;
+
+            }
+
             OrigStore = substitute_in_all_lets(OrigStore);
 
 
@@ -913,9 +919,9 @@ namespace Halide {
 
                 unsigned num_chunks = max_bitwidth / bitvector_size;
 
-                if(!is_divisible_into_vector_size(num_chunks * bits)){
-                    num_chunks = 1; 
-                }
+                //if(!is_divisible_into_vector_size(num_chunks * bits)){
+                //    num_chunks = 1; 
+                //}
 
                 debug(0) << "Need to distribute stores into "<<num_chunks <<" chunks!\n";
 

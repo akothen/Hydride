@@ -269,6 +269,7 @@
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
 
     [(vec-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+    [(vec-bwnot v1 ) (append (list extract bvnot) (get-bv-ops v1)  )]
 
     [(vector_reduce op width vec)
      (cond
@@ -1303,6 +1304,16 @@
         )
      ]
 
+    [(vec-bwnot v1 )
+       (if is-leaf-depth
+        (values (vec-bwnot (arg 0)) 1)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+          (values (vec-bwnot leaf1-sol) args-used1)
+        )
+        )
+     ]
+
     [(vector_reduce op width vec) 
        (if is-leaf-depth
         (values (vector_reduce op width (arg 0)) 1)
@@ -1689,6 +1700,7 @@
     [(vec-shr v1 v2) (vec-size v1)]
 
     [(vec-bwand v1 v2) (vec-size v1)]
+    [(vec-bwnot v1 ) (vec-size v1)]
 
     [(vector_reduce op width vec) (quotient (vec-size vec) width)]
 
@@ -1967,6 +1979,9 @@
               [(int-imm data signed?) 
                (set! imms-vals (append imms-vals (list data)))
                ]
+              [(vector_reduce op width vec) 
+               (set! imms-vals (append imms-vals (list (bv 1 (bitvector (vec-precision e))))))
+               ]
               ;; When target doesn't support saturating operations
               ;; of a given size then we can decompose the operation
               ;; into 
@@ -2157,6 +2172,7 @@
     [(vec-shr v1 v2) (get-elemT v1)]
 
     [(vec-bwand v1 v2) (get-elemT v1)]
+    [(vec-bwnot v1) (get-elemT v1)]
 
     [(vector_reduce op width vec) (get-elemT vec)]
 
@@ -2314,6 +2330,7 @@
     [(vec-shr v1 v2) (vec-precision v1)]
 
     [(vec-bwand v1 v2) (vec-precision v1)]
+    [(vec-bwnot v1 ) (vec-precision v1)]
 
     [(vector_reduce op width vec) (vec-precision vec)]
 
