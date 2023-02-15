@@ -112,8 +112,6 @@ class RoseSimilarityChecker():
         self.FunctionToArgPermutationMap[FunctionInfo.getLatestFunction()] = ArgPermutation
         print("!!!!!!!!!!!!!!!!!ORIGINAL FUNCTION:")
         FunctionInfo.getTargetSpecificFunction().print()
-        print("!!!!!!!!!!ORIGINAL ARG PERMUTATION:")
-        print(ArgPermutation)
       print("ALL VERIFICATION DONE")
 
   
@@ -165,7 +163,7 @@ class RoseSimilarityChecker():
         ArgPermutation.append(-1)
     return ArgPermutation
   
-
+  
   def replaceUsesofConcreteArgsAndGetFunction(self, FunctionInfo : RoseFunctionInfo, DoNotCopy : bool = False):
     print("*****FunctionInfo.ArgsToConcreteValMap:")
     for Arg, Val in FunctionInfo.ArgsToConcreteValMap.items():
@@ -205,9 +203,19 @@ class RoseSimilarityChecker():
     return CopyFunctionInfo
 
 
-  def genSymbolicInput(self, Param, NameSuffix):
+  def genSymbolicInput(self, FunctionInfo, Param, NameSuffix):
+    print("GENERATE SYMBOLIC INPUT")
+    Bitwidth = Param.getType().getBitwidth()
+    print("Bitwidth:")
+    print(Bitwidth)
+    if isinstance(Bitwidth, RoseValue):
+      if isinstance(Bitwidth, RoseConstant):
+        Bitwidth = Bitwidth.getValue()
+      else:
+        # There better be a concrete value
+        Bitwidth = FunctionInfo.getConcreteValFor(Bitwidth).getValue()
     Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
-                                        str(Param.getType().getBitwidth()))
+                                        str(Bitwidth))
     return Input
 
   def genConcreteInput(self, Param : RoseArgument, ConcreteArg : RoseConstant, NameSuffix : str):
@@ -255,7 +263,7 @@ class RoseSimilarityChecker():
     Code = ""
     for Arg in  Function.getArgs():
       if FunctionInfo.argHasConcreteVal(Arg) == False:
-        Code += self.genSymbolicInput(Arg, NameSuffix)
+        Code += self.genSymbolicInput(FunctionInfo, Arg, NameSuffix)
       else:
         ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
         Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix)
@@ -511,7 +519,7 @@ class RoseSimilarityChecker():
     #self.refineSimilarityChecking()
     print("****ELIMINATE ARGUMENTS****")
     self.eliminateUnecessaryArgs()
-    print("****SUMMARIZE****")
+    self.genArgPermuatationsForEquivalenceClasses()
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
@@ -535,7 +543,7 @@ class RoseSimilarityChecker():
     if NumBVArgs1 != NumBVArgs2:
       return False
     # Number of mask and selet operations must be the same as well.
-    # TODO: Are there other weed-out criteria?
+    # TODO: Are there other weed out criteria?
     return True
 
 
@@ -1001,8 +1009,10 @@ class RoseSimilarityChecker():
         CopyFunctionInfo.setInVectorLengthIndex(PermArgIdx)
       if OrgArgIndex == OriginalFunctionInfo.getOutVectorLengthIndex():
         CopyFunctionInfo.setOutVectorLengthIndex(PermArgIdx)
-      if OrgArgIndex == OriginalFunctionInfo.getLaneSizeIndex():
-        CopyFunctionInfo.setLaneSizeIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getOutLaneSizeIndex():
+        CopyFunctionInfo.setOutLaneSizeIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getInLaneSizeIndex():
+        CopyFunctionInfo.setInLaneSizeIndex(PermArgIdx)
 
 
   def reorderArgsAndPerformSimilarityChecking(self):
@@ -1711,6 +1721,152 @@ class RoseSimilarityChecker():
     return RecoveredArgMap
 
 
+  def genArgPermuatationsForEquivalenceClasses(self):
+    for EquivalenceClass in self.EquivalenceClasses:
+      # Go through all the functions and loop for arguments to eliminate
+      Functions = set()
+      Functions.update(EquivalenceClass.getEquivalentFunctions())
+      FunctionToClonedFunctionInfo = dict()
+      for Function in Functions:
+        assert isinstance(Function, RoseFunction)
+        assert Function in self.FunctionToArgPermutationMap
+        print("+++++++FUNCTION:")
+        Function.print()
+        FunctionInfo = self.FunctionToFunctionInfo[Function]
+        FunctionToClonedFunctionInfo[Function] = RoseFunctionInfo()
+        FunctionToClonedFunctionInfo[Function].addFunctionAtNewStage(Function.clone())
+        ArgsToConcreteValMap = deepcopy(FunctionInfo.getArgsToConcreteValMap())
+        FunctionToClonedFunctionInfo[Function].addArgsToConcreteMap(ArgsToConcreteValMap)
+        ArgPermutation = self.FunctionToArgPermutationMap[Function]
+        OriginalFunction = RoseUndefRegion()
+        if Function in  self.CopyFunctionToOriginalFunction:
+          OriginalFunction = self.CopyFunctionToOriginalFunction[Function]
+        ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
+        self.FunctionToFunctionInfo[ClonedOriginalFunction] = FunctionInfo
+        self.FunctionToArgPermutationMap[ClonedOriginalFunction] = ArgPermutation
+        self.FunctionToEquivalenceClassMap[ClonedOriginalFunction] = EquivalenceClass
+        if not isinstance(OriginalFunction, RoseUndefRegion):
+          self.CopyFunctionToOriginalFunction[ClonedOriginalFunction] = OriginalFunction
+        assert Function in self.FunctionToArgPermutationMap
+        # Let's simplify the function first
+        RoseOpSimplify.Run(Function, FunctionInfo.getContext())
+        print("FINAL FUNCTION:")
+        Function.print()
+        self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
+        FunctionInfo.addFunctionAtNewStage(Function)
+        FunctionInfo.addTargetAgnosticFunction(Function)
+        FunctionInfo.computeSemanticsInfo()
+        self.FunctionToFunctionInfo[Function] = FunctionInfo
+        print("ROSETTE CODE:")
+        print(self.FunctionToRosetteCodeMap[Function])
+        print("++++REFERENCE FUNCTION:")
+        FunctionToClonedFunctionInfo[Function].getLatestFunction().print()
+        print("++++CHECK FUNCTION:")
+        FunctionInfo.getLatestFunction().print()
+        Verifier = RoseTransformationVerifier(FunctionToClonedFunctionInfo[Function], \
+                                              FunctionInfo)
+        assert Verifier.verifyEquivalence() == True
+        # Replace uses of concrete arguments and try verifying again
+        CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
+        print("TARGET AGNOSTIC FUNCTION:")
+        FunctionInfo.getLatestFunction().print()
+        print("COPY TARGET AGNOSTIC FUNCTION:")
+        CopyFunctionInfo.getLatestFunction().print()
+        Verifier = RoseTransformationVerifier(CopyFunctionInfo, FunctionInfo)
+        assert Verifier.verifyEquivalence() == True
+        # Now map this new function to the new argument permutation map
+        OlderFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
+        assert OlderFunction in self.FunctionToArgPermutationMap
+        #if OlderFunction in self.CopyFunctionToOriginalFunction
+        OldArgPermutation = self.FunctionToArgPermutationMap[OlderFunction]
+        print("OlderFunction:")
+        OlderFunction.print()
+        print("FUNCTION:")
+        Function.print()
+        print("OldArgPermutation:")
+        print(OldArgPermutation)
+        RecoveredArgMap = list()
+        for Arg in Function.getArgs():
+          print("Arg:")
+          Arg.print()
+          Arg.getType().print()
+          if isinstance(Arg.getType(), RoseBitVectorType) \
+            or isinstance(Arg.getType(), RoseIntegerType) \
+            or isinstance(Arg.getType(), RoseBooleanType):
+            if isinstance(Arg.getType().getBitwidth(), RoseArgument):
+              OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+              RecoveredArgMap.append(OldArgPermutation[OldArgIndex]) 
+              continue
+          # Now we have to be more careful with checking equivalence
+          OldArgIndex = None
+          OlderFunctionInfo = FunctionToClonedFunctionInfo[Function]
+          for Idx, OlderArg in enumerate(OlderFunction.getArgs()):
+            if isinstance(OlderArg.getType(), RoseBitVectorType) \
+              or isinstance(OlderArg.getType(), RoseIntegerType) \
+              or isinstance(OlderArg.getType(), RoseBooleanType):
+              if isinstance(OlderArg.getType().getBitwidth(), int):
+                print("OLD ARG:")
+                OlderArg.print()
+                print("ARG:")
+                Arg.print()
+                if OlderArg == Arg:
+                  print("OlderArg.getType():")
+                  OlderArg.getType().print()
+                  OldArgIndex = Idx
+                  break
+              else:
+                assert isinstance(OlderArg.getType().getBitwidth(), RoseArgument)
+                #### DOUBLE CHECK
+                #assert OlderFunctionInfo.argHasConcreteVal(OlderArg) == True
+                assert OlderFunctionInfo.argHasConcreteVal(OlderArg.getType().getBitwidth()) == True
+                print("\n\n______________________________________________")
+                ClonedOlderArg = OlderArg.clone()
+                print("OlderArg.getType().getBitwidth():")
+                print(OlderArg.getType().getBitwidth())
+                print("ClonedOlderArg.getType().getBitwidth():")
+                print(ClonedOlderArg.getType().getBitwidth())
+                print("OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth():")
+                print(OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()))
+                if isinstance(OlderArg.getType(), RoseBitVectorType):
+                  ClonedOlderArg.setType(RoseBitVectorType.create( \
+                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                else:
+                  assert isinstance(OlderArg.getType(), RoseIntegerType)
+                  ClonedOlderArg.setType(RoseIntegerType.create( \
+                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                print("Arg:")
+                Arg.print()
+                Arg.getType().print()
+                print(Arg.getType())
+                print(Arg.getType().getBitwidth())
+                print("ARG ID:")
+                print(Arg.ID)
+                print("ClonedOlderArg:")
+                ClonedOlderArg.print()
+                ClonedOlderArg.getType().print()
+                print(ClonedOlderArg.getType())
+                print(ClonedOlderArg.getType().getBitwidth())
+                print("CLONED ARG ID:")
+                print(ClonedOlderArg.ID)
+                if Arg == ClonedOlderArg:
+                  print("CLONED ARG == ARG")
+                  OldArgIndex = Idx
+                  break
+          assert OldArgIndex != None
+          #OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+          print("OldArgIndex:")
+          print(OldArgIndex)
+          RecoveredArgMap.append(OldArgPermutation[OldArgIndex])
+        print("RecoveredArgMap:")
+        print(RecoveredArgMap)
+        NewRecoveredMap = self.getArgPermutationMapRecursively(OlderFunction, RecoveredArgMap)
+        self.FunctionToArgPermutationMap[Function] = NewRecoveredMap
+        print("!!!!!!!!!!!!!!!FINAL FUNCTION:")
+        Function.print()
+        print("!!!!!!!!!!!!!FINAL ARG PERMUTATIONN MAP:")
+        print(self.FunctionToArgPermutationMap[Function])
+
+
   def eliminateUnecessaryArgs(self):
     for EquivalenceClass in self.EquivalenceClasses:
       if len(EquivalenceClass.getEquivalentFunctions()) > 1:
@@ -2375,5 +2531,6 @@ if __name__ == '__main__':
   #SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.performSimilarityChecking()
   #SimilarityChecker.parallelizeSimilarityChecking()
+
 
 
