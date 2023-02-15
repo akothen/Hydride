@@ -21,16 +21,18 @@ class RosetteLifter:
     self.ID = -1
     self.RoseValToLLVMType = dict()
     self.OpList = list()
-    self.ParamToType = dict()
+    #self.ParamToType = dict()
     self.Params = list()
+    self.ParamToIndex = dict()
     self.NameToRoseVal = dict()
 
   def reset(self):
     self.ID = -1
     self.RoseValToLLVMType = dict()
     self.OpList = list()
-    self.ParamToType = dict()
+    #self.ParamToType = dict()
     self.Params = list()
+    self.ParamToIndex = dict()
     self.NameToRoseVal = dict()
   
   def genUniqueID(self):
@@ -50,6 +52,12 @@ class RosetteLifter:
       print("self.RoseValToLLVMType of Retun value:")
       print(self.RoseValToLLVMType[RetValue])
       LLVMRetType = self.RoseValToLLVMType[RetValue]
+      # Reorder the paramter arguments depending on the
+      # register number in the Rosette code.
+      OldParamList = list()
+      OldParamList.extend(self.Params)
+      for Param in OldParamList:
+        self.Params[self.ParamToIndex[Param]] = Param
       # Generate a Rosette function
       print("self.Params:")
       print(self.Params)
@@ -141,11 +149,25 @@ class RosetteLifter:
           Type = Comment[OpenParanIdx :]
           print("Type:")
           print(Type)
-          self.ParamToType[RegInfo] = Type
+          #self.ParamToType[RegInfo] = Type
           # len(reg) = 3. Skip "reg"
           RegNo = int(RegInfo[3:])
           print("RegNo:")
           print(RegNo)
+          ParamName = "%" + RegInfo #RosetteAST[0] + str(RosetteAST[1])
+          assert ParamName not in self.NameToRoseVal
+          ParamType = self.getRoseType(Type)
+          print("type(RosetteAST[1]):")
+          print(type(RosetteAST[1]))
+          print("RosetteAST[1]:")
+          print(RosetteAST[1])
+          print("CREATING ARGUMENT")
+          NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
+          #self.Params[RosetteAST[1]] = NewArg
+          self.Params.append(NewArg)
+          self.RoseValToLLVMType[NewArg] = self.getLLVMType(Type)
+          self.NameToRoseVal[NewArg.getName()] = NewArg
+          self.ParamToIndex[NewArg] = int(RegNo)
           #if RegNo + 1 > len(self.Params):
           #  self.Params = [None] * (RegNo + 1)
           return self.liftRosetteAST(RosetteAST[1:])
@@ -174,19 +196,7 @@ class RosetteLifter:
         ParamName = "%" + RosetteAST[0] + str(RosetteAST[1])
         if ParamName in self.NameToRoseVal:
           return self.NameToRoseVal[ParamName]
-        else:
-          ParamType = self.getRoseType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
-          print("type(RosetteAST[1]):")
-          print(type(RosetteAST[1]))
-          print("RosetteAST[1]:")
-          print(RosetteAST[1])
-          print("CREATING ARGUMENT")
-          NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
-          #self.Params[RosetteAST[1]] = NewArg
-          self.Params.append(NewArg)
-          self.RoseValToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
-          self.NameToRoseVal[NewArg.getName()] = NewArg
-          return NewArg
+        assert False and "Register not defined!"
       elif RosetteAST[0] in InstMap:
         Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
         Op = InstMap[RosetteAST[0]].create("%" + str(self.genUniqueID()), Args)
