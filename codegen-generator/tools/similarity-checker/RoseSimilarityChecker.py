@@ -25,6 +25,9 @@ from copy import deepcopy
 
 NumThreads = 1
 
+EliminateUnnecessaryArgs = False
+
+
 class RoseSimilarityChecker():
   def __init__(self, TargetList : list):
     self.TargetList = TargetList
@@ -517,9 +520,11 @@ class RoseSimilarityChecker():
     self.reorderArgsAndPerformSimilarityChecking()
     #print("****TRY ANOTHER HEURISTIC****")
     #self.refineSimilarityChecking()
-    print("****ELIMINATE ARGUMENTS****")
-    self.eliminateUnecessaryArgs()
-    self.genArgPermuatationsForEquivalenceClasses()
+    if EliminateUnnecessaryArgs == True:
+      print("****ELIMINATE ARGUMENTS****")
+      self.eliminateUnecessaryArgs()
+    else:
+      self.genArgPermuatationsForEquivalenceClasses()
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
@@ -819,50 +824,27 @@ class RoseSimilarityChecker():
     
     print("len(ArgsPermuations):")
     print(len(ArgsPermuations))
-    NumThreads = 1
-    if NumThreads != 1:
-      FunctionTuples = list()
-      for Idx, ArgPerm in enumerate(ArgsPermuations):
-        NewArgsList = ArgPerm + RemainingArgs
-        print("len(NewArgsList):")
-        print(len(NewArgsList))
-        print("Function.getNumArgs():")
-        print(Function.getNumArgs())
-        assert len(NewArgsList) == Function.getNumArgs()
-        if Function.getArgs() != NewArgsList:
-          Tuple = (Function, NewArgsList, str(Idx))
-          FunctionTuples.append(Tuple)
-      # Create all function permutations (multithreaded)
-      Pool = multiprocessing.Pool(NumThreads)
-      FunctionList = list()
-      for FunctionCopy in Pool.imap_unordered(self.generateAFunctionPermutation, FunctionTuples):
+    FunctionList = list()
+    for Idx, ArgPerm in enumerate(ArgsPermuations):
+      NewArgsList = ArgPerm + RemainingArgs
+      print("len(NewArgsList):")
+      print(len(NewArgsList))
+      print("Function.getNumArgs():")
+      print(Function.getNumArgs())
+      assert len(NewArgsList) == Function.getNumArgs()
+      if Function.getArgs() != NewArgsList:
+        FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, str(Idx))
         self.CopyFunctionToOriginalFunction[FunctionCopy] = Function
         FunctionList.append(FunctionCopy)
-      self.FunctionToCopies[Function] = FunctionList
-      print("___________________________________________________________________")
-      return FunctionList
-    else:
-      FunctionList = list()
-      for Idx, ArgPerm in enumerate(ArgsPermuations):
-        NewArgsList = ArgPerm + RemainingArgs
-        print("len(NewArgsList):")
-        print(len(NewArgsList))
-        print("Function.getNumArgs():")
-        print(Function.getNumArgs())
-        assert len(NewArgsList) == Function.getNumArgs()
-        if Function.getArgs() != NewArgsList:
-          FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, str(Idx))
-          self.CopyFunctionToOriginalFunction[FunctionCopy] = Function
-          FunctionList.append(FunctionCopy)
-          print("PERMUTATION FUNCTION:")
-          FunctionCopy.print()
-          ArgPermutation = list()
-          for Arg in NewArgsList:
-            ArgPermutation.append(Function.getIndexOfArg(Arg))
-          self.FunctionToArgPermutationMap[FunctionCopy] = ArgPermutation
-      self.FunctionToCopies[Function] = FunctionList
-      print("___________________________________________________________________")
-      return FunctionList
+        print("PERMUTATION FUNCTION:")
+        FunctionCopy.print()
+        ArgPermutation = list()
+        for Arg in NewArgsList:
+          ArgPermutation.append(Function.getIndexOfArg(Arg))
+        self.FunctionToArgPermutationMap[FunctionCopy] = ArgPermutation
+    self.FunctionToCopies[Function] = FunctionList
+    print("___________________________________________________________________")
+    return FunctionList
 
   
   def generateAFunctionPermutation(self, FunctionTuple : tuple):
@@ -2531,6 +2513,4 @@ if __name__ == '__main__':
   #SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.performSimilarityChecking()
   #SimilarityChecker.parallelizeSimilarityChecking()
-
-
 
