@@ -27,7 +27,7 @@ from utils.ConstFold import ConstFold
 
 dsl_list = []
 
-TARGET = 'hvx'
+TARGET = 'x86'
 scd = None
 cost_name = ""
 interpret_name = ""
@@ -43,7 +43,7 @@ get_target_op_name = ""
 
 
 if TARGET == 'x86':
-    dsl_list = parse_dict(semantcs)
+    dsl_list = parse_dict(semantcs, keep_duplicate = True)
     scd = ScaleDef(base_vect_size = None)
     cost_name = "hydride:cost"
     interpret_name = "hydride:interpret"
@@ -57,7 +57,7 @@ if TARGET == 'x86':
     bind_name = "bind-expr"
     get_target_op_name = "hydride:get-target-name"
 else:
-    dsl_list = parse_dict(hvx_semantics)
+    dsl_list = parse_dict(hvx_semantics, keep_duplicate = True)
     scd = ScaleDef(base_vect_size = 1024)
     cost_name = "hvx:cost"
     interpret_name = "hvx:interpret"

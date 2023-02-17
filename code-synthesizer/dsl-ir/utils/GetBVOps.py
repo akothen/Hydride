@@ -54,7 +54,7 @@ class GetBVOps:
             if isinstance(arg, BitVector):
                 recursive_calls.append("({} {})".format(self.get_ops_name, get_arg(idx).name))
 
-        predicate = "(and " + predicate +  ")"
+        predicate = "(and " + predicate +  ")" + "; " + ctx.name +"\n"
 
 
 

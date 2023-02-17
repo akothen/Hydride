@@ -818,7 +818,7 @@ num_14
 	]
 	[ (hexagon_V6_pred_and_128B_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7)
 		(cond 
-		[(and  (equal? size_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_o 0))
+		[(and  (equal? size_o 32) (equal? num_3 32) (equal? num_5 32))
 (hexagon_V6_pred_and_128B_dsl
 (hvx:scale-expr v0 scale-factor)
 (hvx:scale-expr v1 scale-factor)
@@ -826,7 +826,7 @@ num_14
 (* scale-factor num_3)
 num_4
 (* scale-factor num_5)
-(* scale-factor prec_o)
+prec_o
 num_7
 )
 ]
@@ -1171,6 +1171,22 @@ num_16
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
+	[ (hexagon_V6_lvsplatw_128B_dsl v0 size_o num_2 num_3 num_4 size_i num_6)
+		(cond 
+		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_4 32) (equal? size_i 1))
+(hexagon_V6_lvsplatw_128B_dsl
+(hvx:scale-expr v0 scale-factor)
+(* scale-factor size_o)
+(* scale-factor num_2)
+num_3
+(* scale-factor num_4)
+(* scale-factor size_i)
+num_6
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
 	[ (hexagon_V6_vaddhsat_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
@@ -1252,19 +1268,6 @@ num_8
 )
 ]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
-(hexagon_V6_vaddhsat_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_3)
-num_4
-(* scale-factor num_5)
-prec_i_o
-num_7
-num_8
-)
-]
-		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
 (hexagon_V6_vaddhsat_128B_dsl
 (hvx:scale-expr v0 scale-factor)
 (hvx:scale-expr v1 scale-factor)
@@ -1818,19 +1821,6 @@ num_8
 )
 ]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 64))
-(hexagon_V6_vsubh_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_3)
-num_4
-(* scale-factor num_5)
-prec_i_o
-num_7
-num_8
-)
-]
-		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
 (hexagon_V6_vsubh_128B_dsl
 (hvx:scale-expr v0 scale-factor)
 (hvx:scale-expr v1 scale-factor)
@@ -2755,78 +2745,11 @@ num_38
 num_39
 )
 ]
-		[(and  (equal? size_i_o 1) (equal? num_19 32) (equal? num_37 32))
-(hexagon_V6_vmpahb_acc_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(hvx:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-num_4
-num_5
-num_6
-num_7
-num_8
-num_9
-num_10
-num_11
-num_12
-num_13
-num_14
-num_15
-num_16
-num_17
-num_18
-(* scale-factor num_19)
-num_20
-num_21
-num_22
-num_23
-prec_i_o
-num_25
-num_26
-num_27
-num_28
-num_29
-num_30
-num_31
-num_32
-num_33
-num_34
-num_35
-num_36
-(* scale-factor num_37)
-num_38
-num_39
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
 	[ (hexagon_V6_vrounduhub_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 prec_i num_15 num_16 num_17 num_18)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
-(hexagon_V6_vrounduhub_128B_dsl
-vc_0
-vc_1
-vc_2
-vc_3
-(hvx:scale-expr v4 scale-factor)
-(hvx:scale-expr v5 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_7)
-num_8
-(* scale-factor num_9)
-prec_o
-num_11
-num_12
-num_13
-prec_i
-num_15
-num_16
-num_17
-num_18
-)
-]
 		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
 (hexagon_V6_vrounduhub_128B_dsl
 vc_0
@@ -2896,29 +2819,6 @@ num_8
 	]
 	[ (hexagon_V6_vmpyowh_128B_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_6 32) (equal? num_8 16))
-(hexagon_V6_vmpyowh_128B_dsl
-vc_0
-vc_1
-vc_2
-(hvx:scale-expr v3 scale-factor)
-(hvx:scale-expr v4 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_6)
-num_7
-(* scale-factor num_8)
-num_9
-prec_i_o
-num_11
-num_12
-num_13
-num_14
-num_15
-num_16
-num_17
-num_18
-)
-]
 		[(and  (equal? size_i_o 32) (equal? num_6 32) (equal? num_8 16))
 (hexagon_V6_vmpyowh_128B_dsl
 vc_0
@@ -3626,45 +3526,12 @@ num_27
 num_28
 )
 ]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_5 16) (equal? num_8 16) (equal? num_15 32) (equal? num_19 32))
-(hexagon_V6_vmpabusv_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_3)
-num_4
-(* scale-factor num_5)
-num_6
-num_7
-(* scale-factor num_8)
-prec_i
-num_10
-num_11
-num_12
-num_13
-num_14
-(* scale-factor num_15)
-num_16
-num_17
-prec_o
-(* scale-factor num_19)
-num_20
-num_21
-num_22
-num_23
-num_24
-num_25
-num_26
-num_27
-num_28
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
 	[ (hexagon_V6_vor_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_i_o 0))
+		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_5 32))
 (hexagon_V6_vor_128B_dsl
 (hvx:scale-expr v0 scale-factor)
 (hvx:scale-expr v1 scale-factor)
@@ -3672,7 +3539,7 @@ num_28
 (* scale-factor num_3)
 num_4
 (* scale-factor num_5)
-(* scale-factor prec_i_o)
+prec_i_o
 num_7
 )
 ]
@@ -3719,57 +3586,11 @@ num_13
 num_14
 )
 ]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 16))
-(hexagon_V6_vasruwuhsat_128B_dsl
-vc_0
-(hvx:scale-expr v1 scale-factor)
-(hvx:scale-expr v2 scale-factor)
-(hvx:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_o
-num_9
-num_10
-prec_i
-num_12
-num_13
-num_14
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
 	[ (hexagon_V6_vmpyowh_rnd_sacc_128B_dsl vc_0 vc_1 vc_2 v3 v4 v5 size_i_o num_7 num_8 num_9 num_10 prec_i_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
-(hexagon_V6_vmpyowh_rnd_sacc_128B_dsl
-vc_0
-vc_1
-vc_2
-(hvx:scale-expr v3 scale-factor)
-(hvx:scale-expr v4 scale-factor)
-(hvx:scale-expr v5 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_7)
-num_8
-(* scale-factor num_9)
-num_10
-prec_i_o
-num_12
-num_13
-num_14
-num_15
-num_16
-num_17
-num_18
-num_19
-num_20
-num_21
-num_22
-)
-]
 		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
 (hexagon_V6_vmpyowh_rnd_sacc_128B_dsl
 vc_0
@@ -3858,62 +3679,11 @@ num_22
 num_23
 )
 ]
-		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_6 16) (equal? num_9 16) (equal? num_21 32))
-(hexagon_V6_vaddubh_acc_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(hvx:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-num_7
-num_8
-(* scale-factor num_9)
-num_10
-num_11
-num_12
-num_13
-num_14
-num_15
-prec_i_o
-num_17
-num_18
-num_19
-num_20
-(* scale-factor num_21)
-num_22
-num_23
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
 	[ (hexagon_V6_vroundwuh_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 prec_i num_15 num_16 num_17 num_18)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
-(hexagon_V6_vroundwuh_128B_dsl
-vc_0
-vc_1
-vc_2
-vc_3
-(hvx:scale-expr v4 scale-factor)
-(hvx:scale-expr v5 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_7)
-num_8
-(* scale-factor num_9)
-prec_o
-num_11
-num_12
-num_13
-prec_i
-num_15
-num_16
-num_17
-num_18
-)
-]
 		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
 (hexagon_V6_vroundwuh_128B_dsl
 vc_0
@@ -4046,7 +3816,7 @@ num_14
 	]
 	[ (hexagon_V6_pred_xor_128B_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7)
 		(cond 
-		[(and  (equal? size_o 32) (equal? num_3 32) (equal? num_5 32) (equal? prec_o 0))
+		[(and  (equal? size_o 32) (equal? num_3 32) (equal? num_5 32))
 (hexagon_V6_pred_xor_128B_dsl
 (hvx:scale-expr v0 scale-factor)
 (hvx:scale-expr v1 scale-factor)
@@ -4054,7 +3824,7 @@ num_14
 (* scale-factor num_3)
 num_4
 (* scale-factor num_5)
-(* scale-factor prec_o)
+prec_o
 num_7
 )
 ]
@@ -4579,30 +4349,6 @@ num_18
 num_19
 )
 ]
-		[(and  (equal? size_i_o 32) (equal? num_7 32) (equal? num_9 16))
-(hexagon_V6_vasruwuhrndsat_128B_dsl
-vc_0
-vc_1
-vc_2
-(hvx:scale-expr v3 scale-factor)
-(hvx:scale-expr v4 scale-factor)
-(hvx:scale-expr v5 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_7)
-num_8
-(* scale-factor num_9)
-prec_o
-num_11
-num_12
-num_13
-prec_i
-num_15
-num_16
-num_17
-num_18
-num_19
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
@@ -4959,47 +4705,6 @@ num_35
 num_36
 )
 ]
-		[(and  (equal? size_i_o 1) (equal? num_17 32) (equal? num_23 32))
-(hexagon_V6_vmpauhb_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
-num_3
-num_4
-num_5
-num_6
-num_7
-num_8
-num_9
-num_10
-num_11
-num_12
-num_13
-num_14
-num_15
-num_16
-(* scale-factor num_17)
-num_18
-num_19
-num_20
-num_21
-prec_o
-(* scale-factor num_23)
-num_24
-num_25
-num_26
-num_27
-num_28
-num_29
-num_30
-num_31
-num_32
-prec_i
-num_34
-num_35
-num_36
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
@@ -5262,57 +4967,6 @@ num_11
 num_12
 )
 ]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
-(hexagon_V6_vsubhnq_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(hvx:scale-expr v2 scale-factor)
-vc_3
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-)
-]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
-(hexagon_V6_vsubhnq_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(hvx:scale-expr v2 scale-factor)
-vc_3
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-)
-]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
-(hexagon_V6_vsubhnq_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-(hvx:scale-expr v1 scale-factor)
-(hvx:scale-expr v2 scale-factor)
-vc_3
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-)
-]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
@@ -5411,57 +5065,6 @@ num_17
 	]
 	[ (hexagon_V6_vaddbq_128B_dsl v0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
-(hexagon_V6_vaddbq_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-vc_1
-(hvx:scale-expr v2 scale-factor)
-(hvx:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-)
-]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
-(hexagon_V6_vaddbq_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-vc_1
-(hvx:scale-expr v2 scale-factor)
-(hvx:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-)
-]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
-(hexagon_V6_vaddbq_128B_dsl
-(hvx:scale-expr v0 scale-factor)
-vc_1
-(hvx:scale-expr v2 scale-factor)
-(hvx:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-)
-]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_7 32))
 (hexagon_V6_vaddbq_128B_dsl
 (hvx:scale-expr v0 scale-factor)
@@ -5801,14 +5404,14 @@ num_25
 	]
 	[ (hexagon_V6_vnot_128B_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6)
 		(cond 
-		[(and  (equal? size_i_o 32) (equal? num_2 32) (equal? num_4 32) (equal? prec_i_o 0))
+		[(and  (equal? size_i_o 32) (equal? num_2 32) (equal? num_4 32))
 (hexagon_V6_vnot_128B_dsl
 (hvx:scale-expr v0 scale-factor)
 (* scale-factor size_i_o)
 (* scale-factor num_2)
 num_3
 (* scale-factor num_4)
-(* scale-factor prec_i_o)
+prec_i_o
 num_6
 )
 ]

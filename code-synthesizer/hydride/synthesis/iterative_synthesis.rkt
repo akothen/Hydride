@@ -44,6 +44,11 @@
 
 
 
+(define iterative-optimize #f)
+
+(define (set-iterative-optimize)
+  (set! iterative-optimize #t)
+  )
 
 
 
@@ -81,17 +86,34 @@
         (displayln "Verify across lanes spec:")
         (displayln (invoke_ref_lane lane-idx symbols))
         (displayln "Is this printed?")
-        (define cex 
-          (with-handlers ([exn:fail? (lambda (exn) (unsat))])
-                         (with-deep-time-limit 60
-                                               (verify 
-                                                 (begin
-                                                   (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
-                                                   )
-                                                 )
-                                               )
 
-                         )
+        (define verification-timeout? #f)
+        (define cex 
+          (cond 
+            [verification-timeout? 
+              (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                             (with-deep-time-limit 60
+                                                   (verify 
+                                                     (begin
+                                                       (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
+                                                       )
+                                                     )
+                                                   )
+
+                             )
+              ]
+            [else
+              (verify 
+                (begin
+                  (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
+                  )
+                )
+              ]
+            
+            
+            )
+          
+          
           )
 
         (define verified? (not (sat? cex))) ;; True i verified equal on lane-idx
@@ -147,17 +169,38 @@
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
   (debug-log (format "Symbols: ~a\n" symbols))
+  (define verification-timeout? #f)
   (define cex 
-    (with-handlers ([exn:fail? (lambda (exn) (unsat))])
-                   (with-deep-time-limit 30
-                                         (verify 
-                                           (begin
-                                             (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
+    (cond 
+      [verification-timeout? 
+        (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                       (with-deep-time-limit 60
+                                             (verify 
+                                               (begin
+                                                 (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
 
+                                                 )
+                                               )
                                              )
-                                           )
-                                         )
-                   )
+                       )
+        ]
+      [else
+        (verify 
+          (begin
+            (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
+
+            )
+          )
+
+        ]
+
+
+      )
+
+
+
+
+
     )
   (define end (current-seconds))
   (debug-log (format "Verification took ~a seconds\n" (- end start)))
@@ -350,6 +393,46 @@
     )
 )
 
+(define (z3-optimize-iterative assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+  (begin
+    (debug-log (format "z3-optimize iterative with cost-bound ~a ...\n" cost-bound))
+    (debug-log "Synthesizing...\n")
+
+    (define sol?
+      (synthesize 
+        #:forall (list cex-ls)
+        #:guarantee 
+        (begin 
+          ;; loop over inputs and add asserts
+          (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+          (assert (< (cost-fn grammar) cost-bound))
+          )
+        ) 
+      )
+
+
+    (define satisfiable? (sat? sol?))
+
+
+
+
+    (define materialize 
+      (if satisfiable? 
+        (evaluate grammar sol?)
+        '()
+        )
+      )
+
+    (if satisfiable?
+      (debug-log materialize)
+      '()
+      )
+
+    sol?
+
+
+    )
+  )
 
 (define (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin
@@ -397,15 +480,22 @@
 
 
 (define (iterative-synth-query assert-query-fn grammar cex-ls failing-ls optimize? cost-fn cost-bound solver failed-sols) 
-  (if optimize?
-    (if 
-      (equal? solver 'z3)
-      (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
-      (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
-      )
 
-    (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+  (cond
+    [(and optimize? (equal? solver 'boolector))
+        (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+     ]
+    [(and optimize? (equal? solver 'z3) iterative-optimize)
+        (z3-optimize-iterative assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+     ]
+    [(and optimize? (equal? solver 'z3) )
+        (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+     ]
+    [else
+        (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+      ]
     )
+  
   )
 
 
@@ -593,12 +683,13 @@
     )
 
 
-  (define boolector-opt-case (and
+  (define iterative-opt-case (and
     optimize?
-    (equal? solver 'boolector)
+    ;(equal? solver 'boolector)
+    iterative-optimize
     ))
 
-  (debug-log (format "Is this boolector optimization case ~a ?\n" boolector-opt-case))
+  (debug-log (format "Is this iterative optimization case ~a ?\n" iterative-opt-case))
 
   (define is-union (not (concrete? materialize)))
 
@@ -665,7 +756,7 @@
         (if 
 
           ;; Check if optimizations is enabled and the current solver is boolector
-          boolector-opt-case
+          iterative-opt-case
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
@@ -816,7 +907,7 @@
       )
     )
 
-  (define boolector-opt-case #f)
+  (define iterative-opt-case #f)
 
 
   (if 

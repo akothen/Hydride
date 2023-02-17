@@ -11,6 +11,7 @@ class TypedSimpleGrammarGenerator:
         self.typed_contexts = {}
         self.prec_holes = {}
         self.zero_map = []
+        self.created_lits = []
 
 
 
@@ -108,20 +109,35 @@ class TypedSimpleGrammarGenerator:
         neg_one = self.emit_lit_neg_1(bv_size, prec)
         ramp = self.emit_lit_ramp(bv_size, prec)
 
-        imm_clauses = [self.emit_lit_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [0] ]
+        #imm_clauses = [self.emit_lit_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [] ]
+        imm_clauses = []
+
+        for (imm, imm_prec) in self.imms:
+            if (imm, bv_size, imm_prec) in self.created_lits:
+                continue
 
 
-        imm_log2_clauses = [self.emit_log2_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [0] ]
+            imm_clauses.append(self.emit_lit_imm(imm, bv_size, imm_prec))
+
+            self.created_lits.append((imm, bv_size, imm_prec))
+
+
+
+
+        imm_log2_clauses =  [] #[self.emit_log2_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [0] ]
 
         if bv_size in self.zero_map:
             zero = ""
         else:
             self.zero_map.append(bv_size)
 
-        zero_clause = "{}".format(zero)
+        zero_clause =     "{}".format(zero)
+
+        if any([imm == 0 for (imm, imm_prec) in self.imms]):
+            zero_clause = ""
 
 
-        one_clause = " " #"{}".format(one)
+        one_clause =   ""#"{}".format(one)
         neg_one_clause = " " #"{}".format(neg_one)
 
         ramp_clause = "{}".format(ramp)
@@ -133,8 +149,10 @@ class TypedSimpleGrammarGenerator:
 
         hole_clause = "" # "\n\t".join([condition, hole, close])
 
-        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause, ramp_clause] + imm_clauses + imm_log2_clauses)
+        return_clauses =  "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause, ramp_clause] + imm_clauses + imm_log2_clauses)
 
+
+        return return_clauses
 
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
@@ -191,7 +209,7 @@ class TypedSimpleGrammarGenerator:
 
 
     def emit_typed_grammar_clause(self, dsl_inst, ctx , vars_name = "vars",
-                             depth_name = "k",
+                             depth_name = "k", layer_output_len = 256,
                             last_clause = False):
 
         grammar_args = [arg for arg in ctx.context_args]
@@ -208,7 +226,11 @@ class TypedSimpleGrammarGenerator:
 
             if ga.is_hole:
 
+                if layer_output_len in self.reachable_sizes:
+                    self.reachable_sizes.append(ga.size)
+
                 self.init_typed_context(ga.size)
+
                 grammar_name = self.get_layer_name(ga.size)
 
                 grammar_clause.append(self.emit_grammar_hole(vars_name, depth_name, grammar_name) +" "+ga.get_rkt_comment())
@@ -278,6 +300,9 @@ class TypedSimpleGrammarGenerator:
 
         clauses = []
 
+        if "start" in layer_name:
+            self.reachable_sizes.append(layer_output_len)
+
         # First list input registers and literals
         for idx, inp_size in enumerate(input_sizes):
             if inp_size == layer_output_len:
@@ -296,8 +321,11 @@ class TypedSimpleGrammarGenerator:
                                                layer_dsl_args_list[idx],
                                                vars_name = vars_name,
                                                depth_name = depth_name,
+                                               layer_output_len = layer_output_len,
                                                last_clause = (idx + 1 == len(layer_dsl_insts)))
             )
+
+
 
 
         define_grammar = "(define ({} {} #:depth {})".format(layer_name, vars_name, depth_name)
@@ -372,6 +400,8 @@ class TypedSimpleGrammarGenerator:
         self.imms = imms
         self.include_ramp_lit = include_ramp_lit
 
+        self.reachable_sizes = []
+
         # Sort grammar operations into buckets identified by the return type
         # of the operation contexts
 
@@ -387,6 +417,11 @@ class TypedSimpleGrammarGenerator:
 
         grammars = []
 
+
+        size_to_expr_map = {}
+
+
+
         for bv_sizes, grammar_context in self.typed_contexts.items():
             grammar_name = self.get_layer_name(bv_sizes)
 
@@ -398,11 +433,29 @@ class TypedSimpleGrammarGenerator:
                                                     input_sizes = input_sizes
                                                     )
 
+            size_to_expr_map[bv_sizes] = grammar
+
+
             grammars.append(grammar)
 
 
 
 
+        # FIXME: Iterate grammar generation a few times to fully set reachable sets
+        for i in range(0,5):
+            for bv_sizes, grammar_context in self.typed_contexts.items():
+                self.emit_typed_grammar_layer(layer_name = self.get_layer_name(bv_sizes),
+                                                        layer_dsl_insts = grammar_context['ops'],
+                                                        layer_dsl_args_list = grammar_context['ctx'],
+                                                        layer_output_len = bv_sizes,
+                                                        lit_holes = lit_holes,
+                                                        input_sizes = input_sizes
+                                                        )
+
+
+
+
+        grammars = [size_to_expr_map[bv_sizes] for bv_sizes in self.typed_contexts if bv_sizes in self.reachable_sizes]
 
 
 

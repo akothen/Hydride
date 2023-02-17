@@ -1644,6 +1644,16 @@ namespace Halide {
                                 debug(1) << "Select case" <<"\n";
                                 return IRMutator::mutate(expr);
                             }
+                            // If the expression is a conditional, optimize the branches individually
+                            if (base_e.node_type() == IRNodeType::Call){
+                                if(const Call* call = base_e.as<Call>()){
+                                    if(call->is_intrinsic(Call::if_then_else)){
+                                        debug(1) << "ite case" <<"\n";
+                                        return IRMutator::mutate(expr);
+                                    }
+                                }
+
+                            }
 
                             // If the expression is a shuffle , optimize the operands individually
                             if (base_e.node_type() == IRNodeType::Shuffle){
@@ -1834,7 +1844,7 @@ namespace Halide {
 
                     Expr visit(const Ramp *op) override {
                         Expr lowered;
-                        if(SIMPLIFY_RAMP){
+                        if(true  || SIMPLIFY_RAMP){
 
                             // If either the stride or the base are constant
                             // we can simplify the operations and hence keep
@@ -1846,7 +1856,16 @@ namespace Halide {
                                 Expr ramp = Ramp::make(make_zero(op->base.type()), make_one(op->base.type()), op->lanes);
                                 lowered = broadcast_base + broadcast_stride * ramp;
                             }
-
+                            
+                            /*
+                            if(is_const(op->stride) && !is_const(op->base)) {
+                                Expr broadcast_base = Broadcast::make(op->base, op->lanes);
+                                Expr broadcast_stride = Broadcast::make(op->stride, op->lanes);
+                                Expr ramp = Ramp::make(make_zero(op->base.type()), make_one(op->base.type()), op->lanes);
+                                lowered = broadcast_base +  ramp;
+                                debug(0) << "Simplied ramp to : "<< lowered <<"\n";
+                                return lowered;
+                            }*/
 
 
                         }
@@ -2373,8 +2392,6 @@ namespace Halide {
                             return Variable::make(op->type, uname);
 
                         }
-
-
                         else
                             return IRMutator::visit(op);
                     }
@@ -2393,6 +2410,20 @@ namespace Halide {
 
                     }
 
+
+                    Expr visit(const Select *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX)){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
 
                     Expr visit(const LE *op) override {
 
@@ -3192,6 +3223,8 @@ namespace Halide {
                             solver = hydride_solver;
                         }
 
+
+
                         std::string optimize = "#t";
                         std::string symbolic = "#f";
 
@@ -3200,6 +3233,16 @@ namespace Halide {
 
                     std::string emit_interpret_expr(std::string expr_name){
                         return "(halide:interpret "+expr_name+")";
+                    }
+
+
+                    std::string emit_iterative_optimize(bool do_iterative){
+                        std::string comment = ";; Certain solvers do not support direct optimization, and hence we iteratively optimize by progressively tightening cost";
+                        std::string command = "(set-iterative-optimize)";
+
+                        std::string enable = do_iterative ? "" : ";";
+
+                        return comment + "\n" + enable + command +"\n";
                     }
 
 
@@ -3285,6 +3328,7 @@ namespace Halide {
                     expr_depth = (*expr_depth_var) - '0';
                 }
 
+                rkt << HSE.emit_iterative_optimize(/* Enable iterative? */ false) << "\n";
 
 
                 rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",

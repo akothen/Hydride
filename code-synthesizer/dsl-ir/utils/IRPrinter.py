@@ -94,11 +94,12 @@ class IRPrinter:
 
             # Fallback to default printer
             # as DSL inst provides no precision information
-            if input_prec_arg == None:
+            if input_prec_arg == None :
                 lit_typeinfo = "({} {})".format(self.printer_name, ir_arg.name)
             else:
-                lit_typeinfo = "(begin (define num_elem (/ (get-length {} (vector 0)) {})) ".format(ir_arg.name, input_prec_arg.name)
-                lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + input_prec_arg.name +")")
+                lit_typeinfo = "(begin (define-values (num_elem arg_prec) (cond [(< (/ (get-length {} (vector 0)) {}) 1)  (values  (/ (get-length {} (vector 0)) (get-prec {} (vector 0))) (/ (get-prec {} (vector 0))) )] [else (values (/ (get-length {} (vector 0)) {}) {})]))".format(ir_arg.name, input_prec_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, input_prec_arg.name)
+                #lit_typeinfo = "(begin (define num_elem (/ (get-length {} (vector 0)) {})) ".format(ir_arg.name, input_prec_arg.name)
+                lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + "arg_prec" +")")
                 lit_typeinfo += ")"
 
 

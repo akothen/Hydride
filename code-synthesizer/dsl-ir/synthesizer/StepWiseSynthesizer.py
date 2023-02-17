@@ -85,6 +85,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         self.set_target_settings()
         self.partition_flexibility = 4
 
+        self.is_shuffle = is_shuffle
 
         # Lowering of swizzles stages happens at ful bitwidth
         if is_shuffle:
@@ -196,6 +197,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 if key not in ops_bucket:
                     ops_bucket[key] = {"count": 0, "ops": ctx_ops}
                 ops_bucket[key]['count'] += 1
+                print("Adding ", ctx.name, "to op bucket with key", key)
 
 
         if partition_by_size:
@@ -233,9 +235,9 @@ class StepWiseSynthesizer(SynthesizerBase):
             debug("Count: ",count)
             debug("Num Buckets: ", len(bucket.keys()))
 
-        print("OPs buckets:")
-        print(json.dumps(ops_bucket, indent = 2))
-        print_total_count(ops_bucket)
+        #prinddt("OPs buckets:")
+        #print(json.dumps(ops_bucket, indent = 2))
+        #print_total_count(ops_bucket)
 
         #print("Lengths buckets:")
         #print(json.dumps(lengths_bucket, indent = 2))
@@ -547,6 +549,24 @@ class StepWiseSynthesizer(SynthesizerBase):
         sample_keys = [list(ele) for ele in sample_keys]
 
 
+        previous_keys = sample_keys
+        if self.depth >= 2:
+            sample_keys = [sample for sample in sample_keys if sum([1  for ele in sample if "bvmul" in ele]) <= 3]
+
+        if sample_keys == []:
+            sample_keys = previous_keys
+
+        for sample in sample_keys:
+            break
+            print("====BREAK=====")
+            print(sample)
+            print(sum([1  for ele in sample if "bvmul" in ele]))
+
+
+
+
+
+
 
         spec_ops = self.spec.get_semantics_ops_list()
         print("spec_ops:", spec_ops)
@@ -611,15 +631,35 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             key_grammar_combs = [[]]
 
+            sorted_keys = []
+
+            if self.target == 'hvx':
+                # traverse shuffle keys first as more important in hvx
+                sorted_keys = list(sample_key) + shuffle_key
+            else:
+                # Traverse variations in multiplications first
+
+
+                def count_muls(key):
+                    print("count muls key:", key)
+                    return sum([1 for ele in key if "bvmul" in ele]) + len(bucket[key]['ops'])
+
+                sorted_keys = shuffle_key + sorted(list(sample_key), key = lambda e : count_muls(e))
+
+                print(sorted_keys)
+
+
             sorted_keys = list(sample_key) + shuffle_key
+
 
             for key in sorted_keys:
                 idx_range = range(0,len(bucket[key]['ops']))
                 limit = items_per_bucket
                 if key == '[]':
-                    limit = 3
+                    limit = 3 # Set to 4 for hvx_matmul and depthwise_conv, normally 3
 
                 idx_subsets = findsubsets(idx_range, min(limit, len(idx_range)))
+
                 key_grammar_combs = cross_product(key_grammar_combs, idx_subsets)
 
 
@@ -699,6 +739,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
+        memory_shuffle_insts = []
+        memory_shuffle_args_list = []
+
         spec_memory_shuffles = self.get_single_interleave_shuffles()
         memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list = spec_memory_shuffles.contexts #[ctx.context_args for ctx in spec_memory_shuffles.contexts]
@@ -707,6 +750,8 @@ class StepWiseSynthesizer(SynthesizerBase):
         spec_memory_shuffles = self.get_single_deinterleave_shuffles()
         memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list += [ctx for ctx in spec_memory_shuffles.contexts]
+
+
 
 
         spec_memory_shuffles = self.get_two_interleave_shuffles()
@@ -771,7 +816,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         debug("Number of possible instructions in Grammar before pruning:",len(operation_dsl_insts))
 
-        if self.ENABLE_PRUNING:
+        if self.ENABLE_PRUNING and not self.is_shuffle:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
             if self.target not in ["hvx"]:
                 (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
@@ -793,6 +838,10 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
+
+        for idx, dsl_inst in enumerate(operation_dsl_insts):
+            print("[PRE REDUCTION] Pool Of operations: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+
         BOUND = 16
         if self.target == 'hvx':
             delta = [0,0,0,0,1,3,4,4]
@@ -802,15 +851,17 @@ class StepWiseSynthesizer(SynthesizerBase):
                 BOUND = 20 - delta[len(self.spec.input_precision)]
             elif self.depth >= 4:
                 BOUND = 16
+        if self.target == "x86":
+            BOUND = 25
 
         if self.spec.contains_conditional():
             BOUND = 25
 
         if self.depth >= 4:
-            BOUND = 16
+            BOUND = 25 # 16 for regular benchmarks, 20 needed for matmul
 
 
-        #(operation_dsl_insts, operation_dsl_args_list) = self.prune_using_hvx_acc_ops(operation_dsl_insts, operation_dsl_args_list)
+        (operation_dsl_insts, operation_dsl_args_list) = self.prune_using_hvx_acc_ops(operation_dsl_insts, operation_dsl_args_list)
 
 
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
@@ -830,13 +881,14 @@ class StepWiseSynthesizer(SynthesizerBase):
         if not self.is_shuffle:
             MAX_NUM_CLAUSES = 16
             if self.depth >= 4:
-                MAX_NUM_CLAUSES = 7
+                MAX_NUM_CLAUSES = 7 #7 7 by default changing to 8 for matmul
 
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
             debug("Bucket return from partitioning")
             debug(bucket.keys())
-            (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
+            (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 3, max_num_clauses = MAX_NUM_CLAUSES)
             #(operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
+
 
 
         grammar_ops_str = []
@@ -936,11 +988,11 @@ class StepWiseSynthesizer(SynthesizerBase):
     def score_context(self, dsl_inst ,  ctx):
 
         if self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE  ) and ctx.name == "hexagon_V6_vcombine_128B":
-            return 7
+            return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_hi_128B":
-            return 7
+            return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
-            return 7
+            return 15
 
         #elif self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE  ) and self.spec.output_precision == 32 and  ctx.name == "hexagon_V6_vmpyieoh_128B_alt":
         #    return 7

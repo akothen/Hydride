@@ -55,6 +55,20 @@
   )
 
 
+(define (is-simple-ramp ramp-op)
+  (destruct ramp-op
+        [(ramp base stride len)
+
+         (destruct stride
+                   [(int-imm data signed?)
+                    #t
+                    ]
+                   [_ #f]
+                   )
+         ]
+        [_ #f]
+            )
+  )
 
 ;; Gather the list of bv-ops involved in the halide IR expressions.
 ;; This information will be used to identify the list of hydride IR
@@ -92,7 +106,7 @@
     [(xBroadcast sca factor) empty-list]
 
     [(ramp base stride len)
-     (list extract bvmul bvadd sign-extend zero-extend 'ramp)
+     (append (list extract  bvadd  'ramp)  (if (is-simple-ramp (ramp base stride len)) (list) (list bvmul sign-extend zero-extend)))
      ]
 
     [(load buf idxs alignment) empty-list]
@@ -247,14 +261,20 @@
     
     [(vec-add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
 
-    [(vec-sat-add v1 v2) (append (list extract ) (if (halide:is-signed-expr? v1 v2) (list  bvaddnsw ) (list  bvaddnuw  )) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sat-add v1 v2) (append (list extract 
+                                       ;TEMPORARY
+                                       ;bvadd
+                                       ) (if (halide:is-signed-expr? v1 v2) (list  bvaddnsw ) (list  bvaddnuw  )) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend zero-extend ) (list  zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+
+    ;; TODO: Since we now have context specific bitvector ops, this should be safe to do?
+    ;[(vec-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
     [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list bvslt  bvsmin) (list bvult bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-max v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmax bvsgt) (list  bvumax bvugt))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmin) (list  bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-max v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmax ) (list  bvumax ))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-if v1 v2 v3) (append (list bveq 'if 'cond) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
     [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
@@ -262,8 +282,8 @@
     [(vec-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) )] ;(get-bv-ops v2))]
-    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)  )];  (get-bv-ops v2))]
+    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)    (get-bv-ops v2))]
     ;[(vec-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list   bvsmax bvsmin ) (list   bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-absd v1 v2) (append (list  bvsub )  (get-bv-ops (vec-max v1 v2))  (get-bv-ops (vec-min v1 v2)) )]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
@@ -1937,7 +1957,8 @@
   (define (visitor-fn e)
     (destruct e
               [(ramp base stride len) 
-               (set! flag #t)
+               ;(set! flag #t)
+               e
                ]
 
               [(vec-div v1 v2) 

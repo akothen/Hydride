@@ -185,7 +185,7 @@ def create_interleave_two_dsl(input_vector_sizes = [],
             out_lanesize_index = 2,
             in_precision_index = 3,
             out_precision_index = 3,
-            cost = "4",
+            cost = "4", # switching with one from 4
         )
 
     return vec_interleave_two_dsl

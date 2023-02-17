@@ -26,10 +26,14 @@ def parse_cost(dsl_inst_cost, hw_name = "Skylake"):
 
     return None
 
-def populate_dsl_inst(dsl_inst , sub_inst_dict):
+def populate_dsl_inst(dsl_inst , sub_inst_dict, keep_duplicate = False):
 
     duplicate_context_names = []
     for subinst_name in sub_inst_dict:
+
+        if keep_duplicate:
+            break
+
         if subinst_name in duplicate_context_names:
             continue
 
@@ -47,7 +51,7 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict):
 
 
     if duplicate_context_names != []:
-        print("dropping Duplicate contexts:", duplicate_context_names)
+        print("dropping Duplicate contexts:", duplicate_context_names , " belonging to class", dsl_inst.name)
 
 
 
@@ -93,7 +97,7 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict):
 
 
 
-def parse_dict(sem_dict):
+def parse_dict(sem_dict, keep_duplicate = False):
 
     dsl = []
 
@@ -104,7 +108,7 @@ def parse_dict(sem_dict):
 
         dsl_inst = create_dsl_inst(sem_dict[inst_name], inst_name, is_simd)
 
-        dsl_inst = populate_dsl_inst(dsl_inst, sem_dict[inst_name]['target_instructions'])
+        dsl_inst = populate_dsl_inst(dsl_inst, sem_dict[inst_name]['target_instructions'], keep_duplicate = keep_duplicate)
 
         dsl.append(dsl_inst)
 

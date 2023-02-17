@@ -294,7 +294,7 @@
         )
       ;(synthesize-sol-with-depth 1 2  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
 
-      (synthesize-sol-with-depth 1 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
+      (synthesize-sol-with-depth 1 4  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
       )
     )
 

@@ -526,6 +526,10 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
 
         debug(1) << "Optimizing Hexagon instructions (synthesis)...\n";
         body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+        
+        const char* force_opt = getenv("HL_FORCE_HEXAGON_OPT");
+        if(force_opt)
+            body = optimize_hexagon_instructions(body, target);
 
     } else {
 

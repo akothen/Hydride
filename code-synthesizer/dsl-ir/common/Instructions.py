@@ -160,6 +160,7 @@ class Context:
         self.cost = cost
         self.signedness = signedness
         self.semantics = semantics
+        self.precision_scaled = False
 
         self.num_args = len(args)
         self.parse_args(args)
@@ -335,11 +336,12 @@ class Context:
                 scaled_args.append(scaled_lanesize_arg)
 
 
-            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation():
+            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation() and arg.value not in [8,16,32,64]:
                 scaled_prec = Precision(arg.name, input_precision = arg.input_precision, output_precision = arg.output_precision, value = arg.value // scale_factor)
 
                 scaled_args.append(scaled_prec)
                 scale_io_prec = True
+                self.precision_scaled = True
 
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
@@ -360,7 +362,7 @@ class Context:
 
         assert self.out_vectsize % scale_factor == 0, "scale_factor must evenly divide the input vector sizes"
 
-        if not lane_size_scaled and need_to_scale_lanesize:
+        if not lane_size_scaled and (need_to_scale_lanesize or self.lane_size >= 1024):
             self.lane_size = int(self.lane_size // scale_factor)
 
         if scale_io_prec:
@@ -384,7 +386,7 @@ class Context:
     def get_scalable_args_idx(self, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
 
-        sample_scale_factor = 32
+        sample_scale_factor = 4#32
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
@@ -399,7 +401,7 @@ class Context:
             elif idx == self.out_lanesize_index  and arg.value // sample_scale_factor  >= self.out_precision:
                 scalable_idx.append(idx)
 
-            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation():
+            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation() and self.precision_scaled :
                 scalable_idx.append(idx)
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:

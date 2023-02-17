@@ -5,7 +5,22 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = [] # ["hexagon_V6_vmpyiewuh_acc_128B", "hexagon_V6_vmpyieoh_128B"]
+DEBUG_LIST = [
+    # "hexagon_V6_vrmpyubv_acc_128B",
+    #"hexagon_V6_vdmpyhb_acc_128B",
+    #"hexagon_V6_vdmpyhvsat_128B",
+    #"hexagon_V6_vshufoh_128B",
+    #"hexagon_V6_vdealh_128B"
+    "hexagon_V6_vmpyiewh_acc_128B",
+    #"hexagon_V6_vassign_128B",
+    #"hexagon_V6_lo_128B",
+    #"hexagon_V6_pred_and_128B",
+    "hexagon_V6_vmpyih_acc_128B",
+    "_mm512_mulhi_epu16"
+
+
+
+]
 
 
 SKIP_LIST = []
@@ -261,8 +276,8 @@ class SynthesizerBase:
             if not ENABLE_SHUFFLE:
                 continue
 
-            if input_size <= 32:
-                continue
+            #if input_size <= 32:
+            #    continue
 
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
@@ -533,6 +548,11 @@ class SynthesizerBase:
             return (ops , ctxs)
 
         acc_ops = [ctx.name for ctx in ctxs if '_acc' in ctx.name]
+        non_acc_names = [name.replace("_acc","") for name in acc_ops]
+
+        print("Acc ops:", acc_ops)
+        print("non acc ops:", non_acc_names)
+
 
         pruned_ops = []
         pruned_ctxs = []
@@ -548,6 +568,7 @@ class SynthesizerBase:
                 continue
 
             discard = any([acc_name.replace("_acc","") == ctx_i.name for acc_name in acc_ops])
+            discard = discard or ctx_i.name in non_acc_names
 
             if not discard:
                 pruned_ops.append(op_i)
@@ -584,9 +605,15 @@ class SynthesizerBase:
         for op in spec_ops:
             op_variant = op_has_variant(op)
 
+
+
             for var in op_variant:
                 # Only variants which are in the spec are allowed
                 if var not in spec_ops:
+
+                    if var == "bvadd":
+                        continue
+
                     disallowed_ops.append(var)
 
         print("Disallowed bvops: ", disallowed_ops)
@@ -688,10 +715,17 @@ class SynthesizerBase:
             dsl_ops = op_i.get_semantics_ops_list()
 
             # If operations are just byte rearrangements allow them
-            if all([op in ["extract", "concat"] for op in dsl_ops]):
+            if all([op in ["extract", "concat"] for op in dsl_ops]) and ctx_i.in_precision == ctx_i.out_precision:
                 pruned_ops.append(op_i)
                 pruned_ctxs.append(ctx_i)
                 continue
+
+            # If its a bitwise operation such as bitwise and or etc precision doesn't matter
+            if self.is_elementwise_logical_like_operation(op_i):
+                pruned_ops.append(op_i)
+                pruned_ctxs.append(ctx_i)
+                continue
+
 
 
             min_ctx_bvs = min(ctx_i.out_precision, ctx_i.in_precision)
@@ -881,6 +915,12 @@ class SynthesizerBase:
         contexts = []
 
         check = dsl_inst.name in DEBUG_LIST and DEBUG
+        if check:
+            print("============================================")
+            print("Getting support contexts for ", dsl_inst.name)
+            print("Total available contexts: ", [ctx.name for ctx in dsl_inst.contexts])
+
+            print("============================================")
 
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
 
@@ -906,8 +946,8 @@ class SynthesizerBase:
 
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
-                    if v in ctx_ops and v not in spec_ops and not skip:
-                        #print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
+                    if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
+                        print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
                         skip = True
 
 
@@ -945,7 +985,10 @@ class SynthesizerBase:
                     print("Base vector size:", self.BASE_VECT_SIZE)
                     print("Supported Input precision:", supports_inputs_prec)
 
+                #if not self.is_shuffle:
                 supports_inputs_prec = supports_inputs_prec and lane_size_cond
+                #else:
+                #    lane_size_cond = True
 
 
 
@@ -960,21 +1003,10 @@ class SynthesizerBase:
                 supports_input_basevect = ctx.supports_input_size(self.BASE_VECT_SIZE)
                 supports_output_basevect = ctx.supports_output_size(self.BASE_VECT_SIZE)
 
-            if UPCAST_OPERATIONS:
-                # One precision higher
-                supports_inputs_prec = supports_inputs_prec or  any([ctx.supports_input_precision(2 * input_precision) for  input_precision in self.spec.input_precision])
-
-                # Twice vector size
-                supports_input_length = supports_input_length or any([ctx.supports_input_size(2 * input_size) for  input_size in self.input_sizes])
-
-
-                supports_output_length = supports_output_length or ctx.supports_output_size(2 * self.output_slice_length)
-
-                supports_outputs_prec = supports_outputs_prec or ctx.supports_output_precision(2 * self.spec.output_precision)
 
             if check:
                 print("-"*50)
-                print(ctx.name, "Supports Input Prec:", supports_inputs_prec)
+                print(ctx.name, "Supports Input Prec:", supports_inputs_prec, " with input Prec: ",ctx.in_precision)
                 print(ctx.name, "Supports Input Length:",supports_input_length)
                 print(ctx.name,"Supports Output prec", supports_outputs_prec)
                 print(ctx.name, "Supports Output Length:", supports_output_length)
@@ -995,13 +1027,21 @@ class SynthesizerBase:
             # Hexagon condition for distribution:
             #hexagon_cond = ((supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length) ) and lane_size_cond
             # TEMP:
-            hexagon_precision_cond_op =  (supports_inputs_prec or supports_outputs_prec)  and (not is_broadcast_like)
+            hexagon_precision_cond_op =  (supports_inputs_prec or supports_outputs_prec)  and (not is_broadcast_like  or self.is_shuffle)
             hexagon_precision_cond_br =  (supports_input_length or supports_output_length) and  is_broadcast_like
             hexagon_precision_cond = hexagon_precision_cond_op or hexagon_precision_cond_br
             hexagon_cond = (hexagon_precision_cond and (supports_input_length or supports_output_length or supports_input_basevect or supports_output_basevect ) ) and lane_size_cond
             hexagon_cond = hexagon_cond and (self.target == "hvx")
 
-            if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:
+
+            if check:
+                print("Context ops:", ctx_ops)
+                print("Hexagon cond for",ctx.name,hexagon_cond)
+                print("Hexagon cond op for",ctx.name,hexagon_precision_cond_op)
+                print("Hexagon cond op br",ctx.name,hexagon_precision_cond_br)
+
+
+            if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length or supports_input_basevect)) or casts_inter_inputs:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -1013,7 +1053,7 @@ class SynthesizerBase:
         if check:
             print("Contexts in ascending order of score")
             for ctx in contexts:
-                print(ctx.name)
+                print(ctx.name, "with score ", self.score_context(dsl_inst, ctx), "with ops", ctx.get_bv_ops())
 
 
 
@@ -1044,10 +1084,10 @@ class SynthesizerBase:
 
 
 
+            if check:
+                print("Returning contexts: ", [ctx.name for ctx in limited_context])
 
             return limited_context
-            #return contexts[-limit:]
-            #return contexts[:limit]
 
 
         return contexts
@@ -1086,7 +1126,8 @@ class SynthesizerBase:
             score += int(ctx.supports_output_size(self.output_slice_length))
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
-            #score += int(ctx.supports_output_size(self.output_slice_length))
+            #score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
+            #score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
 
             # For targets which prefer distributing computation
             # over a base vector size
@@ -1232,9 +1273,9 @@ class SynthesizerBase:
             if dsl_inst.name in DEBUG_LIST and DEBUG:
                 print("Has inputs and outputs defined")
 
-            supports_inputs_prec = any([dsl_inst.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
+            supports_inputs_prec = any([dsl_inst.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]) or self.is_elementwise_logical_like_operation(dsl_inst)
 
-            supports_outputs_prec = dsl_inst.supports_output_precision(self.spec.output_precision)
+            supports_outputs_prec = dsl_inst.supports_output_precision(self.spec.output_precision) or self.is_elementwise_logical_like_operation(dsl_inst)
 
             supports_output_length = dsl_inst.supports_output_size(self.output_slice_length)
 
@@ -1254,6 +1295,7 @@ class SynthesizerBase:
 
             # for element wise operations, we really only need the sizes of the vectors to overlap
             is_elem_logical = self.is_elementwise_logical_like_operation(dsl_inst) and (supports_input_length or supports_output_length)
+            is_elem_logical = is_elem_logical and (self.BASE_VECT_SIZE == None or dsl_inst.supports_input_size(self.BASE_VECT_SIZE))
 
 
             is_broadcast_like = self.is_broadcast_like_operation(dsl_inst) and supports_input_length and supports_output_length
