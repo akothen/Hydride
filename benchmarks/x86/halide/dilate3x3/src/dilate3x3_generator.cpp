@@ -5,7 +5,7 @@ using namespace Halide;
 
 class Dilate3x3 : public Generator<Dilate3x3> {
 private:
-    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"};
+    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
     Func max_y{ "max_y" }, bounded_input{ "bounded_input" };
     
 public:
@@ -19,23 +19,22 @@ public:
         
         output
             .compute_root()
-            .split(y, y, yi, 36, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32);
+            .split(y, y, yi, 90, TailStrategy::ShiftInwards)
+            .split(yi, yi, yii, 9, TailStrategy::ShiftInwards)
+            .split(x, x, xi, 64, TailStrategy::RoundUp)
+            .vectorize(xi, 64);
             //.parallel(y);
         max_y
             .store_in(MemoryType::Stack)
             .compute_at(output, yi)
-            .split(x, x, xi, 128, TailStrategy::RoundUp)
-            .split(xi, xi, xii, 32, TailStrategy::RoundUp)
-            .vectorize(xii, 32);
+            .split(x, xi, xi, 64, TailStrategy::RoundUp)
+            .vectorize(xi, 64);
         bounded_input
             .store_in(MemoryType::Stack)
             .store_at(output, y)
             .compute_at(output, yi)
             .split(x, x, xi, 64, TailStrategy::RoundUp)
-            .split(xi, xi, xii, 32, TailStrategy::RoundUp)
-            .vectorize(xii, 32);
+            .vectorize(xi, 64);
 
         output.print_loop_nest();
     }
