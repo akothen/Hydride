@@ -178,7 +178,11 @@ class RosetteLifter:
         print("RosetteAST[1][1:]:")
         print(RosetteAST[1][1:])
         # Skip "#b" part of the string
-        BitvectorVal = int("0" + RosetteAST[1][2:], 16)
+        if "#b" in RosetteAST[1]:
+          BitvectorVal = int("0b" + RosetteAST[1][2:], 2)
+        else:
+          assert "#x" in RosetteAST[1]
+          BitvectorVal = int("0x" + RosetteAST[1][2:], 16)
         print("RosetteAST[2]:")
         print(RosetteAST[2])
         print("BitvectorVal:")
@@ -187,6 +191,8 @@ class RosetteLifter:
       elif RosetteAST[0] == 'lit':
         ConstantVal = self.liftRosetteAST(RosetteAST[1])
         assert isinstance(ConstantVal.getType(), RoseBitVectorType)
+        print("++++++++++=======ConstantVal:")
+        ConstantVal.print()
         [OutputType] = RosetteAST[-1]
         self.RoseValToLLVMType[ConstantVal] = self.getLLVMType(OutputType[1:])
         return ConstantVal
@@ -211,6 +217,8 @@ class RosetteLifter:
         return Op
       else:
         print("--ELSE")
+        print("RosetteAST[-1]:")
+        print(RosetteAST[-1])
         [OutputType] = RosetteAST[-1]
         OutputRoseType = self.getRoseType(OutputType[1:])
         Args = list(map(self.liftRosetteAST, RosetteAST[1:-1]))
