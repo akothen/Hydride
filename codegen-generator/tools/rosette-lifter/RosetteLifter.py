@@ -132,7 +132,7 @@ class RosetteLifter:
     if isinstance(RosetteAST, int):
       return RoseConstant.create(RosetteAST, RoseIntegerType.create(32))
     if isinstance(RosetteAST, list):
-      print("RosetteAST[0]:")
+      print("--RosetteAST[0]:")
       print(RosetteAST[0])
       if isinstance(RosetteAST[0], list):
         if ";" in RosetteAST[0][0] and "reg" in RosetteAST[0][0]:
@@ -175,7 +175,14 @@ class RosetteLifter:
         RosetteAST = RosetteAST[0]
       if RosetteAST[0] == 'bv':
         print("BV")
-        BitvectorVal = int("0" + RosetteAST[1][1:], 16)
+        print("RosetteAST[1][1:]:")
+        print(RosetteAST[1][1:])
+        # Skip "#b" part of the string
+        BitvectorVal = int("0" + RosetteAST[1][2:], 16)
+        print("RosetteAST[2]:")
+        print(RosetteAST[2])
+        print("BitvectorVal:")
+        print(BitvectorVal)
         return RoseConstant.create(BitvectorVal, RoseBitVectorType.create(RosetteAST[2]))
       elif RosetteAST[0] == 'lit':
         ConstantVal = self.liftRosetteAST(RosetteAST[1])
