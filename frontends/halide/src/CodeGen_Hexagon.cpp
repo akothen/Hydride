@@ -31,6 +31,14 @@ using namespace llvm;
 
 namespace {
 
+#define FALLBACK_IF_FAIL(OP)\
+    if(op->a.type().bits() >= 64){\
+        CodeGen_Posix::visit(op); \
+        return;\
+    }
+
+
+
 /** A code generator that emits Hexagon code from a given Halide stmt. */
 class CodeGen_Hexagon : public CodeGen_Posix {
 public:
@@ -524,7 +532,7 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
     const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
     if(enable_hydride && strcmp(enable_hydride, "0") != 0){
 
-        debug(1) << "Optimizing Hexagon instructions (synthesis)...\n";
+        debug(0) << "Optimizing Hexagon instructions (synthesis)...\n";
         body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
         
         const char* force_opt = getenv("HL_FORCE_HEXAGON_OPT");
@@ -1866,6 +1874,8 @@ void CodeGen_Hexagon::visit(const Mul *op) {
         debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
         debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
         debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
+
+        FALLBACK_IF_FAIL(Mul)
         value =
             call_intrin(op->type, "halide.hexagon.mul" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
@@ -1911,8 +1921,11 @@ void CodeGen_Hexagon::visit(const Mul *op) {
 }
 
 void CodeGen_Hexagon::visit(const Call *op) {
+
+    debug(0) << "CodeGenHexagon: Call "<<op->name <<"\n";
     internal_assert(op->is_extern() || op->is_intrinsic())
         << "Can only codegen extern calls and intrinsics\n";
+
 
     // Map Halide functions to Hexagon intrinsics, plus a boolean
     // indicating if the intrinsic has signed variants or not.
@@ -1924,6 +1937,11 @@ void CodeGen_Hexagon::visit(const Call *op) {
         {Call::get_intrinsic_name(Call::saturating_add), {"halide.hexagon.sat_add", true}},
         {Call::get_intrinsic_name(Call::saturating_sub), {"halide.hexagon.sat_sub", true}},
     };
+
+    if(functions.find(op->name) != functions.end() && op->type.bits() >= 64){
+        CodeGen_Posix::visit(op);
+        return;
+    }
 
     if (is_native_interleave(op)) {
         internal_assert(
@@ -1948,7 +1966,13 @@ void CodeGen_Hexagon::visit(const Call *op) {
             }
         } else if (op->is_intrinsic(Call::shift_left) ||
                    op->is_intrinsic(Call::shift_right)) {
+            debug(0) << "Shift intrinsic!\n" <<"\n";
+
             internal_assert(op->args.size() == 2);
+            if(op->type.bits() >= 64){
+                CodeGen_Posix::visit(op);
+                return;
+            }
             string instr = op->is_intrinsic(Call::shift_left) ? "halide.hexagon.shl" : "halide.hexagon.shr";
             Expr b = maybe_scalar(op->args[1]);
             // Make b signed. Shifts are only well defined if this wouldn't overflow.
@@ -2099,7 +2123,14 @@ void CodeGen_Hexagon::visit(const Call *op) {
 }
 
 void CodeGen_Hexagon::visit(const Max *op) {
+
     if (op->type.is_vector()) {
+        Expr MaxOp = Max::make(op->a, op->b);
+        debug(0) << "Hexagon Backend attemping to lower: " << MaxOp << "\n";
+        debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
+        debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
+        debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
+        FALLBACK_IF_FAIL(Max)
         value =
             call_intrin(op->type, "halide.hexagon.max" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
@@ -2115,6 +2146,12 @@ void CodeGen_Hexagon::visit(const Max *op) {
 
 void CodeGen_Hexagon::visit(const Min *op) {
     if (op->type.is_vector()) {
+        Expr MinOp = Min::make(op->a, op->b);
+        debug(0) << "Hexagon Backend attemping to lower: " << MinOp << "\n";
+        debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
+        debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
+        debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
+        FALLBACK_IF_FAIL(Min)
         value =
             call_intrin(op->type, "halide.hexagon.min" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
@@ -2192,6 +2229,7 @@ Value *CodeGen_Hexagon::codegen_cache_allocation_size(
 }
 
 void CodeGen_Hexagon::visit(const Allocate *alloc) {
+    debug(0) << "CodeGenHexagon: Allocate" <<"\n";
     if (sym_exists(alloc->name)) {
         user_error << "Can't have two different buffers with the same name: "
                    << alloc->name << "\n";

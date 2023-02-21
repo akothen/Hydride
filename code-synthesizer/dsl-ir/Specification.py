@@ -31,6 +31,10 @@ class Specification:
         return any([op in UNSIGNED_OPS for op in spec_ops])
 
 
+    def target_sema_supports_maxmin(self):
+        return self.target not in ["hvx"]
+
+
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True, supports_absd = True):
         operations = []
         for line in self.semantics:
@@ -67,9 +71,24 @@ class Specification:
                 elif bvop in line:
                     operations.append(bvop)
 
-        if self.target == 'hvx':
+        if not self.target_sema_supports_maxmin():
             # remove maxs /mins as hvx implements max and mins with gt lt
-            operations = [op for op in operations if op not in ['bvsmax', 'bvumax', 'bvsmin', 'bvumin']]
+            #operations = [op for op in operations if op not in ['bvsmax', 'bvumax', 'bvsmin', 'bvumin']]
+
+            op_map = {"bvsmax": "bvsgt", "bvumax": "bvugt", "bvsmin": "bvslt", "bvumin": "bvult" }
+
+            new_ops = []
+
+            for op in operations:
+                if op in op_map:
+                    new_ops.append(op_map[op])
+                else:
+                    new_ops.append(op)
+
+            operations = new_ops
+
+
+
 
 
 

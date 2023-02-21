@@ -27,7 +27,7 @@ from utils.ConstFold import ConstFold
 
 dsl_list = []
 
-TARGET = 'x86'
+TARGET = 'hvx'
 scd = None
 cost_name = ""
 interpret_name = ""

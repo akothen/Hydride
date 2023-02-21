@@ -1364,6 +1364,26 @@ namespace Halide {
                                 
                             }
 
+                            /*
+                            if (stmt.node_type() == IRNodeType::ProducerConsumer){
+
+                                debug(1) << "Producer Consumer STMT  Instruction: "<< stmt <<"\n";
+
+                                const ProducerConsumer* pc = stmt.as<ProducerConsumer>();
+                                scope_name.push(pc->name);
+
+
+                                std::map<const Store*, Expr> scoped_map;
+                                MemMap.push(scope_name.top(), scoped_map);
+                                auto new_produce_consume = mutate(pc->body);
+                                debug(1) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                MemMap.pop(scope_name.top());
+                                scope_name.pop();
+
+                                Stmt NewPC = ProducerConsumer::make(pc->name, pc->is_producer, new_produce_consume);
+
+                            }*/
+
 
                             // Start a new scope for IfThenElse 
                             if(stmt.node_type() == IRNodeType::IfThenElse){
@@ -1393,6 +1413,8 @@ namespace Halide {
                                 return  NewITE;
                                 
                             }
+
+
 
                         return IRMutator::mutate(stmt);
                     }
@@ -2346,48 +2368,48 @@ namespace Halide {
                         }
 
                         if(!supported){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
 
 
                         if (op->is_intrinsic(Call::dynamic_shuffle)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
                         else if (op->is_intrinsic(Call::count_leading_zeros)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
                         else if (op->is_intrinsic(Call::if_then_else)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
                         else if (op->is_intrinsic(Call::shift_left) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
 
                         }
 
                         else if (op->is_intrinsic(Call::shift_right) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
 
                         }
                         else if (op->is_intrinsic(Call::saturating_add) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
 
                         }
                         else if (op->is_intrinsic(Call::saturating_sub) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
 
@@ -2401,7 +2423,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2416,7 +2438,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2430,7 +2452,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2446,7 +2468,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2461,7 +2483,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2475,7 +2497,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2490,7 +2512,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2505,7 +2527,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2519,7 +2541,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2533,7 +2555,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2547,7 +2569,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2561,7 +2583,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2575,7 +2597,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2590,7 +2612,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2605,7 +2627,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2620,7 +2642,7 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector()|| (_arch == Architecture::HVX && op->type.bits() >= 64) ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2632,23 +2654,24 @@ namespace Halide {
 
                     Expr visit(const Shuffle *op) override{
                         bool disable_shuffles = (_arch != Architecture::HVX);
+
                         if (op->is_concat() && disable_shuffles){
                             debug(0) << "Abstracting concat vector!\n";
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
 
-                        if(op->is_slice() && disable_shuffles){
+                        if(op->is_slice() && (disable_shuffles || op->vectors[0].type().lanes() * op->vectors[0].type().lanes() > 2048 )){
                             debug(0) << "Abstracting slice vector!\n";
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
 
                         if(op->is_slice() && (op->slice_begin() != 0 && op->slice_begin() != op->vectors[0].type().lanes() / 2)){
                             debug(0) << "Abstracting random access slice vector!\n";
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         }
@@ -2702,7 +2725,7 @@ namespace Halide {
 
                         if(inner_broadcast){
 
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
 
@@ -2714,7 +2737,7 @@ namespace Halide {
                                 //|| (_arch == Architecture::HVX && op->type.bits() == 16 && op->type.bits() == 2)
                                 
                                 ){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } else {
@@ -2770,7 +2793,7 @@ namespace Halide {
                         }
 
                         if(!supported){
-                            std::string uname = unique_name('t');
+                            std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } else {
@@ -3002,7 +3025,7 @@ namespace Halide {
                     // as a new variable.
 
                     // Just treat it as a symbolic unknown
-                    std::string uname = unique_name('t');
+                    std::string uname = unique_name('h');
                     abstractions[uname] = e;
                     return Variable::make(e.type(), uname);
                 }
@@ -3439,33 +3462,45 @@ namespace Halide {
 
             debug(0) << "Hydride Optimize HVX" <<"\n";
 
-            std::set<const IRNode*> DeadStmts;
-            auto FLS = Hydride::FoldLoadStores(DeadStmts);
-            auto folded = FLS.mutate(s);
-            debug(1) << "Printing Folded Stmt:\n";
-            debug(1) << folded <<"\n";
+            Stmt distributed;
 
-            debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+            const char* disable_preprocess = getenv("HL_DISABLE_PREPROCESS");
+            if(disable_preprocess){
+                debug(0) << "Disabling pre-processing pass\n";
+                distributed = s;
+            } else {
 
-            auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(1) << "Printing Pruned Stmt:\n";
-            debug(1) << pruned <<"\n";
-            
-            std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
+                std::set<const IRNode*> DeadStmts;
+                auto FLS = Hydride::FoldLoadStores(DeadStmts);
+                auto folded = FLS.mutate(s);
+                debug(1) << "Printing Folded Stmt:\n";
+                debug(1) << folded <<"\n";
+
+                debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+
+                auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+                debug(1) << "Printing Pruned Stmt:\n";
+                debug(1) << pruned <<"\n";
+
+                std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
 
 
-            bool model_sat_support = false;
+                bool model_sat_support = false;
 
-            const char* enable_hydride = getenv("HL_BENCH_MATMUL");
-            if(enable_hydride){
-                debug(0) << "Setting model saturating support true" << "\n";
-                model_sat_support = true;
+                const char* enable_hydride = getenv("HL_BENCH_MATMUL");
+                if(enable_hydride){
+                    debug(0) << "Setting model saturating support true" << "\n";
+                    model_sat_support = true;
+                }
+                distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
+                debug(0) << "Distributed Stmt:\n";
+                debug(0) << distributed <<"\n";
+
+
+
             }
-            auto distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
-            debug(0) << "Distributed Stmt:\n";
-            debug(0) << distributed <<"\n";
 
-            //return distributed;
+
 
             srand(time(0));
             int random_seed = rand() % 1024;

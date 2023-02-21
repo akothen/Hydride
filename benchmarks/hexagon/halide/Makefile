@@ -1,10 +1,15 @@
-HALIDE_DIR ?= ../../../distrib
+#HALIDE_DIR ?= ../../../distrib
+
+HALIDE_DISTRIB ?= /home/arnoor2/Racket/TensorSynth/Rosette-experiments/frontends/halide/distrib/
+HALIDE_DIR = $(HALIDE_DISTRIB)
+LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 
 HEXAGON_SIM ?= /shared/akashk4/Hexagon_SDK/3.5.3/tools/HEXAGON_Tools/8.3.07/Tools/bin/hexagon-sim
 HEXAGON_CLANG ?= /shared/akashk4/Hexagon_SDK/3.5.3/tools/HEXAGON_Tools/8.3.07/Tools/bin/hexagon-clang++
 
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
+			 gaussian7x7 \
 			 dilate3x3 \
 			 dilate5x5 \
 			 median3x3 \
@@ -13,6 +18,8 @@ benchmarks = gaussian3x3 \
 			 blur5x5 \
 			 blur7x7 \
 			 matmul \
+			 matmul_hvx \
+			 depthwise_conv \
 			 add \
 			 mul \
 			 l2norm \
@@ -29,7 +36,7 @@ prof_dirs = $(addsuffix /profile,$(benchmarks))
 ENABLE_HYDRIDE ?= 1
 EXPR_DEPTH ?=2
 INT_BW ?= 16
-STARTING_HASH = HYDRIDE_INITIAL_HASH="hvx_hash"
+STARTING_HASH = HYDRIDE_INITIAL_HASH="hash_v3" 
 
 hannk = hannk/common_halide.cpp
 
@@ -47,7 +54,7 @@ $(benchmarks): %: %/bin %/out %/profile
 		-o $@/bin/$@_generator \
 		-L $(HALIDE_DIR)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
 
-	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HYDRIDE_BENCHMARK=$@_hvx; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_SYNTH_BW=$(INT_BW) $(STARTING_HASH) ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=hvx   HL_SYNTH_BW=$(INT_BW) $(STARTING_HASH) ./$@/bin/$@_generator \
 	    -t 0 \
 		-o $@/bin \
 		-g $@ \
@@ -78,7 +85,7 @@ fully_connected: %: %/bin %/out %/profile
 		-o $@/bin/$@_generator \
 		-L $(HALIDE_DIR)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
 
-	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HL_RAKE_BENCHMARK_NAME=$@; ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib;  export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=hvx   HL_SYNTH_BW=$(INT_BW) $(STARTING_HASH) ./$@/bin/$@_generator \
 	    -t 0 \
 		-o $@/bin \
 		-g $@ output.type=uint8 \
