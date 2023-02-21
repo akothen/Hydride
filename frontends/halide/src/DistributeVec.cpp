@@ -139,6 +139,9 @@ namespace Halide {
             }
 
 
+
+
+            debug(0) << "Completed distributing Load...\n";
             return exprs;
         }
 
@@ -299,6 +302,11 @@ namespace Halide {
                 // into different number of chunks, we first concatenate 
                 // the results and then extract the slices accordingly.
                 if(operands_num_chunks != num_chunks){
+                    internal_assert(distributed_value.size() != 0) << "Concat empty vectors for cast nodes\n";
+                    debug(0) << "make concat "<<"cast"<<"\n";
+                    for(auto val : distributed_value){
+                        debug(0) << "Individual elem: "<<val<<"\n";
+                    }
                     Expr Combined = Shuffle::make_concat(distributed_value);
                     
 
@@ -512,7 +520,8 @@ namespace Halide {
         std::vector<Expr> DistributeVec::visit(const Broadcast* op, unsigned num_chunks){
 
             
-            debug(0) << "Distribute Broadcast into " << num_chunks << "!\n";
+            Expr OrigBroadcast = Broadcast::make(op->value, op->type.lanes());
+            debug(0) << "Distribute Broadcast "<< OrigBroadcast << " into " << num_chunks << "!\n";
 
             std::vector<Expr> exprs;
 
@@ -551,6 +560,7 @@ namespace Halide {
                 DI->equally_distributed = !divisible;
                 DistribMap[op] = DI;
             }
+            debug(0) << "Completed distributing broadcast!\n";
             return exprs;
         }
 
@@ -590,6 +600,8 @@ namespace Halide {
                     } \
 \
                     if(operands_num_chunks != num_chunks){ \
+                        internal_assert(exprs.size() != 0) << "Concat empty vectors for internal widen call nodes\n";\
+                    debug(0) << "make concat "<<"call"<<"\n";\
                         Expr Combined = Shuffle::make_concat(exprs); \
                         std::vector<Expr> slice_casts;\
                         if(num_chunks == 1){\
@@ -682,6 +694,8 @@ namespace Halide {
                     // into different number of chunks, we first concatenate 
                     // the results and then extract the slices accordingly.
                     if(operands_num_chunks != num_chunks){
+                        internal_assert(exprs.size() != 0) << "Concat empty vectors for rounding_mul_shift_right nodes\n";
+                        debug(0) << "make concat "<<"rounding_mul_shift_right"<<"\n";
                         Expr Combined = Shuffle::make_concat(exprs);
 
 
@@ -731,6 +745,8 @@ namespace Halide {
                     // into different number of chunks, we first concatenate 
                     // the results and then extract the slices accordingly.
                     if(operands_num_chunks != num_chunks){
+                        internal_assert(exprs.size() != 0) << "Concat empty vectors for mul_shift_right nodes\n";
+                        debug(0) << "make concat "<<"mul_shift_right"<<"\n";
                         Expr Combined = Shuffle::make_concat(exprs);
 
 
@@ -804,6 +820,8 @@ namespace Halide {
             } else if (op->is_broadcast()){
                 OrigShuff = Shuffle::make_broadcast(op->vectors[0], op->broadcast_factor());
             } else if (op->is_concat()){
+                internal_assert(op->vectors.size() != 0) << "Distributed arguments require same number of operands\n"; 
+                debug(0) << "make concat "<<"OrigShuff"<<"\n";
                 OrigShuff = Shuffle::make_concat(op->vectors);
             } else if (op->is_extract_element()){
                 OrigShuff = Shuffle::make_extract_element(op->vectors[0], op->indices[0]);

@@ -264,6 +264,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
                 }
 
                 if (can_collapse) {
+                    debug(0) << "Make concat in can_collapse\n";
                     // It's possible the slices didn't use all of the vector, in which case we need to slice it.
                     Expr result = Shuffle::make_concat(first_shuffle->vectors);
                     if (result.type().lanes() != op->type.lanes()) {
@@ -361,7 +362,8 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
 
                     concat_index += v.type().lanes();
                 }
-                if (new_concat_vectors.size() < inner_shuffle->vectors.size()) {
+                if (new_concat_vectors.size() < inner_shuffle->vectors.size() && new_concat_vectors.size() != 0) {
+                    debug(0) << "Make concat in new_concat_vectors\n";
                     return Shuffle::make_slice(Shuffle::make_concat(new_concat_vectors), op->slice_begin() - new_slice_start, op->slice_stride(), op->indices.size());
                 }
             }
