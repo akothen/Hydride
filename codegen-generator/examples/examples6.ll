@@ -475,5 +475,32 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize, int32 %outer
 
 
 
+function _mm256_unpackhi_epi16 ( bv a, bv b, %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1, i32 %arg2 ) {
+;; Loop bounds are extracted and constants from loop body
+;; are extracted using backwards and forwards dataflow analysis
+ for ([out.it (range 0 %vectsize %window_size)]) {
+  for ([in.it (range %window_offset %interleavesize %elemsize)]) {
+    %in.it.fact = mul i32 in.it, i32 %arg1
+    %low.offset0 = add i32 in.it, i32 %arg2
+    %low.i = add i32 out.it, i32 %low.offset0
+    %lastidx1 = sub i32 %elemsize, i32 1
+    %high.i = add i32 %low.i, i32 %lastidx1
+    %ext.a = bvextract bv a, i32 %low.i, i32 %high.i, i32 %elemsize
+    %lastidx2 = sub i32 %elemsize, i32 1
+    %6 = add i32 in.it.fact, i32 %lastidx2
+    bvinsert bv %ext.a, bv dst, i32 in.it.fact, i32 %6, i32 %elemsize
+    %ext.b = bvextract bv b, i32 %low.i, i32 %high.i, i32 %elemsize
+    %low.offset1 = add i32 in.it.fact, i32 %arg0
+    %7 = add i32 %low.offset1, i32 out.it
+    %lastidx0 = sub i32 %elemsize, i32 1
+    %8 = add i32 %7, i32 %lastidx0
+    bvinsert bv %ext.b, bv dst, i32 %7, i32 %8, i32 %elemsize
+  }}
+ ret bv dst
+}
+
+
+
 
 
