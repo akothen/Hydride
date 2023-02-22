@@ -508,8 +508,31 @@ function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
  for ([%outer.it (range 0 512 128)]) {
   for ([%inner.it (range 0 128 16)]) {
    %factor = div int32 %inner.it, int32 2
-   %offset.0 = add int32 %factor, int32 64
+   %offset.0 = add int32 %factor, int32 0
    %low.idx = add int32 %outer.it, int32 %offset.0
+   %high.idx = add int32 %low.idx, int32 7
+   ;; Extract slice from a
+   %ext.a = bvextract bv512 a, int32 %low.idx, int32 %high.idx, int32 8
+   %12 = add int32 %inner.it, int32 7
+   ;; Insert slice from a into dst
+   bvinsert bv8 %ext.a, bv512 dst, int32 %inner.it, int32 %12, int32 8
+   ;; Extract slice from b
+   %ext.b = bvextract bv512 b, int32 %low.idx, int32 %high.idx, int32 8
+   %offset.1 = add int32 %inner.it, int32 8
+   %13 = add int32 %offset.1, int32 %outer.it
+   %14 = add int32 %13, int32 7
+   ;; Insert slice from b into dst
+   bvinsert bv8 %ext.b, bv512 dst, int32 %13, int32 %14, int32 8
+  }
+ }
+ ret bv512 dst
+}
+
+function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
+ for ([%outer.it (range 0 512 128)]) {
+  for ([%inner.it (range 0 128 16)]) {
+   %factor = div int32 %inner.it, int32 2
+   %low.idx = add int32 %outer.it, int32 %factor
    %high.idx = add int32 %low.idx, int32 7
    ;; Extract slice from a
    %ext.a = bvextract bv512 a, int32 %low.idx, int32 %high.idx, int32 8
