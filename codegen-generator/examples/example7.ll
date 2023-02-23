@@ -177,3 +177,63 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
 
 
 
+
+function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b, int32 %vectsize, 
+                              int32 %outerlanesize, int32 %innerlaneoffset, 
+                              int32 %innerlanesize, int32 %elemsize, int32 %extend_size) {
+ for ([%outer.it (range 0 %vectsize %outerlanesize)]) {
+  %lastidx0 = sub int32 %outerlanesize, int32 1
+  %high = add int32 %outer.it, int32 %lastidx0
+  %acc = bvextract bv512 src, int32 %outer.it, int32 %high, int32 %outerlanesize
+  bvinsert bv32 %acc, bv512 dst, int32 %outer.it, int32 %high, int32 %outerlanesize
+  for ([%inner.it (range %innerlaneoffset %innerlanesize %elemsize)]) {
+   %1.low = add int32 %outer.it, int32 %inner.it
+   %lastidx1 = sub int32 %elemsize, int32 1
+   %2 = add int32 %1.low, int32 %lastidx1
+   %3 = bvextract bv512 a, int32 %1.low, int32 %2, int32 %elemsize
+   %4 = bvzeroextend bv8 %3, int32 %extend_size
+   %8 = bvextract bv512 b, int32 %1.low, int32 %2, int32 %elemsize
+   %9 = bvsignextend bv8 %8, int32 %extend_size
+   %10 = bvmul bv16 %4, bv16 %9
+   %11 = bvsignextend bv16 %10, int32 %outerlanesize
+   %lastidx2 = sub int32 %outerlanesize, int32 1
+   %11.high.new = add int32 %outer.it, int32 %lastidx2
+   %11.ext = bvextract bv512 dst, int32 %outer.it, int32 %11.high.new, int32 %outerlanesize
+   %11.acc = bvadd bv32 %11.ext, bv32 %11
+   bvinsert bv32 %11.acc, bv512 dst, int32 %outer.it, int32 %11.high.new, int32 %outerlanesize
+  }
+ }
+ ret bv512 dst
+}
+
+
+function hexagon_V6_vrmpybusv_acc_128B (bv1024 Vx, bv1024 Vu, bv1024 Vv, int32 %vectsize, 
+                                        int32 %outerlanesize, int32 %innerlaneoffset,
+                                        int32 %innerlanesize, int32 %elemsize, int32 %extend_size ) {
+ for ([%outer.it (range 0 %vectsize %outerlanesize)]) {
+  %lastidx0 = sub int32 %outerlanesize, int32 1
+  %high = add int32 %outer.it, int32 %lastidx0
+  %acc = bvextract bv1024 Vx, int32 %outer.it, int32 %high, int32 %outerlanesize
+  bvinsert bv32 %acc, bv1024 %dst, int32 %outer.it, int32 %high, int32 %outerlanesize
+  for ([%inner.it (range %innerlaneoffset %innerlanesize %elemsize)]) {
+   %5 = add int32 %inner.it, int32 %outer.it
+   %lastidx1 = sub int32 %elemsize, int32 1
+   %6 = add int32 %5, int32 %lastidx1
+   %7 = bvextract bv1024 Vu, int32 %5, int32 %6, int32 %elemsize
+   %12 = bvextract bv1024 Vv, int32 %5, int32 %6, int32 %elemsize
+   %13 = bvzeroextend bv8 %7, int32 %extend_size
+   %14 = bvsignextend bv8 %12, int32 %extend_size
+   %15 = bvmul bv16 %13, bv16 %14
+   %16 = bvsignextend bv16 %15, int32 %outerlanesize
+   %lastidx2 = sub int32 %outerlanesize, int32 1
+   %16.high.new = add int32 %outer.it, int32 %lastidx2
+   %16.ext = bvextract bv1024 %dst0, int32 %outer.it, int32 %16.high.new, int32 %outerlanesize
+   %16.acc = bvadd bv32 %16.ext, bv32 %16
+   bvinsert bv32 %16.acc, bv1024 %dst, int32 %outer.it, int32 %16.high.new, int32 %outerlanesize
+  }
+ }
+ ret bv1024 %dst
+}
+
+
+
