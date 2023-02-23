@@ -12,18 +12,10 @@
 ;; Define arith IR
 
 
-;; Generalized Broadcast
 
-
-;(arith:create-tensor bv (vector 2 2 2) (vector 0 1 2) 'int32 256)
-
-
-;(struct vector:extract_strided_slice (v0 offset sizes strides))
 (struct arith:int-imm (data signed?) #:transparent #:mutable)
 
 (struct arith:tensor (data shape-vector layout-vector  elemT buffSize) #:transparent #:mutable)
-
-
 
 
 ;; Generalized Cast
@@ -53,4 +45,21 @@
 (struct arith:tensor-shr (v1 v2) #:transparent)
 
 (struct arith:tensor-bwand (v1 v2) #:transparent)
+
+(struct vector:bitcast (v1 signed? out-prec) #:transparent)
+(struct vector:broadcast (v1 output-shape) #:transparent)
+(struct vector:extract (v1 extract_indices) #:transparent) ; type of v1 : arith:tensor, type of extract_indices would (vector idx0 idx1 ... )
+(struct vector:extract_strided_slice (v1 offsets sizes strides) #:transparent ) ; ; type of v1 : arith:tensor, type offsets sizes strides each  would (vector idx0 idx1 ... )
+
+
+(struct vector:matrix_multiply (v1 v2 lhs_rows lhs_cols rhs_cols) #:transparent)
+(struct vector:flat_transpose (v1 trows tcols) #:transparent)
+(struct vector:splat (v1 output-shape) #:transparent)
+(struct vector:reduction (v1 operation) #:transparent)
+
+(struct vector:transpose (v1 rank_perm) #:transparent)
+
+
+
+
 

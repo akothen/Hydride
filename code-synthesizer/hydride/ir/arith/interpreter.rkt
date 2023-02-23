@@ -262,7 +262,197 @@
 
             [(arith:tensor-bwand v1 v2) (do-bwand (interpret v1 indices) (interpret v2 indices))]
 
+            [(vector:bitcast v1 signed? out-prec)
+             (cpp:cast
+               (interpret v1 indices)
+               (cond
+                 [(and (eq? out-prec 8) signed?)  'int8]
+                 [(and (eq? out-prec 16) signed?)  'int16]
+                 [(and (eq? out-prec 32) signed?)  'int32]
+                 [(and (eq? out-prec 64) signed?)  'int64]
+                 [(and (eq? out-prec 8) )  'uint8]
+                 [(and (eq? out-prec 16) )  'uint16]
+                 [(and (eq? out-prec 32) )  'uint32]
+                 [(and (eq? out-prec 64) )  'uint64]
 
+                 )
+               )
+             ]
+            [(vector:broadcast v1 output-shape)
+             (define input-shape (tensor-shape v1))
+             (define num-input-dims (vector-length input-shape))
+             (define num-output-dims (vector-length output-shape))
+
+             ;; According to the semantics of the broadcast, the duplication
+             ;; happens along the new leading dimensions, hence for the 
+             ;; purposes of interpreting the semantics, we can discard
+             ;; the leading dimensions
+
+             (define num-new-leading-dims (- num-output-dims num-input-dims))
+             (cond
+               [(< num-output-dims num-input-dims)
+                (error "Illegal broadcast shape for vector:broadcast")
+                ]
+               [else
+                 (define sliced-indices (vector-take-right indices num-input-dims))
+                 (interpret v1 sliced-indices)
+                 ]
+               )
+             ]
+            [(vector:extract_strided_slice v1 offsets sizes strides)
+             (define input-shape (tensor-shape v1))
+             (define (generate-strided-indices i)
+               (if 
+                 (< i (vector-length offsets))
+
+                 ;; Adjusted strided index
+                 (+ (vector-length offsets i) (* strides (vector-ref indices i)))
+                 
+                 ;; If index along non-strided dimension index regularly
+                 (vector-ref indices i)
+                 )
+               )
+
+             (define actual-indices (build-vector (vector-length indices) generate-strided-indices))
+             (interpret v1 actual-indices)
+             
+             ]
+
+            [(vector:extract v1 extract_indices)
+             (define input-shape (tensor-shape v1))
+             (define (generate-extract-indicies i)
+               (if 
+                 (< i (vector-length extract_indices))
+
+                 ;; Adjusted strided index
+                 (+ (vector-length extract_indices i) (* 1 (vector-ref indices i)))
+
+                 ;; If index along non-strided dimension index regularly
+                 (vector-ref indices i)
+                 )
+               )
+
+             (define actual-indices (build-vector (vector-length indices) generate-extract-indicies))
+             (interpret v1 actual-indices)
+             ]
+            [(vector:matrix_multiply v1 v2 lhs_rows lhs_cols rhs_cols)
+             ;; Interprets the underlying flattened vectors as (lhs_rows, lhs_cols)
+             ;; and (lhs_cols, rhs_cols) tensors. Note that the rank of the result
+             ;; tensor and inputs are 1, they're merely 'interpreted' as 2D according
+             ;; to the vector:matrix_multiply semantics.
+             (cond
+               [(equal? (vector-length indices) 1)
+                (define index (vector-ref indices 0))
+                (define out-row (quotient index rhs_cols))
+                (define out-col (- index (* out-row rhs_cols) 1))
+
+                ;; Need to do a dimension along the lhs-cols elements
+                (define partial-products 
+                  (for/list ([k (range lhs_cols)])
+                            (define e1 (interpret v1 (vector out-row k)))
+                            (define e2 (interpret v2 (vector k out-col)))
+                            (do-mul e1 e2)
+                            )
+                  )
+
+                ;; Now accumulate partial-products
+                (define acc '())
+                (for/list ([p partial-products])
+                          (if 
+                            (equal? acc '())
+                            (set! acc p)
+                            (set! acc (do-add p acc))
+                            )
+                          )
+                acc
+                ]
+
+               [else
+                 (error "arith/interpreter.rkt vector:matrix_multiply can only be interpreted as a 2D operation")
+                 ]
+               )
+             ]
+             [(vector:transpose v1 rank_perm)
+              (define input-shape (tensor-shape v1))
+              (cond 
+                [(equal? (vector-length tensor-shape) (vector-length rank_perm))
+                 (define (index-helper i)
+                   (define current-index-loc (vector-ref rank_perm i))
+                   (define adj-index (vector-ref indices current-index-loc))
+                   adj-index
+                   )
+                 (define new-indices (build-vector (vector-length indices) index-helper))
+                 (interpret v1 new-indices)
+                 ]
+                [else
+                  (error "arith//interpreter.rkt vector transpose requires rank permutation match input tensors shape")
+                  ]
+
+                )
+              ]
+             [(vector:flat_transpose v1 trows tcols)
+              (cond
+                [(equal? (vector-length indices) 1)
+                 (define index (vector-ref indices 0))
+                 (define out-row (quotient index tcols))
+                 (define out-col (- index (* out-row tcols) 1))
+
+                 ;; Transpose in 2D simply swaps indexing variable
+                 (define input-row out-col)
+                 (define input-col out-row)
+                 (define num-input-rows tcols)
+                 (define num-input-cols trows)
+
+                 (define adjusted_index (+ (* input-row num-input-cols) input-col))
+
+                 (interpret v1 (vector adjusted_index))
+
+                 ]
+                [else
+                  (error "arith/interpreter.rkt vector:flat_transpose can only be interpreted as a 2D operation")
+                  ]
+                )
+              ]
+
+             [(vector:splat v1 out-shape)
+              (cond
+                [(and (equal? (tensor-shape v1) 1) (equal? (vector-ref (tensor-shape v1)) 1))
+                 (interpret v1 (vector 0))
+                 ]
+                [else
+                  (error "arith/interpreter.rkt vector:splat takes a single element as input")
+                  ]
+                )
+              ]
+             [(vector:reduction v1 operation)
+              (define input-shape (tensor-shape v1))
+              (define reduc-op
+                (cond
+                  [(equal? operation 'add) do-add]
+                  [(equal? operation 'mul) do-mul]
+                  [(equal? operation 'min) do-min]
+                  [(equal? operation 'max) do-max]
+                  [(equal? operation 'and) do-bwand]
+                  [else (error "arith/interpreter.rkt Unsupported operation in vector:reduction")]
+                  )
+                )
+              (cond
+                [(equal? (vector-length input-shape 1))
+                 (define acc '())
+                 (for/list ([i (range (vector-ref input-shape 0))])
+                           (if (equal? acc '())
+                             (set! acc (interpret v1 (vector i)))
+
+                             (set! acc (reduc-op acc (interpret v1 (vector i))))
+                             )
+                           )
+                 acc
+                 ]
+                [else
+                  (error "arith/interpreter.rkt vector:reduction only supports 1D tensors")
+                  ]
+                )
+              ]
             ;; Base case
             [v (error "arith/interpreter.rkt Unsupported data type in interpreter" v)]
 
@@ -307,8 +497,58 @@
     [(arith:tensor-shr v1 v2) (tensor-shape v1)]
 
     [(arith:tensor-bwand v1 v2) (tensor-shape v1)]
+    [(vector:bitcast v1 signed? out-prec) (tensor-shape v1)]
+    [(vector:broadcast v1 output-shape) output-shape]
+    [(vector:extract_strided_slice v1 offsets sizes strides)
+     (define input-shape (tensor-shape v1))
+     (define (extract_strided_slice_helper i)
+       (if 
+         (< i (vector-length offsets))
 
-    
+         ;; Shape along this axis would be whatever number 
+         ;; of elements we want to extract
+         (vector-ref sizes i) 
+
+         ;; Non specified dimension -> extract all elements
+         (vector-ref input-shape i)
+         )
+       )
+
+     (build-vector (vector-length input-shape) extract_strided_slice_helper) 
+     ]
+    [(vector:extract v1 extract_indices)
+     (define input-shape (tensor-shape v1))
+     (define (extract_slice_helper i)
+       (if 
+         (< i (vector-length extract_indices))
+
+         ;; Shape along this axis would be whatever number 
+         ;; of elements we want to extract
+         (- (vector-ref input-shape i) (vector-ref extract_indices i))
+
+         ;; Non specified dimension -> extract all elements
+         (vector-ref input-shape i)
+         )
+       )
+
+     (build-vector (vector-length input-shape) extract_slice_helper) 
+     ]
+    [(vector:matrix_multiply v1 v2 lhs_rows lhs_cols rhs_cols)
+     ;; Flat matrix multiply returns rank 1 tensor
+     (vector (* lhs_rows rhs_cols))
+     ]
+
+    ;; Flat transpose returns a rank 1 tensor
+    [(vector:flat_transpose v1 trows tcols) (tensor-shape v1)]
+    [(vector:transpose v1 rank_perm)
+     (define input-shape (tensor-shape v1))
+     (define (transpose-helper i)
+       (vector-ref input-shape (vector-ref rank_perm i))
+       )
+     (build-vector (vector-length input-shape) transpose-helper)
+     ]
+    [(vector:splat v1 out-shape) out-shape]
+    [(vector:reduction v1 operation) (vector 1)]
     ;; Base case
     [_ (error "arith\\interpreter.rkt: Don't know how to infer vector length for arith expression:" expr)]))
 
@@ -349,10 +589,27 @@
     [(arith:tensor-shr v1 v2) (tensor-layout v1)]
 
     [(arith:tensor-bwand v1 v2) (tensor-layout v1)]
+    [(vector:bitcast v1 signed? out-prec) (tensor-layout v1)]
+    [(vector:extract v1 extract_indicies) (tensor-layout v1)]
+    [(vector:extract_strided_slice v1 offsets sizes strides) (tensor-layout v1)]
+    [(vector:matrix_multiply v1 v2 lhs_rows lhs_cols rhs_cols) (tensor-layout v1)]
+    [(vector:splat v1 out-shape) 
+     (define (id i) i)
+     (build-vector (vector-length out-shape) id)
+     ]
+    [(vector:flat_transpose v1 trows tcols) (tensor-layout v1)]
 
-    
+    [(vector:transpose v1 rank_perm)
+     (define input-layout (tensor-layout v1))
+     (define (transpose-helper i)
+       (vector-ref input-layout (vector-ref rank_perm i))
+       )
+     (build-vector (vector-length input-layout) transpose-helper)
+     ]
+    [(vector:reduction v1 operation) (vector 0)]
     ;; Base case
-    [_ (error "arith\\interpreter.rkt: Don't know how to infer vector length for arith expression:" expr)]))
+    [_ (error "arith\\interpreter.rkt: Don't know how to infer vector length for arith expression:" expr)])
+  )
 
 (define (get-index-combinations shape-vector)
   (cond
