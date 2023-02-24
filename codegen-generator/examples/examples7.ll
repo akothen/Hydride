@@ -36,7 +36,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
 
 
 
-function hexagon_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
+function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
  for ([%i (range 0 32 1)]) {
  ...
   ;; Extract slice from Vxx
@@ -59,7 +59,7 @@ function hexagon_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
 }
 
 
-function hexagon_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
+function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
  for ([%i (range 0 32 1)]) {
   ...
   %acc = bvextract bv1024 Vx, i32 %low0, i32 %high0, i32 32
@@ -107,7 +107,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
 
 
 
-function hexagon_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
+function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
  for ([%outer.it (range 0 1024 32)]) {
   ...
   %acc = bvextract bv1024 Vx, i32 %outer.it, i32 %high, i32 32
@@ -185,7 +185,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b, i32 %vectsize,
 }
 
 
-function hexagon_vrmpybusv_acc (bv1024 Vx, bv1024 Vu, bv1024 Vv, i32 %vectsize, 
+function hvx_vrmpybusv_acc (bv1024 Vx, bv1024 Vu, bv1024 Vv, i32 %vectsize, 
                                 i32 %outerlanesize, i32 %innerlaneoffset,
                                 i32 %innerlanesize, i32 %elemsize, i32 %extend_size ) {
  for ([%outer.it (range 0 %vectsize %outerlanesize)]) {
