@@ -38,10 +38,9 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
 
 function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
  for ([%i (range 0 32 1)]) {
- ...
+  ...
   ;; Extract slice from Vxx
   %2 = bvextract bv1024 Vx, i32 %0, i32 %1, i32 32
-  ...
   ;; Extract slice from Vu
   %7 = bvextract bv1024 Vu, i32 %5, i32 %6, i32 8
   ;; Extract slice from Vv
@@ -62,9 +61,27 @@ function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
 function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
  for ([%i (range 0 32 1)]) {
   ...
+  %2 = bvextract bv1024 Vx, i32 %0, i32 %1, i32 32
+  %7 = bvextract bv1024 Vu, i32 %5, i32 %6, i32 8
+  %12 = bvextract bv1024 Vv, i32 %5, i32 %6, i32 8
+  %13 = bvzeroextend bv8 %7, i32 16
+  %14 = bvsignextend bv8 %12, i32 16
+  %15 = bvmul bv16 %13, bv16 %14
+  %16 = bvsignextend bv16 %15, i32 32
+  %17 = bvadd bv32 %2, bv32 %16
+  ...
+  bvinsert bv32 %77, bv1024 %dst, i32 %78, i32 %79, i32 32
+ }
+ ret bv1024 %dst
+}
+
+
+function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
+ for ([%i (range 0 32 1)]) {
+  ...
   %acc = bvextract bv1024 Vx, i32 %low0, i32 %high0, i32 32
   bvinsert bv32 %acc, bv1024 %dst, i32 %low0, i32 %high0, i32 32
-  for ([%inner.it (range 0 4 1)]) {
+  for ([%in.it (range 0 4 1)]) {
    ...
    %7 = bvextract bv1024 Vu, i32 %5, i32 %6, i32 8
    %12 = bvextract bv1024 Vv, i32 %5, i32 %6, i32 8
@@ -112,7 +129,7 @@ function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
   ...
   %acc = bvextract bv1024 Vx, i32 %outer.it, i32 %high, i32 32
   bvinsert bv32 %acc, bv1024 %dst, i32 %outer.it, i32 %high, i32 32
-  for ([%inner.it (range 0 32 8)]) {
+  for ([%in.it (range 0 32 8)]) {
    ...
    %7 = bvextract bv1024 Vu, i32 %5, i32 %6, i32 8
    %12 = bvextract bv1024 Vv, i32 %5, i32 %6, i32 8
