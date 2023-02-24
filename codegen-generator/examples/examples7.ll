@@ -138,7 +138,7 @@ function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
    %15 = bvmul bv16 %13, bv16 %14
    %16 = bvsignextend bv16 %15, i32 32
    ...
-   %16.ext = bvextract bv1024 %dst0, i32 %out.it, i32 %high1, i32 32
+   %16.ext = bvextract bv1024 %dst, i32 %out.it, i32 %high1, i32 32
    %16.acc = bvadd bv32 %16.ext, bv32 %16
    bvinsert bv32 %16.acc, bv1024 %dst, i32 %out.it, i32 %high1, i32 32
   }
@@ -176,26 +176,22 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
 function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b, i32 %vectsize, 
                               i32 %outerlanesize, i32 %innerlaneoffset, 
                               i32 %innerlanesize, i32 %elemsize, i32 %extend_size) {
- for ([%outer.it (range 0 %vectsize %outerlanesize)]) {
-  %lastidx0 = sub i32 %outerlanesize, i32 1
-  %high = add i32 %outer.it, i32 %lastidx0
+ for ([%out.it (range 0 %vectsize %outerlanesize)]) {
+  ...
   %acc = bvextract bv512 src, i32 %outer.it, i32 %high, i32 %outerlanesize
   bvinsert bv32 %acc, bv512 dst, i32 %outer.it, i32 %high, i32 %outerlanesize
   for ([%inner.it (range %innerlaneoffset %innerlanesize %elemsize)]) {
-   %1.low = add i32 %outer.it, i32 %inner.it
-   %lastidx1 = sub i32 %elemsize, i32 1
-   %2 = add i32 %1.low, i32 %lastidx1
+   ...
    %3 = bvextract bv512 a, i32 %1.low, i32 %2, i32 %elemsize
    %4 = bvzeroextend bv8 %3, i32 %extend_size
    %8 = bvextract bv512 b, i32 %1.low, i32 %2, i32 %elemsize
    %9 = bvsignextend bv8 %8, i32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, i32 %outerlanesize
-   %lastidx2 = sub i32 %outerlanesize, i32 1
-   %high1 = add i32 %outer.it, i32 %lastidx2
-   %11.ext = bvextract bv512 dst, i32 %outer.it, i32 %high1, i32 %outerlanesize
+   ...
+   %11.ext = bvextract bv512 dst, i32 %out.it, i32 %high1, i32 %outerlanesize
    %11.acc = bvadd bv32 %11.ext, bv32 %11
-   bvinsert bv32 %11.acc, bv512 dst, i32 %outer.it, i32 %high1, i32 %outerlanesize
+   bvinsert bv32 %11.acc, bv512 dst, i32 %out.it, i32 %high1, i32 %outerlanesize
   }
  }
  ret bv512 dst
@@ -203,13 +199,13 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b, i32 %vectsize,
 
 
 function hvx_vrmpybusv_acc (bv1024 Vx, bv1024 Vu, bv1024 Vv, i32 %vectsize, 
-                                i32 %outerlanesize, i32 %innerlaneoffset,
-                                i32 %innerlanesize, i32 %elemsize, i32 %extend_size ) {
- for ([%outer.it (range 0 %vectsize %outerlanesize)]) {
+                            i32 %outerlanesize, i32 %innerlaneoffset,
+                            i32 %innerlanesize, i32 %elemsize, i32 %extend_size ) {
+ for ([%out.it (range 0 %vectsize %outerlanesize)]) {
   ...
   %acc = bvextract bv1024 Vx, i32 %outer.it, i32 %high0, i32 %outerlanesize
   bvinsert bv32 %acc, bv1024 %dst, i32 %outer.it, i32 %high0, i32 %outerlanesize
-  for ([%inner.it (range %innerlaneoffset %innerlanesize %elemsize)]) {
+  for ([%in.it (range %innerlaneoffset %innerlanesize %elemsize)]) {
    ...
    %7 = bvextract bv1024 Vu, i32 %5, i32 %6, i32 %elemsize
    %12 = bvextract bv1024 Vv, i32 %5, i32 %6, i32 %elemsize
@@ -218,9 +214,9 @@ function hvx_vrmpybusv_acc (bv1024 Vx, bv1024 Vu, bv1024 Vv, i32 %vectsize,
    %15 = bvmul bv16 %13, bv16 %14
    %16 = bvsignextend bv16 %15, i32 %outerlanesize
    ...
-   %16.ext = bvextract bv1024 %dst0, i32 %outer.it, i32 %high1, i32 %outerlanesize
+   %16.ext = bvextract bv1024 %dst, i32 %out.it, i32 %high1, i32 %outerlanesize
    %16.acc = bvadd bv32 %16.ext, bv32 %16
-   bvinsert bv32 %16.acc, bv1024 %dst, i32 %outer.it, i32 %high1, i32 %outerlanesize
+   bvinsert bv32 %16.acc, bv1024 %dst, i32 %out.it, i32 %high1, i32 %outerlanesize
   }
  }
  ret bv1024 %dst
