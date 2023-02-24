@@ -108,7 +108,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
 
 
 function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
- for ([%outer.it (range 0 1024 32)]) {
+ for ([%out.it (range 0 1024 32)]) {
   ...
   %acc = bvextract bv1024 Vx, i32 %outer.it, i32 %high, i32 32
   bvinsert bv32 %acc, bv1024 %dst, i32 %outer.it, i32 %high, i32 32
@@ -121,9 +121,9 @@ function hvx_vrmpybusv_acc ( bv1024 Vx, bv1024 Vu, bv1024 Vv ) {
    %15 = bvmul bv16 %13, bv16 %14
    %16 = bvsignextend bv16 %15, i32 32
    ...
-   %16.ext = bvextract bv1024 %dst0, i32 %outer.it, i32 %high.new, i32 32
+   %16.ext = bvextract bv1024 %dst0, i32 %out.it, i32 %high1, i32 32
    %16.acc = bvadd bv32 %16.ext, bv32 %16
-   bvinsert bv32 %16.acc, bv1024 %dst, i32 %outer.it, i32 %high.new, i32 32
+   bvinsert bv32 %16.acc, bv1024 %dst, i32 %out.it, i32 %high1, i32 32
   }
  }
  ret bv1024 %dst
