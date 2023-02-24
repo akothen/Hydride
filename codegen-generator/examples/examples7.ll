@@ -235,4 +235,34 @@ function hexagon_vrmpybusv_acc (bv1024 Vx, bv1024 Vu, bv1024 Vv, int32 %vectsize
 }
 
 
+function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
+ for ([%j (range 0 16 1)]) {
+  %0 = mul int32 4, int32 %j
+  %1 = mul int32 8, int32 %0
+  %2 = add int32 %1, int32 7
+  ;; Extract slice from a
+  %3 = bvextract bv512 a, int32 %1, int32 %2, int32 8
+  %4 = bvzeroextend bv8 %3, int32 16
+  ;; Extract slice from b
+  %8 = bvextract bv512 b, int32 %1, int32 %2, int32 8
+  %9 = bvsignextend bv8 %8, int32 16
+  %10 = bvmul bv16 %4, bv16 %9
+  %11 = bvsignextend bv16 %10, int32 32
+  ...
+  %54 = mul int32 32, int32 %j
+  %55 = add int32 %54, int32 31
+  ;; Extract slice from src
+  %56 = bvextract bv512 src, int32 %54, int32 %55, int32 32
+  ...
+  %57 = bvadd bv32 %56, bv32 %11
+  %60 = bvadd bv32 %59, bv32 %53
+  %61 = mul int32 32, int32 %j
+  %62 = add int32 %61, int32 31
+  ;; Insert dot product result in a slice in dst
+  bvinsert bv32 %60, bv512 %dst, int32 %61, int32 %62, int32 32
+ }
+ ret bv512 %dst
+}
+
+
 
