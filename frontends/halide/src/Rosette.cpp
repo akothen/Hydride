@@ -1364,25 +1364,27 @@ namespace Halide {
                                 
                             }
 
-                            /*
                             if (stmt.node_type() == IRNodeType::ProducerConsumer){
 
-                                debug(1) << "Producer Consumer STMT  Instruction: "<< stmt <<"\n";
+                                debug(0) << "Producer Consumer STMT  Instruction: "<< stmt <<"\n";
 
                                 const ProducerConsumer* pc = stmt.as<ProducerConsumer>();
-                                scope_name.push(pc->name);
+                                std::string p_or_c = pc->is_producer? "_prod" : "_cons";
+                                std::string name = pc->name + p_or_c;
+                                scope_name.push(name);
 
 
                                 std::map<const Store*, Expr> scoped_map;
                                 MemMap.push(scope_name.top(), scoped_map);
                                 auto new_produce_consume = mutate(pc->body);
-                                debug(1) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                debug(0) << "Popping scope_name: "<< scope_name.top() << "\n";
                                 MemMap.pop(scope_name.top());
                                 scope_name.pop();
 
                                 Stmt NewPC = ProducerConsumer::make(pc->name, pc->is_producer, new_produce_consume);
+                                return NewPC;
 
-                            }*/
+                            }
 
 
                             // Start a new scope for IfThenElse 

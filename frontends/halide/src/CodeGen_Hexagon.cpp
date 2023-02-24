@@ -135,6 +135,11 @@ private:
 
     /** Generate a LUT (8/16 bit, max_index < 256) lookup using vlut instructions. */
     llvm::Value *vlut256(llvm::Value *lut, llvm::Value *indices, int min_index = 0, int max_index = 255);
+
+    // For reference, disabling any hexagon specific codegen and falling back to LLVM
+    // (Disabled by default)
+    bool defer_to_llvm = false;
+
 };
 
 CodeGen_Hexagon::CodeGen_Hexagon(const Target &t)
@@ -146,6 +151,12 @@ CodeGen_Hexagon::CodeGen_Hexagon(const Target &t)
     } else {
         isa_version = 62;
     }
+
+    const char* compile_via_llvm = getenv("HALIDE_COMPILE_LLVM");
+    if(compile_via_llvm){
+        defer_to_llvm = true;
+    }
+
     user_assert(target.has_feature(Target::HVX))
         << "Creating a Codegen target for Hexagon without the hvx target feature.\n";
 }
@@ -489,6 +500,13 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
     Stmt body = f.body;
 
     debug(0) << "Hexagon: Starting Statement:\n"<<body<<"\n";
+
+    if(defer_to_llvm){
+        debug(0) << "Compiling Hexagon through LLVM!\n";
+        body.accept(this);
+        CodeGen_Posix::end_func(f.args);
+        return;
+    }
 
     debug(0) << "Hexagon: Unpredicating loads and stores...\n";
     // Replace dense vector predicated loads with sloppy scalarized
@@ -1181,6 +1199,11 @@ bool is_concat_or_slice(const vector<int> &indices) {
 
 Value *CodeGen_Hexagon::shuffle_vectors(Value *a, Value *b,
                                         const vector<int> &indices) {
+
+    if(defer_to_llvm){
+        return CodeGen_Posix::shuffle_vectors(a, b, indices);
+    }
+
     llvm::Type *a_ty = a->getType();
     llvm::Type *b_ty = b->getType();
     internal_assert(a_ty == b_ty);
@@ -1783,6 +1806,10 @@ Value *CodeGen_Hexagon::vlut(Value *lut, const vector<int> &indices) {
 Value *CodeGen_Hexagon::call_intrin(Type result_type, const string &name,
                                     vector<Expr> args, bool maybe) {
     llvm::Function *fn = module->getFunction(name);
+    if(defer_to_llvm){
+        return nullptr;
+    }
+
     if (maybe && !fn) {
         return nullptr;
     }
@@ -1806,6 +1833,13 @@ Value *CodeGen_Hexagon::call_intrin(Type result_type, const string &name,
 Value *CodeGen_Hexagon::call_intrin(llvm::Type *result_type, const string &name,
                                     vector<Value *> args, bool maybe) {
     llvm::Function *fn = module->getFunction(name);
+
+
+    if(defer_to_llvm){
+        return nullptr;
+    }
+
+
     if (maybe && !fn) {
         return nullptr;
     }
@@ -1865,6 +1899,11 @@ Expr maybe_scalar(Expr x) {
 
 void CodeGen_Hexagon::visit(const Mul *op) {
 
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
+
     Expr MulOp = Mul::make(op->a, op->b);
 
 
@@ -1921,6 +1960,11 @@ void CodeGen_Hexagon::visit(const Mul *op) {
 }
 
 void CodeGen_Hexagon::visit(const Call *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
 
     debug(0) << "CodeGenHexagon: Call "<<op->name <<"\n";
     internal_assert(op->is_extern() || op->is_intrinsic())
@@ -2124,6 +2168,11 @@ void CodeGen_Hexagon::visit(const Call *op) {
 
 void CodeGen_Hexagon::visit(const Max *op) {
 
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
+
     if (op->type.is_vector()) {
         Expr MaxOp = Max::make(op->a, op->b);
         debug(0) << "Hexagon Backend attemping to lower: " << MaxOp << "\n";
@@ -2145,6 +2194,11 @@ void CodeGen_Hexagon::visit(const Max *op) {
 }
 
 void CodeGen_Hexagon::visit(const Min *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->type.is_vector()) {
         Expr MinOp = Min::make(op->a, op->b);
         debug(0) << "Hexagon Backend attemping to lower: " << MinOp << "\n";
@@ -2166,6 +2220,11 @@ void CodeGen_Hexagon::visit(const Min *op) {
 }
 
 void CodeGen_Hexagon::visit(const Select *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->condition.type().is_scalar() && op->type.is_vector()) {
         // Implement scalar conditions on vector values with if-then-else.
         value = codegen(Call::make(op->type, Call::if_then_else,
@@ -2229,6 +2288,11 @@ Value *CodeGen_Hexagon::codegen_cache_allocation_size(
 }
 
 void CodeGen_Hexagon::visit(const Allocate *alloc) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(alloc);
+        return;
+    }
     debug(0) << "CodeGenHexagon: Allocate" <<"\n";
     if (sym_exists(alloc->name)) {
         user_error << "Can't have two different buffers with the same name: "
