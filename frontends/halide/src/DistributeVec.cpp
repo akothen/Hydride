@@ -158,6 +158,16 @@ namespace Halide {
                 exprs.push_back(OP_NAME::make(op->a, op->b));\
                 return exprs;\
             }\
+            unsigned orig_num_chunks = num_chunks;\
+            if(distribution_look_ahead){\
+                size_t expr_bitwidth = op->type.lanes() * op->type.bits();\
+                    for (unsigned bv : bitvector_sizes){\
+                        if(expr_bitwidth % bv == 0){\
+                            num_chunks = expr_bitwidth / bv;\
+                            break;\
+                        }\
+                    }\
+            }\
             Expr OrigBOP = OP_NAME::make(op->a, op->b); \
             \
             unsigned num_bits = op->type.bits() * op->type.lanes(); \
@@ -190,6 +200,16 @@ namespace Halide {
                 DI->distributed_size = bitvector_sizes[0]; \
                 DI->equally_distributed = !divisible; \
                 DistribMap[op] = DI; \
+            if(orig_num_chunks != num_chunks){\
+                std::vector<Expr> new_expr;\
+                Expr CombinedExpr = Shuffle::make_concat(exprs);\
+                int lanes_per_chunk = op->type.lanes() / orig_num_chunks;\
+                for(unsigned i = 0; i < orig_num_chunks;i++){\
+                    Expr new_slice = Shuffle::make_slice(CombinedExpr,(int) i * lanes_per_chunk, 1, lanes_per_chunk);\
+                    new_expr.push_back(simplify(new_slice));\
+                }\
+                exprs = new_expr;\
+            }\
             return exprs; \
         } 
 
@@ -276,6 +296,20 @@ namespace Halide {
             }
 
 
+            unsigned orig_num_chunks = num_chunks;
+
+            if(distribution_look_ahead){
+                size_t expr_bitwidth = std::max(op->type.lanes() * op->type.bits(), op->value.type().lanes() * op->value.type().bits());
+                    for (unsigned bv : bitvector_sizes){
+                        if(expr_bitwidth % bv == 0){
+                            num_chunks = expr_bitwidth / bv;
+                            break;
+                        }
+                    }
+            }
+
+
+
             unsigned num_bits = op->type.bits() * op->type.lanes();
 
 
@@ -307,7 +341,8 @@ namespace Halide {
                     for(auto val : distributed_value){
                         debug(0) << "Individual elem: "<<val<<"\n";
                     }
-                    Expr Combined = Shuffle::make_concat(distributed_value);
+                    // SIMPLIFY ADDED
+                    Expr Combined = simplify(Shuffle::make_concat(distributed_value));
                     
 
 
@@ -319,7 +354,8 @@ namespace Halide {
                     } else {
                         int step_size = op->type.lanes() / (int) num_chunks;
                         for(unsigned i = 0; i < num_chunks; i++){
-                            Expr new_shuffle = Shuffle::make_slice(Combined, (int) i * step_size, 1, step_size);
+                            // SIMPLIFY ADDED
+                            Expr new_shuffle = simplify(Shuffle::make_slice(Combined, (int) i * step_size, 1, step_size));
                             slice_casts.push_back(new_shuffle);
                         }
                     }
@@ -355,6 +391,17 @@ namespace Halide {
             DI->distributed_size = bitvector_sizes[0];
             DI->equally_distributed = !divisible;
             DistribMap[op] = DI;
+
+            if(orig_num_chunks != num_chunks){
+                std::vector<Expr> new_expr;
+                Expr CombinedExpr = Shuffle::make_concat(exprs);
+                int lanes_per_chunk = op->type.lanes() / orig_num_chunks;
+                for(unsigned i = 0; i < orig_num_chunks;i++){
+                    Expr new_slice = Shuffle::make_slice(CombinedExpr,(int) i * lanes_per_chunk, 1, lanes_per_chunk);
+                    new_expr.push_back(simplify(new_slice));
+                }
+                exprs = new_expr;
+            }
             return exprs;
         }
 
@@ -602,7 +649,7 @@ namespace Halide {
                     if(operands_num_chunks != num_chunks){ \
                         internal_assert(exprs.size() != 0) << "Concat empty vectors for internal widen call nodes\n";\
                     debug(0) << "make concat "<<"call"<<"\n";\
-                        Expr Combined = Shuffle::make_concat(exprs); \
+                        Expr Combined = simplify(Shuffle::make_concat(exprs)); \
                         std::vector<Expr> slice_casts;\
                         if(num_chunks == 1){\
                             slice_casts.push_back(Combined); \
@@ -696,7 +743,7 @@ namespace Halide {
                     if(operands_num_chunks != num_chunks){
                         internal_assert(exprs.size() != 0) << "Concat empty vectors for rounding_mul_shift_right nodes\n";
                         debug(0) << "make concat "<<"rounding_mul_shift_right"<<"\n";
-                        Expr Combined = Shuffle::make_concat(exprs);
+                        Expr Combined = simplify(Shuffle::make_concat(exprs));
 
 
                         std::vector<Expr> slice_casts;
@@ -747,7 +794,7 @@ namespace Halide {
                     if(operands_num_chunks != num_chunks){
                         internal_assert(exprs.size() != 0) << "Concat empty vectors for mul_shift_right nodes\n";
                         debug(0) << "make concat "<<"mul_shift_right"<<"\n";
-                        Expr Combined = Shuffle::make_concat(exprs);
+                        Expr Combined = simplify(Shuffle::make_concat(exprs));
 
 
                         std::vector<Expr> slice_casts;
@@ -759,7 +806,7 @@ namespace Halide {
                             // expressions.
                             for(unsigned i = 0; i < num_chunks; i++){
 
-                                Expr new_shuffle = Shuffle::make_slice(Combined, (int) i * step_size, 1, step_size);
+                                Expr new_shuffle = simplify(Shuffle::make_slice(Combined, (int) i * step_size, 1, step_size));
                                 slice_casts.push_back(new_shuffle);
                             }
                         }
@@ -937,6 +984,15 @@ namespace Halide {
 
                 unsigned num_chunks = max_bitwidth / bitvector_size;
 
+                if(distribution_look_ahead){
+                    for (unsigned bv : bitvector_sizes){
+                        if(expr_bitwidth % bv == 0){
+                            num_chunks = expr_bitwidth / bv;
+                            break;
+                        }
+                    }
+                }
+
                 //if(!is_divisible_into_vector_size(num_chunks * bits)){
                 //    num_chunks = 1; 
                 //}
@@ -949,19 +1005,36 @@ namespace Halide {
 
                 std::vector<Stmt> Stores;
 
-                for(unsigned i = 0; i < num_chunks; i++){
-                    Stores.push_back(
-                            (Store::make(op->name, distributed_value[i], distributed_index[i], op->param, distributed_predicate[i], op->alignment)
-                            ));
-                }
+                bool single_store = is_divisible_into_vector_size(expr_bitwidth);
 
-                for(auto e : Stores){
-                    debug(0) << "New Store: "<< e <<"\n";
-                    debug(0) << "New Simplified Store: "<< simplify(e) <<"\n";
-                }
+                if (single_store && num_chunks != 1){
+                    debug(0) << "Using single store for OrigStore:"<<OrigStore<<"\n";
+                    Expr CombinedExpr = Shuffle::make_concat(distributed_value);
+                    
+                    Stmt CombinedStore =  Store::make(op->name, CombinedExpr, op->index, op->param, op->predicate, op->alignment);
+                    
+                    debug(0) << "New Store: "<< CombinedStore <<"\n";
 
-                // Create a block of statements
-                return  Block::make(Stores);
+                    return CombinedStore;
+
+
+                } else {
+                    for(unsigned i = 0; i < num_chunks; i++){
+                        Stores.push_back(
+                                (Store::make(op->name, distributed_value[i], distributed_index[i], op->param, distributed_predicate[i], op->alignment)
+                                ));
+                    }
+
+                    for(auto e : Stores){
+                        debug(0) << "New Store: "<< e <<"\n";
+                        debug(0) << "New Simplified Store: "<< simplify(e) <<"\n";
+                    }
+
+                    // Create a block of statements
+                    return  Block::make(Stores);
+
+                }
+                
             }
 
             return OrigStore;

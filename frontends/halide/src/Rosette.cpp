@@ -1364,7 +1364,8 @@ namespace Halide {
                                 
                             }
 
-                            if (stmt.node_type() == IRNodeType::ProducerConsumer){
+                            const char* disable_prod = getenv("HL_PROD_CONS_DISABLE");
+                            if (stmt.node_type() == IRNodeType::ProducerConsumer && !disable_prod){
 
                                 debug(0) << "Producer Consumer STMT  Instruction: "<< stmt <<"\n";
 
@@ -1456,6 +1457,7 @@ namespace Halide {
 
                             debug(0) << "LOAD STORE MATCHED!" <<"\n";
                             
+                            debug(0) << "Replaced "<<folded << " with "<<x.second<<"\n";
                             folded = x.second;
                         }
 
@@ -2664,7 +2666,7 @@ namespace Halide {
                             return Variable::make(op->type, uname);
                         }
 
-                        if(op->is_slice() && (disable_shuffles || op->vectors[0].type().lanes() * op->vectors[0].type().lanes() > 2048 )){
+                        if(op->is_slice() && (disable_shuffles || op->vectors[0].type().lanes() * op->vectors[0].type().bits() > 2048 )){
                             debug(0) << "Abstracting slice vector!\n";
                             std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
@@ -2915,7 +2917,7 @@ namespace Halide {
                     Expr visit(const Div *op) override{
 
 
-                        if(!op->type.is_float() && op->type.is_vector() /* && !is_const(op->b, 2)*/){
+                        if(!op->type.is_float() && op->type.is_vector()  && !is_const(op->b, 2)){
                             auto lowered_div =  lower_int_uint_div(op->a, op->b);
                             debug(0) << "Halide Lowered Div to: "<<lowered_div <<"\n";
                             return mutate(lowered_div);
@@ -2966,7 +2968,11 @@ namespace Halide {
                             return op->value;
                         }
 
-                        if(!op->type.is_float() && op->type.is_vector()){
+                        if(is_const(op->value)){
+                            return op;
+                        }
+
+                        if(!op->type.is_float() && op->type.is_vector() ){
 
                             if(bits == 16 && op->value.type().lanes() != 2){
 
@@ -3475,14 +3481,14 @@ namespace Halide {
                 std::set<const IRNode*> DeadStmts;
                 auto FLS = Hydride::FoldLoadStores(DeadStmts);
                 auto folded = FLS.mutate(s);
-                debug(1) << "Printing Folded Stmt:\n";
-                debug(1) << folded <<"\n";
+                debug(0) << "Printing Folded Stmt:\n";
+                debug(0) << folded <<"\n";
 
-                debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+                debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
                 auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-                debug(1) << "Printing Pruned Stmt:\n";
-                debug(1) << pruned <<"\n";
+                debug(0) << "Printing Pruned Stmt:\n";
+                debug(0) << pruned <<"\n";
 
                 std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
 

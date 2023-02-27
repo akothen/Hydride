@@ -6187,10 +6187,10 @@ declare <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32>) #9
 declare <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32>) #9
 
 ; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32>, <32 x i32>) #9
+declare <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind readnone
-declare <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32>, <32 x i32>) #9
+declare <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind mustprogress
 define weak i8* @halide_vtcm_malloc(i8* %user_context, i32 %size) local_unnamed_addr #0 {
@@ -6315,13 +6315,13 @@ entry:
 }
 
 ; Function Attrs: nounwind readnone
-declare <64 x i32> @llvm.hexagon.V6.vzh.128B(<32 x i32>) #9
-
-; Function Attrs: nounwind readnone
 declare <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32>) #9
 
 ; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vpackwuh.sat.128B(<32 x i32>, <32 x i32>) #9
+declare <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32>, <32 x i32>) #9
+
+; Function Attrs: nounwind readnone
+declare <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind readnone
 declare <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32>, <32 x i32>) #9
@@ -6396,12 +6396,12 @@ then_bb:                                          ; preds = %entry
   br i1 %22, label %"for output.s0.y.rebased.preheader", label %call_destructor.exit, !prof !95
 
 "for output.s0.y.rebased.preheader":              ; preds = %then_bb
-  %.neg122 = mul i32 %5, %3
-  %.neg121 = mul i32 %8, %6
-  %.neg120 = mul i32 %11, %9
-  %.neg119 = mul i32 %16, %14
-  %.neg118 = mul i32 %19, %17
-  %.neg117 = mul i32 %20, %9
+  %.neg110 = mul i32 %5, %3
+  %.neg109 = mul i32 %8, %6
+  %.neg108 = mul i32 %11, %9
+  %.neg107 = mul i32 %16, %14
+  %.neg106 = mul i32 %19, %17
+  %.neg105 = mul i32 %20, %9
   %23 = add nsw i32 %7, %6
   %24 = icmp sgt i32 %15, 0
   %25 = add nsw i32 %4, %3
@@ -6409,835 +6409,1110 @@ then_bb:                                          ; preds = %entry
   %27 = add nuw nsw i32 %2, 127
   %28 = ashr i32 %27, 7
   %b18 = add nsw i32 %2, -128
-  %reass.add124 = add i32 %.neg121, %.neg122
-  %reass.add125 = add i32 %reass.add124, %.neg120
-  %29 = insertelement <64 x i8> undef, i8 %a38, i32 0
-  %30 = shufflevector <64 x i8> %29, <64 x i8> undef, <128 x i32> <i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef>
-  %31 = bitcast <128 x i8> %30 to <32 x i32>
-  %32 = insertelement <64 x i8> undef, i8 %b39, i32 0
-  %33 = shufflevector <64 x i8> %32, <64 x i8> undef, <128 x i32> <i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef>
-  %34 = bitcast <128 x i8> %33 to <32 x i32>
-  %reass.add127 = add i32 %.neg118, %.neg119
-  %reass.add128 = add i32 %reass.add127, %.neg117
+  %reass.add112 = add i32 %.neg109, %.neg110
+  %reass.add113 = add i32 %reass.add112, %.neg108
+  %29 = insertelement <128 x i8> undef, i8 %a38, i32 0
+  %30 = shufflevector <128 x i8> %29, <128 x i8> undef, <128 x i32> zeroinitializer
+  %31 = insertelement <128 x i8> undef, i8 %b39, i32 0
+  %32 = shufflevector <128 x i8> %31, <128 x i8> undef, <128 x i32> zeroinitializer
+  %33 = bitcast <128 x i8> %30 to <32 x i32>
+  %34 = bitcast <128 x i8> %32 to <32 x i32>
+  %reass.add115 = add i32 %.neg106, %.neg107
+  %reass.add116 = add i32 %reass.add115, %.neg105
   br i1 %24, label %"for output.s0.y.rebased.us.preheader", label %call_destructor.exit, !prof !95
 
 "for output.s0.y.rebased.us.preheader":           ; preds = %"for output.s0.y.rebased.preheader"
-  %35 = add i32 %4, %3
-  %36 = mul i32 %14, %stride_x
-  %37 = sub i32 %35, %36
-  %38 = sub i32 %3, %36
+  %35 = add nsw i32 %28, -1
+  %36 = add nsw i32 %28, -1
+  %37 = add i32 %4, %3
+  %38 = mul i32 %14, %stride_x
+  %39 = sub i32 %37, %38
+  %40 = sub i32 %3, %38
+  %xtraiter278 = and i32 %28, 7
+  %41 = icmp ult i32 %35, 7
+  %unroll_iter281 = and i32 %28, -8
+  %lcmp.mod280.not = icmp eq i32 %xtraiter278, 0
+  %xtraiter283 = and i32 %28, 7
+  %42 = icmp ult i32 %36, 7
+  %unroll_iter286 = and i32 %28, -8
+  %lcmp.mod285.not = icmp eq i32 %xtraiter283, 0
   br label %"for output.s0.y.rebased.us"
 
 "for output.s0.y.rebased.us":                     ; preds = %"for output.s0.y.rebased.us.preheader", %"end for output.s0.x.rebased.loopexit.us"
-  %output.s0.y.rebased.us = phi i32 [ %59, %"end for output.s0.x.rebased.loopexit.us" ], [ 0, %"for output.s0.y.rebased.us.preheader" ]
-  %39 = add nsw i32 %output.s0.y.rebased.us, %17
-  %40 = mul nsw i32 %39, %stride_y
-  %a0.us = sub nsw i32 %23, %40
-  %41 = icmp slt i32 %a0.us, %b22
-  %b4.us = select i1 %41, i32 %a0.us, i32 %b22
-  %a1.us = sub nsw i32 %6, %40
-  %42 = icmp slt i32 %a1.us, %b22
-  %a12.us = select i1 %42, i32 %a1.us, i32 %b22
-  %43 = mul nsw i32 %39, %19
-  %44 = icmp sgt i32 %a12.us, %b4.us
-  %a11.us = select i1 %44, i32 %a12.us, i32 %b4.us
-  %a7.us = add nsw i32 %40, %b22
-  %45 = icmp slt i32 %a7.us, %23
-  %46 = select i1 %45, i32 %a7.us, i32 %23
-  %47 = icmp slt i32 %6, %40
-  %48 = select i1 %47, i32 %40, i32 %6
-  %49 = sub nsw i32 %46, %48
-  %50 = icmp sgt i32 %a12.us, 0
-  %51 = select i1 %50, i32 %a12.us, i32 0
-  %t161.us = add nsw i32 %51, %40
-  %52 = icmp sgt i32 %a11.us, 0
-  %53 = select i1 %52, i32 %a11.us, i32 0
-  %t168.us = sub nsw i32 %53, %51
-  %54 = icmp sgt i32 %t168.us, 0
+  %output.s0.y.rebased.us = phi i32 [ %61, %"end for output.s0.x.rebased.loopexit.us" ], [ 0, %"for output.s0.y.rebased.us.preheader" ]
+  %43 = add nsw i32 %output.s0.y.rebased.us, %17
+  %44 = mul nsw i32 %43, %stride_y
+  %a0.us = sub nsw i32 %23, %44
+  %45 = icmp slt i32 %a0.us, %b22
+  %b4.us = select i1 %45, i32 %a0.us, i32 %b22
+  %a1.us = sub nsw i32 %6, %44
+  %46 = icmp slt i32 %a1.us, %b22
+  %a12.us = select i1 %46, i32 %a1.us, i32 %b22
+  %47 = mul nsw i32 %43, %19
+  %48 = icmp sgt i32 %a12.us, %b4.us
+  %a11.us = select i1 %48, i32 %a12.us, i32 %b4.us
+  %a7.us = add nsw i32 %44, %b22
+  %49 = icmp slt i32 %a7.us, %23
+  %50 = select i1 %49, i32 %a7.us, i32 %23
+  %51 = icmp slt i32 %6, %44
+  %52 = select i1 %51, i32 %44, i32 %6
+  %53 = sub nsw i32 %50, %52
+  %54 = icmp sgt i32 %a12.us, 0
+  %55 = select i1 %54, i32 %a12.us, i32 0
+  %t161.us = add nsw i32 %55, %44
+  %56 = icmp sgt i32 %a11.us, 0
+  %57 = select i1 %56, i32 %a11.us, i32 0
+  %t168.us = sub nsw i32 %57, %55
+  %58 = icmp sgt i32 %t168.us, 0
   br i1 %26, label %"for output.s0.x.rebased.us.us.preheader", label %"end for output.s0.x.rebased.loopexit.us", !prof !95
 
 "for output.s0.x.rebased.us.us.preheader":        ; preds = %"for output.s0.y.rebased.us"
-  %55 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> zeroinitializer)
-  %56 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> zeroinitializer)
-  %57 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %58 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
+  %59 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> zeroinitializer)
+  %60 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> zeroinitializer)
   br label %"for output.s0.x.rebased.us.us"
 
 "end for output.s0.x.rebased.loopexit.us":        ; preds = %"end for output.s0.b.rebased.loopexit.us.us", %"for output.s0.y.rebased.us"
-  %59 = add nuw nsw i32 %output.s0.y.rebased.us, 1
-  %.not33.us = icmp eq i32 %59, %18
+  %61 = add nuw nsw i32 %output.s0.y.rebased.us, 1
+  %.not33.us = icmp eq i32 %61, %18
   br i1 %.not33.us, label %call_destructor.exit, label %"for output.s0.y.rebased.us"
 
 "for output.s0.x.rebased.us.us":                  ; preds = %"for output.s0.x.rebased.us.us.preheader", %"end for output.s0.b.rebased.loopexit.us.us"
-  %output.s0.x.rebased.us.us = phi i32 [ %108, %"end for output.s0.b.rebased.loopexit.us.us" ], [ 0, %"for output.s0.x.rebased.us.us.preheader" ]
-  %60 = mul i32 %output.s0.x.rebased.us.us, %stride_x
-  %61 = sub i32 %37, %60
-  %62 = icmp sgt i32 %61, %b25
-  %smin263 = select i1 %62, i32 %b25, i32 %61
-  %63 = sub i32 %38, %60
+  %output.s0.x.rebased.us.us = phi i32 [ %104, %"end for output.s0.b.rebased.loopexit.us.us" ], [ 0, %"for output.s0.x.rebased.us.us.preheader" ]
+  %62 = mul i32 %output.s0.x.rebased.us.us, %stride_x
+  %63 = sub i32 %39, %62
   %64 = icmp sgt i32 %63, %b25
-  %smin264 = select i1 %64, i32 %b25, i32 %63
-  %65 = icmp sgt i32 %smin263, %smin264
-  %smax265 = select i1 %65, i32 %smin263, i32 %smin264
-  %66 = icmp sgt i32 %smax265, 0
-  %smax266 = select i1 %66, i32 %smax265, i32 0
-  %67 = icmp sgt i32 %smin264, 0
-  %smax267 = select i1 %67, i32 %smin264, i32 0
-  %68 = sub nsw i32 %smax266, %smax267
-  %69 = xor i32 %smax267, -1
-  %70 = add nsw i32 %smax266, %69
-  %71 = add nsw i32 %output.s0.x.rebased.us.us, %14
-  %72 = mul nsw i32 %71, %stride_x
-  %a3.us.us = sub nsw i32 %25, %72
-  %73 = icmp slt i32 %a3.us.us, %b25
-  %b12.us.us = select i1 %73, i32 %a3.us.us, i32 %b25
-  %a4.us.us = sub nsw i32 %3, %72
-  %74 = icmp slt i32 %a4.us.us, %b25
-  %a18.us.us = select i1 %74, i32 %a4.us.us, i32 %b25
-  %a5.us.us = add nsw i32 %72, %b25
-  %75 = icmp slt i32 %a5.us.us, %25
-  %76 = select i1 %75, i32 %a5.us.us, i32 %25
-  %77 = icmp slt i32 %3, %72
-  %78 = select i1 %77, i32 %72, i32 %3
-  %79 = sub nsw i32 %76, %78
-  %t163.us.us = mul nsw i32 %79, %49
-  %80 = icmp sgt i32 %a18.us.us, %b12.us.us
-  %a17.us.us = select i1 %80, i32 %a18.us.us, i32 %b12.us.us
-  %81 = icmp sgt i32 %a18.us.us, 0
-  %82 = select i1 %81, i32 %a18.us.us, i32 0
-  %t172.us.us = add nsw i32 %82, %72
-  %83 = mul nsw i32 %71, %16
-  %84 = icmp slt i32 %t163.us.us, -131072
-  %t433.us.us.neg = zext i1 %84 to i32
-  %85 = icmp eq i32 %t163.us.us, 0
-  %t434.us.us = sext i1 %85 to i32
+  %smin288 = select i1 %64, i32 %b25, i32 %63
+  %65 = sub i32 %40, %62
+  %66 = icmp sgt i32 %65, %b25
+  %smin289 = select i1 %66, i32 %b25, i32 %65
+  %67 = icmp sgt i32 %smin288, %smin289
+  %smax290 = select i1 %67, i32 %smin288, i32 %smin289
+  %68 = icmp sgt i32 %smax290, 0
+  %smax291 = select i1 %68, i32 %smax290, i32 0
+  %69 = icmp sgt i32 %smin289, 0
+  %smax292 = select i1 %69, i32 %smin289, i32 0
+  %70 = sub nsw i32 %smax291, %smax292
+  %71 = xor i32 %smax292, -1
+  %72 = add nsw i32 %smax291, %71
+  %73 = add nsw i32 %output.s0.x.rebased.us.us, %14
+  %74 = mul nsw i32 %73, %stride_x
+  %a3.us.us = sub nsw i32 %25, %74
+  %75 = icmp slt i32 %a3.us.us, %b25
+  %b12.us.us = select i1 %75, i32 %a3.us.us, i32 %b25
+  %a4.us.us = sub nsw i32 %3, %74
+  %76 = icmp slt i32 %a4.us.us, %b25
+  %a18.us.us = select i1 %76, i32 %a4.us.us, i32 %b25
+  %a5.us.us = add nsw i32 %74, %b25
+  %77 = icmp slt i32 %a5.us.us, %25
+  %78 = select i1 %77, i32 %a5.us.us, i32 %25
+  %79 = icmp slt i32 %3, %74
+  %80 = select i1 %79, i32 %74, i32 %3
+  %81 = sub nsw i32 %78, %80
+  %t163.us.us = mul nsw i32 %81, %53
+  %82 = icmp sgt i32 %a18.us.us, %b12.us.us
+  %a17.us.us = select i1 %82, i32 %a18.us.us, i32 %b12.us.us
+  %83 = icmp sgt i32 %a18.us.us, 0
+  %84 = select i1 %83, i32 %a18.us.us, i32 0
+  %t172.us.us = add nsw i32 %84, %74
+  %85 = mul nsw i32 %73, %16
+  %86 = icmp slt i32 %t163.us.us, -131072
+  %t213.us.us.neg = zext i1 %86 to i32
+  %87 = icmp eq i32 %t163.us.us, 0
+  %t214.us.us = sext i1 %87 to i32
   %t163.lobit.us.us = ashr i32 %t163.us.us, 31
-  %86 = add i32 %t163.us.us, 131072
-  %87 = add i32 %86, %t433.us.us.neg
-  %88 = shl nsw i32 %t163.us.us, 1
-  %89 = sub nsw i32 %88, %t434.us.us
-  %90 = sdiv i32 %87, %89
-  %91 = xor i32 %t163.lobit.us.us, -1
-  %92 = sub nsw i32 %91, %t163.lobit.us.us
-  %93 = select i1 %84, i32 %92, i32 0
-  %94 = add nsw i32 %90, %93
-  %95 = xor i32 %t434.us.us, -1
-  %a15.us.us = and i32 %94, %95
-  %96 = icmp slt i32 %a15.us.us, 65535
-  %a14.us.us = select i1 %96, i32 %a15.us.us, i32 65535
-  %97 = icmp sgt i32 %a17.us.us, 0
-  %98 = select i1 %97, i32 %a17.us.us, i32 0
-  %99 = icmp sgt i32 %98, %82
-  %t154.us.us = add i32 %83, %43
-  %100 = icmp sgt i32 %a14.us.us, 0
-  %101 = select i1 %100, i32 %a14.us.us, i32 0
-  %102 = and i32 %101, 65535
-  %103 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %102) #11
-  %104 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %103, <32 x i32> %103) #11
-  %105 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %104) #11
-  %106 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %104) #11
-  %xtraiter268 = and i32 %68, 7
-  %107 = icmp ult i32 %70, 7
-  %unroll_iter273 = and i32 %68, -8
-  %lcmp.mod270.not = icmp eq i32 %xtraiter268, 0
-  br label %"for output.s0.b.rebased.us.us.us"
+  %88 = add i32 %t163.us.us, 131072
+  %89 = add i32 %88, %t213.us.us.neg
+  %90 = shl nsw i32 %t163.us.us, 1
+  %91 = sub nsw i32 %90, %t214.us.us
+  %92 = sdiv i32 %89, %91
+  %93 = xor i32 %t163.lobit.us.us, -1
+  %94 = sub nsw i32 %93, %t163.lobit.us.us
+  %95 = select i1 %86, i32 %94, i32 0
+  %96 = add nsw i32 %92, %95
+  %97 = xor i32 %t214.us.us, -1
+  %a15.us.us = and i32 %96, %97
+  %98 = icmp slt i32 %a15.us.us, 65535
+  %a14.us.us = select i1 %98, i32 %a15.us.us, i32 65535
+  %99 = icmp sgt i32 %a14.us.us, 0
+  %100 = select i1 %99, i32 %a14.us.us, i32 0
+  %t173.us.us = trunc i32 %100 to i16
+  %101 = insertelement <64 x i16> undef, i16 %t173.us.us, i32 0
+  %102 = shufflevector <64 x i16> %101, <64 x i16> undef, <64 x i32> zeroinitializer
+  %103 = bitcast <64 x i16> %102 to <32 x i32>
+  %t154.us.us = add i32 %85, %47
+  br i1 %58, label %"for output.s0.b.rebased.preheader.split.us.split.us.us.us", label %"for output.s0.b.rebased.preheader.split.us.split.us212.us", !prof !95
 
-"end for output.s0.b.rebased.loopexit.us.us":     ; preds = %"end for output.s0.c.c.loopexit.us.us.us"
-  %108 = add nuw nsw i32 %output.s0.x.rebased.us.us, 1
-  %.not34.us.us = icmp eq i32 %108, %15
+"end for output.s0.b.rebased.loopexit.us.us":     ; preds = %"end for output.s0.c.c.loopexit.split.us194.us.us", %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us", %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.us.us"
+  %104 = add nuw nsw i32 %output.s0.x.rebased.us.us, 1
+  %.not34.us.us = icmp eq i32 %104, %15
   br i1 %.not34.us.us, label %"end for output.s0.x.rebased.loopexit.us", label %"for output.s0.x.rebased.us.us"
 
-"for output.s0.b.rebased.us.us.us":               ; preds = %"end for output.s0.c.c.loopexit.us.us.us", %"for output.s0.x.rebased.us.us"
-  %output.s0.b.rebased.us.us.us = phi i32 [ %168, %"end for output.s0.c.c.loopexit.us.us.us" ], [ 0, %"for output.s0.x.rebased.us.us" ]
-  %109 = add nsw i32 %output.s0.b.rebased.us.us.us, %9
-  %110 = mul nsw i32 %109, %20
-  %111 = mul nsw i32 %109, %11
-  %112 = add i32 %t154.us.us, %110
-  br label %"for output.s0.c.c.us.us.us"
+"for output.s0.b.rebased.us.us208.us":            ; preds = %"for output.s0.b.rebased.preheader.split.us.split.us212.us", %"end for output.s0.c.c.loopexit.split.us194.us.us"
+  %output.s0.b.rebased.us.us209.us = phi i32 [ %153, %"end for output.s0.c.c.loopexit.split.us194.us.us" ], [ 0, %"for output.s0.b.rebased.preheader.split.us.split.us212.us" ]
+  %105 = add nsw i32 %output.s0.b.rebased.us.us209.us, %9
+  %106 = mul nsw i32 %105, %20
+  %107 = add i32 %t154.us.us, %106
+  br i1 %41, label %"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa", label %"for output.s0.c.c.us188.us.us"
 
-"for output.s0.c.c.us.us.us":                     ; preds = %"consume sum.us.us.us", %"for output.s0.b.rebased.us.us.us"
-  %output.s0.c.c.us.us.us = phi i32 [ %167, %"consume sum.us.us.us" ], [ 0, %"for output.s0.b.rebased.us.us.us" ]
-  %a16.us.us.us = shl nsw i32 %output.s0.c.c.us.us.us, 7
-  %113 = icmp slt i32 %a16.us.us.us, %b18
-  %output.s0.c.v6.base.s.us.us.us = select i1 %113, i32 %a16.us.us.us, i32 %b18
-  br i1 %54, label %"for sum.s1.r12$y.rebased.preheader.us.us.us", label %"consume sum.us.us.us", !prof !95
+"for output.s0.c.c.us188.us.us":                  ; preds = %"for output.s0.b.rebased.us.us208.us", %"for output.s0.c.c.us188.us.us"
+  %output.s0.c.c.us189.us.us = phi i32 [ %147, %"for output.s0.c.c.us188.us.us" ], [ 0, %"for output.s0.b.rebased.us.us208.us" ]
+  %niter282 = phi i32 [ %niter282.nsub.7, %"for output.s0.c.c.us188.us.us" ], [ %unroll_iter281, %"for output.s0.b.rebased.us.us208.us" ]
+  %a16.us190.us.us = shl nsw i32 %output.s0.c.c.us189.us.us, 7
+  %108 = icmp slt i32 %a16.us190.us.us, %b18
+  %output.s0.c.v6.base.s.us191.us.us = select i1 %108, i32 %a16.us190.us.us, i32 %b18
+  %t174.us192.us.us = add i32 %107, %output.s0.c.v6.base.s.us191.us.us
+  %109 = sub i32 %t174.us192.us.us, %reass.add116
+  %110 = getelementptr inbounds i8, i8* %12, i32 %109
+  %111 = bitcast i8* %110 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %111, align 1, !tbaa !96
+  %112 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.1 = or i32 %112, 128
+  %113 = icmp slt i32 %a16.us190.us.us.1, %b18
+  %output.s0.c.v6.base.s.us191.us.us.1 = select i1 %113, i32 %a16.us190.us.us.1, i32 %b18
+  %t174.us192.us.us.1 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.1
+  %114 = sub i32 %t174.us192.us.us.1, %reass.add116
+  %115 = getelementptr inbounds i8, i8* %12, i32 %114
+  %116 = bitcast i8* %115 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %116, align 1, !tbaa !96
+  %117 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.2 = or i32 %117, 256
+  %118 = icmp slt i32 %a16.us190.us.us.2, %b18
+  %output.s0.c.v6.base.s.us191.us.us.2 = select i1 %118, i32 %a16.us190.us.us.2, i32 %b18
+  %t174.us192.us.us.2 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.2
+  %119 = sub i32 %t174.us192.us.us.2, %reass.add116
+  %120 = getelementptr inbounds i8, i8* %12, i32 %119
+  %121 = bitcast i8* %120 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %121, align 1, !tbaa !96
+  %122 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.3 = or i32 %122, 384
+  %123 = icmp slt i32 %a16.us190.us.us.3, %b18
+  %output.s0.c.v6.base.s.us191.us.us.3 = select i1 %123, i32 %a16.us190.us.us.3, i32 %b18
+  %t174.us192.us.us.3 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.3
+  %124 = sub i32 %t174.us192.us.us.3, %reass.add116
+  %125 = getelementptr inbounds i8, i8* %12, i32 %124
+  %126 = bitcast i8* %125 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %126, align 1, !tbaa !96
+  %127 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.4 = or i32 %127, 512
+  %128 = icmp slt i32 %a16.us190.us.us.4, %b18
+  %output.s0.c.v6.base.s.us191.us.us.4 = select i1 %128, i32 %a16.us190.us.us.4, i32 %b18
+  %t174.us192.us.us.4 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.4
+  %129 = sub i32 %t174.us192.us.us.4, %reass.add116
+  %130 = getelementptr inbounds i8, i8* %12, i32 %129
+  %131 = bitcast i8* %130 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %131, align 1, !tbaa !96
+  %132 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.5 = or i32 %132, 640
+  %133 = icmp slt i32 %a16.us190.us.us.5, %b18
+  %output.s0.c.v6.base.s.us191.us.us.5 = select i1 %133, i32 %a16.us190.us.us.5, i32 %b18
+  %t174.us192.us.us.5 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.5
+  %134 = sub i32 %t174.us192.us.us.5, %reass.add116
+  %135 = getelementptr inbounds i8, i8* %12, i32 %134
+  %136 = bitcast i8* %135 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %136, align 1, !tbaa !96
+  %137 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.6 = or i32 %137, 768
+  %138 = icmp slt i32 %a16.us190.us.us.6, %b18
+  %output.s0.c.v6.base.s.us191.us.us.6 = select i1 %138, i32 %a16.us190.us.us.6, i32 %b18
+  %t174.us192.us.us.6 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.6
+  %139 = sub i32 %t174.us192.us.us.6, %reass.add116
+  %140 = getelementptr inbounds i8, i8* %12, i32 %139
+  %141 = bitcast i8* %140 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %141, align 1, !tbaa !96
+  %142 = shl i32 %output.s0.c.c.us189.us.us, 7
+  %a16.us190.us.us.7 = or i32 %142, 896
+  %143 = icmp slt i32 %a16.us190.us.us.7, %b18
+  %output.s0.c.v6.base.s.us191.us.us.7 = select i1 %143, i32 %a16.us190.us.us.7, i32 %b18
+  %t174.us192.us.us.7 = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.7
+  %144 = sub i32 %t174.us192.us.us.7, %reass.add116
+  %145 = getelementptr inbounds i8, i8* %12, i32 %144
+  %146 = bitcast i8* %145 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %146, align 1, !tbaa !96
+  %147 = add nuw nsw i32 %output.s0.c.c.us189.us.us, 8
+  %niter282.nsub.7 = add i32 %niter282, -8
+  %niter282.ncmp.7 = icmp eq i32 %niter282.nsub.7, 0
+  br i1 %niter282.ncmp.7, label %"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa", label %"for output.s0.c.c.us188.us.us"
 
-"consume sum.us.us.us":                           ; preds = %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us", %"for sum.s1.r12$y.rebased.preheader.us.us.us", %"for output.s0.c.c.us.us.us"
-  %.us-phi191193.us.us.us = phi <32 x i32> [ %56, %"for output.s0.c.c.us.us.us" ], [ %56, %"for sum.s1.r12$y.rebased.preheader.us.us.us" ], [ %.lcssa, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us" ]
-  %sum27.sroa.9.3.us.us.us = phi <32 x i32> [ %55, %"for output.s0.c.c.us.us.us" ], [ %55, %"for sum.s1.r12$y.rebased.preheader.us.us.us" ], [ %.lcssa244, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us" ]
-  %114 = tail call <64 x i32> @llvm.hexagon.V6.vzh.128B(<32 x i32> %.us-phi191193.us.us.us) #11
-  %115 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %114) #11
-  %116 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %115, <32 x i32> %105) #11
-  %117 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %116, <32 x i32> %115, <32 x i32> %105) #11
-  %118 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %114) #11
-  %119 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %118, <32 x i32> %106) #11
-  %120 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %119, <32 x i32> %118, <32 x i32> %106) #11
-  %121 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %117, <32 x i32> %120) #11
-  %122 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %121) #11
-  %123 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %122, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>) #11
-  %124 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %123, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
-  %125 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %121) #11
-  %126 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %125, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>) #11
-  %127 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %126, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
-  %128 = tail call <32 x i32> @llvm.hexagon.V6.vpackwuh.sat.128B(<32 x i32> %124, <32 x i32> %127) #11
-  %129 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> %57, <32 x i32> %128) #11
-  %130 = bitcast <32 x i32> %129 to <64 x i16>
-  %131 = trunc <64 x i16> %130 to <64 x i8>
-  %132 = shufflevector <64 x i8> %131, <64 x i8> undef, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef>
-  %133 = bitcast <128 x i8> %132 to <32 x i32>
-  %134 = tail call <32 x i32> @llvm.hexagon.V6.vminub.128B(<32 x i32> %133, <32 x i32> %31) #11
-  %135 = tail call <32 x i32> @llvm.hexagon.V6.vmaxub.128B(<32 x i32> %134, <32 x i32> %34) #11
-  %136 = bitcast <32 x i32> %135 to <128 x i8>
-  %137 = shufflevector <128 x i8> %136, <128 x i8> undef, <64 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
-  %t174.us.us.us = add i32 %112, %output.s0.c.v6.base.s.us.us.us
-  %138 = sub i32 %t174.us.us.us, %reass.add128
-  %139 = getelementptr inbounds i8, i8* %12, i32 %138
-  %140 = bitcast i8* %139 to <64 x i8>*
-  store <64 x i8> %137, <64 x i8>* %140, align 1, !tbaa !96
-  %141 = tail call <64 x i32> @llvm.hexagon.V6.vzh.128B(<32 x i32> %sum27.sroa.9.3.us.us.us) #11
-  %142 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %141) #11
-  %143 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %142, <32 x i32> %105) #11
-  %144 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %143, <32 x i32> %142, <32 x i32> %105) #11
-  %145 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %141) #11
-  %146 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %145, <32 x i32> %106) #11
-  %147 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %146, <32 x i32> %145, <32 x i32> %106) #11
-  %148 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %144, <32 x i32> %147) #11
-  %149 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %148) #11
-  %150 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %149, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>) #11
-  %151 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %150, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
-  %152 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %148) #11
-  %153 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %152, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>) #11
-  %154 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %153, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
-  %155 = tail call <32 x i32> @llvm.hexagon.V6.vpackwuh.sat.128B(<32 x i32> %151, <32 x i32> %154) #11
-  %156 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> %58, <32 x i32> %155) #11
-  %157 = bitcast <32 x i32> %156 to <64 x i16>
-  %158 = trunc <64 x i16> %157 to <64 x i8>
-  %159 = shufflevector <64 x i8> %158, <64 x i8> undef, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef, i32 undef>
-  %160 = bitcast <128 x i8> %159 to <32 x i32>
-  %161 = tail call <32 x i32> @llvm.hexagon.V6.vminub.128B(<32 x i32> %160, <32 x i32> %31) #11
-  %162 = tail call <32 x i32> @llvm.hexagon.V6.vmaxub.128B(<32 x i32> %161, <32 x i32> %34) #11
-  %163 = bitcast <32 x i32> %162 to <128 x i8>
-  %164 = shufflevector <128 x i8> %163, <128 x i8> undef, <64 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
-  %165 = getelementptr inbounds i8, i8* %139, i32 64
-  %166 = bitcast i8* %165 to <64 x i8>*
-  store <64 x i8> %164, <64 x i8>* %166, align 1, !tbaa !96
-  %167 = add nuw nsw i32 %output.s0.c.c.us.us.us, 1
-  %.not36.us.us.us = icmp eq i32 %167, %28
-  br i1 %.not36.us.us.us, label %"end for output.s0.c.c.loopexit.us.us.us", label %"for output.s0.c.c.us.us.us"
+"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa": ; preds = %"for output.s0.c.c.us188.us.us", %"for output.s0.b.rebased.us.us208.us"
+  %output.s0.c.c.us189.us.us.unr = phi i32 [ 0, %"for output.s0.b.rebased.us.us208.us" ], [ %147, %"for output.s0.c.c.us188.us.us" ]
+  br i1 %lcmp.mod280.not, label %"end for output.s0.c.c.loopexit.split.us194.us.us", label %"for output.s0.c.c.us188.us.us.epil"
 
-"for sum.s1.r12$y.rebased.preheader.us.us.us":    ; preds = %"for output.s0.c.c.us.us.us"
-  %t171.us.us.us = add i32 %output.s0.c.v6.base.s.us.us.us, %111
-  br i1 %99, label %"for sum.s1.r12$y.rebased.us.us.us.us", label %"consume sum.us.us.us", !prof !95
+"for output.s0.c.c.us188.us.us.epil":             ; preds = %"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa", %"for output.s0.c.c.us188.us.us.epil"
+  %output.s0.c.c.us189.us.us.epil = phi i32 [ %152, %"for output.s0.c.c.us188.us.us.epil" ], [ %output.s0.c.c.us189.us.us.unr, %"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa" ]
+  %epil.iter279 = phi i32 [ %epil.iter279.sub, %"for output.s0.c.c.us188.us.us.epil" ], [ %xtraiter278, %"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa" ]
+  %a16.us190.us.us.epil = shl nsw i32 %output.s0.c.c.us189.us.us.epil, 7
+  %148 = icmp slt i32 %a16.us190.us.us.epil, %b18
+  %output.s0.c.v6.base.s.us191.us.us.epil = select i1 %148, i32 %a16.us190.us.us.epil, i32 %b18
+  %t174.us192.us.us.epil = add i32 %107, %output.s0.c.v6.base.s.us191.us.us.epil
+  %149 = sub i32 %t174.us192.us.us.epil, %reass.add116
+  %150 = getelementptr inbounds i8, i8* %12, i32 %149
+  %151 = bitcast i8* %150 to <32 x i32>*
+  store <32 x i32> %183, <32 x i32>* %151, align 1, !tbaa !96
+  %152 = add nuw nsw i32 %output.s0.c.c.us189.us.us.epil, 1
+  %epil.iter279.sub = add i32 %epil.iter279, -1
+  %epil.iter279.cmp.not = icmp eq i32 %epil.iter279.sub, 0
+  br i1 %epil.iter279.cmp.not, label %"end for output.s0.c.c.loopexit.split.us194.us.us", label %"for output.s0.c.c.us188.us.us.epil", !llvm.loop !99
 
-"end for output.s0.c.c.loopexit.us.us.us":        ; preds = %"consume sum.us.us.us"
-  %168 = add nuw nsw i32 %output.s0.b.rebased.us.us.us, 1
-  %.not35.us.us.us = icmp eq i32 %168, %10
-  br i1 %.not35.us.us.us, label %"end for output.s0.b.rebased.loopexit.us.us", label %"for output.s0.b.rebased.us.us.us"
+"end for output.s0.c.c.loopexit.split.us194.us.us": ; preds = %"for output.s0.c.c.us188.us.us.epil", %"end for output.s0.c.c.loopexit.split.us194.us.us.unr-lcssa"
+  %153 = add nuw nsw i32 %output.s0.b.rebased.us.us209.us, 1
+  %.not35.us.us210.us = icmp eq i32 %153, %10
+  br i1 %.not35.us.us210.us, label %"end for output.s0.b.rebased.loopexit.us.us", label %"for output.s0.b.rebased.us.us208.us"
 
-"for sum.s1.r12$y.rebased.us.us.us.us":           ; preds = %"for sum.s1.r12$y.rebased.preheader.us.us.us", %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us"
-  %.lcssa187190.us.us.us.us = phi <32 x i32> [ %.lcssa, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us" ], [ %56, %"for sum.s1.r12$y.rebased.preheader.us.us.us" ]
-  %sum27.sroa.9.0.us.us.us.us = phi <32 x i32> [ %.lcssa244, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us" ], [ %55, %"for sum.s1.r12$y.rebased.preheader.us.us.us" ]
-  %"sum.s1.r12$y.rebased.us.us.us.us" = phi i32 [ %280, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us" ], [ 0, %"for sum.s1.r12$y.rebased.preheader.us.us.us" ]
-  %169 = add nsw i32 %t161.us, %"sum.s1.r12$y.rebased.us.us.us.us"
-  %170 = mul nsw i32 %169, %8
-  %171 = add i32 %t171.us.us.us, %170
-  br i1 %107, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased.us.us.us.us"
+"for output.s0.b.rebased.preheader.split.us.split.us212.us": ; preds = %"for output.s0.x.rebased.us.us"
+  %154 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %60, <32 x i32> %103) #11
+  %155 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %154) #11
+  %156 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %155) #11
+  %157 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %156, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %158 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %154) #11
+  %159 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %158) #11
+  %160 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %159, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %161 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %157, <32 x i32> %160) #11
+  %162 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %161) #11
+  %163 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %161) #11
+  %164 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %162, <32 x i32> %163) #11
+  %165 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %164) #11
+  %166 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %59, <32 x i32> %103) #11
+  %167 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %166) #11
+  %168 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %167) #11
+  %169 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %168, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %170 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %166) #11
+  %171 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %170) #11
+  %172 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %171, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %173 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %169, <32 x i32> %172) #11
+  %174 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %173) #11
+  %175 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %173) #11
+  %176 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %174, <32 x i32> %175) #11
+  %177 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %176) #11
+  %178 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %165, <32 x i32> %177) #11
+  %179 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %178) #11
+  %180 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %178) #11
+  %181 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %179, <32 x i32> %180) #11
+  %182 = tail call <32 x i32> @llvm.hexagon.V6.vminub.128B(<32 x i32> %181, <32 x i32> %33) #11
+  %183 = tail call <32 x i32> @llvm.hexagon.V6.vmaxub.128B(<32 x i32> %34, <32 x i32> %182) #11
+  br label %"for output.s0.b.rebased.us.us208.us"
 
-"for sum.s1.r12$x.rebased.us.us.us.us":           ; preds = %"for sum.s1.r12$y.rebased.us.us.us.us", %"for sum.s1.r12$x.rebased.us.us.us.us"
-  %sum27.sroa.0.0.sum27.sroa.0.0.88186.us.us.us.us = phi <32 x i32> [ %266, %"for sum.s1.r12$x.rebased.us.us.us.us" ], [ %.lcssa187190.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us" ]
-  %sum27.sroa.9.1.us.us.us.us = phi <32 x i32> [ %265, %"for sum.s1.r12$x.rebased.us.us.us.us" ], [ %sum27.sroa.9.0.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us" ]
-  %"sum.s1.r12$x.rebased.us.us.us.us" = phi i32 [ %267, %"for sum.s1.r12$x.rebased.us.us.us.us" ], [ 0, %"for sum.s1.r12$y.rebased.us.us.us.us" ]
-  %niter274 = phi i32 [ %niter274.nsub.7, %"for sum.s1.r12$x.rebased.us.us.us.us" ], [ %unroll_iter273, %"for sum.s1.r12$y.rebased.us.us.us.us" ]
-  %172 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %sum27.sroa.9.1.us.us.us.us, <32 x i32> %sum27.sroa.0.0.sum27.sroa.0.0.88186.us.us.us.us)
-  %173 = add nsw i32 %t172.us.us, %"sum.s1.r12$x.rebased.us.us.us.us"
-  %174 = mul nsw i32 %173, %5
-  %t179.us.us.us.us = add i32 %171, %174
-  %175 = sub i32 %t179.us.us.us.us, %reass.add125
-  %176 = getelementptr inbounds i8, i8* %0, i32 %175
-  %177 = bitcast i8* %176 to <32 x i32>*
-  %178 = load <32 x i32>, <32 x i32>* %177, align 1, !tbaa !99
-  %179 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %178) #11
-  %180 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %172, <64 x i32> %179) #11
-  %181 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %180)
-  %182 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %180)
-  %183 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 1
-  %184 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %181, <32 x i32> %182)
-  %185 = add nsw i32 %t172.us.us, %183
-  %186 = mul nsw i32 %185, %5
-  %t179.us.us.us.us.1 = add i32 %171, %186
-  %187 = sub i32 %t179.us.us.us.us.1, %reass.add125
-  %188 = getelementptr inbounds i8, i8* %0, i32 %187
-  %189 = bitcast i8* %188 to <32 x i32>*
-  %190 = load <32 x i32>, <32 x i32>* %189, align 1, !tbaa !99
-  %191 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %190) #11
-  %192 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %184, <64 x i32> %191) #11
-  %193 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %192)
-  %194 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %192)
-  %195 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 2
-  %196 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %193, <32 x i32> %194)
-  %197 = add nsw i32 %t172.us.us, %195
-  %198 = mul nsw i32 %197, %5
-  %t179.us.us.us.us.2 = add i32 %171, %198
-  %199 = sub i32 %t179.us.us.us.us.2, %reass.add125
-  %200 = getelementptr inbounds i8, i8* %0, i32 %199
-  %201 = bitcast i8* %200 to <32 x i32>*
-  %202 = load <32 x i32>, <32 x i32>* %201, align 1, !tbaa !99
-  %203 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %202) #11
-  %204 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %196, <64 x i32> %203) #11
-  %205 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %204)
-  %206 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %204)
-  %207 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 3
-  %208 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %205, <32 x i32> %206)
-  %209 = add nsw i32 %t172.us.us, %207
-  %210 = mul nsw i32 %209, %5
-  %t179.us.us.us.us.3 = add i32 %171, %210
-  %211 = sub i32 %t179.us.us.us.us.3, %reass.add125
-  %212 = getelementptr inbounds i8, i8* %0, i32 %211
-  %213 = bitcast i8* %212 to <32 x i32>*
-  %214 = load <32 x i32>, <32 x i32>* %213, align 1, !tbaa !99
-  %215 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %214) #11
-  %216 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %208, <64 x i32> %215) #11
-  %217 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %216)
-  %218 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %216)
-  %219 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 4
-  %220 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %217, <32 x i32> %218)
-  %221 = add nsw i32 %t172.us.us, %219
-  %222 = mul nsw i32 %221, %5
-  %t179.us.us.us.us.4 = add i32 %171, %222
-  %223 = sub i32 %t179.us.us.us.us.4, %reass.add125
-  %224 = getelementptr inbounds i8, i8* %0, i32 %223
-  %225 = bitcast i8* %224 to <32 x i32>*
-  %226 = load <32 x i32>, <32 x i32>* %225, align 1, !tbaa !99
-  %227 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %226) #11
-  %228 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %220, <64 x i32> %227) #11
-  %229 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %228)
-  %230 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %228)
-  %231 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 5
-  %232 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %229, <32 x i32> %230)
-  %233 = add nsw i32 %t172.us.us, %231
-  %234 = mul nsw i32 %233, %5
-  %t179.us.us.us.us.5 = add i32 %171, %234
-  %235 = sub i32 %t179.us.us.us.us.5, %reass.add125
-  %236 = getelementptr inbounds i8, i8* %0, i32 %235
-  %237 = bitcast i8* %236 to <32 x i32>*
-  %238 = load <32 x i32>, <32 x i32>* %237, align 1, !tbaa !99
-  %239 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %238) #11
-  %240 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %232, <64 x i32> %239) #11
-  %241 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %240)
-  %242 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %240)
-  %243 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 6
-  %244 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %241, <32 x i32> %242)
-  %245 = add nsw i32 %t172.us.us, %243
-  %246 = mul nsw i32 %245, %5
-  %t179.us.us.us.us.6 = add i32 %171, %246
-  %247 = sub i32 %t179.us.us.us.us.6, %reass.add125
-  %248 = getelementptr inbounds i8, i8* %0, i32 %247
-  %249 = bitcast i8* %248 to <32 x i32>*
-  %250 = load <32 x i32>, <32 x i32>* %249, align 1, !tbaa !99
-  %251 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %250) #11
-  %252 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %244, <64 x i32> %251) #11
-  %253 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %252)
-  %254 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %252)
-  %255 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us", 7
-  %256 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %253, <32 x i32> %254)
-  %257 = add nsw i32 %t172.us.us, %255
-  %258 = mul nsw i32 %257, %5
-  %t179.us.us.us.us.7 = add i32 %171, %258
-  %259 = sub i32 %t179.us.us.us.us.7, %reass.add125
-  %260 = getelementptr inbounds i8, i8* %0, i32 %259
-  %261 = bitcast i8* %260 to <32 x i32>*
-  %262 = load <32 x i32>, <32 x i32>* %261, align 1, !tbaa !99
-  %263 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %262) #11
-  %264 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %256, <64 x i32> %263) #11
-  %265 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %264)
-  %266 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %264)
-  %267 = add nuw nsw i32 %"sum.s1.r12$x.rebased.us.us.us.us", 8
-  %niter274.nsub.7 = add i32 %niter274, -8
-  %niter274.ncmp.7 = icmp eq i32 %niter274.nsub.7, 0
-  br i1 %niter274.ncmp.7, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased.us.us.us.us"
+"for output.s0.b.rebased.preheader.split.us.split.us.us.us": ; preds = %"for output.s0.x.rebased.us.us"
+  %184 = icmp sgt i32 %a17.us.us, 0
+  %185 = select i1 %184, i32 %a17.us.us, i32 0
+  %186 = icmp sgt i32 %185, %84
+  br i1 %186, label %"for output.s0.b.rebased.us.us.us.us.us.preheader", label %"for output.s0.b.rebased.preheader.split.us.split.us.split.us217.us", !prof !95
 
-"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa": ; preds = %"for sum.s1.r12$x.rebased.us.us.us.us", %"for sum.s1.r12$y.rebased.us.us.us.us"
-  %.lcssa244.ph = phi <32 x i32> [ undef, %"for sum.s1.r12$y.rebased.us.us.us.us" ], [ %265, %"for sum.s1.r12$x.rebased.us.us.us.us" ]
-  %.lcssa.ph = phi <32 x i32> [ undef, %"for sum.s1.r12$y.rebased.us.us.us.us" ], [ %266, %"for sum.s1.r12$x.rebased.us.us.us.us" ]
-  %sum27.sroa.0.0.sum27.sroa.0.0.88186.us.us.us.us.unr = phi <32 x i32> [ %.lcssa187190.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us" ], [ %266, %"for sum.s1.r12$x.rebased.us.us.us.us" ]
-  %sum27.sroa.9.1.us.us.us.us.unr = phi <32 x i32> [ %sum27.sroa.9.0.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us" ], [ %265, %"for sum.s1.r12$x.rebased.us.us.us.us" ]
-  %"sum.s1.r12$x.rebased.us.us.us.us.unr" = phi i32 [ 0, %"for sum.s1.r12$y.rebased.us.us.us.us" ], [ %267, %"for sum.s1.r12$x.rebased.us.us.us.us" ]
-  br i1 %lcmp.mod270.not, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us", label %"for sum.s1.r12$x.rebased.us.us.us.us.epil"
+"for output.s0.b.rebased.us.us.us.us.us.preheader": ; preds = %"for output.s0.b.rebased.preheader.split.us.split.us.us.us"
+  %xtraiter293 = and i32 %70, 7
+  %187 = icmp ult i32 %72, 7
+  %unroll_iter299 = and i32 %70, -8
+  %lcmp.mod296.not = icmp eq i32 %xtraiter293, 0
+  br label %"for output.s0.b.rebased.us.us.us.us.us"
 
-"for sum.s1.r12$x.rebased.us.us.us.us.epil":      ; preds = %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa", %"for sum.s1.r12$x.rebased.us.us.us.us.epil"
-  %sum27.sroa.0.0.sum27.sroa.0.0.88186.us.us.us.us.epil = phi <32 x i32> [ %278, %"for sum.s1.r12$x.rebased.us.us.us.us.epil" ], [ %sum27.sroa.0.0.sum27.sroa.0.0.88186.us.us.us.us.unr, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa" ]
-  %sum27.sroa.9.1.us.us.us.us.epil = phi <32 x i32> [ %277, %"for sum.s1.r12$x.rebased.us.us.us.us.epil" ], [ %sum27.sroa.9.1.us.us.us.us.unr, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa" ]
-  %"sum.s1.r12$x.rebased.us.us.us.us.epil" = phi i32 [ %279, %"for sum.s1.r12$x.rebased.us.us.us.us.epil" ], [ %"sum.s1.r12$x.rebased.us.us.us.us.unr", %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa" ]
-  %epil.iter269 = phi i32 [ %epil.iter269.sub, %"for sum.s1.r12$x.rebased.us.us.us.us.epil" ], [ %xtraiter268, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa" ]
-  %268 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %sum27.sroa.9.1.us.us.us.us.epil, <32 x i32> %sum27.sroa.0.0.sum27.sroa.0.0.88186.us.us.us.us.epil)
-  %269 = add nsw i32 %t172.us.us, %"sum.s1.r12$x.rebased.us.us.us.us.epil"
-  %270 = mul nsw i32 %269, %5
-  %t179.us.us.us.us.epil = add i32 %171, %270
-  %271 = sub i32 %t179.us.us.us.us.epil, %reass.add125
-  %272 = getelementptr inbounds i8, i8* %0, i32 %271
-  %273 = bitcast i8* %272 to <32 x i32>*
-  %274 = load <32 x i32>, <32 x i32>* %273, align 1, !tbaa !99
-  %275 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %274) #11
-  %276 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %268, <64 x i32> %275) #11
-  %277 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %276)
-  %278 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %276)
-  %279 = add nuw nsw i32 %"sum.s1.r12$x.rebased.us.us.us.us.epil", 1
-  %epil.iter269.sub = add i32 %epil.iter269, -1
-  %epil.iter269.cmp.not = icmp eq i32 %epil.iter269.sub, 0
-  br i1 %epil.iter269.cmp.not, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us", label %"for sum.s1.r12$x.rebased.us.us.us.us.epil", !llvm.loop !101
+"for output.s0.b.rebased.us.us.us213.us":         ; preds = %"for output.s0.b.rebased.preheader.split.us.split.us.split.us217.us", %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us"
+  %output.s0.b.rebased.us.us.us214.us = phi i32 [ %236, %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us" ], [ 0, %"for output.s0.b.rebased.preheader.split.us.split.us.split.us217.us" ]
+  %188 = add nsw i32 %output.s0.b.rebased.us.us.us214.us, %9
+  %189 = mul nsw i32 %188, %20
+  %190 = add i32 %t154.us.us, %189
+  br i1 %42, label %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa", label %"for output.s0.c.c.us.us.us.us.us"
 
-"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us": ; preds = %"for sum.s1.r12$x.rebased.us.us.us.us.epil", %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa"
-  %.lcssa244 = phi <32 x i32> [ %.lcssa244.ph, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa" ], [ %277, %"for sum.s1.r12$x.rebased.us.us.us.us.epil" ]
-  %.lcssa = phi <32 x i32> [ %.lcssa.ph, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.unr-lcssa" ], [ %278, %"for sum.s1.r12$x.rebased.us.us.us.us.epil" ]
-  %280 = add nuw nsw i32 %"sum.s1.r12$y.rebased.us.us.us.us", 1
-  %.not37.us.us.us.us = icmp eq i32 %280, %t168.us
-  br i1 %.not37.us.us.us.us, label %"consume sum.us.us.us", label %"for sum.s1.r12$y.rebased.us.us.us.us"
+"for output.s0.c.c.us.us.us.us.us":               ; preds = %"for output.s0.b.rebased.us.us.us213.us", %"for output.s0.c.c.us.us.us.us.us"
+  %output.s0.c.c.us.us.us.us.us = phi i32 [ %230, %"for output.s0.c.c.us.us.us.us.us" ], [ 0, %"for output.s0.b.rebased.us.us.us213.us" ]
+  %niter287 = phi i32 [ %niter287.nsub.7, %"for output.s0.c.c.us.us.us.us.us" ], [ %unroll_iter286, %"for output.s0.b.rebased.us.us.us213.us" ]
+  %a16.us.us.us.us.us = shl nsw i32 %output.s0.c.c.us.us.us.us.us, 7
+  %191 = icmp slt i32 %a16.us.us.us.us.us, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us = select i1 %191, i32 %a16.us.us.us.us.us, i32 %b18
+  %t174.us.us.us.us.us = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us
+  %192 = sub i32 %t174.us.us.us.us.us, %reass.add116
+  %193 = getelementptr inbounds i8, i8* %12, i32 %192
+  %194 = bitcast i8* %193 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %194, align 1, !tbaa !96
+  %195 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.1 = or i32 %195, 128
+  %196 = icmp slt i32 %a16.us.us.us.us.us.1, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.1 = select i1 %196, i32 %a16.us.us.us.us.us.1, i32 %b18
+  %t174.us.us.us.us.us.1 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.1
+  %197 = sub i32 %t174.us.us.us.us.us.1, %reass.add116
+  %198 = getelementptr inbounds i8, i8* %12, i32 %197
+  %199 = bitcast i8* %198 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %199, align 1, !tbaa !96
+  %200 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.2 = or i32 %200, 256
+  %201 = icmp slt i32 %a16.us.us.us.us.us.2, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.2 = select i1 %201, i32 %a16.us.us.us.us.us.2, i32 %b18
+  %t174.us.us.us.us.us.2 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.2
+  %202 = sub i32 %t174.us.us.us.us.us.2, %reass.add116
+  %203 = getelementptr inbounds i8, i8* %12, i32 %202
+  %204 = bitcast i8* %203 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %204, align 1, !tbaa !96
+  %205 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.3 = or i32 %205, 384
+  %206 = icmp slt i32 %a16.us.us.us.us.us.3, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.3 = select i1 %206, i32 %a16.us.us.us.us.us.3, i32 %b18
+  %t174.us.us.us.us.us.3 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.3
+  %207 = sub i32 %t174.us.us.us.us.us.3, %reass.add116
+  %208 = getelementptr inbounds i8, i8* %12, i32 %207
+  %209 = bitcast i8* %208 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %209, align 1, !tbaa !96
+  %210 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.4 = or i32 %210, 512
+  %211 = icmp slt i32 %a16.us.us.us.us.us.4, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.4 = select i1 %211, i32 %a16.us.us.us.us.us.4, i32 %b18
+  %t174.us.us.us.us.us.4 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.4
+  %212 = sub i32 %t174.us.us.us.us.us.4, %reass.add116
+  %213 = getelementptr inbounds i8, i8* %12, i32 %212
+  %214 = bitcast i8* %213 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %214, align 1, !tbaa !96
+  %215 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.5 = or i32 %215, 640
+  %216 = icmp slt i32 %a16.us.us.us.us.us.5, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.5 = select i1 %216, i32 %a16.us.us.us.us.us.5, i32 %b18
+  %t174.us.us.us.us.us.5 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.5
+  %217 = sub i32 %t174.us.us.us.us.us.5, %reass.add116
+  %218 = getelementptr inbounds i8, i8* %12, i32 %217
+  %219 = bitcast i8* %218 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %219, align 1, !tbaa !96
+  %220 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.6 = or i32 %220, 768
+  %221 = icmp slt i32 %a16.us.us.us.us.us.6, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.6 = select i1 %221, i32 %a16.us.us.us.us.us.6, i32 %b18
+  %t174.us.us.us.us.us.6 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.6
+  %222 = sub i32 %t174.us.us.us.us.us.6, %reass.add116
+  %223 = getelementptr inbounds i8, i8* %12, i32 %222
+  %224 = bitcast i8* %223 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %224, align 1, !tbaa !96
+  %225 = shl i32 %output.s0.c.c.us.us.us.us.us, 7
+  %a16.us.us.us.us.us.7 = or i32 %225, 896
+  %226 = icmp slt i32 %a16.us.us.us.us.us.7, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.7 = select i1 %226, i32 %a16.us.us.us.us.us.7, i32 %b18
+  %t174.us.us.us.us.us.7 = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.7
+  %227 = sub i32 %t174.us.us.us.us.us.7, %reass.add116
+  %228 = getelementptr inbounds i8, i8* %12, i32 %227
+  %229 = bitcast i8* %228 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %229, align 1, !tbaa !96
+  %230 = add nuw nsw i32 %output.s0.c.c.us.us.us.us.us, 8
+  %niter287.nsub.7 = add i32 %niter287, -8
+  %niter287.ncmp.7 = icmp eq i32 %niter287.nsub.7, 0
+  br i1 %niter287.ncmp.7, label %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa", label %"for output.s0.c.c.us.us.us.us.us"
+
+"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa": ; preds = %"for output.s0.c.c.us.us.us.us.us", %"for output.s0.b.rebased.us.us.us213.us"
+  %output.s0.c.c.us.us.us.us.us.unr = phi i32 [ 0, %"for output.s0.b.rebased.us.us.us213.us" ], [ %230, %"for output.s0.c.c.us.us.us.us.us" ]
+  br i1 %lcmp.mod285.not, label %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us", label %"for output.s0.c.c.us.us.us.us.us.epil"
+
+"for output.s0.c.c.us.us.us.us.us.epil":          ; preds = %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa", %"for output.s0.c.c.us.us.us.us.us.epil"
+  %output.s0.c.c.us.us.us.us.us.epil = phi i32 [ %235, %"for output.s0.c.c.us.us.us.us.us.epil" ], [ %output.s0.c.c.us.us.us.us.us.unr, %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa" ]
+  %epil.iter284 = phi i32 [ %epil.iter284.sub, %"for output.s0.c.c.us.us.us.us.us.epil" ], [ %xtraiter283, %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa" ]
+  %a16.us.us.us.us.us.epil = shl nsw i32 %output.s0.c.c.us.us.us.us.us.epil, 7
+  %231 = icmp slt i32 %a16.us.us.us.us.us.epil, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.epil = select i1 %231, i32 %a16.us.us.us.us.us.epil, i32 %b18
+  %t174.us.us.us.us.us.epil = add i32 %190, %output.s0.c.v6.base.s.us.us.us.us.us.epil
+  %232 = sub i32 %t174.us.us.us.us.us.epil, %reass.add116
+  %233 = getelementptr inbounds i8, i8* %12, i32 %232
+  %234 = bitcast i8* %233 to <32 x i32>*
+  store <32 x i32> %266, <32 x i32>* %234, align 1, !tbaa !96
+  %235 = add nuw nsw i32 %output.s0.c.c.us.us.us.us.us.epil, 1
+  %epil.iter284.sub = add i32 %epil.iter284, -1
+  %epil.iter284.cmp.not = icmp eq i32 %epil.iter284.sub, 0
+  br i1 %epil.iter284.cmp.not, label %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us", label %"for output.s0.c.c.us.us.us.us.us.epil", !llvm.loop !100
+
+"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us": ; preds = %"for output.s0.c.c.us.us.us.us.us.epil", %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.unr-lcssa"
+  %236 = add nuw nsw i32 %output.s0.b.rebased.us.us.us214.us, 1
+  %.not35.us.us.us215.us = icmp eq i32 %236, %10
+  br i1 %.not35.us.us.us215.us, label %"end for output.s0.b.rebased.loopexit.us.us", label %"for output.s0.b.rebased.us.us.us213.us"
+
+"for output.s0.b.rebased.preheader.split.us.split.us.split.us217.us": ; preds = %"for output.s0.b.rebased.preheader.split.us.split.us.us.us"
+  %237 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %60, <32 x i32> %103) #11
+  %238 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %237) #11
+  %239 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %238) #11
+  %240 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %239, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %241 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %237) #11
+  %242 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %241) #11
+  %243 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %242, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %244 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %240, <32 x i32> %243) #11
+  %245 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %244) #11
+  %246 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %244) #11
+  %247 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %245, <32 x i32> %246) #11
+  %248 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %247) #11
+  %249 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %59, <32 x i32> %103) #11
+  %250 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %249) #11
+  %251 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %250) #11
+  %252 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %251, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %253 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %249) #11
+  %254 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %253) #11
+  %255 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %254, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %256 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %252, <32 x i32> %255) #11
+  %257 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %256) #11
+  %258 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %256) #11
+  %259 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %257, <32 x i32> %258) #11
+  %260 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %259) #11
+  %261 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %248, <32 x i32> %260) #11
+  %262 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %261) #11
+  %263 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %261) #11
+  %264 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %262, <32 x i32> %263) #11
+  %265 = tail call <32 x i32> @llvm.hexagon.V6.vminub.128B(<32 x i32> %264, <32 x i32> %33) #11
+  %266 = tail call <32 x i32> @llvm.hexagon.V6.vmaxub.128B(<32 x i32> %34, <32 x i32> %265) #11
+  br label %"for output.s0.b.rebased.us.us.us213.us"
+
+"for output.s0.b.rebased.us.us.us.us.us":         ; preds = %"for output.s0.b.rebased.us.us.us.us.us.preheader", %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.us.us"
+  %output.s0.b.rebased.us.us.us.us.us = phi i32 [ %420, %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.us.us" ], [ 0, %"for output.s0.b.rebased.us.us.us.us.us.preheader" ]
+  %267 = add nsw i32 %output.s0.b.rebased.us.us.us.us.us, %9
+  %268 = mul nsw i32 %267, %20
+  %269 = mul nsw i32 %267, %11
+  %270 = add i32 %t154.us.us, %268
+  br label %"for output.s0.c.c.us.us.us.us.us.us.us"
+
+"for output.s0.c.c.us.us.us.us.us.us.us":         ; preds = %"consume sum.loopexit.split.us.us.us.us.us.us.us.us", %"for output.s0.b.rebased.us.us.us.us.us"
+  %output.s0.c.c.us.us.us.us.us.us.us = phi i32 [ %419, %"consume sum.loopexit.split.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.b.rebased.us.us.us.us.us" ]
+  %a16.us.us.us.us.us.us.us = shl nsw i32 %output.s0.c.c.us.us.us.us.us.us.us, 7
+  %271 = icmp slt i32 %a16.us.us.us.us.us.us.us, %b18
+  %output.s0.c.v6.base.s.us.us.us.us.us.us.us = select i1 %271, i32 %a16.us.us.us.us.us.us.us, i32 %b18
+  %t171.us.us.us.us.us.us.us = add i32 %output.s0.c.v6.base.s.us.us.us.us.us.us.us, %269
+  br label %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us"
+
+"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us": ; preds = %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us", %"for output.s0.c.c.us.us.us.us.us.us.us"
+  %.lcssa173176.us.us.us.us.us.us.us.us = phi <32 x i32> [ %.lcssa, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us" ], [ %60, %"for output.s0.c.c.us.us.us.us.us.us.us" ]
+  %sum27.sroa.8.0.us.us.us.us.us.us.us.us = phi <32 x i32> [ %.lcssa259, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us" ], [ %59, %"for output.s0.c.c.us.us.us.us.us.us.us" ]
+  %"sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" = phi i32 [ %385, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.c.c.us.us.us.us.us.us.us" ]
+  %272 = add nsw i32 %t161.us, %"sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us"
+  %273 = mul nsw i32 %272, %8
+  %274 = add i32 %t171.us.us.us.us.us.us.us, %273
+  br i1 %187, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us"
+
+"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us": ; preds = %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us", %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us"
+  %275 = phi <32 x i32> [ %370, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ], [ %.lcssa173176.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ]
+  %sum27.sroa.8.1.us.us.us.us.us.us.us.us = phi <32 x i32> [ %369, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ], [ %sum27.sroa.8.0.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ]
+  %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" = phi i32 [ %371, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ], [ 0, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ]
+  %niter300 = phi i32 [ %niter300.nsub.7, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ], [ %unroll_iter299, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ]
+  %276 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %sum27.sroa.8.1.us.us.us.us.us.us.us.us, <32 x i32> %275)
+  %277 = add nsw i32 %t172.us.us, %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us"
+  %278 = mul nsw i32 %277, %5
+  %t179.us.us.us.us.us.us.us.us = add i32 %274, %278
+  %279 = sub i32 %t179.us.us.us.us.us.us.us.us, %reass.add113
+  %280 = getelementptr inbounds i8, i8* %0, i32 %279
+  %281 = bitcast i8* %280 to <32 x i32>*
+  %282 = load <32 x i32>, <32 x i32>* %281, align 1, !tbaa !101
+  %283 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %282) #11
+  %284 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %283, <64 x i32> %276) #11
+  %285 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %284)
+  %286 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %284)
+  %287 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 1
+  %288 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %285, <32 x i32> %286)
+  %289 = add nsw i32 %t172.us.us, %287
+  %290 = mul nsw i32 %289, %5
+  %t179.us.us.us.us.us.us.us.us.1 = add i32 %274, %290
+  %291 = sub i32 %t179.us.us.us.us.us.us.us.us.1, %reass.add113
+  %292 = getelementptr inbounds i8, i8* %0, i32 %291
+  %293 = bitcast i8* %292 to <32 x i32>*
+  %294 = load <32 x i32>, <32 x i32>* %293, align 1, !tbaa !101
+  %295 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %294) #11
+  %296 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %295, <64 x i32> %288) #11
+  %297 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %296)
+  %298 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %296)
+  %299 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 2
+  %300 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %297, <32 x i32> %298)
+  %301 = add nsw i32 %t172.us.us, %299
+  %302 = mul nsw i32 %301, %5
+  %t179.us.us.us.us.us.us.us.us.2 = add i32 %274, %302
+  %303 = sub i32 %t179.us.us.us.us.us.us.us.us.2, %reass.add113
+  %304 = getelementptr inbounds i8, i8* %0, i32 %303
+  %305 = bitcast i8* %304 to <32 x i32>*
+  %306 = load <32 x i32>, <32 x i32>* %305, align 1, !tbaa !101
+  %307 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %306) #11
+  %308 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %307, <64 x i32> %300) #11
+  %309 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %308)
+  %310 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %308)
+  %311 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 3
+  %312 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %309, <32 x i32> %310)
+  %313 = add nsw i32 %t172.us.us, %311
+  %314 = mul nsw i32 %313, %5
+  %t179.us.us.us.us.us.us.us.us.3 = add i32 %274, %314
+  %315 = sub i32 %t179.us.us.us.us.us.us.us.us.3, %reass.add113
+  %316 = getelementptr inbounds i8, i8* %0, i32 %315
+  %317 = bitcast i8* %316 to <32 x i32>*
+  %318 = load <32 x i32>, <32 x i32>* %317, align 1, !tbaa !101
+  %319 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %318) #11
+  %320 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %319, <64 x i32> %312) #11
+  %321 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %320)
+  %322 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %320)
+  %323 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 4
+  %324 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %321, <32 x i32> %322)
+  %325 = add nsw i32 %t172.us.us, %323
+  %326 = mul nsw i32 %325, %5
+  %t179.us.us.us.us.us.us.us.us.4 = add i32 %274, %326
+  %327 = sub i32 %t179.us.us.us.us.us.us.us.us.4, %reass.add113
+  %328 = getelementptr inbounds i8, i8* %0, i32 %327
+  %329 = bitcast i8* %328 to <32 x i32>*
+  %330 = load <32 x i32>, <32 x i32>* %329, align 1, !tbaa !101
+  %331 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %330) #11
+  %332 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %331, <64 x i32> %324) #11
+  %333 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %332)
+  %334 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %332)
+  %335 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 5
+  %336 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %333, <32 x i32> %334)
+  %337 = add nsw i32 %t172.us.us, %335
+  %338 = mul nsw i32 %337, %5
+  %t179.us.us.us.us.us.us.us.us.5 = add i32 %274, %338
+  %339 = sub i32 %t179.us.us.us.us.us.us.us.us.5, %reass.add113
+  %340 = getelementptr inbounds i8, i8* %0, i32 %339
+  %341 = bitcast i8* %340 to <32 x i32>*
+  %342 = load <32 x i32>, <32 x i32>* %341, align 1, !tbaa !101
+  %343 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %342) #11
+  %344 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %343, <64 x i32> %336) #11
+  %345 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %344)
+  %346 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %344)
+  %347 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 6
+  %348 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %345, <32 x i32> %346)
+  %349 = add nsw i32 %t172.us.us, %347
+  %350 = mul nsw i32 %349, %5
+  %t179.us.us.us.us.us.us.us.us.6 = add i32 %274, %350
+  %351 = sub i32 %t179.us.us.us.us.us.us.us.us.6, %reass.add113
+  %352 = getelementptr inbounds i8, i8* %0, i32 %351
+  %353 = bitcast i8* %352 to <32 x i32>*
+  %354 = load <32 x i32>, <32 x i32>* %353, align 1, !tbaa !101
+  %355 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %354) #11
+  %356 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %355, <64 x i32> %348) #11
+  %357 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %356)
+  %358 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %356)
+  %359 = or i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 7
+  %360 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %357, <32 x i32> %358)
+  %361 = add nsw i32 %t172.us.us, %359
+  %362 = mul nsw i32 %361, %5
+  %t179.us.us.us.us.us.us.us.us.7 = add i32 %274, %362
+  %363 = sub i32 %t179.us.us.us.us.us.us.us.us.7, %reass.add113
+  %364 = getelementptr inbounds i8, i8* %0, i32 %363
+  %365 = bitcast i8* %364 to <32 x i32>*
+  %366 = load <32 x i32>, <32 x i32>* %365, align 1, !tbaa !101
+  %367 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %366) #11
+  %368 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %367, <64 x i32> %360) #11
+  %369 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %368)
+  %370 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %368)
+  %371 = add nuw nsw i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", 8
+  %niter300.nsub.7 = add i32 %niter300, -8
+  %niter300.ncmp.7 = icmp eq i32 %niter300.nsub.7, 0
+  br i1 %niter300.ncmp.7, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us"
+
+"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa": ; preds = %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us", %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us"
+  %.lcssa259.ph = phi <32 x i32> [ undef, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ], [ %369, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ]
+  %.lcssa.ph = phi <32 x i32> [ undef, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ], [ %370, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ]
+  %.unr295 = phi <32 x i32> [ %.lcssa173176.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ], [ %370, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ]
+  %sum27.sroa.8.1.us.us.us.us.us.us.us.us.unr = phi <32 x i32> [ %sum27.sroa.8.0.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ], [ %369, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ]
+  %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.unr" = phi i32 [ 0, %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us" ], [ %371, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us" ]
+  br i1 %lcmp.mod296.not, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil"
+
+"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil": ; preds = %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa", %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil"
+  %372 = phi <32 x i32> [ %383, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" ], [ %.unr295, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %sum27.sroa.8.1.us.us.us.us.us.us.us.us.epil = phi <32 x i32> [ %382, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" ], [ %sum27.sroa.8.1.us.us.us.us.us.us.us.us.unr, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" = phi i32 [ %384, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" ], [ %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.unr", %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %epil.iter294 = phi i32 [ %epil.iter294.sub, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" ], [ %xtraiter293, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %373 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %sum27.sroa.8.1.us.us.us.us.us.us.us.us.epil, <32 x i32> %372)
+  %374 = add nsw i32 %t172.us.us, %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil"
+  %375 = mul nsw i32 %374, %5
+  %t179.us.us.us.us.us.us.us.us.epil = add i32 %274, %375
+  %376 = sub i32 %t179.us.us.us.us.us.us.us.us.epil, %reass.add113
+  %377 = getelementptr inbounds i8, i8* %0, i32 %376
+  %378 = bitcast i8* %377 to <32 x i32>*
+  %379 = load <32 x i32>, <32 x i32>* %378, align 1, !tbaa !101
+  %380 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %379) #11
+  %381 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %380, <64 x i32> %373) #11
+  %382 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %381)
+  %383 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %381)
+  %384 = add nuw nsw i32 %"sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil", 1
+  %epil.iter294.sub = add i32 %epil.iter294, -1
+  %epil.iter294.cmp.not = icmp eq i32 %epil.iter294.sub, 0
+  br i1 %epil.iter294.cmp.not, label %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil", !llvm.loop !103
+
+"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us": ; preds = %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil", %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa"
+  %.lcssa259 = phi <32 x i32> [ %.lcssa259.ph, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa" ], [ %382, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" ]
+  %.lcssa = phi <32 x i32> [ %.lcssa.ph, %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us.unr-lcssa" ], [ %383, %"for sum.s1.r12$x.rebased.us.us.us.us.us.us.us.us.epil" ]
+  %385 = add nuw nsw i32 %"sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us", 1
+  %.not37.us.us.us.us.us.us.us.us = icmp eq i32 %385, %t168.us
+  br i1 %.not37.us.us.us.us.us.us.us.us, label %"consume sum.loopexit.split.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$y.rebased.us.us.us.us.us.us.us.us"
+
+"consume sum.loopexit.split.us.us.us.us.us.us.us.us": ; preds = %"end for sum.s1.r12$x.rebased.loopexit.us.us.us.us.us.us.us.us"
+  %386 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %.lcssa, <32 x i32> %103) #11
+  %387 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %386) #11
+  %388 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %387) #11
+  %389 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %388, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %390 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %386) #11
+  %391 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %390) #11
+  %392 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %391, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %393 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %389, <32 x i32> %392) #11
+  %394 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %393) #11
+  %395 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %393) #11
+  %396 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %394, <32 x i32> %395) #11
+  %397 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %396) #11
+  %398 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %.lcssa259, <32 x i32> %103) #11
+  %399 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %398) #11
+  %400 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %399) #11
+  %401 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %400, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %402 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %398) #11
+  %403 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %402) #11
+  %404 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %403, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>) #11
+  %405 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %401, <32 x i32> %404) #11
+  %406 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %405) #11
+  %407 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %405) #11
+  %408 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %406, <32 x i32> %407) #11
+  %409 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %408) #11
+  %410 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %397, <32 x i32> %409) #11
+  %411 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %410) #11
+  %412 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %410) #11
+  %413 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %411, <32 x i32> %412) #11
+  %414 = tail call <32 x i32> @llvm.hexagon.V6.vminub.128B(<32 x i32> %413, <32 x i32> %33) #11
+  %415 = tail call <32 x i32> @llvm.hexagon.V6.vmaxub.128B(<32 x i32> %34, <32 x i32> %414) #11
+  %t174.us.us.us.us.us.us.us = add i32 %270, %output.s0.c.v6.base.s.us.us.us.us.us.us.us
+  %416 = sub i32 %t174.us.us.us.us.us.us.us, %reass.add116
+  %417 = getelementptr inbounds i8, i8* %12, i32 %416
+  %418 = bitcast i8* %417 to <32 x i32>*
+  store <32 x i32> %415, <32 x i32>* %418, align 1, !tbaa !96
+  %419 = add nuw nsw i32 %output.s0.c.c.us.us.us.us.us.us.us, 1
+  %.not36.us.us.us.us.us.us.us = icmp eq i32 %419, %28
+  br i1 %.not36.us.us.us.us.us.us.us, label %"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.us.us", label %"for output.s0.c.c.us.us.us.us.us.us.us"
+
+"end for output.s0.c.c.loopexit.split.us.us.us.split.us.us.us.us": ; preds = %"consume sum.loopexit.split.us.us.us.us.us.us.us.us"
+  %420 = add nuw nsw i32 %output.s0.b.rebased.us.us.us.us.us, 1
+  %.not35.us.us.us.us.us = icmp eq i32 %420, %10
+  br i1 %.not35.us.us.us.us.us, label %"end for output.s0.b.rebased.loopexit.us.us", label %"for output.s0.b.rebased.us.us.us.us.us"
 
 next_bb:                                          ; preds = %entry
   br i1 %22, label %"for output.s0.y.rebased1.preheader", label %call_destructor.exit, !prof !95
 
 "for output.s0.y.rebased1.preheader":             ; preds = %next_bb
-  %.neg111 = mul i32 %5, %3
-  %.neg110 = mul i32 %8, %6
-  %.neg109 = mul i32 %11, %9
-  %.neg108 = mul i32 %16, %14
-  %.neg107 = mul i32 %19, %17
+  %.neg99 = mul i32 %5, %3
+  %.neg98 = mul i32 %8, %6
+  %.neg97 = mul i32 %11, %9
+  %.neg96 = mul i32 %16, %14
+  %.neg95 = mul i32 %19, %17
   %.neg = mul i32 %20, %9
-  %281 = add nsw i32 %7, %6
-  %282 = icmp sgt i32 %15, 0
-  %283 = add nsw i32 %4, %3
-  %284 = icmp sgt i32 %2, 0
-  %reass.add = add i32 %.neg110, %.neg111
-  %reass.add113 = add i32 %reass.add, %.neg109
-  %reass.add114 = add i32 %.neg107, %.neg108
-  %reass.add115 = add i32 %reass.add114, %.neg
-  %285 = icmp sgt i32 %10, 0
-  %or.cond = and i1 %282, %285
-  br i1 %or.cond, label %"for output.s0.y.rebased1.us.us.preheader", label %call_destructor.exit, !prof !102
+  %421 = add nsw i32 %7, %6
+  %422 = icmp sgt i32 %15, 0
+  %423 = add nsw i32 %4, %3
+  %424 = icmp sgt i32 %2, 0
+  %reass.add = add i32 %.neg98, %.neg99
+  %reass.add101 = add i32 %reass.add, %.neg97
+  %reass.add102 = add i32 %.neg95, %.neg96
+  %reass.add103 = add i32 %reass.add102, %.neg
+  %425 = icmp sgt i32 %10, 0
+  %or.cond = and i1 %422, %425
+  br i1 %or.cond, label %"for output.s0.y.rebased1.us.us.preheader", label %call_destructor.exit, !prof !104
 
 "for output.s0.y.rebased1.us.us.preheader":       ; preds = %"for output.s0.y.rebased1.preheader"
-  %286 = add i32 %10, -1
-  %287 = add i32 %4, %3
-  %288 = mul i32 %14, %stride_x
-  %289 = sub i32 %287, %288
-  %290 = sub i32 %3, %288
+  %426 = add i32 %10, -1
+  %427 = add i32 %4, %3
+  %428 = mul i32 %14, %stride_x
+  %429 = sub i32 %427, %428
+  %430 = sub i32 %3, %428
   %xtraiter = and i32 %10, 7
-  %291 = icmp ult i32 %286, 7
+  %431 = icmp ult i32 %426, 7
   %unroll_iter = and i32 %10, -8
   %lcmp.mod.not = icmp eq i32 %xtraiter, 0
-  %xtraiter249 = and i32 %10, 7
-  %292 = icmp ult i32 %286, 7
-  %unroll_iter252 = and i32 %10, -8
-  %lcmp.mod251.not = icmp eq i32 %xtraiter249, 0
+  %xtraiter264 = and i32 %10, 7
+  %432 = icmp ult i32 %426, 7
+  %unroll_iter267 = and i32 %10, -8
+  %lcmp.mod266.not = icmp eq i32 %xtraiter264, 0
   br label %"for output.s0.y.rebased1.us.us"
 
 "for output.s0.y.rebased1.us.us":                 ; preds = %"for output.s0.y.rebased1.us.us.preheader", %"end for output.s0.x.rebased5.loopexit.split.us.us.us"
-  %output.s0.y.rebased3.us.us = phi i32 [ %505, %"end for output.s0.x.rebased5.loopexit.split.us.us.us" ], [ 0, %"for output.s0.y.rebased1.us.us.preheader" ]
-  %293 = mul i32 %19, %output.s0.y.rebased3.us.us
-  %294 = add nsw i32 %output.s0.y.rebased3.us.us, %17
-  %295 = mul nsw i32 %294, %stride_y
-  %a19.us.us = sub nsw i32 %281, %295
-  %296 = icmp slt i32 %a19.us.us, %b22
-  %b23.us.us = select i1 %296, i32 %a19.us.us, i32 %b22
-  %a20.us.us = sub nsw i32 %6, %295
-  %297 = icmp slt i32 %a20.us.us, %b22
-  %a31.us.us = select i1 %297, i32 %a20.us.us, i32 %b22
-  %298 = mul nsw i32 %294, %19
-  %299 = icmp sgt i32 %a31.us.us, %b23.us.us
-  %a30.us.us = select i1 %299, i32 %a31.us.us, i32 %b23.us.us
-  %a26.us.us = add nsw i32 %295, %b22
-  %300 = icmp slt i32 %a26.us.us, %281
-  %301 = select i1 %300, i32 %a26.us.us, i32 %281
-  %302 = icmp slt i32 %6, %295
-  %303 = select i1 %302, i32 %295, i32 %6
-  %304 = sub nsw i32 %301, %303
-  %305 = icmp sgt i32 %a31.us.us, 0
-  %306 = select i1 %305, i32 %a31.us.us, i32 0
-  %t194.us.us = add nsw i32 %306, %295
-  %307 = icmp sgt i32 %a30.us.us, 0
-  %308 = select i1 %307, i32 %a30.us.us, i32 0
-  %t201.us.us = sub nsw i32 %308, %306
-  %309 = icmp sgt i32 %t201.us.us, 0
+  %output.s0.y.rebased3.us.us = phi i32 [ %647, %"end for output.s0.x.rebased5.loopexit.split.us.us.us" ], [ 0, %"for output.s0.y.rebased1.us.us.preheader" ]
+  %433 = mul i32 %19, %output.s0.y.rebased3.us.us
+  %434 = add nsw i32 %output.s0.y.rebased3.us.us, %17
+  %435 = mul nsw i32 %434, %stride_y
+  %a19.us.us = sub nsw i32 %421, %435
+  %436 = icmp slt i32 %a19.us.us, %b22
+  %b23.us.us = select i1 %436, i32 %a19.us.us, i32 %b22
+  %a20.us.us = sub nsw i32 %6, %435
+  %437 = icmp slt i32 %a20.us.us, %b22
+  %a31.us.us = select i1 %437, i32 %a20.us.us, i32 %b22
+  %438 = mul nsw i32 %434, %19
+  %439 = icmp sgt i32 %a31.us.us, %b23.us.us
+  %a30.us.us = select i1 %439, i32 %a31.us.us, i32 %b23.us.us
+  %a26.us.us = add nsw i32 %435, %b22
+  %440 = icmp slt i32 %a26.us.us, %421
+  %441 = select i1 %440, i32 %a26.us.us, i32 %421
+  %442 = icmp slt i32 %6, %435
+  %443 = select i1 %442, i32 %435, i32 %6
+  %444 = sub nsw i32 %441, %443
+  %445 = icmp sgt i32 %a31.us.us, 0
+  %446 = select i1 %445, i32 %a31.us.us, i32 0
+  %t194.us.us = add nsw i32 %446, %435
+  %447 = icmp sgt i32 %a30.us.us, 0
+  %448 = select i1 %447, i32 %a30.us.us, i32 0
+  %t201.us.us = sub nsw i32 %448, %446
+  %449 = icmp sgt i32 %t201.us.us, 0
   br label %"for output.s0.x.rebased4.us.us.us"
 
 "for output.s0.x.rebased4.us.us.us":              ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us", %"for output.s0.y.rebased1.us.us"
-  %output.s0.x.rebased6.us.us.us = phi i32 [ %361, %"end for output.s0.b.rebased8.loopexit.us.us.us" ], [ 0, %"for output.s0.y.rebased1.us.us" ]
-  %310 = mul i32 %output.s0.x.rebased6.us.us.us, %stride_x
-  %311 = sub i32 %289, %310
-  %312 = icmp sgt i32 %311, %b25
-  %smin = select i1 %312, i32 %b25, i32 %311
-  %313 = sub i32 %290, %310
-  %314 = icmp sgt i32 %313, %b25
-  %smin254 = select i1 %314, i32 %b25, i32 %313
-  %315 = icmp sgt i32 %smin, %smin254
-  %smax = select i1 %315, i32 %smin, i32 %smin254
-  %316 = icmp sgt i32 %smax, 0
-  %smax255 = select i1 %316, i32 %smax, i32 0
-  %317 = icmp sgt i32 %smin254, 0
-  %smax256 = select i1 %317, i32 %smin254, i32 0
-  %318 = sub nsw i32 %smax255, %smax256
-  %319 = xor i32 %smax256, -1
-  %320 = add nsw i32 %smax255, %319
-  %321 = mul i32 %16, %output.s0.x.rebased6.us.us.us
-  %322 = add i32 %293, %321
-  %323 = add nsw i32 %output.s0.x.rebased6.us.us.us, %14
-  %324 = mul nsw i32 %323, %stride_x
-  %a22.us.us.us = sub nsw i32 %283, %324
-  %325 = icmp slt i32 %a22.us.us.us, %b25
-  %b31.us.us.us = select i1 %325, i32 %a22.us.us.us, i32 %b25
-  %a23.us.us.us = sub nsw i32 %3, %324
-  %326 = icmp slt i32 %a23.us.us.us, %b25
-  %a36.us.us.us = select i1 %326, i32 %a23.us.us.us, i32 %b25
-  %a24.us.us.us = add nsw i32 %324, %b25
-  %327 = icmp slt i32 %a24.us.us.us, %283
-  %328 = select i1 %327, i32 %a24.us.us.us, i32 %283
-  %329 = icmp slt i32 %3, %324
-  %330 = select i1 %329, i32 %324, i32 %3
-  %331 = sub nsw i32 %328, %330
-  %t196.us.us.us = mul nsw i32 %331, %304
-  %332 = icmp sgt i32 %a36.us.us.us, %b31.us.us.us
-  %a35.us.us.us = select i1 %332, i32 %a36.us.us.us, i32 %b31.us.us.us
-  %333 = icmp sgt i32 %a36.us.us.us, 0
-  %334 = select i1 %333, i32 %a36.us.us.us, i32 0
-  %t205.us.us.us = add nsw i32 %334, %324
-  %335 = mul nsw i32 %323, %16
-  %336 = icmp slt i32 %t196.us.us.us, -131072
-  %t436.us.us.us.neg = zext i1 %336 to i32
-  %337 = icmp eq i32 %t196.us.us.us, 0
-  %t437.us.us.us = sext i1 %337 to i32
+  %output.s0.x.rebased6.us.us.us = phi i32 [ %501, %"end for output.s0.b.rebased8.loopexit.us.us.us" ], [ 0, %"for output.s0.y.rebased1.us.us" ]
+  %450 = mul i32 %output.s0.x.rebased6.us.us.us, %stride_x
+  %451 = sub i32 %429, %450
+  %452 = icmp sgt i32 %451, %b25
+  %smin = select i1 %452, i32 %b25, i32 %451
+  %453 = sub i32 %430, %450
+  %454 = icmp sgt i32 %453, %b25
+  %smin269 = select i1 %454, i32 %b25, i32 %453
+  %455 = icmp sgt i32 %smin, %smin269
+  %smax = select i1 %455, i32 %smin, i32 %smin269
+  %456 = icmp sgt i32 %smax, 0
+  %smax270 = select i1 %456, i32 %smax, i32 0
+  %457 = icmp sgt i32 %smin269, 0
+  %smax271 = select i1 %457, i32 %smin269, i32 0
+  %458 = sub nsw i32 %smax270, %smax271
+  %459 = xor i32 %smax271, -1
+  %460 = add nsw i32 %smax270, %459
+  %461 = mul i32 %16, %output.s0.x.rebased6.us.us.us
+  %462 = add i32 %433, %461
+  %463 = add nsw i32 %output.s0.x.rebased6.us.us.us, %14
+  %464 = mul nsw i32 %463, %stride_x
+  %a22.us.us.us = sub nsw i32 %423, %464
+  %465 = icmp slt i32 %a22.us.us.us, %b25
+  %b31.us.us.us = select i1 %465, i32 %a22.us.us.us, i32 %b25
+  %a23.us.us.us = sub nsw i32 %3, %464
+  %466 = icmp slt i32 %a23.us.us.us, %b25
+  %a36.us.us.us = select i1 %466, i32 %a23.us.us.us, i32 %b25
+  %a24.us.us.us = add nsw i32 %464, %b25
+  %467 = icmp slt i32 %a24.us.us.us, %423
+  %468 = select i1 %467, i32 %a24.us.us.us, i32 %423
+  %469 = icmp slt i32 %3, %464
+  %470 = select i1 %469, i32 %464, i32 %3
+  %471 = sub nsw i32 %468, %470
+  %t196.us.us.us = mul nsw i32 %471, %444
+  %472 = icmp sgt i32 %a36.us.us.us, %b31.us.us.us
+  %a35.us.us.us = select i1 %472, i32 %a36.us.us.us, i32 %b31.us.us.us
+  %473 = icmp sgt i32 %a36.us.us.us, 0
+  %474 = select i1 %473, i32 %a36.us.us.us, i32 0
+  %t205.us.us.us = add nsw i32 %474, %464
+  %475 = mul nsw i32 %463, %16
+  %476 = icmp slt i32 %t196.us.us.us, -131072
+  %t216.us.us.us.neg = zext i1 %476 to i32
+  %477 = icmp eq i32 %t196.us.us.us, 0
+  %t217.us.us.us = sext i1 %477 to i32
   %t196.lobit.us.us.us = ashr i32 %t196.us.us.us, 31
-  %338 = add i32 %t196.us.us.us, 131072
-  %339 = add i32 %338, %t436.us.us.us.neg
-  %340 = shl nsw i32 %t196.us.us.us, 1
-  %341 = sub nsw i32 %340, %t437.us.us.us
-  %342 = sdiv i32 %339, %341
-  %343 = xor i32 %t196.lobit.us.us.us, -1
-  %344 = sub nsw i32 %343, %t196.lobit.us.us.us
-  %345 = select i1 %336, i32 %344, i32 0
-  %346 = add nsw i32 %342, %345
-  %347 = xor i32 %t437.us.us.us, -1
-  %a34.us.us.us = and i32 %346, %347
-  %348 = icmp slt i32 %a34.us.us.us, 65535
-  %a33.us.us.us = select i1 %348, i32 %a34.us.us.us, i32 65535
-  %349 = icmp sgt i32 %a33.us.us.us, 0
-  %350 = select i1 %349, i32 %a33.us.us.us, i32 0
-  %351 = icmp sgt i32 %a35.us.us.us, 0
-  %352 = select i1 %351, i32 %a35.us.us.us, i32 0
-  %353 = icmp sgt i32 %352, %334
-  %354 = and i32 %350, 65535
-  %t187.us.us.us = add i32 %335, %298
-  br i1 %284, label %"for output.s0.b.rebased7.preheader.split.us.us.us.us", label %"end for output.s0.b.rebased8.loopexit.us.us.us", !prof !95
+  %478 = add i32 %t196.us.us.us, 131072
+  %479 = add i32 %478, %t216.us.us.us.neg
+  %480 = shl nsw i32 %t196.us.us.us, 1
+  %481 = sub nsw i32 %480, %t217.us.us.us
+  %482 = sdiv i32 %479, %481
+  %483 = xor i32 %t196.lobit.us.us.us, -1
+  %484 = sub nsw i32 %483, %t196.lobit.us.us.us
+  %485 = select i1 %476, i32 %484, i32 0
+  %486 = add nsw i32 %482, %485
+  %487 = xor i32 %t217.us.us.us, -1
+  %a34.us.us.us = and i32 %486, %487
+  %488 = icmp slt i32 %a34.us.us.us, 65535
+  %a33.us.us.us = select i1 %488, i32 %a34.us.us.us, i32 65535
+  %489 = icmp sgt i32 %a33.us.us.us, 0
+  %490 = select i1 %489, i32 %a33.us.us.us, i32 0
+  %491 = icmp sgt i32 %a35.us.us.us, 0
+  %492 = select i1 %491, i32 %a35.us.us.us, i32 0
+  %493 = icmp sgt i32 %492, %474
+  %494 = and i32 %490, 65535
+  %t187.us.us.us = add i32 %475, %438
+  br i1 %424, label %"for output.s0.b.rebased7.preheader.split.us.us.us.us", label %"end for output.s0.b.rebased8.loopexit.us.us.us", !prof !95
 
-"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa": ; preds = %"for output.s0.b.rebased7.us.us.us172.us.us", %"for output.s0.b.rebased7.us.us.us172.us.us.preheader"
-  %output.s0.b.rebased9.us.us.us173.us.us.unr = phi i32 [ 0, %"for output.s0.b.rebased7.us.us.us172.us.us.preheader" ], [ %410, %"for output.s0.b.rebased7.us.us.us172.us.us" ]
-  br i1 %lcmp.mod251.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us.us172.us.us.epil"
+"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa": ; preds = %"for output.s0.b.rebased7.us.us.us159.us.us", %"for output.s0.b.rebased7.us.us.us159.us.us.preheader"
+  %output.s0.b.rebased9.us.us.us160.us.us.unr = phi i32 [ 0, %"for output.s0.b.rebased7.us.us.us159.us.us.preheader" ], [ %550, %"for output.s0.b.rebased7.us.us.us159.us.us" ]
+  br i1 %lcmp.mod266.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us.us159.us.us.epil"
 
-"for output.s0.b.rebased7.us.us.us172.us.us.epil": ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa", %"for output.s0.b.rebased7.us.us.us172.us.us.epil"
-  %output.s0.b.rebased9.us.us.us173.us.us.epil = phi i32 [ %357, %"for output.s0.b.rebased7.us.us.us172.us.us.epil" ], [ %output.s0.b.rebased9.us.us.us173.us.us.unr, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa" ]
-  %epil.iter250 = phi i32 [ %epil.iter250.sub, %"for output.s0.b.rebased7.us.us.us172.us.us.epil" ], [ %xtraiter249, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa" ]
-  %355 = mul i32 %20, %output.s0.b.rebased9.us.us.us173.us.us.epil
-  %356 = add i32 %322, %355
-  %scevgep232.epil = getelementptr i8, i8* %12, i32 %356
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.epil, i8 %b39, i32 %2, i1 false)
-  %357 = add nuw nsw i32 %output.s0.b.rebased9.us.us.us173.us.us.epil, 1
-  %epil.iter250.sub = add i32 %epil.iter250, -1
-  %epil.iter250.cmp.not = icmp eq i32 %epil.iter250.sub, 0
-  br i1 %epil.iter250.cmp.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us.us172.us.us.epil", !llvm.loop !103
+"for output.s0.b.rebased7.us.us.us159.us.us.epil": ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa", %"for output.s0.b.rebased7.us.us.us159.us.us.epil"
+  %output.s0.b.rebased9.us.us.us160.us.us.epil = phi i32 [ %497, %"for output.s0.b.rebased7.us.us.us159.us.us.epil" ], [ %output.s0.b.rebased9.us.us.us160.us.us.unr, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa" ]
+  %epil.iter265 = phi i32 [ %epil.iter265.sub, %"for output.s0.b.rebased7.us.us.us159.us.us.epil" ], [ %xtraiter264, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa" ]
+  %495 = mul i32 %20, %output.s0.b.rebased9.us.us.us160.us.us.epil
+  %496 = add i32 %462, %495
+  %scevgep241.epil = getelementptr i8, i8* %12, i32 %496
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.epil, i8 %b39, i32 %2, i1 false)
+  %497 = add nuw nsw i32 %output.s0.b.rebased9.us.us.us160.us.us.epil, 1
+  %epil.iter265.sub = add i32 %epil.iter265, -1
+  %epil.iter265.cmp.not = icmp eq i32 %epil.iter265.sub, 0
+  br i1 %epil.iter265.cmp.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us.us159.us.us.epil", !llvm.loop !105
 
-"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa": ; preds = %"for output.s0.b.rebased7.us.us167.us.us", %"for output.s0.b.rebased7.us.us167.us.us.preheader"
-  %output.s0.b.rebased9.us.us168.us.us.unr = phi i32 [ 0, %"for output.s0.b.rebased7.us.us167.us.us.preheader" ], [ %385, %"for output.s0.b.rebased7.us.us167.us.us" ]
-  br i1 %lcmp.mod.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us167.us.us.epil"
+"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa": ; preds = %"for output.s0.b.rebased7.us.us154.us.us", %"for output.s0.b.rebased7.us.us154.us.us.preheader"
+  %output.s0.b.rebased9.us.us155.us.us.unr = phi i32 [ 0, %"for output.s0.b.rebased7.us.us154.us.us.preheader" ], [ %525, %"for output.s0.b.rebased7.us.us154.us.us" ]
+  br i1 %lcmp.mod.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us154.us.us.epil"
 
-"for output.s0.b.rebased7.us.us167.us.us.epil":   ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa", %"for output.s0.b.rebased7.us.us167.us.us.epil"
-  %output.s0.b.rebased9.us.us168.us.us.epil = phi i32 [ %360, %"for output.s0.b.rebased7.us.us167.us.us.epil" ], [ %output.s0.b.rebased9.us.us168.us.us.unr, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa" ]
-  %epil.iter = phi i32 [ %epil.iter.sub, %"for output.s0.b.rebased7.us.us167.us.us.epil" ], [ %xtraiter, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa" ]
-  %358 = mul i32 %20, %output.s0.b.rebased9.us.us168.us.us.epil
-  %359 = add i32 %322, %358
-  %scevgep.epil = getelementptr i8, i8* %12, i32 %359
+"for output.s0.b.rebased7.us.us154.us.us.epil":   ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa", %"for output.s0.b.rebased7.us.us154.us.us.epil"
+  %output.s0.b.rebased9.us.us155.us.us.epil = phi i32 [ %500, %"for output.s0.b.rebased7.us.us154.us.us.epil" ], [ %output.s0.b.rebased9.us.us155.us.us.unr, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa" ]
+  %epil.iter = phi i32 [ %epil.iter.sub, %"for output.s0.b.rebased7.us.us154.us.us.epil" ], [ %xtraiter, %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa" ]
+  %498 = mul i32 %20, %output.s0.b.rebased9.us.us155.us.us.epil
+  %499 = add i32 %462, %498
+  %scevgep.epil = getelementptr i8, i8* %12, i32 %499
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.epil, i8 %b39, i32 %2, i1 false)
-  %360 = add nuw nsw i32 %output.s0.b.rebased9.us.us168.us.us.epil, 1
+  %500 = add nuw nsw i32 %output.s0.b.rebased9.us.us155.us.us.epil, 1
   %epil.iter.sub = add i32 %epil.iter, -1
   %epil.iter.cmp.not = icmp eq i32 %epil.iter.sub, 0
-  br i1 %epil.iter.cmp.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us167.us.us.epil", !llvm.loop !104
+  br i1 %epil.iter.cmp.not, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us154.us.us.epil", !llvm.loop !106
 
-"end for output.s0.b.rebased8.loopexit.us.us.us": ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa", %"for output.s0.b.rebased7.us.us167.us.us.epil", %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa", %"for output.s0.b.rebased7.us.us.us172.us.us.epil", %"end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us", %"for output.s0.x.rebased4.us.us.us"
-  %361 = add nuw nsw i32 %output.s0.x.rebased6.us.us.us, 1
-  %.not28.us.us.us = icmp eq i32 %361, %15
+"end for output.s0.b.rebased8.loopexit.us.us.us": ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa", %"for output.s0.b.rebased7.us.us154.us.us.epil", %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa", %"for output.s0.b.rebased7.us.us.us159.us.us.epil", %"end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us", %"for output.s0.x.rebased4.us.us.us"
+  %501 = add nuw nsw i32 %output.s0.x.rebased6.us.us.us, 1
+  %.not28.us.us.us = icmp eq i32 %501, %15
   br i1 %.not28.us.us.us, label %"end for output.s0.x.rebased5.loopexit.split.us.us.us", label %"for output.s0.x.rebased4.us.us.us"
 
 "for output.s0.b.rebased7.preheader.split.us.us.us.us": ; preds = %"for output.s0.x.rebased4.us.us.us"
-  br i1 %309, label %"for output.s0.b.rebased7.preheader.split.us.split.us.us.us.us", label %"for output.s0.b.rebased7.us.us167.us.us.preheader", !prof !95
+  br i1 %449, label %"for output.s0.b.rebased7.preheader.split.us.split.us.us.us.us", label %"for output.s0.b.rebased7.us.us154.us.us.preheader", !prof !95
 
-"for output.s0.b.rebased7.us.us167.us.us.preheader": ; preds = %"for output.s0.b.rebased7.preheader.split.us.us.us.us"
-  br i1 %291, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa", label %"for output.s0.b.rebased7.us.us167.us.us"
+"for output.s0.b.rebased7.us.us154.us.us.preheader": ; preds = %"for output.s0.b.rebased7.preheader.split.us.us.us.us"
+  br i1 %431, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa", label %"for output.s0.b.rebased7.us.us154.us.us"
 
-"for output.s0.b.rebased7.us.us167.us.us":        ; preds = %"for output.s0.b.rebased7.us.us167.us.us.preheader", %"for output.s0.b.rebased7.us.us167.us.us"
-  %output.s0.b.rebased9.us.us168.us.us = phi i32 [ %385, %"for output.s0.b.rebased7.us.us167.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us167.us.us.preheader" ]
-  %niter = phi i32 [ %niter.nsub.7, %"for output.s0.b.rebased7.us.us167.us.us" ], [ %unroll_iter, %"for output.s0.b.rebased7.us.us167.us.us.preheader" ]
-  %362 = mul i32 %20, %output.s0.b.rebased9.us.us168.us.us
-  %363 = add i32 %322, %362
-  %scevgep = getelementptr i8, i8* %12, i32 %363
+"for output.s0.b.rebased7.us.us154.us.us":        ; preds = %"for output.s0.b.rebased7.us.us154.us.us.preheader", %"for output.s0.b.rebased7.us.us154.us.us"
+  %output.s0.b.rebased9.us.us155.us.us = phi i32 [ %525, %"for output.s0.b.rebased7.us.us154.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us154.us.us.preheader" ]
+  %niter = phi i32 [ %niter.nsub.7, %"for output.s0.b.rebased7.us.us154.us.us" ], [ %unroll_iter, %"for output.s0.b.rebased7.us.us154.us.us.preheader" ]
+  %502 = mul i32 %20, %output.s0.b.rebased9.us.us155.us.us
+  %503 = add i32 %462, %502
+  %scevgep = getelementptr i8, i8* %12, i32 %503
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep, i8 %b39, i32 %2, i1 false)
-  %364 = or i32 %output.s0.b.rebased9.us.us168.us.us, 1
-  %365 = mul i32 %20, %364
-  %366 = add i32 %322, %365
-  %scevgep.1 = getelementptr i8, i8* %12, i32 %366
+  %504 = or i32 %output.s0.b.rebased9.us.us155.us.us, 1
+  %505 = mul i32 %20, %504
+  %506 = add i32 %462, %505
+  %scevgep.1 = getelementptr i8, i8* %12, i32 %506
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.1, i8 %b39, i32 %2, i1 false)
-  %367 = or i32 %output.s0.b.rebased9.us.us168.us.us, 2
-  %368 = mul i32 %20, %367
-  %369 = add i32 %322, %368
-  %scevgep.2 = getelementptr i8, i8* %12, i32 %369
+  %507 = or i32 %output.s0.b.rebased9.us.us155.us.us, 2
+  %508 = mul i32 %20, %507
+  %509 = add i32 %462, %508
+  %scevgep.2 = getelementptr i8, i8* %12, i32 %509
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.2, i8 %b39, i32 %2, i1 false)
-  %370 = or i32 %output.s0.b.rebased9.us.us168.us.us, 3
-  %371 = mul i32 %20, %370
-  %372 = add i32 %322, %371
-  %scevgep.3 = getelementptr i8, i8* %12, i32 %372
+  %510 = or i32 %output.s0.b.rebased9.us.us155.us.us, 3
+  %511 = mul i32 %20, %510
+  %512 = add i32 %462, %511
+  %scevgep.3 = getelementptr i8, i8* %12, i32 %512
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.3, i8 %b39, i32 %2, i1 false)
-  %373 = or i32 %output.s0.b.rebased9.us.us168.us.us, 4
-  %374 = mul i32 %20, %373
-  %375 = add i32 %322, %374
-  %scevgep.4 = getelementptr i8, i8* %12, i32 %375
+  %513 = or i32 %output.s0.b.rebased9.us.us155.us.us, 4
+  %514 = mul i32 %20, %513
+  %515 = add i32 %462, %514
+  %scevgep.4 = getelementptr i8, i8* %12, i32 %515
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.4, i8 %b39, i32 %2, i1 false)
-  %376 = or i32 %output.s0.b.rebased9.us.us168.us.us, 5
-  %377 = mul i32 %20, %376
-  %378 = add i32 %322, %377
-  %scevgep.5 = getelementptr i8, i8* %12, i32 %378
+  %516 = or i32 %output.s0.b.rebased9.us.us155.us.us, 5
+  %517 = mul i32 %20, %516
+  %518 = add i32 %462, %517
+  %scevgep.5 = getelementptr i8, i8* %12, i32 %518
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.5, i8 %b39, i32 %2, i1 false)
-  %379 = or i32 %output.s0.b.rebased9.us.us168.us.us, 6
-  %380 = mul i32 %20, %379
-  %381 = add i32 %322, %380
-  %scevgep.6 = getelementptr i8, i8* %12, i32 %381
+  %519 = or i32 %output.s0.b.rebased9.us.us155.us.us, 6
+  %520 = mul i32 %20, %519
+  %521 = add i32 %462, %520
+  %scevgep.6 = getelementptr i8, i8* %12, i32 %521
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.6, i8 %b39, i32 %2, i1 false)
-  %382 = or i32 %output.s0.b.rebased9.us.us168.us.us, 7
-  %383 = mul i32 %20, %382
-  %384 = add i32 %322, %383
-  %scevgep.7 = getelementptr i8, i8* %12, i32 %384
+  %522 = or i32 %output.s0.b.rebased9.us.us155.us.us, 7
+  %523 = mul i32 %20, %522
+  %524 = add i32 %462, %523
+  %scevgep.7 = getelementptr i8, i8* %12, i32 %524
   call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep.7, i8 %b39, i32 %2, i1 false)
-  %385 = add nuw nsw i32 %output.s0.b.rebased9.us.us168.us.us, 8
+  %525 = add nuw nsw i32 %output.s0.b.rebased9.us.us155.us.us, 8
   %niter.nsub.7 = add i32 %niter, -8
   %niter.ncmp.7 = icmp eq i32 %niter.nsub.7, 0
-  br i1 %niter.ncmp.7, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit246.unr-lcssa", label %"for output.s0.b.rebased7.us.us167.us.us"
+  br i1 %niter.ncmp.7, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit261.unr-lcssa", label %"for output.s0.b.rebased7.us.us154.us.us"
 
 "for output.s0.b.rebased7.preheader.split.us.split.us.us.us.us": ; preds = %"for output.s0.b.rebased7.preheader.split.us.us.us.us"
-  br i1 %353, label %"for output.s0.b.rebased7.us.us.us.us.us.us.preheader", label %"for output.s0.b.rebased7.us.us.us172.us.us.preheader", !prof !95
+  br i1 %493, label %"for output.s0.b.rebased7.us.us.us.us.us.us.preheader", label %"for output.s0.b.rebased7.us.us.us159.us.us.preheader", !prof !95
 
-"for output.s0.b.rebased7.us.us.us172.us.us.preheader": ; preds = %"for output.s0.b.rebased7.preheader.split.us.split.us.us.us.us"
-  br i1 %292, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa", label %"for output.s0.b.rebased7.us.us.us172.us.us"
+"for output.s0.b.rebased7.us.us.us159.us.us.preheader": ; preds = %"for output.s0.b.rebased7.preheader.split.us.split.us.us.us.us"
+  br i1 %432, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa", label %"for output.s0.b.rebased7.us.us.us159.us.us"
 
 "for output.s0.b.rebased7.us.us.us.us.us.us.preheader": ; preds = %"for output.s0.b.rebased7.preheader.split.us.split.us.us.us.us"
-  %xtraiter257 = and i32 %318, 7
-  %386 = icmp ult i32 %320, 7
-  %unroll_iter261 = and i32 %318, -8
-  %lcmp.mod259.not = icmp eq i32 %xtraiter257, 0
+  %xtraiter272 = and i32 %458, 7
+  %526 = icmp ult i32 %460, 7
+  %unroll_iter276 = and i32 %458, -8
+  %lcmp.mod274.not = icmp eq i32 %xtraiter272, 0
   br label %"for output.s0.b.rebased7.us.us.us.us.us.us"
 
-"for output.s0.b.rebased7.us.us.us172.us.us":     ; preds = %"for output.s0.b.rebased7.us.us.us172.us.us.preheader", %"for output.s0.b.rebased7.us.us.us172.us.us"
-  %output.s0.b.rebased9.us.us.us173.us.us = phi i32 [ %410, %"for output.s0.b.rebased7.us.us.us172.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us.us172.us.us.preheader" ]
-  %niter253 = phi i32 [ %niter253.nsub.7, %"for output.s0.b.rebased7.us.us.us172.us.us" ], [ %unroll_iter252, %"for output.s0.b.rebased7.us.us.us172.us.us.preheader" ]
-  %387 = mul i32 %20, %output.s0.b.rebased9.us.us.us173.us.us
-  %388 = add i32 %322, %387
-  %scevgep232 = getelementptr i8, i8* %12, i32 %388
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232, i8 %b39, i32 %2, i1 false)
-  %389 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 1
-  %390 = mul i32 %20, %389
-  %391 = add i32 %322, %390
-  %scevgep232.1 = getelementptr i8, i8* %12, i32 %391
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.1, i8 %b39, i32 %2, i1 false)
-  %392 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 2
-  %393 = mul i32 %20, %392
-  %394 = add i32 %322, %393
-  %scevgep232.2 = getelementptr i8, i8* %12, i32 %394
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.2, i8 %b39, i32 %2, i1 false)
-  %395 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 3
-  %396 = mul i32 %20, %395
-  %397 = add i32 %322, %396
-  %scevgep232.3 = getelementptr i8, i8* %12, i32 %397
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.3, i8 %b39, i32 %2, i1 false)
-  %398 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 4
-  %399 = mul i32 %20, %398
-  %400 = add i32 %322, %399
-  %scevgep232.4 = getelementptr i8, i8* %12, i32 %400
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.4, i8 %b39, i32 %2, i1 false)
-  %401 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 5
-  %402 = mul i32 %20, %401
-  %403 = add i32 %322, %402
-  %scevgep232.5 = getelementptr i8, i8* %12, i32 %403
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.5, i8 %b39, i32 %2, i1 false)
-  %404 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 6
-  %405 = mul i32 %20, %404
-  %406 = add i32 %322, %405
-  %scevgep232.6 = getelementptr i8, i8* %12, i32 %406
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.6, i8 %b39, i32 %2, i1 false)
-  %407 = or i32 %output.s0.b.rebased9.us.us.us173.us.us, 7
-  %408 = mul i32 %20, %407
-  %409 = add i32 %322, %408
-  %scevgep232.7 = getelementptr i8, i8* %12, i32 %409
-  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep232.7, i8 %b39, i32 %2, i1 false)
-  %410 = add nuw nsw i32 %output.s0.b.rebased9.us.us.us173.us.us, 8
-  %niter253.nsub.7 = add i32 %niter253, -8
-  %niter253.ncmp.7 = icmp eq i32 %niter253.nsub.7, 0
-  br i1 %niter253.ncmp.7, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit245.unr-lcssa", label %"for output.s0.b.rebased7.us.us.us172.us.us"
+"for output.s0.b.rebased7.us.us.us159.us.us":     ; preds = %"for output.s0.b.rebased7.us.us.us159.us.us.preheader", %"for output.s0.b.rebased7.us.us.us159.us.us"
+  %output.s0.b.rebased9.us.us.us160.us.us = phi i32 [ %550, %"for output.s0.b.rebased7.us.us.us159.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us.us159.us.us.preheader" ]
+  %niter268 = phi i32 [ %niter268.nsub.7, %"for output.s0.b.rebased7.us.us.us159.us.us" ], [ %unroll_iter267, %"for output.s0.b.rebased7.us.us.us159.us.us.preheader" ]
+  %527 = mul i32 %20, %output.s0.b.rebased9.us.us.us160.us.us
+  %528 = add i32 %462, %527
+  %scevgep241 = getelementptr i8, i8* %12, i32 %528
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241, i8 %b39, i32 %2, i1 false)
+  %529 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 1
+  %530 = mul i32 %20, %529
+  %531 = add i32 %462, %530
+  %scevgep241.1 = getelementptr i8, i8* %12, i32 %531
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.1, i8 %b39, i32 %2, i1 false)
+  %532 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 2
+  %533 = mul i32 %20, %532
+  %534 = add i32 %462, %533
+  %scevgep241.2 = getelementptr i8, i8* %12, i32 %534
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.2, i8 %b39, i32 %2, i1 false)
+  %535 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 3
+  %536 = mul i32 %20, %535
+  %537 = add i32 %462, %536
+  %scevgep241.3 = getelementptr i8, i8* %12, i32 %537
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.3, i8 %b39, i32 %2, i1 false)
+  %538 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 4
+  %539 = mul i32 %20, %538
+  %540 = add i32 %462, %539
+  %scevgep241.4 = getelementptr i8, i8* %12, i32 %540
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.4, i8 %b39, i32 %2, i1 false)
+  %541 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 5
+  %542 = mul i32 %20, %541
+  %543 = add i32 %462, %542
+  %scevgep241.5 = getelementptr i8, i8* %12, i32 %543
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.5, i8 %b39, i32 %2, i1 false)
+  %544 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 6
+  %545 = mul i32 %20, %544
+  %546 = add i32 %462, %545
+  %scevgep241.6 = getelementptr i8, i8* %12, i32 %546
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.6, i8 %b39, i32 %2, i1 false)
+  %547 = or i32 %output.s0.b.rebased9.us.us.us160.us.us, 7
+  %548 = mul i32 %20, %547
+  %549 = add i32 %462, %548
+  %scevgep241.7 = getelementptr i8, i8* %12, i32 %549
+  call void @llvm.memset.p0i8.i32(i8* align 1 %scevgep241.7, i8 %b39, i32 %2, i1 false)
+  %550 = add nuw nsw i32 %output.s0.b.rebased9.us.us.us160.us.us, 8
+  %niter268.nsub.7 = add i32 %niter268, -8
+  %niter268.ncmp.7 = icmp eq i32 %niter268.nsub.7, 0
+  br i1 %niter268.ncmp.7, label %"end for output.s0.b.rebased8.loopexit.us.us.us.loopexit260.unr-lcssa", label %"for output.s0.b.rebased7.us.us.us159.us.us"
 
 "for output.s0.b.rebased7.us.us.us.us.us.us":     ; preds = %"for output.s0.b.rebased7.us.us.us.us.us.us.preheader", %"end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us"
-  %output.s0.b.rebased9.us.us.us.us.us.us = phi i32 [ %504, %"end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us.us.us.us.us.preheader" ]
-  %411 = add nsw i32 %output.s0.b.rebased9.us.us.us.us.us.us, %9
-  %412 = mul nsw i32 %411, %20
-  %413 = mul nsw i32 %411, %11
-  %414 = add i32 %t187.us.us.us, %412
+  %output.s0.b.rebased9.us.us.us.us.us.us = phi i32 [ %646, %"end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us.us.us.us.us.preheader" ]
+  %551 = add nsw i32 %output.s0.b.rebased9.us.us.us.us.us.us, %9
+  %552 = mul nsw i32 %551, %20
+  %553 = mul nsw i32 %551, %11
+  %554 = add i32 %t187.us.us.us, %552
   br label %"for output.s0.c.rebased.us.us.us.us.us.us.us.us"
 
 "for output.s0.c.rebased.us.us.us.us.us.us.us.us": ; preds = %"consume sum17.loopexit.split.us.us.us.us.us.us.us.us.us", %"for output.s0.b.rebased7.us.us.us.us.us.us"
-  %output.s0.c.rebased.us.us.us.us.us.us.us.us = phi i32 [ %503, %"consume sum17.loopexit.split.us.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us.us.us.us.us" ]
-  %t204.us.us.us.us.us.us.us.us = add i32 %output.s0.c.rebased.us.us.us.us.us.us.us.us, %413
+  %output.s0.c.rebased.us.us.us.us.us.us.us.us = phi i32 [ %645, %"consume sum17.loopexit.split.us.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.b.rebased7.us.us.us.us.us.us" ]
+  %t204.us.us.us.us.us.us.us.us = add i32 %output.s0.c.rebased.us.us.us.us.us.us.us.us, %553
   br label %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us"
 
 "for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us": ; preds = %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us", %"for output.s0.c.rebased.us.us.us.us.us.us.us.us"
-  %.lcssa132135.us.us.us.us.us.us.us.us.us = phi i16 [ %.lcssa248, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.c.rebased.us.us.us.us.us.us.us.us" ]
-  %"sum.s1.r12$y.rebased13.us.us.us.us.us.us.us.us.us" = phi i32 [ %490, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.c.rebased.us.us.us.us.us.us.us.us" ]
-  %415 = add nsw i32 %t194.us.us, %"sum.s1.r12$y.rebased13.us.us.us.us.us.us.us.us.us"
-  %416 = mul nsw i32 %415, %8
-  %417 = add i32 %t204.us.us.us.us.us.us.us.us, %416
-  br i1 %386, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us"
+  %.lcssa119122.us.us.us.us.us.us.us.us.us = phi i16 [ %.lcssa263, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.c.rebased.us.us.us.us.us.us.us.us" ]
+  %"sum.s1.r12$y.rebased13.us.us.us.us.us.us.us.us.us" = phi i32 [ %632, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us" ], [ 0, %"for output.s0.c.rebased.us.us.us.us.us.us.us.us" ]
+  %555 = add nsw i32 %t194.us.us, %"sum.s1.r12$y.rebased13.us.us.us.us.us.us.us.us.us"
+  %556 = mul nsw i32 %555, %8
+  %557 = add i32 %t204.us.us.us.us.us.us.us.us, %556
+  br i1 %526, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us"
 
 "for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us": ; preds = %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us", %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us"
-  %sum27.sroa.0.0.sum27.sroa.0.0.93131.us.us.us.us.us.us.us.us.us = phi i16 [ %480, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ], [ %.lcssa132135.us.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ]
-  %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us" = phi i32 [ %481, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ], [ 0, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ]
-  %niter262 = phi i32 [ %niter262.nsub.7, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ], [ %unroll_iter261, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ]
-  %418 = add nsw i32 %t205.us.us.us, %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us"
-  %419 = mul nsw i32 %418, %5
-  %t212.us.us.us.us.us.us.us.us.us = add i32 %417, %419
-  %420 = sub i32 %t212.us.us.us.us.us.us.us.us.us, %reass.add113
-  %421 = getelementptr inbounds i8, i8* %0, i32 %420
-  %422 = load i8, i8* %421, align 1, !tbaa !99
-  %423 = zext i8 %422 to i16
-  %424 = add i16 %sum27.sroa.0.0.sum27.sroa.0.0.93131.us.us.us.us.us.us.us.us.us, %423
-  %425 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 1
-  %426 = add nsw i32 %t205.us.us.us, %425
-  %427 = mul nsw i32 %426, %5
-  %t212.us.us.us.us.us.us.us.us.us.1 = add i32 %417, %427
-  %428 = sub i32 %t212.us.us.us.us.us.us.us.us.us.1, %reass.add113
-  %429 = getelementptr inbounds i8, i8* %0, i32 %428
-  %430 = load i8, i8* %429, align 1, !tbaa !99
-  %431 = zext i8 %430 to i16
-  %432 = add i16 %424, %431
-  %433 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 2
-  %434 = add nsw i32 %t205.us.us.us, %433
-  %435 = mul nsw i32 %434, %5
-  %t212.us.us.us.us.us.us.us.us.us.2 = add i32 %417, %435
-  %436 = sub i32 %t212.us.us.us.us.us.us.us.us.us.2, %reass.add113
-  %437 = getelementptr inbounds i8, i8* %0, i32 %436
-  %438 = load i8, i8* %437, align 1, !tbaa !99
-  %439 = zext i8 %438 to i16
-  %440 = add i16 %432, %439
-  %441 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 3
-  %442 = add nsw i32 %t205.us.us.us, %441
-  %443 = mul nsw i32 %442, %5
-  %t212.us.us.us.us.us.us.us.us.us.3 = add i32 %417, %443
-  %444 = sub i32 %t212.us.us.us.us.us.us.us.us.us.3, %reass.add113
-  %445 = getelementptr inbounds i8, i8* %0, i32 %444
-  %446 = load i8, i8* %445, align 1, !tbaa !99
-  %447 = zext i8 %446 to i16
-  %448 = add i16 %440, %447
-  %449 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 4
-  %450 = add nsw i32 %t205.us.us.us, %449
-  %451 = mul nsw i32 %450, %5
-  %t212.us.us.us.us.us.us.us.us.us.4 = add i32 %417, %451
-  %452 = sub i32 %t212.us.us.us.us.us.us.us.us.us.4, %reass.add113
-  %453 = getelementptr inbounds i8, i8* %0, i32 %452
-  %454 = load i8, i8* %453, align 1, !tbaa !99
-  %455 = zext i8 %454 to i16
-  %456 = add i16 %448, %455
-  %457 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 5
-  %458 = add nsw i32 %t205.us.us.us, %457
-  %459 = mul nsw i32 %458, %5
-  %t212.us.us.us.us.us.us.us.us.us.5 = add i32 %417, %459
-  %460 = sub i32 %t212.us.us.us.us.us.us.us.us.us.5, %reass.add113
-  %461 = getelementptr inbounds i8, i8* %0, i32 %460
-  %462 = load i8, i8* %461, align 1, !tbaa !99
-  %463 = zext i8 %462 to i16
-  %464 = add i16 %456, %463
-  %465 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 6
-  %466 = add nsw i32 %t205.us.us.us, %465
-  %467 = mul nsw i32 %466, %5
-  %t212.us.us.us.us.us.us.us.us.us.6 = add i32 %417, %467
-  %468 = sub i32 %t212.us.us.us.us.us.us.us.us.us.6, %reass.add113
-  %469 = getelementptr inbounds i8, i8* %0, i32 %468
-  %470 = load i8, i8* %469, align 1, !tbaa !99
-  %471 = zext i8 %470 to i16
-  %472 = add i16 %464, %471
-  %473 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 7
-  %474 = add nsw i32 %t205.us.us.us, %473
-  %475 = mul nsw i32 %474, %5
-  %t212.us.us.us.us.us.us.us.us.us.7 = add i32 %417, %475
-  %476 = sub i32 %t212.us.us.us.us.us.us.us.us.us.7, %reass.add113
-  %477 = getelementptr inbounds i8, i8* %0, i32 %476
-  %478 = load i8, i8* %477, align 1, !tbaa !99
-  %479 = zext i8 %478 to i16
-  %480 = add i16 %472, %479
-  %481 = add nuw nsw i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 8
-  %niter262.nsub.7 = add i32 %niter262, -8
-  %niter262.ncmp.7 = icmp eq i32 %niter262.nsub.7, 0
-  br i1 %niter262.ncmp.7, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us"
+  %558 = phi i16 [ %621, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ], [ %.lcssa119122.us.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ]
+  %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us" = phi i32 [ %622, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ], [ 0, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ]
+  %niter277 = phi i32 [ %niter277.nsub.7, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ], [ %unroll_iter276, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ]
+  %559 = add nsw i32 %t205.us.us.us, %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us"
+  %560 = mul nsw i32 %559, %5
+  %t212.us.us.us.us.us.us.us.us.us = add i32 %557, %560
+  %561 = sub i32 %t212.us.us.us.us.us.us.us.us.us, %reass.add101
+  %562 = getelementptr inbounds i8, i8* %0, i32 %561
+  %563 = load i8, i8* %562, align 1, !tbaa !101
+  %564 = zext i8 %563 to i16
+  %565 = add i16 %558, %564
+  %566 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 1
+  %567 = add nsw i32 %t205.us.us.us, %566
+  %568 = mul nsw i32 %567, %5
+  %t212.us.us.us.us.us.us.us.us.us.1 = add i32 %557, %568
+  %569 = sub i32 %t212.us.us.us.us.us.us.us.us.us.1, %reass.add101
+  %570 = getelementptr inbounds i8, i8* %0, i32 %569
+  %571 = load i8, i8* %570, align 1, !tbaa !101
+  %572 = zext i8 %571 to i16
+  %573 = add i16 %565, %572
+  %574 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 2
+  %575 = add nsw i32 %t205.us.us.us, %574
+  %576 = mul nsw i32 %575, %5
+  %t212.us.us.us.us.us.us.us.us.us.2 = add i32 %557, %576
+  %577 = sub i32 %t212.us.us.us.us.us.us.us.us.us.2, %reass.add101
+  %578 = getelementptr inbounds i8, i8* %0, i32 %577
+  %579 = load i8, i8* %578, align 1, !tbaa !101
+  %580 = zext i8 %579 to i16
+  %581 = add i16 %573, %580
+  %582 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 3
+  %583 = add nsw i32 %t205.us.us.us, %582
+  %584 = mul nsw i32 %583, %5
+  %t212.us.us.us.us.us.us.us.us.us.3 = add i32 %557, %584
+  %585 = sub i32 %t212.us.us.us.us.us.us.us.us.us.3, %reass.add101
+  %586 = getelementptr inbounds i8, i8* %0, i32 %585
+  %587 = load i8, i8* %586, align 1, !tbaa !101
+  %588 = zext i8 %587 to i16
+  %589 = add i16 %581, %588
+  %590 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 4
+  %591 = add nsw i32 %t205.us.us.us, %590
+  %592 = mul nsw i32 %591, %5
+  %t212.us.us.us.us.us.us.us.us.us.4 = add i32 %557, %592
+  %593 = sub i32 %t212.us.us.us.us.us.us.us.us.us.4, %reass.add101
+  %594 = getelementptr inbounds i8, i8* %0, i32 %593
+  %595 = load i8, i8* %594, align 1, !tbaa !101
+  %596 = zext i8 %595 to i16
+  %597 = add i16 %589, %596
+  %598 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 5
+  %599 = add nsw i32 %t205.us.us.us, %598
+  %600 = mul nsw i32 %599, %5
+  %t212.us.us.us.us.us.us.us.us.us.5 = add i32 %557, %600
+  %601 = sub i32 %t212.us.us.us.us.us.us.us.us.us.5, %reass.add101
+  %602 = getelementptr inbounds i8, i8* %0, i32 %601
+  %603 = load i8, i8* %602, align 1, !tbaa !101
+  %604 = zext i8 %603 to i16
+  %605 = add i16 %597, %604
+  %606 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 6
+  %607 = add nsw i32 %t205.us.us.us, %606
+  %608 = mul nsw i32 %607, %5
+  %t212.us.us.us.us.us.us.us.us.us.6 = add i32 %557, %608
+  %609 = sub i32 %t212.us.us.us.us.us.us.us.us.us.6, %reass.add101
+  %610 = getelementptr inbounds i8, i8* %0, i32 %609
+  %611 = load i8, i8* %610, align 1, !tbaa !101
+  %612 = zext i8 %611 to i16
+  %613 = add i16 %605, %612
+  %614 = or i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 7
+  %615 = add nsw i32 %t205.us.us.us, %614
+  %616 = mul nsw i32 %615, %5
+  %t212.us.us.us.us.us.us.us.us.us.7 = add i32 %557, %616
+  %617 = sub i32 %t212.us.us.us.us.us.us.us.us.us.7, %reass.add101
+  %618 = getelementptr inbounds i8, i8* %0, i32 %617
+  %619 = load i8, i8* %618, align 1, !tbaa !101
+  %620 = zext i8 %619 to i16
+  %621 = add i16 %613, %620
+  %622 = add nuw nsw i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us", 8
+  %niter277.nsub.7 = add i32 %niter277, -8
+  %niter277.ncmp.7 = icmp eq i32 %niter277.nsub.7, 0
+  br i1 %niter277.ncmp.7, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us"
 
 "end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa": ; preds = %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us", %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us"
-  %.lcssa248.ph = phi i16 [ undef, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ], [ %480, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ]
-  %sum27.sroa.0.0.sum27.sroa.0.0.93131.us.us.us.us.us.us.us.us.us.unr = phi i16 [ %.lcssa132135.us.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ], [ %480, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ]
-  %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.unr" = phi i32 [ 0, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ], [ %481, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ]
-  br i1 %lcmp.mod259.not, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil"
+  %.lcssa263.ph = phi i16 [ undef, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ], [ %621, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ]
+  %.unr = phi i16 [ %.lcssa119122.us.us.us.us.us.us.us.us.us, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ], [ %621, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ]
+  %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.unr" = phi i32 [ 0, %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us" ], [ %622, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us" ]
+  br i1 %lcmp.mod274.not, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil"
 
 "for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil": ; preds = %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa", %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil"
-  %sum27.sroa.0.0.sum27.sroa.0.0.93131.us.us.us.us.us.us.us.us.us.epil = phi i16 [ %488, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ], [ %sum27.sroa.0.0.sum27.sroa.0.0.93131.us.us.us.us.us.us.us.us.us.unr, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ]
-  %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.epil" = phi i32 [ %489, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ], [ %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.unr", %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ]
-  %epil.iter258 = phi i32 [ %epil.iter258.sub, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ], [ %xtraiter257, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ]
-  %482 = add nsw i32 %t205.us.us.us, %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.epil"
-  %483 = mul nsw i32 %482, %5
-  %t212.us.us.us.us.us.us.us.us.us.epil = add i32 %417, %483
-  %484 = sub i32 %t212.us.us.us.us.us.us.us.us.us.epil, %reass.add113
-  %485 = getelementptr inbounds i8, i8* %0, i32 %484
-  %486 = load i8, i8* %485, align 1, !tbaa !99
-  %487 = zext i8 %486 to i16
-  %488 = add i16 %sum27.sroa.0.0.sum27.sroa.0.0.93131.us.us.us.us.us.us.us.us.us.epil, %487
-  %489 = add nuw nsw i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.epil", 1
-  %epil.iter258.sub = add i32 %epil.iter258, -1
-  %epil.iter258.cmp.not = icmp eq i32 %epil.iter258.sub, 0
-  br i1 %epil.iter258.cmp.not, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil", !llvm.loop !105
+  %623 = phi i16 [ %630, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ], [ %.unr, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.epil" = phi i32 [ %631, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ], [ %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.unr", %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %epil.iter273 = phi i32 [ %epil.iter273.sub, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ], [ %xtraiter272, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ]
+  %624 = add nsw i32 %t205.us.us.us, %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.epil"
+  %625 = mul nsw i32 %624, %5
+  %t212.us.us.us.us.us.us.us.us.us.epil = add i32 %557, %625
+  %626 = sub i32 %t212.us.us.us.us.us.us.us.us.us.epil, %reass.add101
+  %627 = getelementptr inbounds i8, i8* %0, i32 %626
+  %628 = load i8, i8* %627, align 1, !tbaa !101
+  %629 = zext i8 %628 to i16
+  %630 = add i16 %623, %629
+  %631 = add nuw nsw i32 %"sum.s1.r12$x.rebased16.us.us.us.us.us.us.us.us.us.epil", 1
+  %epil.iter273.sub = add i32 %epil.iter273, -1
+  %epil.iter273.cmp.not = icmp eq i32 %epil.iter273.sub, 0
+  br i1 %epil.iter273.cmp.not, label %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil", !llvm.loop !107
 
 "end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us": ; preds = %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil", %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa"
-  %.lcssa248 = phi i16 [ %.lcssa248.ph, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ], [ %488, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ]
-  %490 = add nuw nsw i32 %"sum.s1.r12$y.rebased13.us.us.us.us.us.us.us.us.us", 1
-  %.not31.us.us.us.us.us.us.us.us.us = icmp eq i32 %490, %t201.us.us
+  %.lcssa263 = phi i16 [ %.lcssa263.ph, %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us.unr-lcssa" ], [ %630, %"for sum.s1.r12$x.rebased14.us.us.us.us.us.us.us.us.us.epil" ]
+  %632 = add nuw nsw i32 %"sum.s1.r12$y.rebased13.us.us.us.us.us.us.us.us.us", 1
+  %.not31.us.us.us.us.us.us.us.us.us = icmp eq i32 %632, %t201.us.us
   br i1 %.not31.us.us.us.us.us.us.us.us.us, label %"consume sum17.loopexit.split.us.us.us.us.us.us.us.us.us", label %"for sum.s1.r12$y.rebased11.us.us.us.us.us.us.us.us.us"
 
 "consume sum17.loopexit.split.us.us.us.us.us.us.us.us.us": ; preds = %"end for sum.s1.r12$x.rebased15.loopexit.us.us.us.us.us.us.us.us.us"
-  %491 = zext i16 %.lcssa248 to i32
-  %492 = mul nuw i32 %354, %491
-  %493 = lshr i32 %492, 1
-  %494 = add nuw nsw i32 %493, 16384
-  %495 = lshr i32 %494, 15
-  %a39.us.us.us.us.us.us.us.us = trunc i32 %495 to i16
-  %496 = icmp ult i16 %a39.us.us.us.us.us.us.us.us, 255
-  %497 = select i1 %496, i16 %a39.us.us.us.us.us.us.us.us, i16 255
-  %b40.us.us.us.us.us.us.us.us = trunc i16 %497 to i8
-  %498 = icmp ugt i8 %b40.us.us.us.us.us.us.us.us, %a38
-  %a37.us.us.us.us.us.us.us.us = select i1 %498, i8 %a38, i8 %b40.us.us.us.us.us.us.us.us
-  %499 = icmp ugt i8 %a37.us.us.us.us.us.us.us.us, %b39
-  %500 = select i1 %499, i8 %a37.us.us.us.us.us.us.us.us, i8 %b39
-  %t207.us.us.us.us.us.us.us.us = add i32 %414, %output.s0.c.rebased.us.us.us.us.us.us.us.us
-  %501 = sub i32 %t207.us.us.us.us.us.us.us.us, %reass.add115
-  %502 = getelementptr inbounds i8, i8* %12, i32 %501
-  store i8 %500, i8* %502, align 1, !tbaa !96
-  %503 = add nuw nsw i32 %output.s0.c.rebased.us.us.us.us.us.us.us.us, 1
-  %.not30.us.us.us.us.us.us.us.us = icmp eq i32 %503, %2
+  %633 = zext i16 %.lcssa263 to i32
+  %634 = mul nuw i32 %494, %633
+  %635 = lshr i32 %634, 1
+  %636 = add nuw nsw i32 %635, 16384
+  %637 = lshr i32 %636, 15
+  %a39.us.us.us.us.us.us.us.us = trunc i32 %637 to i16
+  %638 = icmp ult i16 %a39.us.us.us.us.us.us.us.us, 255
+  %639 = select i1 %638, i16 %a39.us.us.us.us.us.us.us.us, i16 255
+  %b40.us.us.us.us.us.us.us.us = trunc i16 %639 to i8
+  %640 = icmp ugt i8 %b40.us.us.us.us.us.us.us.us, %a38
+  %a37.us.us.us.us.us.us.us.us = select i1 %640, i8 %a38, i8 %b40.us.us.us.us.us.us.us.us
+  %641 = icmp ugt i8 %a37.us.us.us.us.us.us.us.us, %b39
+  %642 = select i1 %641, i8 %a37.us.us.us.us.us.us.us.us, i8 %b39
+  %t207.us.us.us.us.us.us.us.us = add i32 %554, %output.s0.c.rebased.us.us.us.us.us.us.us.us
+  %643 = sub i32 %t207.us.us.us.us.us.us.us.us, %reass.add103
+  %644 = getelementptr inbounds i8, i8* %12, i32 %643
+  store i8 %642, i8* %644, align 1, !tbaa !96
+  %645 = add nuw nsw i32 %output.s0.c.rebased.us.us.us.us.us.us.us.us, 1
+  %.not30.us.us.us.us.us.us.us.us = icmp eq i32 %645, %2
   br i1 %.not30.us.us.us.us.us.us.us.us, label %"end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us", label %"for output.s0.c.rebased.us.us.us.us.us.us.us.us"
 
 "end for output.s0.c.rebased.loopexit.split.us.split.us.us.us.us.us.us.us": ; preds = %"consume sum17.loopexit.split.us.us.us.us.us.us.us.us.us"
-  %504 = add nuw nsw i32 %output.s0.b.rebased9.us.us.us.us.us.us, 1
-  %.not29.us.us.us.us.us.us = icmp eq i32 %504, %10
+  %646 = add nuw nsw i32 %output.s0.b.rebased9.us.us.us.us.us.us, 1
+  %.not29.us.us.us.us.us.us = icmp eq i32 %646, %10
   br i1 %.not29.us.us.us.us.us.us, label %"end for output.s0.b.rebased8.loopexit.us.us.us", label %"for output.s0.b.rebased7.us.us.us.us.us.us"
 
 "end for output.s0.x.rebased5.loopexit.split.us.us.us": ; preds = %"end for output.s0.b.rebased8.loopexit.us.us.us"
-  %505 = add nuw nsw i32 %output.s0.y.rebased3.us.us, 1
-  %.not.us.us = icmp eq i32 %505, %18
+  %647 = add nuw nsw i32 %output.s0.y.rebased3.us.us, 1
+  %.not.us.us = icmp eq i32 %647, %18
   br i1 %.not.us.us, label %call_destructor.exit, label %"for output.s0.y.rebased1.us.us"
 }
 
@@ -7287,7 +7562,7 @@ entry:
   %0 = bitcast <128 x i8> %arg.1 to <32 x i32>
   %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
   %2 = bitcast <128 x i16> %arg to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %2, <64 x i32> %1)
+  %3 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %1, <64 x i32> %2)
   %4 = bitcast <64 x i32> %3 to <128 x i16>
   ret <128 x i16> %4
 }
@@ -7296,77 +7571,50 @@ entry:
 declare <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32>, <64 x i32>) #9
 
 ; Function Attrs: nounwind readnone willreturn
-define <64 x i16> @hydride.node.average_pool_hvx_depth3.1(<64 x i16> %arg, <1 x i32> %arg.1, <1 x i32> %arg.2, <64 x i16> %arg.3, <1 x i32> %arg.4, <1 x i32> %arg.5, <128 x i16> %arg.6) local_unnamed_addr #13 {
+define <128 x i8> @hydride.node.average_pool_hvx_depth3.1(<64 x i16> %arg, <64 x i16> %arg.1, <64 x i16> %arg.2, <64 x i16> %arg.3, <64 x i16> %arg.4, <64 x i16> %arg.5, <128 x i8> %arg.6, <128 x i8> %arg.7) local_unnamed_addr #13 {
 entry:
-  %0 = bitcast <128 x i16> %arg.6 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = bitcast <64 x i16> %arg to <32 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vzh.128B(<32 x i32> %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %3)
-  %5 = extractelement <1 x i32> %arg.1, i32 0
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %5)
-  %7 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %6, <32 x i32> %6)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %4, <32 x i32> %8)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %9, <32 x i32> %4, <32 x i32> %8)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %3)
-  %12 = extractelement <1 x i32> %arg.2, i32 0
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %12)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %13, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %11, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %16, <32 x i32> %11, <32 x i32> %15)
-  %18 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %10, <32 x i32> %17)
+  %0 = bitcast <64 x i16> %arg to <32 x i32>
+  %1 = bitcast <64 x i16> %arg.1 to <32 x i32>
+  %2 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %0, <32 x i32> %1)
+  %3 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %2)
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %3)
+  %5 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %4, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
+  %6 = bitcast <64 x i16> %arg.2 to <32 x i32>
+  %7 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %0, <32 x i32> %6)
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %7)
+  %9 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %8)
+  %10 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %9, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
+  %11 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %5, <32 x i32> %10)
+  %12 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %11)
+  %13 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %11)
+  %14 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %12, <32 x i32> %13)
+  %15 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %14)
+  %16 = bitcast <64 x i16> %arg.3 to <32 x i32>
+  %17 = bitcast <64 x i16> %arg.4 to <32 x i32>
+  %18 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %16, <32 x i32> %17)
   %19 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %19, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>)
+  %20 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %19)
   %21 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %20, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %18)
-  %23 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %22, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>)
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %23, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
-  %25 = tail call <32 x i32> @llvm.hexagon.V6.vpackwuh.sat.128B(<32 x i32> %21, <32 x i32> %24)
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> %1, <32 x i32> %25)
-  %27 = bitcast <32 x i32> %26 to <64 x i16>
-  ret <64 x i16> %27
-}
-
-; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32) #9
-
-; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32>, <32 x i32>, <32 x i32>) #9
-
-; Function Attrs: nounwind readnone willreturn
-define <64 x i16> @hydride.node.average_pool_hvx_depth3.2(<64 x i16> %arg, <1 x i32> %arg.1, <1 x i32> %arg.2, <64 x i16> %arg.3, <1 x i32> %arg.4, <1 x i32> %arg.5, <128 x i16> %arg.6) local_unnamed_addr #13 {
-entry:
-  %0 = bitcast <128 x i16> %arg.6 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %2 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vzh.128B(<32 x i32> %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %3)
-  %5 = extractelement <1 x i32> %arg.4, i32 0
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %5)
-  %7 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %6, <32 x i32> %6)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %4, <32 x i32> %8)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %9, <32 x i32> %4, <32 x i32> %8)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %3)
-  %12 = extractelement <1 x i32> %arg.5, i32 0
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %12)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %13, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %11, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %16, <32 x i32> %11, <32 x i32> %15)
-  %18 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %10, <32 x i32> %17)
-  %19 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %19, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %20, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %18)
-  %23 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> %22, <32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>)
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %23, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
-  %25 = tail call <32 x i32> @llvm.hexagon.V6.vpackwuh.sat.128B(<32 x i32> %21, <32 x i32> %24)
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> %1, <32 x i32> %25)
-  %27 = bitcast <32 x i32> %26 to <64 x i16>
-  ret <64 x i16> %27
+  %22 = bitcast <64 x i16> %arg.5 to <32 x i32>
+  %23 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %16, <32 x i32> %22)
+  %24 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %23)
+  %25 = tail call <32 x i32> @llvm.hexagon.V6.vadduwsat.128B(<32 x i32> <i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768, i32 32768>, <32 x i32> %24)
+  %26 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %25, <32 x i32> <i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16, i32 16>)
+  %27 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %21, <32 x i32> %26)
+  %28 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %27)
+  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %27)
+  %30 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %28, <32 x i32> %29)
+  %31 = tail call <32 x i32> @llvm.hexagon.V6.vminuh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %30)
+  %32 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %15, <32 x i32> %31)
+  %33 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %32)
+  %34 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %32)
+  %35 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %33, <32 x i32> %34)
+  %36 = bitcast <128 x i8> %arg.6 to <32 x i32>
+  %37 = tail call <32 x i32> @llvm.hexagon.V6.vminub.128B(<32 x i32> %35, <32 x i32> %36)
+  %38 = bitcast <128 x i8> %arg.7 to <32 x i32>
+  %39 = tail call <32 x i32> @llvm.hexagon.V6.vmaxub.128B(<32 x i32> %38, <32 x i32> %37)
+  %40 = bitcast <32 x i32> %39 to <128 x i8>
+  ret <128 x i8> %40
 }
 
 attributes #0 = { nounwind mustprogress "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-builtins" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
@@ -7489,10 +7737,12 @@ attributes #16 = { noinline }
 !96 = !{!97, !97, i64 0}
 !97 = !{!"output", !98, i64 0}
 !98 = !{!"Halide buffer"}
-!99 = !{!100, !100, i64 0}
-!100 = !{!"input", !98, i64 0}
-!101 = distinct !{!101, !32}
-!102 = !{!"branch_weights", i32 -2147483648, i32 0}
+!99 = distinct !{!99, !32}
+!100 = distinct !{!100, !32}
+!101 = !{!102, !102, i64 0}
+!102 = !{!"input", !98, i64 0}
 !103 = distinct !{!103, !32}
-!104 = distinct !{!104, !32}
+!104 = !{!"branch_weights", i32 -2147483648, i32 0}
 !105 = distinct !{!105, !32}
+!106 = distinct !{!106, !32}
+!107 = distinct !{!107, !32}
