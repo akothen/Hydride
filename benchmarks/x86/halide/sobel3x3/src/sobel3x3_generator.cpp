@@ -24,43 +24,14 @@ public:
 
         // Schedules for x86
         output
-            .compute_root()
-            .split(y, y, yi, 36, TailStrategy::ShiftInwards)
-            .split(yi, yi, yii, 9, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 192, TailStrategy::ShiftInwards)
-            .split(xi, xi, xii, 64, TailStrategy::RoundUp)
-            .vectorize(xii, 64)
-            .reorder({xii, xi, x, yii, yi, y});
-            //.parallel(y);
-        sobel_y
-            .store_in(MemoryType::Stack)
-            .compute_at(output, yii)
-            .split(x, x, xi, 128, TailStrategy::RoundUp)
-            .split(xi, xi, xii, 32, TailStrategy::RoundUp)
-            .vectorize(xii, 32);
-        sobel_y_avg
-            .store_in(MemoryType::Stack)
-            .compute_at(sobel_y, x)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32);
-        sobel_x
-            .store_in(MemoryType::Stack)
-            .compute_at(output, x)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32);
-        sobel_x_avg
-            .store_in(MemoryType::Stack)
-            .compute_at(output, x)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32);
-        input_16
-            .store_in(MemoryType::Stack)
-            .store_at(output, y)
-            .compute_at(output, yi)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32)
-            .reorder({xi, y, x});
-        
+            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 64)
+            .unroll(yi);
+        bounded_input
+            .compute_at(output, y)
+            .align_storage(x, 64)
+            .vectorize(x, 64, TailStrategy::RoundUp);
+            
         output.print_loop_nest();
     }
 
