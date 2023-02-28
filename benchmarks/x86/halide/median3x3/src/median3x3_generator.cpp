@@ -34,35 +34,13 @@ public:
         output(x,y) = mid(minmax_x(x, y), maxmin_x(x, y), midmid_x(x, y));
 
         output
-            .compute_root()
-            .split(y, y, yi, 36, TailStrategy::ShiftInwards)
-            .split(yi, yi, yii, 18, TailStrategy::ShiftInwards)
-            .split(yii, yii, yiii, 3, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 256, TailStrategy::ShiftInwards)
-            .split(xi, xi, xii, 64, TailStrategy::RoundUp)
-            .vectorize(xii, 64);
-            //.parallel(y);
-        minmax_x
-            .store_in(MemoryType::Stack)
-            .compute_at(output, x)
-            .split(x, x, xi, 64, TailStrategy::RoundUp)
-            .vectorize(xi, 64);
-        max_y
-            .store_in(MemoryType::Stack)
-            .compute_at(output, yi)
-            .split(x, x, xi, 64, TailStrategy::RoundUp)
-            .vectorize(xi, 64);
-        min_y
-            .store_in(MemoryType::Stack)
-            .compute_at(output, yii)
-            .split(x, x, xi, 64, TailStrategy::RoundUp)
-            .vectorize(xi, 64);
+            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 64)
+            .unroll(yi);
         bounded_input
-            .store_in(MemoryType::Stack)
-            .store_at(output, y)
-            .compute_at(output, yi)
-            .split(x, x, xi, 64, TailStrategy::RoundUp)
-            .vectorize(xi, 64);
+            .compute_at(output, y)
+            .align_storage(x, 64)
+            .vectorize(x, 64, TailStrategy::RoundUp);
 
         output.print_loop_nest();
     }
@@ -70,7 +48,7 @@ public:
     void schedule() {}
 
 private:
-    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
+    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};
     Func max_y{"max_y"}, min_y{"min_y"}, mid_y{"mid_y"},
         minmax_x{"minmax_x"}, maxmin_x{"maxmin_x"}, midmid_x{"midmid_x"}, 
         bounded_input{"bounded_input"};
