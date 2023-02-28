@@ -1,5 +1,4 @@
 #include "Halide.h"
-#include "../../common_params.h"
 
 using namespace Halide;
 
@@ -23,32 +22,19 @@ public:
 
         // Schedules for x86
         output
-            .compute_root()
-            .split(y, y, yi, 36, TailStrategy::ShiftInwards)
-            .split(yi, yi, yii, 9, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 128, TailStrategy::ShiftInwards)
-            .split(xi, xi, xii, 32, TailStrategy::ShiftInwards)
-            .reorder({xii, xi, yii, x, yi, y})
-            .vectorize(xii, 32);
-            //.parallel(y);
-        cols
-            .store_in(MemoryType::Stack)
-            .compute_at(output, xi)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32)
-            .reorder({xi, x, y});
+            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 64)
+            .unroll(yi);
         rows
-            .store_in(MemoryType::Stack)
-            .store_at(output, x)
-            .compute_at(output, yii)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32);
-        input_16
-            .store_in(MemoryType::Stack)
-            .store_at(output, y)
-            .compute_at(output, yi)
-            .split(x, x, xi, 32, TailStrategy::RoundUp)
-            .vectorize(xi, 32);
+            .compute_at(output, y)
+            .tile(x, y, x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 64)
+            .unroll(yi)
+            .align_storage(x, 64);
+        bounded_input
+            .compute_at(output, y)
+            .align_storage(x, 64)
+            .vectorize(x, 64, TailStrategy::RoundUp);
 
         output.print_loop_nest();
     }
