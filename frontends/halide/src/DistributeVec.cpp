@@ -920,7 +920,8 @@ namespace Halide {
 
             Stmt OrigStore =  Store::make(op->name, op->value, op->index, op->param, op->predicate, op->alignment);
 
-            if(op->value.type().is_scalar()){
+            // Un-neccessary to distribute loads and variable copies
+            if(op->value.type().is_scalar() || op->value.as<Load>() || op->value.as<Variable>()){
                 return OrigStore;
             }
 

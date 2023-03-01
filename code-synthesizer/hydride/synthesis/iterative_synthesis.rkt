@@ -12,9 +12,11 @@
 (require hydride/utils/target)
 (require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
+(require hydride/ir/hydride/visitor)
 
 (require hydride/ir/hvx/interpreter)
 (require hydride/ir/hvx/const_fold)
+(require hydride/ir/hvx/visitor)
 
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
@@ -22,7 +24,7 @@
 
 (require (only-in racket build-vector))
 (require (only-in racket build-list))
-(require (only-in racket/sandbox with-deep-time-limit))
+;(require (only-in racket/sandbox with-deep-time-limit))
 
 (provide (all-defined-out))
 
@@ -572,6 +574,36 @@
   differing-lanes
 )
 
+;; Synthesis may yield a union node for on of the synthesized sub-expressions
+;; hence we can make it concrete by selecting the first concrete element recursively
+;; from the expression
+(define (de-union-expression expr visitor-fn)
+
+  (debug-log "De-union expression")
+
+  (define (fn e)
+    (cond
+      [(union? e)
+       (println e)
+       (for/list ([i (union-contents e)])
+                 (println (cdr i))
+                 )
+       ;e
+       (define extracted (cdr (list-ref (union-contents e) 0)))
+       (fn extracted)
+       ]
+      [else e]
+      )
+    )
+
+  (define concretized-expr (visitor-fn expr fn))
+
+   (debug-log (format "Is expression concrete? ~a\n" (concrete?  concretized-expr)))
+   concretized-expr
+
+
+  )
+
 
 (define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn cexs failing-lanes cost-bound solver failed-sols)
   (debug-log "synthesize-sol-iterative")
@@ -691,7 +723,35 @@
 
   (debug-log (format "Is this iterative optimization case ~a ?\n" iterative-opt-case))
 
+
+      (define visitor-functor 
+        (cond
+          [(equal? target 'x86)
+           hydride:visitor
+           ]
+          [(equal? target 'hvx)
+           hvx:visitor
+           ]
+          )
+        )
+
   (define is-union (not (concrete? materialize)))
+
+
+
+  (set! materialize
+    (cond
+      [is-union
+        (set! is-union #f)
+        (de-union-expression materialize visitor-functor)
+        ]
+      [else
+        materialize
+        ]
+      )
+    )
+
+
 
   (cond 
     [(and satisfiable? (not is-union))
