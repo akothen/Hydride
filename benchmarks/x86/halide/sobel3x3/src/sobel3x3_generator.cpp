@@ -24,13 +24,13 @@ public:
 
         // Schedules for x86
         output
-            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
-            .vectorize(xi, 64)
-            .unroll(yi);
+            .tile(x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
+            .unroll(yi, 4);
         bounded_input
             .compute_at(output, y)
-            .align_storage(x, 64)
-            .vectorize(x, 64, TailStrategy::RoundUp);
+            .align_storage(x, 32)
+            .vectorize(x, 32, TailStrategy::RoundUp);
             
         output.print_loop_nest();
     }
@@ -38,7 +38,7 @@ public:
     void schedule() {}
 
 private:
-    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
+    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};
     Func sobel_x_avg{ "sobel_x_avg" }, sobel_y_avg{ "sobel_y_avg" };
     Func sobel_x{ "sobel_x" }, sobel_y{ "sobel_y" };
     Func bounded_input{ "bounded_input" }, input_16{ "input_16" };
