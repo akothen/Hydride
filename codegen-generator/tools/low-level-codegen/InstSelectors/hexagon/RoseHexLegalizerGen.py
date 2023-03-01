@@ -45,26 +45,23 @@ class RoseInstSelectorGenerator():
   def generateLegalizerPassDeclaration(self):
     String = '''
       namespace llvm {
-
       class HexLegalizationPass : public FunctionPass {
       public:
           static char ID;
-
           HexLegalizationPass() : FunctionPass(ID) {}
-
           bool runOnFunction(Function &F);
-
           void getAnalysisUsage(AnalysisUsage &AU) const {}
       };
-
       }
     '''
     return String
   
 
   def generateAPattern(self, TargetAgnosticInst : str, InstDict : dict):
+    InstNames = list()
     String = ""
     for InstName, InstInfo in InstDict.items():
+      InstNames.append("\"llvm.hydride." + InstName + "_dsl\"")
       Checks = list()
       for Idx, ArgVal in enumerate(InstInfo["args"]):
         if "SYMBOLIC_BV" not in ArgVal and InstInfo["arg_permute_map"][Idx] == -1:
@@ -126,10 +123,13 @@ class RoseInstSelectorGenerator():
         '''.format(InstName, InstName, ",".join(Permutation))
       String += Pattern
     FinalPattern = '''
-      if(CI->getCalledFunction()->getName().contains(\"llvm.hydride.{}_dsl\")) {{ 
+    {{
+      std::vector<std::string> InstNames = {{{}}};
+      if(isNameMatch(CI, InstNames)) {{ 
         {} 
       }} 
-    '''.format(TargetAgnosticInst, String)
+    }}
+    '''.format(",\n".join(InstNames), String)
     print("FinalPattern:")
     print(FinalPattern)
     return FinalPattern
@@ -169,13 +169,10 @@ class RoseInstSelectorGenerator():
   def generateLegalizerPassDefinition(self):
     String = '''
     using namespace llvm;
-
     class HexLegalizer : public Legalizer {{
     public:
     {}
-
     }};
-
     {}
     '''.format(self.generateInstSelector(), self.generatePassToRunOnFunction())
     return String
