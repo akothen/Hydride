@@ -22,19 +22,19 @@ public:
 
         // Schedules for x86
         output
-            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
-            .vectorize(xi, 64)
+            .tile(x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
             .unroll(yi);
         rows
             .compute_at(output, y)
-            .tile(x, y, x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
-            .vectorize(xi, 64)
+            .tile(x, y, x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
             .unroll(yi)
-            .align_storage(x, 64);
+            .align_storage(x, 32);
         bounded_input
             .compute_at(output, y)
-            .align_storage(x, 64)
-            .vectorize(x, 64, TailStrategy::RoundUp);
+            .align_storage(x, 32)
+            .vectorize(x, 32, TailStrategy::RoundUp);
 
         output.print_loop_nest();
     }
