@@ -49,37 +49,11 @@ public:
 
         output_(c, x, y, b) = min(maximum(c, x, y, b), output_max_);
 
-        RVar r12_x(maximum.update(0).get_schedule().dims()[0].var);
-        RVar r12_y(maximum.update(0).get_schedule().dims()[1].var);
-
         // Schedules for x86
         output_
             .compute_root()
-            .split(x, x, xi, 8, TailStrategy::ShiftInwards)
-            .split(y, y, yi, 16, TailStrategy::ShiftInwards)
-            .split(c, c, ci, 512, TailStrategy::ShiftInwards)
-            .split(ci, ci, cii, 64, TailStrategy::ShiftInwards) 
-            .vectorize(cii, 64)
-            .reorder({cii, ci, yi, xi, y, c, x, b})
-            .fuse(c, x, c);
-            //.parallel(x);
-        maximum.update(0)
-            .split(c, c, ci, 64, TailStrategy::RoundUp) 
-            .vectorize(ci, 64)
-            .reorder({ci, c, x, y, b, r12_x, r12_y});
-        maximum
-            .store_in(MemoryType::Stack)
-            .compute_at(output_, ci)
-            .split(c, c, ci, 64, TailStrategy::RoundUp)
-            .vectorize(ci, 64)
-            .reorder({ci, c, x, y, b});
-        input_bounded
-            .store_in(MemoryType::Stack)
-            .store_at(output_, c)
-            .compute_at(output_, xi)
-            .split(c, c, ci, 64, TailStrategy::ShiftInwards) 
-            .vectorize(ci, 64)
-            .reorder({ci, c, x, y, b});
+            .reorder(c, b, x, y)
+            .vectorize(c, 64);
 
         output_.print_loop_nest();
     }
@@ -87,7 +61,7 @@ public:
     void schedule() {}
 
 private:
-    Var c{"c"}, x{"x"}, y{"y"}, b{"b"}, yi{"yi"}, xi{"xi"}, ci{"ci"}, cii{"cii"};
+    Var c{"c"}, x{"x"}, y{"y"}, b{"b"};
     Func sum{"sum"}, input_bounded{"input_bounded"};
 };
 
