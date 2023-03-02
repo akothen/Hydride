@@ -45,6 +45,12 @@
   )
 
 
+(define optimize-bound-found #f)
+
+
+(define (set-optimize-bound-found val)
+  (set! optimize-bound-found val)
+  )
 
 (define iterative-optimize #f)
 
@@ -584,13 +590,16 @@
   (define (fn e)
     (cond
       [(union? e)
-       (println e)
+       (displayln "Union term in expr")
+       (displayln e)
        (for/list ([i (union-contents e)])
-                 (println (cdr i))
+                 (displayln "===================")
+                 (displayln i)
+                 (displayln (cdr i))
                  )
        ;e
        (define extracted (cdr (list-ref (union-contents e) 0)))
-       (fn extracted)
+       (visitor-fn extracted fn)
        ]
       [else e]
       )
@@ -608,7 +617,12 @@
 (define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn cexs failing-lanes cost-bound solver failed-sols)
   (debug-log "synthesize-sol-iterative")
 
-
+  (cond 
+    [(and optimize? (not iterative-optimize) optimize-bound-found)
+     (debug-log "Escaping early as other thread found optimize bound solution")
+     (values #f '() -1)
+     ]
+    [else 
   ;; Clear the verification condition up till this point
   (clear-vc!)
 
@@ -739,17 +753,17 @@
 
 
 
-  (set! materialize
-    (cond
-      [is-union
-        (set! is-union #f)
-        (de-union-expression materialize visitor-functor)
-        ]
-      [else
-        materialize
-        ]
-      )
-    )
+  ;(set! materialize
+  ;  (cond
+  ;    [is-union
+  ;      (set! is-union #f)
+  ;      (de-union-expression materialize visitor-functor)
+  ;      ]
+  ;    [else
+  ;      materialize
+  ;      ]
+  ;    )
+  ;  )
 
 
 
@@ -841,7 +855,19 @@
             )
 
           ;; If not doing optimizaiton and boolector then return current verified solution directly
-          (values satisfiable? materialize elapsed_time)
+          (begin
+            (if (and optimize? (not iterative-opt-case))
+              
+                (begin
+                 
+                  (set-optimize-bound-found #t)
+                  (values satisfiable? materialize elapsed_time) 
+                  )
+
+                (values satisfiable? materialize elapsed_time)
+              )
+            
+            )
           )
 
 
@@ -896,6 +922,11 @@
     [else (values satisfiable? materialize elapsed_time) ;; If not satisfiable just return current state
           ]
     )
+      
+      ]
+    )
+
+
 
 
   )

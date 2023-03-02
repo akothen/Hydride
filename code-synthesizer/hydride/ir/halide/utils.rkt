@@ -1779,6 +1779,9 @@
               [(xBroadcast sca factor) 
                (xBroadcast sca (/ factor scale-factor))
                ]
+              [(vec-broadcast n vec) 
+               (vec-broadcast (/ n scale-factor) vec)
+               ]
               [(x128 sca)
                (cond
                  [(equal? scale-factor 2)
@@ -1991,6 +1994,31 @@
   )
 
 
+(define (get-expr-depth e)
+  (define depth 1)
+
+  (destruct e
+            [(buffer data elemT buffsize)
+             (set! depth 0)
+             ]
+            [_
+
+  (define sub-exp (halide:sub-exprs e))
+
+  (for/list ([se sub-exp])
+            (println se)
+            (define sub-depth (get-expr-depth se))
+            (define edge-depth (+ 1 sub-depth))
+            (set! depth (max depth edge-depth))
+            )
+
+              ]
+            )
+
+
+  depth
+  
+  )
 
 (define (get-imm-values expr)
 
@@ -1999,9 +2027,18 @@
     (destruct e
               [(int-imm data signed?) 
                (set! imms-vals (append imms-vals (list data)))
+               e
                ]
               [(vector_reduce op width vec) 
                (set! imms-vals (append imms-vals (list (bv 1 (bitvector (vec-precision e))))))
+               e
+               ]
+              [(vec-shr v1 v2) 
+               (define shift-imms (get-imm-values v2))
+               (define adjusted (for/list ([val shift-imms])   (if (< (bvlength val) 32)  (zero-extend val (bitvector 32)) val )))
+               (set! imms-vals (append imms-vals adjusted))
+               e
+
                ]
               ;; When target doesn't support saturating operations
               ;; of a given size then we can decompose the operation

@@ -67,6 +67,8 @@
 
     )
 
+  (set! actual-expr-depth (min actual-expr-depth (+ (halide:get-expr-depth halide-expr) 1)))
+
   (debug-log "=======================================")
   (define leaves (halide:get-sub-exprs halide-expr (+ actual-expr-depth 1)))
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
@@ -119,6 +121,7 @@
   ;; Helper for verification of later up-scaled versions
   (define (verify-upscaled-equal? hydride-expr)
       (debug-log "Verifying upscaled expression")
+      (pretty-print hydride-expr)
       (define leave-sizes (halide:get-expr-bv-sizes leaves))
 
       (debug-log (format "Symbolic bv sizes: ~a" leave-sizes))
@@ -258,12 +261,16 @@
                   (println hashed-expr)
                   (debug-log "Leaves are bitvectors of sizes:")
                   (debug-log leaves-sizes)
+
+                  (define hashed-sol? #f)
+
                   (define-values 
                     (satisfiable? materialize elap)
                     (if (hash-has-key? synth-log hashed-expr)
                       (begin 
                         (debug-log "Equivalent expression synthesized before, returned stored solution")
                         (define memo-result (hash-ref synth-log hashed-expr))
+                        (set! hashed-sol? (vector-ref memo-result 0))
                         (debug-log (format "Equivalent solution required ~a seconds on synthesis time" (vector-ref memo-result 2)))
                         (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
                         )
@@ -351,14 +358,14 @@
                         '()
                         )
                       (define recalculate (scale-down-synthesis expr-extract 
-                                                                ;(max 1 (- actual-expr-depth 1))  
-                                                                1
+                                                                (max 1 (- actual-expr-depth 1))  
                                                                 VF sub-id-map solver opt? sym? 
                                                                 scale-factor 
                                                                 synth-log))
                       (debug-log "Smaller window synthesis returned:")
                       (debug-log recalculate)
                       (set! satisfiable? #t)
+                      (set! hashed-sol? #t)
                       (set! materialize recalculate)
                       (set! effective-scale-factor 1)
                       ;(hash-set! synth-log hashed-expr (vector satisfiable? materialize 0))
@@ -427,6 +434,8 @@
                       )
                     )
 
+                  (debug-log (format "Upscaled mat: ~a" upscaled-mat))
+
                   (cond
                     [(equal? effective-scale-factor 1)
                      (define bound-expr (bind-functor upscaled-mat (list->vector synthesized-leaves)))
@@ -438,7 +447,16 @@
                       ;; Before combining solution check if the upscaled version still remains equivalent
 
                       (begin
-                        (define equiv? (verify-upscaled-equal? upscaled-mat))
+                        (define equiv? 
+                          (cond
+                            [hashed-sol?
+                              #t
+                              ]
+                            [else
+                                (verify-upscaled-equal? upscaled-mat)
+                              ]
+                            )
+                          )
                         
                         (define use-expr
                           (cond
@@ -446,9 +464,14 @@
                               upscaled-mat
                               ]
                             [else
+                              (hash-remove! synth-log hashed-expr)
+
+                              (debug-log "Not equivalent on upscaled version: need to synthesize without scaling")
+                              (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr recalculate-args actual-expr-depth))
+                              (define expr-VF (halide:vec-len expr-extract))
                                 (scale-down-synthesis expr-extract 
                                             (max 1 (- actual-expr-depth 1))  
-                                            VF sub-id-map solver opt? sym? 
+                                            expr-VF sub-id-map solver opt? sym? 
                                             1 ;scale-factor 
                                 synth-log)
                               
@@ -458,7 +481,7 @@
                           )
                         
 
-                        (define bound-expr (bind-functor upscaled-mat (list->vector synthesized-leaves)))
+                        (define bound-expr (bind-functor use-expr (list->vector synthesized-leaves)))
                         (displayln "Bound expr")
                         (println bound-expr)
                         bound-expr
@@ -494,6 +517,7 @@
   (define step-limit 5)
 
   (define solved? #f)
+  (define min-cost #f) ;; Alternate threads may find different solutions together, we keep the one with the min cost
   (define expr-VF (halide:vec-len spec-expr))
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define cost-bound 30)
@@ -503,7 +527,7 @@
 
   (set! depth-limit (max depth-limit (+ 2 starting-depth) ))
 
-  ;(set! starting-depth 3)
+  ;(set! starting-depth 5)
   ;(set! starting-depth 2)
   ;(set! depth-limit 6)
 
@@ -533,7 +557,7 @@
                 (cond 
                   [(<= d 2) 1]
                   [else
-                    1;4
+                    4
                     ]
                   )
                 )
@@ -576,6 +600,7 @@
 
                         (define thds  
                               (for/list ([t (range step-low step-high )])
+                                (set-optimize-bound-found #f)
                                 (parameterize 
                                   ([current-solver (if (equal? solver 'z3) (z3) (boolector))] 
                                    ;[current-custodian (make-custodian)]
@@ -614,15 +639,19 @@
                                                             d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
                                                             optimize? interpreter cost-model  symbolic? cost-bound solver) 
                                                           )
-                                           ;; if sat set solution? to be true
-                                           (if sat?
-                                             (begin
+
+                                           (cond
+                                             [(and sat? (equal? min-cost #f))
                                                (set! solved? #t)
                                                (set! sol mat)
-                                               ;(kill-other-threads t)
-                                               )
-                                             '()
+                                               (set! min-cost (cost-model mat))
+                                              ]
+                                             [(and sat? (<= (cost-model mat) min-cost))
+                                               (set! sol mat)
+                                               (set! min-cost (cost-model mat))
+                                              ]
                                              )
+
                                            ]
                                           )
                                         ) ) ; (thread thunk
