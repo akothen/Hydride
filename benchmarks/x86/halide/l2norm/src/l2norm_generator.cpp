@@ -34,27 +34,17 @@ public:
         output = i16_sat(rounding_shift_right(output, q - 7));
         output_(x, y) = u8_sat(saturating_add(output, i16(128)));
 
-        RVar r8_x(sum_input_sq.update(0).get_schedule().dims()[0].var);
         // Schedules for x86
         output_
             .compute_root()
-            .split(y, y, yi, 34, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 64, TailStrategy::ShiftInwards)
-            //.split(xi, xi, xii, 64, TailStrategy::RoundUp)
-            .vectorize(xi, 64);
-            //.parallel(y);
+            .vectorize(x, 64, TailStrategy::Predicate);
         inv_sqrt
-            .compute_at(output_, y)
-            .split(y, y, yi, 16, TailStrategy::RoundUp)
-            .vectorize(yi, 16);
-        sum_input_sq.update(0)
-            .split(y, y, yi, 16, TailStrategy::GuardWithIf)
-            .vectorize(yi, 16)
-            .reorder({yi, y, r8_x});
+            .compute_at(output_, y);
         sum_input_sq
             .compute_at(output_, y)
-            .split(y, y, yi, 16, TailStrategy::RoundUp)
-            .vectorize(yi, 16);
+            .update()
+            .atomic()
+            .vectorize(rx, 64);
 
         output_.print_loop_nest();
     }
