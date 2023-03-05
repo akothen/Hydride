@@ -14,8 +14,8 @@ public:
         
         // Schedules for x86
         output
-            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
-            .vectorize(xi)
+            .tile(x, y, xi, yi, 64, 8, TailStrategy::RoundUp)
+            .vectorize(xi, 64)
             .unroll(yi);
         bounded_input
             .compute_at(output, y)
@@ -28,7 +28,7 @@ public:
     void schedule() {}
 
 private:
-    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
+    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};
     Func max_y{ "max_y" }, bounded_input{ "bounded_input" };
 };
 
