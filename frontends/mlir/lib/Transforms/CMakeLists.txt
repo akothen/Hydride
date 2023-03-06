@@ -4,6 +4,7 @@ add_mlir_library(MLIRTransforms
   Canonicalizer.cpp
   ControlFlowSink.cpp
   CSE.cpp
+  HydrideArith.cpp
   Inliner.cpp
   LocationSnapshot.cpp
   LoopInvariantCodeMotion.cpp

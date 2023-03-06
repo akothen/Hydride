@@ -77,6 +77,11 @@ def CSE : Pass<"cse"> {
   ];
 }
 
+def HydrideArith : Pass<"hydride-arith"> {
+  let summary = "Hydride Arith Frontend";
+  let constructor = "mlir::createHydrideArithPass()";
+}
+
 def Inliner : Pass<"inline"> {
   let summary = "Inline function calls";
   let constructor = "mlir::createInlinerPass()";
