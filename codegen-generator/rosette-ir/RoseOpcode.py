@@ -90,6 +90,11 @@ class RoseOpcode(Enum):
     # but important for SSA representation in IR.
     bvinsert = auto()
 
+    # todo: col-based counterparts?
+    mtxinsertel = auto()
+    mtxinsertrow = auto()
+    mtxextractrow = auto()
+
     # Some important IR ops
     select = auto()
     call = auto()
@@ -156,13 +161,13 @@ class RoseOpcode(Enum):
     def __hash__(self):
         return hash(self.value)
 
-    def getBVOpInputs(self, Inputs : list):
-        BVInputs = []
-        for Input in Inputs:
-            assert isinstance(Input, RoseValue)
-            if isinstance(Input.getType(), RoseBitVectorType):
-                BVInputs.append(Input)
-        return BVInputs
+    def getBVOpInputs(self, Inputs: list):
+        assert all(isinstance(i, RoseValue) for i in Inputs)
+        return [i for i in Inputs if isinstance(i.getType(), RoseBitVectorType)]
+
+    def getMTXOpInputs(self, Inputs: list):
+        assert all(isinstance(i, RoseValue) for i in Inputs)
+        return [i for i in Inputs if isinstance(i.getType(), RoseMatrixType)]
 
     def getOutputType(self, Inputs : list): 
         assert(len(Inputs) >= 1)
@@ -240,6 +245,26 @@ class RoseOpcode(Enum):
             # The bitwidth inserted by is a constant value
             assert isinstance(Inputs[4], RoseValues.RoseConstant)
             return RoseVoidType.create()
+
+        if self.value == self.mtxinsertel.value:
+            # `mtxinsertel <elements> <tile> <r1> <c1> <r2> <c2>`
+            assert self.inputsAreValid(Inputs)
+            return RoseVoidType.create()
+
+        if self.value == self.mtxinsertrow.value:
+            # `mtxinsertrow <elements> <tile> <idx>`
+            assert self.inputsAreValid(Inputs)
+            return RoseVoidType.create()
+
+        if self.value == self.mtxextractrow.value:
+            # `mtxextractrow <tile> <idx>`
+            assert self.inputsAreValid(Inputs)
+            tile, idx = Inputs
+            tile_t = tile.getType()
+            return RoseBitVectorType.create(
+                tile_t.getElementBitwidth() * tile_t.getMaxCols()
+            )
+
         if self.value == self.call.value:
             Callee = Inputs[0]
             assert isinstance(Callee, RoseAbstractions.RoseFunction)
@@ -413,6 +438,53 @@ class RoseOpcode(Enum):
                 print("false4")
                 return False
             return True
+
+        if self.value == self.mtxinsertel.value:
+            # `mtxinsertel <elements> <tile> <r1> <c1> <r2> <c2>`
+            valid = True
+            element, tile, r1, c1, r2, c2 = Inputs
+            idxs = [r1, c1, r2, c2]
+            tile_t = tile.getType()
+            valid &= isinstance(element.getType(), RoseBitVectorType)
+            valid &= isinstance(tile_t, RoseMatrixType)
+            valid &= all(isinstance(idx.getType(), RoseIntegerType) for idx in idxs)
+            valid &= element.getType() == RoseBitVectorType.create(tile_t.getElementBitwidth())
+            if all(isinstance(idx, RoseValues.RoseConstant) for idx in idxs):
+                valid &= r1.getValue() <= r2.getValue()
+                valid &= c1.getValue() <= c2.getValue()
+                valid &= all(0 <= r < tile_t.getMaxRows() for r in [r1, r2])
+                valid &= all(0 <= c < tile_t.getMaxCols() for c in [c1, c2])
+            return valid
+
+        if self.value == self.mtxinsertrow.value:
+            # `mtxinsertrow <elements> <tile> <idx>`
+            valid = True
+            elements, tile, idx = Inputs
+            tile_t = tile.getType()
+            valid &= isinstance(elements.getType(), RoseBitVectorType)
+            valid &= isinstance(tile_t, RoseMatrixType)
+            valid &= isinstance(idx.getType(), RoseIntegerType)
+            valid &= elements.getType() == RoseBitVectorType.create(
+                tile_t.getElementBitwidth() * tile_t.getMaxCols()
+            )
+            if isinstance(idx, RoseValues.RoseConstant):
+                valid &= 0 <= idx.getValue()
+                valid &= idx.getValue() < tile_t.getMaxRows()
+            return valid
+
+        if self.value == self.mtxextractrow.value:
+            # `mtxextractrow <tile> <idx>`
+            valid = True
+            tile, idx = Inputs
+            tile_t = tile.getType()
+            valid &= isinstance(tile_t, RoseMatrixType)
+            if isinstance(idx, RoseValues.RoseConstant):
+                valid &= 0 <= idx.getValue()
+                valid &= idx.getValue() < tile_t.getMaxRows()
+            return RoseBitVectorType.create(
+                tile_t.getElementBitwidth() * tile_t.getMaxCols()
+            )
+
         if self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -711,6 +783,9 @@ class RoseOpcode(Enum):
         or self.value == self.bvuge.value \
         or self.value == self.bvextract.value \
         or self.value == self.bvinsert.value \
+        or self.value == self.mtxextractrow.value \
+        or self.value == self.mtxinsertrow.value \
+        or self.value == self.mtxinsertel.value \
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
         or self.value == self.bvpadhighbits.value \
@@ -801,6 +876,9 @@ class RoseOpcode(Enum):
             return True
         if self.value == self.bvextract.value \
         or self.value == self.bvinsert.value \
+        or self.value == self.mtxextractrow.value \
+        or self.value == self.mtxinsertrow.value \
+        or self.value == self.mtxinsertel.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
         or self.value == self.bvsizeextend.value \
@@ -946,6 +1024,9 @@ class RoseOpcode(Enum):
         or self.value == self.bvgeneralmax.value \
         or self.value == self.bvgeneralmin.value:
             return (NumInputs >= 3)
+        if self.value == self.mtxinsertel.value: return NumInputs == 6  # `mtxinsertel <elements> <tile> <r1> <c1> <r2> <c2>`
+        if self.value == self.mtxinsertrow.value: return NumInputs == 3  # `mtxinsertrow <elements> <tile> <idx>`
+        if self.value == self.mtxextractrow.value: return NumInputs == 2  # `mtxextractrow <tile> <idx>`
         return None
     
     def isBitVectorOpcode(self):
@@ -1002,6 +1083,9 @@ class RoseOpcode(Enum):
         or self.value == self.rotateright.value \
         or self.value == self.bvextract.value \
         or self.value == self.bvinsert.value \
+        or self.value == self.mtxextractrow.value \
+        or self.value == self.mtxinsertrow.value \
+        or self.value == self.mtxinsertel.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
         or self.value == self.bvsizeextend.value \

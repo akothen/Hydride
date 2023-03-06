@@ -630,6 +630,9 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   def getBitwidthPos(self):
     return 4
 
+  def getType(self):
+    return self.getInputBitVector().getType()
+
   def getOutputBitwidth(self):
     BitwidthVal = self.getOperand(self.getBitwidthPos())
     #assert isinstance(BitwidthVal, RoseConstant)

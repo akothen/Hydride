@@ -44,6 +44,7 @@ class RoseUndefValue(RoseValue):
 class RoseConstant(RoseValue):
   def __init__(self, Value, Type : RoseType):
     # Some sanity checks
+    assert type(Value) != float
     if type(Value) == int:
       assert isinstance(Type, RoseBitVectorType) \
           or isinstance(Type, RoseIntegerType) \

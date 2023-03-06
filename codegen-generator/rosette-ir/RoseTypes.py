@@ -56,19 +56,21 @@ class RoseVoidType(RoseType):
 class RoseBitVectorType(RoseType):
     def __init__(self, Bitwidth):
         # Some sanity checks
-        print(type(Bitwidth))
+        # print(type(Bitwidth))  todo: Kunal — these make a million annoying "<class 'int'>" prints on startup
         assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
         if isinstance(Bitwidth, int):
             # Bitwidth of a bitvector must be more than 1.
             assert Bitwidth >= 1
-        super().__init__(RoseType.RoseTypeEnum.BitVector, Bitwidth)
+        SubClassData = {}
+        SubClassData['Bitwidth'] = Bitwidth
+        super().__init__(RoseType.RoseTypeEnum.BitVector, SubClassData)
     
     @staticmethod
     def create(Bitwidth):
       return RoseBitVectorType(Bitwidth)
 
     def getBitwidth(self):
-      Bitwidth = self.getSubClassData()
+      Bitwidth = self.getSubClassData()['Bitwidth']
       assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
       if isinstance(Bitwidth, int):
         assert Bitwidth >= 1
@@ -97,7 +99,8 @@ class RoseBitVectorType(RoseType):
 class RoseIntegerType(RoseType):
     def __init__(self, Bitwidth : int):
         # Bitwidth of an integer must be more than 1.
-        print(type(Bitwidth))
+        # print(type(Bitwidth))   todo: Kunal — these make a million annoying "<class 'int'>" prints on startup
+        assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
         assert Bitwidth > 1
         super().__init__(RoseType.RoseTypeEnum.Integer, Bitwidth)
     
@@ -169,38 +172,36 @@ class RoseStringType(RoseType):
         NotImplemented
 
 
-class RoseTileType(RoseType):
-    
-    # '__tile': RoseListType.create(RoseBitVectorType.create(512, 16),
-    # 'rows': RoseBitVectorType.create(8),
-    # 'colsb': RoseBitVectorType.create(16),
-    def __init__(self, Rows: int, Cols: int):
-        SubClassData = {}
-        SubClassData["rows"] = Rows
-        SubClassData["cols"] = Cols
-        super().__init__(RoseType.RoseTypeEnum.Tile, SubClassData)
+class RoseMatrixType(RoseType):
+
+    # For AMX—
+    #   'rows': RoseBitVectorType.create(8),
+    #   'colsb': RoseBitVectorType.create(16),
+    def __init__(self, max_rows: int, max_cols: int, element_bitwidth: int):
+        super().__init__(RoseType.RoseTypeEnum.Matrix, {
+            'max_rows': max_rows,
+            'max_cols': max_cols,
+            'element_bitwidth': element_bitwidth
+        })
 
     @staticmethod
-    def create(Rows: int, Cols: int):
-        return RoseTileType(Rows, Cols)
+    def create(max_rows: int, max_cols: int, element_bitwidth: int):
+        return RoseMatrixType(max_rows, max_cols, element_bitwidth)
 
-    def getRows(self):
-        Rows = self.getSubClassData()["rows"]
-        return Rows
+    def getMaxRows(self):
+        return self.getSubClassData()["max_rows"]
 
-    def getColsb(self):
-        Cols = self.getSubClassData()["cols"]
-        return Cols
+    def getMaxCols(self):
+        return self.getSubClassData()["max_cols"]
+
+    def getElementBitwidth(self):
+        return self.getSubClassData()["element_bitwidth"]
 
     def __str__(self):
-        Rows = self.getSubClassData()["rows"]
-        Cols = self.getSubClassData()["cols"]
-        return "tile.r" + str(Rows) + ".c" + str(Cols)
-    
+        return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
+
     def print(self):
-        Rows = self.getSubClassData()["rows"]
-        Cols = self.getSubClassData()["cols"]
-        print("tile.r" + str(Rows) + ".c" + str(Cols))
+        print(self.__str__())
 
     def to_llvm_ir(self):
         assert False, "Rose IR to LLVM IR type conversion not supported."

@@ -5098,6 +5098,7 @@ def Compile_Tests():
 
 
 if __name__ == '__main__':
-  Compile_Tests()
+  # Compile_Tests()
+    Compile()
 
 
