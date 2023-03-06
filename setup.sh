@@ -1,6 +1,16 @@
 
 CUR_DIR=$(pwd)
 
+export HYDRIDE_ROOT=$CUR_DIR
+export LLVM_ROOT=$CUR_DIR/backends/llvm/build/
+export LLVM_DIS_ROOT=$LLVM_ROOT
+export LLVM_CONFIG=$LLVM_DIS_ROOT/bin/llvm-config
+export HALIDE_SRC=$CUR_DIR/frontends/halide/
+export HALIDE_DISTRIB=$HALIDE_SRC/build
+
+export INTRINSICS_LL=$CUR_DIR/code-synthesizer/dsl-ir/x86_wrappers.c.ll
+export LEGALIZER_PATH=$CUR_DIR/backends/llvm/build/lib/LLVMX86Legalizer.so
+
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/hexagon/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/codegen/rosette/:$PYTHONPATH
@@ -14,10 +24,11 @@ export PYTHONPATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/:$PYTHONPAT
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/similarity-checker:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/validity-checker:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/transform:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/codegen-generator/analysis:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/codegen-generator/tools/transformations-verifier:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/tools/llvmlite:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/code-synthesizer/dsl-ir:$PYTHONPATH
 
 export PATH=$CUR_DIR/llvm-project/build/bin/:$PATH
 export PATH=$CUR_DIR/rosette/bin/:$PATH
 export PATH=$CUR_DIR/bin/:$PATH
-

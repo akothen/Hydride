@@ -20,15 +20,13 @@ from RoseValidityChecker import *
 from RoseTargetInfo import *
 from RoseTransformationsVerifier import *
 
-import threading
 from copy import deepcopy
 
-FunctionToEquivalenceClassMapLock = threading.Lock()
-EquivalenceClassesLock = threading.Lock()
-EQToEQMapLock = threading.Lock()
-RegionLock = threading.Lock()
 
 NumThreads = 1
+
+EliminateUnnecessaryArgs = False
+
 
 class RoseSimilarityChecker():
   def __init__(self, TargetList : list):
@@ -43,7 +41,6 @@ class RoseSimilarityChecker():
     self.FunctionToArgPermutationMap = dict()
     self.FunctionToCopies = dict()
     self.EQToEQMap = dict()
-    #self.Pool = multiprocessing.Pool(NumThreads)
     self.initializeSimilarityChecker()
 
   def initializeSimilarityChecker(self):
@@ -114,19 +111,61 @@ class RoseSimilarityChecker():
         Verifier = RoseTransformationVerifier(TargetSpecificInfo, FunctionInfo)
         assert Verifier.verifyEquivalence() == True
         # Map the target agnostic funtion to target specific
-        ArgPermutation = list()
-        for Arg in FunctionInfo.getLatestFunction().getArgs():
-          if Arg in FunctionInfo.getTargetSpecificFunction().getArgs():
-            ArgPermutation.append(FunctionInfo.getTargetSpecificFunction().getIndexOfArg(Arg))
-          else:
-            ArgPermutation.append(-1)
+        ArgPermutation = self.getArgPermutation(FunctionInfo)
         self.FunctionToArgPermutationMap[FunctionInfo.getLatestFunction()] = ArgPermutation
         print("!!!!!!!!!!!!!!!!!ORIGINAL FUNCTION:")
         FunctionInfo.getTargetSpecificFunction().print()
-        print("!!!!!!!!!!ORIGINAL ARG PERMUTATION:")
-        print(ArgPermutation)
       print("ALL VERIFICATION DONE")
 
+  
+  def getArgPermutation(self, FunctionInfo : RoseFunctionInfo):
+    ArgPermutation = list()
+    for Arg in FunctionInfo.getLatestFunction().getArgs():
+      if not isinstance(Arg.getType(), RoseBitVectorType):
+        ArgPermutation.append(-1)
+        continue
+      if not isinstance(Arg.getType().getBitwidth(), RoseArgument):
+        if Arg in FunctionInfo.getTargetSpecificFunction().getArgs():
+          ArgPermutation.append(FunctionInfo.getTargetSpecificFunction().getIndexOfArg(Arg))
+        else:
+          ArgPermutation.append(-1)
+        continue
+      assert FunctionInfo.argHasConcreteVal(Arg.getType().getBitwidth()) == True
+      print("\n\n______________________________________________")
+      ClonedArg = Arg.clone()
+      print("Arg.getType().getBitwidth():")
+      print(Arg.getType().getBitwidth())
+      print("ClonedArg.getType().getBitwidth():")
+      print(ClonedArg.getType().getBitwidth())
+      print("FunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth():")
+      print(FunctionInfo.getConcreteValFor(Arg.getType().getBitwidth()))
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        ClonedArg.setType(RoseBitVectorType.create( \
+              FunctionInfo.getConcreteValFor(Arg.getType().getBitwidth()).getValue()))
+      else:
+        assert isinstance(Arg.getType(), RoseIntegerType)
+        ClonedArg.setType(RoseIntegerType.create( \
+              FunctionInfo.getConcreteValFor(Arg.getType().getBitwidth()).getValue()))
+      print("Arg:")
+      Arg.print()
+      Arg.getType().print()
+      print(Arg.getType())
+      print(Arg.getType().getBitwidth())
+      print("ARG ID:")
+      print(Arg.ID)
+      print("ClonedArg:")
+      ClonedArg.print()
+      ClonedArg.getType().print()
+      print(ClonedArg.getType())
+      print(ClonedArg.getType().getBitwidth())
+      print("CLONED ARG ID:")
+      print(ClonedArg.ID)
+      if ClonedArg in FunctionInfo.getTargetSpecificFunction().getArgs():
+        ArgPermutation.append(FunctionInfo.getTargetSpecificFunction().getIndexOfArg(ClonedArg))
+      else:
+        ArgPermutation.append(-1)
+    return ArgPermutation
+  
   
   def replaceUsesofConcreteArgsAndGetFunction(self, FunctionInfo : RoseFunctionInfo, DoNotCopy : bool = False):
     print("*****FunctionInfo.ArgsToConcreteValMap:")
@@ -167,9 +206,19 @@ class RoseSimilarityChecker():
     return CopyFunctionInfo
 
 
-  def genSymbolicInput(self, Param, NameSuffix):
+  def genSymbolicInput(self, FunctionInfo, Param, NameSuffix):
+    print("GENERATE SYMBOLIC INPUT")
+    Bitwidth = Param.getType().getBitwidth()
+    print("Bitwidth:")
+    print(Bitwidth)
+    if isinstance(Bitwidth, RoseValue):
+      if isinstance(Bitwidth, RoseConstant):
+        Bitwidth = Bitwidth.getValue()
+      else:
+        # There better be a concrete value
+        Bitwidth = FunctionInfo.getConcreteValFor(Bitwidth).getValue()
     Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
-                                        str(Param.getType().getBitwidth()))
+                                        str(Bitwidth))
     return Input
 
   def genConcreteInput(self, Param : RoseArgument, ConcreteArg : RoseConstant, NameSuffix : str):
@@ -217,7 +266,7 @@ class RoseSimilarityChecker():
     Code = ""
     for Arg in  Function.getArgs():
       if FunctionInfo.argHasConcreteVal(Arg) == False:
-        Code += self.genSymbolicInput(Arg, NameSuffix)
+        Code += self.genSymbolicInput(FunctionInfo, Arg, NameSuffix)
       else:
         ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
         Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix)
@@ -235,8 +284,11 @@ class RoseSimilarityChecker():
     Function2.print()
     # Rosette code headers
     Content = [
-      "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
-      "(require racket/pretty)", "(require \"RosetteOpsImpl.rkt\")\n"
+      "#lang rosette", \
+      "(require rosette/lib/synthax)", \
+      "(require rosette/lib/angelic)",
+      "(require racket/pretty)", \
+      "(require \"RosetteOpsImpl.rkt\")\n"
     ]
     #Content.append("(custodian-limit-memory (current-custodian) (* 1024 1024))")
     # Generate rosette code
@@ -466,7 +518,13 @@ class RoseSimilarityChecker():
     # Try another heuristic
     print("****TRY NEW HEURISTIC****")
     self.reorderArgsAndPerformSimilarityChecking()
-    self.eliminateUnecessaryArgs()
+    #print("****TRY ANOTHER HEURISTIC****")
+    #self.refineSimilarityChecking()
+    if EliminateUnnecessaryArgs == True:
+      print("****ELIMINATE ARGUMENTS****")
+      self.eliminateUnecessaryArgs()
+    else:
+      self.genArgPermuatationsForEquivalenceClasses()
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
@@ -766,50 +824,27 @@ class RoseSimilarityChecker():
     
     print("len(ArgsPermuations):")
     print(len(ArgsPermuations))
-    NumThreads = 1
-    if NumThreads != 1:
-      FunctionTuples = list()
-      for Idx, ArgPerm in enumerate(ArgsPermuations):
-        NewArgsList = ArgPerm + RemainingArgs
-        print("len(NewArgsList):")
-        print(len(NewArgsList))
-        print("Function.getNumArgs():")
-        print(Function.getNumArgs())
-        assert len(NewArgsList) == Function.getNumArgs()
-        if Function.getArgs() != NewArgsList:
-          Tuple = (Function, NewArgsList, str(Idx))
-          FunctionTuples.append(Tuple)
-      # Create all function permutations (multithreaded)
-      Pool = multiprocessing.Pool(NumThreads)
-      FunctionList = list()
-      for FunctionCopy in Pool.imap_unordered(self.generateAFunctionPermutation, FunctionTuples):
+    FunctionList = list()
+    for Idx, ArgPerm in enumerate(ArgsPermuations):
+      NewArgsList = ArgPerm + RemainingArgs
+      print("len(NewArgsList):")
+      print(len(NewArgsList))
+      print("Function.getNumArgs():")
+      print(Function.getNumArgs())
+      assert len(NewArgsList) == Function.getNumArgs()
+      if Function.getArgs() != NewArgsList:
+        FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, str(Idx))
         self.CopyFunctionToOriginalFunction[FunctionCopy] = Function
         FunctionList.append(FunctionCopy)
-      self.FunctionToCopies[Function] = FunctionList
-      print("___________________________________________________________________")
-      return FunctionList
-    else:
-      FunctionList = list()
-      for Idx, ArgPerm in enumerate(ArgsPermuations):
-        NewArgsList = ArgPerm + RemainingArgs
-        print("len(NewArgsList):")
-        print(len(NewArgsList))
-        print("Function.getNumArgs():")
-        print(Function.getNumArgs())
-        assert len(NewArgsList) == Function.getNumArgs()
-        if Function.getArgs() != NewArgsList:
-          FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, str(Idx))
-          self.CopyFunctionToOriginalFunction[FunctionCopy] = Function
-          FunctionList.append(FunctionCopy)
-          print("PERMUTATION FUNCTION:")
-          FunctionCopy.print()
-          ArgPermutation = list()
-          for Arg in NewArgsList:
-            ArgPermutation.append(Function.getIndexOfArg(Arg))
-          self.FunctionToArgPermutationMap[FunctionCopy] = ArgPermutation
-      self.FunctionToCopies[Function] = FunctionList
-      print("___________________________________________________________________")
-      return FunctionList
+        print("PERMUTATION FUNCTION:")
+        FunctionCopy.print()
+        ArgPermutation = list()
+        for Arg in NewArgsList:
+          ArgPermutation.append(Function.getIndexOfArg(Arg))
+        self.FunctionToArgPermutationMap[FunctionCopy] = ArgPermutation
+    self.FunctionToCopies[Function] = FunctionList
+    print("___________________________________________________________________")
+    return FunctionList
 
   
   def generateAFunctionPermutation(self, FunctionTuple : tuple):
@@ -822,10 +857,8 @@ class RoseSimilarityChecker():
     ArgPermutation = list()
     for Arg in NewArgsList:
       ArgPermutation.append(Function.getIndexOfArg(Arg))
-    #RegionLock.acquire()
     #self.CopyFunctionToOriginalFunction[FunctionCopy] = Function
     self.FunctionToArgPermutationMap[FunctionCopy] = ArgPermutation
-    #RegionLock.release()
     return FunctionCopy
 
 
@@ -958,8 +991,10 @@ class RoseSimilarityChecker():
         CopyFunctionInfo.setInVectorLengthIndex(PermArgIdx)
       if OrgArgIndex == OriginalFunctionInfo.getOutVectorLengthIndex():
         CopyFunctionInfo.setOutVectorLengthIndex(PermArgIdx)
-      if OrgArgIndex == OriginalFunctionInfo.getLaneSizeIndex():
-        CopyFunctionInfo.setLaneSizeIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getOutLaneSizeIndex():
+        CopyFunctionInfo.setOutLaneSizeIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getInLaneSizeIndex():
+        CopyFunctionInfo.setInLaneSizeIndex(PermArgIdx)
 
 
   def reorderArgsAndPerformSimilarityChecking(self):
@@ -1668,6 +1703,152 @@ class RoseSimilarityChecker():
     return RecoveredArgMap
 
 
+  def genArgPermuatationsForEquivalenceClasses(self):
+    for EquivalenceClass in self.EquivalenceClasses:
+      # Go through all the functions and loop for arguments to eliminate
+      Functions = set()
+      Functions.update(EquivalenceClass.getEquivalentFunctions())
+      FunctionToClonedFunctionInfo = dict()
+      for Function in Functions:
+        assert isinstance(Function, RoseFunction)
+        assert Function in self.FunctionToArgPermutationMap
+        print("+++++++FUNCTION:")
+        Function.print()
+        FunctionInfo = self.FunctionToFunctionInfo[Function]
+        FunctionToClonedFunctionInfo[Function] = RoseFunctionInfo()
+        FunctionToClonedFunctionInfo[Function].addFunctionAtNewStage(Function.clone())
+        ArgsToConcreteValMap = deepcopy(FunctionInfo.getArgsToConcreteValMap())
+        FunctionToClonedFunctionInfo[Function].addArgsToConcreteMap(ArgsToConcreteValMap)
+        ArgPermutation = self.FunctionToArgPermutationMap[Function]
+        OriginalFunction = RoseUndefRegion()
+        if Function in  self.CopyFunctionToOriginalFunction:
+          OriginalFunction = self.CopyFunctionToOriginalFunction[Function]
+        ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
+        self.FunctionToFunctionInfo[ClonedOriginalFunction] = FunctionInfo
+        self.FunctionToArgPermutationMap[ClonedOriginalFunction] = ArgPermutation
+        self.FunctionToEquivalenceClassMap[ClonedOriginalFunction] = EquivalenceClass
+        if not isinstance(OriginalFunction, RoseUndefRegion):
+          self.CopyFunctionToOriginalFunction[ClonedOriginalFunction] = OriginalFunction
+        assert Function in self.FunctionToArgPermutationMap
+        # Let's simplify the function first
+        RoseOpSimplify.Run(Function, FunctionInfo.getContext())
+        print("FINAL FUNCTION:")
+        Function.print()
+        self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
+        FunctionInfo.addFunctionAtNewStage(Function)
+        FunctionInfo.addTargetAgnosticFunction(Function)
+        FunctionInfo.computeSemanticsInfo()
+        self.FunctionToFunctionInfo[Function] = FunctionInfo
+        print("ROSETTE CODE:")
+        print(self.FunctionToRosetteCodeMap[Function])
+        print("++++REFERENCE FUNCTION:")
+        FunctionToClonedFunctionInfo[Function].getLatestFunction().print()
+        print("++++CHECK FUNCTION:")
+        FunctionInfo.getLatestFunction().print()
+        Verifier = RoseTransformationVerifier(FunctionToClonedFunctionInfo[Function], \
+                                              FunctionInfo)
+        assert Verifier.verifyEquivalence() == True
+        # Replace uses of concrete arguments and try verifying again
+        CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
+        print("TARGET AGNOSTIC FUNCTION:")
+        FunctionInfo.getLatestFunction().print()
+        print("COPY TARGET AGNOSTIC FUNCTION:")
+        CopyFunctionInfo.getLatestFunction().print()
+        Verifier = RoseTransformationVerifier(CopyFunctionInfo, FunctionInfo)
+        assert Verifier.verifyEquivalence() == True
+        # Now map this new function to the new argument permutation map
+        OlderFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
+        assert OlderFunction in self.FunctionToArgPermutationMap
+        #if OlderFunction in self.CopyFunctionToOriginalFunction
+        OldArgPermutation = self.FunctionToArgPermutationMap[OlderFunction]
+        print("OlderFunction:")
+        OlderFunction.print()
+        print("FUNCTION:")
+        Function.print()
+        print("OldArgPermutation:")
+        print(OldArgPermutation)
+        RecoveredArgMap = list()
+        for Arg in Function.getArgs():
+          print("Arg:")
+          Arg.print()
+          Arg.getType().print()
+          if isinstance(Arg.getType(), RoseBitVectorType) \
+            or isinstance(Arg.getType(), RoseIntegerType) \
+            or isinstance(Arg.getType(), RoseBooleanType):
+            if isinstance(Arg.getType().getBitwidth(), RoseArgument):
+              OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+              RecoveredArgMap.append(OldArgPermutation[OldArgIndex]) 
+              continue
+          # Now we have to be more careful with checking equivalence
+          OldArgIndex = None
+          OlderFunctionInfo = FunctionToClonedFunctionInfo[Function]
+          for Idx, OlderArg in enumerate(OlderFunction.getArgs()):
+            if isinstance(OlderArg.getType(), RoseBitVectorType) \
+              or isinstance(OlderArg.getType(), RoseIntegerType) \
+              or isinstance(OlderArg.getType(), RoseBooleanType):
+              if isinstance(OlderArg.getType().getBitwidth(), int):
+                print("OLD ARG:")
+                OlderArg.print()
+                print("ARG:")
+                Arg.print()
+                if OlderArg == Arg:
+                  print("OlderArg.getType():")
+                  OlderArg.getType().print()
+                  OldArgIndex = Idx
+                  break
+              else:
+                assert isinstance(OlderArg.getType().getBitwidth(), RoseArgument)
+                #### DOUBLE CHECK
+                #assert OlderFunctionInfo.argHasConcreteVal(OlderArg) == True
+                assert OlderFunctionInfo.argHasConcreteVal(OlderArg.getType().getBitwidth()) == True
+                print("\n\n______________________________________________")
+                ClonedOlderArg = OlderArg.clone()
+                print("OlderArg.getType().getBitwidth():")
+                print(OlderArg.getType().getBitwidth())
+                print("ClonedOlderArg.getType().getBitwidth():")
+                print(ClonedOlderArg.getType().getBitwidth())
+                print("OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth():")
+                print(OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()))
+                if isinstance(OlderArg.getType(), RoseBitVectorType):
+                  ClonedOlderArg.setType(RoseBitVectorType.create( \
+                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                else:
+                  assert isinstance(OlderArg.getType(), RoseIntegerType)
+                  ClonedOlderArg.setType(RoseIntegerType.create( \
+                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                print("Arg:")
+                Arg.print()
+                Arg.getType().print()
+                print(Arg.getType())
+                print(Arg.getType().getBitwidth())
+                print("ARG ID:")
+                print(Arg.ID)
+                print("ClonedOlderArg:")
+                ClonedOlderArg.print()
+                ClonedOlderArg.getType().print()
+                print(ClonedOlderArg.getType())
+                print(ClonedOlderArg.getType().getBitwidth())
+                print("CLONED ARG ID:")
+                print(ClonedOlderArg.ID)
+                if Arg == ClonedOlderArg:
+                  print("CLONED ARG == ARG")
+                  OldArgIndex = Idx
+                  break
+          assert OldArgIndex != None
+          #OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+          print("OldArgIndex:")
+          print(OldArgIndex)
+          RecoveredArgMap.append(OldArgPermutation[OldArgIndex])
+        print("RecoveredArgMap:")
+        print(RecoveredArgMap)
+        NewRecoveredMap = self.getArgPermutationMapRecursively(OlderFunction, RecoveredArgMap)
+        self.FunctionToArgPermutationMap[Function] = NewRecoveredMap
+        print("!!!!!!!!!!!!!!!FINAL FUNCTION:")
+        Function.print()
+        print("!!!!!!!!!!!!!FINAL ARG PERMUTATIONN MAP:")
+        print(self.FunctionToArgPermutationMap[Function])
+
+
   def eliminateUnecessaryArgs(self):
     for EquivalenceClass in self.EquivalenceClasses:
       if len(EquivalenceClass.getEquivalentFunctions()) > 1:
@@ -2056,22 +2237,178 @@ class RoseSimilarityChecker():
         print(self.FunctionToArgPermutationMap[Function])
 
 
+  def punchHolesInFunction(self, Function : RoseFunction, Context : RoseContext):
+    print("RUN ON OP SIMPLIFY FUNCTION")
+    print("FUNCTION:")
+    Function.print()
+    # Define a macro
+    Macro = self.create("depth", RoseConstant.create("K", RoseStringType(1)))
+    # Look for extracts
+    BlockList = Function.getRegionsOfType(RoseBlock)
+    HoleList = list()
+    HoleMap = dict()
+    for Block in BlockList:
+      OpList = list()
+      OpList.extend(Block.getOperations())
+      for Op in OpList:
+        if isinstance(Op, RoseBVExtractSliceOp):
+          if Op.getLowIndex() in HoleMap:
+            continue
+          HoleArgsList = [Op.getLowIndex()]
+          # Add all the iterators of parent loops to the hole arg list
+          Parent = Block.getParentOfType(RoseForLoop)
+          while Parent != RoseUndefRegion():
+            HoleArgsList.append(Parent.getIterator())
+            Parent = Parent.getParentOfType(RoseForLoop)
+          HoleFunction = Context.genName(".hole")
+          Hole = RoseOpaqueCallOp.create(Context.genName(),\
+                  RoseConstant(HoleFunction, RoseStringType.create(len(HoleFunction))), \
+                  HoleArgsList, Op.getLowIndex().getType())
+          # Replace all uses of low index with this hole
+          HoleMap[Op.getLowIndex()] = Hole
+          Users = Function.getUsersOf(Op.getLowIndex())
+          Users[0].getParent().addOperationBefore(Hole, Users[0])
+          Function.replaceUsesWith(Op.getLowIndex(), Hole)
+          HoleList.append(Hole)
+    return HoleList
 
-  def verifyParallel(self, FunctionInfo1 : RoseFunctionInfo, \
-                  FunctionInfo2 : RoseFunctionInfo):
-    if self.qualifiesForSimilarityChecking(FunctionInfo1, FunctionInfo2) == False:
-      return False
-    # Generate verification code
-    Code = self.emitVerificationCodeFor(FunctionInfo1, FunctionInfo2)
-    Function1 = FunctionInfo1.getLatestFunction()
-    Function2 = FunctionInfo2.getLatestFunction()
-    FileName = "test_" + Function1.getName() + "_" + Function2.getName() + ".rkt"
+
+  def getRosetteCodeForHole(self, Hole : RoseOpaqueCallOp):
+    RosetteCode = "(define-grammar " + Hole.getCallee().getName()
+    for Operand in Hole.getCallOperands():
+      RosetteCode += Operand.getName() + " "
+    RosetteCode += ")\n"
+    RosetteCode += "[expr \n"
+    RosetteCode += "(choose\n"
+    for Operand in Hole.getCallOperands():
+      RosetteCode += Operand.getName() + "\n"
+    RosetteCode += "(+ (expr) (expr))\n"
+    RosetteCode += "(- (expr) (expr))\n"
+    RosetteCode += "(* (expr) (expr))\n"
+    RosetteCode += "(\ (expr) (expr))\n"
+    RosetteCode += ")]\n"
+    RosetteCode += ")\n"
+    return RosetteCode
+
+
+  def generateCodeForParams(self, Function : RoseFunction, ParamListName : str):
+    # Generate variables definitions for concrete inputs to the given functions
+    Code = ""
+    FunctionInfo = self.FunctionToFunctionInfo[Function]
+    for Arg in  Function.getArgs():
+      if FunctionInfo.argHasConcreteVal(Arg) == True:
+        ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
+        Code += self.genConcreteInput(Arg, ConcreteVal, ".arg")
+    Code += "(define (" + ParamListName + " env)\n"
+    Code += "(vector "
+    for Idx, Arg in  enumerate(Function.getArgs()):
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        Code += "(vector-ref env" + str(Idx) + ") "
+      else:
+        Code += Arg.getName() + ".arg "
+    Code += ")\n"
+    Code += ")\n\n"
+    return Code
+
+
+  def generateCodeForSynthesis(self, Function : RoseFunction, RosetteImplCode : str, DepthVarName : str = None):
+    # Generate code for function in Rosette
+    RosetteFuncName = "invoke_ " + Function.getName()
+    OuterFuncName = RosetteFuncName
+    RosetteCode = ""
+    if DepthVarName != None:
+      assert isinstance(DepthVarName, str)
+      OuterFuncName = RosetteFuncName + "_sketch"
+      RosetteCode.append("(define (" + OuterFuncName + "_sketch" + DepthVarName + ")")
+    RosetteCode.append("(define (" + RosetteFuncName + " params)")
+    RosetteCode.append(RosetteImplCode)
+    RosetteCode.append("(" + Function.getName())
+    for Idx in range(Function.getNumArgs()):
+      RosetteCode.append("(vector-ref params " + str(Idx) + ")")
+    RosetteCode.append(")")
+    RosetteCode.append(")")
+    if DepthVarName != None:
+      RosetteCode.append(RosetteFuncName)
+      RosetteCode.append(")")
+    RosetteCode.append("\n")
+    RosetteCode = "\n".join(RosetteCode)
+    # Generate code for parameters of this function
+    ParamListName = "generate_param_" + Function.getName()
+    RosetteCode += self.generateCodeForParams(Function, ParamListName)
+    RosetteCode += "\n"
+    return RosetteCode, OuterFuncName, ParamListName
+
+
+  def emitSynthesisCodeForSimilarityChecking(self, Sketch : RoseFunction, RefImpl : RoseFunction, \
+                                            HolesList : list):
+    # Sanity check
+    assert len(HolesList) > 0
+    # Generate a file for performing synthesis first
+    RosetteSketch = RosetteGen.CodeGen(Sketch)
+    RosetteRefImpl = RosetteGen.CodeGen(RefImpl)
+    # Rosette code headers
+    Content = [
+      "#lang rosette", \
+      "(require rosette/lib/synthax)", \
+      "(require rosette/lib/angelic)",
+      "(require racket/pretty)", \
+      "(require racket/serialize)", \
+      "(require hydride)",
+      "(require \"RosetteOpsImpl.rkt\")\n"
+    ]
+    Content.extend(["enable-debug", \
+                    "(current-bitwidth 16)", \
+                    "(custodian-limit-memory (current-custodian) (* 20000 1024 1024))", \
+                    "(define solver 'z3)\n"])
+    # Generate rosette code for all holes
+    DepthVarName = None
+    for Hole in HolesList:
+      assert isinstance(Hole, RoseOpaqueCallOp)
+      if DepthVarName == None:
+        if Hole.getMacro() != None:
+          DepthVarName = Hole.getMacro().getName()
+      Content.append(self.getRosetteCodeForHole(Hole))
+    # Generate rosette code for the reference implementation
+    RefRosette, RefFunctionName, RefParamList = \
+                          self.generateCodeForSynthesis(RefImpl, RosetteRefImpl)
+    Content.append(RefRosette)
+    # Generate rosette code for the sketch implementation.
+    # For now we use the depth of 2.
+    Depth = 2
+    SketchRosette, SketchFunctionName, SketchParamList = \
+                    self.generateCodeForSynthesis(Sketch, RosetteSketch, DepthVarName)
+    Content.append(SketchRosette)
+    # Generate a list of bitwidths
+    Code = "(define bitwidth-list (list "
+    for Arg in RefImpl.getArgs():
+      if isinstance(Arg.getType(), RoseBitVectorType):
+        Code += str(Arg.getType().getBitwidth())  + " "
+    Code += "))\n"
+    Content.append(Code)
+    # Generate code for performing synthesis
+    Content.append("(define test-depth " + Depth + ")")
+    Content.append("(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative \
+                    ({} {}) {} bitwidth-list {} {} '() solver)") \
+                    .format(SketchFunctionName, str(Depth), RefFunctionName, \
+                            SketchParamList, RefParamList)
+    Content.append("(displayln \"is Satisfiable?\")")
+    Content.append("(println satisfiable?)")
+    return "\n".join(Content)
+
+
+  def verifyUsingSynthesis(self, Sketch : RoseFunction, RefImpl : RoseFunction, \
+                            HolesList : list, Suffix : str = None):
+    RosetteCode = self.emitSynthesisCodeForSimilarityChecking(Sketch, RefImpl, HolesList)
+    FileName = "test_synthesis_" + Sketch.getName() + "_" + RefImpl.getName() + ".rkt"
     try:
       File = open(FileName, "w+")
-      File.write(Code)
+      File.write(RosetteCode)
       File.close()
       # Perform verification
       Output, Err = RunCommand("racket {}".format(FileName))
+      RunCommand("killall z3")
+      RunCommand("killall racket")
+      #RunCommand("rm {}".format(FileName))
       print("Output:")
       print(Output)
       print("Err:")
@@ -2090,344 +2427,85 @@ class RoseSimilarityChecker():
       return False
 
 
-  def HandleEqToEq(self, FunctionInfo, CheckFunctionInfo):
-    Function = FunctionInfo.getLatestFunction()
-    CheckFunction = CheckFunctionInfo.getLatestFunction()
-    #assert EquivalentClass in self.EquivalenceClasses
-    #assert CheckedEquivalentClass in self.EquivalenceClasses
-    FunctionToEquivalenceClassMapLock.acquire()
-    EquivalentClass = self.FunctionToEquivalenceClassMap[Function]
-    CheckedEquivalentClass = self.FunctionToEquivalenceClassMap[CheckFunction]
-    FunctionToEquivalenceClassMapLock.release()
-    if EquivalentClass == CheckedEquivalentClass:
-      return
-    # Do we know what the equivalence relation between the two classes?
-    EQToEQMapLock.acquire()
-    Condition = (EquivalentClass, CheckedEquivalentClass) not in self.EQToEQMap
-    EQToEQMapLock.release()
-    if Condition == True:
-      #assert (CheckedEquivalentClass, EquivalentClass) not in self.EQToEQMap
-      VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo) 
-      EQToEQMapLock.acquire()
-      self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-      self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-      EQToEQMapLock.release()
-    
-  
-  def HandleEqToNone(self, FunctionInfo, CheckFunctionInfo):
-    Function = FunctionInfo.getLatestFunction()
-    CheckFunction = CheckFunctionInfo.getLatestFunction()
-    #assert EquivalentClass in self.EquivalenceClasses
-    VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-    if VerifyResult == True:
-      print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
-      FunctionToEquivalenceClassMapLock.acquire()
-      EquivalentClass = self.FunctionToEquivalenceClassMap[Function]
-      EquivalentClass.addFunction(CheckFunction)
-      EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                    CheckFunctionInfo.getArgsToConcreteValMap())
-      self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
-      FunctionToEquivalenceClassMapLock.release()
-    else:
-      CheckedEquivalentClass = RoseEquivalenceClass()
-      print("--Added {} to new eq class".format(CheckFunction.getName()))
-      CheckedEquivalentClass.addFunction(CheckFunction)
-      CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                    CheckFunctionInfo.getArgsToConcreteValMap())
-      FunctionToEquivalenceClassMapLock.acquire()
-      self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
-      FunctionToEquivalenceClassMapLock.release()
-      EQToEQMapLock.acquire()
-      self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-      self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-      EQToEQMapLock.release()
-
-
-  def HandleNoneToEq(self, FunctionInfo, CheckFunctionInfo):
-    Function = FunctionInfo.getLatestFunction()
-    CheckFunction = CheckFunctionInfo.getLatestFunction()
-    #assert CheckedEquivalentClass in self.EquivalenceClasses
-    VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-    if VerifyResult == True:
-      print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
-      FunctionToEquivalenceClassMapLock.acquire()
-      CheckedEquivalentClass = self.FunctionToEquivalenceClassMap[CheckFunction]
-      CheckedEquivalentClass.addFunction(Function)
-      CheckedEquivalentClass.addFunctionToArgsMapping(Function, \
-                                    FunctionInfo.getArgsToConcreteValMap())
-      self.FunctionToEquivalenceClassMap[Function] = CheckedEquivalentClass
-      FunctionToEquivalenceClassMapLock.release()
-    else:
-      EquivalentClass = RoseEquivalenceClass()
-      print("--Added {} to new eq class".format(Function.getName()))
-      EquivalentClass.addFunction(Function)
-      EquivalentClass.addFunctionToArgsMapping(Function, \
-                                    FunctionInfo.getArgsToConcreteValMap()) 
-      FunctionToEquivalenceClassMapLock.acquire()
-      self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-      FunctionToEquivalenceClassMapLock.release()
-      EQToEQMapLock.acquire()
-      self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-      self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-      EQToEQMapLock.release()
-        
-
-  def HandleNoneToNone(self, FunctionInfo, CheckFunctionInfo):
-    Function = FunctionInfo.getLatestFunction()
-    CheckFunction = CheckFunctionInfo.getLatestFunction()
-    VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-    if VerifyResult == True:
-      EquivalentClass = RoseEquivalenceClass()
-      EquivalentClass.addFunction(Function)
-      EquivalentClass.addFunction(CheckFunction)
-      EquivalentClass.addFunctionToArgsMapping(Function, \
-                                    FunctionInfo.getArgsToConcreteValMap())
-      EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                    CheckFunctionInfo.getArgsToConcreteValMap()) 
-      FunctionToEquivalenceClassMapLock.acquire()
-      self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-      self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
-      FunctionToEquivalenceClassMapLock.release()
-    else:
-      EquivalentClass = RoseEquivalenceClass()
-      CheckedEquivalentClass = RoseEquivalenceClass()
-      print("--Added {} and {} to new eq classes".format(CheckFunction.getName(), Function.getName()))
-      EquivalentClass.addFunction(Function)
-      CheckedEquivalentClass.addFunction(CheckFunction)
-      EquivalentClass.addFunctionToArgsMapping(Function, \
-                                    FunctionInfo.getArgsToConcreteValMap()) 
-      CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                    CheckFunctionInfo.getArgsToConcreteValMap()) 
-      FunctionToEquivalenceClassMapLock.acquire()
-      self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-      self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
-      FunctionToEquivalenceClassMapLock.release()
-      EQToEQMapLock.acquire()
-      self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-      self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-      EQToEQMapLock.release()
-
-
-  def lambdaFunctionForParallelSimilarityChecking(self, FunctionInfo):
-    FunctionMap = {
-      (True, True) : self.HandleEqToEq,
-      (True, False) : self.HandleEqToNone,
-      (False, True) : self.HandleNoneToEq,
-      (False, False) : self.HandleNoneToNone,
-    }
-    Function = FunctionInfo.getLatestFunction()
-    for CheckFunctionInfo in self.FunctionInfoList:
-      CheckFunction = CheckFunctionInfo.getLatestFunction()
-      print("---------------------------------------------------")
-      print("Function:")
-      print(Function.getName())
-      print("CheckFunction:")
-      print(CheckFunction.getName())
-      if Function == CheckFunction:
-        print("FUNCTIONS ARE EQUAL")
-        continue
-      EquivalentClass = None
-      CheckedEquivalentClass = None
-      FunctionToEquivalenceClassMapLock.acquire()
-      if Function in self.FunctionToEquivalenceClassMap:
-        EquivalentClass = self.FunctionToEquivalenceClassMap[Function]
-      if CheckFunction in self.FunctionToEquivalenceClassMap:
-        CheckedEquivalentClass = self.FunctionToEquivalenceClassMap[CheckFunction]
-      FunctionToEquivalenceClassMapLock.release()
-      FunctionMap[(EquivalentClass != None, CheckedEquivalentClass != None)](FunctionInfo, CheckFunctionInfo)
-
-
-  def lambdaFunctionForSimilarityChecking(self, FunctionInfo):
-    Function = FunctionInfo.getLatestFunction()
-    for CheckFunctionInfo in self.FunctionInfoList:
-      CheckFunction = CheckFunctionInfo.getLatestFunction()
-      print("---------------------------------------------------")
-      print("Function:")
-      print(Function.getName())
-      print("CheckFunction:")
-      print(CheckFunction.getName())
-      if Function == CheckFunction:
-        print("FUNCTIONS ARE EQUAL")
-        continue
-      EquivalentClass = None
-      CheckedEquivalentClass = None
-      FunctionToEquivalenceClassMapLock.acquire()
-      if Function in self.FunctionToEquivalenceClassMap:
-        EquivalentClass = self.FunctionToEquivalenceClassMap[Function]
-      if CheckFunction in self.FunctionToEquivalenceClassMap:
-        CheckedEquivalentClass = self.FunctionToEquivalenceClassMap[CheckFunction]
-      FunctionToEquivalenceClassMapLock.release()
-      # Perform similarity checking
-      # Case 1:
-      if EquivalentClass != None and CheckedEquivalentClass != None:
-        #assert EquivalentClass in self.EquivalenceClasses
-        #assert CheckedEquivalentClass in self.EquivalenceClasses
-        if EquivalentClass == CheckedEquivalentClass:
-          continue
-        # Do we know what the equivalence relation between the two classes?
-        EQToEQMapLock.acquire()
-        if (EquivalentClass, CheckedEquivalentClass) in self.EQToEQMap:
-          assert (CheckedEquivalentClass, EquivalentClass) in self.EQToEQMap
-          VerifyResult = self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)]
-          EQToEQMapLock.release()
-        else:
-          EQToEQMapLock.release()
-          VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo) 
-          if VerifyResult == True:
-            print("Merged {} and {} eq class".format(Function.getName(), CheckFunction.getName()))
-            # Merge the two equivalent classes
-            EqFunctions = CheckedEquivalentClass.getEquivalentFunctions()
-            EquivalentClass.extend(EqFunctions, CheckedEquivalentClass.getFunctionToArgsMapping())
-            FunctionToEquivalenceClassMapLock.acquire()
-            for EqFunction in EqFunctions:
-              self.FunctionToEquivalenceClassMap[EqFunction] = EquivalentClass
-            FunctionToEquivalenceClassMapLock.release()
-            EquivalenceClassesLock.acquire()
-            if CheckedEquivalentClass in self.EquivalenceClasses:
-              self.EquivalenceClasses.remove(CheckedEquivalentClass)
-            EquivalenceClassesLock.release()
-          EQToEQMapLock.acquire()
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          EQToEQMapLock.release()
-        continue
-      # Case 2:
-      if EquivalentClass == None and CheckedEquivalentClass != None:
-        #assert CheckedEquivalentClass in self.EquivalenceClasses
-        VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-        if VerifyResult == True:
-          EquivalenceClassesLock.acquire()
-          if CheckedEquivalentClass in self.EquivalenceClasses:
-            self.EquivalenceClasses.remove(CheckedEquivalentClass)
-          EquivalenceClassesLock.release()
-          print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
-          CheckedEquivalentClass.addFunction(Function)
-          CheckedEquivalentClass.addFunctionToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap())
-          FunctionToEquivalenceClassMapLock.acquire()
-          self.FunctionToEquivalenceClassMap[Function] = CheckedEquivalentClass
-          FunctionToEquivalenceClassMapLock.release()
-          EquivalenceClassesLock.acquire()
-          self.EquivalenceClasses.add(CheckedEquivalentClass)
-          EquivalenceClassesLock.release()
-        else:
-          EquivalentClass = RoseEquivalenceClass()
-          print("--Added {} to new eq class".format(Function.getName()))
-          EquivalentClass.addFunction(Function)
-          EquivalentClass.addFunctionToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap()) 
-          FunctionToEquivalenceClassMapLock.acquire()
-          self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-          FunctionToEquivalenceClassMapLock.release()
-          EquivalenceClassesLock.acquire()
-          self.EquivalenceClasses.add(EquivalentClass)
-          EquivalenceClassesLock.release()
-          EQToEQMapLock.acquire()
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          EQToEQMapLock.release()
-        continue
-      # Case 3:
-      if EquivalentClass != None and CheckedEquivalentClass == None:
-        #assert EquivalentClass in self.EquivalenceClasses
-        VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-        if VerifyResult == True:
-          EquivalenceClassesLock.acquire()
-          if EquivalentClass in self.EquivalenceClasses:
-            self.EquivalenceClasses.remove(EquivalentClass)
-          EquivalenceClassesLock.release()
-          print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
-          EquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap())   
-          FunctionToEquivalenceClassMapLock.acquire()
-          self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
-          FunctionToEquivalenceClassMapLock.release()
-          EquivalenceClassesLock.acquire()
-          self.EquivalenceClasses.add(EquivalentClass)
-          EquivalenceClassesLock.release()
-        else:
-          CheckedEquivalentClass = RoseEquivalenceClass()
-          print("--Added {} to new eq class".format(CheckFunction.getName()))
-          CheckedEquivalentClass.addFunction(CheckFunction)
-          CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap())
-          FunctionToEquivalenceClassMapLock.acquire()
-          self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
-          FunctionToEquivalenceClassMapLock.release()
-          EquivalenceClassesLock.acquire()
-          self.EquivalenceClasses.add(CheckedEquivalentClass)
-          EquivalenceClassesLock.release()
-          EQToEQMapLock.acquire()
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          EQToEQMapLock.release()
-        continue
-      # Case 4:
-      if EquivalentClass == None and CheckedEquivalentClass == None:
-        VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-        if VerifyResult == True:
-          EquivalentClass = RoseEquivalenceClass()
-          EquivalentClass.addFunction(Function)
-          EquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctionToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap())
-          EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap()) 
-          FunctionToEquivalenceClassMapLock.acquire()
-          self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-          self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
-          FunctionToEquivalenceClassMapLock.release()
-          EquivalenceClassesLock.acquire()
-          self.EquivalenceClasses.add(EquivalentClass)
-          EquivalenceClassesLock.release()
-        else:
-          EquivalentClass = RoseEquivalenceClass()
-          CheckedEquivalentClass = RoseEquivalenceClass()
-          print("--Added {} and {} to new eq classes".format(CheckFunction.getName(), Function.getName()))
-          EquivalentClass.addFunction(Function)
-          CheckedEquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctionToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap()) 
-          CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap()) 
-          FunctionToEquivalenceClassMapLock.acquire()
-          self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-          self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
-          FunctionToEquivalenceClassMapLock.release()
-          EquivalenceClassesLock.acquire()
-          self.EquivalenceClasses.add(EquivalentClass)
-          self.EquivalenceClasses.add(CheckedEquivalentClass)
-          EquivalenceClassesLock.release()
-          EQToEQMapLock.acquire()
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          EQToEQMapLock.release()
-        continue
-
-
-  def parallelizeSimilarityChecking(self):
+  def refineSimilarityChecking(self):
     # Track verification results
-    print("len(FunctionInfoList):")
-    print(len(self.FunctionInfoList))
-    Threads = list()
-    for FunctionInfo in self.FunctionInfoList:
-      Thread = threading.Thread(target=self.lambdaFunctionForParallelSimilarityChecking, args=(FunctionInfo,))
-      Threads.append(Thread)
-    for Thread in Threads:
-      Thread.start()
-    for Thread in Threads:
-      Thread.join()
-    # Try another heuristic
-    print("****TRY NEW HEURISTIC****")
-    #self.reorderArgsAndPerformSimilarityChecking()
-    #self.eliminateUnecessaryArgs()
-    # Summmarize
-    self.summarize()
-    # Generate LLVM intrinsics
-    #self.genLLVMIntrinsics()
-    # Generate Rose IR to LLVM IR mappings
-    #self.genRoseIRToLLVMIRMappings()
+    EQToEQMap = dict()
+    EQToResultMap = dict()
+    #RemovedEquivalenceClasses = set()
+    EquivalenceClasses = set()
+    EquivalenceClasses.update(self.EquivalenceClasses)
+    Suffix = -1
+    for EquivalenceClass in EquivalenceClasses:
+      #if EquivalenceClass in RemovedEquivalenceClasses:
+      #  continue
+      for CheckEquivalenceClass in EquivalenceClasses:
+        #if CheckEquivalenceClass in RemovedEquivalenceClasses:
+        #  continue
+        if EquivalenceClass == CheckEquivalenceClass:
+          continue
+        if (CheckEquivalenceClass, EquivalenceClass) in EQToResultMap:
+            continue
+        if EquivalenceClass in EQToEQMap:
+          EquivalenceClass = EQToEQMap[EquivalenceClass]
+        if CheckEquivalenceClass in EQToEQMap:
+          CheckEquivalenceClass = EQToEQMap[CheckEquivalenceClass]
+        if EquivalenceClass == CheckEquivalenceClass:
+          continue
+        Function = EquivalenceClass.getAFunction()
+        CheckFunction = CheckEquivalenceClass.getAFunction()
+        print("CHECKING AGAINST EQUIVALENCE CLASS \n{} AND \n{}".format(str(Function), str(CheckFunction)))
+        if self.doFunctionsQualifyForSimilarityChecking(Function, CheckFunction)  == False:
+          continue
+        # Punches holes in one function
+        ClonedCheckFunction = CheckFunction.clone()
+        CheckFunctionInfo = self.FunctionToFunctionInfo[CheckFunction]
+        HolesList = self.punchHolesInFunction(ClonedCheckFunction, CheckFunctionInfo.getContext())
+        Suffix += 1
+        VerifyResult = self.verifyUsingSynthesis(ClonedCheckFunction,Function, HolesList, Suffix)
+        if VerifyResult == True:
+          # Now that synthesis has worked, we will now perform verification again to verify that
+          # the new sketch and the old sketch are equivalent on the old sketch's inputs.
+          # First the new sketch
+          print("Merged {} and {} eq class".format(Function.getName(), ClonedCheckFunction.getName()))
+          # Merge the two equivalent classes
+          CheckedEqFunctions = CheckEquivalenceClass.getEquivalentFunctions()
+          print("CheckedEqFunctions:")
+          print(CheckedEqFunctions)
+          PermutedCheckFunctions = list()
+          FunctionToArgsMapping = dict()
+          for OrgFunction in CheckedEqFunctions:
+            print("OrgFunction:")
+            OrgFunction.print()
+            print("CheckFunction:")
+            CheckFunction.print()
+            if OrgFunction == CheckFunction:
+              PermutedCheckFunctions.append(PermCheckFunction)
+              FunctionToArgsMapping[PermCheckFunction] = PermArgsToConcreteValMap
+              self.completeFunctionInfo(PermCheckFunctionInfo, CheckFunctionInfo, ArgPermutation)
+              self.FunctionToFunctionInfo[PermCheckFunction] = PermCheckFunctionInfo
+              continue
+            CopyFunction = self.createPermutatedFunction(OrgFunction, ArgPermutation)
+            PermutedCheckFunctions.append(CopyFunction)
+            OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
+            OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
+            CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction, \
+                                  OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+            FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
+            OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
+            CopyFunctionInfo = RoseFunctionInfo()
+            CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
+            CopyFunctionInfo.addArgsToConcreteMap(CopyFuncArgsToConcreteValMap)
+            self.completeFunctionInfo(CopyFunctionInfo, OrgFunctionInfo, ArgPermutation)
+            self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
+          EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
+          for EqFunction in PermutedCheckFunctions:
+            self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
+          self.EquivalenceClasses.remove(CheckEquivalenceClass)
+          #RemovedEquivalenceClasses.add(CheckEquivalenceClass)
+          EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
+          print("DONE MERGING")
+          break
+
 
 if __name__ == '__main__':
   SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
@@ -2435,5 +2513,4 @@ if __name__ == '__main__':
   #SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.performSimilarityChecking()
   #SimilarityChecker.parallelizeSimilarityChecking()
-
 

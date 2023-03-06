@@ -159,33 +159,14 @@ class GetLengthDef:
         for ctx in dsl_inst.contexts:
             cond_clauses.append(self.emit_ctx_len_clause(ctx, dsl_inst.get_sample_context()))
 
-        if len(cond_clauses) == 1 and output_size_arg != None:
+        if len(cond_clauses) == 1 and output_size_arg != None and False:
             clause.append(output_size_arg.name)
         else:
+
+            cond_clauses.append("[else (error \"Unable to infer length for {}: \"  prog)]".format(dsl_inst.name))
             cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
+
             clause.append(cond_expr)
-        """
-
-        if output_size_arg != None:
-            assert output_size_arg != None, "DSL instruction does not define output size"
-
-            #clause.append(output_size_arg.name)
-            cond_clauses = []
-            # Iterate over contexts and condition on parameter values
-            for ctx in dsl_inst.contexts:
-                cond_clauses.append(self.emit_ctx_len_clause(ctx))
-
-            if len(cond_clauses) == 1:
-                clause.append(output_size_arg.name)
-            else:
-                cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
-                clause.append(cond_expr)
-
-
-        else:
-            self.unclear_lengths.append(dsl_inst)
-            clause.append("-1 ;; Unable to reason about length")
-        """
 
 
 

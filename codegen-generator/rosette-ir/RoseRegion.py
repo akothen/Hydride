@@ -108,7 +108,7 @@ class RoseRegion:
       return False
 
   def isParentValid(self, Parent):
-    # assert isinstance(self, RoseAbstractions.RoseUndefRegion) # todo: Kunal — not necessarily ??
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     if isinstance(Parent, RoseAbstractions.RoseForLoop) \
     or isinstance(Parent, RoseAbstractions.RoseFunction) \
     or isinstance(Parent, RoseAbstractions.RoseCond):
@@ -137,7 +137,7 @@ class RoseRegion:
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     # Make sure the keys are valid
-    self.areKeysValid()
+    assert self.areKeysValid()
     return self.Keys
   
   def getChildren(self, Key = None):

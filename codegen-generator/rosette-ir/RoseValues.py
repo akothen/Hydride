@@ -142,7 +142,18 @@ class RoseConstant(RoseValue):
           print(NumElem)
           for Idx in range(NumElem):
             Index = Idx * int(ElemBitwidth / 4)
-            ElemStr = HexValStr[Index : (Index + int(ElemBitwidth / 4))]
+            print("INDEX:")
+            print(Index)
+            print("ElemBitwidth:")
+            print(ElemBitwidth)
+            print("(Index + int(ElemBitwidth / 4)):")
+            print(Index + int(ElemBitwidth / 4))
+            if Index != (Index + int(ElemBitwidth / 4)):
+              ElemStr = HexValStr[Index : (Index + int(ElemBitwidth / 4))]
+            else:
+              ElemStr = HexValStr[Index]
+            print("org ElemStr:")
+            print(ElemStr)
             ElemStr = "0x" + ElemStr
             print("ElemStr:")
             print(ElemStr)

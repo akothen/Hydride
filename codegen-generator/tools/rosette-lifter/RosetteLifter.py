@@ -21,16 +21,18 @@ class RosetteLifter:
     self.ID = -1
     self.RoseValToLLVMType = dict()
     self.OpList = list()
-    self.ParamToType = dict()
+    #self.ParamToType = dict()
     self.Params = list()
+    self.ParamToIndex = dict()
     self.NameToRoseVal = dict()
 
   def reset(self):
     self.ID = -1
     self.RoseValToLLVMType = dict()
     self.OpList = list()
-    self.ParamToType = dict()
+    #self.ParamToType = dict()
     self.Params = list()
+    self.ParamToIndex = dict()
     self.NameToRoseVal = dict()
   
   def genUniqueID(self):
@@ -50,6 +52,12 @@ class RosetteLifter:
       print("self.RoseValToLLVMType of Retun value:")
       print(self.RoseValToLLVMType[RetValue])
       LLVMRetType = self.RoseValToLLVMType[RetValue]
+      # Reorder the paramter arguments depending on the
+      # register number in the Rosette code.
+      OldParamList = list()
+      OldParamList.extend(self.Params)
+      for Param in OldParamList:
+        self.Params[self.ParamToIndex[Param]] = Param
       # Generate a Rosette function
       print("self.Params:")
       print(self.Params)
@@ -124,10 +132,10 @@ class RosetteLifter:
     if isinstance(RosetteAST, int):
       return RoseConstant.create(RosetteAST, RoseIntegerType.create(32))
     if isinstance(RosetteAST, list):
-      print("RosetteAST[0]:")
+      print("--RosetteAST[0]:")
       print(RosetteAST[0])
       if isinstance(RosetteAST[0], list):
-        if ";" in RosetteAST[0][0] and "reg" in  RosetteAST[0][0]:
+        if ";" in RosetteAST[0][0] and "reg" in RosetteAST[0][0]:
           # Get the reg info
           Comment = RosetteAST[0][0]
           Comment = Comment.strip()
@@ -141,46 +149,67 @@ class RosetteLifter:
           Type = Comment[OpenParanIdx :]
           print("Type:")
           print(Type)
-          self.ParamToType[RegInfo] = Type
+          #self.ParamToType[RegInfo] = Type
           # len(reg) = 3. Skip "reg"
           RegNo = int(RegInfo[3:])
           print("RegNo:")
           print(RegNo)
-          if RegNo + 1 > len(self.Params):
-            self.Params = [None] * (RegNo + 1)
-          return self.liftRosetteAST(RosetteAST[1:])
-        # Strip the list off
-        RosetteAST = RosetteAST[0]
-      if RosetteAST[0] == 'bv':
-        print("BV")
-        BitvectorVal = int("0" + RosetteAST[1][1:], 16)
-        return RoseConstant.create(BitvectorVal, RoseBitVectorType.create(RosetteAST[2]))
-      elif RosetteAST[0] == 'lit':
-        ConstantVal = self.liftRosetteAST(RosetteAST[1])
-        assert isinstance(ConstantVal.getType(), RoseBitVectorType)
-        [OutputType] = RosetteAST[-1]
-        self.RoseValToLLVMType[ConstantVal] = self.getLLVMType(OutputType[1:])
-        return ConstantVal
-      elif RosetteAST[0] == 'reg':
-        print("REG")
-        # This register is a binding
-        if RosetteAST[1] in self.Params: 
-          return self.Params[RosetteAST[1]]
-        ParamName = "%" + RosetteAST[0] + str(RosetteAST[1])
-        if ParamName in self.NameToRoseVal:
-          return self.NameToRoseVal[ParamName]
-        else:
-          ParamType = self.getRoseType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
+          ParamName = "%" + RegInfo #RosetteAST[0] + str(RosetteAST[1])
+          assert ParamName not in self.NameToRoseVal
+          ParamType = self.getRoseType(Type)
           print("type(RosetteAST[1]):")
           print(type(RosetteAST[1]))
           print("RosetteAST[1]:")
           print(RosetteAST[1])
           print("CREATING ARGUMENT")
           NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
-          self.Params[RosetteAST[1]] = NewArg
-          self.RoseValToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
+          #self.Params[RosetteAST[1]] = NewArg
+          self.Params.append(NewArg)
+          self.RoseValToLLVMType[NewArg] = self.getLLVMType(Type)
           self.NameToRoseVal[NewArg.getName()] = NewArg
-          return NewArg
+          self.ParamToIndex[NewArg] = int(RegNo)
+          #if RegNo + 1 > len(self.Params):
+          #  self.Params = [None] * (RegNo + 1)
+          return self.liftRosetteAST(RosetteAST[1:])
+        # Strip the list off
+        RosetteAST = RosetteAST[0]
+      if RosetteAST[0] == 'bv':
+        print("BV")
+        print("RosetteAST[1][1:]:")
+        print(RosetteAST[1][1:])
+        # Skip "#b" part of the string
+        if "#b" in RosetteAST[1]:
+          BitvectorVal = int("0b" + RosetteAST[1][2:], 2)
+        else:
+          assert "#x" in RosetteAST[1]
+          BitvectorVal = int("0x" + RosetteAST[1][2:], 16)
+        print("RosetteAST[2]:")
+        print(RosetteAST[2])
+        print("BitvectorVal:")
+        print(BitvectorVal)
+        return RoseConstant.create(BitvectorVal, RoseBitVectorType.create(RosetteAST[2]))
+      elif RosetteAST[0] == 'lit':
+        ConstantVal = self.liftRosetteAST(RosetteAST[1])
+        assert isinstance(ConstantVal.getType(), RoseBitVectorType)
+        print("++++++++++=======ConstantVal:")
+        ConstantVal.print()
+        [OutputType] = RosetteAST[-1]
+        self.RoseValToLLVMType[ConstantVal] = self.getLLVMType(OutputType[1:])
+        return ConstantVal
+      elif RosetteAST[0] == 'reg':
+        print("REG")
+        print("--RosetteAST[1]:")
+        print(RosetteAST[1])
+        # This register is a binding
+        #if RosetteAST[1] in self.Params: 
+        #  return self.Params[RosetteAST[1]]
+        for Param in self.Params:
+          if Param == RosetteAST[1]:
+            return Param
+        ParamName = "%" + RosetteAST[0] + str(RosetteAST[1])
+        if ParamName in self.NameToRoseVal:
+          return self.NameToRoseVal[ParamName]
+        assert False and "Register not defined!"
       elif RosetteAST[0] in InstMap:
         Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
         Op = InstMap[RosetteAST[0]].create("%" + str(self.genUniqueID()), Args)
@@ -188,6 +217,8 @@ class RosetteLifter:
         return Op
       else:
         print("--ELSE")
+        print("RosetteAST[-1]:")
+        print(RosetteAST[-1])
         [OutputType] = RosetteAST[-1]
         OutputRoseType = self.getRoseType(OutputType[1:])
         Args = list(map(self.liftRosetteAST, RosetteAST[1:-1]))

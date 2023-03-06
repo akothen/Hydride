@@ -475,5 +475,229 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize, int32 %outer
 
 
 
+function _mm256_unpackhi_epi16 ( bv a, bv b, %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1, i32 %arg2 ) {
+;; Loop bounds are extracted and constants from loop body
+;; are extracted using backwards and forwards dataflow analysis
+ for ([out.it (range 0 %vectsize %window_size)]) {
+  for ([in.it (range %window_offset %interleavesize %elemsize)]) {
+    %in.it.fact = mul i32 in.it, i32 %arg1
+    %low.offset0 = add i32 in.it.fact, i32 %arg2
+    %low.i = add i32 out.it, i32 %low.offset0
+    %lastidx1 = sub i32 %elemsize, i32 1
+    %high.i = add i32 %low.i, i32 %lastidx1
+    %ext.a = bvextract bv a, i32 %low.i, i32 %high.i, i32 %elemsize
+    %lastidx2 = sub i32 %elemsize, i32 1
+    %6 = add i32 in.it.fact, i32 %lastidx2
+    bvinsert bv %ext.a, bv dst, i32 in.it.fact, i32 %6, i32 %elemsize
+    %ext.b = bvextract bv b, i32 %low.i, i32 %high.i, i32 %elemsize
+    %low.offset1 = add i32 in.it.fact, i32 %arg0
+    %7 = add i32 %low.offset1, i32 out.it
+    %lastidx0 = sub i32 %elemsize, i32 1
+    %8 = add i32 %7, i32 %lastidx0
+    bvinsert bv %ext.b, bv dst, i32 %7, i32 %8, i32 %elemsize
+  }
+ ret bv dst
+}
+
+
+
+
+
+function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
+ for ([%outer.it (range 0 512 128)]) {
+  for ([%inner.it (range 0 128 16)]) {
+   %factor = div int32 %inner.it, int32 2
+   %offset.0 = add int32 %factor, int32 0
+   %low.idx = add int32 %outer.it, int32 %offset.0
+   %high.idx = add int32 %low.idx, int32 7
+   ;; Extract slice from a
+   %ext.a = bvextract bv512 a, int32 %low.idx, int32 %high.idx, int32 8
+   %12 = add int32 %inner.it, int32 7
+   ;; Insert slice from a into dst
+   bvinsert bv8 %ext.a, bv512 dst, int32 %inner.it, int32 %12, int32 8
+   ;; Extract slice from b
+   %ext.b = bvextract bv512 b, int32 %low.idx, int32 %high.idx, int32 8
+   %offset.1 = add int32 %inner.it, int32 8
+   %13 = add int32 %offset.1, int32 %outer.it
+   %14 = add int32 %13, int32 7
+   ;; Insert slice from b into dst
+   bvinsert bv8 %ext.b, bv512 dst, int32 %13, int32 %14, int32 8
+  }
+ }
+ ret bv512 dst
+}
+
+function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
+ for ([%outer.it (range 0 512 128)]) {
+  for ([%inner.it (range 0 128 16)]) {
+   %factor = div int32 %inner.it, int32 2
+   %low.idx = add int32 %outer.it, int32 %factor
+   %high.idx = add int32 %low.idx, int32 7
+   ;; Extract slice from a
+   %ext.a = bvextract bv512 a, int32 %low.idx, int32 %high.idx, int32 8
+   %12 = add int32 %inner.it, int32 7
+   ;; Insert slice from a into dst
+   bvinsert bv8 %ext.a, bv512 dst, int32 %inner.it, int32 %12, int32 8
+   ;; Extract slice from b
+   %ext.b = bvextract bv512 b, int32 %low.idx, int32 %high.idx, int32 8
+   %offset.1 = add int32 %inner.it, int32 8
+   %13 = add int32 %offset.1, int32 %outer.it
+   %14 = add int32 %13, int32 7
+   ;; Insert slice from b into dst
+   bvinsert bv8 %ext.b, bv512 dst, int32 %13, int32 %14, int32 8
+  }
+ }
+ ret bv512 dst
+}
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ for ([%outer.it (range 0 256 128)]) {
+  for ([%inner.it (range 0 128 32)]) {
+   %factor = div int32 %inner.it, int32 2
+   %offset.0 = add int32 %factor, int32 64
+   %low.idx = add int32 %outer.it, int32 %offset.0
+   %high.idx = add int32 %low.idx, int32 15
+   ;; Extract slice from a
+   %ext.a = bvextract bv256 a, int32 %low.idx, int32 %high.idx, int32 16
+   %6 = add int32 %inner.it, int32 15
+   ;; Insert slice from a into dst
+   bvinsert bv16 %ext.b, bv256 dst, int32 %inner.it, int32 %6, int32 16
+   ;; Extract slice from b
+   %ext.b = bvextract bv256 b, int32 %low.idx, int32 %high.idx, int32 16
+   %offset.1 = add int32 %inner.it, int32 16
+   %7 = add int32 %offset.1, int32 %outer.it
+   %8 = add int32 %7, int32 15
+   ;; Insert slice from b into dst
+   bvinsert bv16 %ext.b, bv256 dst, int32 %7, int32 %8, int32 16
+  }
+ }
+ ret bv256 dst
+}
+
+
+
+
+
+
+function _mm256_unpackhi_epi16 ( bv a, bv b, i32 %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1, i32 %arg2 ) {
+ for ([%out.it (range 0 %vectsize %window_size)]) {
+  for ([%in.it (range %window_offset %interleavesize %elemsize)]) {
+    %in.it.fact = mul i32 %in.it, i32 %arg1
+    %low.offset0 = add i32 %in.it, i32 %arg2
+    %low.i = add i32 %out.it, i32 %low.offset0
+    %lastidx1 = sub i32 %elemsize, i32 1
+    %high.i = add i32 %low.i, i32 %lastidx1
+    %ext.a = bvextract bv a, i32 %low.i, i32 %high.i, i32 %elemsize
+    %lastidx2 = sub i32 %elemsize, i32 1
+    %6 = add i32 %in.it.fact, i32 %lastidx2
+    bvinsert bv %ext.a, bv dst, i32 %in.it.fact, i32 %6, i32 %elemsize
+    %ext.b = bvextract bv b, i32 %low.i, i32 %high.i, i32 %elemsize
+    %low.offset1 = add i32 %in.it.fact, i32 %arg0
+    %7 = add i32 %low.offset1, i32 %out.it
+    %lastidx0 = sub i32 %elemsize, i32 1
+    %8 = add i32 %7, i32 %lastidx0
+    bvinsert bv %ext.b, bv dst, i32 %7, i32 %8, i32 %elemsize
+  }
+ ret bv dst
+}
+
+
+function _mm512_unpacklo_epi8 ( bv a, bv b, i32 %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1 ) {
+  for ([%out.it (range 0 %vectsize %window_size)]) {
+    for ([%in.it (range %window_offset %interleavesize %elemsize)]) {
+      %in.it.fact = mul i32 %in.it, i32 %arg1
+      %low.i = add i32 %out.it, i32 %in.it.fact
+      %lastidx1 = sub i32 %elemsize, i32 1
+      %high.i = add i32 %low.i, i32 %lastidx1
+      %ext.a = bvextract bv a, i32 %low.i, i32 %high.i, i32 %elemsize
+      %lastidx2 = sub i32 %elemsize, i32 1
+      %12 = add i32 %in.it.fact, i32 %lastidx2
+      bvinsert bv %ext.a, bv dst, i32 %in.it.fact, i32 %12, i32 %elemsize
+      %ext.b = bvextract bv b, i32 %low.i, i32 %high.i, i32 %elemsize
+      %low.offset1 = add i32 %in.it.fact, i32 %arg0
+      %13 = add i32 %low.offset1, i32 %out.it
+      %lastidx0 = sub i32 %elemsize, i32 1
+      %14 = add i32 %7, i32 %lastidx0
+      bvinsert bv %ext.b, bv dst, i32 %13, i32 %14, i32 %elemsize
+    }
+   ret bv dst
+}
+
+
+function _mm512_unpacklo_epi8 ( bv a, bv b, i32 %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1 ) {
+  for ([%out.it (range 0 %vectsize %window_size)]) {
+    for ([%in.it (range %window_offset %interleavesize %elemsize)]) {
+      %in.it.fact = mul i32 %in.it, i32 %arg1
+      %low.i = add i32 %out.it, i32 %in.it.fact
+      %hole = call @hole.grammar(i32 %out.it, i32 %in.it, i32 %low.i)
+      %lastidx1 = sub i32 %elemsize, i32 1
+      %high.i = add i32 %hole, i32 %lastidx1
+      %ext.a = bvextract bv a, i32 %hole, i32 %high.i, i32 %elemsize
+      %lastidx2 = sub i32 %elemsize, i32 1
+      %12 = add i32 %in.it.fact, i32 %lastidx2
+      bvinsert bv %ext.a, bv dst, i32 %in.it.fact, i32 %12, i32 %elemsize
+      %ext.b = bvextract bv b, i32 %hole, i32 %high.i, i32 %elemsize
+      %low.offset1 = add i32 %in.it.fact, i32 %arg0
+      %13 = add i32 %low.offset1, i32 %out.it
+      %lastidx0 = sub i32 %elemsize, i32 1
+      %14 = add i32 %7, i32 %lastidx0
+      bvinsert bv %ext.b, bv dst, i32 %13, i32 %14, i32 %elemsize
+    }
+   ret bv dst
+}
+
+
+function _mm512_unpacklo_epi8 ( bv a, bv b, i32 %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1 ) {
+  for ([%out.it (range 0 %vectsize %window_size)]) {
+    for ([%in.it (range %window_offset %interleavesize %elemsize)]) {
+      %in.it.fact = mul i32 %in.it, i32 %arg1
+      %low.i = add i32 %out.it, i32 %in.it.fact
+      %filled.hole = add i32 %low.i, i32 0
+      %lastidx1 = sub i32 %elemsize, i32 1
+      %high.i = add i32 %filled.hole, i32 %lastidx1
+      %ext.a = bvextract bv a, i32 %filled.hole, i32 %high.i, i32 %elemsize
+      %lastidx2 = sub i32 %elemsize, i32 1
+      %12 = add i32 %in.it.fact, i32 %lastidx2
+      bvinsert bv %ext.a, bv dst, i32 %in.it.fact, i32 %12, i32 %elemsize
+      %ext.b = bvextract bv b, i32 %filled.hole, i32 %high.i, i32 %elemsize
+      %low.offset1 = add i32 %in.it.fact, i32 %arg0
+      %13 = add i32 %low.offset1, i32 %out.it
+      %lastidx0 = sub i32 %elemsize, i32 1
+      %14 = add i32 %7, i32 %lastidx0
+      bvinsert bv %ext.b, bv dst, i32 %13, i32 %14, i32 %elemsize
+    }
+   ret bv dst
+}
+
+
+function _mm512_unpacklo_epi8 ( bv a, bv b, i32 %vectsize, i32 %window_size, i32 %window_offset, 
+                                i32 %interleavesize, i32 %elemsize, i32 %arg0, i32 %arg1, i32 %arg2 ) {
+  for ([%out.it (range 0 %vectsize %window_size)]) {
+    for ([%in.it (range %window_offset %interleavesize %elemsize)]) {
+      %in.it.fact = mul i32 %in.it, i32 %arg1
+      %low.i = add i32 %out.it, i32 %in.it.fact
+      %filled.hole = add i32 %low.i, i32 %arg2
+      %lastidx1 = sub i32 %elemsize, i32 1
+      %high.i = add i32 %filled.hole, i32 %lastidx1
+      %ext.a = bvextract bv a, i32 %filled.hole, i32 %high.i, i32 %elemsize
+      %lastidx2 = sub i32 %elemsize, i32 1
+      %12 = add i32 %in.it.fact, i32 %lastidx2
+      bvinsert bv %ext.a, bv dst, i32 %in.it.fact, i32 %12, i32 %elemsize
+      %ext.b = bvextract bv b, i32 %filled.hole, i32 %high.i, i32 %elemsize
+      %low.offset1 = add i32 %in.it.fact, i32 %arg0
+      %13 = add i32 %low.offset1, i32 %out.it
+      %lastidx0 = sub i32 %elemsize, i32 1
+      %14 = add i32 %7, i32 %lastidx0
+      bvinsert bv %ext.b, bv dst, i32 %13, i32 %14, i32 %elemsize
+    }
+   ret bv dst
+}
+
+
 
 

@@ -22,6 +22,7 @@
 
 (define (create-symbolic-bv bw) 
   (define-symbolic* sym_bv (bitvector bw))
+
   sym_bv
   )
 

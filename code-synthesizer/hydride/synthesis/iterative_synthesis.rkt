@@ -12,9 +12,11 @@
 (require hydride/utils/target)
 (require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
+(require hydride/ir/hydride/visitor)
 
 (require hydride/ir/hvx/interpreter)
 (require hydride/ir/hvx/const_fold)
+(require hydride/ir/hvx/visitor)
 
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
@@ -22,6 +24,7 @@
 
 (require (only-in racket build-vector))
 (require (only-in racket build-list))
+;(require (only-in racket/sandbox with-deep-time-limit))
 
 (provide (all-defined-out))
 
@@ -42,7 +45,18 @@
   )
 
 
+(define optimize-bound-found #f)
 
+
+(define (set-optimize-bound-found val)
+  (set! optimize-bound-found val)
+  )
+
+(define iterative-optimize #f)
+
+(define (set-iterative-optimize)
+  (set! iterative-optimize #t)
+  )
 
 
 
@@ -74,13 +88,42 @@
       #f
       (begin 
 
+        (define synth-sol-lane (invoke_sol_lane lane-idx symbols))
+        (displayln "Verify across lanes hydride:")
+        (displayln synth-sol-lane)
+        (displayln "Verify across lanes spec:")
+        (displayln (invoke_ref_lane lane-idx symbols))
+        (displayln "Is this printed?")
+
+        (define verification-timeout? #f)
         (define cex 
-          (verify 
-            (begin
-              (assert (bveq   (invoke_ref_lane lane-idx symbols) (invoke_sol_lane lane-idx symbols)))
-              )
+          (cond 
+            [verification-timeout? 
+              (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                             (with-deep-time-limit 60
+                                                   (verify 
+                                                     (begin
+                                                       (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
+                                                       )
+                                                     )
+                                                   )
+
+                             )
+              ]
+            [else
+              (verify 
+                (begin
+                  (assert (bveq   (invoke_ref_lane lane-idx symbols) synth-sol-lane))
+                  )
+                )
+              ]
+            
+            
             )
+          
+          
           )
+
         (define verified? (not (sat? cex))) ;; True i verified equal on lane-idx
 
         (if (not verified?)
@@ -134,13 +177,38 @@
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
   (debug-log (format "Symbols: ~a\n" symbols))
+  (define verification-timeout? #f)
   (define cex 
-    (verify 
-      (begin
-          (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
+    (cond 
+      [verification-timeout? 
+        (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                       (with-deep-time-limit 60
+                                             (verify 
+                                               (begin
+                                                 (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
 
-           )
+                                                 )
+                                               )
+                                             )
+                       )
+        ]
+      [else
+        (verify 
+          (begin
+            (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
+
+            )
+          )
+
+        ]
+
+
       )
+
+
+
+
+
     )
   (define end (current-seconds))
   (debug-log (format "Verification took ~a seconds\n" (- end start)))
@@ -190,7 +258,7 @@
   )
 
 
-(define (general-verify-synth-sol invoke_f1 invoke_f2  bw-list assert-query-fn generate-params solver)
+(define (general-verify-synth-sol invoke_f1 invoke_f2  bw-list assert-query-fn generate-params-f1 generate-params-f2 solver)
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
@@ -215,15 +283,13 @@
 
         (define new-bvs (build-vector num-bw helper))
         (debug-log new-bvs)
-        (define spec_res (invoke_f2 (generate-params new-bvs)))
+        (define spec_res (invoke_f2 (generate-params-f2 new-bvs)))
         (debug-log spec_res)
 
-        (define synth_res (invoke_f1 (generate-params new-bvs)))
+        (define synth_res (invoke_f1 (generate-params-f1 new-bvs)))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res))
         (values #f new-bvs)
-
         )
-
       (values #t '()) ;; No cex exists => Verified solution
 
       )
@@ -251,6 +317,7 @@
 
 
 (define (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+  (displayln "get-concrete-asserts")
 
 
   (define (helper i)
@@ -288,6 +355,7 @@
 
 (define (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin 
+    (displayln "*** regular-concrete-synthesis ***")
     (synthesize 
       #:forall (list cex-ls)
       #:guarantee 
@@ -305,17 +373,22 @@
     (debug-log "*********** z3-optimize *****************")
 
     (define sol?
-            (optimize 
-              #:minimize (list (cost-fn grammar))
-              #:guarantee 
-                ;; loop over inputs and add asserts
-                (begin 
-                        (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-                        ;(assert (< (cost-fn grammar) cost-bound))
-                  )
+      ;(with-handlers ([exn:fail? (lambda (exn) (unsat))])
+      ;               (with-deep-time-limit 10000 ;7200 ; 2 hours timeout
+                                           (optimize 
+                                             #:minimize (list (cost-fn grammar))
+                                             #:guarantee 
+                                             ;; loop over inputs and add asserts
+                                             (begin 
+                                               (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                                               ;(assert (< (cost-fn grammar) cost-bound))
+                                               )
 
-                )
-              )
+                                             )
+       ;                                    )
+
+        ;             )
+      )
     (if (sat? sol?)
       (begin
         (define mat (evaluate grammar sol?))
@@ -328,6 +401,46 @@
     )
 )
 
+(define (z3-optimize-iterative assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+  (begin
+    (debug-log (format "z3-optimize iterative with cost-bound ~a ...\n" cost-bound))
+    (debug-log "Synthesizing...\n")
+
+    (define sol?
+      (synthesize 
+        #:forall (list cex-ls)
+        #:guarantee 
+        (begin 
+          ;; loop over inputs and add asserts
+          (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+          (assert (< (cost-fn grammar) cost-bound))
+          )
+        ) 
+      )
+
+
+    (define satisfiable? (sat? sol?))
+
+
+
+
+    (define materialize 
+      (if satisfiable? 
+        (evaluate grammar sol?)
+        '()
+        )
+      )
+
+    (if satisfiable?
+      (debug-log materialize)
+      '()
+      )
+
+    sol?
+
+
+    )
+  )
 
 (define (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin
@@ -375,15 +488,22 @@
 
 
 (define (iterative-synth-query assert-query-fn grammar cex-ls failing-ls optimize? cost-fn cost-bound solver failed-sols) 
-  (if optimize?
-    (if 
-      (equal? solver 'z3)
-      (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
-      (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
-      )
 
-    (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+  (cond
+    [(and optimize? (equal? solver 'boolector))
+        (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+     ]
+    [(and optimize? (equal? solver 'z3) iterative-optimize)
+        (z3-optimize-iterative assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+     ]
+    [(and optimize? (equal? solver 'z3) )
+        (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+     ]
+    [else
+        (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
+      ]
     )
+  
   )
 
 
@@ -460,11 +580,49 @@
   differing-lanes
 )
 
+;; Synthesis may yield a union node for on of the synthesized sub-expressions
+;; hence we can make it concrete by selecting the first concrete element recursively
+;; from the expression
+(define (de-union-expression expr visitor-fn)
+
+  (debug-log "De-union expression")
+
+  (define (fn e)
+    (cond
+      [(union? e)
+       (displayln "Union term in expr")
+       (displayln e)
+       (for/list ([i (union-contents e)])
+                 (displayln "===================")
+                 (displayln i)
+                 (displayln (cdr i))
+                 )
+       ;e
+       (define extracted (cdr (list-ref (union-contents e) 0)))
+       (visitor-fn extracted fn)
+       ]
+      [else e]
+      )
+    )
+
+  (define concretized-expr (visitor-fn expr fn))
+
+   (debug-log (format "Is expression concrete? ~a\n" (concrete?  concretized-expr)))
+   concretized-expr
+
+
+  )
+
 
 (define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn cexs failing-lanes cost-bound solver failed-sols)
   (debug-log "synthesize-sol-iterative")
 
-
+  (cond 
+    [(and optimize? (not iterative-optimize) optimize-bound-found)
+     (debug-log "Escaping early as other thread found optimize bound solution")
+     (values #f '() -1)
+     ]
+    [else 
   ;; Clear the verification condition up till this point
   (clear-vc!)
 
@@ -524,6 +682,7 @@
 
     (define interpret-res (extract high low full-interpret-res))
 
+
     (define halide-res 
         (invoke_ref_lane (+ random-idx 0) env)
       )
@@ -570,14 +729,43 @@
     )
 
 
-  (define boolector-opt-case (and
+  (define iterative-opt-case (and
     optimize?
-    (equal? solver 'boolector)
+    ;(equal? solver 'boolector)
+    iterative-optimize
     ))
 
-  (debug-log (format "Is this boolector optimization case ~a ?\n" boolector-opt-case))
+  (debug-log (format "Is this iterative optimization case ~a ?\n" iterative-opt-case))
+
+
+      (define visitor-functor 
+        (cond
+          [(equal? target 'x86)
+           hydride:visitor
+           ]
+          [(equal? target 'hvx)
+           hvx:visitor
+           ]
+          )
+        )
 
   (define is-union (not (concrete? materialize)))
+
+
+
+  ;(set! materialize
+  ;  (cond
+  ;    [is-union
+  ;      (set! is-union #f)
+  ;      (de-union-expression materialize visitor-functor)
+  ;      ]
+  ;    [else
+  ;      materialize
+  ;      ]
+  ;    )
+  ;  )
+
+
 
   (cond 
     [(and satisfiable? (not is-union))
@@ -642,7 +830,7 @@
         (if 
 
           ;; Check if optimizations is enabled and the current solver is boolector
-          boolector-opt-case
+          iterative-opt-case
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
@@ -667,7 +855,19 @@
             )
 
           ;; If not doing optimizaiton and boolector then return current verified solution directly
-          (values satisfiable? materialize elapsed_time)
+          (begin
+            (if (and optimize? (not iterative-opt-case))
+              
+                (begin
+                 
+                  (set-optimize-bound-found #t)
+                  (values satisfiable? materialize elapsed_time) 
+                  )
+
+                (values satisfiable? materialize elapsed_time)
+              )
+            
+            )
           )
 
 
@@ -698,7 +898,7 @@
     ;; Found a solution, but it contains a symbolic
     ;; union term as one of the sub-trees. Add another
     ;; counter example and re-attempt synthesis.
-    [satisfiable? 
+    [(and satisfiable? (<= (length cex-ls) 15))
       (begin
         (debug-log "Contains symbolic union, retry synthesis")
         (debug-log "Union solution:")
@@ -714,9 +914,19 @@
         
         )
       ]
+    ;; Found union-solutions and exceed number of CEXs
+    ;; , return failure
+    [satisfiable?
+        (values #f materialize elapsed_time)
+     ]
     [else (values satisfiable? materialize elapsed_time) ;; If not satisfiable just return current state
           ]
     )
+      
+      ]
+    )
+
+
 
 
   )
@@ -724,7 +934,7 @@
 
 
 
-(define (general-synthesize-sol-iterative invoke_f1 invoke_f2 bitwidth-list generate-params cexs solver)
+(define (general-synthesize-sol-iterative invoke_f1 invoke_f2 bitwidth-list generate-params-f1 generate-params-f2 cexs solver)
 
   
   (if (equal? solver 'boolector)
@@ -757,14 +967,18 @@
 
 
 
-  (define (assert-query-fn env)
-    (define parameters (generate-params env))
-    (assert (equal? (invoke_f1 parameters)  (invoke_f2 parameters)))
+  (define (assert-query-fn env idx)
+    (define parameters-f1 (generate-params-f1 env))
+    (define parameters-f2 (generate-params-f2 env))
+    (assert (equal? (invoke_f1 parameters-f1)  (invoke_f2 parameters-f2)))
     )
+
+  (define failing-ls (for/list ([i (range (length cex-ls))])  0))
+
 
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-fn invoke_f1 cex-ls #f '() 0 solver)
+    (iterative-synth-query assert-query-fn invoke_f1 cex-ls failing-ls #f '() 0 solver '())
     )
 
   (define end_time (current-seconds))
@@ -784,7 +998,7 @@
       )
     )
 
-  (define boolector-opt-case #f)
+  (define iterative-opt-case #f)
 
 
   (if 
@@ -797,8 +1011,8 @@
       (debug-log materialize)
       (print-forms sol?)
       (displayln "Testing materialized!")
-      (println (invoke_f2 (generate-params (list-ref cex-ls 0))))
-      (println (evaluate (materialize (generate-params (list-ref cex-ls 0))) sol?))
+      (println (invoke_f2 (generate-params-f2 (list-ref cex-ls 0))))
+      (println (evaluate (materialize (generate-params-f1 (list-ref cex-ls 0))) sol?))
 
 
       (define (exec-synth-sol env)
@@ -806,14 +1020,15 @@
         )
 
       (define (assert-query-mat-fn env)
-        (define parameters (generate-params env))
+        (define parameters-f1 (generate-params-f1 env))
+        (define parameters-f2 (generate-params-f2 env))
 
-        (assert (equal? (exec-synth-sol parameters)  (invoke_f2 parameters)))
+        (assert (equal? (exec-synth-sol parameters-f1)  (invoke_f2 parameters-f2)))
         )
 
       (define-values 
         (verified? new-cex) 
-                (general-verify-synth-sol exec-synth-sol invoke_f2 bitwidth-list assert-query-mat-fn generate-params  solver)
+                (general-verify-synth-sol exec-synth-sol invoke_f2 bitwidth-list assert-query-mat-fn generate-params-f1 generate-params-f2  solver)
         )
 
 
@@ -827,7 +1042,7 @@
 
 
             ;; If not verified then attempt synthesizing with appended counter example
-            (general-synthesize-sol-iterative invoke_f1 invoke_f2  bitwidth-list generate-params 
+            (general-synthesize-sol-iterative invoke_f1 invoke_f2  bitwidth-list generate-params-f1 generate-params-f2
                                       (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
                                       solver
                                       )

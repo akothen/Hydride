@@ -23,13 +23,22 @@ class RosetteParser:
       print( self.RosetteCode)
 
     def nextToken(self):
-      while True:
+      print("NEXT TOKEN")
+      while (self.Index < len(self.RosetteCode)) or len(self.Line) != 0:
         if self.Line == "":
+          print("self.Index:")
+          print(self.Index)
+          print("len(self.RosetteCode) - 1:")
+          print(len(self.RosetteCode) - 1)
           if self.Index != len(self.RosetteCode) - 1:
             self.Line = self.RosetteCode[self.Index]
             self.Index += 1
           else:
-            break
+            if self.RosetteCode[len(self.RosetteCode) - 1].strip() == '\n':
+              break
+            else:
+              self.Line = self.RosetteCode[self.Index]
+              self.Index += 1
         print("PARSED LINE:")
         print(self.Line)
         Token, self.Line = re.match(RosetteParser.RosetteTokenizer.Tokenizer, \
@@ -41,6 +50,7 @@ class RosetteParser:
         if Token != '': #and not Token.startswith(";"):
           print("--")
           return Token
+      print("NEXT TOKEN IS NONE")
       return None
 
   def tokenize(self, Code):

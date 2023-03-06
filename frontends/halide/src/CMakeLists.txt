@@ -51,6 +51,7 @@ set(HEADER_FILES
     DeviceArgument.h
     DeviceInterface.h
     Dimension.h
+    DistributeVec.h
     EarlyFree.h
     Elf.h
     EliminateBoolVectors.h
@@ -218,6 +219,7 @@ set(SOURCE_FILES
     DeviceArgument.cpp
     DeviceInterface.cpp
     Dimension.cpp
+    DistributeVec.cpp
     EarlyFree.cpp
     Elf.cpp
     EliminateBoolVectors.cpp

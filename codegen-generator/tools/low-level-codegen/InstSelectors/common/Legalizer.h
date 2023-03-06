@@ -315,4 +315,3 @@ public:
 
 #endif  // HYDRIDE_LEGALIZER_H
 
-

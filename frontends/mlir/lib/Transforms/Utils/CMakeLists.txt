@@ -3,6 +3,7 @@ add_mlir_library(MLIRTransformUtils
   DialectConversion.cpp
   FoldUtils.cpp
   GreedyPatternRewriteDriver.cpp
+  HydrideUtils.cpp
   InliningUtils.cpp
   LoopInvariantCodeMotionUtils.cpp
   RegionUtils.cpp

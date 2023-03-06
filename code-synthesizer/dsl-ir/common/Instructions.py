@@ -1,4 +1,5 @@
 from common.Types import *
+import sys
 
 
 SYM_BV_STR =  "SYMBOLIC_BV_"
@@ -27,7 +28,7 @@ BV_OPS = [
     "bvrol", "bvror",
     "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
     "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
-    "bvlt", "bvle", "bvgt", "bvge",
+    "bvlt", "bvle", "bvgt", "bvge", "bvmulnw"
 ]
 
 BV_OP_VARIANTS = [
@@ -142,7 +143,7 @@ class Context:
                  in_precision_index = None,
                  out_precision_index = None, cost = None,
                  signedness = None, in_lanesize_index = None,
-                 out_lanesize_index = None):
+                 out_lanesize_index = None, semantics = None):
         self.name= name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
@@ -158,27 +159,160 @@ class Context:
         self.out_precision_index = out_precision_index
         self.cost = cost
         self.signedness = signedness
+        self.semantics = semantics
+        self.precision_scaled = False
 
         self.num_args = len(args)
         self.parse_args(args)
 
 
+
+    def get_bv_ops(self):
+        function_prototype = self.semantics[0].replace("(define", "").lstrip()
+
+        # Map the formal parameter names to instructions
+        # formal argument index
+
+        formal_param_to_arg_idx  = {}
+
+        tokens = function_prototype.replace("\"","").replace(")","").replace("(","").strip().split(" ")
+        tokens = [tk for tk in tokens if tk != ""]
+
+        # token 0 is the name of the instruction
+        for idx, token in enumerate(tokens[1:]):
+            formal_param_to_arg_idx[token] = idx
+
+
+
+
+
+        # Helper method to handle higher level bvops with parameterized signedness
+        def handle_signed_variant_op(op_name, line):
+            substr = line.split(op_name)[-1].replace(")","").replace("\"","").strip()
+            # Check bvadd's signedness
+            signedness_val = substr.split(" ")[-1]
+
+            # Signedness could either be a constant value or a formal parameter
+
+            signedness = None
+
+            if signedness_val == "-1":
+                signedness = None
+            elif signedness_val == "0":
+                signedness = 0
+            elif signedness == "1":
+                signedness = 1
+            elif signedness_val in formal_param_to_arg_idx:
+                index = formal_param_to_arg_idx[signedness_val]
+                arg = self.context_args[index]
+                assert isinstance(arg, Integer), "Operation signedness must be of integer type"
+                assert arg.value in [0,-1,1], "Signedness of bvoperation must be in [0,-1,1]"
+
+                if arg.value == -1:
+                    signedness = None
+                else:
+                    signedness = arg.value
+
+            else:
+                assert False, "Unable to infer bvop signedness for  {} in line {}".format(self.name, line)
+
+            return get_variant_by_sign(op_name, signedness)
+
+        operations = []
+        for line in self.semantics[1:]:
+            for bvop in BV_OPS:
+
+
+                # only include bvmul when
+                # bvmul is in the line
+                # but the other saturating operations
+                # arent
+                if bvop == "bvmul" and bvop in line:
+                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw", "bvmulnw"]])
+                    if insert_bvmul:
+                        operations.append(bvop)
+                elif bvop == "bvadd" and bvop in line:
+                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw", "bvaddnw"]])
+                    if insert_bvadd:
+                        operations.append(bvop)
+                elif bvop == "bvsub" and bvop in line:
+                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw","bvsubnw" ]])
+                    if insert_bvsub:
+                        operations.append(bvop)
+                elif bvop in ["bvaddnw", "bvsubnw", "bvsizeext", "bvsaturate", "bvdiv",
+                              "bvrem", "bvmin", "bvmax", "bvlt", "bvle", "bvgt", "bvge"] and bvop in line:
+                    specialized_op = handle_signed_variant_op(bvop, line)
+                    operations.append(specialized_op)
+
+                elif bvop in line and bvop not in ["concat", "extract"]:
+                    operations.append(bvop)
+
+
+
+        return list(set(operations))
+
+
+
+
+
+
+
+
+
     # To scale the arguments of the context, we must have a defined
     # in_vectsize index and out_vectsize_index
-    def can_scale_context(self):
+    def can_scale_context(self, scale_factor = None):
         has_defined_io = self.has_output_size() and self.has_input_size()
         has_defined_lanesize = (self.in_lanesize_index != None) and (self.out_lanesize_index != None)
-        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize
+
+        scale_factor_cond = True
+        if scale_factor != None:
+            for idx, arg in enumerate(self.context_args):
+                if isinstance(arg, BitVector):
+                    scale_factor_cond = scale_factor_cond and (arg.size % scale_factor == 0)
+
+        return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize and scale_factor_cond
+
+
+
+    def is_broadcast_like_operation(self):
+        ops = self.get_bv_ops()
+
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq" ,"if" ,"cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
+
+
+    def is_elementwise_logical_like_operation(self):
+
+        if self.is_broadcast_like_operation():
+            return False
+
+        ops = self.get_bv_ops()
+
+        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg", "extract", "concat"]
+
+        return all([ (op in bitwise_logical_ops) for op in ops ])
+
 
 
     # Update context parameters to down scale the vector sizes parameters
-    def scale_context(self, scale_factor):
+    def scale_context(self, scale_factor, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling"
         scaled_args = []
 
+        lane_size_scaled = False
+        need_to_scale_lanesize = False
+
+
+        ## Generally we don't want to scale the precisions
+        ## however for bitwise operations where we have
+        ## lane_size = precision = vector_lengths we would
+        ## have to scale the precisions.
+
+        scale_io_prec = False
+
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
-                assert arg.size % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
+                assert arg.size % scale_factor == 0, "scale_factor {} must evenly divide the operand sizes {}".format(scale_factor, arg.size)
                 scaled_bv_arg = BitVector(arg.name, int(arg.size // scale_factor))
                 scaled_args.append(scaled_bv_arg)
             elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
@@ -192,14 +326,31 @@ class Context:
                 scaled_lanesize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_lanesize_arg)
                 self.lane_size = self.lane_size // scale_factor
+                lane_size_scaled = True
+                need_to_scale_lanesize = True
 
 
             elif idx == self.out_lanesize_index  and arg.value // scale_factor  >= self.out_precision:
+
                 scaled_lanesize_arg = Integer(arg.name, value = int(arg.value // scale_factor))
                 scaled_args.append(scaled_lanesize_arg)
 
+
+            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation() and arg.value not in [8,16,32,64]:
+                scaled_prec = Precision(arg.name, input_precision = arg.input_precision, output_precision = arg.output_precision, value = arg.value // scale_factor)
+
+                scaled_args.append(scaled_prec)
+                scale_io_prec = True
+                self.precision_scaled = True
+
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
+                    scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
+                    scaled_args.append(scaled_int)
+                elif base_vector_size != None and arg.value == base_vector_size:
+                    scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
+                    scaled_args.append(scaled_int)
+                elif base_vector_size != None and arg.value == (base_vector_size // 2):
                     scaled_int = Integer(arg.name, value = int(arg.value // scale_factor))
                     scaled_args.append(scaled_int)
                 else:
@@ -211,8 +362,18 @@ class Context:
 
         assert self.out_vectsize % scale_factor == 0, "scale_factor must evenly divide the input vector sizes"
 
+        if not lane_size_scaled and (need_to_scale_lanesize or self.lane_size >= 1024):
+            self.lane_size = int(self.lane_size // scale_factor)
+
+        if scale_io_prec:
+            assert self.in_precision == self.out_precision, "Only scale precision for elementwise bitwise operations"
+            self.in_precision = self.in_precision // scale_factor
+            self.out_precision = self.out_precision // scale_factor
+
         self.in_vectsize = int(self.in_vectsize // scale_factor)
         self.out_vectsize = int(self.out_vectsize // scale_factor)
+
+
 
 
 
@@ -221,10 +382,11 @@ class Context:
 
 
 
-    def get_scalable_args_idx(self):
+
+    def get_scalable_args_idx(self, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
 
-        sample_scale_factor = 8
+        sample_scale_factor = 4#32
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
@@ -238,8 +400,15 @@ class Context:
                 scalable_idx.append(idx)
             elif idx == self.out_lanesize_index  and arg.value // sample_scale_factor  >= self.out_precision:
                 scalable_idx.append(idx)
+
+            elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation() and self.precision_scaled :
+                scalable_idx.append(idx)
             elif isinstance(arg, Integer):
                 if arg.value == self.in_vectsize or arg.value == self.out_vectsize:
+                    scalable_idx.append(idx)
+                elif base_vector_size != None and arg.value == base_vector_size:
+                    scalable_idx.append(idx)
+                elif base_vector_size != None and arg.value == (base_vector_size // 2):
                     scalable_idx.append(idx)
 
         return scalable_idx
@@ -499,7 +668,9 @@ class DSLInstruction(InstructionType):
                     out_precision_index = out_precision_index,
                     cost = cost, signedness = signedness,
                     in_lanesize_index = in_lanesize_index,
-                    out_lanesize_index = out_lanesize_index)
+                    out_lanesize_index = out_lanesize_index,
+                    semantics = self.semantics
+                    )
         )
 
     def print_instruction(self):
@@ -533,7 +704,7 @@ class DSLInstruction(InstructionType):
 
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True):
         operations = []
-        for line in self.semantics:
+        for line in self.semantics[1:]:
             for bvop in BV_OPS:
                 if bvop == "concat" and exclude_concat:
                     continue
@@ -546,15 +717,15 @@ class DSLInstruction(InstructionType):
                 # but the other saturating operations
                 # arent
                 if bvop == "bvmul" and bvop in line:
-                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw"]])
+                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw", "bvmulnw"]])
                     if insert_bvmul:
                         operations.append(bvop)
                 elif bvop == "bvadd" and bvop in line:
-                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw"]])
+                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw", "bvaddnw"]])
                     if insert_bvadd:
                         operations.append(bvop)
                 elif bvop == "bvsub" and bvop in line:
-                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw"]])
+                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw","bvsubnw" ]])
                     if insert_bvsub:
                         operations.append(bvop)
                 elif bvop in line:
@@ -630,17 +801,27 @@ class DSLInstruction(InstructionType):
         return any([supports(ctx) for ctx in self.contexts])
 
 
-    def supports_scaling(self):
-        return all([ctx.can_scale_context() for ctx in self.contexts])
 
-    def scale_contexts(self, scale_factor):
+
+    def supports_scaling(self):
+
+
+        return any([ctx.can_scale_context() for ctx in self.contexts])
+
+    def scale_contexts(self, scale_factor, base_vector_size = None):
 
         scaled_contexts = []
+        #test_args = []
         for ctx in self.contexts:
-            if ctx.can_scale_context():
-                ctx.scale_context(scale_factor)
+
+            if ctx.can_scale_context(scale_factor = scale_factor):
+                ctx.scale_context(scale_factor, base_vector_size = base_vector_size)
                 scaled_contexts.append(ctx)
 
+
+
+
+        # Discards contexts
         self.contexts = scaled_contexts
 
 

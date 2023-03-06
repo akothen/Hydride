@@ -289,3 +289,33 @@
   (hash-union! merged-hash h1 h2)
   merged-hash
   )
+
+
+
+
+;; For a given symbolic bitvector, update the assumptions 
+;; in the verification condition to reflect the signedness 
+;; information of the specific elements.
+(define (assume-signedness sym-bv prec signed?)
+  (define bv-size (bvlength sym-bv))
+  (for/list ([i (range (/ bv-size prec))])
+            (define low (* i prec))
+            (define high (+ low (- prec 1)))
+            (define slice (extract high low sym-bv))
+
+            (cond 
+              [signed?
+                '()
+                ]
+              [(concrete? sym-bv)
+               '() ;; No assumptions needed for concrete values
+               ]
+              [else 
+                (assume (bvsgt slice (bv 0 prec)))
+                (assume (bvugt slice (bv 0 prec)))
+                ]
+              )
+            
+            )
+  
+  )

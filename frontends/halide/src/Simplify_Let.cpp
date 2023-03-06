@@ -165,6 +165,7 @@ Body Simplify::simplify_let(const LetOrLetStmt *op, ExprInfo *bounds) {
                 // Replacing new_value below might free the shuffle
                 // indices vector, so save them now.
                 std::vector<int> slice_indices = shuffle->indices;
+                debug(0) << "make_concat: SimplifyLet is_slice"<<"\n";
                 f.new_value = Shuffle::make_concat(shuffle->vectors);
                 new_var = Variable::make(f.new_value.type(), f.new_name);
                 replacement = substitute(f.new_name, Shuffle::make({new_var}, slice_indices), replacement);
@@ -173,6 +174,7 @@ Body Simplify::simplify_let(const LetOrLetStmt *op, ExprInfo *bounds) {
                 new_var = Variable::make(var_a ? shuffle->vectors[1].type() : shuffle->vectors[0].type(), f.new_name);
                 Expr op_a = var_a ? shuffle->vectors[0] : new_var;
                 Expr op_b = var_a ? new_var : shuffle->vectors[1];
+                debug(0) << "make_concat: SimplifyLet is_concat"<<"\n";
                 replacement = substitute(f.new_name, Shuffle::make_concat({op_a, op_b}), replacement);
                 f.new_value = var_a ? shuffle->vectors[1] : shuffle->vectors[0];
             } else if ((tag = Call::as_tag(f.new_value)) != nullptr && !tag->is_intrinsic(Call::strict_float)) {

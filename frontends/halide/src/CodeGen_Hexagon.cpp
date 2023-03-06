@@ -31,6 +31,14 @@ using namespace llvm;
 
 namespace {
 
+#define FALLBACK_IF_FAIL(OP)\
+    if(op->a.type().bits() >= 64){\
+        CodeGen_Posix::visit(op); \
+        return;\
+    }
+
+
+
 /** A code generator that emits Hexagon code from a given Halide stmt. */
 class CodeGen_Hexagon : public CodeGen_Posix {
 public:
@@ -127,6 +135,11 @@ private:
 
     /** Generate a LUT (8/16 bit, max_index < 256) lookup using vlut instructions. */
     llvm::Value *vlut256(llvm::Value *lut, llvm::Value *indices, int min_index = 0, int max_index = 255);
+
+    // For reference, disabling any hexagon specific codegen and falling back to LLVM
+    // (Disabled by default)
+    bool defer_to_llvm = false;
+
 };
 
 CodeGen_Hexagon::CodeGen_Hexagon(const Target &t)
@@ -138,6 +151,12 @@ CodeGen_Hexagon::CodeGen_Hexagon(const Target &t)
     } else {
         isa_version = 62;
     }
+
+    const char* compile_via_llvm = getenv("HALIDE_COMPILE_LLVM");
+    if(compile_via_llvm){
+        defer_to_llvm = true;
+    }
+
     user_assert(target.has_feature(Target::HVX))
         << "Creating a Codegen target for Hexagon without the hvx target feature.\n";
 }
@@ -482,6 +501,13 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
 
     debug(0) << "Hexagon: Starting Statement:\n"<<body<<"\n";
 
+    if(defer_to_llvm){
+        debug(0) << "Compiling Hexagon through LLVM!\n";
+        body.accept(this);
+        CodeGen_Posix::end_func(f.args);
+        return;
+    }
+
     debug(0) << "Hexagon: Unpredicating loads and stores...\n";
     // Replace dense vector predicated loads with sloppy scalarized
     // predicates, and scalarize predicated stores
@@ -524,12 +550,27 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
     const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
     if(enable_hydride && strcmp(enable_hydride, "0") != 0){
 
-        debug(1) << "Optimizing Hexagon instructions (synthesis)...\n";
+        debug(0) << "Optimizing Hexagon instructions (synthesis)...\n";
         body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+        
+        const char* force_opt = getenv("HL_FORCE_HEXAGON_OPT");
+        if(force_opt)
+            body = optimize_hexagon_instructions(body, target);
 
     } else {
-        debug(1) << "Hexagon: Optimizing Hexagon instructions...\n";
-        body = optimize_hexagon_instructions(body, target);
+
+        const char* disable_opt = getenv("HL_DISABLE_HEXAGON_OPT");
+
+        debug(0) << "Hexagon Code input before optimization:" << "\n";
+        debug(0) << body << "\n";
+        if(!disable_opt || strcmp(disable_opt, "1") != 0){
+            debug(0) << "Disable opt value:"<<disable_opt <<"\n";
+            debug(0) << "Hexagon: Optimizing Hexagon instructions...\n";
+            body = optimize_hexagon_instructions(body, target);
+        } else {
+            debug(0) << "Hexagon Optimization disabled!"<<"\n";
+        }
+
     }
 
 
@@ -1158,6 +1199,11 @@ bool is_concat_or_slice(const vector<int> &indices) {
 
 Value *CodeGen_Hexagon::shuffle_vectors(Value *a, Value *b,
                                         const vector<int> &indices) {
+
+    if(defer_to_llvm){
+        return CodeGen_Posix::shuffle_vectors(a, b, indices);
+    }
+
     llvm::Type *a_ty = a->getType();
     llvm::Type *b_ty = b->getType();
     internal_assert(a_ty == b_ty);
@@ -1760,6 +1806,10 @@ Value *CodeGen_Hexagon::vlut(Value *lut, const vector<int> &indices) {
 Value *CodeGen_Hexagon::call_intrin(Type result_type, const string &name,
                                     vector<Expr> args, bool maybe) {
     llvm::Function *fn = module->getFunction(name);
+    if(defer_to_llvm){
+        return nullptr;
+    }
+
     if (maybe && !fn) {
         return nullptr;
     }
@@ -1783,6 +1833,13 @@ Value *CodeGen_Hexagon::call_intrin(Type result_type, const string &name,
 Value *CodeGen_Hexagon::call_intrin(llvm::Type *result_type, const string &name,
                                     vector<Value *> args, bool maybe) {
     llvm::Function *fn = module->getFunction(name);
+
+
+    if(defer_to_llvm){
+        return nullptr;
+    }
+
+
     if (maybe && !fn) {
         return nullptr;
     }
@@ -1841,13 +1898,35 @@ Expr maybe_scalar(Expr x) {
 }
 
 void CodeGen_Hexagon::visit(const Mul *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
+
+    Expr MulOp = Mul::make(op->a, op->b);
+
+
     if (op->type.is_vector()) {
+
+        debug(0) << "Hexagon Backend attemping to lower: " << MulOp << "\n";
+        debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
+        debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
+        debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
+
+        FALLBACK_IF_FAIL(Mul)
         value =
             call_intrin(op->type, "halide.hexagon.mul" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
         if (value) {
+            debug(0) << "Found an intrinsic:" << value << " for " << MulOp <<"\n";
+            debug(0) << "halide.hexagon.mul"+type_suffix(op->a, op->b) << "\n";
+            llvm::errs() << *value << "\n";
             return;
         }
+
+
+        debug(0) << "Failed to find value, try widening " <<   " for " << MulOp << "\n";
 
         // Hexagon has mostly widening multiplies. Try to find a
         // widening multiply we can use.
@@ -1865,6 +1944,10 @@ void CodeGen_Hexagon::visit(const Mul *op) {
             value = call_intrin(llvm_type_of(op->type),
                                 "halide.hexagon.trunc" + type_suffix(wide, false),
                                 {value});
+
+
+            debug(0) << "Found widening then truncating intrinsic " << value<< " for " << MulOp << "\n";
+            llvm::errs() << *value << "\n";
             return;
         }
 
@@ -1877,8 +1960,16 @@ void CodeGen_Hexagon::visit(const Mul *op) {
 }
 
 void CodeGen_Hexagon::visit(const Call *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
+
+    debug(0) << "CodeGenHexagon: Call "<<op->name <<"\n";
     internal_assert(op->is_extern() || op->is_intrinsic())
         << "Can only codegen extern calls and intrinsics\n";
+
 
     // Map Halide functions to Hexagon intrinsics, plus a boolean
     // indicating if the intrinsic has signed variants or not.
@@ -1890,6 +1981,11 @@ void CodeGen_Hexagon::visit(const Call *op) {
         {Call::get_intrinsic_name(Call::saturating_add), {"halide.hexagon.sat_add", true}},
         {Call::get_intrinsic_name(Call::saturating_sub), {"halide.hexagon.sat_sub", true}},
     };
+
+    if(functions.find(op->name) != functions.end() && op->type.bits() >= 64){
+        CodeGen_Posix::visit(op);
+        return;
+    }
 
     if (is_native_interleave(op)) {
         internal_assert(
@@ -1914,7 +2010,13 @@ void CodeGen_Hexagon::visit(const Call *op) {
             }
         } else if (op->is_intrinsic(Call::shift_left) ||
                    op->is_intrinsic(Call::shift_right)) {
+            debug(0) << "Shift intrinsic!\n" <<"\n";
+
             internal_assert(op->args.size() == 2);
+            if(op->type.bits() >= 64){
+                CodeGen_Posix::visit(op);
+                return;
+            }
             string instr = op->is_intrinsic(Call::shift_left) ? "halide.hexagon.shl" : "halide.hexagon.shr";
             Expr b = maybe_scalar(op->args[1]);
             // Make b signed. Shifts are only well defined if this wouldn't overflow.
@@ -2065,7 +2167,19 @@ void CodeGen_Hexagon::visit(const Call *op) {
 }
 
 void CodeGen_Hexagon::visit(const Max *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
+
     if (op->type.is_vector()) {
+        Expr MaxOp = Max::make(op->a, op->b);
+        debug(0) << "Hexagon Backend attemping to lower: " << MaxOp << "\n";
+        debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
+        debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
+        debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
+        FALLBACK_IF_FAIL(Max)
         value =
             call_intrin(op->type, "halide.hexagon.max" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
@@ -2080,7 +2194,18 @@ void CodeGen_Hexagon::visit(const Max *op) {
 }
 
 void CodeGen_Hexagon::visit(const Min *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->type.is_vector()) {
+        Expr MinOp = Min::make(op->a, op->b);
+        debug(0) << "Hexagon Backend attemping to lower: " << MinOp << "\n";
+        debug(0) << "Operand 0 has type:" << op->a.type().lanes() << " lanes , with each element " << op->a.type().bits() << "\n";
+        debug(0) << "Operand 1 has type:" << op->b.type().lanes() << " lanes , with each element " << op->b.type().bits() << "\n";
+        debug(0) << "Return type: "<< op->type.lanes() << "lanes, with each element " << op->type.bits() << " bits\n";
+        FALLBACK_IF_FAIL(Min)
         value =
             call_intrin(op->type, "halide.hexagon.min" + type_suffix(op->a, op->b),
                         {op->a, op->b}, true /*maybe*/);
@@ -2095,6 +2220,11 @@ void CodeGen_Hexagon::visit(const Min *op) {
 }
 
 void CodeGen_Hexagon::visit(const Select *op) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->condition.type().is_scalar() && op->type.is_vector()) {
         // Implement scalar conditions on vector values with if-then-else.
         value = codegen(Call::make(op->type, Call::if_then_else,
@@ -2158,6 +2288,12 @@ Value *CodeGen_Hexagon::codegen_cache_allocation_size(
 }
 
 void CodeGen_Hexagon::visit(const Allocate *alloc) {
+
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(alloc);
+        return;
+    }
+    debug(0) << "CodeGenHexagon: Allocate" <<"\n";
     if (sym_exists(alloc->name)) {
         user_error << "Can't have two different buffers with the same name: "
                    << alloc->name << "\n";

@@ -63,7 +63,51 @@ namespace Halide {
                         bitvector_sizes.insert( bitvector_sizes.begin() ,bv_size);
                     }
 
+
+                    const char* look_ahead_distribute = getenv("HYDRIDE_DISTRIBUTE_LOOK_AHEAD");
+
+                    // Alternative distribution strategy: 
+                    // Each node is given a distribution factor
+                    // with with it has to return those many nodes.
+                    // However, current node can decide based on it's own expression sizes
+                    // how to distribute. It would distribute according to it's derived
+                    // number of chunks, and when propogating upwards return the required amount.
+                    if(look_ahead_distribute){
+                        distribution_look_ahead = true;
+                    }
+
+
                     debug(0) << "Distribute number of bitvector sizes:\t" << bitvector_sizes.size() <<"\n";
+                    debug(0) << "Distribute via look ahead: "<<distribution_look_ahead<<"\n";
+
+                }
+
+
+
+                DistributeVec(std::vector<unsigned> bv_sizes, bool supports_sat) {
+                    supports_saturating_operations = supports_sat;
+                    std::sort(bv_sizes.begin(), bv_sizes.end());
+                    for(unsigned bv_size : bv_sizes){
+                        bitvector_sizes.insert( bitvector_sizes.begin() ,bv_size);
+                    }
+
+
+                    const char* look_ahead_distribute = getenv("HYDRIDE_DISTRIBUTE_LOOK_AHEAD");
+
+                    // Alternative distribution strategy: 
+                    // Each node is given a distribution factor
+                    // with with it has to return those many nodes.
+                    // However, current node can decide based on it's own expression sizes
+                    // how to distribute. It would distribute according to it's derived
+                    // number of chunks, and when propogating upwards return the required amount.
+                    if(look_ahead_distribute){
+                        distribution_look_ahead = true;
+                    }
+
+
+                    debug(0) << "Distribute number of bitvector sizes:\t" << bitvector_sizes.size() <<"\n";
+                    debug(0) << "Distribute via look ahead: "<<distribution_look_ahead<<"\n";
+
                 }
 
                 // Supported vector sizes to distribute into. Sorted in descending order
@@ -130,6 +174,12 @@ namespace Halide {
                 // Helpers
                 bool can_type_fit_vector_sizes(Type t);
 
+                bool is_divisible_into_vector_size(size_t sz);
+
+                bool supports_saturating_operations = false;
+
+                bool distribution_look_ahead = false;
+
 
 
 
@@ -139,7 +189,7 @@ namespace Halide {
         };
 
         Stmt distribute_vector_exprs(Stmt S, unsigned bitwidth);
-        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bitwidths);
+        Stmt distribute_vector_exprs(Stmt S, std::vector<unsigned> bitwidths, bool supports_sat);
 
     }  // namespace Internal
 

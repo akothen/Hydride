@@ -14,6 +14,7 @@ from RoseBitVectorOperations import *
 from RoseOperations import *
 from RoseUtilities import *
 from RoseContext import *
+from RoseAliasAnalysis import *
 
 import numpy as np
 import math
@@ -119,6 +120,43 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
   return OffsetsList
 
 
+# It is assumed that code in pack2 is dominated by code in pack1
+def ArePacksContiguous(Pack1 : list, Pack2 : list, Context : RoseContext):
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
+  print("ARE PACKS CONTIGIUOUS:")
+  PrintPack(Pack1)
+  PrintPack(Pack2)
+  # List of bitvectors written to by the given packs
+  DestBitvectorsList = list()
+  # For the first pack we will be loking for last last bvinsert operation
+  # to a bitslice.
+  Pack1BVInsertOps = dict()
+  for Op in Pack1:
+    if isinstance(Op, RoseBVInsertSliceOp):
+      Pack1BVInsertOps[Op.getInputBitVector()] = Op
+  # For the second pack we will be loking for the first bvinsert operation
+  # to a bitslice.
+  Pack2BVInsertOps = dict()
+  for Op in Pack2:
+    if isinstance(Op, RoseBVInsertSliceOp):
+      if Op.getInputBitVector() not in Pack2BVInsertOps:
+        Pack2BVInsertOps[Op.getInputBitVector()] = Op
+        DestBitvectorsList.append(Op.getInputBitVector())
+  for DestBitvector in DestBitvectorsList:
+    Op1 = Pack1BVInsertOps[DestBitvector]
+    Op2 = Pack2BVInsertOps[DestBitvector]
+    print("OP1:")
+    Op1.print()
+    print("OP2:")
+    Op2.print()
+    # Both of the bvinsert ops must be writing contiguous slices
+    if (RoseAliasAnalysis.alias(Op1, Op2) == RoseAliasAnalysis.AnalysisResults.Contiguous \
+      or RoseAliasAnalysis.alias(Op1, Op2) == RoseAliasAnalysis.AnalysisResults.Unknown):
+      continue
+    return False
+  return True
+
+
 def GetValidRerollableCandidates(RerollableCandidatePacks : list, Context : RoseContext):
   print("++++++++++++++++++++++++++++++++++++++++++++++++")
   # Collect list of rerollable windows in a set.
@@ -136,6 +174,20 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list, Context : Rose
     print("CheckDFGsAreIsomorphic:")
     print(CheckDFGsAreIsomorphic)
     if CheckDFGsAreIsomorphic == False:
+      # This is the end of the window list.
+      # If we didn't capture multiple windows, we must discard the list
+      if len(PacksList) != 1:
+        # Add the window list to the candidate list
+        RerollableCandidatesList.append(PacksList)
+      # Empty the list and continue
+      PacksList = [Pack]
+      continue
+    # Make sure that the bvinserts in the two packs are 
+    # contiguous.
+    CheckPacksAreContiguous = True #ArePacksContiguous(CheckPack, Pack, Context)
+    print("CheckPacksAreContiguous:")
+    print(CheckPacksAreContiguous)
+    if CheckPacksAreContiguous == False:
       # This is the end of the window list.
       # If we didn't capture multiple windows, we must discard the list
       if len(PacksList) != 1:
@@ -1015,7 +1067,7 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list, Context : RoseCont
         assert not isinstance(Op2.getLowIndex(), RoseConstant)
       else:
         assert isinstance(Op2.getLowIndex(), RoseConstant)
-        return None, None
+        #return None, None
       continue
     if isinstance(Op1, RoseBVExtractSliceOp):
       assert isinstance(Op2, RoseBVExtractSliceOp)
@@ -1023,7 +1075,8 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list, Context : RoseCont
         assert not isinstance(Op2.getLowIndex(), RoseConstant)
       else:
         assert isinstance(Op2.getLowIndex(), RoseConstant)
-        return None, None
+        #print("NONE, NONE -- EXTRACT OP")
+        #return None, None
       continue
     if Op1 in IndexingToBVOpsMap1:
       assert Op2 in IndexingToBVOpsMap2
@@ -1414,12 +1467,15 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
         if LowOffset != 0:
         # Generate an add instruction
           LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
-          LowIndex = RoseAddOp.create(Context.genName("%" + "low.offset"), [ScaledIterator, LowOffsetVal]) 
+          LowIndex = RoseAddOp.create(Context.genName("%" + "low.offset"), \
+                                      [ScaledIterator, LowOffsetVal]) 
           Loop.addAbstraction(LowIndex)
         else:
           LowIndex = ScaledIterator
-        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
-        HighIndex = RoseAddOp.create(Context.genName("%" + "high.offset"), [LowIndex, OpBitWidthVal]) 
+        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, \
+                                      ScaledIterator.getType())
+        HighIndex = RoseAddOp.create(Context.genName("%" + "high.offset"), \
+                                    [LowIndex, OpBitWidthVal]) 
         Loop.addAbstraction(HighIndex)
         NewOp = Op.clone()
         for Index, Operand in enumerate(Op.getOperands()):
@@ -2416,7 +2472,11 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
       print("INDEXING Val:")
       IndexingVal.print()
       if isinstance(IndexingVal, RoseOperation):
+        # If the operands are non-operations, add them to the
+        # ValueToValue map since we do not want any changes to them.
         for Operand in IndexingVal.getOperands():
+          if not isinstance(Operand, RoseOperation):
+            ValueToValueMap[Operand] = Operand
           print("OPERNAD:")
           Operand.print()
           print(Operand.ID)
@@ -2497,15 +2557,20 @@ def PrintFunctionInfo(Function : RoseFunction):
   Function.print()
   for Block in Function.getRegionsOfType(RoseBlock):
     for Op in Block:
-      if isinstance(Op, RoseBVInsertSliceOp):
-        print("bvinsert op:")
-        Op.print()
-        print("Op.getInputBitVector():")
-        Op.getInputBitVector().print()
-        print(Op.getInputBitVector().ID)
-        print("Function.getReturnValue():")
-        Function.getReturnValue().print()
-        print(Function.getReturnValue().ID)
+      #if isinstance(Op, RoseBVInsertSliceOp):
+      #  print("bvinsert op:")
+      Op.print()
+      if isinstance(Op, RoseMulOp):
+        for Operand in Op.getOperands():
+          print("OPERAND:")
+          Operand.print()
+          print(Operand.ID)
+      #  print("Op.getInputBitVector():")
+      #  Op.getInputBitVector().print()
+      #  print(Op.getInputBitVector().ID)
+      #  print("Function.getReturnValue():")
+      #  Function.getReturnValue().print()
+      #  print(Function.getReturnValue().ID)
 
 
 # Runs Loop reroller
@@ -2520,6 +2585,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("Function:")
   Function.print()
   PrintFunctionInfo(Function)
+
 
 
 

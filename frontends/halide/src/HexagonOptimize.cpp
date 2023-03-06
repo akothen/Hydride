@@ -11,7 +11,6 @@
 #include "IRMutator.h"
 #include "IROperator.h"
 #include "Lerp.h"
-#include "Rosette.h"
 #include "Scope.h"
 #include "Simplify.h"
 #include "Substitute.h"
@@ -27,6 +26,8 @@ using std::string;
 using std::vector;
 
 using namespace Halide::ConciseCasts;
+
+
 
 Expr native_interleave(const Expr &x) {
     string fn;

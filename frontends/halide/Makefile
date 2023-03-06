@@ -522,6 +522,7 @@ SOURCE_FILES = \
   RemoveDeadAllocations.cpp \
   RemoveExternLoops.cpp \
   RemoveUndef.cpp \
+  VectorInfo.cpp \
   DistributeVec.cpp \
   Rosette.cpp \
   Schedule.cpp \
@@ -706,6 +707,7 @@ HEADER_FILES = \
   RemoveUndef.h \
   runtime/HalideBuffer.h \
   runtime/HalideRuntime.h \
+  VectorInfo.h \
   DistributeVec.h \
   Rosette.h \
   Schedule.h \

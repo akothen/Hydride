@@ -127,7 +127,7 @@
   )
 
 ;; Generates a specification for a Halide IR Expression
-(define (gen-synthesis-spec expr sub-expr-ls base_name)
+(define (gen-synthesis-spec-halide expr sub-expr-ls base_name)
   (define name (string-append "\"" base_name "\""))
   (define spec-name (get-spec-name base_name))
   (define sema (string-append "[ " (get-expr-sema expr) "]"))
@@ -154,10 +154,165 @@
   )
 
 
+;; ==============================================
+;; Utilities for extracting features from hydride expressions
+;; to generate specifications for synthesis
+;; ==============================================
+
+(define (get-hydride-expr-sema hydride-expr get-ops-functor)
+  (define ops (get-ops-functor hydride-expr))
+  (string-append "\"" (~s ops) "\"")
+  )
+
+(define (get-input-shapes-hydride input-sizes input-precs)
+  (define num-inputs (length input-sizes))
+  (define shapes 
+    (apply string-append
+           (for/list ([i (range num-inputs)])
+                     (define input_size (list-ref input-sizes i))
+                     (define input_prec (list-ref input-precs i))
+                     (define rows 1)
+                     (define cols (/ input_size input_prec))
+                     (define sep 
+                       (if (equal? i (- num-inputs 1))
+                         ""
+                         ", "
+                         )
+                       )
+
+                     (string-append "[" (~s rows) "," (~s cols) "]" sep)
+                     )
+           )
+    )
+  (string-append "[" shapes "]")
+  )
+
+
+
+(define (get-output-shape-hydride hydride-expr get-length-functor get-prec-functor )
+  (define num-elems (/ (get-length-functor hydride-expr (vector)) (get-prec-functor hydride-expr (vector))  ))
+  (define shape 
+    (string-append "[1 , " (~s num-elems) "]" )
+    )
+  shape
+  )
+
+
+(define (get-input-precisions-hydride input-precisions)
+
+  (define args 
+    (apply string-append
+           (for/list ([i (range (length input-precisions))])
+                     (define prec (list-ref input-precisions i))
+                     (define prec-str (~s prec))
+                     (define sep 
+                       (if (equal? i (- (length input-precisions) 1))
+                         ""
+                         ", "
+                         )
+                       )
+
+                     (string-append  prec-str  sep)
+                     )
+           )
+    )
+  (string-append "[" args "]")
+  )
+
+
+(define (get-args-str-hydride input-list)
+  (define num-inputs (length input-list))
+  (define args 
+    (apply string-append
+           (for/list ([i (range num-inputs)])
+                     (define expr (list-ref input-list i))
+                     (define bv-str (string-append "SYMBOLIC_BV_" (~s expr)))
+                     (define sep 
+                       (if (equal? i (- num-inputs 1))
+                         ""
+                         ", "
+                         )
+                       )
+
+                     (string-append "\"" bv-str "\"" sep)
+                     )
+           )
+    )
+  (string-append "[" args "]")
+  )
+
+
+
+(define (get-expr-imms-hydride expr visitor-functor)
+
+  (define imms (list))
+  (define (visitor-fn e)
+    (destruct e
+              [(lit v)
+               (set! imms (append imms (list v)))
+               e
+               ]
+              [v v]
+              )
+    )
+
+  (visitor-functor expr visitor-fn)
+
+  (define imm-ints (for/list ([v imms]) (bitvector->integer v) ))
+  (define imm-precs (for/list ([v imms]) (bvlength v) ))
+
+  (define val-strs 
+    (for/list ([i (range (length imm-ints))])
+              (define val (list-ref imm-ints i))
+              (define val-str (string-append "[" (~s val) ", " (~s (list-ref imm-precs i) ) "]"))
+              (define sep
+                (if (equal? i (- (length imms) 1)) 
+                  ""
+                  ", "
+                  )
+                )
+              (string-append val-str sep)
+              )
+    )
+  (string-append "[" (apply string-append val-strs) "]")
+  )
+
+
+;; Generates a specification for a Hydride IR Expression
+(define (gen-synthesis-spec-hydride expr get-ops-functor visitor-functor 
+                                    get-length-functor get-prec-functor
+                                    input-precs input-sizes  base_name)
+  (define name (string-append "\"" base_name "\""))
+  (define spec-name (get-spec-name base_name))
+  (define sema (string-append "[ " (get-hydride-expr-sema expr) "]"))
+  (define input_shapes (get-input-shapes-hydride input-sizes input-precs))
+  (define output_shape (get-output-shape-hydride expr get-length-functor get-prec-functor))
+  (define input_precision (get-input-precisions-hydride input-precs))
+  (define output_precision (~s (get-prec-functor expr (vector))))
+  (define args (get-args-str-hydride input-sizes))
+  (define spec_invoke "\"\"")
+  (define imm-ls (get-expr-imms-hydride expr visitor-functor))
+  (string-append 
+    "{ \n"
+    "\"name\": " name " , \n"
+    "\"semantics\": " sema " , \n" 
+    "\"input_shapes\": " input_shapes ", \n"
+    "\"output_shape\": " output_shape ", \n" 
+    "\"input_precision\": " input_precision ", \n"
+    "\"output_precision\": " output_precision ", \n"
+    "\"args\": " args ", \n"
+    "\"spec_invokation\": " spec_invoke ",\n" 
+    "\"imms\": " imm-ls " \n"
+    "}\n"
+    )
+  )
+
+
 ;; Spec generation for swizzles
 
 (define (get-swizzle-expr-sema)
-  "\"(list extract concat sign-extend zero-extend bvssat bvusat)\""
+  ;"\"(list extract concat sign-extend zero-extend bvssat bvusat)\""
+  "\"(list extract concat  zero-extend  bvusat)\""
   )
 
 
@@ -166,8 +321,8 @@
   ;; need the actual types of the input arguments
   ;; as they may not be inferable from the expr
   ;; itself. (Pass id-map?)
-  (define len (get-length e (vector))) 
-  (define prec (get-prec e (vector)))
+  (define len (hydride:get-length e (vector))) 
+  (define prec (hydride:get-prec e (vector)))
   (define num-elems (/ len prec))
   (string-append "[" (~s 1) "," (~s num-elems) "]")
   )
@@ -286,7 +441,7 @@
   (define input_shapes (get-swizzle-input-shapes expr))
   (define output_shape (get-swizzle-output-shape expr))
   (define input_precision (get-swizzle-input-precisions expr))
-  (define output_precision (~s (get-prec expr (vector))))
+  (define output_precision (~s (hydride:get-prec expr (vector))))
   (define args (get-swizzle-args-str expr))
   (define spec_invoke "\"\"")
   (define imm-ls "[]")

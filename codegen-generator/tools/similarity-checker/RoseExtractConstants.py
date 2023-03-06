@@ -138,90 +138,6 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
   return
 
 
-#
-# The basic assumption here is that the one of the ops'
-# bitwidth is expressed in terms of loop iterators and
-# loop steps. 
-# Consider an example:
-# %index = mul %iterator, constant
-#
-# This is replaced with:
-# %factor1 = div %op_bitwidth, %loop_step
-# %factor2 = mul %new_arg, %factor1
-# %index = mul %iterator, %factor2
-#
-# %new_arg will sort itself out in the later stages of compilation
-# especially when it is redundant in cases where %new_arg == 1.
-#
-def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
-                  LoopIterator : RoseValue, LoopStep : RoseValue, Visited : set, \
-                  Context : RoseContext, ArgToConstantValsMap : dict):
-  # Now we have to deal with the low index that is a mul op
-  if Op.getLowIndex() in Visited:
-    return
-  Block = Op.getParent()
-  print("FixLowIndices OP:")
-  Op.print()
-  print("Bitwidth:")
-  Bitwidth.print()
-  print("LoopIterator:")
-  LoopIterator.print()
-  if isinstance(Op.getLowIndex(), RoseMulOp):
-    assert len(Op.getLowIndex().getOperands()) == 2
-    if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
-      # If the other operand is an iterator, deal with it.
-      if Op.getLowIndex().getOperand(1) == LoopIterator:
-        # Generate a div op for generality
-        Factor1 = RoseDivOp.create(Context.genName("%" + "factor"), \
-                                  Op.getOutputBitwidth(), LoopStep)
-        Block.addOperationBefore(Factor1, Op.getLowIndex())
-        NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "alpha.arg"), \
-                                      Op.getLowIndex().getType()))
-        Factor1Value = int(ArgToConstantValsMap[Op.getOutputBitwidth()].getValue() \
-                              / ArgToConstantValsMap[LoopStep].getValue())
-        ConcreteNewArg = int(Op.getLowIndex().getOperand(0).getValue() / Factor1Value)
-        ArgToConstantValsMap[NewArg] = RoseConstant.create(ConcreteNewArg, \
-                                          Op.getLowIndex().getOperand(0).getType())
-        Factor2 = RoseMulOp.create(Context.genName("%" + "factor"), [NewArg, Factor1])
-        Block.addOperationBefore(Factor2, Op.getLowIndex())
-        Op.getLowIndex().setOperand(0, Factor2)
-        Visited.add(Factor1)
-        Visited.add(Factor2)
-        Visited.add(Op.getLowIndex())
-        return
-      else:
-        assert isinstance(Op.getLowIndex().getOperand(1), RoseOperation)
-        Op.getLowIndex().setOperand(0, Op.getOutputBitwidth())
-        Visited.add(Op.getLowIndex())
-        return
-    if isinstance(Op.getLowIndex().getOperand(1), RoseConstant):
-      # If the other operand is an iterator, deal with it.
-      if Op.getLowIndex().getOperand(0) == LoopIterator:
-        # Generate a div op for generality
-        Factor1 = RoseDivOp.create(Context.genName("%" + "factor"), \
-                                  Op.getOutputBitwidth(), LoopStep)
-        Block.addOperationBefore(Factor1, Op.getLowIndex())
-        NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "alpha.arg"), \
-                                      Op.getLowIndex().getType()))
-        Factor1Value = int(ArgToConstantValsMap[Op.getOutputBitwidth()].getValue() \
-                              / ArgToConstantValsMap[LoopStep].getValue())
-        ConcreteNewArg = int(Op.getLowIndex().getOperand(1).getValue() / Factor1Value)
-        ArgToConstantValsMap[NewArg] = RoseConstant.create(ConcreteNewArg, \
-                                          Op.getLowIndex().getOperand(1).getType())
-        Factor2 = RoseMulOp.create(Context.genName("%" + "factor"), [NewArg, Factor1])
-        Block.addOperationBefore(Factor2, Op.getLowIndex())
-        Op.getLowIndex().setOperand(1, Factor2)
-        Visited.add(Factor1)
-        Visited.add(Factor2)
-        Visited.add(Op.getLowIndex())
-        return
-      else:
-        assert isinstance(Op.getLowIndex().getOperand(0), RoseOperation)
-        Op.getLowIndex().setOperand(1, Op.getOutputBitwidth())
-        Visited.add(Op.getLowIndex())
-        return
-
-
 def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
                                     LoopIterator : RoseValue, LoopStep : RoseValue, \
                                     Visited : set, Context : RoseContext, ArgToConstantValsMap : dict):
@@ -267,9 +183,7 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     Op.getParent().print()
     print("--------------------")
     Op.getLowIndex().print()
-    # Deal with the low index first
-    FixLowIndices(Function, Op, Bitwidth, LoopIterator, LoopStep, Visited, Context, ArgToConstantValsMap)
-    # Now deal with the high index
+    # Deal with the high index
     if Op.getHighIndex() in Visited:
       return
     if Op.getLowIndex() != Op.getHighIndex():

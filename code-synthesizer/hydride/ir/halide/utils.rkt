@@ -13,6 +13,7 @@
   hydride/ir/halide/visitor
   hydride/utils/debug
   hydride/utils/misc
+  hydride/utils/bvops
   )
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -33,9 +34,281 @@
     [(x128 sca) #t]
     [(x256 sca) #t]
     [(x512 sca) #t]
+    [(xBroadcast sca factor) #t]
     [_ #f]
    )
 )
+
+
+;; Add buffer signed assumptions
+(define (assume-buffer-signedness buf)
+  (define is-signed (halide:is-buffer-signed buf))
+  (define buffer-bv (halide:assemble-bitvector (halide:interpret buf) (halide:vec-len buf)))
+  (assume-signedness buffer-bv (vec-precision buf) is-signed)
+  )
+
+;; wrapper to apply buffer signedness to list of buffers
+(define (assume-buffers-signedness bufs)
+  (for/list ([buf bufs])
+            (assume-buffer-signedness buf)
+            )
+  )
+
+
+(define (is-simple-ramp ramp-op)
+  (destruct ramp-op
+        [(ramp base stride len)
+
+         (destruct stride
+                   [(int-imm data signed?)
+                    #t
+                    ]
+                   [_ #f]
+                   )
+         ]
+        [_ #f]
+            )
+  )
+
+;; Gather the list of bv-ops involved in the halide IR expressions.
+;; This information will be used to identify the list of hydride IR
+;; instructions to include.
+
+(define empty-list (list ))
+
+(define signed-casting-list (list extract sign-extend bvssat))
+(define unsigned-casting-list (list extract zero-extend bvusat))
+
+
+(define signed-upcasting-list (list extract sign-extend ))
+(define unsigned-upcasting-list (list extract zero-extend ))
+
+(define signed-downcasting-list (list extract  bvssat))
+(define unsigned-downcasting-list (list extract  bvusat))
+
+
+(define (get-bv-ops p)
+  (destruct p
+    ;; Abstract expressions
+    [(abstr-halide-expr orig-expr abstr-vals) empty-list]
+
+    ;; Var lookups
+    [(var-lookup var val) empty-list]
+    
+    ;; Constructors
+    [(x8 sca) empty-list]
+    [(x16 sca) empty-list]
+    [(x32 sca) empty-list]
+    [(x64 sca) empty-list]
+    [(x128 sca) empty-list]
+    [(x256 sca) empty-list]
+    [(x512 sca) empty-list]
+    [(xBroadcast sca factor) empty-list]
+
+    [(ramp base stride len)
+     (append (list extract  bvadd  'ramp)  (if (is-simple-ramp (ramp base stride len)) (list) (list bvmul sign-extend zero-extend)))
+     ]
+
+    [(load buf idxs alignment) empty-list]
+    [(int-imm data signed?) empty-list]
+    [(buffer data elemT buffsize) (if (halide:is-buffer-signed p)  (list sign-extend)  (list zero-extend) ) ]
+    [(load-sca buf idx) empty-list]
+
+    ;; Type Casts
+    [(cast-int vec olane oprec) 
+     (cond
+       ;; Upcast
+       [(> (vec-size p) (vec-size vec))
+            (append signed-upcasting-list (get-bv-ops vec))
+        ] 
+       ;; Downcast
+       [(< (vec-size p) (vec-size vec))
+            (append signed-downcasting-list (get-bv-ops vec))
+        ] 
+       ;; Same length -> reinterpret cast between signedness
+       [else 
+            (append signed-casting-list (get-bv-ops vec))
+         ] 
+       )
+     ]
+    [(cast-uint vec olane oprec) 
+     (cond
+       ;; Upcast
+       [(> (vec-size p) (vec-size vec))
+            (append unsigned-upcasting-list (get-bv-ops vec))
+        ] 
+       ;; Downcast
+       [(< (vec-size p) (vec-size vec))
+            (append unsigned-downcasting-list (get-bv-ops vec))
+        ] 
+       ;; Same length -> reinterpret cast between signedness
+       [else 
+            (append unsigned-casting-list (get-bv-ops vec))
+         ] 
+       )
+
+     ]
+    [(uint8x1 sca) (list extract  zero-extend)]
+    [(uint16x1 sca) (list  extract  zero-extend)]    
+    [(uint32x1 sca) (list  extract  zero-extend)]
+    [(uint64x1 sca) (list  extract  zero-extend)]
+
+    [(int8x1 sca) (list  extract sign-extend )]
+    [(int16x1 sca) (list  extract sign-extend )]
+    [(int32x1 sca) (list  extract sign-extend )]
+    [(int64x1 sca) (list  extract sign-extend )]
+
+    ;[(uint1x32 vec) NYI: Not sure what would be casted into uint1?]
+    ;[(uint1x64 vec) NYI: Not sure what would be casted into uint1?]
+    ;[(uint1x128 vec) NYI: Not sure what would be casted into uint1?]
+    ;[(uint1x256 vec) NYI: Not sure what would be casted into uint1?]    
+
+
+    [(uint8x8 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x16 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x32 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint8x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
+
+
+    [(int8x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int8x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int8x32 vec) (append  signed-casting-list (get-bv-ops vec))]
+    [(int8x64 vec) (append  signed-casting-list (get-bv-ops vec))]
+    [(int8x128 vec) (append  signed-casting-list (get-bv-ops vec))]
+    [(int8x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int8x512 vec) (append signed-casting-list (get-bv-ops vec))]
+
+
+    [(uint16x8 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x16 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x32 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint16x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
+
+
+
+    [(int16x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x32 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x64 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x128 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int16x512 vec) (append signed-casting-list (get-bv-ops vec))]
+    
+
+    [(uint32x8 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x16 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x32 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint32x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
+
+
+    [(int32x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x32 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x64 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x128 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int32x512 vec) (append signed-casting-list (get-bv-ops vec))]
+    
+
+    [(uint64x8 vec) (append  unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x16 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x32 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x64 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x128 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x256 vec) (append unsigned-casting-list (get-bv-ops vec))]
+    [(uint64x512 vec) (append unsigned-casting-list (get-bv-ops vec))]
+
+
+
+    [(int64x8 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x16 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x32 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x64 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x128 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x256 vec) (append signed-casting-list (get-bv-ops vec))]
+    [(int64x512 vec) (append signed-casting-list (get-bv-ops vec))]
+    
+    ;; Operations
+    [(sca-add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(sca-sub v1 v2) (append (list extract bvsub) (if (halide:is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) ) ]
+    [(sca-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-mod v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsrem bvsmod) (list zero-extend bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsmin) (list zero-extend bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-max v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsmax) (list zero-extend bvumax)) (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(sca-if v1 v2 v3) (append (list ) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
+    [(sca-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
+    [(sca-lt v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvslt) (list zero-extend bvult))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(sca-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
+    [(sca-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list bvsge  bvsmax bvsmin) (list bvuge bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shl v1 v2) (append (list bvshl) (if (halide:is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  sign-extend) (list bvlshr  zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-clz v1) (append empty-list (get-bv-ops v1) )]
+
+    [(sca-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+    
+    [(vec-add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+
+    [(vec-sat-add v1 v2) (append (list extract 
+                                       ;TEMPORARY
+                                       ;bvadd
+                                       ) (if (halide:is-signed-expr? v1 v2) (list  bvaddnsw ) (list  bvaddnuw  )) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sat-sub v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend zero-extend ) (list  zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+
+    ;; TODO: Since we now have context specific bitvector ops, this should be safe to do?
+    ;[(vec-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+    [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-mod v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmin) (list  bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-max v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmax ) (list  bvumax ))  (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(vec-if v1 v2 v3) (append (list bveq 'if 'cond) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
+    [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
+    [(vec-lt v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvslt) (list zero-extend bvult))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
+    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)    (get-bv-ops v2))]
+    ;[(vec-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list   bvsmax bvsmin ) (list   bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-absd v1 v2) (append (list  bvsub )  (get-bv-ops (vec-max v1 v2))  (get-bv-ops (vec-min v1 v2)) )]
+    [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
+
+    [(vec-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+    [(vec-bwnot v1 ) (append (list extract bvnot) (get-bv-ops v1)  )]
+
+    [(vector_reduce op width vec)
+     (cond
+       [(eq? op 'add)
+        (append (list extract bvadd bvmul) (if (halide:is-signed-expr? vec vec) (list sign-extend) (list  zero-extend )) (get-bv-ops vec))]
+       [else (error "Unexpected vector_reduce op:" op)])]
+
+    ;; Shuffles
+    [(vec-broadcast n vec) (append (list extract concat) (get-bv-ops vec)  )]
+    [(slice_vectors vec base stride len) (append (list extract concat) (get-bv-ops vec)  )]
+    [(concat_vectors v1 v2) (append (list extract concat) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(dynamic_shuffle vec idxs st end) (append (list extract concat) (get-bv-ops vec) )]
+    [(interleave v1 v2) (append (list extract concat) (get-bv-ops v1) (get-bv-ops v2) )]
+    [(interleave4 v1 v2 v3 v4) 
+     (append (list extract concat) (get-bv-ops v1) (get-bv-ops v2) (get-bv-ops v3)  (get-bv-ops v4) )
+     ]
+    
+    ;; Base case
+    [_ empty-list]))
 
 
 ;; Binds
@@ -78,6 +351,20 @@
      ]
     [(x512 sca) 
       (broadcast-helper x512 sca)
+     ]
+    [(xBroadcast sca factor) 
+     (if (int-imm? sca)
+       (values (xBroadcast sca factor) 0)
+       (if is-leaf-depth
+         (begin
+           (values (xBroadcast (arg 0) factor) 1)
+           )
+         (begin
+           (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+           (values (xBroadcast leaf-sol factor) args-used)
+           )
+         )
+       )
      ]
 
     [(ramp base stride len) 
@@ -1037,6 +1324,16 @@
         )
      ]
 
+    [(vec-bwnot v1 )
+       (if is-leaf-depth
+        (values (vec-bwnot (arg 0)) 1)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+          (values (vec-bwnot leaf1-sol) args-used1)
+        )
+        )
+     ]
+
     [(vector_reduce op width vec) 
        (if is-leaf-depth
         (values (vector_reduce op width (arg 0)) 1)
@@ -1298,6 +1595,7 @@
     [(x128 sca) (* 128 (vec-size sca))]
     [(x256 sca) (* 256 (vec-size sca))]
     [(x512 sca) (* 512 (vec-size sca))]
+    [(xBroadcast sca factor) (* factor (vec-size sca))]
 
     [(ramp base stride len) (* len (vec-size base))]
     [(load buf idxs alignment) (vec-size idxs)]
@@ -1422,6 +1720,7 @@
     [(vec-shr v1 v2) (vec-size v1)]
 
     [(vec-bwand v1 v2) (vec-size v1)]
+    [(vec-bwnot v1 ) (vec-size v1)]
 
     [(vector_reduce op width vec) (quotient (vec-size vec) width)]
 
@@ -1447,10 +1746,28 @@
 ;; halide factor by scale-factor x
 (define (scale-down-expr expr scale-factor)
 
+  (define scaled? #t)
+
   (define (visitor-fn e)
     (destruct e
               [(buffer data elemT buffsize) 
-               (define scaled-size (/ buffsize scale-factor))
+               (define prec (vec-precision e))
+               (define len (halide:vec-len e))
+
+                (define scaled-size
+                  (cond
+                    [(equal? (modulo len scale-factor) 0)
+                     (* prec (/ len scale-factor))
+                     ]
+                    [else
+
+                      (set! scaled? #f)
+                      ;(error "Unsupported scaling for " e)
+                      (* prec len)
+                      
+                      ]
+                    )
+                  )
                (halide:create-buffer (bv 0 (bitvector scaled-size)) elemT)
                ]
               [(cast-int vec olane oprec)
@@ -1458,6 +1775,12 @@
                ]
               [(cast-uint vec olane oprec)
                (cast-uint vec (/ olane scale-factor) oprec)
+               ]
+              [(xBroadcast sca factor) 
+               (xBroadcast sca (/ factor scale-factor))
+               ]
+              [(vec-broadcast n vec) 
+               (vec-broadcast (/ n scale-factor) vec)
                ]
               [(x128 sca)
                (cond
@@ -1474,7 +1797,8 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                    (set! scaled? #f)
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
@@ -1490,8 +1814,13 @@
                  [(equal? scale-factor 8)
                   (x8 sca)
                   ]
+                 [(equal? scale-factor 8)
+                  (x8 sca)
+                  ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                   (set! scaled? #f)
+                   e
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
@@ -1504,7 +1833,9 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                   (set! scaled? #f)
+                   e
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
@@ -1515,10 +1846,22 @@
                   (x8 sca)
                   ]
                  [else
-                   (error "Unsupported scaling size: " scale-factor)
+                   (set! scaled? #f)
+                   e
+                   ;(error "Unsupported scaling size: " scale-factor)
                    ]
                  )
                ]
+              [(ramp base stride len)
+                (set! scaled? #f)
+                (ramp base stride (/ len scale-factor))
+               ]
+
+              [(slice_vectors vec base stride len)
+               (slice_vectors vec (/ base scale-factor) stride (/ len scale-factor))
+                
+               ]
+
               [v 
                 v]
               )
@@ -1535,7 +1878,7 @@
       )
   )
 
-  result
+  (values scaled? result)
   
   )
 
@@ -1617,7 +1960,8 @@
   (define (visitor-fn e)
     (destruct e
               [(ramp base stride len) 
-               (set! flag #t)
+               ;(set! flag #t)
+               e
                ]
 
               [(vec-div v1 v2) 
@@ -1650,6 +1994,31 @@
   )
 
 
+(define (get-expr-depth e)
+  (define depth 1)
+
+  (destruct e
+            [(buffer data elemT buffsize)
+             (set! depth 0)
+             ]
+            [_
+
+  (define sub-exp (halide:sub-exprs e))
+
+  (for/list ([se sub-exp])
+            (println se)
+            (define sub-depth (get-expr-depth se))
+            (define edge-depth (+ 1 sub-depth))
+            (set! depth (max depth edge-depth))
+            )
+
+              ]
+            )
+
+
+  depth
+  
+  )
 
 (define (get-imm-values expr)
 
@@ -1658,6 +2027,18 @@
     (destruct e
               [(int-imm data signed?) 
                (set! imms-vals (append imms-vals (list data)))
+               e
+               ]
+              [(vector_reduce op width vec) 
+               (set! imms-vals (append imms-vals (list (bv 1 (bitvector (vec-precision e))))))
+               e
+               ]
+              [(vec-shr v1 v2) 
+               (define shift-imms (get-imm-values v2))
+               (define adjusted (for/list ([val shift-imms])   (if (< (bvlength val) 32)  (zero-extend val (bitvector 32)) val )))
+               (set! imms-vals (append imms-vals adjusted))
+               e
+
                ]
               ;; When target doesn't support saturating operations
               ;; of a given size then we can decompose the operation
@@ -1726,6 +2107,7 @@
     [(x128 sca)  (get-elemT sca)]
     [(x256 sca)  (get-elemT sca)]
     [(x512 sca)  (get-elemT sca)]
+    [(xBroadcast sca factor) (get-elemT sca)]
 
     [(ramp base stride len) (get-elemT base)]
     [(load buf idxs alignment) (size-to-elemT (vec-precision idxs))]
@@ -1848,6 +2230,7 @@
     [(vec-shr v1 v2) (get-elemT v1)]
 
     [(vec-bwand v1 v2) (get-elemT v1)]
+    [(vec-bwnot v1) (get-elemT v1)]
 
     [(vector_reduce op width vec) (get-elemT vec)]
 
@@ -1880,6 +2263,7 @@
     [(x128 sca) (vec-precision sca)]
     [(x256 sca) (vec-precision sca)]
     [(x512 sca) (vec-precision sca)]
+    [(xBroadcast sca factor) (vec-precision sca)]
 
     [(ramp base stride len) (vec-precision base)]
     [(load buf idxs alignment) (vec-precision idxs)]
@@ -2004,6 +2388,7 @@
     [(vec-shr v1 v2) (vec-precision v1)]
 
     [(vec-bwand v1 v2) (vec-precision v1)]
+    [(vec-bwnot v1 ) (vec-precision v1)]
 
     [(vector_reduce op width vec) (vec-precision vec)]
 

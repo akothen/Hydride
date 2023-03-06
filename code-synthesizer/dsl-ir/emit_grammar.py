@@ -4,7 +4,8 @@ import json
 import subprocess as sb
 from common.DSLParser import parse_dict
 #from LatestSemantics import semantcs
-from merged_dict import semantcs
+from  x86SemanticsAllArgs import semantcs
+
 from common.PredefinedDSL import *
 from common.StructDef import StructDef
 from interpreter.InterpreterDef import InterpreterDef
@@ -14,7 +15,7 @@ from legal_insts import legal_map
 from Specification import Specification, parse_spec
 
 
-from HexSemanticsAllArgs import hvx_semantics
+from hexsemantics_new import semantics as hvx_semantics
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
@@ -27,6 +28,7 @@ OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
 IS_SHUFFLE = int(sys.argv[4]) == 1
 TARGET = sys.argv[5]
+SCALE_FACTOR = 1
 
 STEP=0
 DEPTH=3
@@ -37,6 +39,10 @@ if len(sys.argv) >= 7:
 
 if len(sys.argv) >= 8:
     DEPTH = int(sys.argv[7])
+
+
+if len(sys.argv) >= 9:
+    SCALE_FACTOR = int(sys.argv[8])
 
 
 
@@ -103,6 +109,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     sp = parse_spec(spec)
 
+    sp.set_target(TARGET)
+
 
     write_to_file(rosette_imports.format(spec['name']))
     write_to_file(hydride_header)
@@ -116,7 +124,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
                   is_shuffle = IS_SHUFFLE,
                   legal_map = legal_map,
                   target = TARGET,
-                  step = STEP
+                  step = STEP,
+                  scale_factor = SCALE_FACTOR
                   )
 
 

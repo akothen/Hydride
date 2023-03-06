@@ -4,7 +4,8 @@ from common.PredefinedDSL import *
 
 class BindDef:
 
-    def __init__(self):
+    def __init__(self, bind_name = "bind-expr"):
+        self.bind_name = bind_name
         return
 
 
@@ -19,7 +20,6 @@ class BindDef:
 
         defaults.append("[(lit v) (lit v)]")
 
-        defaults.append("[(nop v1) (nop (bind-expr v1 {}))]".format(env_name))
         defaults.append("[(idx-add i1 i2) (idx-add i1 i2)]")
         defaults.append("[(idx-mul i1 i2) (idx-mul i1 i2)]")
 
@@ -46,7 +46,7 @@ class BindDef:
         for idx,arg in enumerate(sample_ctx.context_args):
             if idx % 3 == 0 and idx != 0:
                 sub_bind.append("\n\t\t")
-            sub_bind.append("(bind-expr {} {})".format(arg.name, env_name))
+            sub_bind.append("({} {} {})".format(self.bind_name, arg.name, env_name))
 
         bind_cmd = "({} {})".format(dsl_inst.get_dsl_name(), " ".join(sub_bind))
 
@@ -66,7 +66,7 @@ class BindDef:
 
         sufix = "\n;; "+"="*80 + "\n"
 
-        binder = "(define (bind-expr prog {})\n (destruct prog\n{}\n )\n)".format(env_name, "\n".join(bind_clauses))
+        binder = "(define ({} prog {})\n (destruct prog\n{}\n )\n)".format(self.bind_name,env_name, "\n".join(bind_clauses))
         return prefix + binder + sufix
 
 

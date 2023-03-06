@@ -36,6 +36,9 @@
 (struct x256 (sca) #:transparent)
 (struct x512 (sca) #:transparent)
 
+;; Generalized Broadcast
+(struct xBroadcast (sca factor) #:transparent)
+
 
 (struct int-imm (data signed?) #:transparent #:mutable)
 
@@ -184,6 +187,7 @@
 (struct vec-shr (v1 v2) #:transparent)
 
 (struct vec-bwand (v1 v2) #:transparent)
+(struct vec-bwnot (v1) #:transparent)
 
 (struct vector_reduce (op width vec) #:transparent)
 

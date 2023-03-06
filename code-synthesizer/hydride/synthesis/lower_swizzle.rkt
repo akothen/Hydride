@@ -26,6 +26,8 @@
 
 (require hydride/synthesis/iterative_synthesis)
 
+(require hydride/synthesis/scalable_synthesis)
+
 (require hydride/synthesis/python)
 
 
@@ -264,6 +266,7 @@
               )
 
     )
+  (debug-log swizzle-expr)
 
   (define cost-bound 40)
 
@@ -289,13 +292,19 @@
         (define memo-result (hash-ref swizzle-synth-log swizzle-hash))
         (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
         )
-      (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
+      ;(synthesize-sol-with-depth 1 2  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
+
+      (synthesize-sol-with-depth 1 4  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
       )
     )
 
   (define lowered-expression
     (cond 
-      [satisfiable? materialize]
+      [satisfiable? 
+        (debug-log "Swizzle successfully lowered")
+        (debug-log materialize)
+        materialize
+        ]
       [else 
         (lower-swizzle-to-llvm-shuffle swizzle-expr)
         ]

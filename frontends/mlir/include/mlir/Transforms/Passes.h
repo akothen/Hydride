@@ -51,6 +51,9 @@ std::unique_ptr<Pass> createControlFlowSinkPass();
 /// Creates a pass to perform common sub expression elimination.
 std::unique_ptr<Pass> createCSEPass();
 
+/// Hydride Arith dialect frontend pass
+std::unique_ptr<Pass> createHydrideArithPass();
+
 /// Creates a loop invariant code motion pass that hoists loop invariant
 /// instructions out of the loop.
 std::unique_ptr<Pass> createLoopInvariantCodeMotionPass();

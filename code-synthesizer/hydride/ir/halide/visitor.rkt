@@ -20,6 +20,7 @@
     [(x128 sca) (handler (x128 (visit sca handler)))]
     [(x256 sca) (handler (x256 (visit sca handler)))]
     [(x512 sca) (handler (x512 (visit sca handler)))]
+    [(xBroadcast sca factor) (handler (xBroadcast (visit sca handler) factor))]
 
     [(int-imm data signed?) (handler expr)]
 
@@ -145,6 +146,8 @@
     [(vec-if v1 v2 v3) (handler (vec-if (visit v1 handler) (visit v2 handler) (visit v3 handler)))]
 
     [(vec-bwand v1 v2) (handler (vec-bwand (visit v1 handler) (visit v2 handler)))]
+
+    [(vec-bwnot v1) (handler (vec-bwnot (visit v1 handler) ))]
 
     [(vector_reduce op width vec) (handler (vector_reduce op width (visit vec handler)))]
 
