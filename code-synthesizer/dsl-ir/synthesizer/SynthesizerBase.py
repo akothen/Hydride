@@ -1136,9 +1136,10 @@ class SynthesizerBase:
                 score +=  int(([ctx.supports_input_size(input_size) for input_size in [self.MAX_BW_SIZE]].count(True)))
 
 
-            # In the case where we have inputs of varying sizes, we want also want
-            #unique_input_sizes = self.input_sizes
-            #score +=  int([ctx.supports_output_size(isize) for isize in unique_input_sizes].count(True)) * 2
+            if not self.is_shuffle :
+                # In the case where we have inputs of varying sizes, we want also want
+                unique_input_sizes = self.input_sizes
+                score +=  min(int([ctx.supports_output_size(isize) for isize in unique_input_sizes].count(True)), 3) #* 2
 
 
 

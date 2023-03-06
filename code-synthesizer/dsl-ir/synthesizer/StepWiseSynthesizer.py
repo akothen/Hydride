@@ -87,6 +87,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         self.is_shuffle = is_shuffle
 
+        #if self.is_shuffle:
+        #    self.contexts_per_dsl_inst = None
+
         # Lowering of swizzles stages happens at ful bitwidth
         if is_shuffle:
             self.scale_factor = 1
@@ -568,7 +571,6 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
-        spec_ops = self.spec.get_semantics_ops_list()
         print("spec_ops:", spec_ops)
         def spans_spec(comb, non_matching_lim = 1):
             eval_str = [ast.literal_eval(ele) for ele in comb]
@@ -579,10 +581,13 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             non_matching_count = 0
 
+
             for op in spec_ops:
                 if op not in fold_ops:
                     non_matching_count += 1
 
+
+            #print("Checking in span:", eval_str, (non_matching_count < non_matching_lim) )
             return  (non_matching_count < non_matching_lim)
 
 
@@ -641,12 +646,12 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
                 def count_muls(key):
-                    print("count muls key:", key)
+                    #print("count muls key:", key)
                     return sum([1 for ele in key if "bvmul" in ele]) + len(bucket[key]['ops'])
 
                 sorted_keys = shuffle_key + sorted(list(sample_key), key = lambda e : count_muls(e))
 
-                print(sorted_keys)
+                #print(sorted_keys)
 
 
             sorted_keys = list(sample_key) + shuffle_key
@@ -700,6 +705,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         step_combination = context_combinations[step % len(context_combinations)]
 
+
         (step_keys, step_indices) = step_combination
 
         comb_ops = []
@@ -715,6 +721,18 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
+    def prune_masked_operations(self, ops, ctxs):
+        pruned_ops = []
+        pruned_ctxs = []
+
+        for i in range(len(ops)):
+            if "mask" in ops[i].name or "mask" in ctxs[i].name:
+                continue
+            pruned_ops.append(ops[i])
+            pruned_ctxs.append(ctxs[i])
+
+
+        return (pruned_ops, pruned_ctxs)
 
 
 
@@ -839,8 +857,6 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
-        for idx, dsl_inst in enumerate(operation_dsl_insts):
-            print("[PRE REDUCTION] Pool Of operations: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
 
         BOUND = 16
         if self.target == 'hvx':
@@ -864,7 +880,12 @@ class StepWiseSynthesizer(SynthesizerBase):
         (operation_dsl_insts, operation_dsl_args_list) = self.prune_using_hvx_acc_ops(operation_dsl_insts, operation_dsl_args_list)
 
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
+        if not self.is_shuffle:
+            (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
+        else:
+            (operation_dsl_insts, operation_dsl_args_list) = self.prune_masked_operations(operation_dsl_insts, operation_dsl_args_list)
+
+
 
 
 
@@ -983,6 +1004,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             imms = imms,
             include_ramp_lit = include_ramp_lit
         )
+
+
 
 
     def score_context(self, dsl_inst ,  ctx):
