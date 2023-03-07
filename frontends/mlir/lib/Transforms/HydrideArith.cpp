@@ -634,6 +634,22 @@ void HydrideArithPass::runOnOperation() {
       for (Value operand : op->getOperands()) {
         expr = MLIRValVisit(operand);
         EmitSynthesis("benchmark", expr, expr_id);
+        std::vector<Type> arg_types(RegToLoadMap.size() +
+                                    RegToVariableMap.size());
+        std::vector<Value> args_vec(RegToLoadMap.size() +
+                                    RegToVariableMap.size());
+        for (auto reg : RegToLoadMap) {
+          arg_types[reg.first] = reg.second.getType();
+          args_vec[reg.first] = reg.second;
+        }
+        MLIRContext *ctx = returnOp.getContext();
+        MyPatternRewriter rewriter(ctx);
+        FlatSymbolRefAttr sym_ref = getOrInsertHydrideFunc(
+            rewriter, this->mainModule, expr_id, operand.getType(), arg_types);
+      rewriter.setInsertionPoint(returnOp);
+      Location loc = returnOp->getLoc();
+      rewriter.create<LLVM::CallOp>(loc, TypeRange(), sym_ref,
+                                    ValueRange(args_vec));
         expr_id++;
       }
     }
@@ -659,6 +675,11 @@ void HydrideArithPass::runOnOperation() {
       MyPatternRewriter rewriter(ctx);
       FlatSymbolRefAttr sym_ref = getOrInsertHydrideFunc(
           rewriter, this->mainModule, expr_id, valToStoreType, arg_types);
+      // get all args in
+      rewriter.setInsertionPointAfter(storeOp);
+      Location loc = storeOp->getLoc();
+      rewriter.create<LLVM::CallOp>(loc, TypeRange(), sym_ref,
+                                    ValueRange(args_vec));
       expr_id++;
 
     } else {
