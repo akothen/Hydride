@@ -59,7 +59,9 @@
 
 (struct vector:transpose (v1 rank_perm) #:transparent)
 
+(struct vector:outer_product (v1 v2) #:transparent)
 
+(struct vector:shape_cast (v1 input_shape output_shape) #:transparent)
 
 
 

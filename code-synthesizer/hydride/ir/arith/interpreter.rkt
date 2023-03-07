@@ -124,6 +124,8 @@
   )
 
 
+
+
 (define (index-tensor bv shape-vec layout-vec prec indices)
   (cond
     [(equal? 0 (vector-length indices ))     
@@ -453,6 +455,101 @@
                   ]
                 )
               ]
+             [(vector:outer_product v1 v2)
+              (define rows (vector-ref (tensor-shape v1) 0))
+              (define cols (vector-ref (tensor-shape v2) 0))
+              ;; Interpret outer product as a matrix multiplication
+              ;; for a (rows x 1) and (1 x cols) tensor
+              (interpret (vector:matrix_multiply v1 v2 rows 1 cols) indices)
+              ]
+             [(vector:shape_cast v1 input_shape output_shape)
+              ;; Methodology for interpretting shape_cast:
+              ;; For each input index in index, we define a function which maps 
+              ;; an input index to a list of indices for the original shape of v1
+              ;; We append all these indices together and cast back into a vector
+              ;; then we simply interpret v1 with the new indices
+
+              ;; It is currently assumed that this operation does not require moving data, and that it will be folded away before lowering vector operations. // Layout doesn't change
+              (cond
+                [(< (vector-length input_shape) (vector-length output_shape)) ; Rank increases
+
+                 ;; TODO, can we interpret this similar to the decreasing rank case by swapping input and output shapes?
+                 (error "arith/interpreter.rkt vector:shape_cast increase rank interpreter TODO")
+                 ]
+                [(> (vector-length input_shape) (vector-length output_shape)) ; Rank decreases
+
+                 ;; Each input index maps to multiple v1 indices
+
+                 (define collapsed-dims-vec (list))
+
+                 (define starting_index 0)
+                 (for/list ([output-dim output_shape])
+                           (define prod 1)
+                           (for/list ([i-dim-idx (range starting_index (vector-length input_shape))])
+                                     (define i-dim (vector-ref input_shape i-dim-idx))
+                                     (set! prod (* prod i-dim))
+
+                                     (cond
+                                       [(equal? prod output-dim)
+                                        ;; Contigous collapsing dim gives the required output shape
+
+                                        ;; For the given output-dimension output-dim, the 
+                                        ;; input-dimension indices from starting_index to i-idx-idx
+                                        (define mapping (list starting_index i-dim-idx)) 
+                                        (set! collapsed-dims-vec (append collapsed-dims-vec mapping))
+                                        (set! starting_index (+ i-dim-idx 1))
+                                        ]
+                                       [else
+                                         '()
+                                         ]
+                                       )
+                                     )
+
+                           )
+
+                 ;; collapsed-dims-vec maintains a list of pair of indices for the decreasing rank mapping (start_1, end_1), (end_1+1, end_2), (end_2+1, end_3),...
+                 ;; We now need to each index in the indices vectors by identifying the increased rank index corresponding to it.
+                 ;; e.g. index 10 of output-shape (20) and input-shape (5 x 4 x 1), would correspond to index (2 , 2, 0)
+                 ;; Strides vector : 4, 1, 1
+                 ;; TODO: devise function to do this factorization
+
+                 (for/list ( [i (range (vector-length indices))])
+                           (define expanded-dims-range (list-ref collapsed-dims-vec i))
+                           (define dims-start (list-ref expanded-dims-range 0))
+                           (define dims-end (list-ref expanded-dims-range 1))
+                           (define expanded-dims 
+                             (for/list ([k (range dims-start (+ 1 dims-end))])
+                                       (vector-ref input_shape k)
+                                       )
+                             )
+
+                           (define (stride-helper i)
+                             (define starting-dim (list-ref expanded-dims i))
+                             (define num-elems 1)
+                             (for/list ([si (range starting-dim (length expanded-dims))])
+                                       (set! num-elems (* num-elems (list-ref expanded-dims si)))
+                                       )
+                             num-elems
+                             )
+
+                           (define dim-strides (build-list (length expanded-dims) stride-helper))
+
+
+
+
+
+                           dim-strides
+                           
+                           
+                           )
+                 ]
+                [else
+                  (error "arith/interpreter.rkt vector shape cast without change in rank not supported")
+                  
+                  ]
+                
+                )
+              ]
             ;; Base case
             [v (error "arith/interpreter.rkt Unsupported data type in interpreter" v)]
 
@@ -549,6 +646,14 @@
      ]
     [(vector:splat v1 out-shape) out-shape]
     [(vector:reduction v1 operation) (vector 1)]
+    [(vector:outer_product v1 v2)
+     (define left-shape (tensor-shape v1))
+     (define right-shape (tensor-shape v1))
+     (vector (vector-ref left-shape 0) (vector-ref right-shape 0))
+     ]
+    [(vector:shape_cast v1 input_shape output_shape)
+     output_shape
+     ]
     ;; Base case
     [_ (error "arith\\interpreter.rkt: Don't know how to infer vector length for arith expression:" expr)]))
 
@@ -607,6 +712,9 @@
      (build-vector (vector-length input-layout) transpose-helper)
      ]
     [(vector:reduction v1 operation) (vector 0)]
+    [(vector:outer_product v1 v2)
+     (vector 0 1)
+     ]
     ;; Base case
     [_ (error "arith\\interpreter.rkt: Don't know how to infer vector length for arith expression:" expr)])
   )
