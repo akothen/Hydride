@@ -9,11 +9,18 @@
 #include "PassDetail.h"
 #include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/Vector/IR/VectorOps.h"
+
+#include "mlir/Conversion/LLVMCommon/ConversionTarget.h"
+#include "mlir/Conversion/LLVMCommon/TypeConverter.h"
+
 #include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/BuiltinTypes.h"
+#include "mlir/IR/Matchers.h"
 #include "mlir/IR/Operation.h"
 #include "mlir/IR/OperationSupport.h"
+#include "mlir/IR/PatternMatch.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Support/FileUtilities.h"
 #include "mlir/Transforms/HydrideUtils.h"
@@ -47,6 +54,13 @@ std::queue<Operation *> RootExprOp;
 unsigned op_lanes = 0;
 
 namespace {
+
+class MyPatternRewriter : public PatternRewriter {
+public:
+  MyPatternRewriter(MLIRContext *ctx) : PatternRewriter(ctx) {}
+
+  /// Override the necessary PatternRewriter hooks here.
+};
 
 class HydrideSynthEmitter {
 public:
@@ -334,6 +348,11 @@ struct HydrideArithPass : public HydrideArithBase<HydrideArithPass> {
   void EmitSynthesis(std::string benchmark_name, std::string expr,
                      unsigned expr_id);
 
+  FlatSymbolRefAttr getOrInsertHydrideFunc(MyPatternRewriter &rewriter,
+                                           ModuleOp module, int expr_id,
+                                           Type retType,
+                                           std::vector<Type> argTypes);
+
   std::string MLIRValVisit(Value val);
 
   std::string MLIRArithOpVisit(Operation *op);
@@ -342,6 +361,8 @@ struct HydrideArithPass : public HydrideArithBase<HydrideArithPass> {
 
   std::string print_binary_op(std::string bv_name, Value a, Value b,
                               bool is_vector_op);
+
+  ModuleOp mainModule;
 
 protected:
   std::string visit(arith::AddIOp addOp) {
@@ -383,10 +404,12 @@ protected:
     auto extractPos = extractElementOp.getPosition();
 
     Value src = extractElementOp.getVector();
-
-    // std::string ret_str = "(vector:extract-element (" + MLIRValVisit(src) + " " + std::to_string(extractPos) + ") )";
-    // return ret_str;
-    return "";
+    std::string val_str;
+    llvm::raw_string_ostream val_ostream(val_str);
+    val_ostream << extractPos;
+    std::string ret_str = "(vector:extract-element (" + MLIRValVisit(src) +
+                          " " + val_ostream.str() + ") )";
+    return ret_str;
   }
 
   std::string visit(vector::ExtractOp extractOp) {
@@ -572,8 +595,14 @@ protected:
 
 void HydrideArithPass::runOnOperation() {
 
+  LLVMConversionTarget target(getContext());
+  target.addLegalOp<ModuleOp>();
+  // target.addLegalDialect<mlir::LLVMDialect>();
+  LLVMTypeConverter typeConverter(&getContext());
+
+  this->mainModule = dyn_cast<ModuleOp>(getOperation());
   // Compute the operation statistics for the currently visited operation.
-  getOperation()->walk([&](func::FuncOp funcOp) {
+  this->mainModule->walk([&](func::FuncOp funcOp) {
     funcOp.walk([&](Operation *op) {
       if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
         RootExprOp.push(op);
@@ -610,8 +639,26 @@ void HydrideArithPass::runOnOperation() {
     }
     if (auto storeOp = dyn_cast<vector::StoreOp>(op)) {
       auto valToStore = storeOp.getValueToStore();
+      auto valToStoreType = valToStore.getType();
+      std::vector<Type> arg_types(RegToLoadMap.size() +
+                                  RegToVariableMap.size());
+      std::vector<Value> args_vec(RegToLoadMap.size() +
+                                  RegToVariableMap.size());
+      for (auto reg : RegToLoadMap) {
+        arg_types[reg.first] = reg.second.getType();
+        args_vec[reg.first] = reg.second;
+      }
+
+      /* for (auto reg : RegToVariableMap) {
+        arg_types[reg.first] = reg.second.getType();
+      } */
+
       expr = MLIRValVisit(valToStore);
       EmitSynthesis("benchmark", expr, expr_id);
+      MLIRContext *ctx = storeOp.getContext();
+      MyPatternRewriter rewriter(ctx);
+      FlatSymbolRefAttr sym_ref = getOrInsertHydrideFunc(
+          rewriter, this->mainModule, expr_id, valToStoreType, arg_types);
       expr_id++;
 
     } else {
@@ -633,6 +680,29 @@ void HydrideArithPass::runOnOperation() {
     LoadToRegMap.clear();
     RootExprOp.pop();
   }
+}
+
+FlatSymbolRefAttr HydrideArithPass::getOrInsertHydrideFunc(
+    MyPatternRewriter &rewriter, ModuleOp module, int expr_id, Type retType,
+    std::vector<Type> argTypes) {
+  // add logic for naming
+  std::string func_name = "hydride.node.benchmark." + std::to_string(expr_id);
+  auto *context = module.getContext();
+
+  // Create a function declaration for printf, the signature is:
+  //   * `i32 (i8*, ...)`
+  // auto llvmI32Ty = IntegerType::get(context, 32);
+  // auto llvmI8PtrTy = LLVM::LLVMPointerType::get(IntegerType::get(context,
+  // 8));
+
+  auto llvmFnType = LLVM::LLVMFunctionType::get(retType, argTypes,
+                                                /*isVarArg=*/false);
+
+  // Insert the printf function into the body of the parent module.
+  PatternRewriter::InsertionGuard insertGuard(rewriter);
+  rewriter.setInsertionPointToStart(module.getBody());
+  rewriter.create<LLVM::LLVMFuncOp>(module.getLoc(), func_name, llvmFnType);
+  return SymbolRefAttr::get(context, func_name);
 }
 
 std::string HydrideArithPass::MLIRValVisit(Value val) {
@@ -736,9 +806,9 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
     return visit(broadcastOp);
   }
 
-  /* if (auto extractElementOp = dyn_cast<vector::ExtractElementOp>(op)) {
+  if (auto extractElementOp = dyn_cast<vector::ExtractElementOp>(op)) {
     return visit(extractElementOp);
-  } */
+  }
 
   if (auto extractOp = dyn_cast<vector::ExtractOp>(op)) {
     return visit(extractOp);

@@ -80,6 +80,9 @@ def CSE : Pass<"cse"> {
 def HydrideArith : Pass<"hydride-arith"> {
   let summary = "Hydride Arith Frontend";
   let constructor = "mlir::createHydrideArithPass()";
+  let dependentDialects = [
+    "LLVM::LLVMDialect",
+  ];
 }
 
 def Inliner : Pass<"inline"> {

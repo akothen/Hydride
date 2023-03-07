@@ -10,16 +10,18 @@
 
 (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
 
+
 ; Creating a map between buffers and mlir call node arguments
 (define id-map (make-hash))
+(hash-set! id-map reg_0 (bv 0 (bitvector 8)))
 
 
 (define mlir-expr 
-
+reg_0
 )
 
 (clear-vc!)
-(define synth-res (synthesize-mlir-expr mlir-expr id-map 2 4 'z3 #t #f  ""  ""  "X86"))
+(define synth-res (synthesize-mlir-expr mlir-expr id-map 2 64 'z3 #t #f  ""  ""  "X86"))
 (dump-synth-res-with-typeinfo synth-res id-map)
 ; Translate synthesized hydride-expression into LLVM-IR
 (compile-to-llvm synth-res id-map "hydride.node.benchmark.0" "benchmark")
