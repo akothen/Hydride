@@ -470,12 +470,106 @@
               ;; We append all these indices together and cast back into a vector
               ;; then we simply interpret v1 with the new indices
 
-              ;; It is currently assumed that this operation does not require moving data, and that it will be folded away before lowering vector operations. // Layout doesn't change
+              ;; "It is currently assumed that this operation does not require moving data, and that it will be folded away before lowering vector operations." // Layout doesn't change
               (cond
                 [(< (vector-length input_shape) (vector-length output_shape)) ; Rank increases
 
-                 ;; TODO, can we interpret this similar to the decreasing rank case by swapping input and output shapes?
-                 (error "arith/interpreter.rkt vector:shape_cast increase rank interpreter TODO")
+                 (displayln "Increased Dimensionality")
+                 ;; Multiple output indices map to single v1 index
+
+                 (define expanded-dims-vec (list))
+
+                 (define starting_index 0)
+                 (for/list ([input-dim input_shape])
+                           (define prod 1)
+                           (for/list ([o-dim-idx (range starting_index (vector-length output_shape))])
+                                     (define o-dim (vector-ref output_shape o-dim-idx))
+                                     (set! prod (* prod o-dim))
+
+                                     ;; Fold Degenerate dimensions into current output-dim
+                                     (define next-term-1? 
+                                       (cond
+                                         
+                                         ;; If current dimension is the last index, not degenerate
+                                         [(equal? o-dim-idx (- (vector-length output_shape) 1))
+                                          #f
+                                          ]
+                                         ;; If next dimension exent is 1, fold into current output-dim
+                                         [(equal? (vector-ref output_shape (+ 1 o-dim-idx)) 1)
+                                          #t
+                                          ]
+                                         [else
+                                           #f
+                                           ]
+                                         )
+                                       
+                                       )
+
+                                     (cond
+                                       [(and (equal? prod input-dim) (not next-term-1?))
+                                        ;; Contigous collapsing dim gives the required output shape
+
+                                        ;; For the given output-dimension output-dim, the 
+                                        ;; input-dimension indices from starting_index to i-idx-idx
+                                        (define mapping (list starting_index o-dim-idx)) 
+                                        (set! expanded-dims-vec (append expanded-dims-vec (list mapping)))
+                                        (set! starting_index (+ o-dim-idx 1))
+                                        ]
+                                       [(equal? prod input-dim)
+                                        ;; Proceed as normal
+                                        '()
+                                        ]
+                                       [else
+                                         '()
+                                         ]
+                                       )
+                                     )
+
+                           )
+
+
+                 (define list-of-collapsed-indices
+                   ;; Each v1 shape dimension extent maps to potentially multiple output indices after shape cast where rank increases
+                   (for/list ( [i (range (vector-length (tensor-shape v1)))])
+                             (define collapsed-dims-range (list-ref expanded-dims-vec i))
+                             (define dims-start (list-ref collapsed-dims-range 0))
+                             (define dims-end (list-ref collapsed-dims-range 1))
+                             (define collapsed-dims 
+                               (for/list ([k (range dims-start (+ 1 dims-end))])
+                                         (vector-ref output_shape k)
+                                         )
+                               )
+
+
+                             (define (stride-helper i)
+                               (define starting-dim (list-ref collapsed-dims i))
+                               (define num-elems 1)
+                               (for/list ([si (range (+ 1 i)(length collapsed-dims))])
+                                         (set! num-elems (* num-elems (list-ref collapsed-dims si)))
+                                         )
+                               num-elems
+                               )
+
+                             (define dim-strides (build-list (length collapsed-dims) stride-helper))
+                             (println dim-strides)
+                             ;(define index-val (vector-ref indices i))
+
+                             (define collapsed-index 0)
+
+
+                              (for/list ([p (range dims-start (+ 1 dims-end))])
+                                        (set! collapsed-index (+ collapsed-index (* (vector-ref indices p)   (list-ref dim-strides p))))
+                                     )
+
+                              collapsed-index
+
+                             )
+                   )
+
+
+                 (define new-indices (list->vector list-of-collapsed-indices))
+                 (interpret v1 new-indices)
+
                  ]
                 [(> (vector-length input_shape) (vector-length output_shape)) ; Rank decreases
 
@@ -487,8 +581,6 @@
                  (define starting_index 0)
                  (for/list ([output-dim output_shape])
                            (define prod 1)
-                           (displayln "Starting index")
-                           (println starting_index)
                            (for/list ([i-dim-idx (range starting_index (vector-length input_shape))])
                                      (define i-dim (vector-ref input_shape i-dim-idx))
                                      (set! prod (* prod i-dim))
@@ -503,7 +595,6 @@
                                           ]
                                          ;; If next dimension exent is 1, fold into current output-dim
                                          [(equal? (vector-ref input_shape (+ 1 i-dim-idx)) 1)
-                                          (displayln "Degenerate Dimension!")
                                           #t
                                           ]
                                          [else
@@ -534,8 +625,6 @@
                                      )
 
                            )
-                 (displayln "Collapsed-dims-vec")
-                 (println collapsed-dims-vec)
 
                  ;; collapsed-dims-vec maintains a list of pair of indices for the decreasing rank mapping (start_1, end_1), (end_1+1, end_2), (end_2+1, end_3),...
                  ;; We now need to each index in the indices vectors by identifying the increased rank index corresponding to it.
@@ -553,8 +642,6 @@
                                          )
                                )
 
-                             (displayln "expanded-dims")
-                             (println expanded-dims)
 
                              (define (stride-helper i)
                                (define starting-dim (list-ref expanded-dims i))
@@ -566,7 +653,6 @@
                                )
 
                              (define dim-strides (build-list (length expanded-dims) stride-helper))
-                             (displayln "dim-strides")
                              (println dim-strides)
 
                              (define index-val (vector-ref indices i))
@@ -587,21 +673,9 @@
                              )
                    )
 
-                 (displayln "list-of-exapnded-indices")
-                 (println list-of-expanded-indices)
 
                  (define new-indices (list->vector (apply append list-of-expanded-indices)))
-                 (displayln "Old indices")
-                 (println indices)
-
-                 (displayln "New Indices")
-                 (println new-indices)
-                 (displayln "Input shape")
-                 (println (tensor-shape v1))
                  (interpret v1 new-indices)
-                 
-
-
                  ]
                 [else
                   (error "arith/interpreter.rkt vector shape cast without change in rank not supported")
