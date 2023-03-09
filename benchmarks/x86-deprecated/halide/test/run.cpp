@@ -18,6 +18,8 @@
 #include "gaussian7x7.h"
 #elif benchmark_sobel3x3
 #include "sobel3x3.h"
+#elif benchmark_sobel5x5
+#include "sobel5x5.h"
 #elif benchmark_blur3x3
 #include "blur3x3.h"
 #elif benchmark_blur5x5
@@ -52,6 +54,8 @@
 #include "fully_connected.h"
 #elif benchmark_conv_nn
 #include "conv.h"
+#elif benchmark_conv3x3a32
+#include "conv3x3a32.h"
 #elif benchmark_matmul_256
 #include "matmul_256.h"
 #elif benchmark_matmul_256_32bit
@@ -599,6 +603,44 @@ int main(int argc, char **argv) {
 #endif
 
 
+#if benchmark_conv3x3a32
+    signed char mask[9] =
+    {
+        1, 2, 1,
+        2, 4, 2,
+        1, 2, 1
+    };
+
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    halide_dimension_t mask_shape[2];
+    mask_shape[0].min = 0; mask_shape[0].extent = 3; mask_shape[0].stride = 1;
+    mask_shape[1].min = 0; mask_shape[1].extent = 3; mask_shape[1].stride = 3;
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+    Halide::Runtime::Buffer<int8_t> mask_buf(mask, dims, mask_shape);
+
+    cycles = benchmark([&]() {
+            int error = conv3x3a32(input_buf, mask_buf, output_buf);
+            if (error != 0) {
+            printf("conv3x3a32 pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+#endif
+    printf("AppReported (): Image %dx%d - conv3x3a32(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
 #if benchmark_blur3x3
     halide_dimension_t x_dim{ 0, width/2, 1 };
     halide_dimension_t y_dim{ 0, height, width/2 };
@@ -776,6 +818,32 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - sobel3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+
+#if benchmark_sobel5x5
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+
+    float exec_time = benchmark([&]() {
+            int error = sobel5x5(input_buf, output_buf);
+            if (error != 0) {
+            printf("sobel5x5 pipeline failed: %d\n", error);
+            }
+            });
+
+      printf("Execution took %0.4f s\n", exec_time);
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - sobel5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
 
 #if benchmark_matmul_256
 
@@ -1081,7 +1149,6 @@ int main(int argc, char **argv) {
     char *filename = (char *) malloc(100 * sizeof(char));
     strcpy(filename, argv[4]);
     int out_fp;
-
     
     if((out_fp = open(filename, O_CREAT_WRONLY_TRUNC, 0777)) < 0)
     {
@@ -1091,9 +1158,7 @@ int main(int argc, char **argv) {
     if(write_file(out_fp, output, height, width, 2) != 0) {
         printf("Error: Cannot write to file %s\n", filename);
     }
-
     close(out_fp);
-
     free(input);
     free(output);
     free(filename);
@@ -1102,4 +1167,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
