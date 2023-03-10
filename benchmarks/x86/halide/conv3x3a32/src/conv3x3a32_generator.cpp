@@ -24,14 +24,14 @@ public:
 
         // Schedule for x86
         output
-            .tile(x, y, xi, yi, 64, 8, TailStrategy::RoundUp)
-            .vectorize(xi, 64)
+            .tile(x, y, xi, yi, 32, 16, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
             .unroll(yi);
         bounded_input
             .store_in(MemoryType::Stack)
             .compute_at(output, y)
-            .align_storage(x, 64)
-            .vectorize(x, 64, TailStrategy::RoundUp);
+            .align_storage(x, 32)
+            .vectorize(x, 32, TailStrategy::RoundUp);
 
         output.print_loop_nest();
     }
