@@ -24,7 +24,7 @@ public:
 
         // Schedule for x86
         output
-            .tile(x, y, xi, yi, 32, 12, TailStrategy::RoundUp)
+            .tile(x, y, xi, yi, 32, 16, TailStrategy::RoundUp)
             .vectorize(xi, 32)
             .unroll(yi);
         bounded_input
