@@ -3065,10 +3065,16 @@ namespace Halide {
 
             class HydrideSynthEmitter {
                 public:
-                    HydrideSynthEmitter(std::string benchmark_name) :  benchmark_name(benchmark_name) {}
+                    HydrideSynthEmitter(std::string benchmark_name) :  benchmark_name(benchmark_name) {
+                            const char* extract_ops  = getenv("HYDRIDE_EXTRACT_OPS");
+                            if(extract_ops) {
+                                extract_ops_only = true;
+                            }
+                    }
 
                     std::string benchmark_name;
 
+                    bool extract_ops_only = false;
 
                     std::string get_synthlog_hash_filepath(int id){
 
@@ -3100,6 +3106,28 @@ namespace Halide {
                             }
                         } else {
                             return "synth_hash_" + benchmark_name + "_"+ std::to_string(id);
+                        }
+
+                    }
+
+
+                    std::string get_expr_extract_filepath(int id){
+
+                        if(id < 0){
+                            return "";
+                        } else {
+                            return "expr_hash_" + benchmark_name + "_"+ std::to_string(id) + ".rkt";
+                        }
+
+                    }
+
+
+                    std::string get_expr_extract_hash_name(int id){
+
+                        if(id < 0){
+                                return "";
+                        } else {
+                            return "expr_hash_" + benchmark_name + "_"+ std::to_string(id);
                         }
 
                     }
@@ -3346,8 +3374,6 @@ namespace Halide {
                 rkt << "(clear-vc!)" << "\n";
 
 
-                std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
-                std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
 
 
 
@@ -3359,25 +3385,44 @@ namespace Halide {
                     expr_depth = (*expr_depth_var) - '0';
                 }
 
-                rkt << HSE.emit_iterative_optimize(/* Enable iterative? */ false) << "\n";
+                // If we simply want to identify the expressions in this benchmark given a particular depth
+                if(HSE.extract_ops_only){
+
+                    std::string prev_hash_path = HSE.get_expr_extract_filepath(expr_id - 1);
+                    std::string prev_hash_name = HSE.get_expr_extract_hash_name(expr_id - 1);
+
+                    std::string cur_hash_path = HSE.get_expr_extract_filepath(expr_id );
+                    std::string cur_hash_name = HSE.get_expr_extract_hash_name(expr_id );
+
+                    rkt << "(write-expression-hashes halide-expr \"" <<prev_hash_path <<"\"  \"" << prev_hash_name << "\" \"/tmp/" << cur_hash_path <<"\"  \"" << cur_hash_name << "\" " << expr_depth <<")\n";
+
+                } else {
+
+                    std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
+                    std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
+
+                    rkt << HSE.emit_iterative_optimize(/* Enable iterative? */ false) << "\n";
 
 
-                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",
-                            /* Previous hash file path */ prev_hash_path,
-                            /* Previous hash  name */ prev_hash_name ,
-                            /* target id */ target_str
-                            ) << ")" <<"\n";
-                rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
+                    rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",
+                                /* Previous hash file path */ prev_hash_path,
+                                /* Previous hash  name */ prev_hash_name ,
+                                /* target id */ target_str
+                                ) << ")" <<"\n";
+                    rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
 
 
-                std::string fn_name = "hydride.node." +benchmark_name+ "." +  std::to_string(expr_id);
-                rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name , benchmark_name);
+                    std::string fn_name = "hydride.node." +benchmark_name+ "." +  std::to_string(expr_id);
+                    rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name , benchmark_name);
 
 
-                std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
-                std::string cur_hash_name = HSE.get_synthlog_hash_name(expr_id );
+                    std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
+                    std::string cur_hash_name = HSE.get_synthlog_hash_name(expr_id );
 
-                rkt << HSE.emit_write_synth_log_to_file( "/tmp/"+cur_hash_path, cur_hash_name);
+                    rkt << HSE.emit_write_synth_log_to_file( "/tmp/"+cur_hash_path, cur_hash_name);
+
+
+                }
 
                 rkt.close();
 

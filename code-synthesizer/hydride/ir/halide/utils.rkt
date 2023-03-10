@@ -1979,6 +1979,42 @@
   )
 
 
+(define (contains-mul-op-in-subexpr expr expr-depth)
+
+  (define leaves (get-sub-exprs expr (+ expr-depth 1)))
+  (define leaves-sizes (get-expr-bv-sizes leaves))
+
+  (define leaves-elemT (get-expr-elemT leaves))
+  (define sym-bvs (create-concrete-bvs leaves-sizes))
+
+  (define dummy-args (create-buffers leaves sym-bvs))
+
+  (define-values (expr-extract num-used) (bind-expr-args expr dummy-args expr-depth))
+
+
+  (contains-mul-op expr-extract)
+  )
+
+
+
+(define (contains-mul-op expr)
+
+  (define flag #f)
+  (define (visitor-fn e)
+    (destruct e
+              [(vec-mul v1 v2) 
+               (set! flag #t)
+               e
+               ]
+              [_ e]
+              )
+    )
+  (halide:visit expr visitor-fn)
+
+  flag
+  )
+
+
 (define (hash-expr expr)
   (define (visitor-fn e)
     (destruct e
@@ -1996,15 +2032,12 @@
 
 (define (get-expr-depth e)
   (define depth 1)
-
   (destruct e
             [(buffer data elemT buffsize)
              (set! depth 0)
              ]
             [_
-
   (define sub-exp (halide:sub-exprs e))
-
   (for/list ([se sub-exp])
             (println se)
             (define sub-depth (get-expr-depth se))
@@ -2018,6 +2051,35 @@
 
   depth
   
+  )
+
+
+(define (extract-sub-expressions expr depth)
+  (define is-buffer? (buffer? expr))
+  (cond
+    [is-buffer?
+      (list (hash-expr expr))
+      ]
+    [else
+      (define leaves (get-sub-exprs expr (+ 1 depth)))
+      (define leaves-sizes (get-expr-bv-sizes leaves))
+      (define sym-bvs (create-concrete-bvs leaves-sizes)) 
+
+      (define halide-expr-args (create-buffers leaves sym-bvs))
+
+
+      (define-values (expr-extract num-used) (bind-expr-args expr  halide-expr-args depth))
+
+      (define current-hash (hash-expr expr-extract))
+
+      (define sub-results (for/list ([leaf leaves]) (extract-sub-expressions leaf depth)))
+
+      (define combine-children (apply append sub-results))
+      (define final (append (list current-hash)   combine-children))
+      final
+
+      ]
+    )
   )
 
 (define (get-imm-values expr)

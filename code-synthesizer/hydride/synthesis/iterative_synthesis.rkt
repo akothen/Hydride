@@ -372,22 +372,45 @@
   (begin 
     (debug-log "*********** z3-optimize *****************")
 
+    (define synthesis-timeout? #f)
     (define sol?
-      ;(with-handlers ([exn:fail? (lambda (exn) (unsat))])
-      ;               (with-deep-time-limit 10000 ;7200 ; 2 hours timeout
-                                           (optimize 
-                                             #:minimize (list (cost-fn grammar))
-                                             #:guarantee 
-                                             ;; loop over inputs and add asserts
-                                             (begin 
-                                               (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-                                               ;(assert (< (cost-fn grammar) cost-bound))
-                                               )
+      (cond
+        [synthesis-timeout? 
+          (with-handlers 
+            ([exn:fail? (lambda (exn) (begin (debug-log "Synthesis timed-out ...") (unsat)))])
+            (with-deep-time-limit 10000 ; 2 hours timeout
+                                  (optimize 
+                                    #:minimize (list (cost-fn grammar))
+                                    #:guarantee 
+                                    ;; loop over inputs and add asserts
+                                    (begin 
+                                      (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                                      ;(assert (< (cost-fn grammar) cost-bound))
+                                      )
 
-                                             )
-       ;                                    )
+                                    )
+                                  )
 
-        ;             )
+            )
+          ]
+        [else
+
+          (optimize 
+            #:minimize (list (cost-fn grammar))
+            #:guarantee 
+            ;; loop over inputs and add asserts
+            (begin 
+              (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+              ;(assert (< (cost-fn grammar) cost-bound))
+              )
+
+            )
+
+
+          ]
+
+        )
+
       )
     (if (sat? sol?)
       (begin
@@ -622,6 +645,10 @@
      (debug-log "Escaping early as other thread found optimize bound solution")
      (values #f '() -1)
      ]
+    [(>= (length cexs) 15)
+     (debug-log "Escaping early as exceeded quota for number of cex allowed")
+     (values #f '() -1)
+     ]
     [else 
   ;; Clear the verification condition up till this point
   (clear-vc!)
@@ -834,6 +861,7 @@
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
+            (debug-log "Iteartive optimization, refine search")
             (define simplify (const-fold materialize))
             (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn simplify)))
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )

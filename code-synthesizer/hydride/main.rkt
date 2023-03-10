@@ -30,6 +30,7 @@
 (require hydride/utils/debug)
 (require hydride/utils/llvm_impl)
 (require hydride/utils/target)
+(require hydride/utils/extract_sub_exprs)
 
 
 ;; Hydride IR
@@ -99,6 +100,7 @@
   (all-from-out hydride/utils/debug)
   (all-from-out hydride/utils/llvm_impl)
   (all-from-out hydride/utils/target)
+  (all-from-out hydride/utils/extract_sub_exprs)
 
   (all-from-out hydride/ir/hydride/semantics)
   (all-from-out hydride/ir/hydride/definition)
