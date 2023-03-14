@@ -350,6 +350,7 @@ struct HydrideArithPass : public HydrideArithBase<HydrideArithPass> {
 
   FlatSymbolRefAttr getOrInsertHydrideFunc(MyPatternRewriter &rewriter,
                                            ModuleOp module, int expr_id,
+                                           std::string curr_func_name,
                                            Type retType,
                                            std::vector<Type> argTypes);
 
@@ -463,9 +464,41 @@ protected:
 
     Value src = extractStridedSliceOp.getVector();
 
-    std::string ret_str = "(vector:extract_strided_slice " + MLIRValVisit(src) +
+    std::string ret_str = "(vector:extract-strided-slice " + MLIRValVisit(src) +
                           " " + RosetteOffsetVec + " " + RosetteSliceVec + " " +
                           RosetteStrideVec + " " + ")";
+    return ret_str;
+  }
+
+  std::string visit(vector::InsertStridedSliceOp insertStridedSliceOp) {
+
+    auto sliceOffsets =
+        extractVector<int64_t>(insertStridedSliceOp.getOffsets());
+    auto sliceStrides =
+        extractVector<int64_t>(insertStridedSliceOp.getStrides());
+
+    std::string RosetteOffsetVec = "(vector";
+    std::string RosetteStrideVec = "(vector";
+
+    for (auto d : sliceOffsets) {
+
+      RosetteOffsetVec += " " + std::to_string(d);
+    }
+
+    for (auto d : sliceStrides) {
+
+      RosetteStrideVec += " " + std::to_string(d);
+    }
+
+    RosetteOffsetVec += ")";
+    RosetteStrideVec += ")";
+
+    Value src = insertStridedSliceOp.getSource();
+    Value dst = insertStridedSliceOp.getDest();
+
+    std::string ret_str = "(vector:insert-strided-slice " + MLIRValVisit(src) +
+                          " " + MLIRValVisit(dst) + " " + RosetteOffsetVec +
+                          " " + RosetteStrideVec + " " + ")";
     return ret_str;
   }
 
@@ -601,8 +634,11 @@ void HydrideArithPass::runOnOperation() {
   LLVMTypeConverter typeConverter(&getContext());
 
   this->mainModule = dyn_cast<ModuleOp>(getOperation());
+
+  std::string curr_func_name;
   // Compute the operation statistics for the currently visited operation.
   this->mainModule->walk([&](func::FuncOp funcOp) {
+    curr_func_name = funcOp.getName().str();
     funcOp.walk([&](Operation *op) {
       if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
         RootExprOp.push(op);
@@ -633,23 +669,40 @@ void HydrideArithPass::runOnOperation() {
     if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
       for (Value operand : op->getOperands()) {
         expr = MLIRValVisit(operand);
-        EmitSynthesis("benchmark", expr, expr_id);
+        llvm::outs() << "expr: " << expr << "\n";
+
+        EmitSynthesis(curr_func_name, expr, expr_id);
         std::vector<Type> arg_types(RegToLoadMap.size() +
                                     RegToVariableMap.size());
         std::vector<Value> args_vec(RegToLoadMap.size() +
                                     RegToVariableMap.size());
         for (auto reg : RegToLoadMap) {
           arg_types[reg.first] = reg.second.getType();
+          llvm::outs() << "reg.second.getType(): " << reg.second.getType()
+                       << "\n";
           args_vec[reg.first] = reg.second;
         }
+
+        for (auto reg : RegToVariableMap) {
+
+          auto val = Value::getFromOpaquePointer(reg.second);
+          arg_types[reg.first] = val.getType();
+          llvm::outs() << "val" << val << "\n";
+          args_vec[reg.first] = val;
+        }
+
+        llvm::outs() << "operand.getType(): " << operand.getType() << "\n";
         MLIRContext *ctx = returnOp.getContext();
         MyPatternRewriter rewriter(ctx);
         FlatSymbolRefAttr sym_ref = getOrInsertHydrideFunc(
-            rewriter, this->mainModule, expr_id, operand.getType(), arg_types);
-      rewriter.setInsertionPoint(returnOp);
-      Location loc = returnOp->getLoc();
-      rewriter.create<LLVM::CallOp>(loc, TypeRange(), sym_ref,
-                                    ValueRange(args_vec));
+            rewriter, this->mainModule, expr_id, curr_func_name,
+            operand.getType(), arg_types);
+        llvm::outs() << "sym_ref: " << sym_ref << "\n";
+        rewriter.setInsertionPoint(returnOp);
+        Location loc = returnOp->getLoc();
+        auto callOp = rewriter.create<LLVM::CallOp>(
+            loc, TypeRange(operand.getType()), sym_ref, ValueRange(args_vec));
+        operand.replaceAllUsesWith(callOp.getResult(0));
         expr_id++;
       }
     }
@@ -665,21 +718,28 @@ void HydrideArithPass::runOnOperation() {
         args_vec[reg.first] = reg.second;
       }
 
-      /* for (auto reg : RegToVariableMap) {
-        arg_types[reg.first] = reg.second.getType();
-      } */
+      for (auto reg : RegToVariableMap) {
+
+        auto val = Value::getFromOpaquePointer(reg.second);
+        arg_types[reg.first] = val.getType();
+        args_vec[reg.first] = val;
+      }
 
       expr = MLIRValVisit(valToStore);
-      EmitSynthesis("benchmark", expr, expr_id);
+      EmitSynthesis(curr_func_name, expr, expr_id);
       MLIRContext *ctx = storeOp.getContext();
       MyPatternRewriter rewriter(ctx);
-      FlatSymbolRefAttr sym_ref = getOrInsertHydrideFunc(
-          rewriter, this->mainModule, expr_id, valToStoreType, arg_types);
+      FlatSymbolRefAttr sym_ref =
+          getOrInsertHydrideFunc(rewriter, this->mainModule, expr_id,
+                                 curr_func_name, valToStoreType, arg_types);
       // get all args in
       rewriter.setInsertionPointAfter(storeOp);
       Location loc = storeOp->getLoc();
-      rewriter.create<LLVM::CallOp>(loc, TypeRange(), sym_ref,
-                                    ValueRange(args_vec));
+      // rewriter.create<LLVM::CallOp>(loc, TypeRange(), sym_ref,
+      // ValueRange(args_vec));
+      auto callOp = rewriter.create<LLVM::CallOp>(
+          loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
+      valToStore.replaceAllUsesWith(callOp.getResult(0));
       expr_id++;
 
     } else {
@@ -691,7 +751,7 @@ void HydrideArithPass::runOnOperation() {
           expr = MLIRVectorOpVisit(op);
         } else
           continue;
-        EmitSynthesis("benchmark", expr, expr_id);
+        EmitSynthesis(curr_func_name, expr, expr_id);
         expr_id++;
       }
     }
@@ -704,10 +764,11 @@ void HydrideArithPass::runOnOperation() {
 }
 
 FlatSymbolRefAttr HydrideArithPass::getOrInsertHydrideFunc(
-    MyPatternRewriter &rewriter, ModuleOp module, int expr_id, Type retType,
-    std::vector<Type> argTypes) {
+    MyPatternRewriter &rewriter, ModuleOp module, int expr_id,
+    std::string curr_func_name, Type retType, std::vector<Type> argTypes) {
   // add logic for naming
-  std::string func_name = "hydride.node.benchmark." + std::to_string(expr_id);
+  std::string func_name =
+      "hydride.node." + curr_func_name + "." + std::to_string(expr_id);
   auto *context = module.getContext();
 
   // Create a function declaration for printf, the signature is:
@@ -838,6 +899,10 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
   if (auto extractStridedSliceOp =
           dyn_cast<vector::ExtractStridedSliceOp>(op)) {
     return visit(extractStridedSliceOp);
+  }
+
+  if (auto insertStridedSliceOp = dyn_cast<vector::InsertStridedSliceOp>(op)) {
+    return visit(insertStridedSliceOp);
   }
 
   if (auto fmaOp = dyn_cast<vector::FMAOp>(op)) {
