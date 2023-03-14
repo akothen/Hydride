@@ -68,6 +68,8 @@
 #include "handtune_matmul.h"
 #elif benchmark_depthwise_conv
 #include "depthwise_conv.h"
+#elif benchmark_softmax
+#include "softmax.h"
 #endif
 
 #define LOG2VLEN 7
@@ -233,6 +235,31 @@ int main(int argc, char **argv) {
 #endif
 
     printf("AppReported (): Image %dx%d - add(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+#if benchmark_softmax
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+
+    benchmark([&]() {
+        int error = softmax(input_buf, 0, 100, 0, 5, 225, output_buf);
+        if (error != 0) {
+        printf("softmax pipeline failed: %d\n", error);
+        }
+    });
+#if DEBUG
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - softmax(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
 #endif
 
 #if benchmark_mul
@@ -1163,15 +1190,12 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
-
-
-
-         benchmark([&]() {
-                int error = median3x3(input_buf, output_buf);
-                if (error != 0) {
-                printf("median3x3 pipeline failed: %d\n", error);
-                }
-                });
+    benchmark([&]() {
+        int error = median3x3(input_buf, output_buf);
+        if (error != 0) {
+        printf("median3x3 pipeline failed: %d\n", error);
+        }
+    });
 #if DEBUG
 
     for (int x = 0; x < 10; x++)
@@ -1181,6 +1205,8 @@ int main(int argc, char **argv) {
 
     printf("AppReported (): Image %dx%d - median3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
 #endif
+
+
 
     /* -----------------------------------------------------*/
     /*  Write output image to file                          */
