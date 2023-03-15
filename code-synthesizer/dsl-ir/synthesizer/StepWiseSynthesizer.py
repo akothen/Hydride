@@ -542,7 +542,14 @@ class StepWiseSynthesizer(SynthesizerBase):
         sorted_keys =  sorted_keys_lexo + shuffle_key
 
         sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2) ), 0)
-        print("Sample key sizes:", sample_key_sizes)
+
+        spec_ops = self.spec.get_semantics_ops_list()
+        if sample_key_sizes <= 3 and "bvmul" not in spec_ops:
+            sample_key_sizes =  max(min(len(sorted_keys) -1,4 ), 0)
+
+
+        #print("Sample key sizes:", sample_key_sizes)
+
 
         # For higher depths, to maintain tractability during synthesis, we only include
         # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
