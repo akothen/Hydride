@@ -14,6 +14,7 @@
   hydride/utils/debug
   hydride/utils/misc
   hydride/utils/bvops
+  hydride/synthesis/symbolic_synthesis
   )
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -282,8 +283,8 @@
     [(vec-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)    (get-bv-ops v2))]
+    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (if (buffer? v2) (list) (get-bv-ops v2))  )]
+    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)    (if (buffer? v2) (list) (get-bv-ops v2)))]
     ;[(vec-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list   bvsmax bvsmin ) (list   bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-absd v1 v2) (append (list  bvsub )  (get-bv-ops (vec-max v1 v2))  (get-bv-ops (vec-min v1 v2)) )]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
@@ -2467,3 +2468,336 @@
     [_ (error "halide\\utils.rkt: Don't know how to infer vector precision for Halide expression:" expr)]))
 
 ;; 
+
+
+
+
+;; Utilities to check if halide expressions are equivalent
+
+(define (is-buffer-hash e)
+  (cond 
+    [(equal? e '(buf uint8 32))
+     (values #t 'uint8 32)
+     ]
+    [(equal? e '(buf uint8 64))
+     (values #t 'uint8 64)
+     ]
+    [(equal? e '(buf uint8 1024))
+     (values #t 'uint8 1024)
+     ]
+    [(equal? e '(buf uint8 2048))
+     (values #t 'uint8 2048)
+     ]
+    [(equal? e '(buf int8 32))
+     (values #t 'int8 32)
+     ]
+    [(equal? e '(buf int8 64))
+     (values #t 'int8 64)
+     ]
+    [(equal? e '(buf int8 1024))
+     (values #t 'int8 1024)
+     ]
+    [(equal? e '(buf int8 2048))
+     (values #t 'int8 2048)
+     ]
+    [(equal? e '(buf uint16 32))
+     (values #t 'uint16 32)
+     ]
+    [(equal? e '(buf uint16 64))
+     (values #t 'uint16 64)
+     ]
+    [(equal? e '(buf uint16 1024))
+     (values #t 'uint16 1024)
+     ]
+    [(equal? e '(buf uint16 2048))
+     (values #t 'uint16 2048)
+     ]
+    [(equal? e '(buf int16 32))
+     (values #t 'uint16 32)
+     ]
+    [(equal? e '(buf int16 64))
+     (values #t 'uint16 64)
+     ]
+    [(equal? e '(buf int16 1024))
+     (values #t 'int16 1024)
+     ]
+    [(equal? e '(buf int16 2048))
+     (values #t 'int16 2048)
+     ]
+    [(equal? e '(buf uint32 32))
+     (values #t 'uint32 32)
+     ]
+    [(equal? e '(buf uint32 64))
+     (values #t 'uint32 64)
+     ]
+    [(equal? e '(buf uint32 1024))
+     (values #t 'uint32 1024)
+     ]
+    [(equal? e '(buf uint32 2048))
+     (values #t 'uint32 2048)
+     ]
+    [(equal? e '(buf int32 32))
+     (values #t 'int32 32)
+     ]
+    [(equal? e '(buf int32 64))
+     (values #t 'int32 64)
+     ]
+    [(equal? e '(buf int32 1024))
+     (values #t 'int32 1024)
+     ]
+    [(equal? e '(buf int32 2048))
+     (values #t 'int32 2048)
+     ]
+    [else
+      (values #f 0 0)
+      ]
+    
+    )
+  
+  )
+
+
+
+(define (get-halide-expr-regs expr)
+  (define-values (is-buf? type size) (is-buffer-hash expr))
+  (cond
+    [is-buf?
+     (list (halide:create-buffer (bv 0 size) type))
+     ]
+
+    [(buffer? expr)
+     (list expr)
+     ]
+    [else
+      (define sub-exprs (halide:sub-exprs expr))
+      (define nested-regs (for/list ([sub-exp sub-exprs])  (get-halide-expr-regs sub-exp)))
+      (apply append nested-regs)
+      ]
+    )
+  )
+
+
+(define (halide-expr-equiv? e1 e2)
+  (define regs-1 (get-halide-expr-regs e1))
+  (define regs-2 (get-halide-expr-regs e2))
+
+
+
+  (cond
+    [(equal? (length regs-1) (length regs-2))
+     ;; proceed with next steps
+
+     (define (get-types b)
+       (destruct b
+                 [(buffer data elemT buffsize)
+                  elemT
+                  ]
+                 [_
+                   (error "Must be buffers to get types")
+                   ]
+                 )
+       )
+
+     (define types-e1 (for/list ([b regs-1]) (get-types b)))
+     (define types-e2 (for/list ([b regs-2]) (get-types b)))
+
+     (define intersect-types (set-intersect types-e1 types-e2))
+
+     (cond 
+       [(not (equal? (length intersect-types) 0))
+        ;; Check further if the list of the sizes (sorted) are the same
+
+        (define (get-sizes b)
+          (destruct b
+                    [(buffer data elemT buffsize)
+                     buffsize
+                     ]
+                    [_
+                      (error "Must be buffers to get types")
+                      ]
+                    )
+          )
+        (define sizes-e1 (sort (for/list ([b regs-1]) (get-sizes b)) <))
+        (define sizes-e2 (sort (for/list ([b regs-2]) (get-sizes b)) <))
+
+        (cond
+          [(and (equal? sizes-e1 sizes-e2) ) 
+           ;; Same number of arguments with same sizes, 
+           ;; we can check if they are equivalent through verification
+           (verify-equivalent-halide-exprs e1 e2)
+           ]
+          [else
+            ;; Operating on different sizes of vectors, hence can't be equivlant
+            #f
+            ]
+          )
+        ]
+       [else
+         ;; Has no common types, hence we can discard equivalence
+         #f
+         ]
+
+       )
+
+
+     ]
+    [else
+      ;; Different number of registers, hence expressions
+      ;; are not equal
+      #f
+      ]
+    
+    )
+  
+  
+  
+  )
+
+
+(define (verify-equivalent-halide-exprs e1 e2)
+  (displayln "Verify-Equivalent-halide-exprs")
+  (define regs-1 (get-halide-expr-regs e1))
+  (define regs-2 (get-halide-expr-regs e2))
+
+  (define (replace-hashed-buf expr)
+    (define-values (is-buff? type size) (is-buffer-hash expr))
+    (if 
+      is-buff?
+      (halide:create-buffer (bv 0 size) type)
+      expr
+      )
+    )
+
+
+  (define dummy-e1 (halide:visit e1 replace-hashed-buf ))
+  (define dummy-e2 (halide:visit e2 replace-hashed-buf ))
+
+
+
+  ;; We know that regs-1 and regs-2 have the same number
+  ;; of arguments, have some common types, and have the
+  ;; same number of arguments of a given sizes. To check
+  ;; if they're equivalent, what we will do is
+  ;; create symbolic holes according to e1, and 
+  ;; define a grammar for e2 which can choose between
+  ;; any of the bitvectors of the same size from e1.
+  ;; This way, we let the synthesizer find any isomorphism
+  ;; and ordering for the arguments
+
+
+  (define (get-sizes b)
+    (destruct b
+              [(buffer data elemT buffsize)
+               buffsize
+               ]
+              [_
+                (error "Must be buffers to get types")
+                ]
+              )
+    )
+
+  (define (get-type b)
+    (destruct b
+              [(buffer data elemT buffsize)
+               elemT
+               ]
+              [_
+                (error "Must be buffers to get types")
+                ]
+              )
+    )
+
+  (define bv-sizes (for/list ([b regs-1])  (get-sizes b)))
+  (define unique-sizes (remove-duplicates bv-sizes))
+
+  (define sym-bvs (create-symbolic-bvs bv-sizes))
+  (println bv-sizes)
+
+
+  (define depth-e1 (get-expr-depth dummy-e1))
+
+  (define bound-regs-1
+    (for/list ([i (range (length bv-sizes))])
+              (define hole (vector-ref sym-bvs i))
+              (define reg-i (list-ref regs-1 i))
+              (define type-i (get-type reg-i))
+              (println type-i)
+              (println hole)
+              (halide:create-buffer hole type-i)
+              )
+    )
+
+
+  (define-values (symbolic-e1 num-used-1) (bind-expr-args dummy-e1 (list->vector bound-regs-1) (+ depth-e1 1)))
+
+
+  ;; For each unique size in e1, we define a map
+  ;; which maps from a given bitvector size
+  ;; to a grammar which selects bitvectors of those sizes
+
+  (define bv-size-to-grammar-hash (make-hash))
+
+
+
+  (define (grammar-visitor expr)
+    (destruct expr
+              [(buffer data elemT buffsize)
+
+               (define (matches-size? s)
+                 (equal? (bvlength s) buffsize)
+                 )
+
+               (define holes-of-size (filter matches-size? (vector->list sym-bvs)))
+               (displayln "holes of sizes")
+               (println holes-of-size)
+
+               (define-grammar (choose-regs)
+                               [expr
+                                 (choose 
+                                   ;(list-ref holes-of-size (?? integer?))
+                                   (?? integer?)
+                                  )
+                                 ]
+                               )
+
+               (define-symbolic* index integer?)
+               (assume (>= index 0))
+               (assume (< index (length holes-of-size)))
+
+               ;(halide:create-buffer (choose-regs) elemT)
+
+               (halide:create-buffer (list-ref holes-of-size index) elemT)
+               ]
+              [v v]
+              )
+    )
+  (define symbolic-e2 (halide:visit dummy-e2 grammar-visitor))
+
+  (displayln "Symbolic e1")
+  (pretty-print symbolic-e1)
+
+  (displayln "Symbolic e2")
+  (pretty-print symbolic-e2)
+
+  (println (halide:vec-len symbolic-e1))
+  (define e1-result (halide:assemble-bitvector (halide:interpret symbolic-e1) (halide:vec-len symbolic-e1)))
+
+  (define e2-result (halide:assemble-bitvector (halide:interpret symbolic-e2) (halide:vec-len symbolic-e2)))
+
+  (println e1-result)
+  (println e2-result)
+
+  (define sol
+    (synthesize
+      #:forall (list sym-bvs)
+      #:guarantee
+      (assert (equal? e1-result e2-result ))
+      )
+    )
+  
+  (define materialize (evaluate symbolic-e2  sol))
+  (println materialize)
+  (println sol)
+  (sat? sol)
+
+  )
