@@ -6,19 +6,13 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     if sub_op then
-    BEGIN
         Elem[result, e, esize] = element1 - element2;
-    END
     else
-    BEGIN
         Elem[result, e, esize] = element1 + element2;
 
-    END
-END
 V[d] = result;
 
 
@@ -32,20 +26,14 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     if pair then
-    BEGIN
         element1 = Elem[concat, 2*e, esize];
         element2 = Elem[concat, (2*e)+1, esize];
-    END
     else
-    BEGIN
         element1 = Elem[operand1, e, esize];
         element2 = Elem[operand2, e, esize];
-    END
     Elem[result, e, esize] = FPAdd(element1, element2, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -59,20 +47,14 @@ integer element2;
 integer sum;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     if sub_op then
-    BEGIN
         sum = element1 - element2;
-    END
     else
-    BEGIN
         sum = element1 + element2;
-    END
     Elem[result, e, 2*esize] = sum<2*esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -86,20 +68,14 @@ integer element2;
 integer sum;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, 2*esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     if sub_op then
-    BEGIN
         sum = element1 - element2;
-    END
     else
-    BEGIN
         sum = element1 + element2;
-    END
     Elem[result, e, 2*esize] = sum<2*esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -113,13 +89,11 @@ integer element2;
 integer sum;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     sum = element1 + element2;
     Elem[result, e, esize] = sum<esize:1>;
 
-END
 V[d] = result;
 
 
@@ -132,12 +106,10 @@ integer element1;
 integer element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     Elem[result, e, esize] = (element1 + element2 + 1)<esize:1>;
 
-END
 V[d] = result;
 
 
@@ -152,14 +124,12 @@ integer sum;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     sum = element1 + element2;
     (Elem[result, e, esize], sat) = SatQ(sum, esize, unsigned);
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -174,12 +144,10 @@ integer op2;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     op1 = Int(Elem[operand, e, esize], !unsigned);
     op2 = Int(Elem[operand2, e, esize], unsigned);
     (Elem[result, e, esize], sat) = SatQ(op1 + op2, esize, unsigned);
     if sat then FPSR.QC = '1';
-END
 V[d] = result;
 
 
@@ -194,21 +162,15 @@ bits(2*esize) element2;
 bits(2*esize) sum;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, 2*esize];
     element2 = Elem[operand2, e, 2*esize];
     if sub_op then
-    BEGIN
         sum = element1 - element2;
-    END
     else
-    BEGIN
         sum = element1 + element2;
-    END
     sum = sum + round_const;
     Elem[result, e, esize] = sum<2*esize-1:esize>;
 
-END
 Vpart[d, part] = result;
 
 
@@ -222,20 +184,14 @@ bits(esize) element2;
 bits(esize) product;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     if poly then
-    BEGIN
         product = PolynomialMult(element1, element2)<esize-1:0>;
-    END
     else
-    BEGIN
         product = (UInt(element1) * UInt(element2))<esize-1:0>;
-    END
     Elem[result, e, esize] = product;
 
-END
 V[d] = result;
 
 
@@ -248,12 +204,10 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     Elem[result, e, esize] = FPMul(element1, element2, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -269,11 +223,9 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[n] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     Elem[result, e, esize] = FPMulX(element1, element2, fpcr);
-END
 V[d] = result;
 
 
@@ -286,12 +238,10 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     Elem[result, e, esize] = FPDiv(element1, element2, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -306,22 +256,19 @@ bits(esize) element2;
 bits(esize) product;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     product = (UInt(element1) * UInt(element2))<esize-1:0>;
     if sub_op then
-    BEGIN
         Elem[result, e, esize] = Elem[operand3, e, esize] - product;
-    END
     else
-    BEGIN
         Elem[result, e, esize] = Elem[operand3, e, esize] + product;
 
-    END
-END
 V[d] = result;
 
+
+
+OperationNo operation information.
 
 
 
@@ -336,21 +283,15 @@ bits(2*esize) product;
 bits(2*esize) accum;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     product = (element1 * element2)<2*esize-1:0>;
     if sub_op then
-    BEGIN
         accum = Elem[operand3, e, 2*esize] - product;
-    END
     else
-    BEGIN
         accum = Elem[operand3, e, 2*esize] + product;
-    END
     Elem[result, e, 2*esize] = accum;
 
-END
 V[d] = result;
 
 
@@ -364,13 +305,11 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     if sub_op then element1 = FPNeg(element1);
     Elem[result, e, esize] = FPMulAdd(Elem[operand3, e, esize], element1, element2, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -404,14 +343,12 @@ integer product;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element1 = SInt(Elem[operand1, e, esize]);
     element2 = SInt(Elem[operand2, e, esize]);
     product = (2 * element1 * element2) + round_const;
     (Elem[result, e, esize], sat) = SignedSatQ(product >> esize, esize);
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -429,22 +366,16 @@ boolean sat1;
 boolean sat2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = SInt(Elem[operand1, e, esize]);
     element2 = SInt(Elem[operand2, e, esize]);
     (product, sat1) = SignedSatQ(2 * element1 * element2, 2*esize);
     if sub_op then
-    BEGIN
         accum = SInt(Elem[operand3, e, 2*esize]) - SInt(product);
-    END
     else
-    BEGIN
         accum = SInt(Elem[operand3, e, 2*esize]) + SInt(product);
-    END
     (Elem[result, e, 2*esize], sat2) = SignedSatQ(accum, 2*esize);
     if sat1 || sat2 then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -457,12 +388,10 @@ integer element1;
 integer element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     Elem[result, e, 2*esize] = (element1 * element2)<2*esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -475,12 +404,10 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     Elem[result, e, 2*esize] = PolynomialMult(element1, element2);
 
-END
 V[d] = result;
 
 
@@ -495,14 +422,12 @@ bits(2*esize) product;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element1 = SInt(Elem[operand1, e, esize]);
     element2 = SInt(Elem[operand2, e, esize]);
     (product, sat) = SignedSatQ(2 * element1 * element2, 2*esize);
     Elem[result, e, 2*esize] = product;
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -518,13 +443,11 @@ FPCRType fpcr = FPCR[];
 bits(datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     diff = FPSub(element1, element2, fpcr);
     Elem[result, e, esize] = if abs then FPAbs(diff) else diff;
 
-END
 V[d] = result;
 
 
@@ -538,13 +461,11 @@ integer element2;
 integer diff;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     diff = element1 - element2;
     Elem[result, e, esize] = diff<esize:1>;
 
-END
 V[d] = result;
 
 
@@ -559,14 +480,12 @@ integer diff;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     diff = element1 - element2;
     (Elem[result, e, esize], sat) = SatQ(diff, esize, unsigned);
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -580,20 +499,14 @@ bits(esize) element2;
 boolean test_passed;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     if and_test then
-    BEGIN
         test_passed = !IsZero(element1 AND element2);
-    END
     else
-    BEGIN
         test_passed = (element1 == element2);
-    END
     Elem[result, e, esize] = if test_passed then Ones() else Zeros();
 
-END
 V[d] = result;
 
 
@@ -610,23 +523,17 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[m] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     if abs then
-    BEGIN
         element1 = FPAbs(element1);
         element2 = FPAbs(element2);
-    END
     case cmp of
-    BEGIN
         when CompareOp_EQ test_passed = FPCompareEQ(element1, element2, fpcr);
         when CompareOp_GE test_passed = FPCompareGE(element1, element2, fpcr);
         when CompareOp_GT test_passed = FPCompareGT(element1, element2, fpcr);
-    END
     Elem[result, e, esize] = if test_passed then Ones() else Zeros();
 
-END
 V[d] = result;
 
 
@@ -638,19 +545,15 @@ integer element;
 boolean test_passed;
 
 for e = 0 to elements-1
-BEGIN
     element = SInt(Elem[operand, e, esize]);
     case comparison of
-    BEGIN
         when CompareOp_GT test_passed = element > 0;
         when CompareOp_GE test_passed = element >= 0;
         when CompareOp_EQ test_passed = element == 0;
         when CompareOp_LE test_passed = element <= 0;
         when CompareOp_LT test_passed = element < 0;
-    END
     Elem[result, e, esize] = if test_passed then Ones() else Zeros();
 
-END
 V[d] = result;
 
 
@@ -663,19 +566,15 @@ bits(esize) element;
 boolean test_passed;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     case comparison of
-    BEGIN
         when CompareOp_GT test_passed = FPCompareGT(element, zero, FPCR[]);
         when CompareOp_GE test_passed = FPCompareGE(element, zero, FPCR[]);
         when CompareOp_EQ test_passed = FPCompareEQ(element, zero, FPCR[]);
         when CompareOp_LE test_passed = FPCompareGE(zero, element, FPCR[]);
         when CompareOp_LT test_passed = FPCompareGT(zero, element, FPCR[]);
-    END
     Elem[result, e, esize] = if test_passed then Ones() else Zeros();
 
-END
 V[d] = result;
 
 
@@ -689,13 +588,11 @@ integer element2;
 boolean test_passed;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     test_passed = if cmp_eq then element1 >= element2 else element1 > element2;
     Elem[result, e, esize] = if test_passed then Ones() else Zeros();
 
-END
 V[d] = result;
 
 
@@ -710,12 +607,10 @@ bits(esize) absdiff;
 
 result = if accumulate then V[d] else Zeros();
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     absdiff = Abs(element1 - element2)<esize-1:0>;
     Elem[result, e, esize] = Elem[result, e, esize] + absdiff;
-END
 V[d] = result;
 
 
@@ -732,13 +627,11 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[n] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     diff = FPSub(element1, element2, fpcr);
     Elem[result, e, esize] = if abs then FPAbs(diff) else diff;
 
-END
 V[d] = result;
 
 
@@ -753,12 +646,10 @@ bits(2*esize) absdiff;
 
 result = if accumulate then V[d] else Zeros();
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     absdiff = Abs(element1 - element2)<2*esize-1:0>;
     Elem[result, e, 2*esize] = Elem[result, e, 2*esize] + absdiff;
-END
 V[d] = result;
 
 
@@ -772,13 +663,11 @@ integer element2;
 integer maxmin;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     maxmin = if minimum then Min(element1, element2) else Max(element1, element2);
     Elem[result, e, esize] = maxmin<esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -792,28 +681,18 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     if pair then
-    BEGIN
         element1 = Elem[concat, 2*e, esize];
         element2 = Elem[concat, (2*e)+1, esize];
-    END
     else
-    BEGIN
         element1 = Elem[operand1, e, esize];
         element2 = Elem[operand2, e, esize];
 
-    END
     if minimum then
-    BEGIN
         Elem[result, e, esize] = FPMin(element1, element2, FPCR[]);
-    END
     else
-    BEGIN
         Elem[result, e, esize] = FPMax(element1, element2, FPCR[]);
 
-    END
-END
 V[d] = result;
 
 
@@ -827,28 +706,18 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     if pair then
-    BEGIN
         element1 = Elem[concat, 2*e, esize];
         element2 = Elem[concat, (2*e)+1, esize];
-    END
     else
-    BEGIN
         element1 = Elem[operand1, e, esize];
         element2 = Elem[operand2, e, esize];
 
-    END
     if minimum then
-    BEGIN
         Elem[result, e, esize] = FPMinNum(element1, element2, FPCR[]);
-    END
     else
-    BEGIN
         Elem[result, e, esize] = FPMaxNum(element1, element2, FPCR[]);
 
-    END
-END
 V[d] = result;
 
 
@@ -864,24 +733,16 @@ integer element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     shift = SInt(Elem[operand2, e, esize]<7:0>);
     if rounding then
-    BEGIN
         round_const = 1 << (-shift - 1); // 0 for left shift, 2^(n-1) for right shift 
-    END
     element = (Int(Elem[operand1, e, esize], unsigned) + round_const) << shift;
     if saturating then
-    BEGIN
         (Elem[result, e, esize], sat) = SatQ(element, esize, unsigned);
         if sat then FPSR.QC = '1';
-    END
     else
-    BEGIN
         Elem[result, e, esize] = element<esize-1:0>;
 
-    END
-END
 V[d] = result;
 
 
@@ -895,11 +756,9 @@ integer element;
 
 operand2 = if accumulate then V[d] else Zeros();
 for e = 0 to elements-1
-BEGIN
     element = (Int(Elem[operand, e, esize], unsigned) + round_const) >> shift;
     Elem[result, e, esize] = Elem[operand2, e, esize] + element<esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -909,10 +768,8 @@ bits(datasize) operand  = V[n];
 bits(datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, esize] = LSL(Elem[operand, e, esize], shift);
 
-END
 V[d] = result;
 
 
@@ -924,12 +781,10 @@ integer element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element = Int(Elem[operand, e, esize], src_unsigned) << shift;
     (Elem[result, e, esize], sat) = SatQ(element, esize, dst_unsigned);
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -941,11 +796,9 @@ integer round_const = if round then (1 << (shift - 1)) else 0;
 integer element;
 
 for e = 0 to elements-1
-BEGIN
     element = (UInt(Elem[operand, e, 2*esize]) + round_const) >> shift;
     Elem[result, e, esize] = element<esize-1:0>;
 
-END
 Vpart[d, part] = result;
 
 
@@ -958,12 +811,10 @@ integer element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element = (SInt(Elem[operand, e, 2*esize]) + round_const) >> shift;
     (Elem[result, e, esize], sat) = UnsignedSatQ(element, esize);
     if sat then FPSR.QC = '1';
 
-END
 Vpart[d, part] = result;
 
 
@@ -976,12 +827,10 @@ integer element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element = (Int(Elem[operand, e, 2*esize], unsigned) + round_const) >> shift;
     (Elem[result, e, esize], sat) = SatQ(element, esize, unsigned);
     if sat then FPSR.QC = '1';
 
-END
 Vpart[d, part] = result;
 
 
@@ -992,11 +841,9 @@ bits(datasize*2) result;
 integer element;
 
 for e = 0 to elements-1
-BEGIN
     element = Int(Elem[operand, e, esize], unsigned) << shift;
     Elem[result, e, 2*esize] = element<2*esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -1009,10 +856,8 @@ bits(esize) mask = LSR(Ones(esize), shift);
 bits(esize) shifted;
 
 for e = 0 to elements-1
-BEGIN
     shifted = LSR(Elem[operand, e, esize], shift);
     Elem[result, e, esize] = (Elem[operand2, e, esize] AND NOT(mask)) OR shifted;
-END
 V[d] = result;
 
 
@@ -1025,10 +870,8 @@ bits(esize) mask = LSL(Ones(esize), shift);
 bits(esize) shifted;
 
 for e = 0 to elements-1
-BEGIN
     shifted = LSL(Elem[operand, e, esize], shift);
     Elem[result, e, esize] = (Elem[operand2, e, esize] AND NOT(mask)) OR shifted;
-END
 V[d] = result;
 
 
@@ -1041,11 +884,9 @@ FPCRType fpcr    = FPCR[];
 boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[d] else Zeros();
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPToFixed(element, fracbits, unsigned, fpcr, rounding);
 
-END
 V[d] = result;
 
 
@@ -1059,11 +900,9 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[d] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPToFixed(element, 0, unsigned, fpcr, rounding);
 
-END
 V[d] = result;
 
 
@@ -1077,11 +916,9 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[d] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FixedToFP(element, fracbits, unsigned, fpcr, rounding);
 
-END
 V[d] = result;
 
 
@@ -1091,10 +928,8 @@ bits(2*datasize) operand = V[n];
 bits(datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, esize] = FPConvert(Elem[operand, e, 2*esize], FPCR[]);
 
-END
 Vpart[d, part] = result;
 
 
@@ -1104,10 +939,8 @@ bits(datasize) operand = Vpart[n, part];
 bits(2*datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, 2*esize] = FPConvert(Elem[operand, e, esize], FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -1120,32 +953,24 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[d] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, esize] = FPConvert(Elem[operand, e, 2*esize], fpcr, FPRounding_ODD);
 
-END
 if merge then
-BEGIN
     V[d] = result;
-END
 else
-BEGIN
     Vpart[d, part] = Elem[result, 0, datasize];
 
 
 
-END
 OperationCheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPRoundInt(element, FPCR[], rounding, exact);
 
-END
 V[d] = result;
 
 
@@ -1156,10 +981,8 @@ bits(datasize) result;
 bits(2*esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, 2*esize];
     Elem[result, e, esize] = element<esize-1:0>;
-END
 Vpart[d, part] = result;
 
 
@@ -1171,12 +994,10 @@ bits(2*esize) element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, 2*esize];
     (Elem[result, e, esize], sat) = SatQ(Int(element, unsigned), esize, unsigned);
     if sat then FPSR.QC = '1';
 
-END
 Vpart[d, part] = result;
 
 
@@ -1188,12 +1009,10 @@ bits(2*esize) element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, 2*esize];
     (Elem[result, e, esize], sat) = UnsignedSatQ(SInt(element), esize);
     if sat then FPSR.QC = '1';
 
-END
 Vpart[d, part] = result;
 
 
@@ -1204,19 +1023,13 @@ bits(datasize) result;
 integer element;
 
 for e = 0 to elements-1
-BEGIN
     element = SInt(Elem[operand, e, esize]);
     if neg then
-    BEGIN
         element = -element;
-    END
     else
-    BEGIN
         element = Abs(element);
-    END
     Elem[result, e, esize] = element<esize-1:0>;                
 
-END
 V[d] = result;
 
 
@@ -1227,19 +1040,13 @@ bits(datasize) result;
 bits(esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     if neg then
-    BEGIN
         element = FPNeg(element);
-    END
     else
-    BEGIN
         element = FPAbs(element);
-    END
     Elem[result, e, esize] = element;
 
-END
 V[d] = result;
 
 
@@ -1251,20 +1058,14 @@ integer element;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element = SInt(Elem[operand, e, esize]);
     if neg then
-    BEGIN
         element = -element;
-    END
     else
-    BEGIN
         element = Abs(element);
-    END
     (Elem[result, e, esize], sat) = SignedSatQ(element, esize);         
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -1275,17 +1076,11 @@ bits(datasize) result;
 
 integer count;
 for e = 0 to elements-1
-BEGIN
     if countop == CountOp_CLS then
-    BEGIN
         count = CountLeadingSignBits(Elem[operand, e, esize]);
-    END
     else
-    BEGIN
         count = CountLeadingZeroBits(Elem[operand, e, esize]);
-    END
     Elem[result, e, esize] = count<esize-1:0>;
-END
 V[d] = result;
 
 
@@ -1296,10 +1091,8 @@ bits(datasize) result;
 
 integer count;
 for e = 0 to elements-1
-BEGIN
     count = BitCount(Elem[operand, e, esize]);
     Elem[result, e, esize] = count<esize-1:0>;
-END
 V[d] = result;
 
 
@@ -1310,11 +1103,9 @@ bits(datasize) result;
 bits(32) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, 32];
     Elem[result, e, 32] = UnsignedRecipEstimate(element);
 
-END
 V[d] = result;
 
 
@@ -1328,11 +1119,9 @@ bits(128) result = if merge then V[d] else Zeros();
 bits(esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPRecipEstimate(element, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -1348,12 +1137,10 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[n] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     Elem[result, e, esize] = FPRecipStepFused(element1, element2);
 
-END
 V[d] = result;
 
 
@@ -1364,11 +1151,9 @@ bits(datasize) result;
 bits(esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPSqrt(element, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -1379,11 +1164,9 @@ bits(datasize) result;
 bits(32) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, 32];
     Elem[result, e, 32] = UnsignedRSqrtEstimate(element);
 
-END
 V[d] = result;
 
 
@@ -1397,11 +1180,9 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[d] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPRSqrtEstimate(element, fpcr);
 
-END
 V[d] = result;
 
 
@@ -1417,12 +1198,10 @@ boolean merge    = elements == 1 && IsMerging(fpcr);
 bits(128) result = if merge then V[n] else Zeros();
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
     Elem[result, e, esize] = FPRSqrtStepFused(element1, element2);
 
-END
 V[d] = result;
 
 
@@ -1439,17 +1218,11 @@ bits(datasize) result;
 if invert then operand2 = NOT(operand2);
 
 case op of
-BEGIN
     when LogicalOp_AND
-    BEGIN
         result = operand1 AND operand2;
-    END
     when LogicalOp_ORR
-    BEGIN
         result = operand1 OR operand2;
 
-    END
-END
 V[d] = result;
 
 
@@ -1461,33 +1234,23 @@ bits(datasize) operand3;
 bits(datasize) operand4 = V[n];
 
 case op of
-BEGIN
     when VBitOp_VEOR
-    BEGIN
         operand1 = V[m];
         operand2 = Zeros();
         operand3 = Ones();
-    END
     when VBitOp_VBSL
-    BEGIN
         operand1 = V[m];
         operand2 = operand1;
         operand3 = V[d];
-    END
     when VBitOp_VBIT
-    BEGIN
         operand1 = V[d];
         operand2 = operand1;
         operand3 = V[m];
-    END
     when VBitOp_VBIF
-    BEGIN
         operand1 = V[d];
         operand2 = operand1;
         operand3 = NOT(V[m]);
 
-    END
-END
 V[d] = operand1 EOR ((operand2 EOR operand4) AND operand3);
 
 
@@ -1509,9 +1272,7 @@ bits(esize) element;
 
 element = Elem[operand, index, esize];
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, esize] = element;
-END
 V[d] = result;
 
 
@@ -1523,15 +1284,11 @@ bits(esize) element;
 bits(esize) rev;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     for i = 0 to esize-1
-    BEGIN
         rev<esize-1-i> = element<i>;
-    END
     Elem[result, e, esize] = rev;
 
-END
 V[d] = result;
 
 
@@ -1545,67 +1302,41 @@ integer tt;
 constant integer ebytes = esize DIV 8;
 
 if HaveMTE2Ext() then
-BEGIN
     SetTagCheckedInstruction(tag_checked);
 
-END
 if n == 31 then
-BEGIN
     CheckSPAlignment();
     address = SP[];
-END
 else
-BEGIN
     address = X[n];
 
-END
 offs = Zeros();
 for r = 0 to rpt-1
-BEGIN
     for e = 0 to elements-1
-    BEGIN
         tt = (t + r) MOD 32;
         for s = 0 to selem-1
-        BEGIN
             rval = V[tt];
             if memop == MemOp_LOAD then
-            BEGIN
                 Elem[rval, e, esize] = Mem[address + offs, ebytes, AccType_VEC];
                 V[tt] = rval;
-            END
             else // memop == MemOp_STORE
-            BEGIN
                 Mem[address + offs, ebytes, AccType_VEC] = Elem[rval, e, esize];
-            END
             offs = offs + ebytes;
             tt = (tt + 1) MOD 32;
 
-        END
-    END
-END
 if wback then
-BEGIN
     if m != 31 then
-    BEGIN
         offs = X[m];
-    END
     if n == 31 then
-    BEGIN
         SP[] = address + offs;
-    END
     else
-    BEGIN
         X[n] = address + offs;
 
 
 
-    END
-END
 Operationif HaveMTE2Ext() then
-BEGIN
     SetTagCheckedInstruction(tag_checked);
 
-END
 CheckFPAdvSIMDEnabled64();
 
 bits(64) address;
@@ -1615,68 +1346,44 @@ bits(esize) element;
 constant integer ebytes = esize DIV 8;
 
 if n == 31 then
-BEGIN
     CheckSPAlignment();
     address = SP[];
-END
 else
-BEGIN
     address = X[n];
 
-END
 offs = Zeros();
 if replicate then
-BEGIN
     // load and replicate to all elements
     for s = 0 to selem-1
-    BEGIN
         element = Mem[address + offs, ebytes, AccType_VEC];
         // replicate to fill 128- or 64-bit register
         V[t] = Replicate(element, datasize DIV esize);
         offs = offs + ebytes;
         t = (t + 1) MOD 32;
-    END
-END
 else
-BEGIN
     // load/store one element per register
     for s = 0 to selem-1
-    BEGIN
         rval = V[t];
         if memop == MemOp_LOAD then
-        BEGIN
             // insert into one lane of 128-bit register
             Elem[rval, index, esize] = Mem[address + offs, ebytes, AccType_VEC];
             V[t] = rval;
-        END
         else // memop == MemOp_STORE
-        BEGIN
             // extract from one lane of 128-bit register
             Mem[address + offs, ebytes, AccType_VEC] = Elem[rval, index, esize];
-        END
         offs = offs + ebytes;
         t = (t + 1) MOD 32;
 
-    END
-END
 if wback then
-BEGIN
     if m != 31 then
-    BEGIN
         offs = X[m];
-    END
     if n == 31 then
-    BEGIN
         SP[] = address + offs;
-    END
     else
-    BEGIN
         X[n] = address + offs;
 
 
 
-    END
-END
 OperationCheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
@@ -1686,12 +1393,10 @@ bits(esize) element1;
 bits(esize) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[concat, 2*e, esize];
     element2 = Elem[concat, (2*e)+1, esize];
     Elem[result, e, esize] = element1 + element2;
 
-END
 V[d] = result;
 
 
@@ -1706,20 +1411,14 @@ integer op2;
 
 if acc then result = V[d];
 for e = 0 to elements-1
-BEGIN
     op1 = Int(Elem[operand, 2*e+0, esize], unsigned);
     op2 = Int(Elem[operand, 2*e+1, esize], unsigned);
     sum = (op1 + op2)<2*esize-1:0>;
     if acc then
-    BEGIN
         Elem[result, e, 2*esize] = Elem[result, e, 2*esize] + sum;
-    END
     else
-    BEGIN
         Elem[result, e, 2*esize] = sum;
 
-    END
-END
 V[d] = result;
 
 
@@ -1734,13 +1433,11 @@ integer element2;
 integer maxmin;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Int(Elem[concat, 2*e, esize], unsigned);
     element2 = Int(Elem[concat, (2*e)+1, esize], unsigned);
     maxmin = if minimum then Min(element1, element2) else Max(element1, element2);
     Elem[result, e, esize] = maxmin<esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -1757,10 +1454,8 @@ integer sum;
 
 sum = Int(Elem[operand, 0, esize], unsigned);
 for e = 1 to elements-1
-BEGIN
     sum = sum + Int(Elem[operand, e, esize], unsigned);
 
-END
 V[d] = sum<2*esize-1:0>;
 
 
@@ -1772,11 +1467,9 @@ integer element;
 
 maxmin = Int(Elem[operand, 0, esize], unsigned);
 for e = 1 to elements-1
-BEGIN
     element = Int(Elem[operand, e, esize], unsigned);
     maxmin = if min then Min(maxmin, element) else Max(maxmin, element);
 
-END
 V[d] = maxmin<esize-1:0>;
 
 
@@ -1810,16 +1503,12 @@ bits(datasize) result;
 integer element = 0;
 integer rev_element;
 for c = 0 to containers-1
-BEGIN
     rev_element = element + elements_per_container - 1;
     for e = 0 to elements_per_container-1
-    BEGIN
         Elem[result, rev_element, esize] = Elem[operand, element, esize];
         element = element + 1;
         rev_element = rev_element - 1;
 
-    END
-END
 V[d] = result;
 
 
@@ -1832,11 +1521,9 @@ bits(datasize) result;
 integer base = part * pairs;
 
 for p = 0 to pairs-1
-BEGIN
     Elem[result, 2*p+0, esize] = Elem[operand1, base+p, esize];
     Elem[result, 2*p+1, esize] = Elem[operand2, base+p, esize];
 
-END
 V[d] = result;
 
 
@@ -1848,10 +1535,8 @@ bits(datasize) result;
 
 bits(datasize*2) zipped = operandh:operandl;
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, esize] = Elem[zipped, 2*e+part, esize];
 
-END
 V[d] = result;
 
 
@@ -1862,11 +1547,9 @@ bits(datasize) operand2 = V[m];
 bits(datasize) result;
 
 for p = 0 to pairs-1
-BEGIN
     Elem[result, 2*p+0, esize] = Elem[operand1, 2*p+part, esize];
     Elem[result, 2*p+1, esize] = Elem[operand2, 2*p+part, esize];
 
-END
 V[d] = result;
 
 
@@ -1879,21 +1562,15 @@ integer index;
 
 // Create table from registers
 for i = 0 to regs - 1
-BEGIN
     table<128*i+127:128*i> = V[n];
     n = (n + 1) MOD 32;
 
-END
 result = if is_tbl then Zeros() else V[d];
 for i = 0 to elements - 1
-BEGIN
     index = UInt(Elem[indices, i, 8]);
     if index < 16 * regs then
-    BEGIN
         Elem[result, i, 8] = Elem[table, index, 8];
 
-    END
-END
 V[d] = result;
 
 
@@ -1921,72 +1598,48 @@ bits(128) result = if merge then V[d] else Zeros();
 bits(esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPRecpX(element, fpcr);
 
-END
 V[d] = result;
 
 
 
 Operationif HaveMTE2Ext() then
-BEGIN
     SetTagCheckedInstruction(tag_checked);
 
-END
 CheckFPAdvSIMDEnabled64();
 bits(64) address;
 bits(datasize) data;
 
 if n == 31 then
-BEGIN
     CheckSPAlignment();
     address = SP[];
-END
 else
-BEGIN
     address = X[n];
 
-END
 if ! postindex then
-BEGIN
     address = address + offset;
 
-END
 case memop of
-BEGIN
     when MemOp_STORE
-    BEGIN
         data = V[t];
         Mem[address, datasize DIV 8, acctype] = data;
 
-    END
     when MemOp_LOAD
-    BEGIN
         data = Mem[address, datasize DIV 8, acctype];
         V[t] = data;
 
-    END
-END
 if wback then
-BEGIN
     if postindex then
-    BEGIN
         address = address + offset;
-    END
     if n == 31 then
-    BEGIN
         SP[] = address;
-    END
     else
-    BEGIN
         X[n] = address;
 
 
 
-    END
-END
 OperationAArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand1 = V[d];
@@ -1994,14 +1647,10 @@ bits(128) operand2 = V[n];
 bits(128) result;
 result = operand1 EOR operand2;
 if decrypt then
-BEGIN
     result = AESInvSubBytes(AESInvShiftRows(result));
-END
 else
-BEGIN
     result = AESSubBytes(AESShiftRows(result));
 
-END
 V[d] = result;
 
 
@@ -2011,13 +1660,9 @@ OperationAArch64.CheckFPAdvSIMDEnabled();
 bits(128) operand = V[n];
 bits(128) result;
 if decrypt then
-BEGIN
     result = AESInvMixColumns(operand);
-END
 else
-BEGIN
     result = AESMixColumns(operand);
-END
 V[d] = result;
 
 
@@ -2030,12 +1675,10 @@ bits(128) W = V[m];
 bits(32)  t;
 
 for e = 0 to 3
-BEGIN
     t = SHAchoose(X<63:32>, X<95:64>, X<127:96>);
     Y = Y + ROL(X<31:0>, 5) + t + Elem[W, e, 32];
     X<63:32> = ROL(X<63:32>, 30);
     <Y, X> = ROL(Y : X, 32);
-END
 V[d] = X;
 
 
@@ -2048,12 +1691,10 @@ bits(128) W = V[m];
 bits(32)  t;
 
 for e = 0 to 3
-BEGIN
     t = SHAparity(X<63:32>, X<95:64>, X<127:96>);
     Y = Y + ROL(X<31:0>, 5) + t + Elem[W, e, 32];
     X<63:32> = ROL(X<63:32>, 30);
     <Y, X> = ROL(Y : X, 32);
-END
 V[d] = X;
 
 
@@ -2066,12 +1707,10 @@ bits(128) W = V[m];
 bits(32)  t;
 
 for e = 0 to 3
-BEGIN
     t = SHAmajority(X<63:32>, X<95:64>, X<127:96>);
     Y = Y + ROL(X<31:0>, 5) + t + Elem[W, e, 32];
     X<63:32> = ROL(X<63:32>, 30);
     <Y, X> = ROL(Y : X, 32);
-END
 V[d] = X;
 
 
@@ -2114,13 +1753,9 @@ OperationAArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) result;
 if part1 then
-BEGIN
     result = SHA256hash(V[d], V[n], V[m], TRUE);
-END
 else
-BEGIN
     result = SHA256hash(V[n], V[d], V[m], FALSE);
-END
 V[d] = result;
 
 
@@ -2134,11 +1769,9 @@ bits(128) T = operand2<31:0> : operand1<127:32>;
 bits(32) elt;
 
 for e = 0 to 3
-BEGIN
     elt = Elem[T, e, 32];
     elt = ROR(elt, 7) EOR ROR(elt, 18) EOR LSR(elt, 3);
     Elem[result, e, 32] = elt + Elem[operand1, e, 32];
-END
 V[d] = result;
 
 
@@ -2155,22 +1788,18 @@ bits(32) elt;
 
 T1 = operand3<127:64>;
 for e = 0 to 1
-BEGIN
     elt = Elem[T1, e, 32];
     elt = ROR(elt, 17) EOR ROR(elt, 19) EOR LSR(elt, 10);
     elt = elt + Elem[operand1, e, 32] + Elem[T0, e, 32];
     Elem[result, e, 32] = elt;
 
-END
 T1 = result<63:0>;
 for e = 2 to 3
-BEGIN
     elt = Elem[T1, e - 2, 32];
     elt = ROR(elt, 17) EOR ROR(elt, 19) EOR LSR(elt, 10);
     elt = elt + Elem[operand1, e, 32] + Elem[T0, e, 32];
     Elem[result, e, 32] = elt;
 
-END
 V[d] = result;
 
 
@@ -2200,22 +1829,16 @@ integer product;
 boolean sat;
 
 for e = 0 to elements-1
-BEGIN
     element1 = SInt(Elem[operand1, e, esize]);
     element2 = SInt(Elem[operand2, e, esize]);
     element3 = SInt(Elem[operand3, e, esize]);
     if sub_op then
-    BEGIN
         accum = ((element3 << esize) - 2 * (element1 * element2) + rounding_const);
-    END
     else
-    BEGIN
         accum = ((element3 << esize) + 2 * (element1 * element2) + rounding_const);
-    END
     (Elem[result, e, esize], sat) = SignedSatQ(accum >> esize, esize);
     if sat then FPSR.QC = '1';
 
-END
 V[d] = result;
 
 
@@ -2227,25 +1850,17 @@ bits(datasize) result;
 
 result = V[d];
 for e = 0 to elements-1 
-BEGIN
     integer res = 0;
     integer element1, element2;
     for i = 0 to 3 
-    BEGIN
         if signed then
-        BEGIN
             element1 = SInt(Elem[operand1, 4 * e + i, esize DIV 4]); 
             element2 = SInt(Elem[operand2, 4 * e + i, esize DIV 4]);
-        END
         else 
-        BEGIN
             element1 = UInt(Elem[operand1, 4 * e + i, esize DIV 4]); 
             element2 = UInt(Elem[operand2, 4 * e + i, esize DIV 4]);
-        END
         res = res + element1 * element2; 
-    END
     Elem[result, e, esize] = Elem[result, e, esize] + res;
-END
 V[d] = result;
 
 
@@ -2464,13 +2079,9 @@ bits(128) result;
 result<95:0> = (Vd EOR Vn)<95:0> EOR (ROL(Vm<127:96>,15):ROL(Vm<95:64>,15):ROL(Vm<63:32>,15));
 
 for i = 0 to 3
-BEGIN
     if i == 3 then 
-    BEGIN
         result<127:96> = (Vd EOR Vn)<127:96> EOR (ROL(result<31:0>,15));
-    END
     result<(32*i)+31:(32*i)> = result<(32*i)+31:(32*i)> EOR ROL(result<(32*i)+31:(32*i)>,15) EOR ROL(result<(32*i)+31:(32*i)>,23);
-END
 V[d] = result;
 
 
@@ -2502,16 +2113,13 @@ bits(32) roundkey;
 
 roundresult=V[d];
 for index = 0 to 3
-BEGIN
     roundkey = Elem[Vn,index,32];
 
     intval = roundresult<127:96> EOR roundresult<95:64> EOR roundresult<63:32> EOR roundkey; 
 
     for i = 0 to 3  
-    BEGIN
         Elem[intval,i,8]  = Sbox(Elem[intval,i,8]); 
 
-    END
     intval = intval EOR ROL(intval,2) EOR ROL(intval,10) EOR ROL(intval,18) EOR ROL(intval,24);
     intval = intval EOR roundresult<31:0>; 
 
@@ -2519,7 +2127,6 @@ BEGIN
     roundresult<63:32> = roundresult<95:64>;
     roundresult<95:64> = roundresult<127:96>;
     roundresult<127:96> = intval; 
-END
 V[d] = roundresult;
 
 
@@ -2535,16 +2142,13 @@ bits(128) roundresult;
 
 roundresult = V[n];
 for index = 0 to 3 
-BEGIN
     const = Elem[Vm,index,32];
 
     intval = roundresult<127:96> EOR roundresult<95:64> EOR roundresult<63:32> EOR const; 
 
     for i = 0 to 3  
-    BEGIN
         Elem[intval,i,8] = Sbox(Elem[intval,i,8]); 
 
-    END
     intval = intval EOR ROL(intval,13) EOR ROL(intval,23);
     intval = intval EOR roundresult<31:0>; 
 
@@ -2552,7 +2156,6 @@ BEGIN
     roundresult<63:32> = roundresult<95:64>;
     roundresult<95:64> = roundresult<127:96>;
     roundresult<127:96> = intval; 
-END
 V[d] = roundresult;
 
 
@@ -2566,12 +2169,10 @@ bits(esize DIV 2) element1;
 bits(esize DIV 2) element2;
 
 for e = 0 to elements-1
-BEGIN
     element1 = Elem[operand1, e, esize DIV 2];
     element2 = Elem[operand2, e, esize DIV 2];
     if sub_op then element1 = FPNeg(element1);
     Elem[result,e,esize] = FPMulAddH(Elem[operand3, e, esize], element1, element2, FPCR[]);
-END
 V[d] = result;
 
 
@@ -2585,24 +2186,16 @@ bits(esize) element1;
 bits(esize) element3;
 
 for e = 0 to (elements DIV 2) -1 
-BEGIN
     case rot of 
-    BEGIN
         when '0'
-        BEGIN
             element1 = FPNeg(Elem[operand2, e*2+1, esize]); 
             element3 = Elem[operand2, e*2, esize];
-        END
         when '1'
-        BEGIN
             element1 = Elem[operand2, e*2+1, esize]; 
             element3 = FPNeg(Elem[operand2, e*2, esize]);   
-        END
-    END
     Elem[result, e*2,   esize] = FPAdd(Elem[operand1, e*2, esize], element1, FPCR[]);
     Elem[result, e*2+1, esize] = FPAdd(Elem[operand1, e*2+1, esize], element3, FPCR[]);
 
-END
 V[d] = result;
 
 
@@ -2619,43 +2212,31 @@ bits(esize) element4;
 FPCRType fpcr = FPCR[];
 
 for e = 0 to (elements DIV 2) -1
-BEGIN
     case rot of
-    BEGIN
         when '00'
-        BEGIN
             element1 = Elem[operand2, e*2, esize];
             element2 = Elem[operand1, e*2, esize];
             element3 = Elem[operand2, e*2+1, esize];
             element4 = Elem[operand1, e*2, esize];
-        END
         when '01'
-        BEGIN
             element1 = FPNeg(Elem[operand2, e*2+1, esize]);
             element2 = Elem[operand1, e*2+1, esize];
             element3 = Elem[operand2, e*2, esize];
             element4 = Elem[operand1, e*2+1, esize];
-        END
         when '10'
-        BEGIN
             element1 = FPNeg(Elem[operand2, e*2, esize]);
             element2 = Elem[operand1, e*2, esize];
             element3 = FPNeg(Elem[operand2, e*2+1, esize]);
             element4 = Elem[operand1, e*2, esize];
-        END
         when '11'
-        BEGIN
             element1 = Elem[operand2, e*2+1, esize];
             element2 = Elem[operand1, e*2+1, esize];
             element3 = FPNeg(Elem[operand2, e*2, esize]);
             element4 = Elem[operand1, e*2+1, esize];
 
-        END
-    END
     Elem[result, e*2,   esize] = FPMulAdd(Elem[operand3, e*2, esize], element2, element1, fpcr);
     Elem[result, e*2+1, esize] = FPMulAdd(Elem[operand3, e*2+1, esize], element4, element3, fpcr);
 
-END
 V[d] = result;
 
 
@@ -2666,11 +2247,9 @@ bits(datasize) result;
 bits(esize) element;
 
 for e = 0 to elements-1
-BEGIN
     element = Elem[operand, e, esize];
     Elem[result, e, esize] = FPRoundIntN(element, FPCR[], rounding, intsize);
 
-END
 V[d] = result;
 
 
@@ -2691,17 +2270,13 @@ bits(datasize) operand3 = V[d];
 bits(datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     bits(32) res = Elem[operand3, e, 32];
     for b = 0 to 3
-    BEGIN
         integer element1 = UInt(Elem[operand1, 4 * e + b, 8]);
         integer element2 = SInt(Elem[operand2, 4 * e + b, 8]);
         res = res + element1 * element2;
-    END
     Elem[result, e, 32] = res;
 
-END
 V[d] = result;
 
 
@@ -2713,16 +2288,12 @@ bits(datasize) operand3 = V[d];
 bits(datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     bits(32) res = Elem[operand3, e, 32];
     for b = 0 to 3
-    BEGIN
         integer element1 = Int(Elem[operand1, 4 * e + b, 8], op1_unsigned);
         integer element2 = Int(Elem[operand2, 4 * i + b, 8], op2_unsigned);
         res = res + element1 * element2;
-    END
     Elem[result, e, 32] = res;
-END
 V[d] = result;
 
 
@@ -2733,11 +2304,9 @@ bits(2*datasize) result;
 integer element;
 
 for e = 0 to elements-1
-BEGIN
     element = Int(Elem[operand, e, esize], unsigned) << shift;
     Elem[result, e, 2*esize] = element<2*esize-1:0>;
 
-END
 V[d] = result;
 
 
@@ -2747,10 +2316,8 @@ bits(128) operand = V[n];
 bits(64) result;
 
 for e = 0 to elements-1
-BEGIN
     Elem[result, e, 16] = FPConvertBF(Elem[operand, e, 32], FPCR[]);
 
-END
 Vpart[d, part] = result;
 
 
@@ -2775,7 +2342,6 @@ bits(datasize) operand3 = V[d];
 bits(datasize) result;
 
 for e = 0 to elements-1
-BEGIN
     bits(16) elt1_a = Elem[operand1, 2 * e + 0, 16];
     bits(16) elt1_b = Elem[operand1, 2 * e + 1, 16];
     bits(16) elt2_a = Elem[operand2, 2 * e + 0, 16];
@@ -2785,7 +2351,6 @@ BEGIN
     sum = BFDotAdd(sum, elt1_a, elt1_b, elt2_a, elt2_b, FPCR[]);
     Elem[result, e, 32] = sum;
 
-END
 V[d] = result;
 
 
@@ -2806,13 +2371,11 @@ bits(128) operand3 = V[d];
 bits(128) result;
 
 for e = 0 to elements-1
-BEGIN
     bits(32) element1 = Elem[operand1, 2 * e + sel, 16] : Zeros(16);
     bits(32) element2 = Elem[operand2, 2 * e + sel, 16] : Zeros(16);
     bits(32) addend   = Elem[operand3, e, 32];
     Elem[result, e, 32] = BFMulAdd(addend, element1, element2, FPCR[]);
 
-END
 V[d] = result;
 
 
