@@ -1,4 +1,5 @@
 import ply.lex as lex
+import ply.yacc as yacc
 
 from collections import namedtuple
 
@@ -7,8 +8,12 @@ reserved = {
     'THEN',
     'ELSE',
     'FOR',
+    'TO',
     'BEGIN',
     'END',
+    'CASE',
+    'OF',
+    'WHEN',
 }
 binOps = {
     r'\+': 'PLUS',
@@ -19,6 +24,13 @@ binOps = {
     r'>>': 'RSHIFT',
     r'&&': 'LOGIC_AND',
     r'\|\|': 'LOGIC_OR',
+    r'<=': 'LESS_EQUAL',
+    r'>=': 'GREATER_EQUAL',
+    r'!=': 'NOT_EQUAL',
+    r'==': 'EQUAL',
+    r'EOR': 'BITWISE_XOR',
+    r'OR': 'BITWISE_OR',
+    r'AND': 'BITWISE_AND',
 }
 punc = {
     r':': 'COLON',
