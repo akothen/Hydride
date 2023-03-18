@@ -1,9 +1,11 @@
 import ply.lex as lex
 import ply.yacc as yacc
+import re
 
 from collections import namedtuple
 
 Number = namedtuple('Number', ['val'])
+HexNumber = namedtuple('HexNumber', ['val'])
 BitString = namedtuple('BitString', ['val'])
 BitSlice = namedtuple('BitSlice', ['bv', 'hi', 'lo', 'id'])
 BitIndex = namedtuple('BitIndex', ['obj', 'idxs', 'id'])
@@ -26,6 +28,7 @@ BinaryExpr = namedtuple('BinaryExpr', ['op', 'a', 'b', 'id'])
 UnaryExpr = namedtuple('UnaryExpr', ['op', 'a', 'id'])
 AssignExpr = namedtuple('AssignExpr', ['lhs', 'rhs', 'id'])
 PairAssignExpr = namedtuple('PairAssignExpr', ['lhs', 'rhs', 'id'])
+ConcatAssignExpr = namedtuple('ConcatAssignExpr', ['lhs', 'rhs', 'id'])
 FieldExpr = namedtuple('FieldExpr', ['obj', 'field', 'id'])
 CompoundStmt = namedtuple('CompoundStmt', ['stmts', 'id'])
 
@@ -55,7 +58,7 @@ binOps = {
     r'\+': 'PLUS',
     r'-': 'MINUS',
     r'\*': 'TIMES',
-    r'/': 'DIVIDE',
+    r'DIV': 'DIVIDE',
     r'MOD': 'MOD',
     r'<<': 'LSHIFT',
     r'>>': 'RSHIFT',
@@ -86,13 +89,14 @@ punc = {
     r'!': "NOT",
 }
 tokens = [
+    'HEXNUMBER',
     'NUMBER',
     'BITSTRING',
     'ID'
 ] + list(reserved) + list(binOps.values()) + list(punc.values())
 
 precedence = (
-    ('left', 'ELSE'),
+    ('left', 'COMMA', 'ELSE'),
     ('left', 'BITWISE_OR'),
     ('left', 'BITWISE_AND'),
     ('left', 'BITWISE_XOR'),
@@ -104,8 +108,8 @@ precedence = (
     ('left', 'LSHIFT', 'RSHIFT'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE', 'MOD'),
-    ('right', 'NOT'),
-    ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'BITSLICE'),
+    ('right', 'NOT', 'UMINUS'),
+    ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE'),
 )
 
 for k, v in binOps.items():
@@ -114,6 +118,11 @@ for k, v in punc.items():
     locals()['t_'+v] = k
 
 Parser = None
+
+
+def t_HEXNUMBER(t):
+    r'0x[0-9A-F]+'
+    return t
 
 
 def t_NUMBER(t):
@@ -168,9 +177,19 @@ def preprocess(text):
             else:
                 break
         return count, dep
+    lines = text.split("\n")
+    # pass1: <s> -> [s]
+    p = re.compile("<([^<>]*)>")
+
+    def qwq(m):
+        print(m.group(0))
+        return "["+m.group(1)+"]"
+
+    for i, s in enumerate(lines):
+        lines[i] = p.sub(qwq, s)
+    # pass2: add BEGIN END by indent
     stack = [0]
     cdep = 0
-    lines = text.split("\n")
     for i, s in enumerate(lines):
         if s.strip() == "":
             continue
@@ -198,14 +217,17 @@ def GenUniqueID():
 
 def p_stmt_assign(p):
     '''stmt : expr ASSIGN expr SEMICOLON
+            | LBRACKET expr COMMA expr RBRACKET ASSIGN expr SEMICOLON
             | LPAREN expr COMMA MINUS RPAREN ASSIGN expr SEMICOLON
-            | LPAREN expr COMMA ID RPAREN ASSIGN expr SEMICOLON'''
+            | LPAREN expr COMMA expr RPAREN ASSIGN expr SEMICOLON'''
     if len(p) == 5:
         p[0] = AssignExpr(p[1], p[3], GenUniqueID())
     elif p[4] == 'MINUS':
         p[0] = PairAssignExpr((p[2], None), p[7], GenUniqueID())
-    else:
+    elif p[1] == 'LPAREN':
         p[0] = PairAssignExpr((p[2], p[4]), p[7], GenUniqueID())
+    else:
+        p[0] = ConcatAssignExpr((p[2], p[4]), p[7], GenUniqueID())
 
 
 def p_stmt_check(p):
@@ -228,11 +250,15 @@ def p_type_simple(p):
 
 def p_stmt_vardecl(p):
     '''stmt : type ID SEMICOLON
+            | type ID COMMA ID SEMICOLON
             | type ID ASSIGN expr SEMICOLON'''
     if len(p) == 4:
-        p[0] = VarDecl(p[1], p[2], GenUniqueID())
+        p[0] = VarDecl(p[1], [Var(p[2], GenUniqueID())], GenUniqueID())
+    elif len(p) == 6:
+        p[0] = VarDecl(p[1], [Var(p[2], GenUniqueID()),
+                       Var(p[4], GenUniqueID())], GenUniqueID())
     else:
-        p[0] = VarDeclDef(p[1], p[2], p[4], GenUniqueID())
+        p[0] = VarDeclDef(p[1], Var(p[2], GenUniqueID()), p[4], GenUniqueID())
 
 
 def p_stmt_if(p):
@@ -293,12 +319,12 @@ def p_expr_binOps(p):
             | expr BITWISE_XOR expr
             | expr BITWISE_OR expr
             | expr BITWISE_AND expr'''
-    print("?", *p)
     p[0] = BinaryExpr(p[2], p[1], p[3], GenUniqueID())
 
 
 def p_expr_unaryOps(p):
-    '''expr : NOT expr'''
+    '''expr : NOT expr
+            | MINUS expr %prec UMINUS'''
     p[0] = UnaryExpr(p[1], p[2], GenUniqueID())
 
 
@@ -326,6 +352,11 @@ def p_expr_number(p):
     p[0] = Number(p[1])
 
 
+def p_expr_hexnumber(p):
+    '''expr : HEXNUMBER'''
+    p[0] = HexNumber(p[1])
+
+
 def p_expr_bitstring(p):
     '''expr : BITSTRING'''
     p[0] = BitString(p[1])
@@ -350,9 +381,10 @@ def p_expr_index(p):
         p[0] = BitIndex(p[1], [], GenUniqueID())
 
 
-def p_expr_slice(p):
-    'expr : expr LANGLE expr COLON expr RANGLE %prec BITSLICE'
-    p[0] = BitSlice(p[1], p[3], p[5], GenUniqueID())
+# def p_expr_slice(p):
+#     'expr : expr LBRACKET expr COLON expr RBRACKET %prec BITSLICE'
+
+#     p[0] = BitSlice(p[1], p[3], p[5], GenUniqueID())
 
 
 def p_expr_call(p):
@@ -374,8 +406,8 @@ def preprocess_data():
 
 if __name__ == "__main__":
     # preprocess_data()
-    if True:
-        data = """sum<2:0>"""
+    if False:
+        data = """bits(32)      poly    = (if crc32c then 0x1EDC6F41 else 0x04C11DB7)[31:0];"""
         # for i, s in enumerate(data.split('\n')):
         #     print(f"{i+1:>4d}: {s}")
         lexer = lex.lex()
@@ -391,6 +423,7 @@ if __name__ == "__main__":
             data = f.read()
 
     lexer = lex.lex()
-    Parser = yacc.yacc(start='expr')
+    Parser = yacc.yacc(start='stmts')
     Parser.id_counter = 0
-    print(Parser.parse(data))
+    # print(Parser.parse(data))
+    Parser.parse(data)

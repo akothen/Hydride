@@ -1,4 +1,4 @@
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -23,7 +23,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -50,7 +50,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) result;
@@ -70,14 +70,14 @@ BEGIN
     BEGIN
         sum = element1 + element2;
     END
-    Elem[result, e, 2*esize] = sum<2*esize-1:0>;
+    Elem[result, e, 2*esize] = sum[2*esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(2*datasize) operand1 = V[n];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) result;
@@ -97,14 +97,14 @@ BEGIN
     BEGIN
         sum = element1 + element2;
     END
-    Elem[result, e, 2*esize] = sum<2*esize-1:0>;
+    Elem[result, e, 2*esize] = sum[2*esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -117,14 +117,14 @@ BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     sum = element1 + element2;
-    Elem[result, e, esize] = sum<esize:1>;
+    Elem[result, e, esize] = sum[esize:1];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -135,14 +135,14 @@ for e = 0 to elements-1
 BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
-    Elem[result, e, esize] = (element1 + element2 + 1)<esize:1>;
+    Elem[result, e, esize] = (element1 + element2 + 1)[esize:1];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -164,7 +164,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 
@@ -184,7 +184,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(2*datasize) operand1 = V[n];
 bits(2*datasize) operand2 = V[m];
 bits(datasize)   result;
@@ -206,14 +206,14 @@ BEGIN
         sum = element1 + element2;
     END
     sum = sum + round_const;
-    Elem[result, e, esize] = sum<2*esize-1:esize>;
+    Elem[result, e, esize] = sum[2*esize-1:esize];
 
 END
 Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -227,11 +227,11 @@ BEGIN
     element2 = Elem[operand2, e, esize];
     if poly then
     BEGIN
-        product = PolynomialMult(element1, element2)<esize-1:0>;
+        product = PolynomialMult(element1, element2)[esize-1:0];
     END
     else
     BEGIN
-        product = (UInt(element1) * UInt(element2))<esize-1:0>;
+        product = (UInt(element1) * UInt(element2))[esize-1:0];
     END
     Elem[result, e, esize] = product;
 
@@ -240,7 +240,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -258,7 +258,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 
@@ -278,7 +278,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -296,7 +296,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -309,7 +309,7 @@ for e = 0 to elements-1
 BEGIN
     element1 = Elem[operand1, e, esize];
     element2 = Elem[operand2, e, esize];
-    product = (UInt(element1) * UInt(element2))<esize-1:0>;
+    product = (UInt(element1) * UInt(element2))[esize-1:0];
     if sub_op then
     BEGIN
         Elem[result, e, esize] = Elem[operand3, e, esize] - product;
@@ -325,7 +325,9 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+
+
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) operand3 = V[d];
@@ -339,7 +341,7 @@ for e = 0 to elements-1
 BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
-    product = (element1 * element2)<2*esize-1:0>;
+    product = (element1 * element2)[2*esize-1:0];
     if sub_op then
     BEGIN
         accum = Elem[operand3, e, 2*esize] - product;
@@ -355,7 +357,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -375,7 +377,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 
 bits(esize) operanda = V[a];
 bits(esize) operand1 = V[n];
@@ -393,7 +395,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -416,7 +418,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) operand3 = V[d];
@@ -449,7 +451,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) result;
@@ -460,14 +462,14 @@ for e = 0 to elements-1
 BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
-    Elem[result, e, 2*esize] = (element1 * element2)<2*esize-1:0>;
+    Elem[result, e, 2*esize] = (element1 * element2)[2*esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) result;
@@ -485,7 +487,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) result;
@@ -507,7 +509,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 
@@ -529,7 +531,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -542,14 +544,14 @@ BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     diff = element1 - element2;
-    Elem[result, e, esize] = diff<esize:1>;
+    Elem[result, e, esize] = diff[esize:1];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -571,7 +573,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -598,7 +600,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 
@@ -631,7 +633,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 integer element;
@@ -655,7 +657,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) zero = FPZero('0');
@@ -680,7 +682,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -700,7 +702,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -713,14 +715,14 @@ for e = 0 to elements-1
 BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
-    absdiff = Abs(element1 - element2)<esize-1:0>;
+    absdiff = Abs(element1 - element2)[esize-1:0];
     Elem[result, e, esize] = Elem[result, e, esize] + absdiff;
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 
@@ -743,7 +745,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize)   operand1 = Vpart[n, part];
 bits(datasize)   operand2 = Vpart[m, part];
 bits(2*datasize) result;
@@ -756,14 +758,14 @@ for e = 0 to elements-1
 BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
-    absdiff = Abs(element1 - element2)<2*esize-1:0>;
+    absdiff = Abs(element1 - element2)[2*esize-1:0];
     Elem[result, e, 2*esize] = Elem[result, e, 2*esize] + absdiff;
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -776,14 +778,14 @@ BEGIN
     element1 = Int(Elem[operand1, e, esize], unsigned);
     element2 = Int(Elem[operand2, e, esize], unsigned);
     maxmin = if minimum then Min(element1, element2) else Max(element1, element2);
-    Elem[result, e, esize] = maxmin<esize-1:0>;
+    Elem[result, e, esize] = maxmin[esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -818,7 +820,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -853,7 +855,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -865,7 +867,7 @@ boolean sat;
 
 for e = 0 to elements-1
 BEGIN
-    shift = SInt(Elem[operand2, e, esize]<7:0>);
+    shift = SInt(Elem[operand2, e, esize][7:0]);
     if rounding then
     BEGIN
         round_const = 1 << (-shift - 1); // 0 for left shift, 2^(n-1) for right shift 
@@ -878,7 +880,7 @@ BEGIN
     END
     else
     BEGIN
-        Elem[result, e, esize] = element<esize-1:0>;
+        Elem[result, e, esize] = element[esize-1:0];
 
     END
 END
@@ -886,7 +888,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 bits(datasize) operand2;
 bits(datasize) result;
@@ -897,14 +899,14 @@ operand2 = if accumulate then V[d] else Zeros();
 for e = 0 to elements-1
 BEGIN
     element = (Int(Elem[operand, e, esize], unsigned) + round_const) >> shift;
-    Elem[result, e, esize] = Elem[operand2, e, esize] + element<esize-1:0>;
+    Elem[result, e, esize] = Elem[operand2, e, esize] + element[esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 bits(datasize) result;
 
@@ -917,7 +919,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 bits(datasize) result;
 integer element;
@@ -934,7 +936,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize*2) operand = V[n];
 bits(datasize) result;
 integer round_const = if round then (1 << (shift - 1)) else 0;
@@ -943,14 +945,14 @@ integer element;
 for e = 0 to elements-1
 BEGIN
     element = (UInt(Elem[operand, e, 2*esize]) + round_const) >> shift;
-    Elem[result, e, esize] = element<esize-1:0>;
+    Elem[result, e, esize] = element[esize-1:0];
 
 END
 Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize*2) operand = V[n];
 bits(datasize) result;
 integer round_const = if round then (1 << (shift - 1)) else 0;
@@ -968,7 +970,7 @@ Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize*2) operand = V[n];
 bits(datasize) result;
 integer round_const = if round then (1 << (shift - 1)) else 0;
@@ -986,7 +988,7 @@ Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = Vpart[n, part];
 bits(datasize*2) result;
 integer element;
@@ -994,14 +996,14 @@ integer element;
 for e = 0 to elements-1
 BEGIN
     element = Int(Elem[operand, e, esize], unsigned) << shift;
-    Elem[result, e, 2*esize] = element<2*esize-1:0>;
+    Elem[result, e, 2*esize] = element[2*esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 bits(datasize) operand2 = V[d];
 bits(datasize) result;
@@ -1017,7 +1019,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 bits(datasize) operand2 = V[d];
 bits(datasize) result;
@@ -1033,7 +1035,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 
 bits(esize) element;
@@ -1050,7 +1052,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 
 bits(esize) element;
@@ -1068,7 +1070,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand  = V[n];
 
 bits(esize) element;
@@ -1086,7 +1088,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(2*datasize) operand = V[n];
 bits(datasize) result;
 
@@ -1099,7 +1101,7 @@ Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = Vpart[n, part];
 bits(2*datasize) result;
 
@@ -1112,7 +1114,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 
 bits(2*datasize) operand = V[n];
 FPCRType fpcr    = FPCR[];
@@ -1135,7 +1137,7 @@ BEGIN
 
 
 END
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
@@ -1150,7 +1152,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(2*datasize) operand = V[n];
 bits(datasize) result;
 bits(2*esize) element;
@@ -1158,13 +1160,13 @@ bits(2*esize) element;
 for e = 0 to elements-1
 BEGIN
     element = Elem[operand, e, 2*esize];
-    Elem[result, e, esize] = element<esize-1:0>;
+    Elem[result, e, esize] = element[esize-1:0];
 END
 Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(2*datasize) operand = V[n];
 bits(datasize) result;
 bits(2*esize) element;
@@ -1181,7 +1183,7 @@ Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(2*datasize) operand = V[n];
 bits(datasize) result;
 bits(2*esize) element;
@@ -1198,7 +1200,7 @@ Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 integer element;
@@ -1214,14 +1216,14 @@ BEGIN
     BEGIN
         element = Abs(element);
     END
-    Elem[result, e, esize] = element<esize-1:0>;                
+    Elem[result, e, esize] = element[esize-1:0];                
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
@@ -1244,7 +1246,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 integer element;
@@ -1269,7 +1271,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 
@@ -1284,13 +1286,13 @@ BEGIN
     BEGIN
         count = CountLeadingZeroBits(Elem[operand, e, esize]);
     END
-    Elem[result, e, esize] = count<esize-1:0>;
+    Elem[result, e, esize] = count[esize-1:0];
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 
@@ -1298,13 +1300,13 @@ integer count;
 for e = 0 to elements-1
 BEGIN
     count = BitCount(Elem[operand, e, esize]);
-    Elem[result, e, esize] = count<esize-1:0>;
+    Elem[result, e, esize] = count[esize-1:0];
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(32) element;
@@ -1319,7 +1321,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 
 FPCRType fpcr    = FPCR[];
@@ -1337,7 +1339,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 
@@ -1358,7 +1360,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
@@ -1373,7 +1375,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(32) element;
@@ -1388,7 +1390,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 
 bits(esize) element;
@@ -1406,7 +1408,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 
@@ -1427,11 +1429,11 @@ V[d] = result;
 
 
 
-OperationThe description of NOT gives the operational pseudocode for this instruction.
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -1454,7 +1456,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1;
 bits(datasize) operand2;
 bits(datasize) operand3;
@@ -1492,7 +1494,7 @@ V[d] = operand1 EOR ((operand2 EOR operand4) AND operand3);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(idxdsize) operand = V[n];
 bits(128) result;
 
@@ -1502,7 +1504,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(idxdsize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
@@ -1516,7 +1518,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
@@ -1527,7 +1529,7 @@ BEGIN
     element = Elem[operand, e, esize];
     for i = 0 to esize-1
     BEGIN
-        rev<esize-1-i> = element<i>;
+        rev[esize-1-i] = element[i];
     END
     Elem[result, e, esize] = rev;
 
@@ -1536,7 +1538,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 
 bits(64) address;
 bits(64) offs;
@@ -1601,7 +1603,7 @@ BEGIN
 
     END
 END
-Operationif HaveMTE2Ext() then
+if HaveMTE2Ext() then
 BEGIN
     SetTagCheckedInstruction(tag_checked);
 
@@ -1677,7 +1679,7 @@ BEGIN
 
     END
 END
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -1696,7 +1698,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 
@@ -1709,7 +1711,7 @@ for e = 0 to elements-1
 BEGIN
     op1 = Int(Elem[operand, 2*e+0, esize], unsigned);
     op2 = Int(Elem[operand, 2*e+1, esize], unsigned);
-    sum = (op1 + op2)<2*esize-1:0>;
+    sum = (op1 + op2)[2*esize-1:0];
     if acc then
     BEGIN
         Elem[result, e, 2*esize] = Elem[result, e, 2*esize] + sum;
@@ -1724,7 +1726,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -1738,20 +1740,20 @@ BEGIN
     element1 = Int(Elem[concat, 2*e, esize], unsigned);
     element2 = Int(Elem[concat, (2*e)+1, esize], unsigned);
     maxmin = if minimum then Min(element1, element2) else Max(element1, element2);
-    Elem[result, e, esize] = maxmin<esize-1:0>;
+    Elem[result, e, esize] = maxmin[esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 V[d] = Reduce(op, operand, esize);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 integer sum;
 
@@ -1761,11 +1763,11 @@ BEGIN
     sum = sum + Int(Elem[operand, e, esize], unsigned);
 
 END
-V[d] = sum<2*esize-1:0>;
+V[d] = sum[2*esize-1:0];
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 integer maxmin;
 integer element;
@@ -1777,34 +1779,34 @@ BEGIN
     maxmin = if min then Min(maxmin, element) else Max(maxmin, element);
 
 END
-V[d] = maxmin<esize-1:0>;
+V[d] = maxmin[esize-1:0];
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 
 V[d] = Reduce(op, operand, esize);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 boolean altfp = FALSE;
 V[d] = Reduce(op, operand, esize, altfp);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) hi = V[m];
 bits(datasize) lo = V[n];
 bits(datasize*2) concat = hi : lo;
 
-V[d] = concat<position+datasize-1:position>;
+V[d] = concat[position+datasize-1:position];
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 integer element = 0;
@@ -1824,7 +1826,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -1841,7 +1843,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operandl = V[n];
 bits(datasize) operandh = V[m];
 bits(datasize) result;
@@ -1856,7 +1858,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -1871,7 +1873,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) indices = V[m];
 bits(128*regs) table = Zeros();
 bits(datasize) result;
@@ -1880,7 +1882,7 @@ integer index;
 // Create table from registers
 for i = 0 to regs - 1
 BEGIN
-    table<128*i+127:128*i> = V[n];
+    table[128*i+127:128*i] = V[n];
     n = (n + 1) MOD 32;
 
 END
@@ -1898,21 +1900,21 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(idxdsize) operand = V[n];
 
 X[d] = ZeroExtend(Elem[operand, index, esize], datasize);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(idxdsize) operand = V[n];
 
 X[d] = SignExtend(Elem[operand, index, esize], datasize);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 
 FPCRType fpcr    = FPCR[];
@@ -1930,7 +1932,7 @@ V[d] = result;
 
 
 
-Operationif HaveMTE2Ext() then
+if HaveMTE2Ext() then
 BEGIN
     SetTagCheckedInstruction(tag_checked);
 
@@ -1987,7 +1989,7 @@ BEGIN
 
     END
 END
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand1 = V[d];
 bits(128) operand2 = V[n];
@@ -2006,7 +2008,7 @@ V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand = V[n];
 bits(128) result;
@@ -2022,7 +2024,7 @@ V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) X = V[d];
 bits(32)  Y = V[n];     // Note: 32 not 128 bits wide
@@ -2031,16 +2033,16 @@ bits(32)  t;
 
 for e = 0 to 3
 BEGIN
-    t = SHAchoose(X<63:32>, X<95:64>, X<127:96>);
-    Y = Y + ROL(X<31:0>, 5) + t + Elem[W, e, 32];
-    X<63:32> = ROL(X<63:32>, 30);
-    <Y, X> = ROL(Y : X, 32);
+    t = SHAchoose(X[63:32], X[95:64], X[127:96]);
+    Y = Y + ROL(X[31:0], 5) + t + Elem[W, e, 32];
+    X[63:32] = ROL(X[63:32], 30);
+    [Y, X] = ROL(Y : X, 32);
 END
 V[d] = X;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) X = V[d];
 bits(32)  Y = V[n];     // Note: 32 not 128 bits wide
@@ -2049,16 +2051,16 @@ bits(32)  t;
 
 for e = 0 to 3
 BEGIN
-    t = SHAparity(X<63:32>, X<95:64>, X<127:96>);
-    Y = Y + ROL(X<31:0>, 5) + t + Elem[W, e, 32];
-    X<63:32> = ROL(X<63:32>, 30);
-    <Y, X> = ROL(Y : X, 32);
+    t = SHAparity(X[63:32], X[95:64], X[127:96]);
+    Y = Y + ROL(X[31:0], 5) + t + Elem[W, e, 32];
+    X[63:32] = ROL(X[63:32], 30);
+    [Y, X] = ROL(Y : X, 32);
 END
 V[d] = X;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) X = V[d];
 bits(32)  Y = V[n];     // Note: 32 not 128 bits wide
@@ -2067,50 +2069,50 @@ bits(32)  t;
 
 for e = 0 to 3
 BEGIN
-    t = SHAmajority(X<63:32>, X<95:64>, X<127:96>);
-    Y = Y + ROL(X<31:0>, 5) + t + Elem[W, e, 32];
-    X<63:32> = ROL(X<63:32>, 30);
-    <Y, X> = ROL(Y : X, 32);
+    t = SHAmajority(X[63:32], X[95:64], X[127:96]);
+    Y = Y + ROL(X[31:0], 5) + t + Elem[W, e, 32];
+    X[63:32] = ROL(X[63:32], 30);
+    [Y, X] = ROL(Y : X, 32);
 END
 V[d] = X;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(32) operand = V[n];        // read element [0] only,  [1-3] zeroed
 V[d] = ROL(operand, 30);
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand1 = V[d];
 bits(128) operand2 = V[n];
 bits(128) operand3 = V[m];
 bits(128) result;
 
-result = operand2<63:0> : operand1<127:64>;
+result = operand2[63:0] : operand1[127:64];
 result = result EOR operand1 EOR operand3;
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand1 = V[d];
 bits(128) operand2 = V[n];
 bits(128) result;
 bits(128) T = operand1 EOR LSR(operand2, 32);
-result<31:0>   = ROL(T<31:0>,   1);
-result<63:32>  = ROL(T<63:32>,  1);
-result<95:64>  = ROL(T<95:64>,  1);
-result<127:96> = ROL(T<127:96>, 1) EOR ROL(T<31:0>, 2);
+result[31:0]   = ROL(T[31:0],   1);
+result[63:32]  = ROL(T[63:32],  1);
+result[95:64]  = ROL(T[95:64],  1);
+result[127:96] = ROL(T[127:96], 1) EOR ROL(T[31:0], 2);
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) result;
 if part1 then
@@ -2125,12 +2127,12 @@ V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand1 = V[d];
 bits(128) operand2 = V[n];
 bits(128) result;
-bits(128) T = operand2<31:0> : operand1<127:32>;
+bits(128) T = operand2[31:0] : operand1[127:32];
 bits(32) elt;
 
 for e = 0 to 3
@@ -2143,17 +2145,17 @@ V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) operand1 = V[d];
 bits(128) operand2 = V[n];
 bits(128) operand3 = V[m];
 bits(128) result;
-bits(128) T0 = operand3<31:0> : operand2<127:32>;
+bits(128) T0 = operand3[31:0] : operand2[127:32];
 bits(64) T1;
 bits(32) elt;
 
-T1 = operand3<127:64>;
+T1 = operand3[127:64];
 for e = 0 to 1
 BEGIN
     elt = Elem[T1, e, 32];
@@ -2162,7 +2164,7 @@ BEGIN
     Elem[result, e, 32] = elt;
 
 END
-T1 = result<63:0>;
+T1 = result[63:0];
 for e = 2 to 3
 BEGIN
     elt = Elem[T1, e - 2, 32];
@@ -2175,9 +2177,9 @@ V[d] = result;
 
 
 
-Operationbits(32)      acc     = X[n];   // accumulator
+bits(32)      acc     = X[n];   // accumulator
 bits(size)    val     = X[m];   // input value
-bits(32)      poly    = (if crc32c then 0x1EDC6F41 else 0x04C11DB7)<31:0>;
+bits(32)      poly    = (if crc32c then 0x1EDC6F41 else 0x04C11DB7)[31:0];
 
 bits(32+size) tempacc = BitReverse(acc) : Zeros(size);
 bits(size+32) tempval = BitReverse(val) : Zeros(32);
@@ -2187,7 +2189,7 @@ X[d] = BitReverse(Poly32Mod2(tempacc EOR tempval, poly));
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -2220,7 +2222,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) result;
@@ -2250,7 +2252,7 @@ V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vtmp;  
 bits(64)  MSigma1;
@@ -2259,18 +2261,18 @@ bits(128) X = V[n];
 bits(128) Y = V[m];
 bits(128) W = V[d];
 
-MSigma1 =  ROR(Y<127:64>, 14) EOR ROR(Y<127:64>,18) EOR ROR(Y<127:64>,41);
-Vtmp<127:64> =  (Y<127:64> AND X<63:0>) EOR (NOT(Y<127:64>) AND X<127:64>);
-Vtmp<127:64> = (Vtmp<127:64> + MSigma1 +  W<127:64>);
-tmp = Vtmp<127:64> + Y<63:0>;
+MSigma1 =  ROR(Y[127:64], 14) EOR ROR(Y[127:64],18) EOR ROR(Y[127:64],41);
+Vtmp[127:64] =  (Y[127:64] AND X[63:0]) EOR (NOT(Y[127:64]) AND X[127:64]);
+Vtmp[127:64] = (Vtmp[127:64] + MSigma1 +  W[127:64]);
+tmp = Vtmp[127:64] + Y[63:0];
 MSigma1 = ROR(tmp, 14) EOR ROR(tmp,18) EOR ROR(tmp,41);
-Vtmp<63:0> = (tmp AND Y<127:64>) EOR (NOT(tmp) AND X<63:0>);
-Vtmp<63:0> = (Vtmp<63:0> + MSigma1 + W<63:0>);
+Vtmp[63:0] = (tmp AND Y[127:64]) EOR (NOT(tmp) AND X[63:0]);
+Vtmp[63:0] = (Vtmp[63:0] + MSigma1 + W[63:0]);
 V[d] =  Vtmp;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vtmp;  
 bits(64) NSigma0;
@@ -2279,32 +2281,32 @@ bits(128) X = V[n];
 bits(128) Y = V[m];
 bits(128) W = V[d];
 
-NSigma0 =  ROR(Y<63:0>, 28) EOR ROR(Y<63:0>,34) EOR ROR(Y<63:0>,39);
-Vtmp<127:64> = (X<63:0> AND Y<127:64>) EOR (X<63:0> AND Y<63:0>) EOR (Y<127:64> AND Y<63:0>);
-Vtmp<127:64> = (Vtmp<127:64> + NSigma0 +  W<127:64>);
-NSigma0 =  ROR(Vtmp<127:64>, 28) EOR ROR(Vtmp<127:64>,34) EOR ROR(Vtmp<127:64>,39);
-Vtmp<63:0> =   (Vtmp<127:64> AND Y<63:0>) EOR (Vtmp<127:64> AND Y<127:64>) EOR (Y<127:64> AND Y<63:0>);
-Vtmp<63:0> =   (Vtmp<63:0> + NSigma0 + W<63:0>);
+NSigma0 =  ROR(Y[63:0], 28) EOR ROR(Y[63:0],34) EOR ROR(Y[63:0],39);
+Vtmp[127:64] = (X[63:0] AND Y[127:64]) EOR (X[63:0] AND Y[63:0]) EOR (Y[127:64] AND Y[63:0]);
+Vtmp[127:64] = (Vtmp[127:64] + NSigma0 +  W[127:64]);
+NSigma0 =  ROR(Vtmp[127:64], 28) EOR ROR(Vtmp[127:64],34) EOR ROR(Vtmp[127:64],39);
+Vtmp[63:0] =   (Vtmp[127:64] AND Y[63:0]) EOR (Vtmp[127:64] AND Y[127:64]) EOR (Y[127:64] AND Y[63:0]);
+Vtmp[63:0] =   (Vtmp[63:0] + NSigma0 + W[63:0]);
 
 V[d] = Vtmp;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(64) sig0;
 bits(128) Vtmp;
 bits(128) X = V[n];
 bits(128) W = V[d]; 
-sig0 = ROR(W<127:64>, 1) EOR ROR(W<127:64>, 8) EOR ('0000000':W<127:71>);
-Vtmp<63:0> = W<63:0> + sig0;
-sig0 = ROR(X<63:0>, 1) EOR ROR(X<63:0>, 8) EOR ('0000000':X<63:7>);
-Vtmp<127:64> = W<127:64> + sig0;
+sig0 = ROR(W[127:64], 1) EOR ROR(W[127:64], 8) EOR ('0000000':W[127:71]);
+Vtmp[63:0] = W[63:0] + sig0;
+sig0 = ROR(X[63:0], 1) EOR ROR(X[63:0], 8) EOR ('0000000':X[63:7]);
+Vtmp[127:64] = W[127:64] + sig0;
 V[d] = Vtmp;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(64) sig1;
 bits(128) Vtmp;
@@ -2312,15 +2314,15 @@ bits(128) X = V[n];
 bits(128) Y = V[m];
 bits(128) W = V[d];
 
-sig1 = ROR(X<127:64>, 19) EOR ROR(X<127:64>,61) EOR ('000000':X<127:70>);
-Vtmp<127:64> = W<127:64> + sig1 + Y<127:64>;
-sig1 = ROR(X<63:0>, 19) EOR ROR(X<63:0>,61) EOR ('000000':X<63:6>);
-Vtmp<63:0> = W<63:0> + sig1 + Y<63:0>;
+sig1 = ROR(X[127:64], 19) EOR ROR(X[127:64],61) EOR ('000000':X[127:70]);
+Vtmp[127:64] = W[127:64] + sig1 + Y[127:64];
+sig1 = ROR(X[63:0], 19) EOR ROR(X[63:0],61) EOR ('000000':X[63:6]);
+Vtmp[63:0] = W[63:0] + sig1 + Y[63:0];
 V[d] = Vtmp;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2329,25 +2331,25 @@ V[d] = Vn EOR Vm EOR Va;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
-V[d] = Vn EOR (ROL(Vm<127:64>,1):ROL(Vm<63:0>, 1));
+V[d] = Vn EOR (ROL(Vm[127:64],1):ROL(Vm[63:0], 1));
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
 bits(128) tmp;
 tmp = Vn EOR Vm; 
-V[d] = ROR(tmp<127:64>, UInt(imm6)):ROR(tmp<63:0>, UInt(imm6));
+V[d] = ROR(tmp[127:64], UInt(imm6)):ROR(tmp[63:0], UInt(imm6));
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2356,19 +2358,19 @@ V[d] = Vn EOR (Vm AND NOT(Va));
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
 bits(128) Vd = V[d];
 bits(128) Va = V[a];
-Vd<127:96> = ROL((ROL(Vn<127:96>,12) + Vm<127:96> + Va<127:96>) , 7);
-Vd<95:0> = Zeros();
+Vd[127:96] = ROL((ROL(Vn[127:96],12) + Vm[127:96] + Va[127:96]) , 7);
+Vd[95:0] = Zeros();
 V[d] = Vd;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2379,18 +2381,18 @@ bits(32) TT1;
 bits(32) SS2;
 
 WjPrime = Elem[Vm,i,32];
-SS2 = Vn<127:96> EOR ROL(Vd<127:96>,12); 
-TT1 = Vd<63:32> EOR (Vd<127:96> EOR Vd<95:64>);
-TT1 = (TT1 + Vd<31:0> + SS2 + WjPrime)<31:0>;
-result<31:0> = Vd<63:32>;
-result<63:32> = ROL(Vd<95:64>,9); 
-result<95:64> = Vd<127:96>; 
-result<127:96> = TT1; 
+SS2 = Vn[127:96] EOR ROL(Vd[127:96],12); 
+TT1 = Vd[63:32] EOR (Vd[127:96] EOR Vd[95:64]);
+TT1 = (TT1 + Vd[31:0] + SS2 + WjPrime)[31:0];
+result[31:0] = Vd[63:32];
+result[63:32] = ROL(Vd[95:64],9); 
+result[95:64] = Vd[127:96]; 
+result[127:96] = TT1; 
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2401,18 +2403,18 @@ bits(32) TT1;
 bits(32) SS2;
 
 WjPrime = Elem[Vm,i,32];
-SS2 = Vn<127:96> EOR ROL(Vd<127:96>,12); 
-TT1 = (Vd<127:96> AND Vd<63:32>) OR (Vd<127:96> AND Vd<95:64>) OR (Vd<63:32> AND Vd<95:64>); 
-TT1 = (TT1 + Vd<31:0> + SS2 + WjPrime)<31:0>;
-result<31:0> = Vd<63:32>;
-result<63:32> = ROL(Vd<95:64>,9); 
-result<95:64> = Vd<127:96>; 
-result<127:96> = TT1; 
+SS2 = Vn[127:96] EOR ROL(Vd[127:96],12); 
+TT1 = (Vd[127:96] AND Vd[63:32]) OR (Vd[127:96] AND Vd[95:64]) OR (Vd[63:32] AND Vd[95:64]); 
+TT1 = (TT1 + Vd[31:0] + SS2 + WjPrime)[31:0];
+result[31:0] = Vd[63:32];
+result[63:32] = ROL(Vd[95:64],9); 
+result[95:64] = Vd[127:96]; 
+result[127:96] = TT1; 
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2422,18 +2424,18 @@ bits(128) result;
 bits(32) TT2;
 
 Wj = Elem[Vm,i,32];
-TT2 = Vd<63:32> EOR (Vd<127:96> EOR Vd<95:64>);
-TT2 = (TT2 + Vd<31:0> + Vn<127:96> + Wj)<31:0>;
+TT2 = Vd[63:32] EOR (Vd[127:96] EOR Vd[95:64]);
+TT2 = (TT2 + Vd[31:0] + Vn[127:96] + Wj)[31:0];
 
-result<31:0> = Vd<63:32>;
-result<63:32> = ROL(Vd<95:64>,19); 
-result<95:64> = Vd<127:96>; 
-result<127:96> = TT2 EOR ROL(TT2,9) EOR ROL(TT2,17); 
+result[31:0] = Vd[63:32];
+result[63:32] = ROL(Vd[95:64],19); 
+result[95:64] = Vd[127:96]; 
+result[127:96] = TT2 EOR ROL(TT2,9) EOR ROL(TT2,17); 
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2443,39 +2445,39 @@ bits(128) result;
 bits(32) TT2;
 
 Wj = Elem[Vm,i,32];
-TT2 = (Vd<127:96> AND Vd<95:64>) OR (NOT(Vd<127:96>) AND Vd<63:32>); 
-TT2 = (TT2 + Vd<31:0> + Vn<127:96> + Wj)<31:0>;
+TT2 = (Vd[127:96] AND Vd[95:64]) OR (NOT(Vd[127:96]) AND Vd[63:32]); 
+TT2 = (TT2 + Vd[31:0] + Vn[127:96] + Wj)[31:0];
 
-result<31:0> = Vd<63:32>;
-result<63:32> = ROL(Vd<95:64>,19); 
-result<95:64> = Vd<127:96>; 
-result<127:96> = TT2 EOR ROL(TT2,9) EOR ROL(TT2,17); 
+result[31:0] = Vd[63:32];
+result[63:32] = ROL(Vd[95:64],19); 
+result[95:64] = Vd[127:96]; 
+result[127:96] = TT2 EOR ROL(TT2,9) EOR ROL(TT2,17); 
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
 bits(128) Vd = V[d];
 bits(128) result; 
 
-result<95:0> = (Vd EOR Vn)<95:0> EOR (ROL(Vm<127:96>,15):ROL(Vm<95:64>,15):ROL(Vm<63:32>,15));
+result[95:0] = (Vd EOR Vn)[95:0] EOR (ROL(Vm[127:96],15):ROL(Vm[95:64],15):ROL(Vm[63:32],15));
 
 for i = 0 to 3
 BEGIN
     if i == 3 then 
     BEGIN
-        result<127:96> = (Vd EOR Vn)<127:96> EOR (ROL(result<31:0>,15));
+        result[127:96] = (Vd EOR Vn)[127:96] EOR (ROL(result[31:0],15));
     END
-    result<(32*i)+31:(32*i)> = result<(32*i)+31:(32*i)> EOR ROL(result<(32*i)+31:(32*i)>,15) EOR ROL(result<(32*i)+31:(32*i)>,23);
+    result[(32*i)+31:(32*i)] = result[(32*i)+31:(32*i)] EOR ROL(result[(32*i)+31:(32*i)],15) EOR ROL(result[(32*i)+31:(32*i)],23);
 END
 V[d] = result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(128) Vn = V[n];
@@ -2483,16 +2485,16 @@ bits(128) Vd = V[d];
 bits(128) result; 
 bits(128) tmp;
 bits(32) tmp2;
-tmp<127:0> = Vn EOR (ROL(Vm<127:96>,7):ROL(Vm<95:64>,7):ROL(Vm<63:32>,7):ROL(Vm<31:0>,7)); 
-result<127:0> = Vd<127:0> EOR tmp<127:0>;
-tmp2 = ROL(tmp<31:0>,15);
+tmp[127:0] = Vn EOR (ROL(Vm[127:96],7):ROL(Vm[95:64],7):ROL(Vm[63:32],7):ROL(Vm[31:0],7)); 
+result[127:0] = Vd[127:0] EOR tmp[127:0];
+tmp2 = ROL(tmp[31:0],15);
 tmp2 = tmp2 EOR ROL(tmp2,15) EOR ROL(tmp2,23);
-result<127:96> = result<127:96> EOR tmp2;
+result[127:96] = result[127:96] EOR tmp2;
 V[d]= result;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vn = V[n];
 bits(32) intval; 
@@ -2505,7 +2507,7 @@ for index = 0 to 3
 BEGIN
     roundkey = Elem[Vn,index,32];
 
-    intval = roundresult<127:96> EOR roundresult<95:64> EOR roundresult<63:32> EOR roundkey; 
+    intval = roundresult[127:96] EOR roundresult[95:64] EOR roundresult[63:32] EOR roundkey; 
 
     for i = 0 to 3  
     BEGIN
@@ -2513,18 +2515,18 @@ BEGIN
 
     END
     intval = intval EOR ROL(intval,2) EOR ROL(intval,10) EOR ROL(intval,18) EOR ROL(intval,24);
-    intval = intval EOR roundresult<31:0>; 
+    intval = intval EOR roundresult[31:0]; 
 
-    roundresult<31:0> = roundresult<63:32>;
-    roundresult<63:32> = roundresult<95:64>;
-    roundresult<95:64> = roundresult<127:96>;
-    roundresult<127:96> = intval; 
+    roundresult[31:0] = roundresult[63:32];
+    roundresult[63:32] = roundresult[95:64];
+    roundresult[95:64] = roundresult[127:96];
+    roundresult[127:96] = intval; 
 END
 V[d] = roundresult;
 
 
 
-OperationAArch64.CheckFPAdvSIMDEnabled();
+AArch64.CheckFPAdvSIMDEnabled();
 
 bits(128) Vm = V[m];
 bits(32) intval; 
@@ -2538,7 +2540,7 @@ for index = 0 to 3
 BEGIN
     const = Elem[Vm,index,32];
 
-    intval = roundresult<127:96> EOR roundresult<95:64> EOR roundresult<63:32> EOR const; 
+    intval = roundresult[127:96] EOR roundresult[95:64] EOR roundresult[63:32] EOR const; 
 
     for i = 0 to 3  
     BEGIN
@@ -2546,18 +2548,18 @@ BEGIN
 
     END
     intval = intval EOR ROL(intval,13) EOR ROL(intval,23);
-    intval = intval EOR roundresult<31:0>; 
+    intval = intval EOR roundresult[31:0]; 
 
-    roundresult<31:0> = roundresult<63:32>;
-    roundresult<63:32> = roundresult<95:64>;
-    roundresult<95:64> = roundresult<127:96>;
-    roundresult<127:96> = intval; 
+    roundresult[31:0] = roundresult[63:32];
+    roundresult[63:32] = roundresult[95:64];
+    roundresult[95:64] = roundresult[127:96];
+    roundresult[127:96] = intval; 
 END
 V[d] = roundresult;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize DIV 2) operand1 = Vpart[n,part];
 bits(datasize DIV 2) operand2 = Vpart[m,part];
 bits(datasize) operand3 = V[d];
@@ -2576,7 +2578,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -2607,7 +2609,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -2660,7 +2662,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = V[n];
 bits(datasize) result;
 bits(esize) element;
@@ -2675,7 +2677,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(128) operand1 = V[n];
 bits(128) operand2 = V[m];
 bits(128) addend   = V[d];
@@ -2684,7 +2686,7 @@ V[d] = MatMulAdd(addend, operand1, operand2, op1_unsigned, op2_unsigned);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -2706,7 +2708,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(128)      operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -2727,7 +2729,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand = Vpart[n, part];
 bits(2*datasize) result;
 integer element;
@@ -2735,14 +2737,14 @@ integer element;
 for e = 0 to elements-1
 BEGIN
     element = Int(Elem[operand, e, esize], unsigned) << shift;
-    Elem[result, e, 2*esize] = element<2*esize-1:0>;
+    Elem[result, e, 2*esize] = element[2*esize-1:0];
 
 END
 V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(128) operand = V[n];
 bits(64) result;
 
@@ -2755,7 +2757,7 @@ Vpart[d, part] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 
 bits(32) operand = V[n];
 FPCRType fpcr    = FPCR[];
@@ -2768,7 +2770,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(datasize) operand1 = V[n];
 bits(datasize) operand2 = V[m];
 bits(datasize) operand3 = V[d];
@@ -2790,7 +2792,7 @@ V[d] = result;
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(128) op1 = V[n];
 bits(128) op2 = V[m];
 bits(128) acc = V[d];
@@ -2799,7 +2801,7 @@ V[d] = BFMatMulAdd(acc, op1, op2);
 
 
 
-OperationCheckFPAdvSIMDEnabled64();
+CheckFPAdvSIMDEnabled64();
 bits(128) operand1 = V[n];
 bits(128) operand2 = V[m];
 bits(128) operand3 = V[d];
