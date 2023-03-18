@@ -38,9 +38,10 @@ public:
             .vectorize(xi, 64)
             .unroll(yi);
         bounded_input
+            .store_in(MemoryType::Stack)
             .compute_at(output, y)
             .align_storage(x, 64)
-            .vectorize(x, 64, TailStrategy::RoundUp);
+            .vectorize(x, 64);
 
         output.print_loop_nest();
     }
