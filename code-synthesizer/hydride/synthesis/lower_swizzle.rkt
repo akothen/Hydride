@@ -298,6 +298,9 @@
       )
     )
 
+  ;; Reset context for next synthesis
+  (set-optimize-bound-found #f)
+
   (define lowered-expression
     (cond 
       [satisfiable? 
@@ -310,6 +313,9 @@
         ]
       )
     )
+
+  ;; Reset context for next synthesis
+  (set-optimize-bound-found #f)
 
 
   ;; Restore synthesize-by-lane global
