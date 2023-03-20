@@ -2482,6 +2482,15 @@
     [(equal? e '(buf uint8 64))
      (values #t 'uint8 64)
      ]
+    [(equal? e '(buf uint8 128))
+     (values #t 'uint8 128)
+     ]
+    [(equal? e '(buf uint8 256))
+     (values #t 'uint8 256)
+     ]
+    [(equal? e '(buf uint8 512))
+     (values #t 'uint8 512)
+     ]
     [(equal? e '(buf uint8 1024))
      (values #t 'uint8 1024)
      ]
@@ -2493,6 +2502,15 @@
      ]
     [(equal? e '(buf int8 64))
      (values #t 'int8 64)
+     ]
+    [(equal? e '(buf int8 128))
+     (values #t 'int8 128)
+     ]
+    [(equal? e '(buf int8 256))
+     (values #t 'int8 256)
+     ]
+    [(equal? e '(buf int8 512))
+     (values #t 'int8 512)
      ]
     [(equal? e '(buf int8 1024))
      (values #t 'int8 1024)
@@ -2506,6 +2524,15 @@
     [(equal? e '(buf uint16 64))
      (values #t 'uint16 64)
      ]
+    [(equal? e '(buf uint16 128))
+     (values #t 'uint16 128)
+     ]
+    [(equal? e '(buf uint16 256))
+     (values #t 'uint16 256)
+     ]
+    [(equal? e '(buf uint16 512))
+     (values #t 'uint16 512)
+     ]
     [(equal? e '(buf uint16 1024))
      (values #t 'uint16 1024)
      ]
@@ -2513,10 +2540,19 @@
      (values #t 'uint16 2048)
      ]
     [(equal? e '(buf int16 32))
-     (values #t 'uint16 32)
+     (values #t 'int16 32)
      ]
     [(equal? e '(buf int16 64))
-     (values #t 'uint16 64)
+     (values #t 'int16 64)
+     ]
+    [(equal? e '(buf int16 128))
+     (values #t 'int16 128)
+     ]
+    [(equal? e '(buf int16 256))
+     (values #t 'int16 256)
+     ]
+    [(equal? e '(buf int16 512))
+     (values #t 'int16 512)
      ]
     [(equal? e '(buf int16 1024))
      (values #t 'int16 1024)
@@ -2584,6 +2620,10 @@
 
 
   (cond
+    [(equal? e1 e2)
+     ;; Hashs are equivalent, they match exactly
+     #t
+     ]
     [(equal? (length regs-1) (length regs-2))
      ;; proceed with next steps
 
@@ -2766,7 +2806,7 @@
 
                ;(halide:create-buffer (choose-regs) elemT)
 
-               (halide:create-buffer (list-ref holes-of-size index) elemT)
+               (halide:create-buffer (vector-ref (list->vector holes-of-size) index) elemT)
                ]
               [v v]
               )
@@ -2780,24 +2820,102 @@
   (pretty-print symbolic-e2)
 
   (println (halide:vec-len symbolic-e1))
-  (define e1-result (halide:assemble-bitvector (halide:interpret symbolic-e1) (halide:vec-len symbolic-e1)))
 
-  (define e2-result (halide:assemble-bitvector (halide:interpret symbolic-e2) (halide:vec-len symbolic-e2)))
 
-  (println e1-result)
-  (println e2-result)
-
-  (define sol
-    (synthesize
-      #:forall (list sym-bvs)
-      #:guarantee
-      (assert (equal? e1-result e2-result ))
+  (define (equiv-at-index i)
+    (define e1-result-i (cpp:eval ((halide:interpret symbolic-e1) i)))
+    (define e2-result-i (cpp:eval ((halide:interpret symbolic-e2) i)))
+    (clear-vc!)
+    (define sol
+      (synthesize
+        #:forall (list sym-bvs)
+        #:guarantee
+        (assert (equal? e1-result-i e2-result-i ))
+        )
       )
-    )
-  
-  (define materialize (evaluate symbolic-e2  sol))
-  (println materialize)
-  (println sol)
-  (sat? sol)
 
+    (sat? sol)
+    )
+
+
+  ;; First test equivalence on just one index
+  (define equiv (equiv-at-index 0))
+
+  (cond
+    [equiv
+    (define e1-result (halide:assemble-bitvector (halide:interpret symbolic-e1) (halide:vec-len symbolic-e1) ))
+    (define e2-result (halide:assemble-bitvector (halide:interpret symbolic-e2) (halide:vec-len symbolic-e2) ))
+
+    (clear-vc!)
+    (define sol
+      (synthesize
+        #:forall (list sym-bvs)
+        #:guarantee
+        (assert (equal? e1-result e2-result ))
+        )
+      )
+
+    (sat? sol)
+      ]
+    [else
+      (displayln "Not equal at index 0")
+      #f
+      ]
+    )
   )
+
+
+
+;; Given a list of expression hashes,
+;; create a hash-map which maps each expression
+;; to how many times it appears in the list.
+;; This is useful for any analysis on the frequency
+;; of expressions.
+(define (bucketize-hash expr-ls)
+  (define buckets (make-hash))
+
+  (for/list ([expr expr-ls])
+            (cond
+              [(hash-has-key? buckets expr)
+               (define prev-count (hash-ref buckets expr))
+               (hash-set! buckets expr (+ 1 prev-count))
+               ]
+              [else
+                (hash-set! buckets expr 1)
+                ]
+              )
+            )
+  buckets
+  
+  )
+
+(define (get-common-expressions expr-ls-1 expr-ls-2)
+  
+  (define hash1 (bucketize-hash expr-ls-1))
+  (define hash2 (bucketize-hash expr-ls-2))
+
+  ;(pretty-print hash1)
+  ;(pretty-print hash2)
+
+  (define exprs-1 (hash-keys hash1))
+  (define exprs-2 (hash-keys hash2))
+
+  (define common-expressions (list))
+
+  (for/list ([e1 exprs-1])
+            (for/list ([e2 exprs-2])
+
+                      (define equivalent? (halide-expr-equiv? e1 e2))
+
+                      (cond 
+                        [equivalent? 
+                          (set! common-expressions (append common-expressions (list (list e1 e2))))
+                          ]
+                        )
+
+                      )
+            )
+  common-expressions
+  )
+
+
