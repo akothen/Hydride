@@ -284,7 +284,7 @@
                                     input-precs input-sizes  base_name)
   (define name (string-append "\"" base_name "\""))
   (define spec-name (get-spec-name base_name))
-  (define sema (string-append "[ " (get-hydride-expr-sema expr) "]"))
+  (define sema (string-append "[ " (get-hydride-expr-sema expr get-ops-functor) "]"))
   (define input_shapes (get-input-shapes-hydride input-sizes input-precs))
   (define output_shape (get-output-shape-hydride expr get-length-functor get-prec-functor))
   (define input_precision (get-input-precisions-hydride input-precs))

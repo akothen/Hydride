@@ -38,6 +38,8 @@
 (require hydride/ir/hvx/visitor)
 (require hydride/ir/hvx/interpreter)
 
+(require hydride/halide)
+(require hydride/synthesis/llvm_codegen)
 
 
 (provide (all-defined-out))
@@ -61,8 +63,64 @@
       )
     )
 
-  (rewrite-ir spec-expr 1 4 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
+  (define sanatized-expr (sanatize-reg-types spec-expr language-type))
+
+  (define-values (solved? simplified-expr elapsed-time) (rewrite-ir sanatized-expr 1 4 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type ))
+
+  (debug-log (format "Inst combine transformation required ~a seconds" elapsed-time))
+
+  (cond
+    [solved?
+      (debug-log "Possibly simplified expression!")
+      (pretty-print simplified-expr)
+      simplified-expr
+
+      ]
+    [else
+      (debug-log "Unable to simplify further: returning original expression")
+      sanatized-expr
+      ]
+    )
   
+  )
+
+;; The synthesizer represents the index of the register
+;; as a bitvector instead of an integer. For synthesis,
+;; if the input expression contains integer indices for
+;; the registers, we simply translate them to bitvectors.
+;; e.g. (reg 0) :-> (reg (bv 0 8))
+(define (sanatize-reg-types spec-expr target)
+  (define visitor-fn
+    (cond
+      [(equal? target 'x86)
+       hydride:visitor
+       ]
+      [(equal? target 'hvx)
+       hvx:visitor
+       ]
+      )
+    )
+
+
+  (define (sanatize-fn e)
+    (destruct e
+              [(reg i)
+               (cond 
+                 [(integer? i)
+                  (reg (bv i 8))
+                  ]
+                 [else
+                   e
+                   ]
+                 )
+               ]
+              [_
+                e
+                ]
+              )
+    )
+
+  (visitor-fn spec-expr sanatize-fn)
   )
 
 
@@ -171,7 +229,7 @@
                 (cond 
                   [(<= d 2) 1]
                   [else
-                    4 ; 4
+                    1 ; 4
                     ]
                   )
                 )
@@ -214,6 +272,9 @@
 
                         (define thds  
                               (for/list ([t (range step-low step-high )])
+
+                                  ;; Reset context for next synthesis
+                                  (set-optimize-bound-found #f)
                                 (parameterize 
                                   ([current-solver (if (equal? solver 'z3) (z3) (boolector))] 
                                    [current-bitwidth 16]
@@ -287,7 +348,11 @@
 
   (define end-time (current-seconds))
 
+  ;; Reset context for next synthesis
+  (set-optimize-bound-found #f)
+
   (debug-log "Stepwise synthesis completed!")
+
 
   (if (not solved?)
     (begin
@@ -296,4 +361,24 @@
       )
     (values solved? sol (- end-time start-time))
     )
+  )
+
+(define (save-simplified-expr output-expr input-sizes input-precs function-name file-name)
+
+  ;; Construct an id-map to print out buffer information
+  ;; Using halide-buffer object currently to represent buffers
+
+  (define id-map (make-hash))
+
+  (for/list ([i (range (length input-sizes))])
+            (define size-i (list-ref input-sizes i))
+            (define prec-i (list-ref input-precs i))
+
+            (define buf (halide:create-buffer (bv 0 size-i) (halide:size-to-elemT-signed prec-i #t)))
+
+            (hash-set! id-map buf (bv i (bitvector 8)))
+            )
+
+  ;(dump-synth-res-with-typeinfo output-expr id-map)
+  (compile-to-llvm output-expr id-map function-name file-name)
   )
