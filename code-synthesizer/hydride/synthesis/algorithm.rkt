@@ -35,6 +35,8 @@
 
 (require hydride/synthesis/scalable_synthesis)
 
+(require hydride/ir/arith/utils)
+
 (provide (all-defined-out))
 
 
@@ -57,7 +59,18 @@
     (display "; (reg ")
     (display (~s  v))
     (display ") ")
-    (displayln (halide:print-buffer-type-info k))
+
+    (displayln 
+      (cond
+        [(equal? input-lang 'halide)
+            (halide:print-buffer-type-info k)
+         ]
+
+        [(equal? input-lang 'mlir)
+            (arith:print-buffer-type-info k)
+         ]
+        )
+      )
     v
     )
   (define printed-map (hash-map id-map print-helper))
@@ -131,6 +144,99 @@
   (define synthesized-sol (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
+  (pretty-print halide-expr)
+  (displayln "Synthesis completed:")
+
+  ;; Synthesis completed with Hydride Target Agnostic 
+  ;; Operations, check if further simplification can 
+  ;; be performed. E.g. if the bitvector operands of
+  ;; any operation are all literals then that operation
+  ;; can instead be replaced with it's result. Traverse
+  ;; bottom up and incrementally simplify operations.
+
+  (define const-fold-functor
+    (cond
+      [(equal? target 'hvx)
+       hvx:const-fold
+       ]
+      [(equal? target 'x86)
+       hydride:const-fold
+       ]
+      )
+    )
+
+
+  (define cost-functor
+    (cond
+      [(equal? target 'hvx)
+       hvx:cost
+       ]
+      [(equal? target 'x86)
+       hydride:cost
+       ]
+      )
+    )
+
+  (define folded (const-fold-functor synthesized-sol))
+
+  ;; Lower target agnostic specialized shuffles to sequences
+  ;; of target specific shuffle operations.
+  (define swizzle-start (current-seconds))
+  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log cost-functor #t #f))
+  (define swizzle-end (current-seconds))
+  (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
+  (pretty-print id-map)
+  (displayln "========================================")
+  ;; Apply constant folding again after lowering swizzles
+  ;; as additional simplfication oppurtunities may have resulted
+  (const-fold-functor legalized-shuffles-expr) 
+  )
+
+
+(define (synthesize-mlir-expr halide-expr id-map expr-depth VF solver opt? sym? prev-hash-file prev-hash-name arch)
+  (debug-log id-map)
+  (if (equal? prev-hash-file "")
+    '()
+    (begin
+      (debug-log "Found previous hash!\n")
+      (define prev-hash (import-synth-map prev-hash-file prev-hash-name))
+      (set! synth-log (hash-copy prev-hash))
+      (debug-log synth-log)
+
+      )
+
+    )
+
+  ;; Update globals
+  (set-input-mlir)
+
+  (cond
+    [(equal? arch "x86" )
+     (set-target-x86)
+     ]
+
+    [(equal? arch "hvx" )
+     (set-target-hvx)
+     ]
+    )
+
+  (cond 
+    [(equal? solver 'boolector)
+     (current-solver (boolector))
+     ]
+
+    [(equal? solver 'z3)
+     (current-solver (z3))
+     ]
+    )
+
+
+  (define scale-factor 
+    1
+    )
+  (define synthesized-sol (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
+  (displayln "========================================")
+  (displayln "Original MLIR Expression:")
   (pretty-print halide-expr)
   (displayln "Synthesis completed:")
 

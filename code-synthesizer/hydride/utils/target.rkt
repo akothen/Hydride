@@ -10,6 +10,8 @@
 
 (define target 'hvx)
 
+(define input-lang 'halide)
+
 (define (set-target-hvx)
   (set! target 'hvx)
   )
@@ -18,3 +20,15 @@
 (define (set-target-x86)
   (set! target 'x86)
   )
+
+
+(define (set-input-halide)
+  (set! input-lang 'halide)
+  )
+
+
+(define (set-input-mlir)
+  (set! input-lang 'mlir)
+  )
+
+

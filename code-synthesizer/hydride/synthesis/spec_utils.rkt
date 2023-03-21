@@ -16,12 +16,28 @@
 (require hydride/ir/hydride/length)
 (require hydride/ir/hydride/prec)
 
+(require hydride/ir/arith/utils)
+
+(require hydride/utils/target)
+
 
 (provide (all-defined-out))
 
 
 (define (get-expr-sema expr)
-  (define ops (remove-duplicates (halide:get-bv-ops expr)))
+  (define ops 
+    (remove-duplicates 
+      (cond
+        [(equal? input-lang 'halide)
+         (halide:get-bv-ops expr)
+         ]
+
+        [(equal? input-lang 'mlir)
+         (arith:get-bv-ops expr)
+         ]
+        )
+      )
+    )
   (string-append "\"" (~s ops) "\"")
   )
 
@@ -32,7 +48,19 @@
            (for/list ([i (range num-inputs)])
                      (define expr (list-ref input-list i))
                      (define rows 1)
-                     (define cols (halide:vec-len expr))
+                     (define cols 
+                       (cond
+                         [(equal? input-lang 'halide)
+                          (halide:vec-len expr)
+                          ]
+
+                         [(equal? input-lang 'mlir)
+                          (arith:vec-len expr)
+                          ]
+                         )
+
+
+                       )
                      (define sep 
                        (if (equal? i (- num-inputs 1))
                          ""
@@ -50,7 +78,18 @@
 
 (define (get-output-shape expr)
   (define shape 
-    (string-append "[1 , " (~s (halide:vec-len expr)) "]" )
+    (string-append "[1 , " 
+                   (~s 
+                     (cond
+                       [(equal? input-lang 'halide)
+                        (halide:vec-len expr)
+                        ]
+
+                       [(equal? input-lang 'mlir)
+                        (arith:vec-len expr)
+                        ]
+                       )
+                     ) "]" )
     )
   shape
   )
@@ -61,7 +100,20 @@
     (apply string-append
            (for/list ([i (range num-inputs)])
                      (define expr (list-ref input-list i))
-                     (define bv-str (string-append "SYMBOLIC_BV_" (~s (halide:vec-size expr))))
+                     (define bv-str (string-append "SYMBOLIC_BV_" 
+                                                   (~s 
+                                                     (cond
+                                                       [(equal? input-lang 'halide)
+                                                        (halide:vec-size expr)
+                                                        ]
+
+                                                       [(equal? input-lang 'mlir)
+                                                        (arith:vec-size expr)
+                                                        ]
+                                                       )
+
+
+                                                     )))
                      (define sep 
                        (if (equal? i (- num-inputs 1))
                          ""
@@ -82,7 +134,17 @@
 
 (define (get-input-precisions sub-expr-ls)
   (define input-precisions (for/list ([i (range (length sub-expr-ls))])
-                                     (halide:vec-precision (list-ref sub-expr-ls i))
+
+                                     (define expr (list-ref sub-expr-ls i))
+                                     (cond
+                                       [(equal? input-lang 'halide)
+                                        (halide:vec-precision expr)
+                                        ]
+
+                                       [(equal? input-lang 'mlir)
+                                        (arith:vec-precision expr)
+                                        ]
+                                       )
                                      ))
 
   (define args 
@@ -106,7 +168,17 @@
 
 
 (define (get-expr-imms expr)
-  (define imms (halide:get-imm-values expr))
+  (define imms 
+    (cond
+      [(equal? input-lang 'halide)
+       (halide:get-imm-values expr)
+       ]
+
+      [(equal? input-lang 'mlir)
+       (list )
+       ]
+      )
+    )
   (define imm-ints (for/list ([v imms]) (bitvector->integer v) ))
   (define imm-precs (for/list ([v imms]) (bvlength v) ))
 
@@ -134,7 +206,17 @@
   (define input_shapes (get-input-shapes sub-expr-ls))
   (define output_shape (get-output-shape expr))
   (define input_precision (get-input-precisions sub-expr-ls))
-  (define output_precision (~s (halide:vec-precision expr)))
+  (define output_precision 
+    (~s 
+      (cond
+        [(equal? input-lang 'halide)
+         (halide:vec-precision expr)
+         ]
+
+        [(equal? input-lang 'mlir)
+         (arith:vec-precision expr)
+         ]
+        )))
   (define args (get-args-str sub-expr-ls))
   (define spec_invoke "\"\"")
   (define imm-ls (get-expr-imms expr))

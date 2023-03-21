@@ -75,8 +75,8 @@
 ;; ARITH Dialect IR
 (require hydride/ir/arith/types)
 (require hydride/ir/arith/interpreter)
-;(require hydride/ir/arith/utils)
-;(require hydride/ir/arith/visitor)
+(require hydride/ir/arith/utils)
+(require hydride/ir/arith/visitor)
 
 
 ;; Synthesis 
@@ -138,8 +138,8 @@
 
   (all-from-out hydride/ir/arith/types)
   (all-from-out hydride/ir/arith/interpreter)
-  ;(all-from-out hydride/ir/arith/utils)
-  ;(all-from-out hydride/ir/arith/visitor)
+  (all-from-out hydride/ir/arith/utils)
+  (all-from-out hydride/ir/arith/visitor)
 
 
 

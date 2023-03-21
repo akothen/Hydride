@@ -51,13 +51,18 @@
     )
   ;; Create buffer object with
   ;; specified buffer function
+
   (arith:tensor data shape-vector layout-vector elemT (bvlength data))
 
 )
 
 
 (define (is-signed-expr? e1 e2)
-  (define outT (infer-out-type ((interpret e1) 0) ((interpret e2) 0)) )
+  (define input-shape (tensor-shape e1))
+  (define (helper i) 0)
+  (define zero-index (build-vector (vector-length input-shape) helper))
+  
+  (define outT (infer-out-type (interpret e1 zero-index) (interpret e2 zero-index)) )
   (cpp:signed-type? outT)
   )
 
@@ -77,7 +82,7 @@
                [(eq? elemT 'uint64) #f]
                )
              ]
-            [_ (error "Should have passed in buffer")]
+            [_ (error "Should have passed in buffer" buf)]
             )
   )
 
@@ -798,7 +803,7 @@
     
     ;; Constructors
     [(arith:int-imm data signed?) (vector 0)]
-    [(arith:tensor data shape layout elemT buffsize) shape]
+    [(arith:tensor data shape layout elemT buffsize) layout]
 
     ;; Type Casts
 
@@ -898,6 +903,31 @@
                    )
          )
   )
+
+
+
+
+
+
+(define (sub-exprs expr)
+  (destruct expr
+            [(arith:tensor data shape layout elemT buffsize)
+             (list expr)
+             ]
+            [(arith:tensor-add v1 v2)
+             (list v1 v2)
+             ]
+            )
+  )
+
+
+
+
+
+
+
+
+
 
 
 ;; Model basic arithmetic
