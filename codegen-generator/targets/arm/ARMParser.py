@@ -24,6 +24,7 @@ reserved = {
     'CONSTANT',
     'FPCRTYPE',
     'BOOLEAN',
+    'RETURN',
     'V',
     'VPART',
     'ELEM',
@@ -189,9 +190,13 @@ def preprocess(text):
     return "\n".join(lines)
 
 
+PARSER_ID_COUNTER = 0
+
+
 def GenUniqueID():
-    ID = Parser.id_counter
-    Parser.id_counter += 1
+    global PARSER_ID_COUNTER
+    ID = PARSER_ID_COUNTER
+    PARSER_ID_COUNTER += 1
     return str(ID)
 
 
@@ -391,6 +396,11 @@ def p_expr_call(p):
         p[0] = Call(p[1], [], GenUniqueID())
 
 
+def p_stmt_return(p):
+    '''stmt : RETURN expr SEMICOLON'''
+    p[0] = ReturnStmt(p[2], GenUniqueID())
+
+
 def preprocess_data():
     with open('text.original') as f:
         data = f.read()
@@ -402,14 +412,10 @@ def preprocess_data():
 def get_parser():
     lexer = lex.lex()
     Parser = yacc.yacc(start='stmts')
-    Parser.id_counter = 0
     return Parser
 
 
-Parser = get_parser()
-
 if __name__ == "__main__":
-    # preprocess_data()
     if True:
         data = preprocess("if HaveMTE2Ext() then\n    SetTagCheckedInstruction(tag_checked);\n\nCheckFPAdvSIMDEnabled64();\n\nbits(64) address;\nbits(64) offs;\nbits(128) rval;\nbits(esize) element;\nconstant integer ebytes = esize DIV 8;\n\nif n == 31 then\n    CheckSPAlignment();\n    address = SP[];\nelse\n    address = X[n];\n\noffs = Zeros();\nif replicate then\n    // load and replicate to all elements\n    for s = 0 to selem-1\n        element = Mem[address + offs, ebytes, AccType_VEC];\n        // replicate to fill 128- or 64-bit register\n        V[t] = Replicate(element, datasize DIV esize);\n        offs = offs + ebytes;\n        t = (t + 1) MOD 32;\nelse\n    // load/store one element per register\n    for s = 0 to selem-1\n        rval = V[t];\n        if memop == MemOp_LOAD then\n            // insert into one lane of 128-bit register\n            Elem[rval, index, esize] = Mem[address + offs, ebytes, AccType_VEC];\n            V[t] = rval;\n        else // memop == MemOp_STORE\n            // extract from one lane of 128-bit register\n            Mem[address + offs, ebytes, AccType_VEC] = Elem[rval, index, esize];\n        offs = offs + ebytes;\n        t = (t + 1) MOD 32;\n\nif wback then\n    if m != 31 then\n        offs = X[m];\n    if n == 31 then\n        SP[] = address + offs;\n    else\n        X[n] = address + offs;")
         # for i, s in enumerate(data.split('\n')):
@@ -429,6 +435,5 @@ if __name__ == "__main__":
 
     lexer = lex.lex()
     Parser = yacc.yacc(start='stmts')
-    Parser.id_counter = 0
     Parser.parse(data)
     # print(Parser.parse(data))
