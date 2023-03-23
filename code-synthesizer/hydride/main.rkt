@@ -63,6 +63,8 @@
 (require hydride/ir/hvx/scale)
 (require hydride/ir/hvx/get_ops)
 (require hydride/ir/hvx/get_name)
+(require hydride/ir/hvx/sub_expr)
+(require hydride/ir/hvx/extract)
 
 
 ;; CPP IR
@@ -129,6 +131,8 @@
   (all-from-out hydride/ir/hvx/scale)
   (all-from-out hydride/ir/hvx/get_ops)
   (all-from-out hydride/ir/hvx/get_name)
+  (all-from-out hydride/ir/hvx/sub_expr)
+  (all-from-out hydride/ir/hvx/extract)
 
 
   (all-from-out hydride/cpp)

@@ -37,6 +37,8 @@
 (require hydride/ir/hvx/prec)
 (require hydride/ir/hvx/visitor)
 (require hydride/ir/hvx/interpreter)
+(require hydride/ir/hvx/extract)
+(require hydride/ir/hvx/sub_expr)
 
 (require hydride/halide)
 (require hydride/synthesis/llvm_codegen)
@@ -64,6 +66,9 @@
     )
 
   (define sanatized-expr (sanatize-reg-types spec-expr language-type))
+  (displayln "Expression sanatized")
+  (println sanatized-expr)
+
 
   (define-values (solved? simplified-expr elapsed-time) (rewrite-ir sanatized-expr 1 4 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type ))
 
@@ -381,4 +386,105 @@
 
   ;(dump-synth-res-with-typeinfo output-expr id-map)
   (compile-to-llvm output-expr id-map function-name file-name)
+  )
+
+
+
+
+;; High level wrapper to invoke inst-combine on input hydride expression
+(define (inst-combine-hydride-expr hydride-expr window-depth target type-info)
+
+
+  ;; type-info needed to identify the precisions and the vector lengths of (reg _)
+  ;; type-info is a vector of 2-vectors, of the first element of the two vectors
+  ;; is the precision and the second in the total size
+
+  (define-values 
+    (extract-expr sub-expr get-length get-prec bind-expr)
+    (cond
+      [(equal? target "hvx")
+       (values hvx:extract-expr  hvx:get-sub-exprs hvx:get-length hvx:get-prec hvx:bind-expr)
+       ]
+      )
+    )
+
+
+  ;; Extract list of expression at a given depth away
+
+  (define (multi-level-sub-expr input-expr depth)
+    (cond
+      [(equal? depth 1)
+       (define sub (sub-expr input-expr))
+       sub
+       ]
+      [else
+        (define sub-exprs (sub-expr input-expr))
+        (define nested-sub-exprs (for/list ([se sub-exprs])  (multi-level-sub-expr se (- depth 1)) ))
+        (apply append nested-sub-exprs)
+        ]
+      )
+    )
+
+  (define leaves (multi-level-sub-expr hydride-expr window-depth))
+
+  (displayln "Current Hydride-expr")
+  (println hydride-expr)
+  (displayln "Leaves")
+  (displayln leaves)
+
+  (define precs 
+    (for/list ([leaf leaves])
+              (destruct leaf
+                        [(reg id)  ;; Get precision from type-info 
+                         (define type-details (vector-ref type-info (bitvector->integer id)))
+                         (vector-ref type-details 0)
+                         ] 
+                        [_ (get-prec leaf (vector))]
+                        )
+              )
+    )
+
+  (define sizes 
+    (for/list ([leaf leaves])
+              (destruct leaf
+                        [(reg id)  ;; Get size from type-info 
+                         
+                         (define type-details (vector-ref type-info (bitvector->integer id)))
+                         (vector-ref type-details 1)
+                         ] 
+                        [_ (get-length leaf (vector))]
+                        )
+              )
+    )
+
+
+  (displayln "Precs")
+  (println precs)
+
+  (displayln "sizes")
+  (println sizes)
+
+  (displayln "Extracted Expression")
+  (define-values  (current-expr num-consumed) (extract-expr hydride-expr 0 window-depth))
+  (displayln current-expr)
+
+  (destruct hydride-expr
+            [(reg id) 
+             hydride-expr
+             ]
+            [_
+
+              (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target))
+
+
+              (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
+
+
+
+              (bind-expr simplified-current-expr (list->vector simplified-leaves))
+
+              ]
+
+            )
+
   )
