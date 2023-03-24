@@ -332,6 +332,16 @@
     (destruct e
               [(lit v)
                (set! imms (append imms (list v)))
+
+                ;; Split imms into 32/16 bit words and include those as well
+                (for/list 
+                  ([prec (list 16 32)])
+                  (cond
+                    [(equal? (remainder (bvlength v) prec) 0)
+                     (set! imms (append imms (list (extract (- prec 1) 0 v))))
+                     ]
+                    )
+                  )
                e
                ]
               [v v]
@@ -342,6 +352,7 @@
 
   (define imm-ints (for/list ([v imms]) (bitvector->integer v) ))
   (define imm-precs (for/list ([v imms]) (bvlength v) ))
+
 
   (define val-strs 
     (for/list ([i (range (length imm-ints))])

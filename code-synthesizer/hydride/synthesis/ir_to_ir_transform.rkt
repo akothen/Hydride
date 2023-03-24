@@ -41,13 +41,14 @@
 (require hydride/ir/hvx/sub_expr)
 
 (require hydride/halide)
-(require hydride/synthesis/llvm_codegen)
+;(require hydride/synthesis/llvm_codegen)
 
 
 (provide (all-defined-out))
 
 
 
+(define inst-combine-cache (make-hash))
 
 
 ;; Wrapper to invoke rewrite-ir method
@@ -70,7 +71,7 @@
   (println sanatized-expr)
 
 
-  (define-values (solved? simplified-expr elapsed-time) (rewrite-ir sanatized-expr 1 4 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type ))
+  (define-values (solved? simplified-expr elapsed-time) (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type ))
 
   (debug-log (format "Inst combine transformation required ~a seconds" elapsed-time))
 
@@ -368,25 +369,7 @@
     )
   )
 
-(define (save-simplified-expr output-expr input-sizes input-precs function-name file-name)
 
-  ;; Construct an id-map to print out buffer information
-  ;; Using halide-buffer object currently to represent buffers
-
-  (define id-map (make-hash))
-
-  (for/list ([i (range (length input-sizes))])
-            (define size-i (list-ref input-sizes i))
-            (define prec-i (list-ref input-precs i))
-
-            (define buf (halide:create-buffer (bv 0 size-i) (halide:size-to-elemT-signed prec-i #t)))
-
-            (hash-set! id-map buf (bv i (bitvector 8)))
-            )
-
-  ;(dump-synth-res-with-typeinfo output-expr id-map)
-  (compile-to-llvm output-expr id-map function-name file-name)
-  )
 
 
 
@@ -400,10 +383,10 @@
   ;; is the precision and the second in the total size
 
   (define-values 
-    (extract-expr sub-expr get-length get-prec bind-expr)
+    (extract-expr sub-expr get-length get-prec bind-expr cost-fn)
     (cond
       [(equal? target "hvx")
-       (values hvx:extract-expr  hvx:get-sub-exprs hvx:get-length hvx:get-prec hvx:bind-expr)
+       (values hvx:extract-expr  hvx:get-sub-exprs hvx:get-length hvx:get-prec hvx:bind-expr hvx:cost)
        ]
       )
     )
@@ -427,10 +410,10 @@
 
   (define leaves (multi-level-sub-expr hydride-expr window-depth))
 
-  (displayln "Current Hydride-expr")
-  (println hydride-expr)
-  (displayln "Leaves")
-  (displayln leaves)
+  ;(displayln "Current Hydride-expr")
+  ;(println hydride-expr)
+  ;(displayln "Leaves")
+  ;(displayln leaves)
 
   (define precs 
     (for/list ([leaf leaves])
@@ -468,23 +451,66 @@
   (define-values  (current-expr num-consumed) (extract-expr hydride-expr 0 window-depth))
   (displayln current-expr)
 
-  (destruct hydride-expr
-            [(reg id) 
-             hydride-expr
-             ]
-            [_
+  (cond 
 
-              (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target))
-
-
-              (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
+    [(hash-has-key? inst-combine-cache current-expr)
+     (displayln (format "cache hit for ~a" current-expr))
+     (define simplified-current-expr (hash-ref inst-combine-cache current-expr))
+     (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
 
 
 
-              (bind-expr simplified-current-expr (list->vector simplified-leaves))
 
-              ]
 
-            )
+     (define disjoint-simplified (bind-expr simplified-current-expr (list->vector simplified-leaves)))
+    
+    disjoint-simplified
+
+
+
+     ]
+    [else
+      (destruct hydride-expr
+                [(reg id) 
+                 hydride-expr
+                 ]
+                [_
+
+                  (define start-time (current-seconds))
+                  (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target))
+                  (define end-time (current-seconds))
+
+                  (define elapsed-time (- end-time start-time))
+                  (displayln (format "Inst Combine Query Elapsed ~a seconds" elapsed-time))
+
+                  (hash-set! inst-combine-cache current-expr simplified-current-expr)
+
+
+                  (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
+
+
+                  (define disjoint-simplified (bind-expr simplified-current-expr (list->vector simplified-leaves)))
+
+                  (cond
+                    [(< (cost-fn simplified-current-expr) (cost-fn current-expr))
+                     ;; If current query was simplified, it may be possible to simply the leaves 
+                     ;; with the new expression. Test by running again.
+                     (displayln "Current query simplified, re-run inst combine on new expression")
+                     (inst-combine-hydride-expr hydride-expr window-depth target type-info)
+                     ]
+                    [else
+                      disjoint-simplified
+                      ]
+                    )
+
+
+
+
+                  ]
+
+                )
+      ]
+
+    )
 
   )

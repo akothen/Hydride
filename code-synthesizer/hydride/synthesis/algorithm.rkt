@@ -34,6 +34,7 @@
 
 
 (require hydride/synthesis/scalable_synthesis)
+(require hydride/synthesis/ir_to_ir_transform) 
 
 (require hydride/ir/arith/utils)
 
@@ -137,15 +138,18 @@
      ]
 
     [(equal? arch "hvx" )
-     32 
+     32  
      ]
     )
     )
+  (define type-info (make-type-info id-map))
   (define synthesized-sol (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
   (displayln "Synthesis completed:")
+
+  
 
   ;; Synthesis completed with Hydride Target Agnostic 
   ;; Operations, check if further simplification can 
@@ -179,10 +183,33 @@
 
   (define folded (const-fold-functor synthesized-sol))
 
+  (debug-log "folded-expression")
+  (debug-log folded)
+
+  (define perform-instcombine? #f)
+
+  (define simplified 
+    (cond
+      [perform-instcombine? 
+        (define start-sec (current-seconds))
+        (define simplified-expr (inst-combine-hydride-expr folded 3 arch type-info))
+        (define end-sec (current-seconds))
+
+        (define elapsed-instcombine (- end-sec start-sec))
+        (debug-log (format "inst-combine took ~a seconds ..." elapsed-instcombine))
+        simplified-expr
+        ]
+      [else folded]
+      )
+    )
+
+  (debug-log "Simplified expression")
+  (debug-log simplified)
+
   ;; Lower target agnostic specialized shuffles to sequences
   ;; of target specific shuffle operations.
   (define swizzle-start (current-seconds))
-  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log cost-functor #t #f))
+  (define legalized-shuffles-expr (legalize-expr-swizzles simplified solver  synth-log cost-functor #t #f))
   (define swizzle-end (current-seconds))
   (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
   (pretty-print id-map)
@@ -190,6 +217,27 @@
   ;; Apply constant folding again after lowering swizzles
   ;; as additional simplfication oppurtunities may have resulted
   (const-fold-functor legalized-shuffles-expr) 
+  )
+
+(define (make-type-info id-map)
+  (define regs (hash-values id-map))
+  (define container (for/list ([i (range (length regs))]) '()))
+
+  (set! container (list->vector container))
+
+  (define (hash-helper k v)
+    (define index (bitvector->natural v))
+    (define prec (halide:vec-precision k))
+    (define size (halide:vec-size k))
+    (printf "Inserted ~a at vector in index ~a\n" prec index)
+    (vector-set! container index (vector prec size))
+    )
+
+  (hash-map id-map hash-helper)
+
+  (debug-log "Created typeinfo:")
+  (debug-log container)
+  container
   )
 
 
