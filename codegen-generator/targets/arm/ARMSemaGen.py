@@ -1,6 +1,6 @@
 from ARMParser import get_parser, preprocess
 from ARMAST import *
-from ARMTypes import data_bits_spec, parse_reg, parse_type, get_total_bits
+from ARMTypes import data_bits_spec, parse_reg, parse_type, get_total_bits, global_functions
 import json
 import re
 I = None
@@ -129,9 +129,11 @@ def walk_AST(Node):
     elif isinstance(Node, ReturnStmt):
         walk_AST(Node.ret)
     elif isinstance(Node, WhenStmt):
-        assert False, "Not implement"  # TODO: implement the AST visitor
+        walk_AST(Node.cond)
+        walk_AST(Node.stmt)
     elif isinstance(Node, Case):
-        assert False, "Not implement"  # TODO: implement the AST visitor
+        walk_AST(Node.val)
+        walk_AST(Node.stmt)
         # Also update to walk sample
     else:
         print(Node)
@@ -184,7 +186,8 @@ def parse_instr_attr(instr: InstrDesc):
     for arg in instr.arguments:
         assert arg.split()[-1] in defined_sym
         arg = parse_type(' '.join(arg.split()[:-1]))
-        parsed_input_type.append(arg)
+        if isinstance(arg, CType):
+            parsed_input_type.append(arg)
 
     # - Parse return type:
     # - {"return_base_type": "int", "element_bit_size": "8", "value": "int8x8_t"}
@@ -192,7 +195,7 @@ def parse_instr_attr(instr: InstrDesc):
     esize = int(instr.return_type["element_bit_size"])
 
     # - Sanity check
-    # print(parsed_regs, parsed_types)
+    print(parsed_input_reg, parsed_input_type)
     assert(len(parsed_input_reg) == len(parsed_input_type))
     for preg in parsed_input_reg:
         if isinstance(preg, VectorReg) and preg.elements != 1:
@@ -211,14 +214,47 @@ def parse_instr_attr(instr: InstrDesc):
             == 1) != ("high" in instr.name)
     elements = parsed_result_reg.elements
 
+    # - resolve unknown vars
+    resolved = dict(esize=Number(esize),
+                    datasize=Number(datasize),
+                    elements=Number(elements),)
+    print(resolved)
+    defined_sym = dict(defined_sym,
+                       **resolved)
+    return prolog, epilog
+
+
+def parse_init(instr):
+    global defined_sym
+    defined_sym = global_functions
+    undefined_sym.clear()
+
+
+def parse_flag(instr: InstrDesc):
     # - Parse flags
-    def sub_op_func(instr: InstrDesc):
-        options = {"add": False,
-                   "sub": True}
+    def select_in(src, options):
+        # assert len(set(k for k in options if k in src)) == 1
         for k, v in options.items():
-            if k in instr.name:
-                return v  # ?
-        return None
+            if k in src:
+                return v
+        assert False
+
+    def select_sw(src, options):
+        # assert len(set(k for k in options if src.startswith(k))) == 1
+        for k, v in options.items():
+            if src.startswith(k):
+                return v
+        assert False
+
+    def sub_op_func(instr: InstrDesc):
+        return select_in(instr.name,
+                         {"add": False,
+                          "sub": True,
+                          "mla": False,
+                          "mls": True,
+                          "vfma": False,
+                          "vfms": True,
+                          })
 
     def pair_func(instr: InstrDesc):
         return instr.name.startswith("vp")  # ?
@@ -249,57 +285,56 @@ def parse_instr_attr(instr: InstrDesc):
 
     def and_test_func(instr: InstrDesc):
         return instr.name.startswith("vtst")
-    flags = {
-        "sub_op",
-        "pair",
-        "unsigned",
-        "part",
-        "round",
-        "poly",
-        "opa_neg",
-        "op1_neg",
-        "rounding",
-        "abs",
-        "and_test",
-    }
-    cur_flag = {}
-    for flag in flags:
-        cur_flag[flag] = locals()[flag+"_func"](instr)
 
-    # - resolve unknown vars
-    resolved = dict(esize=Number(esize),
-                    datasize=Number(datasize),
-                    elements=Number(elements),
-                    **cur_flag)
-    print(resolved)
-    defined_sym = dict(defined_sym, **resolved)
-    return prolog, epilog
+    def cmp_func(instr: InstrDesc):
+        return select_in(instr.name,
+                         {"gt": 0,
+                          "ge": 1,
+                          "eq": 2,
+                          "le": 3,
+                          "lt": 4,
+                          })
+    comparison_func = cmp_func
 
+    def cmp_eq_func(instr: InstrDesc):
+        return select_in(instr.name,
+                         {"gt": False,
+                          "ge": True,
+                          "le": True,
+                          "lt": False,
+                          })
 
-def parse_init(instr):
-    global defined_sym
-    defined_sym = {"FPSR": None, "FPCR": None,
-                   "FPAdd": None,
-                   "FPSub": None,
-                   "FPMul": None,
-                   "FPDiv": None,
-                   "FPNeg": None,
-                   "FPMulAdd": None,
-                   "FPMulX": None,
-                   "FPAbs": None,
-                   "PolynomialMult": None,
-                   "CheckFPAdvSIMDEnabled64": None,
-                   "Int": None,
-                   "UInt": None,
-                   "SInt": None,
-                   "Ones": None,
-                   "Zeros": None,
-                   "SatQ": None,
-                   "SignedSatQ": None,
-                   "IsMerging": None,
-                   "IsZero": None,
-                   }
-    undefined_sym.clear()
+    def accumulate_func(instr: InstrDesc):
+        return "accumulate" in instr.instruction_group
+
+    def minimum_func(instr: InstrDesc):
+        return select_in(instr.name,
+                         {"max": False,
+                          "min": True,
+                          })
+
+    def saturating_func(instr: InstrDesc):
+        return instr.name.startswith("vq")
+
+    def shift_func(instr: InstrDesc):
+        if "_n_" in instr.name:
+            return Var("n", 0)
+        assert False
+
+    def dst_unsigned_func(instr: InstrDesc):
+        return {"NeonOperationId_00041": True}[instr.Operation]
+
+    def src_unsigned_func(instr: InstrDesc):
+        return {"NeonOperationId_00041": False}[instr.Operation]
+
+    def fracbits_func(instr: InstrDesc):
+        return None  # wtf
+
+    def exact_func(instr: InstrDesc):
+        return None  # wtf
+
+    for flag in undefined_sym:
+        defined_sym[flag] = locals()[flag+"_func"](instr)
 
 
 def get_sema(ID):
@@ -307,14 +342,14 @@ def get_sema(ID):
     if op is None:
         return
     walk_AST(CompoundStmt(op, -1))
-    print(undefined_sym)
-    assert len(undefined_sym) == 0
+    # print(undefined_sym)
+    parse_flag(instr)
 
 
 if __name__ == "__main__":
     # test_parse_operation()
     allll = 4344
-    for i in range(1000):
+    for i in range(allll):
         get_sema(i)
     # get_sema(22)
     # for i in range(allll):

@@ -27,13 +27,13 @@ FieldExpr = namedtuple('FieldExpr', ['obj', 'field', 'id'])
 ReturnStmt = namedtuple('ReturnStmt', ['ret', 'id'])
 CompoundStmt = namedtuple('CompoundStmt', ['stmts', 'id'])
 WhenStmt = namedtuple("WhenStmt", ['cond', 'stmt', 'id'])
-Case = namedtuple('Case', ['val', 'stmts', 'id'])
+Case = namedtuple('Case', ['val', 'stmt', 'id'])
 
 ARMSema = namedtuple(
     "ARMSema", ["name", "return_type", "args", "operation", "parameter"])
 InstrDesc = namedtuple(
     "InstrDesc", ["name", "return_type", "arguments", "results",
-                  "Arguments_Preparation", "Operation", "base_instruction", "operands"]
+                  "Arguments_Preparation", "Operation", "base_instruction", "operands", "instruction_group"]
 )
 
 VectorReg = namedtuple("VecReg", ["idx", "elements", "bitspec"])
