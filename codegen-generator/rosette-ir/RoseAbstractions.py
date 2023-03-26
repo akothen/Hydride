@@ -229,20 +229,15 @@ class RoseFunction(RoseValue, RoseRegion):
     assert ArgIndex < len(self.ArgsList)
     self.ArgsList[ArgIndex].setName(Name)
 
-  def update(self, Function, ChangeID : bool = False):
+  def update(self, Function, ValueToValueMap : dict = dict(), ChangeID : bool = False):
     assert isinstance(Function, RoseFunction)
     print("UPDATING FUNCTION")
     # The type of the given function and this function
     # must be the same.
     assert Function.getType() == self.getType()
-    ValueToValueMap = dict()
     # Update arguments
     self.ArgList = list()
-    OldArgList = list()
-    OldArgList.extend(Function.getArgs())
-    print("OldArgList lenght:")
-    print(len(OldArgList))
-    for Arg in OldArgList:
+    for Arg in Function.getArgs():
       ClonedArg = Arg.clone(ChangeID=ChangeID)
       ClonedArg.setFunction(self)
       print("ClonedArg:")
@@ -389,6 +384,19 @@ class RoseBlock(RoseRegion):
       ClonedOperation = Operation.cloneOperation(Suffix, ValueToValueMap, ChangeID)
       ClonedBlock.addRegion(ClonedOperation)
     return ClonedBlock
+  
+  def update(self, Block, ValueToValueMap : dict = dict(), ChangeID : bool = False):
+    assert isinstance(Block, RoseBlock)
+    # Erase all operations in this block
+    RemoveOps = list()
+    RemoveOps.extend(self.getOperations())
+    for Op in RemoveOps:
+      self.eraseOperation(Op)
+    # Add ops from the given block to this block
+    for Operation in Block.getOperations():
+      ClonedOperation = Operation.cloneOperation("", ValueToValueMap, ChangeID)
+      Block.addRegion(ClonedOperation)
+    return
 
   def getOperations(self):
     return self.getChildren()
@@ -603,6 +611,35 @@ class RoseForLoop(RoseRegion):
       ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap, ChangeID)
       ClonedLoop.addRegion(ClonedAbstraction)
     return ClonedLoop
+  
+  def update(self, Loop, ValueToValueMap : dict = dict(),  ChangeID : bool = False):
+    assert isinstance(Loop, RoseForLoop)
+    # Update the loop start, end and step
+    LoopStart = Loop.getStartIndex()
+    if not isinstance(LoopStart, RoseConstant):
+      LoopStart = ValueToValueMap[LoopStart]
+    self.setStartIndexVal(LoopStart)
+    LoopEnd = Loop.getEndIndex()
+    if not isinstance(LoopEnd, RoseConstant):
+      LoopEnd = ValueToValueMap[LoopEnd]
+    self.setEndIndexVal(LoopEnd)
+    LoopStep = Loop.getStep()
+    if not isinstance(LoopStep, RoseConstant):
+      LoopStep = ValueToValueMap[LoopStep]
+    self.setStepVal(LoopStep)
+    # Set the iterator
+    self.setIteratorName(Loop.getIterator().getName())
+    ValueToValueMap[Loop.getIterator()] = self.getIterator()
+    # Erase all regions in this loop
+    RegionsToBeRemoved = list()
+    RegionsToBeRemoved.extend(self.getChildren())
+    for Abstraction in RegionsToBeRemoved:
+      self.eraseChild(Abstraction)
+    # Add new regions and remove the old regions
+    for Abstraction in Loop:
+      ClonedAbstraction = Abstraction.clone("", ValueToValueMap, ChangeID)
+      self.addRegion(ClonedAbstraction)
+    return
 
   def getIterator(self):
     return self.Iterator
@@ -811,6 +848,25 @@ class RoseCond(RoseRegion):
       ClonedCondRegion.addRegion(ClonedAbstraction, Key)
     return ClonedCondRegion
 
+  def update(self, CondRegion, ValueToValueMap : dict = dict(), ChangeID : bool = False):
+    assert isinstance(CondRegion, RoseCond)
+    # Add the new conditions
+    self.Conditions = list()
+    for Condition in CondRegion.getConditions():
+      self.Conditions.append(ValueToValueMap[Condition])
+    # Remove all regions in this cond region
+    RegionsToBeRemoved = list()
+    for Abstraction in self:
+      RegionsToBeRemoved.append(Abstraction)
+    for Abstraction in RegionsToBeRemoved:
+      self.eraseChild(Abstraction)
+    # Add new regions and remove the old regions
+    for Abstraction in CondRegion:
+      ClonedAbstraction = Abstraction.clone("", ValueToValueMap, ChangeID)
+      Key = self.getKeyForChild(Abstraction)
+      self.addRegion(ClonedAbstraction, Key)
+    return
+  
   def getCondition(self, Index : int = 0):
     return self.Conditions[Index]
   
