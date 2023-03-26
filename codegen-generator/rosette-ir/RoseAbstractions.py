@@ -229,6 +229,56 @@ class RoseFunction(RoseValue, RoseRegion):
     assert ArgIndex < len(self.ArgsList)
     self.ArgsList[ArgIndex].setName(Name)
 
+  def update(self, Function, ChangeID : bool = False):
+    assert isinstance(Function, RoseFunction)
+    print("UPDATING FUNCTION")
+    # The type of the given function and this function
+    # must be the same.
+    assert Function.getType() == self.getType()
+    ValueToValueMap = dict()
+    # Update arguments
+    self.ArgList = list()
+    OldArgList = list()
+    OldArgList.extend(Function.getArgs())
+    print("OldArgList lenght:")
+    print(len(OldArgList))
+    for Arg in OldArgList:
+      ClonedArg = Arg.clone(ChangeID=ChangeID)
+      ClonedArg.setFunction(self)
+      print("ClonedArg:")
+      ClonedArg.print()
+      self.ArgList.append(ClonedArg)
+      ValueToValueMap[Arg] = ClonedArg
+    # Update the return value
+    ReturnValue = Function.getReturnValue()
+    if not isinstance(ReturnValue, RoseOperation) \
+      and not isinstance(ReturnValue, RoseArgument):
+      ClonedReturnVal = ReturnValue.clone(ChangeID=ChangeID)
+      self.setRetVal(ClonedReturnVal)
+      ValueToValueMap[ReturnValue] = ClonedReturnVal
+    # Collect regions in this function to be erased
+    RegionsToBeRemoved = list()
+    RegionsToBeRemoved.extend(self.getChildren())
+    for Abstraction in RegionsToBeRemoved:
+      self.eraseChild(Abstraction)
+    # Add new regions and remove the old regions
+    for Abstraction in Function:
+      ClonedAbstraction = Abstraction.clone("", ValueToValueMap, ChangeID)
+      self.addRegion(ClonedAbstraction)
+    if self.getReturnValue().getType() == RoseUndefinedType() \
+      and self.getReturnValue() == RoseUndefValue():
+      BlockList = self.getRegionsOfType(RoseBlock)
+      for Block in BlockList:
+        for Op in Block:
+          if isinstance(Op, RoseReturnOp):
+            self.setRetVal(Op.getReturnedValue())
+            break
+        if self.getReturnValue() != RoseUndefValue():
+          break
+    print("UPDATING FUNCTION")
+    self.print()
+    return
+
   def verify(self):
     # Verify the basic abstractions in the function
     if RoseRegion.verify() == False:
