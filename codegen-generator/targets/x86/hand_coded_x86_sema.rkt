@@ -471,31 +471,31 @@
 )
 
 
-<intrinsic tech="AVX-512" name="_mm512_unpackhi_epi32">
-	<type>Integer</type>
-	<CPUID>AVX512F</CPUID>
-	<category>Swizzle</category>
-	<return type="__m512i" varname="dst" etype="UI32"/>
-	<parameter type="__m512i" varname="a" etype="UI32"/>
-	<parameter type="__m512i" varname="b" etype="UI32"/>
-	<description>Unpack and interleave 32-bit integers from the high half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
-	<operation>
-DEFINE INTERLEAVE_HIGH_DWORDS(src1[127:0], src2[127:0]) {
-	dst[31:0] := src1[95:64] 
-	dst[63:32] := src2[95:64] 
-	dst[95:64] := src1[127:96] 
-	dst[127:96] := src2[127:96] 
-	RETURN dst[127:0]	
-}
-dst[127:0] := INTERLEAVE_HIGH_DWORDS(a[127:0], b[127:0])
-dst[255:128] := INTERLEAVE_HIGH_DWORDS(a[255:128], b[255:128])
-dst[383:256] := INTERLEAVE_HIGH_DWORDS(a[383:256], b[383:256])
-dst[511:384] := INTERLEAVE_HIGH_DWORDS(a[511:384], b[511:384])
-dst[MAX:512] := 0
-	</operation>
-	<instruction name="VPUNPCKHDQ" form="zmm, zmm, zmm" xed="VPUNPCKHDQ_ZMMu32_MASKmskw_ZMMu32_ZMMu32_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
+;;; <intrinsic tech="AVX-512" name="_mm512_unpackhi_epi32">
+;;; 	<type>Integer</type>
+;;; 	<CPUID>AVX512F</CPUID>
+;;; 	<category>Swizzle</category>
+;;; 	<return type="__m512i" varname="dst" etype="UI32"/>
+;;; 	<parameter type="__m512i" varname="a" etype="UI32"/>
+;;; 	<parameter type="__m512i" varname="b" etype="UI32"/>
+;;; 	<description>Unpack and interleave 32-bit integers from the high half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
+;;; 	<operation>
+;;; DEFINE INTERLEAVE_HIGH_DWORDS(src1[127:0], src2[127:0]) {
+;;; 	dst[31:0] := src1[95:64] 
+;;; 	dst[63:32] := src2[95:64] 
+;;; 	dst[95:64] := src1[127:96] 
+;;; 	dst[127:96] := src2[127:96] 
+;;; 	RETURN dst[127:0]	
+;;; }
+;;; dst[127:0] := INTERLEAVE_HIGH_DWORDS(a[127:0], b[127:0])
+;;; dst[255:128] := INTERLEAVE_HIGH_DWORDS(a[255:128], b[255:128])
+;;; dst[383:256] := INTERLEAVE_HIGH_DWORDS(a[383:256], b[383:256])
+;;; dst[511:384] := INTERLEAVE_HIGH_DWORDS(a[511:384], b[511:384])
+;;; dst[MAX:512] := 0
+;;; 	</operation>
+;;; 	<instruction name="VPUNPCKHDQ" form="zmm, zmm, zmm" xed="VPUNPCKHDQ_ZMMu32_MASKmskw_ZMMu32_ZMMu32_AVX512"/>
+;;; 	<header>immintrin.h</header>
+;;; </intrinsic>
 (define (_mm512_unpackhi_epi32 v1 v2)
   (define result
     (apply
@@ -518,7 +518,7 @@ dst[MAX:512] := 0
 
 
 ;; Test the semantics
-(define a128 (bv #x00010001000100010001000100010001 128))
+(define a128 (bv #x00010001000100010001000100010001 #x128))
 (define b128 (bv #x00020003000200030002000300020003 128))
 (define src128 (bv 0 128))
 (define mask8 (bv #x0f 8))
