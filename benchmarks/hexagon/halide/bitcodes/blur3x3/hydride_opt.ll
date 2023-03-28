@@ -1,4 +1,4 @@
-; ModuleID = 'gaussian3x3_hvx128'
+; ModuleID = 'blur3x3_hvx128'
 source_filename = "/home/arnoor2/Racket/TensorSynth/Rosette-experiments/frontends/halide/src/runtime/qurt_allocator.cpp"
 target datalayout = "e-m:e-p:32:32:32-a:0-n16:32-i64:64:64-i32:32:32-i16:16:16-i1:8:8-f32:32:32-f64:64:64-v32:32:32-v64:64:64-v512:512:512-v1024:1024:1024-v2048:2048:2048"
 target triple = "hexagon-unknown--elf"
@@ -191,11 +191,11 @@ target triple = "hexagon-unknown--elf"
 @3 = private constant i64 0
 @4 = private constant i64 0
 @5 = private constant [4 x i64*] [i64* @3, i64* null, i64* @4, i64* null]
-@str.102 = private constant [7 x i8] c"output\00", align 32
-@6 = private constant [2 x %struct.halide_filter_argument_t] [%struct.halide_filter_argument_t { i8* getelementptr inbounds ([6 x i8], [6 x i8]* @str, i32 0, i32 0), i32 1, i32 2, %struct.halide_type_t { i8 1, i8 8, i16 1 }, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, i64** getelementptr inbounds ([4 x i64*], [4 x i64*]* @2, i32 0, i32 0) }, %struct.halide_filter_argument_t { i8* getelementptr inbounds ([7 x i8], [7 x i8]* @str.102, i32 0, i32 0), i32 2, i32 2, %struct.halide_type_t { i8 1, i8 8, i16 1 }, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, i64** getelementptr inbounds ([4 x i64*], [4 x i64*]* @5, i32 0, i32 0) }]
+@str.102 = private constant [7 x i8] c"blur_y\00", align 32
+@6 = private constant [2 x %struct.halide_filter_argument_t] [%struct.halide_filter_argument_t { i8* getelementptr inbounds ([6 x i8], [6 x i8]* @str, i32 0, i32 0), i32 1, i32 2, %struct.halide_type_t { i8 1, i8 16, i16 1 }, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, i64** getelementptr inbounds ([4 x i64*], [4 x i64*]* @2, i32 0, i32 0) }, %struct.halide_filter_argument_t { i8* getelementptr inbounds ([7 x i8], [7 x i8]* @str.102, i32 0, i32 0), i32 2, i32 2, %struct.halide_type_t { i8 1, i8 16, i16 1 }, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, %struct.halide_scalar_value_t* null, i64** getelementptr inbounds ([4 x i64*], [4 x i64*]* @5, i32 0, i32 0) }]
 @str.103 = private constant [63 x i8] c"hexagon-32-noos-hvx-hvx_128-hvx_v66-no_asserts-no_bounds_query\00", align 128
-@str.104 = private constant [19 x i8] c"gaussian3x3_hvx128\00", align 32
-@gaussian3x3_hvx128_metadata_storage = private constant %struct.halide_filter_metadata_t { i32 1, i32 2, %struct.halide_filter_argument_t* getelementptr inbounds ([2 x %struct.halide_filter_argument_t], [2 x %struct.halide_filter_argument_t]* @6, i32 0, i32 0), i8* getelementptr inbounds ([63 x i8], [63 x i8]* @str.103, i32 0, i32 0), i8* getelementptr inbounds ([19 x i8], [19 x i8]* @str.104, i32 0, i32 0) }
+@str.104 = private constant [15 x i8] c"blur3x3_hvx128\00", align 32
+@blur3x3_hvx128_metadata_storage = private constant %struct.halide_filter_metadata_t { i32 1, i32 2, %struct.halide_filter_argument_t* getelementptr inbounds ([2 x %struct.halide_filter_argument_t], [2 x %struct.halide_filter_argument_t]* @6, i32 0, i32 0), i8* getelementptr inbounds ([63 x i8], [63 x i8]* @str.103, i32 0, i32 0), i8* getelementptr inbounds ([15 x i8], [15 x i8]* @str.104, i32 0, i32 0) }
 @switch.table.halide_type_to_string = private unnamed_addr constant [4 x i8*] [i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.14, i32 0, i32 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.15, i32 0, i32 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.16, i32 0, i32 0), i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.17, i32 0, i32 0)], align 4
 
 ; Function Attrs: nounwind mustprogress
@@ -206,7 +206,7 @@ entry:
   %neg = sub i32 0, %alignment
   %and = and i32 %sub, %neg
   %add2 = add i32 %and, %alignment
-  %call = tail call i8* @malloc(i32 %add2) #13
+  %call = tail call i8* @malloc(i32 %add2) #15
   %cmp = icmp eq i8* %call, null
   br i1 %cmp, label %cleanup, label %if.end
 
@@ -238,7 +238,7 @@ if.then:                                          ; preds = %entry
   %arrayidx = getelementptr inbounds i8, i8* %ptr, i32 -4
   %0 = bitcast i8* %arrayidx to i8**
   %1 = load i8*, i8** %0, align 4, !tbaa !10
-  tail call void @free(i8* %1) #13
+  tail call void @free(i8* %1) #15
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %entry
@@ -251,25 +251,25 @@ declare void @free(i8*) local_unnamed_addr #1
 define linkonce void @_ZN6Halide7Runtime8Internal24halide_allocator_cleanupEv() #0 {
 entry:
   %0 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 0), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %0) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %0) #16
   %1 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 1), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %1) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %1) #16
   %2 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 2), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %2) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %2) #16
   %3 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 3), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %3) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %3) #16
   %4 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 4), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %4) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %4) #16
   %5 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 5), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %5) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %5) #16
   %6 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 6), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %6) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %6) #16
   %7 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 7), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %7) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %7) #16
   %8 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 8), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %8) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %8) #16
   %9 = load i8*, i8** getelementptr inbounds ([10 x i8*], [10 x i8*]* @_ZN6Halide7Runtime8Internal7mem_bufE, i32 0, i32 9), align 4, !tbaa !10
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %9) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %9) #16
   ret void
 }
 
@@ -295,7 +295,7 @@ if.then3:                                         ; preds = %for.inc.8.if.then3_
   br i1 %cmp4, label %if.then5, label %cleanup11
 
 if.then5:                                         ; preds = %if.then3
-  %call = tail call i8* @_ZN6Halide7Runtime8Internal14aligned_mallocEjj(i32 128, i32 65536) #14
+  %call = tail call i8* @_ZN6Halide7Runtime8Internal14aligned_mallocEjj(i32 128, i32 65536) #16
   store i8* %call, i8** %arrayidx.phi, align 4, !tbaa !10
   br label %cleanup11
 
@@ -309,7 +309,7 @@ for.inc.if.then3_crit_edge:                       ; preds = %for.inc
   br label %if.then3
 
 if.end9:                                          ; preds = %for.inc.8, %entry
-  %call10 = tail call i8* @_ZN6Halide7Runtime8Internal14aligned_mallocEjj(i32 128, i32 %x) #14
+  %call10 = tail call i8* @_ZN6Halide7Runtime8Internal14aligned_mallocEjj(i32 128, i32 %x) #16
   br label %cleanup11
 
 cleanup11:                                        ; preds = %if.end9, %if.then5, %if.then3
@@ -490,14 +490,14 @@ for.inc.8.if.then_crit_edge:                      ; preds = %for.inc.8
   br label %if.then
 
 for.inc.9:                                        ; preds = %for.inc.8
-  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %ptr) #14
+  tail call void @_ZN6Halide7Runtime8Internal12aligned_freeEPv(i8* %ptr) #16
   br label %return
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i8* (i8*, i32)* @halide_set_custom_malloc(i8* (i8*, i32)* %user_malloc) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_print(i8* null, i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0)) #13
+  tail call void @halide_print(i8* null, i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0)) #15
   %0 = load i8* (i8*, i32)*, i8* (i8*, i32)** @_ZN6Halide7Runtime8Internal13custom_mallocE, align 4, !tbaa !10
   store i8* (i8*, i32)* %user_malloc, i8* (i8*, i32)** @_ZN6Halide7Runtime8Internal13custom_mallocE, align 4, !tbaa !10
   ret i8* (i8*, i32)* %0
@@ -508,37 +508,37 @@ declare void @halide_print(i8*, i8*) local_unnamed_addr #1
 ; Function Attrs: nounwind mustprogress
 define weak void (i8*, i8*)* @halide_set_custom_free(void (i8*, i8*)* %user_free) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_print(i8* null, i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0)) #13
+  tail call void @halide_print(i8* null, i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0)) #15
   %0 = load void (i8*, i8*)*, void (i8*, i8*)** @_ZN6Halide7Runtime8Internal11custom_freeE, align 4, !tbaa !10
   store void (i8*, i8*)* %user_free, void (i8*, i8*)** @_ZN6Halide7Runtime8Internal11custom_freeE, align 4, !tbaa !10
   ret void (i8*, i8*)* %0
 }
 
 ; Function Attrs: nounwind mustprogress
-define weak i8* @halide_malloc(i8* %user_context, i32 %x) local_unnamed_addr #0 {
+define weak noalias i8* @halide_malloc(i8* %user_context, i32 %x) local_unnamed_addr #0 {
 entry:
-  %call = tail call i8* @halide_default_malloc(i8* %user_context, i32 %x) #14
+  %call = tail call i8* @halide_default_malloc(i8* %user_context, i32 %x) #16
   ret i8* %call
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak void @halide_free(i8* %user_context, i8* %ptr) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_default_free(i8* %user_context, i8* %ptr) #14
+  tail call void @halide_default_free(i8* %user_context, i8* %ptr) #16
   ret void
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_do_task(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %idx, i8* %closure) #0 {
 entry:
-  %call = tail call i32 %f(i8* %user_context, i32 %idx, i8* %closure) #13
+  %call = tail call i32 %f(i8* %user_context, i32 %idx, i8* %closure) #15
   ret i32 %call
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_do_loop_task(i8* %user_context, i32 (i8*, i32, i32, i8*, i8*)* %f, i32 %min, i32 %extent, i8* %closure, i8* %task_parent) #0 {
 entry:
-  %call = tail call i32 %f(i8* %user_context, i32 %min, i32 %extent, i8* %closure, i8* %task_parent) #13
+  %call = tail call i32 %f(i8* %user_context, i32 %min, i32 %extent, i8* %closure, i8* %task_parent) #15
   ret i32 %call
 }
 
@@ -555,7 +555,7 @@ for.cond:                                         ; preds = %for.body
 
 for.body:                                         ; preds = %entry, %for.cond
   %x.012 = phi i32 [ %inc, %for.cond ], [ %min, %entry ]
-  %call = tail call i32 @halide_do_task(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %x.012, i8* %closure) #14
+  %call = tail call i32 @halide_do_task(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %x.012, i8* %closure) #16
   %tobool.not = icmp eq i32 %call, 0
   %inc = add nsw i32 %x.012, 1
   br i1 %tobool.not, label %for.cond, label %cleanup1
@@ -569,14 +569,14 @@ cleanup1:                                         ; preds = %for.body, %for.cond
 define weak i32 @halide_do_task(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %idx, i8* %closure) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (i8*, i32 (i8*, i32, i8*)*, i32, i8*)*, i32 (i8*, i32 (i8*, i32, i8*)*, i32, i8*)** @_ZN6Halide7Runtime8Internal14custom_do_taskE, align 4, !tbaa !10
-  %call = tail call i32 %0(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %idx, i8* %closure) #13
+  %call = tail call i32 %0(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %idx, i8* %closure) #15
   ret i32 %call
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_do_parallel_tasks(i8* %user_context, i32 %num_tasks, %struct.halide_parallel_task_t* %tasks, i8* %task_parent) #0 {
 entry:
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([67 x i8], [67 x i8]* @.str.1, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([67 x i8], [67 x i8]* @.str.1, i32 0, i32 0)) #15
   ret i32 -1
 }
 
@@ -585,35 +585,35 @@ declare void @halide_error(i8*, i8*) local_unnamed_addr #1
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_semaphore_init(%struct.halide_semaphore_t* %s, i32 %n) #0 {
 entry:
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([64 x i8], [64 x i8]* @.str.1.2, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([64 x i8], [64 x i8]* @.str.1.2, i32 0, i32 0)) #15
   ret i32 0
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak zeroext i1 @halide_default_semaphore_try_acquire(%struct.halide_semaphore_t* %s, i32 %n) #0 {
 entry:
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([71 x i8], [71 x i8]* @.str.3, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([71 x i8], [71 x i8]* @.str.3, i32 0, i32 0)) #15
   ret i1 false
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_semaphore_release(%struct.halide_semaphore_t* %s, i32 %n) #0 {
 entry:
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([67 x i8], [67 x i8]* @.str.2, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([67 x i8], [67 x i8]* @.str.2, i32 0, i32 0)) #15
   ret i32 0
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak %struct.halide_thread* @halide_spawn_thread(void (i8*)* %f, i8* %closure) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([54 x i8], [54 x i8]* @.str.4, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([54 x i8], [54 x i8]* @.str.4, i32 0, i32 0)) #15
   ret %struct.halide_thread* null
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak void @halide_join_thread(%struct.halide_thread* %thread_arg) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([53 x i8], [53 x i8]* @.str.5, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([53 x i8], [53 x i8]* @.str.5, i32 0, i32 0)) #15
   ret void
 }
 
@@ -666,7 +666,7 @@ entry:
   br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.6, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* null, i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.6, i32 0, i32 0)) #15
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %entry
@@ -693,7 +693,7 @@ entry:
 define weak i32 @halide_do_par_for(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %min, i32 %size, i8* %closure) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (i8*, i32 (i8*, i32, i8*)*, i32, i32, i8*)*, i32 (i8*, i32 (i8*, i32, i8*)*, i32, i32, i8*)** @_ZN6Halide7Runtime8Internal17custom_do_par_forE, align 4, !tbaa !10
-  %call = tail call i32 %0(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %min, i32 %size, i8* %closure) #13
+  %call = tail call i32 %0(i8* %user_context, i32 (i8*, i32, i8*)* %f, i32 %min, i32 %size, i8* %closure) #15
   ret i32 %call
 }
 
@@ -701,7 +701,7 @@ entry:
 define weak i32 @halide_do_loop_task(i8* %user_context, i32 (i8*, i32, i32, i8*, i8*)* %f, i32 %min, i32 %size, i8* %closure, i8* %task_parent) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (i8*, i32 (i8*, i32, i32, i8*, i8*)*, i32, i32, i8*, i8*)*, i32 (i8*, i32 (i8*, i32, i32, i8*, i8*)*, i32, i32, i8*, i8*)** @_ZN6Halide7Runtime8Internal19custom_do_loop_taskE, align 4, !tbaa !10
-  %call = tail call i32 %0(i8* %user_context, i32 (i8*, i32, i32, i8*, i8*)* %f, i32 %min, i32 %size, i8* %closure, i8* %task_parent) #13
+  %call = tail call i32 %0(i8* %user_context, i32 (i8*, i32, i32, i8*, i8*)* %f, i32 %min, i32 %size, i8* %closure, i8* %task_parent) #15
   ret i32 %call
 }
 
@@ -709,7 +709,7 @@ entry:
 define weak i32 @halide_do_parallel_tasks(i8* %user_context, i32 %num_tasks, %struct.halide_parallel_task_t* %tasks, i8* %task_parent) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (i8*, i32, %struct.halide_parallel_task_t*, i8*)*, i32 (i8*, i32, %struct.halide_parallel_task_t*, i8*)** @_ZN6Halide7Runtime8Internal24custom_do_parallel_tasksE, align 4, !tbaa !10
-  %call = tail call i32 %0(i8* %user_context, i32 %num_tasks, %struct.halide_parallel_task_t* %tasks, i8* %task_parent) #13
+  %call = tail call i32 %0(i8* %user_context, i32 %num_tasks, %struct.halide_parallel_task_t* %tasks, i8* %task_parent) #15
   ret i32 %call
 }
 
@@ -717,7 +717,7 @@ entry:
 define weak i32 @halide_semaphore_init(%struct.halide_semaphore_t* %sema, i32 %count) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (%struct.halide_semaphore_t*, i32)*, i32 (%struct.halide_semaphore_t*, i32)** @_ZN6Halide7Runtime8Internal21custom_semaphore_initE, align 4, !tbaa !10
-  %call = tail call i32 %0(%struct.halide_semaphore_t* %sema, i32 %count) #13
+  %call = tail call i32 %0(%struct.halide_semaphore_t* %sema, i32 %count) #15
   ret i32 %call
 }
 
@@ -725,7 +725,7 @@ entry:
 define weak i32 @halide_semaphore_release(%struct.halide_semaphore_t* %sema, i32 %count) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (%struct.halide_semaphore_t*, i32)*, i32 (%struct.halide_semaphore_t*, i32)** @_ZN6Halide7Runtime8Internal24custom_semaphore_releaseE, align 4, !tbaa !10
-  %call = tail call i32 %0(%struct.halide_semaphore_t* %sema, i32 %count) #13
+  %call = tail call i32 %0(%struct.halide_semaphore_t* %sema, i32 %count) #15
   ret i32 %call
 }
 
@@ -733,7 +733,7 @@ entry:
 define weak zeroext i1 @halide_semaphore_try_acquire(%struct.halide_semaphore_t* %sema, i32 %count) local_unnamed_addr #0 {
 entry:
   %0 = load i1 (%struct.halide_semaphore_t*, i32)*, i1 (%struct.halide_semaphore_t*, i32)** @_ZN6Halide7Runtime8Internal28custom_semaphore_try_acquireE, align 4, !tbaa !10
-  %call = tail call zeroext i1 %0(%struct.halide_semaphore_t* %sema, i32 %count) #13
+  %call = tail call zeroext i1 %0(%struct.halide_semaphore_t* %sema, i32 %count) #15
   ret i1 %call
 }
 
@@ -768,12 +768,12 @@ _ZN6Halide7Runtime8Internal14ScopedSpinLockC2EPVc.exit.if.end4_crit_edge: ; pred
   br label %if.end4
 
 if.then:                                          ; preds = %_ZN6Halide7Runtime8Internal14ScopedSpinLockC2EPVc.exit
-  %call = tail call i8* @getenv(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.7, i32 0, i32 0)) #13
+  %call = tail call i8* @getenv(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.7, i32 0, i32 0)) #15
   %tobool1.not = icmp eq i8* %call, null
   br i1 %tobool1.not, label %if.end, label %if.then2
 
 if.then2:                                         ; preds = %if.then
-  %call3 = tail call i32 @atoi(i8* nonnull %call) #13
+  %call3 = tail call i32 @atoi(i8* nonnull %call) #15
   br label %if.end
 
 if.end:                                           ; preds = %if.then2, %if.then
@@ -831,7 +831,7 @@ define weak i8* @halide_uint64_to_string(i8* %dst, i8* %end, i64 %arg, i32 %min_
 entry:
   %buf = alloca [32 x i8], align 1
   %0 = getelementptr inbounds [32 x i8], [32 x i8]* %buf, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %0) #15
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %0) #12
   %arrayidx = getelementptr inbounds [32 x i8], [32 x i8]* %buf, i32 0, i32 31
   store i8 0, i8* %arrayidx, align 1, !tbaa !22
   %add.ptr = getelementptr inbounds [32 x i8], [32 x i8]* %buf, i32 0, i32 30
@@ -847,8 +847,8 @@ entry.for.body_crit_edge:                         ; preds = %entry
 for.cond.cleanup:                                 ; preds = %for.body, %entry
   %digits.0.lcssa = phi i8* [ %add.ptr, %entry ], [ %incdec.ptr, %for.body ]
   %incdec.ptr1 = getelementptr inbounds i8, i8* %digits.0.lcssa, i32 1
-  %call = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* nonnull %incdec.ptr1) #14
-  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %0) #15
+  %call = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* nonnull %incdec.ptr1) #16
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %0) #12
   ret i8* %call
 
 for.body:                                         ; preds = %entry.for.body_crit_edge, %for.body.for.body_crit_edge
@@ -895,7 +895,7 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %if.then, %entry
   %arg.addr.0 = phi i64 [ %sub, %if.then ], [ %arg, %entry ]
   %dst.addr.0 = phi i8* [ %incdec.ptr, %if.then ], [ %dst, %entry ]
-  %call = tail call i8* @halide_uint64_to_string(i8* %dst.addr.0, i8* %end, i64 %arg.addr.0, i32 %min_digits) #14
+  %call = tail call i8* @halide_uint64_to_string(i8* %dst.addr.0, i8* %end, i64 %arg.addr.0, i32 %min_digits) #16
   ret i8* %call
 }
 
@@ -907,10 +907,10 @@ entry:
   %buf = alloca [512 x i8], align 1
   store double %arg, double* %arg.addr, align 8, !tbaa !24
   %0 = bitcast i64* %bits to i8*
-  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %0) #15
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %0) #12
   store i64 0, i64* %bits, align 8, !tbaa !26
   %1 = bitcast double* %arg.addr to i8*
-  %call = call i8* @memcpy(i8* nonnull %0, i8* nonnull %1, i32 8) #13
+  %call = call i8* @memcpy(i8* nonnull %0, i8* nonnull %1, i32 8) #15
   %2 = load i64, i64* %bits, align 8, !tbaa !26
   %and = and i64 %2, 4503599627370495
   %shr = lshr i64 %2, 52
@@ -928,22 +928,22 @@ if.then4:                                         ; preds = %if.then
   br i1 %tobool10.not, label %if.else, label %if.then6
 
 if.then6:                                         ; preds = %if.then4
-  %call7 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.1.9, i32 0, i32 0)) #14
+  %call7 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.1.9, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else:                                          ; preds = %if.then4
-  %call8 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2.10, i32 0, i32 0)) #14
+  %call8 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2.10, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else9:                                         ; preds = %if.then
   br i1 %tobool10.not, label %if.else13, label %if.then11
 
 if.then11:                                        ; preds = %if.else9
-  %call12 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.3.11, i32 0, i32 0)) #14
+  %call12 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.3.11, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else13:                                        ; preds = %if.else9
-  %call14 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.4.12, i32 0, i32 0)) #14
+  %call14 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.4.12, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else15:                                        ; preds = %entry
@@ -961,22 +961,22 @@ if.then20:                                        ; preds = %if.then18
   br i1 %tobool27.not, label %if.else24, label %if.then22
 
 if.then22:                                        ; preds = %if.then20
-  %call23 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.5.13, i32 0, i32 0)) #14
+  %call23 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.5.13, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else24:                                        ; preds = %if.then20
-  %call25 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.6.14, i32 0, i32 0)) #14
+  %call25 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.6.14, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else26:                                        ; preds = %if.then18
   br i1 %tobool27.not, label %if.else30, label %if.then28
 
 if.then28:                                        ; preds = %if.else26
-  %call29 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.7.15, i32 0, i32 0)) #14
+  %call29 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.7.15, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.else30:                                        ; preds = %if.else26
-  %call31 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.8.16, i32 0, i32 0)) #14
+  %call31 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.8.16, i32 0, i32 0)) #16
   br label %cleanup147
 
 if.end32:                                         ; preds = %if.else15
@@ -984,7 +984,7 @@ if.end32:                                         ; preds = %if.else15
   br i1 %tobool33.not, label %if.end36, label %if.then34
 
 if.then34:                                        ; preds = %if.end32
-  %call35 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.9, i32 0, i32 0)) #14
+  %call35 = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.9, i32 0, i32 0)) #16
   %4 = load double, double* %arg.addr, align 8, !tbaa !24
   %fneg = fneg double %4
   store double %fneg, double* %arg.addr, align 8, !tbaa !24
@@ -1046,18 +1046,18 @@ while.end43:                                      ; preds = %while.cond40.while.
   %div46 = udiv i64 %conv45, 1000000
   %mul47.neg = mul i64 %div46, -1000000
   %sub48 = add i64 %mul47.neg, %conv45
-  %call49 = call i8* @halide_int64_to_string(i8* %dst.addr.0, i8* %end, i64 %div46, i32 1) #14
-  %call50 = call i8* @halide_string_to_string(i8* %call49, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #14
-  %call51 = call i8* @halide_int64_to_string(i8* %call50, i8* %end, i64 %sub48, i32 6) #14
+  %call49 = call i8* @halide_int64_to_string(i8* %dst.addr.0, i8* %end, i64 %div46, i32 1) #16
+  %call50 = call i8* @halide_string_to_string(i8* %call49, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #16
+  %call51 = call i8* @halide_int64_to_string(i8* %call50, i8* %end, i64 %sub48, i32 6) #16
   %cmp52 = icmp sgt i32 %exponent_base_10.1.lcssa, -1
   br i1 %cmp52, label %if.then53, label %if.else55
 
 if.then53:                                        ; preds = %while.end43
-  %call54 = call i8* @halide_string_to_string(i8* %call51, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.11, i32 0, i32 0)) #14
+  %call54 = call i8* @halide_string_to_string(i8* %call51, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.11, i32 0, i32 0)) #16
   br label %if.end58
 
 if.else55:                                        ; preds = %while.end43
-  %call56 = call i8* @halide_string_to_string(i8* %call51, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.12, i32 0, i32 0)) #14
+  %call56 = call i8* @halide_string_to_string(i8* %call51, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.12, i32 0, i32 0)) #16
   %sub57 = sub nsw i32 0, %exponent_base_10.1.lcssa
   br label %if.end58
 
@@ -1065,14 +1065,14 @@ if.end58:                                         ; preds = %if.else55, %if.then
   %exponent_base_10.2 = phi i32 [ %exponent_base_10.1.lcssa, %if.then53 ], [ %sub57, %if.else55 ]
   %dst.addr.1 = phi i8* [ %call54, %if.then53 ], [ %call56, %if.else55 ]
   %conv59261 = zext i32 %exponent_base_10.2 to i64
-  %call60 = call i8* @halide_int64_to_string(i8* %dst.addr.1, i8* %end, i64 %conv59261, i32 2) #14
+  %call60 = call i8* @halide_int64_to_string(i8* %dst.addr.1, i8* %end, i64 %conv59261, i32 2) #16
   br label %cleanup147
 
 if.else61:                                        ; preds = %if.end36
   br i1 %cmp16, label %if.then63, label %if.end65
 
 if.then63:                                        ; preds = %if.else61
-  %call64 = call i8* @halide_double_to_string(i8* %dst.addr.0, i8* %end, double 0.000000e+00, i32 0) #14
+  %call64 = call i8* @halide_double_to_string(i8* %dst.addr.0, i8* %end, double 0.000000e+00, i32 0) #16
   br label %cleanup147
 
 if.end65:                                         ; preds = %if.else61
@@ -1122,10 +1122,10 @@ if.end104:                                        ; preds = %if.end83, %if.end65
   %integer_exponent.0 = phi i32 [ 0, %if.end83 ], [ %sub69, %if.end65 ]
   %fractional_part.2 = phi i64 [ %spec.select259, %if.end83 ], [ 0, %if.end65 ]
   %8 = getelementptr inbounds [512 x i8], [512 x i8]* %buf, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 512, i8* nonnull %8) #15
+  call void @llvm.lifetime.start.p0i8(i64 512, i8* nonnull %8) #12
   %add.ptr = getelementptr inbounds [512 x i8], [512 x i8]* %buf, i32 0, i32 512
   %add.ptr105 = getelementptr inbounds [512 x i8], [512 x i8]* %buf, i32 0, i32 480
-  %call108 = call i8* @halide_int64_to_string(i8* nonnull %add.ptr105, i8* nonnull %add.ptr, i64 %integer_part.2, i32 1) #14
+  %call108 = call i8* @halide_int64_to_string(i8* nonnull %add.ptr105, i8* nonnull %add.ptr, i64 %integer_part.2, i32 1) #16
   %cmp109267 = icmp sgt i32 %integer_exponent.0, 0
   br i1 %cmp109267, label %for.cond111.preheader.preheader, label %for.cond.cleanup
 
@@ -1191,10 +1191,10 @@ if.end137.epil:                                   ; preds = %if.then135.epil, %f
 
 for.cond.cleanup:                                 ; preds = %for.cond.cleanup.loopexit.unr-lcssa, %if.end137.epil, %if.end104
   %int_part_ptr.0.lcssa = phi i8* [ %add.ptr105, %if.end104 ], [ %int_part_ptr.1.lcssa.ph, %for.cond.cleanup.loopexit.unr-lcssa ], [ %int_part_ptr.1.epil, %if.end137.epil ]
-  %call141 = call i8* @halide_string_to_string(i8* %dst.addr.0, i8* %end, i8* %int_part_ptr.0.lcssa) #14
-  %call142 = call i8* @halide_string_to_string(i8* %call141, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #14
-  %call143 = call i8* @halide_int64_to_string(i8* %call142, i8* %end, i64 %fractional_part.2, i32 6) #14
-  call void @llvm.lifetime.end.p0i8(i64 512, i8* nonnull %8) #15
+  %call141 = call i8* @halide_string_to_string(i8* %dst.addr.0, i8* %end, i8* %int_part_ptr.0.lcssa) #16
+  %call142 = call i8* @halide_string_to_string(i8* %call141, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #16
+  %call143 = call i8* @halide_int64_to_string(i8* %call142, i8* %end, i64 %fractional_part.2, i32 6) #16
+  call void @llvm.lifetime.end.p0i8(i64 512, i8* nonnull %8) #12
   br label %cleanup147
 
 for.cond.cleanup114:                              ; preds = %for.body115
@@ -1229,7 +1229,7 @@ if.end137:                                        ; preds = %if.then135, %for.co
 
 cleanup147:                                       ; preds = %for.cond.cleanup, %if.then63, %if.end58, %if.else30, %if.then28, %if.else24, %if.then22, %if.else13, %if.then11, %if.else, %if.then6
   %retval.1 = phi i8* [ %call7, %if.then6 ], [ %call8, %if.else ], [ %call12, %if.then11 ], [ %call14, %if.else13 ], [ %call23, %if.then22 ], [ %call25, %if.else24 ], [ %call29, %if.then28 ], [ %call31, %if.else30 ], [ %call64, %if.then63 ], [ %call60, %if.end58 ], [ %call143, %for.cond.cleanup ]
-  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %0) #15
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %0) #12
   ret i8* %retval.1
 
 for.body115.1:                                    ; preds = %if.end137, %for.body115.1
@@ -1330,7 +1330,7 @@ define weak i8* @halide_pointer_to_string(i8* %dst, i8* %end, i8* %arg) local_un
 entry:
   %buf = alloca [20 x i8], align 1
   %0 = getelementptr inbounds [20 x i8], [20 x i8]* %buf, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 20, i8* nonnull %0) #15
+  call void @llvm.lifetime.start.p0i8(i64 20, i8* nonnull %0) #12
   call void @llvm.memset.p0i8.i32(i8* nonnull align 1 dereferenceable(20) %0, i8 0, i32 20, i1 false)
   %add.ptr = getelementptr inbounds [20 x i8], [20 x i8]* %buf, i32 0, i32 18
   %1 = ptrtoint i8* %arg to i32
@@ -1359,8 +1359,8 @@ cleanup:                                          ; preds = %for.cond.6, %for.co
   %incdec.ptr1 = getelementptr inbounds i8, i8* %buf_ptr.016.lcssa, i32 -2
   store i8 120, i8* %incdec.ptr.lcssa, align 1, !tbaa !22
   store i8 48, i8* %incdec.ptr1, align 1, !tbaa !22
-  %call = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* nonnull %incdec.ptr1) #14
-  call void @llvm.lifetime.end.p0i8(i64 20, i8* nonnull %0) #15
+  %call = call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* nonnull %incdec.ptr1) #16
+  call void @llvm.lifetime.end.p0i8(i64 20, i8* nonnull %0) #12
   ret i8* %call
 
 for.cond.1:                                       ; preds = %for.cond
@@ -1440,21 +1440,21 @@ switch.lookup:                                    ; preds = %entry
 
 sw.epilog:                                        ; preds = %entry, %switch.lookup
   %code_name.0 = phi i8* [ %switch.load, %switch.lookup ], [ getelementptr inbounds ([14 x i8], [14 x i8]* @.str.18, i32 0, i32 0), %entry ]
-  %call = tail call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* nonnull %code_name.0) #14
+  %call = tail call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* nonnull %code_name.0) #16
   %bits = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %t, i32 0, i32 1
   %3 = load i8, i8* %bits, align 1, !tbaa !38
   %conv4 = zext i8 %3 to i64
-  %call5 = tail call i8* @halide_uint64_to_string(i8* %call, i8* %end, i64 %conv4, i32 1) #14
+  %call5 = tail call i8* @halide_uint64_to_string(i8* %call, i8* %end, i64 %conv4, i32 1) #16
   %lanes = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %t, i32 0, i32 2
   %4 = load i16, i16* %lanes, align 2, !tbaa !39
   %cmp.not = icmp eq i16 %4, 1
   br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %sw.epilog
-  %call7 = tail call i8* @halide_string_to_string(i8* %call5, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.19, i32 0, i32 0)) #14
+  %call7 = tail call i8* @halide_string_to_string(i8* %call5, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.19, i32 0, i32 0)) #16
   %5 = load i16, i16* %lanes, align 2, !tbaa !39
   %conv9 = zext i16 %5 to i64
-  %call10 = tail call i8* @halide_uint64_to_string(i8* %call7, i8* %end, i64 %conv9, i32 1) #14
+  %call10 = tail call i8* @halide_uint64_to_string(i8* %call7, i8* %end, i64 %conv9, i32 1) #16
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %sw.epilog
@@ -1469,30 +1469,30 @@ entry:
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %call = tail call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.20, i32 0, i32 0)) #14
+  %call = tail call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.20, i32 0, i32 0)) #16
   br label %return
 
 if.end:                                           ; preds = %entry
-  %call1 = tail call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.21, i32 0, i32 0)) #14
+  %call1 = tail call i8* @halide_string_to_string(i8* %dst, i8* %end, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.21, i32 0, i32 0)) #16
   %device = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 0
   %0 = load i64, i64* %device, align 8, !tbaa !40
-  %call2 = tail call i8* @halide_uint64_to_string(i8* %call1, i8* %end, i64 %0, i32 1) #14
-  %call3 = tail call i8* @halide_string_to_string(i8* %call2, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #14
+  %call2 = tail call i8* @halide_uint64_to_string(i8* %call1, i8* %end, i64 %0, i32 1) #16
+  %call3 = tail call i8* @halide_string_to_string(i8* %call2, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #16
   %device_interface = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 1
   %1 = bitcast %struct.halide_device_interface_t** %device_interface to i8**
   %2 = load i8*, i8** %1, align 8, !tbaa !42
-  %call4 = tail call i8* @halide_pointer_to_string(i8* %call3, i8* %end, i8* %2) #14
-  %call5 = tail call i8* @halide_string_to_string(i8* %call4, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #14
+  %call4 = tail call i8* @halide_pointer_to_string(i8* %call3, i8* %end, i8* %2) #16
+  %call5 = tail call i8* @halide_string_to_string(i8* %call4, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #16
   %host = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 2
   %3 = load i8*, i8** %host, align 4, !tbaa !43
-  %call6 = tail call i8* @halide_pointer_to_string(i8* %call5, i8* %end, i8* %3) #14
-  %call7 = tail call i8* @halide_string_to_string(i8* %call6, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #14
+  %call6 = tail call i8* @halide_pointer_to_string(i8* %call5, i8* %end, i8* %3) #16
+  %call7 = tail call i8* @halide_string_to_string(i8* %call6, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #16
   %flags = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 3
   %4 = load i64, i64* %flags, align 8, !tbaa !44
-  %call8 = tail call i8* @halide_uint64_to_string(i8* %call7, i8* %end, i64 %4, i32 1) #14
-  %call9 = tail call i8* @halide_string_to_string(i8* %call8, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #14
+  %call8 = tail call i8* @halide_uint64_to_string(i8* %call7, i8* %end, i64 %4, i32 1) #16
+  %call9 = tail call i8* @halide_string_to_string(i8* %call8, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #16
   %type = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 4
-  %call10 = tail call i8* @halide_type_to_string(i8* %call9, i8* %end, %struct.halide_type_t* nonnull %type) #14
+  %call10 = tail call i8* @halide_type_to_string(i8* %call9, i8* %end, %struct.halide_type_t* nonnull %type) #16
   %dimensions = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 5
   %5 = load i32, i32* %dimensions, align 4, !tbaa !45
   %cmp1177 = icmp sgt i32 %5, 0
@@ -1504,31 +1504,31 @@ for.body.lr.ph:                                   ; preds = %if.end
 
 for.cond.cleanup:                                 ; preds = %for.body, %if.end
   %dst.addr.0.lcssa = phi i8* [ %call10, %if.end ], [ %call24, %for.body ]
-  %call25 = tail call i8* @halide_string_to_string(i8* %dst.addr.0.lcssa, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #14
+  %call25 = tail call i8* @halide_string_to_string(i8* %dst.addr.0.lcssa, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #16
   br label %return
 
 for.body:                                         ; preds = %for.body, %for.body.lr.ph
   %i.079 = phi i32 [ 0, %for.body.lr.ph ], [ %inc, %for.body ]
   %dst.addr.078 = phi i8* [ %call10, %for.body.lr.ph ], [ %call24, %for.body ]
-  %call12 = tail call i8* @halide_string_to_string(i8* %dst.addr.078, i8* %end, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.23, i32 0, i32 0)) #14
+  %call12 = tail call i8* @halide_string_to_string(i8* %dst.addr.078, i8* %end, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.23, i32 0, i32 0)) #16
   %6 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim, align 8, !tbaa !46
   %min = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 %i.079, i32 0
   %7 = load i32, i32* %min, align 4, !tbaa !47
   %conv = sext i32 %7 to i64
-  %call13 = tail call i8* @halide_int64_to_string(i8* %call12, i8* %end, i64 %conv, i32 1) #14
-  %call14 = tail call i8* @halide_string_to_string(i8* %call13, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #14
+  %call13 = tail call i8* @halide_int64_to_string(i8* %call12, i8* %end, i64 %conv, i32 1) #16
+  %call14 = tail call i8* @halide_string_to_string(i8* %call13, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #16
   %8 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim, align 8, !tbaa !46
   %extent = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %8, i32 %i.079, i32 1
   %9 = load i32, i32* %extent, align 4, !tbaa !49
   %conv17 = sext i32 %9 to i64
-  %call18 = tail call i8* @halide_int64_to_string(i8* %call14, i8* %end, i64 %conv17, i32 1) #14
-  %call19 = tail call i8* @halide_string_to_string(i8* %call18, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #14
+  %call18 = tail call i8* @halide_int64_to_string(i8* %call14, i8* %end, i64 %conv17, i32 1) #16
+  %call19 = tail call i8* @halide_string_to_string(i8* %call18, i8* %end, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #16
   %10 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim, align 8, !tbaa !46
   %stride = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %10, i32 %i.079, i32 2
   %11 = load i32, i32* %stride, align 4, !tbaa !50
   %conv22 = sext i32 %11 to i64
-  %call23 = tail call i8* @halide_int64_to_string(i8* %call19, i8* %end, i64 %conv22, i32 1) #14
-  %call24 = tail call i8* @halide_string_to_string(i8* %call23, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.24, i32 0, i32 0)) #14
+  %call23 = tail call i8* @halide_int64_to_string(i8* %call19, i8* %end, i64 %conv22, i32 1) #16
+  %call24 = tail call i8* @halide_string_to_string(i8* %call23, i8* %end, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.24, i32 0, i32 0)) #16
   %inc = add nuw nsw i32 %i.079, 1
   %12 = load i32, i32* %dimensions, align 4, !tbaa !45
   %cmp11 = icmp slt i32 %inc, %12
@@ -1553,14 +1553,14 @@ entry:
   br i1 %flag, label %if.end5, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #15
   %p.014 = load %struct.halide_device_allocation_pool*, %struct.halide_device_allocation_pool** @_ZN6Halide7Runtime8Internal23device_allocation_poolsE, align 4, !tbaa !10
   %cmp.not15 = icmp eq %struct.halide_device_allocation_pool* %p.014, null
   br i1 %cmp.not15, label %for.cond.cleanup, label %for.body
 
 for.cond.cleanup:                                 ; preds = %for.body, %if.then
   %err.0.lcssa = phi i32 [ 0, %if.then ], [ %spec.select, %for.body ]
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #15
   br label %if.end5
 
 for.body:                                         ; preds = %if.then, %for.body
@@ -1568,7 +1568,7 @@ for.body:                                         ; preds = %if.then, %for.body
   %err.016 = phi i32 [ %spec.select, %for.body ], [ 0, %if.then ]
   %release_unused = getelementptr inbounds %struct.halide_device_allocation_pool, %struct.halide_device_allocation_pool* %p.017, i32 0, i32 0
   %0 = load i32 (i8*)*, i32 (i8*)** %release_unused, align 4, !tbaa !52
-  %call = tail call i32 %0(i8* %user_context) #13
+  %call = tail call i32 %0(i8* %user_context) #15
   %tobool3.not = icmp eq i32 %call, 0
   %spec.select = select i1 %tobool3.not, i32 %err.016, i32 %call
   %next = getelementptr inbounds %struct.halide_device_allocation_pool, %struct.halide_device_allocation_pool* %p.017, i32 0, i32 1
@@ -1592,12 +1592,12 @@ entry:
 ; Function Attrs: nounwind willreturn
 define weak void @halide_register_device_allocation_pool(%struct.halide_device_allocation_pool* %pool) local_unnamed_addr #7 {
 entry:
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #15
   %0 = load %struct.halide_device_allocation_pool*, %struct.halide_device_allocation_pool** @_ZN6Halide7Runtime8Internal23device_allocation_poolsE, align 4, !tbaa !10
   %next = getelementptr inbounds %struct.halide_device_allocation_pool, %struct.halide_device_allocation_pool* %pool, i32 0, i32 1
   store %struct.halide_device_allocation_pool* %0, %struct.halide_device_allocation_pool** %next, align 4, !tbaa !55
   store %struct.halide_device_allocation_pool* %pool, %struct.halide_device_allocation_pool** @_ZN6Halide7Runtime8Internal23device_allocation_poolsE, align 4, !tbaa !10
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal21allocation_pools_lockE) #15
   ret void
 }
 
@@ -1651,14 +1651,14 @@ if.then:                                          ; preds = %while.body, %while.
   %chunk_size = getelementptr inbounds %"struct.Halide::Runtime::Internal::device_copy", %"struct.Halide::Runtime::Internal::device_copy"* %copy, i32 0, i32 6
   %6 = load i64, i64* %chunk_size, align 8, !tbaa !60
   %conv5 = trunc i64 %6 to i32
-  %call = tail call i8* @memcpy(i8* %5, i8* %3, i32 %conv5) #13
+  %call = tail call i8* @memcpy(i8* %5, i8* %3, i32 %conv5) #15
   br label %if.end
 
 for.body:                                         ; preds = %for.body.for.body_crit_edge, %for.body.lr.ph
   %inc.phi = phi i64 [ %inc.0, %for.body.lr.ph ], [ %inc.1, %for.body.for.body_crit_edge ]
   %src_off.addr.037 = phi i64 [ %src_off, %for.body.lr.ph ], [ %add10, %for.body.for.body_crit_edge ]
   %dst_off.addr.036 = phi i64 [ %dst_off, %for.body.lr.ph ], [ %add12, %for.body.for.body_crit_edge ]
-  tail call void @_ZN6Halide7Runtime8Internal18copy_memory_helperERKNS1_11device_copyEixx(%"struct.Halide::Runtime::Internal::device_copy"* nonnull align 8 dereferenceable(416) %copy, i32 %sub, i64 %src_off.addr.037, i64 %dst_off.addr.036) #14
+  tail call void @_ZN6Halide7Runtime8Internal18copy_memory_helperERKNS1_11device_copyEixx(%"struct.Halide::Runtime::Internal::device_copy"* nonnull align 8 dereferenceable(416) %copy, i32 %sub, i64 %src_off.addr.037, i64 %dst_off.addr.036) #16
   %7 = load i64, i64* %arrayidx9, align 8, !tbaa !26
   %add10 = add i64 %7, %src_off.addr.037
   %8 = load i64, i64* %arrayidx11, align 8, !tbaa !26
@@ -1688,7 +1688,7 @@ entry:
 if.then:                                          ; preds = %entry
   %src_begin = getelementptr inbounds %"struct.Halide::Runtime::Internal::device_copy", %"struct.Halide::Runtime::Internal::device_copy"* %copy, i32 0, i32 2
   %2 = load i64, i64* %src_begin, align 8, !tbaa !62
-  tail call void @_ZN6Halide7Runtime8Internal18copy_memory_helperERKNS1_11device_copyEixx(%"struct.Halide::Runtime::Internal::device_copy"* nonnull align 8 dereferenceable(416) %copy, i32 15, i64 %2, i64 0) #14
+  tail call void @_ZN6Halide7Runtime8Internal18copy_memory_helperERKNS1_11device_copyEixx(%"struct.Halide::Runtime::Internal::device_copy"* nonnull align 8 dereferenceable(416) %copy, i32 15, i64 %2, i64 0) #16
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %entry
@@ -1700,7 +1700,7 @@ define linkonce void @_ZN6Halide7Runtime8Internal16make_buffer_copyEPK15halide_b
 entry:
   %c = alloca %"struct.Halide::Runtime::Internal::device_copy", align 8
   %0 = bitcast %"struct.Halide::Runtime::Internal::device_copy"* %c to i8*
-  call void @llvm.lifetime.start.p0i8(i64 416, i8* nonnull %0) #15
+  call void @llvm.lifetime.start.p0i8(i64 416, i8* nonnull %0) #12
   br i1 %src_host, label %cond.true, label %cond.false
 
 cond.true:                                        ; preds = %entry
@@ -2348,7 +2348,7 @@ while.end:                                        ; preds = %while.body, %land.r
   br label %cleanup
 
 cleanup:                                          ; preds = %while.end, %if.then46, %if.then
-  call void @llvm.lifetime.end.p0i8(i64 416, i8* nonnull %0) #15
+  call void @llvm.lifetime.end.p0i8(i64 416, i8* nonnull %0) #12
   ret void
 }
 
@@ -2377,7 +2377,7 @@ if.end15:                                         ; preds = %if.end9
   %2 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %copy_to_host = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %2, i32 0, i32 6
   %3 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %copy_to_host, align 4, !tbaa !73
-  %call16 = tail call i32 %3(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call16 = tail call i32 %3(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %cmp17.not = icmp eq i32 %call16, 0
   br i1 %cmp17.not, label %if.end23, label %return
 
@@ -2385,7 +2385,7 @@ if.end23:                                         ; preds = %if.end15
   %4 = load i64, i64* %flags.i.i, align 8, !tbaa !44
   %and.i.i44 = and i64 %4, -3
   store i64 %and.i.i44, i64* %flags.i.i, align 8, !tbaa !44
-  %call24 = tail call i32 @halide_msan_annotate_buffer_is_initialized(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call24 = tail call i32 @halide_msan_annotate_buffer_is_initialized(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   br label %return
 
 return:                                           ; preds = %if.end23, %if.end15, %if.end9, %if.end, %entry
@@ -2400,19 +2400,19 @@ entry:
   %0 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_release = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %0, i32 0, i32 5
   %1 = load i32 (i8*)*, i32 (i8*)** %device_release, align 4, !tbaa !75
-  %call = tail call i32 %1(i8* %user_context) #13
+  %call = tail call i32 %1(i8* %user_context) #15
   ret void
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_copy_to_host(i8* %user_context, %struct.halide_buffer_t* %buf) local_unnamed_addr #4 {
 entry:
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   %cmp.i = icmp eq %struct.halide_buffer_t* %buf, null
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([20 x i8], [20 x i8]* @.str.6.17, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([20 x i8], [20 x i8]* @.str.6.17, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2427,7 +2427,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2436,7 +2436,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -2447,11 +2447,11 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end16.i.split
 
 if.end16.i.split:                                 ; preds = %if.end16.i
-  %call11 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #14
+  %call11 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #16
   br label %cleanup
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -2460,12 +2460,12 @@ _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; p
   br i1 %cmp.not, label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split, label %cleanup
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split: ; preds = %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
-  %call12 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* %buf) #14
+  %call12 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* %buf) #16
   br label %cleanup
 
 cleanup:                                          ; preds = %if.end16.i.split, %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split, %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
   %retval.0 = phi i32 [ %retval.2.i, %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit ], [ %call11, %if.end16.i.split ], [ %call12, %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split ]
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   ret i32 %retval.0
 }
 
@@ -2476,7 +2476,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.7.18, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.7.18, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2491,7 +2491,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2500,7 +2500,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -2511,7 +2511,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -2530,7 +2530,7 @@ if.then2:                                         ; preds = %if.end
   br i1 %cmp6, label %if.then7, label %if.end11
 
 if.then7:                                         ; preds = %if.then2
-  %call8 = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call8 = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %cleanup
 
 if.end11:                                         ; preds = %if.then2, %if.end
@@ -2547,11 +2547,11 @@ land.lhs.true:                                    ; preds = %if.end11
   br i1 %cmp13.not, label %if.end27, label %if.then14
 
 if.then14:                                        ; preds = %land.lhs.true
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([61 x i8], [61 x i8]* @.str.9.19, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([61 x i8], [61 x i8]* @.str.9.19, i32 0, i32 0)) #15
   br label %cleanup
 
 if.then18:                                        ; preds = %if.end11
-  %call19 = tail call i32 @halide_device_malloc(i8* %user_context, %struct.halide_buffer_t* nonnull %buf, %struct.halide_device_interface_t* nonnull %device_interface.addr.0) #14
+  %call19 = tail call i32 @halide_device_malloc(i8* %user_context, %struct.halide_buffer_t* nonnull %buf, %struct.halide_device_interface_t* nonnull %device_interface.addr.0) #16
   %cmp20.not = icmp eq i32 %call19, 0
   br i1 %cmp20.not, label %if.end27, label %cleanup
 
@@ -2572,7 +2572,7 @@ if.else:                                          ; preds = %if.then29
   %8 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %copy_to_device = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %8, i32 0, i32 7
   %9 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %copy_to_device, align 4, !tbaa !76
-  %call44 = tail call i32 %9(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call44 = tail call i32 %9(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %cmp45 = icmp eq i32 %call44, 0
   br i1 %cmp45, label %if.then46, label %cleanup
 
@@ -2594,7 +2594,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.17.20, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.17.20, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2609,7 +2609,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2618,7 +2618,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -2629,7 +2629,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -2650,7 +2650,7 @@ if.end:                                           ; preds = %_ZN12_GLOBAL__N_126
   br i1 %or.cond, label %if.end7, label %if.then6
 
 if.then6:                                         ; preds = %if.end
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([59 x i8], [59 x i8]* @.str.20.21, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([59 x i8], [59 x i8]* @.str.20.21, i32 0, i32 0)) #15
   br label %cleanup12
 
 if.end7:                                          ; preds = %if.end
@@ -2658,15 +2658,15 @@ if.end7:                                          ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_malloc = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %7, i32 0, i32 2
   %8 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %device_malloc, align 4, !tbaa !78
-  %call9 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call9 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %9 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %9, i32 0, i32 1
   %10 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %10() #13
+  tail call void %10() #15
   %tobool.not = icmp eq i32 %call9, 0
   %spec.select = select i1 %tobool.not, i32 0, i32 -16
   ret i32 %spec.select
@@ -2679,9 +2679,9 @@ cleanup12:                                        ; preds = %if.then6, %_ZN12_GL
 ; Function Attrs: nounwind
 define weak i32 @halide_copy_to_device(i8* %user_context, %struct.halide_buffer_t* %buf, %struct.halide_device_interface_t* %device_interface) local_unnamed_addr #4 {
 entry:
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
-  %call = tail call i32 @copy_to_device_already_locked(i8* %user_context, %struct.halide_buffer_t* %buf, %struct.halide_device_interface_t* %device_interface) #14
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
+  %call = tail call i32 @copy_to_device_already_locked(i8* %user_context, %struct.halide_buffer_t* %buf, %struct.halide_device_interface_t* %device_interface) #16
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   ret i32 %call
 }
 
@@ -2692,7 +2692,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.16.22, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.16.22, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2707,7 +2707,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2716,7 +2716,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -2727,7 +2727,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -2746,7 +2746,7 @@ if.end:                                           ; preds = %_ZN12_GLOBAL__N_126
   br i1 %cmp2, label %if.then3, label %if.end5
 
 if.then3:                                         ; preds = %if.end
-  %call4 = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call4 = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %cleanup8
 
 if.end5:                                          ; preds = %if.end
@@ -2754,7 +2754,7 @@ if.end5:                                          ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_sync = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 4
   %6 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %device_sync, align 4, !tbaa !80
-  %call6 = tail call i32 %6(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call6 = tail call i32 %6(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %tobool.not = icmp eq i32 %call6, 0
   %spec.select = select i1 %tobool.not, i32 0, i32 -17
   ret i32 %spec.select
@@ -2771,7 +2771,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.21.23, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.21.23, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2786,7 +2786,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2795,7 +2795,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -2806,7 +2806,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -2829,23 +2829,23 @@ if.then3:                                         ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_free = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %7, i32 0, i32 3
   %8 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %device_free, align 4, !tbaa !81
-  %call5 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call5 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %9 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %9, i32 0, i32 1
   %10 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %10() #13
+  tail call void %10() #15
   %device = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 0
   %11 = load i64, i64* %device, align 8, !tbaa !40
   %cmp7 = icmp eq i64 %11, 0
   br i1 %cmp7, label %do.end, label %if.then8
 
 if.then8:                                         ; preds = %if.then3
-  tail call void @halide_print(i8* %user_context, i8* getelementptr inbounds ([157 x i8], [157 x i8]* @.str.22.24, i32 0, i32 0)) #13
-  tail call void @abort() #13
+  tail call void @halide_print(i8* %user_context, i8* getelementptr inbounds ([157 x i8], [157 x i8]* @.str.22.24, i32 0, i32 0)) #15
+  tail call void @abort() #15
   br label %do.end
 
 do.end:                                           ; preds = %if.then8, %if.then3
@@ -2871,7 +2871,7 @@ declare void @abort() local_unnamed_addr #1
 define weak void @halide_device_free_as_destructor(i8* %user_context, i8* %obj) local_unnamed_addr #0 {
 entry:
   %0 = bitcast i8* %obj to %struct.halide_buffer_t*
-  %call = tail call i32 @halide_device_free(i8* %user_context, %struct.halide_buffer_t* %0) #14
+  %call = tail call i32 @halide_device_free(i8* %user_context, %struct.halide_buffer_t* %0) #16
   ret void
 }
 
@@ -2882,7 +2882,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.23.25, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.23.25, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2897,7 +2897,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2906,7 +2906,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -2917,7 +2917,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -2938,7 +2938,7 @@ if.end:                                           ; preds = %_ZN12_GLOBAL__N_126
   br i1 %or.cond, label %if.end7, label %if.then6
 
 if.then6:                                         ; preds = %if.end
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([68 x i8], [68 x i8]* @.str.25.26, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([68 x i8], [68 x i8]* @.str.25.26, i32 0, i32 0)) #15
   br label %cleanup14
 
 if.end7:                                          ; preds = %if.end
@@ -2946,20 +2946,20 @@ if.end7:                                          ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_and_host_malloc = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %7, i32 0, i32 8
   %8 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %device_and_host_malloc, align 4, !tbaa !82
-  %call9 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call9 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %9 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %9, i32 0, i32 1
   %10 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %10() #13
+  tail call void %10() #15
   %cmp11.not = icmp eq i32 %call9, 0
   br i1 %cmp11.not, label %cleanup14, label %if.then12
 
 if.then12:                                        ; preds = %if.end7
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([42 x i8], [42 x i8]* @.str.26, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([42 x i8], [42 x i8]* @.str.26, i32 0, i32 0)) #15
   br label %cleanup14
 
 cleanup14:                                        ; preds = %if.then12, %if.end7, %if.then6, %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
@@ -2974,7 +2974,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.27, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.27, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -2989,7 +2989,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -2998,7 +2998,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -3009,7 +3009,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -3032,23 +3032,23 @@ if.then3:                                         ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_and_host_free = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %7, i32 0, i32 9
   %8 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %device_and_host_free, align 4, !tbaa !83
-  %call5 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call5 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %9 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %9, i32 0, i32 1
   %10 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %10() #13
+  tail call void %10() #15
   %device = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 0
   %11 = load i64, i64* %device, align 8, !tbaa !40
   %cmp7 = icmp eq i64 %11, 0
   br i1 %cmp7, label %do.end, label %if.then8
 
 if.then8:                                         ; preds = %if.then3
-  tail call void @halide_print(i8* %user_context, i8* getelementptr inbounds ([157 x i8], [157 x i8]* @.str.28, i32 0, i32 0)) #13
-  tail call void @abort() #13
+  tail call void @halide_print(i8* %user_context, i8* getelementptr inbounds ([157 x i8], [157 x i8]* @.str.28, i32 0, i32 0)) #15
+  tail call void @abort() #15
   br label %do.end
 
 do.end:                                           ; preds = %if.then8, %if.then3
@@ -3063,7 +3063,7 @@ if.else11:                                        ; preds = %if.end
   br i1 %tobool12.not, label %if.end17, label %if.then13
 
 if.then13:                                        ; preds = %if.else11
-  tail call void @halide_free(i8* %user_context, i8* nonnull %12) #13
+  tail call void @halide_free(i8* %user_context, i8* nonnull %12) #15
   store i8* null, i8** %host, align 4, !tbaa !43
   br label %if.end17
 
@@ -3086,7 +3086,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([38 x i8], [38 x i8]* @.str.29, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([38 x i8], [38 x i8]* @.str.29, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -3101,7 +3101,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -3110,7 +3110,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -3121,7 +3121,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -3288,20 +3288,20 @@ _ZNK15halide_buffer_t13size_in_bytesEv.exit:      ; preds = %if.end._ZNK15halide
   %add.i4.i = add nuw nsw i32 %conv.i.i, 7
   %div.i.i = lshr i32 %add.i4.i, 3
   %mul.i = mul i32 %div.i.i, %sub.i.phi
-  %call2 = tail call i8* @halide_malloc(i8* %user_context, i32 %mul.i) #13
+  %call2 = tail call i8* @halide_malloc(i8* %user_context, i32 %mul.i) #15
   %host = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 2
   store i8* %call2, i8** %host, align 4, !tbaa !43
   %cmp4 = icmp eq i8* %call2, null
   br i1 %cmp4, label %cleanup13, label %if.end6
 
 if.end6:                                          ; preds = %_ZNK15halide_buffer_t13size_in_bytesEv.exit
-  %call7 = tail call i32 @halide_device_malloc(i8* %user_context, %struct.halide_buffer_t* nonnull %buf, %struct.halide_device_interface_t* %device_interface) #14
+  %call7 = tail call i32 @halide_device_malloc(i8* %user_context, %struct.halide_buffer_t* nonnull %buf, %struct.halide_device_interface_t* %device_interface) #16
   %cmp8.not = icmp eq i32 %call7, 0
   br i1 %cmp8.not, label %cleanup13, label %if.then9
 
 if.then9:                                         ; preds = %if.end6
   %21 = load i8*, i8** %host, align 4, !tbaa !43
-  tail call void @halide_free(i8* %user_context, i8* %21) #13
+  tail call void @halide_free(i8* %user_context, i8* %21) #15
   store i8* null, i8** %host, align 4, !tbaa !43
   br label %cleanup13
 
@@ -3539,7 +3539,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.30, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.30, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -3554,7 +3554,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -3563,7 +3563,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -3574,11 +3574,11 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end16.i.split
 
 if.end16.i.split:                                 ; preds = %if.end16.i
-  %call11 = tail call i32 @halide_device_free(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #14
+  %call11 = tail call i32 @halide_device_free(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #16
   br label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -3587,7 +3587,7 @@ _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; p
   br i1 %cmp.not, label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split, label %cleanup
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split: ; preds = %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
-  %call12 = tail call i32 @halide_device_free(i8* %user_context, %struct.halide_buffer_t* %buf) #14
+  %call12 = tail call i32 @halide_device_free(i8* %user_context, %struct.halide_buffer_t* %buf) #16
   br label %if.end
 
 if.end:                                           ; preds = %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit.split, %if.end16.i.split
@@ -3598,7 +3598,7 @@ if.end:                                           ; preds = %_ZN12_GLOBAL__N_126
   br i1 %tobool.not, label %if.end5, label %if.then2
 
 if.then2:                                         ; preds = %if.end
-  tail call void @halide_free(i8* %user_context, i8* nonnull %4) #13
+  tail call void @halide_free(i8* %user_context, i8* nonnull %4) #15
   store i8* null, i8** %host, align 4, !tbaa !43
   br label %if.end5
 
@@ -3621,7 +3621,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.31, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.31, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -3636,7 +3636,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -3645,7 +3645,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -3656,7 +3656,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -3677,7 +3677,7 @@ if.end:                                           ; preds = %_ZN12_GLOBAL__N_126
   br i1 %or.cond, label %if.end5, label %if.then4
 
 if.then4:                                         ; preds = %if.end
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([64 x i8], [64 x i8]* @.str.32, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([64 x i8], [64 x i8]* @.str.32, i32 0, i32 0)) #15
   br label %cleanup12
 
 if.end5:                                          ; preds = %if.end
@@ -3686,16 +3686,16 @@ if.end5:                                          ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   store %struct.halide_device_interface_t* %device_interface, %struct.halide_device_interface_t** %device_interface1, align 8, !tbaa !42
   %7 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %wrap_native = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %7, i32 0, i32 14
   %8 = load i32 (i8*, %struct.halide_buffer_t*, i64)*, i32 (i8*, %struct.halide_buffer_t*, i64)** %wrap_native, align 4, !tbaa !88
-  %call8 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf, i64 %handle) #13
+  %call8 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf, i64 %handle) #15
   %9 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %9, i32 0, i32 1
   %10 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %10() #13
+  tail call void %10() #15
   %tobool.not = icmp eq i32 %call8, 0
   %spec.select = select i1 %tobool.not, i32 0, i32 -16
   ret i32 %spec.select
@@ -3712,7 +3712,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.33, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.33, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -3727,7 +3727,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -3736,7 +3736,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -3747,7 +3747,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -3770,23 +3770,23 @@ if.then3:                                         ; preds = %if.end
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %detach_native = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %7, i32 0, i32 15
   %8 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %detach_native, align 4, !tbaa !89
-  %call5 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call5 = tail call i32 %8(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   %9 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %9, i32 0, i32 1
   %10 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %10() #13
+  tail call void %10() #15
   %device = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 0
   %11 = load i64, i64* %device, align 8, !tbaa !40
   %cmp7 = icmp eq i64 %11, 0
   br i1 %cmp7, label %do.end, label %if.then8
 
 if.then8:                                         ; preds = %if.then3
-  tail call void @halide_print(i8* %user_context, i8* getelementptr inbounds ([157 x i8], [157 x i8]* @.str.34, i32 0, i32 0)) #13
-  tail call void @abort() #13
+  tail call void @halide_print(i8* %user_context, i8* getelementptr inbounds ([157 x i8], [157 x i8]* @.str.34, i32 0, i32 0)) #15
+  tail call void @abort() #15
   br label %do.end
 
 do.end:                                           ; preds = %if.then8, %if.then3
@@ -3814,7 +3814,7 @@ if.end:                                           ; preds = %entry
   %2 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %2, i32 0, i32 0
   %3 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %3() #13
+  tail call void %3() #15
   store i64 %handle, i64* %device, align 8, !tbaa !40
   br label %return
 
@@ -3830,7 +3830,7 @@ entry:
   br i1 %cmp.i, label %if.then.i, label %if.end.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.35, i32 0, i32 0)) #13
+  %call.i = tail call i32 @halide_error_buffer_is_null(i8* %user_context, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.35, i32 0, i32 0)) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end.i:                                         ; preds = %entry
@@ -3845,7 +3845,7 @@ if.end.i:                                         ; preds = %entry
   br i1 %brmerge.i, label %if.end10.i, label %if.then8.i
 
 if.then8.i:                                       ; preds = %if.end.i
-  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #13
+  %call9.i = tail call i32 @halide_error_no_device_interface(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end10.i:                                       ; preds = %if.end.i
@@ -3854,7 +3854,7 @@ if.end10.i:                                       ; preds = %if.end.i
   br i1 %brmerge44.i, label %if.end16.i, label %if.then14.i
 
 if.then14.i:                                      ; preds = %if.end10.i
-  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #13
+  %call15.i = tail call i32 @halide_error_device_interface_no_device(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 if.end16.i:                                       ; preds = %if.end10.i
@@ -3865,7 +3865,7 @@ if.end16.i:                                       ; preds = %if.end10.i
   br i1 %.not.i, label %if.then24.i, label %if.end
 
 if.then24.i:                                      ; preds = %if.end16.i
-  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #13
+  %call25.i = tail call i32 @halide_error_host_and_device_dirty(i8* %user_context) #15
   br label %_ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit
 
 _ZN12_GLOBAL__N_126debug_log_and_validate_bufEPvPK15halide_buffer_tPKc.exit: ; preds = %if.then24.i, %if.then14.i, %if.then8.i, %if.then.i
@@ -3891,7 +3891,7 @@ if.end3:                                          ; preds = %if.end
   %6 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %6, i32 0, i32 1
   %7 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %7() #13
+  tail call void %7() #15
   store i64 0, i64* %device, align 8, !tbaa !40
   store %struct.halide_device_interface_t* null, %struct.halide_device_interface_t** %device_interface, align 8, !tbaa !42
   br label %cleanup
@@ -3905,7 +3905,7 @@ cleanup:                                          ; preds = %if.end3, %if.end, %
 define weak void @halide_device_and_host_free_as_destructor(i8* %user_context, i8* %obj) local_unnamed_addr #0 {
 entry:
   %0 = bitcast i8* %obj to %struct.halide_buffer_t*
-  %call = tail call i32 @halide_device_and_host_free(i8* %user_context, %struct.halide_buffer_t* %0) #14
+  %call = tail call i32 @halide_device_and_host_free(i8* %user_context, %struct.halide_buffer_t* %0) #16
   ret void
 }
 
@@ -3937,7 +3937,7 @@ land.lhs.true:                                    ; preds = %entry
   br i1 %or.cond, label %land.lhs.true5, label %if.then
 
 if.then:                                          ; preds = %land.lhs.true
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([64 x i8], [64 x i8]* @.str.41, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([64 x i8], [64 x i8]* @.str.41, i32 0, i32 0)) #15
   br label %cleanup143
 
 land.lhs.true5:                                   ; preds = %land.lhs.true
@@ -3947,7 +3947,7 @@ land.lhs.true5:                                   ; preds = %land.lhs.true
   br i1 %tobool6.not, label %if.then7, label %if.end13
 
 if.then7:                                         ; preds = %land.lhs.true5
-  %call = tail call i32 @halide_device_malloc(i8* %user_context, %struct.halide_buffer_t* nonnull %dst, %struct.halide_device_interface_t* nonnull %dst_device_interface) #14
+  %call = tail call i32 @halide_device_malloc(i8* %user_context, %struct.halide_buffer_t* nonnull %dst, %struct.halide_device_interface_t* nonnull %dst_device_interface) #16
   %tobool10.not = icmp eq i32 %call, 0
   br i1 %tobool10.not, label %if.end13, label %cleanup143
 
@@ -4011,7 +4011,7 @@ if.end49:                                         ; preds = %if.end41
   %11 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %buffer_copy = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %11, i32 0, i32 10
   %12 = load i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)** %buffer_copy, align 4, !tbaa !90
-  %call48 = tail call i32 %12(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* nonnull %dst_device_interface, %struct.halide_buffer_t* nonnull %dst) #13
+  %call48 = tail call i32 %12(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* nonnull %dst_device_interface, %struct.halide_buffer_t* nonnull %dst) #15
   %cmp50 = icmp eq i32 %call48, -42
   br i1 %cmp50, label %if.then51, label %if.end117
 
@@ -4025,10 +4025,10 @@ if.end58:                                         ; preds = %if.then51
 
 if.end117.thread258:                              ; preds = %if.end58
   %13 = bitcast %"struct.Halide::Runtime::Internal::device_copy"* %c to i8*
-  call void @llvm.lifetime.start.p0i8(i64 416, i8* nonnull %13) #15
-  call void @_ZN6Halide7Runtime8Internal16make_buffer_copyEPK15halide_buffer_tbS4_b(%"struct.Halide::Runtime::Internal::device_copy"* nonnull sret(%"struct.Halide::Runtime::Internal::device_copy") align 8 %c, %struct.halide_buffer_t* nonnull %src, i1 zeroext true, %struct.halide_buffer_t* nonnull %dst, i1 zeroext true) #14
-  call void @_ZN6Halide7Runtime8Internal11copy_memoryERKNS1_11device_copyEPv(%"struct.Halide::Runtime::Internal::device_copy"* nonnull align 8 dereferenceable(416) %c, i8* %user_context) #14
-  call void @llvm.lifetime.end.p0i8(i64 416, i8* nonnull %13) #15
+  call void @llvm.lifetime.start.p0i8(i64 416, i8* nonnull %13) #12
+  call void @_ZN6Halide7Runtime8Internal16make_buffer_copyEPK15halide_buffer_tbS4_b(%"struct.Halide::Runtime::Internal::device_copy"* nonnull sret(%"struct.Halide::Runtime::Internal::device_copy") align 8 %c, %struct.halide_buffer_t* nonnull %src, i1 zeroext true, %struct.halide_buffer_t* nonnull %dst, i1 zeroext true) #16
+  call void @_ZN6Halide7Runtime8Internal11copy_memoryERKNS1_11device_copyEPv(%"struct.Halide::Runtime::Internal::device_copy"* nonnull align 8 dereferenceable(416) %c, i8* %user_context) #16
+  call void @llvm.lifetime.end.p0i8(i64 416, i8* nonnull %13) #12
   br label %land.lhs.true126
 
 if.else:                                          ; preds = %if.end58
@@ -4042,17 +4042,17 @@ if.then66:                                        ; preds = %if.else
   %15 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl70, align 4, !tbaa !71
   %buffer_copy71 = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %15, i32 0, i32 10
   %16 = load i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)** %buffer_copy71, align 4, !tbaa !90
-  %call72 = tail call i32 %16(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* null, %struct.halide_buffer_t* nonnull %dst) #13
+  %call72 = tail call i32 %16(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* null, %struct.halide_buffer_t* nonnull %dst) #15
   %cmp73 = icmp eq i32 %call72, -42
   br i1 %cmp73, label %if.then74, label %if.end117
 
 if.then74:                                        ; preds = %if.then66
-  %call75 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* nonnull %src) #14
+  %call75 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* nonnull %src) #16
   %tobool76.not = icmp eq i32 %call75, 0
   br i1 %tobool76.not, label %if.then77, label %cleanup143
 
 if.then77:                                        ; preds = %if.then74
-  %call78 = tail call i32 @halide_buffer_copy_already_locked(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* null, %struct.halide_buffer_t* nonnull %dst) #14
+  %call78 = tail call i32 @halide_buffer_copy_already_locked(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* null, %struct.halide_buffer_t* nonnull %dst) #16
   br label %if.end117
 
 if.else81:                                        ; preds = %if.else
@@ -4066,7 +4066,7 @@ if.then85:                                        ; preds = %if.else81
   %18 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl91, align 4, !tbaa !71
   %buffer_copy92 = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %18, i32 0, i32 10
   %19 = load i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)** %buffer_copy92, align 4, !tbaa !90
-  %call93 = tail call i32 %19(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* null, %struct.halide_buffer_t* nonnull %dst) #13
+  %call93 = tail call i32 %19(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* null, %struct.halide_buffer_t* nonnull %dst) #15
   %cmp94 = icmp eq i32 %call93, 0
   br i1 %cmp94, label %if.then95, label %cleanup143
 
@@ -4075,14 +4075,14 @@ if.then95:                                        ; preds = %if.then85
   %20 = load i64, i64* %flags.i.i245, align 8, !tbaa !44
   %or.i.i246 = or i64 %20, 1
   store i64 %or.i.i246, i64* %flags.i.i245, align 8, !tbaa !44
-  %call96 = tail call i32 @copy_to_device_already_locked(i8* %user_context, %struct.halide_buffer_t* nonnull %dst, %struct.halide_device_interface_t* %dst_device_interface) #14
+  %call96 = tail call i32 @copy_to_device_already_locked(i8* %user_context, %struct.halide_buffer_t* nonnull %dst, %struct.halide_device_interface_t* %dst_device_interface) #16
   br label %if.end117
 
 if.else98:                                        ; preds = %if.else81
   br i1 %tobool.not, label %cleanup143, label %if.then100
 
 if.then100:                                       ; preds = %if.else98
-  %call103 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* nonnull %src) #14
+  %call103 = tail call i32 @_ZN6Halide7Runtime8Internal27copy_to_host_already_lockedEPvP15halide_buffer_t(i8* %user_context, %struct.halide_buffer_t* nonnull %src) #16
   %cmp104 = icmp eq i32 %call103, 0
   br i1 %cmp104, label %if.then105, label %cleanup143
 
@@ -4091,7 +4091,7 @@ if.then105:                                       ; preds = %if.then100
   %21 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl106, align 4, !tbaa !71
   %buffer_copy107 = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %21, i32 0, i32 10
   %22 = load i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*, %struct.halide_device_interface_t*, %struct.halide_buffer_t*)** %buffer_copy107, align 4, !tbaa !90
-  %call108 = tail call i32 %22(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* nonnull %dst_device_interface, %struct.halide_buffer_t* nonnull %dst) #13
+  %call108 = tail call i32 %22(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* nonnull %dst_device_interface, %struct.halide_buffer_t* nonnull %dst) #15
   br label %if.end117
 
 if.end117:                                        ; preds = %if.then105, %if.then95, %if.then77, %if.then66, %if.end49
@@ -4127,7 +4127,7 @@ cleanup143:                                       ; preds = %if.else133, %if.the
 ; Function Attrs: nounwind
 define weak i32 @halide_buffer_copy(i8* %user_context, %struct.halide_buffer_t* %src, %struct.halide_device_interface_t* %dst_device_interface, %struct.halide_buffer_t* %dst) local_unnamed_addr #4 {
 entry:
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   %tobool.not = icmp eq %struct.halide_device_interface_t* %dst_device_interface, null
   br i1 %tobool.not, label %if.end, label %if.then
 
@@ -4136,7 +4136,7 @@ if.then:                                          ; preds = %entry
   %0 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %0, i32 0, i32 0
   %1 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %1() #13
+  tail call void %1() #15
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %entry
@@ -4150,11 +4150,11 @@ if.then12:                                        ; preds = %if.end
   %3 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl14, align 4, !tbaa !71
   %use_module15 = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %3, i32 0, i32 0
   %4 = load void ()*, void ()** %use_module15, align 4, !tbaa !77
-  tail call void %4() #13
+  tail call void %4() #15
   br label %if.end16
 
 if.end16:                                         ; preds = %if.then12, %if.end
-  %call = tail call i32 @halide_buffer_copy_already_locked(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* %dst_device_interface, %struct.halide_buffer_t* %dst) #14
+  %call = tail call i32 @halide_buffer_copy_already_locked(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_device_interface_t* %dst_device_interface, %struct.halide_buffer_t* %dst) #16
   br i1 %tobool.not, label %if.end20, label %if.then18
 
 if.then18:                                        ; preds = %if.end16
@@ -4162,7 +4162,7 @@ if.then18:                                        ; preds = %if.end16
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl19, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 1
   %6 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %6() #13
+  tail call void %6() #15
   br label %if.end20
 
 if.end20:                                         ; preds = %if.then18, %if.end16
@@ -4175,32 +4175,32 @@ if.then23:                                        ; preds = %if.end20
   %8 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl25, align 4, !tbaa !71
   %release_module26 = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %8, i32 0, i32 1
   %9 = load void ()*, void ()** %release_module26, align 4, !tbaa !79
-  tail call void %9() #13
+  tail call void %9() #15
   br label %if.end27
 
 if.end27:                                         ; preds = %if.then23, %if.end20
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   ret i32 %call
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_device_crop(i8* %user_context, %struct.halide_buffer_t* %src, %struct.halide_buffer_t* %dst) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([44 x i8], [44 x i8]* @.str.58, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([44 x i8], [44 x i8]* @.str.58, i32 0, i32 0)) #15
   ret i32 -40
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_default_device_slice(i8* %user_context, %struct.halide_buffer_t* %src, i32 %slice_dim, i32 %slice_pos, %struct.halide_buffer_t* %dst) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.59, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.59, i32 0, i32 0)) #15
   ret i32 -40
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_device_crop(i8* %user_context, %struct.halide_buffer_t* %src, %struct.halide_buffer_t* %dst) local_unnamed_addr #4 {
 entry:
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   %device = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %src, i32 0, i32 0
   %0 = load i64, i64* %device, align 8, !tbaa !40
   %tobool.not = icmp eq i64 %0, 0
@@ -4213,7 +4213,7 @@ if.end:                                           ; preds = %entry
   br i1 %tobool2.not, label %if.end4, label %if.then3
 
 if.then3:                                         ; preds = %if.end
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([52 x i8], [52 x i8]* @.str.60, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([52 x i8], [52 x i8]* @.str.60, i32 0, i32 0)) #15
   br label %cleanup
 
 if.end4:                                          ; preds = %if.end
@@ -4225,7 +4225,7 @@ if.end4:                                          ; preds = %if.end
   br i1 %cmp.not, label %if.end7, label %if.then6
 
 if.then6:                                         ; preds = %if.end4
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([48 x i8], [48 x i8]* @.str.61, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([48 x i8], [48 x i8]* @.str.61, i32 0, i32 0)) #15
   br label %cleanup
 
 if.end7:                                          ; preds = %if.end4
@@ -4235,25 +4235,25 @@ if.end7:                                          ; preds = %if.end4
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_t*, %struct.halide_device_interface_t** %device_interface, align 8, !tbaa !42
   %impl9 = getelementptr inbounds %struct.halide_device_interface_t, %struct.halide_device_interface_t* %7, i32 0, i32 15
   %8 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl9, align 4, !tbaa !71
   %device_crop = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %8, i32 0, i32 11
   %9 = load i32 (i8*, %struct.halide_buffer_t*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*, %struct.halide_buffer_t*)** %device_crop, align 4, !tbaa !91
-  %call = tail call i32 %9(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_buffer_t* nonnull %dst) #13
+  %call = tail call i32 %9(i8* %user_context, %struct.halide_buffer_t* nonnull %src, %struct.halide_buffer_t* nonnull %dst) #15
   br label %cleanup
 
 cleanup:                                          ; preds = %if.end7, %if.then6, %if.then3, %entry
   %retval.0 = phi i32 [ -41, %if.then3 ], [ -41, %if.then6 ], [ %call, %if.end7 ], [ 0, %entry ]
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   ret i32 %retval.0
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_device_slice(i8* %user_context, %struct.halide_buffer_t* %src, i32 %slice_dim, i32 %slice_pos, %struct.halide_buffer_t* %dst) local_unnamed_addr #4 {
 entry:
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   %device = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %src, i32 0, i32 0
   %0 = load i64, i64* %device, align 8, !tbaa !40
   %tobool.not = icmp eq i64 %0, 0
@@ -4266,7 +4266,7 @@ if.end:                                           ; preds = %entry
   br i1 %tobool2.not, label %if.end4, label %if.then3
 
 if.then3:                                         ; preds = %if.end
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([52 x i8], [52 x i8]* @.str.60, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([52 x i8], [52 x i8]* @.str.60, i32 0, i32 0)) #15
   br label %cleanup
 
 if.end4:                                          ; preds = %if.end
@@ -4279,7 +4279,7 @@ if.end4:                                          ; preds = %if.end
   br i1 %cmp.not, label %if.end7, label %if.then6
 
 if.then6:                                         ; preds = %if.end4
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([52 x i8], [52 x i8]* @.str.64, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([52 x i8], [52 x i8]* @.str.64, i32 0, i32 0)) #15
   br label %cleanup
 
 if.end7:                                          ; preds = %if.end4
@@ -4289,18 +4289,18 @@ if.end7:                                          ; preds = %if.end4
   %5 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %use_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %5, i32 0, i32 0
   %6 = load void ()*, void ()** %use_module, align 4, !tbaa !77
-  tail call void %6() #13
+  tail call void %6() #15
   %7 = load %struct.halide_device_interface_t*, %struct.halide_device_interface_t** %device_interface, align 8, !tbaa !42
   %impl9 = getelementptr inbounds %struct.halide_device_interface_t, %struct.halide_device_interface_t* %7, i32 0, i32 15
   %8 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl9, align 4, !tbaa !71
   %device_slice = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %8, i32 0, i32 12
   %9 = load i32 (i8*, %struct.halide_buffer_t*, i32, i32, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*, i32, i32, %struct.halide_buffer_t*)** %device_slice, align 4, !tbaa !92
-  %call = tail call i32 %9(i8* %user_context, %struct.halide_buffer_t* nonnull %src, i32 %slice_dim, i32 %slice_pos, %struct.halide_buffer_t* nonnull %dst) #13
+  %call = tail call i32 %9(i8* %user_context, %struct.halide_buffer_t* nonnull %src, i32 %slice_dim, i32 %slice_pos, %struct.halide_buffer_t* nonnull %dst) #15
   br label %cleanup
 
 cleanup:                                          ; preds = %if.end7, %if.then6, %if.then3, %entry
   %retval.0 = phi i32 [ -41, %if.then3 ], [ -41, %if.then6 ], [ %call, %if.end7 ], [ 0, %entry ]
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   ret i32 %retval.0
 }
 
@@ -4313,7 +4313,7 @@ entry:
   br i1 %tobool.not, label %return, label %if.end
 
 if.end:                                           ; preds = %entry
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([44 x i8], [44 x i8]* @.str.58, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([44 x i8], [44 x i8]* @.str.58, i32 0, i32 0)) #15
   br label %return
 
 return:                                           ; preds = %if.end, %entry
@@ -4330,21 +4330,21 @@ entry:
   br i1 %tobool.not, label %return, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   %device_interface = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %buf, i32 0, i32 1
   %1 = load %struct.halide_device_interface_t*, %struct.halide_device_interface_t** %device_interface, align 8, !tbaa !42
   %impl = getelementptr inbounds %struct.halide_device_interface_t, %struct.halide_device_interface_t* %1, i32 0, i32 15
   %2 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %device_release_crop = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %2, i32 0, i32 13
   %3 = load i32 (i8*, %struct.halide_buffer_t*)*, i32 (i8*, %struct.halide_buffer_t*)** %device_release_crop, align 4, !tbaa !93
-  %call = tail call i32 %3(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #13
+  %call = tail call i32 %3(i8* %user_context, %struct.halide_buffer_t* nonnull %buf) #15
   store i64 0, i64* %device, align 8, !tbaa !40
   %4 = load %struct.halide_device_interface_impl_t*, %struct.halide_device_interface_impl_t** %impl, align 4, !tbaa !71
   %release_module = getelementptr inbounds %struct.halide_device_interface_impl_t, %struct.halide_device_interface_impl_t* %4, i32 0, i32 1
   %5 = load void ()*, void ()** %release_module, align 4, !tbaa !79
-  tail call void %5() #13
+  tail call void %5() #15
   store %struct.halide_device_interface_t* null, %struct.halide_device_interface_t** %device_interface, align 8, !tbaa !42
-  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #13
+  tail call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal17device_copy_mutexE) #15
   br label %return
 
 return:                                           ; preds = %if.then, %entry
@@ -4406,7 +4406,7 @@ declare i32 @llvm.ctlz.i32(i32, i1 immarg) #8
 ; Function Attrs: nounwind willreturn mustprogress
 define weak double @halide_float16_bits_to_double(i16 zeroext %bits) local_unnamed_addr #2 {
 entry:
-  %call = tail call float @halide_float16_bits_to_float(i16 zeroext %bits) #14
+  %call = tail call float @halide_float16_bits_to_float(i16 zeroext %bits) #16
   %conv = fpext float %call to double
   ret double %conv
 }
@@ -4414,31 +4414,31 @@ entry:
 ; Function Attrs: nounwind
 define weak i32 @halide_error_bounds_inference_call_failed(i8* %user_context, i8* %extern_stage_name, i32 %result) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i71 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([41 x i8], [41 x i8]* @.str.36, i32 0, i32 0)) #13
+  %call.i71 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([41 x i8], [41 x i8]* @.str.36, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i72 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([41 x i8], [41 x i8]* @.str.36, i32 0, i32 0)) #13
+  %call.i72 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([41 x i8], [41 x i8]* @.str.36, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i71, %entry.split ], [ %call.i72, %if.then6.i ]
   %ref.tmp.sroa.16.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i10 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %extern_stage_name) #13
-  %call.i13 = tail call i8* @halide_string_to_string(i8* %call.i10, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.1.37, i32 0, i32 0)) #13
+  %call.i10 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %extern_stage_name) #15
+  %call.i13 = tail call i8* @halide_string_to_string(i8* %call.i10, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.1.37, i32 0, i32 0)) #15
   %conv.i = sext i32 %result to i64
-  %call.i16 = tail call i8* @halide_int64_to_string(i8* %call.i13, i8* %ref.tmp.sroa.16.0, i64 %conv.i, i32 1) #13
+  %call.i16 = tail call i8* @halide_int64_to_string(i8* %call.i13, i8* %ref.tmp.sroa.16.0, i64 %conv.i, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4447,43 +4447,43 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 %result
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_extern_stage_failed(i8* %user_context, i8* %extern_stage_name, i32 %result) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i71 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.2.38, i32 0, i32 0)) #13
+  %call.i71 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.2.38, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i72 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.2.38, i32 0, i32 0)) #13
+  %call.i72 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.2.38, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i71, %entry.split ], [ %call.i72, %if.then6.i ]
   %ref.tmp.sroa.16.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i10 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %extern_stage_name) #13
-  %call.i13 = tail call i8* @halide_string_to_string(i8* %call.i10, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.1.37, i32 0, i32 0)) #13
+  %call.i10 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %extern_stage_name) #15
+  %call.i13 = tail call i8* @halide_string_to_string(i8* %call.i10, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.1.37, i32 0, i32 0)) #15
   %conv.i = sext i32 %result to i64
-  %call.i16 = tail call i8* @halide_int64_to_string(i8* %call.i13, i8* %ref.tmp.sroa.16.0, i64 %conv.i, i32 1) #13
+  %call.i16 = tail call i8* @halide_int64_to_string(i8* %call.i13, i8* %ref.tmp.sroa.16.0, i64 %conv.i, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4492,55 +4492,55 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 %result
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_explicit_bounds_too_small(i8* %user_context, i8* %func_name, i8* %var_name, i32 %min_bound, i32 %max_bound, i32 %min_required, i32 %max_required) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i151 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3.39, i32 0, i32 0)) #13
+  %call.i151 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3.39, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i152 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3.39, i32 0, i32 0)) #13
+  %call.i152 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3.39, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i151, %entry.split ], [ %call.i152, %if.then6.i ]
   %ref.tmp.sroa.34.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i18 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.34.0, i8* %var_name) #13
-  %call.i21 = tail call i8* @halide_string_to_string(i8* %call.i18, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.4.40, i32 0, i32 0)) #13
-  %call.i24 = tail call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.34.0, i8* %func_name) #13
-  %call.i27 = tail call i8* @halide_string_to_string(i8* %call.i24, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.5.41, i32 0, i32 0)) #13
+  %call.i18 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.34.0, i8* %var_name) #15
+  %call.i21 = tail call i8* @halide_string_to_string(i8* %call.i18, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.4.40, i32 0, i32 0)) #15
+  %call.i24 = tail call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.34.0, i8* %func_name) #15
+  %call.i27 = tail call i8* @halide_string_to_string(i8* %call.i24, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.5.41, i32 0, i32 0)) #15
   %conv.i = sext i32 %min_bound to i64
-  %call.i30 = tail call i8* @halide_int64_to_string(i8* %call.i27, i8* %ref.tmp.sroa.34.0, i64 %conv.i, i32 1) #13
-  %call.i33 = tail call i8* @halide_string_to_string(i8* %call.i30, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #13
+  %call.i30 = tail call i8* @halide_int64_to_string(i8* %call.i27, i8* %ref.tmp.sroa.34.0, i64 %conv.i, i32 1) #15
+  %call.i33 = tail call i8* @halide_string_to_string(i8* %call.i30, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #15
   %conv.i36 = sext i32 %max_bound to i64
-  %call.i37 = tail call i8* @halide_int64_to_string(i8* %call.i33, i8* %ref.tmp.sroa.34.0, i64 %conv.i36, i32 1) #13
-  %call.i40 = tail call i8* @halide_string_to_string(i8* %call.i37, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([38 x i8], [38 x i8]* @.str.7.43, i32 0, i32 0)) #13
+  %call.i37 = tail call i8* @halide_int64_to_string(i8* %call.i33, i8* %ref.tmp.sroa.34.0, i64 %conv.i36, i32 1) #15
+  %call.i40 = tail call i8* @halide_string_to_string(i8* %call.i37, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([38 x i8], [38 x i8]* @.str.7.43, i32 0, i32 0)) #15
   %conv.i43 = sext i32 %min_required to i64
-  %call.i44 = tail call i8* @halide_int64_to_string(i8* %call.i40, i8* %ref.tmp.sroa.34.0, i64 %conv.i43, i32 1) #13
-  %call.i47 = tail call i8* @halide_string_to_string(i8* %call.i44, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #13
+  %call.i44 = tail call i8* @halide_int64_to_string(i8* %call.i40, i8* %ref.tmp.sroa.34.0, i64 %conv.i43, i32 1) #15
+  %call.i47 = tail call i8* @halide_string_to_string(i8* %call.i44, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #15
   %conv.i50 = sext i32 %max_required to i64
-  %call.i51 = tail call i8* @halide_int64_to_string(i8* %call.i47, i8* %ref.tmp.sroa.34.0, i64 %conv.i50, i32 1) #13
-  %call.i54 = tail call i8* @halide_string_to_string(i8* %call.i51, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #13
+  %call.i51 = tail call i8* @halide_int64_to_string(i8* %call.i47, i8* %ref.tmp.sroa.34.0, i64 %conv.i50, i32 1) #15
+  %call.i54 = tail call i8* @halide_string_to_string(i8* %call.i51, i8* %ref.tmp.sroa.34.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4549,12 +4549,12 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -2
 }
 
@@ -4568,48 +4568,48 @@ entry:
   store i32 %type_given_bits, i32* %type_given_bits.addr, align 4, !tbaa !14
   store i32 %correct_type_bits, i32* %correct_type_bits.addr, align 4, !tbaa !14
   %0 = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %correct_type, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %0) #15
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %0) #12
   store i8 0, i8* %0, align 2, !tbaa !34
   %bits.i = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %correct_type, i32 0, i32 1
   store i8 0, i8* %bits.i, align 1, !tbaa !38
   %lanes.i = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %correct_type, i32 0, i32 2
   store i16 0, i16* %lanes.i, align 2, !tbaa !39
   %1 = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %type_given, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %1) #15
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %1) #12
   store i8 0, i8* %1, align 2, !tbaa !34
   %bits.i8 = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %type_given, i32 0, i32 1
   store i8 0, i8* %bits.i8, align 1, !tbaa !38
   %lanes.i9 = getelementptr inbounds %struct.halide_type_t, %struct.halide_type_t* %type_given, i32 0, i32 2
   store i16 0, i16* %lanes.i9, align 2, !tbaa !39
   %2 = bitcast i32* %correct_type_bits.addr to i8*
-  %call = call i8* @memcpy(i8* nonnull %0, i8* nonnull %2, i32 4) #13
+  %call = call i8* @memcpy(i8* nonnull %0, i8* nonnull %2, i32 4) #15
   %3 = bitcast i32* %type_given_bits.addr to i8*
-  %call1 = call i8* @memcpy(i8* nonnull %1, i8* nonnull %3, i32 4) #13
-  %call.i = call i8* @malloc(i32 1024) #13
+  %call1 = call i8* @memcpy(i8* nonnull %1, i8* nonnull %3, i32 4) #15
+  %call.i = call i8* @malloc(i32 1024) #15
   %tobool.not.i12 = icmp eq i8* %call.i, null
   br i1 %tobool.not.i12, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i151 = call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #13
+  %call.i151 = call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i152 = call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* %func_name) #13
+  %call.i152 = call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i151, %entry.split ], [ %call.i152, %if.then6.i ]
   %ref.tmp.sroa.18.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i18 = call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.9.45, i32 0, i32 0)) #13
-  %call.i21 = call i8* @halide_type_to_string(i8* %call.i18, i8* %ref.tmp.sroa.18.0, %struct.halide_type_t* nonnull %correct_type) #13
-  %call.i24 = call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([38 x i8], [38 x i8]* @.str.10.46, i32 0, i32 0)) #13
-  %call.i27 = call i8* @halide_type_to_string(i8* %call.i24, i8* %ref.tmp.sroa.18.0, %struct.halide_type_t* nonnull %type_given) #13
+  %call.i18 = call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.9.45, i32 0, i32 0)) #15
+  %call.i21 = call i8* @halide_type_to_string(i8* %call.i18, i8* %ref.tmp.sroa.18.0, %struct.halide_type_t* nonnull %correct_type) #15
+  %call.i24 = call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([38 x i8], [38 x i8]* @.str.10.46, i32 0, i32 0)) #15
+  %call.i27 = call i8* @halide_type_to_string(i8* %call.i24, i8* %ref.tmp.sroa.18.0, %struct.halide_type_t* nonnull %type_given) #15
   br i1 %tobool.not.i12, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4618,48 +4618,48 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  call void @free(i8* %call.i) #13
-  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %1) #15
-  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %0) #15
+  call void @free(i8* %call.i) #15
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %1) #12
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %0) #12
   ret i32 -3
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_bad_dimensions(i8* %user_context, i8* %func_name, i32 %dimensions_given, i32 %correct_dimensions) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* %func_name) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.11.47, i32 0, i32 0)) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.11.47, i32 0, i32 0)) #15
   %conv.i = sext i32 %correct_dimensions to i64
-  %call.i14 = tail call i8* @halide_int64_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i64 %conv.i, i32 1) #13
-  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.12.48, i32 0, i32 0)) #13
+  %call.i14 = tail call i8* @halide_int64_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i64 %conv.i, i32 1) #15
+  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.12.48, i32 0, i32 0)) #15
   %conv.i20 = sext i32 %dimensions_given to i64
-  %call.i21 = tail call i8* @halide_int64_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i64 %conv.i20, i32 1) #13
-  %call.i24 = tail call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.13.49, i32 0, i32 0)) #13
+  %call.i21 = tail call i8* @halide_int64_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i64 %conv.i20, i32 1) #15
+  %call.i24 = tail call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.13.49, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4668,12 +4668,12 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -43
 }
 
@@ -4684,36 +4684,36 @@ entry:
   br i1 %cmp, label %if.then, label %if.else
 
 if.then:                                          ; preds = %entry
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.split, label %if.then6.i
 
 if.then.split:                                    ; preds = %if.then
-  %call.i271 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #13
+  %call.i271 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %if.then
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i272 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* %func_name) #13
+  %call.i272 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %if.then.split, %if.then6.i
   %phi.call = phi i8* [ %call.i271, %if.then.split ], [ %call.i272, %if.then6.i ]
   %ref.tmp.sroa.22.0 = phi i8* [ null, %if.then.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i30 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.14.50, i32 0, i32 0)) #13
+  %call.i30 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.14.50, i32 0, i32 0)) #15
   %conv.i = sext i32 %min_touched to i64
-  %call.i33 = tail call i8* @halide_int64_to_string(i8* %call.i30, i8* %ref.tmp.sroa.22.0, i64 %conv.i, i32 1) #13
-  %call.i36 = tail call i8* @halide_string_to_string(i8* %call.i33, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.15.51, i32 0, i32 0)) #13
+  %call.i33 = tail call i8* @halide_int64_to_string(i8* %call.i30, i8* %ref.tmp.sroa.22.0, i64 %conv.i, i32 1) #15
+  %call.i36 = tail call i8* @halide_string_to_string(i8* %call.i33, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.15.51, i32 0, i32 0)) #15
   %conv.i39 = sext i32 %min_valid to i64
-  %call.i40 = tail call i8* @halide_int64_to_string(i8* %call.i36, i8* %ref.tmp.sroa.22.0, i64 %conv.i39, i32 1) #13
-  %call.i43 = tail call i8* @halide_string_to_string(i8* %call.i40, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.16.52, i32 0, i32 0)) #13
+  %call.i40 = tail call i8* @halide_int64_to_string(i8* %call.i36, i8* %ref.tmp.sroa.22.0, i64 %conv.i39, i32 1) #15
+  %call.i43 = tail call i8* @halide_string_to_string(i8* %call.i40, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.16.52, i32 0, i32 0)) #15
   %conv.i46 = sext i32 %dimension to i64
-  %call.i47 = tail call i8* @halide_int64_to_string(i8* %call.i43, i8* %ref.tmp.sroa.22.0, i64 %conv.i46, i32 1) #13
+  %call.i47 = tail call i8* @halide_int64_to_string(i8* %call.i43, i8* %ref.tmp.sroa.22.0, i64 %conv.i46, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %if.end17.sink.split
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4722,8 +4722,8 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %if.end17.sink.split
 
 if.else:                                          ; preds = %entry
@@ -4731,36 +4731,36 @@ if.else:                                          ; preds = %entry
   br i1 %cmp7, label %if.then8, label %if.end17
 
 if.then8:                                         ; preds = %if.else
-  %call.i53 = tail call i8* @malloc(i32 1024) #13
+  %call.i53 = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i56 = icmp eq i8* %call.i53, null
   br i1 %tobool.not.i56, label %if.then8.split, label %if.then6.i59
 
 if.then8.split:                                   ; preds = %if.then8
-  %call.i653 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #13
+  %call.i653 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit62
 
 if.then6.i59:                                     ; preds = %if.then8
   %add.ptr.i57 = getelementptr inbounds i8, i8* %call.i53, i32 1023
   store i8 0, i8* %add.ptr.i57, align 1, !tbaa !22
-  %call.i654 = tail call i8* @halide_string_to_string(i8* nonnull %call.i53, i8* nonnull %add.ptr.i57, i8* %func_name) #13
+  %call.i654 = tail call i8* @halide_string_to_string(i8* nonnull %call.i53, i8* nonnull %add.ptr.i57, i8* %func_name) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit62
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit62: ; preds = %if.then8.split, %if.then6.i59
   %phi.call5 = phi i8* [ %call.i653, %if.then8.split ], [ %call.i654, %if.then6.i59 ]
   %ref.tmp9.sroa.22.0 = phi i8* [ null, %if.then8.split ], [ %add.ptr.i57, %if.then6.i59 ]
-  %call.i68 = tail call i8* @halide_string_to_string(i8* %phi.call5, i8* %ref.tmp9.sroa.22.0, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.14.50, i32 0, i32 0)) #13
+  %call.i68 = tail call i8* @halide_string_to_string(i8* %phi.call5, i8* %ref.tmp9.sroa.22.0, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.14.50, i32 0, i32 0)) #15
   %conv.i71 = sext i32 %max_touched to i64
-  %call.i72 = tail call i8* @halide_int64_to_string(i8* %call.i68, i8* %ref.tmp9.sroa.22.0, i64 %conv.i71, i32 1) #13
-  %call.i75 = tail call i8* @halide_string_to_string(i8* %call.i72, i8* %ref.tmp9.sroa.22.0, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.17.53, i32 0, i32 0)) #13
+  %call.i72 = tail call i8* @halide_int64_to_string(i8* %call.i68, i8* %ref.tmp9.sroa.22.0, i64 %conv.i71, i32 1) #15
+  %call.i75 = tail call i8* @halide_string_to_string(i8* %call.i72, i8* %ref.tmp9.sroa.22.0, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.17.53, i32 0, i32 0)) #15
   %conv.i78 = sext i32 %max_valid to i64
-  %call.i79 = tail call i8* @halide_int64_to_string(i8* %call.i75, i8* %ref.tmp9.sroa.22.0, i64 %conv.i78, i32 1) #13
-  %call.i82 = tail call i8* @halide_string_to_string(i8* %call.i79, i8* %ref.tmp9.sroa.22.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.16.52, i32 0, i32 0)) #13
+  %call.i79 = tail call i8* @halide_int64_to_string(i8* %call.i75, i8* %ref.tmp9.sroa.22.0, i64 %conv.i78, i32 1) #15
+  %call.i82 = tail call i8* @halide_string_to_string(i8* %call.i79, i8* %ref.tmp9.sroa.22.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.16.52, i32 0, i32 0)) #15
   %conv.i85 = sext i32 %dimension to i64
-  %call.i86 = tail call i8* @halide_int64_to_string(i8* %call.i82, i8* %ref.tmp9.sroa.22.0, i64 %conv.i85, i32 1) #13
+  %call.i86 = tail call i8* @halide_int64_to_string(i8* %call.i82, i8* %ref.tmp9.sroa.22.0, i64 %conv.i85, i32 1) #15
   br i1 %tobool.not.i56, label %if.then.i90, label %if.else.i101
 
 if.then.i90:                                      ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit62
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %if.end17.sink.split
 
 if.else.i101:                                     ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit62
@@ -4769,13 +4769,13 @@ if.else.i101:                                     ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i97 = sub i32 1, %sub.ptr.rhs.cast.i.i96
   %add.i.i98 = add i32 %sub.ptr.sub.i.i97, %sub.ptr.lhs.cast.i.i95
   %conv.i.i99 = sext i32 %add.i.i98 to i64
-  %call.i.i100 = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i53, i64 %conv.i.i99) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i53) #13
+  %call.i.i100 = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i53, i64 %conv.i.i99) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i53) #15
   br label %if.end17.sink.split
 
 if.end17.sink.split:                              ; preds = %if.else.i101, %if.then.i90, %if.else.i, %if.then.i
   %call.i53.sink = phi i8* [ %call.i, %if.else.i ], [ null, %if.then.i ], [ %call.i53, %if.else.i101 ], [ null, %if.then.i90 ]
-  tail call void @free(i8* %call.i53.sink) #13
+  tail call void @free(i8* %call.i53.sink) #15
   br label %if.end17
 
 if.end17:                                         ; preds = %if.end17.sink.split, %if.else
@@ -4785,32 +4785,32 @@ if.end17:                                         ; preds = %if.end17.sink.split
 ; Function Attrs: nounwind
 define weak i32 @halide_error_buffer_allocation_too_large(i8* %user_context, i8* %buffer_name, i64 %allocation_size, i64 %max_size) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.18.54, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.18.54, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.18.54, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.18.54, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %buffer_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_uint64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %allocation_size, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([37 x i8], [37 x i8]* @.str.20.56, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_uint64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_size, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %buffer_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_uint64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %allocation_size, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([37 x i8], [37 x i8]* @.str.20.56, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_uint64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_size, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4819,47 +4819,47 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -5
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_buffer_extents_negative(i8* %user_context, i8* %buffer_name, i32 %dimension, i32 %extent) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i91 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.21.57, i32 0, i32 0)) #13
+  %call.i91 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.21.57, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i92 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.21.57, i32 0, i32 0)) #13
+  %call.i92 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.21.57, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i91, %entry.split ], [ %call.i92, %if.then6.i ]
   %ref.tmp.sroa.22.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i12 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.22.0, i8* %buffer_name) #13
-  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.22.58, i32 0, i32 0)) #13
+  %call.i12 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.22.0, i8* %buffer_name) #15
+  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.22.58, i32 0, i32 0)) #15
   %conv.i = sext i32 %dimension to i64
-  %call.i18 = tail call i8* @halide_int64_to_string(i8* %call.i15, i8* %ref.tmp.sroa.22.0, i64 %conv.i, i32 1) #13
-  %call.i21 = tail call i8* @halide_string_to_string(i8* %call.i18, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.23.59, i32 0, i32 0)) #13
+  %call.i18 = tail call i8* @halide_int64_to_string(i8* %call.i15, i8* %ref.tmp.sroa.22.0, i64 %conv.i, i32 1) #15
+  %call.i21 = tail call i8* @halide_string_to_string(i8* %call.i18, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.23.59, i32 0, i32 0)) #15
   %conv.i24 = sext i32 %extent to i64
-  %call.i25 = tail call i8* @halide_int64_to_string(i8* %call.i21, i8* %ref.tmp.sroa.22.0, i64 %conv.i24, i32 1) #13
-  %call.i28 = tail call i8* @halide_string_to_string(i8* %call.i25, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #13
+  %call.i25 = tail call i8* @halide_int64_to_string(i8* %call.i21, i8* %ref.tmp.sroa.22.0, i64 %conv.i24, i32 1) #15
+  %call.i28 = tail call i8* @halide_string_to_string(i8* %call.i25, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4868,44 +4868,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -28
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_buffer_extents_too_large(i8* %user_context, i8* %buffer_name, i64 %actual_size, i64 %max_size) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.24.60, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.24.60, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.24.60, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.24.60, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %buffer_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_int64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %actual_size, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([37 x i8], [37 x i8]* @.str.20.56, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_size, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %buffer_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_int64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %actual_size, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([37 x i8], [37 x i8]* @.str.20.56, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_size, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4914,12 +4914,12 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -6
 }
 
@@ -4930,46 +4930,46 @@ entry:
   %sub = add i32 %add, %required_extent
   %add1 = add i32 %constrained_min, -1
   %sub2 = add i32 %add1, %constrained_extent
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i231 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.25.61, i32 0, i32 0)) #13
+  %call.i231 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.25.61, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i232 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.25.61, i32 0, i32 0)) #13
+  %call.i232 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.25.61, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i231, %entry.split ], [ %call.i232, %if.then6.i ]
   %ref.tmp.sroa.38.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i26 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.38.0, i8* %buffer_name) #13
-  %call.i29 = tail call i8* @halide_string_to_string(i8* %call.i26, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([54 x i8], [54 x i8]* @.str.26.62, i32 0, i32 0)) #13
+  %call.i26 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.38.0, i8* %buffer_name) #15
+  %call.i29 = tail call i8* @halide_string_to_string(i8* %call.i26, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([54 x i8], [54 x i8]* @.str.26.62, i32 0, i32 0)) #15
   %conv.i = sext i32 %dimension to i64
-  %call.i32 = tail call i8* @halide_int64_to_string(i8* %call.i29, i8* %ref.tmp.sroa.38.0, i64 %conv.i, i32 1) #13
-  %call.i35 = tail call i8* @halide_string_to_string(i8* %call.i32, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.27.63, i32 0, i32 0)) #13
-  %call.i38 = tail call i8* @halide_string_to_string(i8* %call.i35, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.28.64, i32 0, i32 0)) #13
+  %call.i32 = tail call i8* @halide_int64_to_string(i8* %call.i29, i8* %ref.tmp.sroa.38.0, i64 %conv.i, i32 1) #15
+  %call.i35 = tail call i8* @halide_string_to_string(i8* %call.i32, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.27.63, i32 0, i32 0)) #15
+  %call.i38 = tail call i8* @halide_string_to_string(i8* %call.i35, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.28.64, i32 0, i32 0)) #15
   %conv.i41 = sext i32 %required_min to i64
-  %call.i42 = tail call i8* @halide_int64_to_string(i8* %call.i38, i8* %ref.tmp.sroa.38.0, i64 %conv.i41, i32 1) #13
-  %call.i45 = tail call i8* @halide_string_to_string(i8* %call.i42, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #13
+  %call.i42 = tail call i8* @halide_int64_to_string(i8* %call.i38, i8* %ref.tmp.sroa.38.0, i64 %conv.i41, i32 1) #15
+  %call.i45 = tail call i8* @halide_string_to_string(i8* %call.i42, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #15
   %conv.i48 = sext i32 %sub to i64
-  %call.i49 = tail call i8* @halide_int64_to_string(i8* %call.i45, i8* %ref.tmp.sroa.38.0, i64 %conv.i48, i32 1) #13
-  %call.i52 = tail call i8* @halide_string_to_string(i8* %call.i49, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.27.63, i32 0, i32 0)) #13
-  %call.i55 = tail call i8* @halide_string_to_string(i8* %call.i52, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.29.65, i32 0, i32 0)) #13
+  %call.i49 = tail call i8* @halide_int64_to_string(i8* %call.i45, i8* %ref.tmp.sroa.38.0, i64 %conv.i48, i32 1) #15
+  %call.i52 = tail call i8* @halide_string_to_string(i8* %call.i49, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.27.63, i32 0, i32 0)) #15
+  %call.i55 = tail call i8* @halide_string_to_string(i8* %call.i52, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.29.65, i32 0, i32 0)) #15
   %conv.i58 = sext i32 %constrained_min to i64
-  %call.i59 = tail call i8* @halide_int64_to_string(i8* %call.i55, i8* %ref.tmp.sroa.38.0, i64 %conv.i58, i32 1) #13
-  %call.i62 = tail call i8* @halide_string_to_string(i8* %call.i59, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #13
+  %call.i59 = tail call i8* @halide_int64_to_string(i8* %call.i55, i8* %ref.tmp.sroa.38.0, i64 %conv.i58, i32 1) #15
+  %call.i62 = tail call i8* @halide_string_to_string(i8* %call.i59, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.6.42, i32 0, i32 0)) #15
   %conv.i65 = sext i32 %sub2 to i64
-  %call.i66 = tail call i8* @halide_int64_to_string(i8* %call.i62, i8* %ref.tmp.sroa.38.0, i64 %conv.i65, i32 1) #13
-  %call.i69 = tail call i8* @halide_string_to_string(i8* %call.i66, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #13
+  %call.i66 = tail call i8* @halide_int64_to_string(i8* %call.i62, i8* %ref.tmp.sroa.38.0, i64 %conv.i65, i32 1) #15
+  %call.i69 = tail call i8* @halide_string_to_string(i8* %call.i66, i8* %ref.tmp.sroa.38.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -4978,49 +4978,49 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -7
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_constraint_violated(i8* %user_context, i8* %var, i32 %val, i8* %constrained_var, i32 %constrained_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i111 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.31.67, i32 0, i32 0)) #13
+  %call.i111 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.31.67, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i112 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.31.67, i32 0, i32 0)) #13
+  %call.i112 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.31.67, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i111, %entry.split ], [ %call.i112, %if.then6.i ]
   %ref.tmp.sroa.26.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.26.0, i8* %var) #13
-  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.32.68, i32 0, i32 0)) #13
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.26.0, i8* %var) #15
+  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.32.68, i32 0, i32 0)) #15
   %conv.i = sext i32 %val to i64
-  %call.i20 = tail call i8* @halide_int64_to_string(i8* %call.i17, i8* %ref.tmp.sroa.26.0, i64 %conv.i, i32 1) #13
-  %call.i23 = tail call i8* @halide_string_to_string(i8* %call.i20, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.33.69, i32 0, i32 0)) #13
-  %call.i26 = tail call i8* @halide_string_to_string(i8* %call.i23, i8* %ref.tmp.sroa.26.0, i8* %constrained_var) #13
-  %call.i29 = tail call i8* @halide_string_to_string(i8* %call.i26, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.32.68, i32 0, i32 0)) #13
+  %call.i20 = tail call i8* @halide_int64_to_string(i8* %call.i17, i8* %ref.tmp.sroa.26.0, i64 %conv.i, i32 1) #15
+  %call.i23 = tail call i8* @halide_string_to_string(i8* %call.i20, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.33.69, i32 0, i32 0)) #15
+  %call.i26 = tail call i8* @halide_string_to_string(i8* %call.i23, i8* %ref.tmp.sroa.26.0, i8* %constrained_var) #15
+  %call.i29 = tail call i8* @halide_string_to_string(i8* %call.i26, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.32.68, i32 0, i32 0)) #15
   %conv.i32 = sext i32 %constrained_val to i64
-  %call.i33 = tail call i8* @halide_int64_to_string(i8* %call.i29, i8* %ref.tmp.sroa.26.0, i64 %conv.i32, i32 1) #13
-  %call.i36 = tail call i8* @halide_string_to_string(i8* %call.i33, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #13
+  %call.i33 = tail call i8* @halide_int64_to_string(i8* %call.i29, i8* %ref.tmp.sroa.26.0, i64 %conv.i32, i32 1) #15
+  %call.i36 = tail call i8* @halide_string_to_string(i8* %call.i33, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.8.44, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5029,44 +5029,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -8
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_param_too_small_i64(i8* %user_context, i8* %param_name, i64 %val, i64 %min_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_int64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.35.71, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %min_val, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_int64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.35.71, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %min_val, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5075,44 +5075,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -9
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_param_too_small_u64(i8* %user_context, i8* %param_name, i64 %val, i64 %min_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_uint64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.35.71, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_uint64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %min_val, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_uint64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.35.71, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_uint64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %min_val, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5121,44 +5121,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -9
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_param_too_small_f64(i8* %user_context, i8* %param_name, double %val, double %min_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_double_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, double %val, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.35.71, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_double_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, double %min_val, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_double_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, double %val, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.35.71, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_double_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, double %min_val, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5167,44 +5167,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -9
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_param_too_large_i64(i8* %user_context, i8* %param_name, i64 %val, i64 %max_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_int64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.36.72, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_val, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_int64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.36.72, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_val, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5213,44 +5213,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -10
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_param_too_large_u64(i8* %user_context, i8* %param_name, i64 %val, i64 %max_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_uint64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.36.72, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_uint64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_val, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_uint64_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i64 %val, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.36.72, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_uint64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %max_val, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5259,44 +5259,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -10
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_param_too_large_f64(i8* %user_context, i8* %param_name, double %val, double %max_val) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.34.70, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_double_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, double %val, i32 1) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.36.72, i32 0, i32 0)) #13
-  %call.i23 = tail call i8* @halide_double_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, double %max_val, i32 1) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %param_name) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.19.55, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_double_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, double %val, i32 1) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.36.72, i32 0, i32 0)) #15
+  %call.i23 = tail call i8* @halide_double_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, double %max_val, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5305,48 +5305,48 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -10
 }
 
 ; Function Attrs: nounwind mustprogress
 define weak i32 @halide_error_out_of_memory(i8* %user_context) local_unnamed_addr #0 {
 entry:
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([47 x i8], [47 x i8]* @.str.37, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([47 x i8], [47 x i8]* @.str.37, i32 0, i32 0)) #15
   ret i32 -11
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_buffer_argument_is_null(i8* %user_context, i8* %buffer_name) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i51 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.38, i32 0, i32 0)) #13
+  %call.i51 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.38, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i52 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.38, i32 0, i32 0)) #13
+  %call.i52 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.38, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i51, %entry.split ], [ %call.i52, %if.then6.i ]
   %ref.tmp.sroa.14.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i8 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.14.0, i8* %buffer_name) #13
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %call.i8, i8* %ref.tmp.sroa.14.0, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.39, i32 0, i32 0)) #13
+  %call.i8 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.14.0, i8* %buffer_name) #15
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %call.i8, i8* %ref.tmp.sroa.14.0, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.39, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5355,45 +5355,45 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -12
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_debug_to_file_failed(i8* %user_context, i8* %func, i8* %filename, i32 %error_code) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([25 x i8], [25 x i8]* @.str.40, i32 0, i32 0)) #13
+  %call.i81 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([25 x i8], [25 x i8]* @.str.40, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([25 x i8], [25 x i8]* @.str.40, i32 0, i32 0)) #13
+  %call.i82 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([25 x i8], [25 x i8]* @.str.40, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i81, %entry.split ], [ %call.i82, %if.then6.i ]
   %ref.tmp.sroa.20.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %func) #13
-  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.41.73, i32 0, i32 0)) #13
-  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i8* %filename) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.42, i32 0, i32 0)) #13
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.20.0, i8* %func) #15
+  %call.i14 = tail call i8* @halide_string_to_string(i8* %call.i11, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.41.73, i32 0, i32 0)) #15
+  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.20.0, i8* %filename) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.20.0, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.42, i32 0, i32 0)) #15
   %conv.i = sext i32 %error_code to i64
-  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %conv.i, i32 1) #13
+  %call.i23 = tail call i8* @halide_int64_to_string(i8* %call.i20, i8* %ref.tmp.sroa.20.0, i64 %conv.i, i32 1) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5402,44 +5402,44 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -13
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_unaligned_host_ptr(i8* %user_context, i8* %func, i32 %alignment) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i71 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #13
+  %call.i71 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i72 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #13
+  %call.i72 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i71, %entry.split ], [ %call.i72, %if.then6.i ]
   %ref.tmp.sroa.18.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i10 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.18.0, i8* %func) #13
-  %call.i13 = tail call i8* @halide_string_to_string(i8* %call.i10, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.44, i32 0, i32 0)) #13
+  %call.i10 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.18.0, i8* %func) #15
+  %call.i13 = tail call i8* @halide_string_to_string(i8* %call.i10, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.44, i32 0, i32 0)) #15
   %conv.i = sext i32 %alignment to i64
-  %call.i16 = tail call i8* @halide_int64_to_string(i8* %call.i13, i8* %ref.tmp.sroa.18.0, i64 %conv.i, i32 1) #13
-  %call.i19 = tail call i8* @halide_string_to_string(i8* %call.i16, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.45, i32 0, i32 0)) #13
+  %call.i16 = tail call i8* @halide_int64_to_string(i8* %call.i13, i8* %ref.tmp.sroa.18.0, i64 %conv.i, i32 1) #15
+  %call.i19 = tail call i8* @halide_string_to_string(i8* %call.i16, i8* %ref.tmp.sroa.18.0, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.45, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5448,42 +5448,42 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -24
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_device_dirty_with_no_device_support(i8* %user_context, i8* %func) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i61 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.46, i32 0, i32 0)) #13
+  %call.i61 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.46, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i62 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.46, i32 0, i32 0)) #13
+  %call.i62 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.46, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i61, %entry.split ], [ %call.i62, %if.then6.i ]
   %ref.tmp.sroa.16.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i9 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %func) #13
-  %call.i12 = tail call i8* @halide_string_to_string(i8* %call.i9, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([53 x i8], [53 x i8]* @.str.47, i32 0, i32 0)) #13
-  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.48, i32 0, i32 0)) #13
+  %call.i9 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %func) #15
+  %call.i12 = tail call i8* @halide_string_to_string(i8* %call.i9, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([53 x i8], [53 x i8]* @.str.47, i32 0, i32 0)) #15
+  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.48, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5492,41 +5492,41 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -44
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_host_is_null(i8* %user_context, i8* %func) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i51 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #13
+  %call.i51 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i52 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #13
+  %call.i52 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.43, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i51, %entry.split ], [ %call.i52, %if.then6.i ]
   %ref.tmp.sroa.14.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i8 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.14.0, i8* %func) #13
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %call.i8, i8* %ref.tmp.sroa.14.0, i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.49, i32 0, i32 0)) #13
+  %call.i8 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.14.0, i8* %func) #15
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %call.i8, i8* %ref.tmp.sroa.14.0, i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.49, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5535,45 +5535,45 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -34
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_bad_fold(i8* %user_context, i8* %func_name, i8* %var_name, i8* %loop_name) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i91 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.50, i32 0, i32 0)) #13
+  %call.i91 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.50, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i92 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.50, i32 0, i32 0)) #13
+  %call.i92 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.50, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i91, %entry.split ], [ %call.i92, %if.then6.i ]
   %ref.tmp.sroa.22.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i12 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.22.0, i8* %var_name) #13
-  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #13
-  %call.i18 = tail call i8* @halide_string_to_string(i8* %call.i15, i8* %ref.tmp.sroa.22.0, i8* %func_name) #13
-  %call.i21 = tail call i8* @halide_string_to_string(i8* %call.i18, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.52, i32 0, i32 0)) #13
-  %call.i24 = tail call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.22.0, i8* %loop_name) #13
-  %call.i27 = tail call i8* @halide_string_to_string(i8* %call.i24, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #13
+  %call.i12 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.22.0, i8* %var_name) #15
+  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #15
+  %call.i18 = tail call i8* @halide_string_to_string(i8* %call.i15, i8* %ref.tmp.sroa.22.0, i8* %func_name) #15
+  %call.i21 = tail call i8* @halide_string_to_string(i8* %call.i18, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.52, i32 0, i32 0)) #15
+  %call.i24 = tail call i8* @halide_string_to_string(i8* %call.i21, i8* %ref.tmp.sroa.22.0, i8* %loop_name) #15
+  %call.i27 = tail call i8* @halide_string_to_string(i8* %call.i24, i8* %ref.tmp.sroa.22.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5582,12 +5582,12 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -25
 }
 
@@ -5604,49 +5604,49 @@ lor.lhs.false:                                    ; preds = %entry
   br i1 %cmp2, label %if.then, label %if.else
 
 if.then:                                          ; preds = %lor.lhs.false, %entry
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.split, label %if.then6.i
 
 if.then.split:                                    ; preds = %if.then
-  %call.i521 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #13
+  %call.i521 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %if.then
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i522 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #13
+  %call.i522 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %if.then.split, %if.then6.i
   %phi.call = phi i8* [ %call.i521, %if.then.split ], [ %call.i522, %if.then6.i ]
   %ref.tmp.sroa.36.0 = phi i8* [ null, %if.then.split ], [ %add.ptr.i, %if.then6.i ]
   %conv.i = sext i32 %dim to i64
-  %call.i55 = tail call i8* @halide_int64_to_string(i8* %phi.call, i8* %ref.tmp.sroa.36.0, i64 %conv.i, i32 1) #13
-  %call.i58 = tail call i8* @halide_string_to_string(i8* %call.i55, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #13
-  %call.i61 = tail call i8* @halide_string_to_string(i8* %call.i58, i8* %ref.tmp.sroa.36.0, i8* %func_name) #13
-  %call.i64 = tail call i8* @halide_string_to_string(i8* %call.i61, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.54, i32 0, i32 0)) #13
+  %call.i55 = tail call i8* @halide_int64_to_string(i8* %phi.call, i8* %ref.tmp.sroa.36.0, i64 %conv.i, i32 1) #15
+  %call.i58 = tail call i8* @halide_string_to_string(i8* %call.i55, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #15
+  %call.i61 = tail call i8* @halide_string_to_string(i8* %call.i58, i8* %ref.tmp.sroa.36.0, i8* %func_name) #15
+  %call.i64 = tail call i8* @halide_string_to_string(i8* %call.i61, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.54, i32 0, i32 0)) #15
   %conv.i67 = sext i32 %min to i64
-  %call.i68 = tail call i8* @halide_int64_to_string(i8* %call.i64, i8* %ref.tmp.sroa.36.0, i64 %conv.i67, i32 1) #13
-  %call.i71 = tail call i8* @halide_string_to_string(i8* %call.i68, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #13
+  %call.i68 = tail call i8* @halide_int64_to_string(i8* %call.i64, i8* %ref.tmp.sroa.36.0, i64 %conv.i67, i32 1) #15
+  %call.i71 = tail call i8* @halide_string_to_string(i8* %call.i68, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #15
   %add9 = add nsw i32 %extent, %min
   %sub = add nsw i32 %add9, -1
   %conv.i74 = sext i32 %sub to i64
-  %call.i75 = tail call i8* @halide_int64_to_string(i8* %call.i71, i8* %ref.tmp.sroa.36.0, i64 %conv.i74, i32 1) #13
-  %call.i78 = tail call i8* @halide_string_to_string(i8* %call.i75, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.56, i32 0, i32 0)) #13
-  %call.i81 = tail call i8* @halide_string_to_string(i8* %call.i78, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([47 x i8], [47 x i8]* @.str.57, i32 0, i32 0)) #13
+  %call.i75 = tail call i8* @halide_int64_to_string(i8* %call.i71, i8* %ref.tmp.sroa.36.0, i64 %conv.i74, i32 1) #15
+  %call.i78 = tail call i8* @halide_string_to_string(i8* %call.i75, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.56, i32 0, i32 0)) #15
+  %call.i81 = tail call i8* @halide_string_to_string(i8* %call.i78, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([47 x i8], [47 x i8]* @.str.57, i32 0, i32 0)) #15
   %conv.i84 = sext i32 %valid_min to i64
-  %call.i85 = tail call i8* @halide_int64_to_string(i8* %call.i81, i8* %ref.tmp.sroa.36.0, i64 %conv.i84, i32 1) #13
-  %call.i88 = tail call i8* @halide_string_to_string(i8* %call.i85, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #13
+  %call.i85 = tail call i8* @halide_int64_to_string(i8* %call.i81, i8* %ref.tmp.sroa.36.0, i64 %conv.i84, i32 1) #15
+  %call.i88 = tail call i8* @halide_string_to_string(i8* %call.i85, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #15
   %add15 = add nsw i32 %fold_factor, %valid_min
   %sub16 = add nsw i32 %add15, -1
   %conv.i91 = sext i32 %sub16 to i64
-  %call.i92 = tail call i8* @halide_int64_to_string(i8* %call.i88, i8* %ref.tmp.sroa.36.0, i64 %conv.i91, i32 1) #13
-  %call.i95 = tail call i8* @halide_string_to_string(i8* %call.i92, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.58.74, i32 0, i32 0)) #13
+  %call.i92 = tail call i8* @halide_int64_to_string(i8* %call.i88, i8* %ref.tmp.sroa.36.0, i64 %conv.i91, i32 1) #15
+  %call.i95 = tail call i8* @halide_string_to_string(i8* %call.i92, i8* %ref.tmp.sroa.36.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.58.74, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %if.end
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5655,49 +5655,49 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %if.end
 
 if.else:                                          ; preds = %lor.lhs.false
-  %call.i101 = tail call i8* @malloc(i32 1024) #13
+  %call.i101 = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i104 = icmp eq i8* %call.i101, null
   br i1 %tobool.not.i104, label %if.else.split, label %if.then6.i107
 
 if.else.split:                                    ; preds = %if.else
-  %call.i1133 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #13
+  %call.i1133 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit110
 
 if.then6.i107:                                    ; preds = %if.else
   %add.ptr.i105 = getelementptr inbounds i8, i8* %call.i101, i32 1023
   store i8 0, i8* %add.ptr.i105, align 1, !tbaa !22
-  %call.i1134 = tail call i8* @halide_string_to_string(i8* nonnull %call.i101, i8* nonnull %add.ptr.i105, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #13
+  %call.i1134 = tail call i8* @halide_string_to_string(i8* nonnull %call.i101, i8* nonnull %add.ptr.i105, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.53, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit110
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit110: ; preds = %if.else.split, %if.then6.i107
   %phi.call5 = phi i8* [ %call.i1133, %if.else.split ], [ %call.i1134, %if.then6.i107 ]
   %ref.tmp19.sroa.34.0 = phi i8* [ null, %if.else.split ], [ %add.ptr.i105, %if.then6.i107 ]
   %conv.i116 = sext i32 %dim to i64
-  %call.i117 = tail call i8* @halide_int64_to_string(i8* %phi.call5, i8* %ref.tmp19.sroa.34.0, i64 %conv.i116, i32 1) #13
-  %call.i120 = tail call i8* @halide_string_to_string(i8* %call.i117, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #13
-  %call.i123 = tail call i8* @halide_string_to_string(i8* %call.i120, i8* %ref.tmp19.sroa.34.0, i8* %func_name) #13
-  %call.i126 = tail call i8* @halide_string_to_string(i8* %call.i123, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.54, i32 0, i32 0)) #13
+  %call.i117 = tail call i8* @halide_int64_to_string(i8* %phi.call5, i8* %ref.tmp19.sroa.34.0, i64 %conv.i116, i32 1) #15
+  %call.i120 = tail call i8* @halide_string_to_string(i8* %call.i117, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #15
+  %call.i123 = tail call i8* @halide_string_to_string(i8* %call.i120, i8* %ref.tmp19.sroa.34.0, i8* %func_name) #15
+  %call.i126 = tail call i8* @halide_string_to_string(i8* %call.i123, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.54, i32 0, i32 0)) #15
   %conv.i129 = sext i32 %min to i64
-  %call.i130 = tail call i8* @halide_int64_to_string(i8* %call.i126, i8* %ref.tmp19.sroa.34.0, i64 %conv.i129, i32 1) #13
-  %call.i133 = tail call i8* @halide_string_to_string(i8* %call.i130, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #13
+  %call.i130 = tail call i8* @halide_int64_to_string(i8* %call.i126, i8* %ref.tmp19.sroa.34.0, i64 %conv.i129, i32 1) #15
+  %call.i133 = tail call i8* @halide_string_to_string(i8* %call.i130, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.55, i32 0, i32 0)) #15
   %sub28 = add nsw i32 %add, -1
   %conv.i136 = sext i32 %sub28 to i64
-  %call.i137 = tail call i8* @halide_int64_to_string(i8* %call.i133, i8* %ref.tmp19.sroa.34.0, i64 %conv.i136, i32 1) #13
-  %call.i140 = tail call i8* @halide_string_to_string(i8* %call.i137, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.56, i32 0, i32 0)) #13
-  %call.i143 = tail call i8* @halide_string_to_string(i8* %call.i140, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([47 x i8], [47 x i8]* @.str.59.75, i32 0, i32 0)) #13
-  %call.i146 = tail call i8* @halide_string_to_string(i8* %call.i143, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.60.76, i32 0, i32 0)) #13
+  %call.i137 = tail call i8* @halide_int64_to_string(i8* %call.i133, i8* %ref.tmp19.sroa.34.0, i64 %conv.i136, i32 1) #15
+  %call.i140 = tail call i8* @halide_string_to_string(i8* %call.i137, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.56, i32 0, i32 0)) #15
+  %call.i143 = tail call i8* @halide_string_to_string(i8* %call.i140, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([47 x i8], [47 x i8]* @.str.59.75, i32 0, i32 0)) #15
+  %call.i146 = tail call i8* @halide_string_to_string(i8* %call.i143, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.60.76, i32 0, i32 0)) #15
   %conv.i149 = sext i32 %fold_factor to i64
-  %call.i150 = tail call i8* @halide_int64_to_string(i8* %call.i146, i8* %ref.tmp19.sroa.34.0, i64 %conv.i149, i32 1) #13
-  %call.i153 = tail call i8* @halide_string_to_string(i8* %call.i150, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #13
+  %call.i150 = tail call i8* @halide_int64_to_string(i8* %call.i146, i8* %ref.tmp19.sroa.34.0, i64 %conv.i149, i32 1) #15
+  %call.i153 = tail call i8* @halide_string_to_string(i8* %call.i150, i8* %ref.tmp19.sroa.34.0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.30.66, i32 0, i32 0)) #15
   br i1 %tobool.not.i104, label %if.then.i157, label %if.else.i168
 
 if.then.i157:                                     ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit110
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %if.end
 
 if.else.i168:                                     ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit110
@@ -5706,52 +5706,52 @@ if.else.i168:                                     ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i164 = sub i32 1, %sub.ptr.rhs.cast.i.i163
   %add.i.i165 = add i32 %sub.ptr.sub.i.i164, %sub.ptr.lhs.cast.i.i162
   %conv.i.i166 = sext i32 %add.i.i165 to i64
-  %call.i.i167 = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i101, i64 %conv.i.i166) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i101) #13
+  %call.i.i167 = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i101, i64 %conv.i.i166) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i101) #15
   br label %if.end
 
 if.end:                                           ; preds = %if.else.i168, %if.then.i157, %if.else.i, %if.then.i
   %call.i101.sink = phi i8* [ %call.i, %if.else.i ], [ null, %if.then.i ], [ %call.i101, %if.else.i168 ], [ null, %if.then.i157 ]
-  tail call void @free(i8* %call.i101.sink) #13
+  tail call void @free(i8* %call.i101.sink) #15
   ret i32 -35
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_fold_factor_too_small(i8* %user_context, i8* %func_name, i8* %var_name, i32 %fold_factor, i8* %loop_name, i32 %required_extent) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i131 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.61.77, i32 0, i32 0)) #13
+  %call.i131 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.61.77, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i132 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.61.77, i32 0, i32 0)) #13
+  %call.i132 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.61.77, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i131, %entry.split ], [ %call.i132, %if.then6.i ]
   %ref.tmp.sroa.30.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
   %conv.i = sext i32 %fold_factor to i64
-  %call.i16 = tail call i8* @halide_int64_to_string(i8* %phi.call, i8* %ref.tmp.sroa.30.0, i64 %conv.i, i32 1) #13
-  %call.i19 = tail call i8* @halide_string_to_string(i8* %call.i16, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.62, i32 0, i32 0)) #13
-  %call.i22 = tail call i8* @halide_string_to_string(i8* %call.i19, i8* %ref.tmp.sroa.30.0, i8* %var_name) #13
-  %call.i25 = tail call i8* @halide_string_to_string(i8* %call.i22, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #13
-  %call.i28 = tail call i8* @halide_string_to_string(i8* %call.i25, i8* %ref.tmp.sroa.30.0, i8* %func_name) #13
-  %call.i31 = tail call i8* @halide_string_to_string(i8* %call.i28, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([61 x i8], [61 x i8]* @.str.63, i32 0, i32 0)) #13
-  %call.i34 = tail call i8* @halide_string_to_string(i8* %call.i31, i8* %ref.tmp.sroa.30.0, i8* %loop_name) #13
-  %call.i37 = tail call i8* @halide_string_to_string(i8* %call.i34, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.32.68, i32 0, i32 0)) #13
+  %call.i16 = tail call i8* @halide_int64_to_string(i8* %phi.call, i8* %ref.tmp.sroa.30.0, i64 %conv.i, i32 1) #15
+  %call.i19 = tail call i8* @halide_string_to_string(i8* %call.i16, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.62, i32 0, i32 0)) #15
+  %call.i22 = tail call i8* @halide_string_to_string(i8* %call.i19, i8* %ref.tmp.sroa.30.0, i8* %var_name) #15
+  %call.i25 = tail call i8* @halide_string_to_string(i8* %call.i22, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #15
+  %call.i28 = tail call i8* @halide_string_to_string(i8* %call.i25, i8* %ref.tmp.sroa.30.0, i8* %func_name) #15
+  %call.i31 = tail call i8* @halide_string_to_string(i8* %call.i28, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([61 x i8], [61 x i8]* @.str.63, i32 0, i32 0)) #15
+  %call.i34 = tail call i8* @halide_string_to_string(i8* %call.i31, i8* %ref.tmp.sroa.30.0, i8* %loop_name) #15
+  %call.i37 = tail call i8* @halide_string_to_string(i8* %call.i34, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.32.68, i32 0, i32 0)) #15
   %conv.i40 = sext i32 %required_extent to i64
-  %call.i41 = tail call i8* @halide_int64_to_string(i8* %call.i37, i8* %ref.tmp.sroa.30.0, i64 %conv.i40, i32 1) #13
-  %call.i44 = tail call i8* @halide_string_to_string(i8* %call.i41, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.64.78, i32 0, i32 0)) #13
+  %call.i41 = tail call i8* @halide_int64_to_string(i8* %call.i37, i8* %ref.tmp.sroa.30.0, i64 %conv.i40, i32 1) #15
+  %call.i44 = tail call i8* @halide_string_to_string(i8* %call.i41, i8* %ref.tmp.sroa.30.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.64.78, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5760,42 +5760,42 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -26
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_requirement_failed(i8* %user_context, i8* %condition, i8* %message) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i61 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.65, i32 0, i32 0)) #13
+  %call.i61 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.65, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i62 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.65, i32 0, i32 0)) #13
+  %call.i62 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.65, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i61, %entry.split ], [ %call.i62, %if.then6.i ]
   %ref.tmp.sroa.16.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i9 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %condition) #13
-  %call.i12 = tail call i8* @halide_string_to_string(i8* %call.i9, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.66, i32 0, i32 0)) #13
-  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.16.0, i8* %message) #13
+  %call.i9 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.16.0, i8* %condition) #15
+  %call.i12 = tail call i8* @halide_string_to_string(i8* %call.i9, i8* %ref.tmp.sroa.16.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.66, i32 0, i32 0)) #15
+  %call.i15 = tail call i8* @halide_string_to_string(i8* %call.i12, i8* %ref.tmp.sroa.16.0, i8* %message) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5804,163 +5804,163 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -27
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_specialize_fail(i8* %user_context, i8* %message) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i41 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([59 x i8], [59 x i8]* @.str.67, i32 0, i32 0)) #13
-  %call.i75 = tail call i8* @halide_string_to_string(i8* %call.i41, i8* null, i8* %message) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i41 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([59 x i8], [59 x i8]* @.str.67, i32 0, i32 0)) #15
+  %call.i75 = tail call i8* @halide_string_to_string(i8* %call.i41, i8* null, i8* %message) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i42 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([59 x i8], [59 x i8]* @.str.67, i32 0, i32 0)) #13
-  %call.i7 = tail call i8* @halide_string_to_string(i8* %call.i42, i8* nonnull %add.ptr.i, i8* %message) #13
+  %call.i42 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([59 x i8], [59 x i8]* @.str.67, i32 0, i32 0)) #15
+  %call.i7 = tail call i8* @halide_string_to_string(i8* %call.i42, i8* nonnull %add.ptr.i, i8* %message) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i7 to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -31
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_no_device_interface(i8* %user_context) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.68, i32 0, i32 0)) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.68, i32 0, i32 0)) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.68, i32 0, i32 0)) #13
+  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.68, i32 0, i32 0)) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i3 to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -19
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_device_interface_no_device(i8* %user_context) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([57 x i8], [57 x i8]* @.str.69, i32 0, i32 0)) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([57 x i8], [57 x i8]* @.str.69, i32 0, i32 0)) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([57 x i8], [57 x i8]* @.str.69, i32 0, i32 0)) #13
+  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([57 x i8], [57 x i8]* @.str.69, i32 0, i32 0)) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i3 to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -36
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_host_and_device_dirty(i8* %user_context) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.70, i32 0, i32 0)) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.70, i32 0, i32 0)) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.70, i32 0, i32 0)) #13
+  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.70, i32 0, i32 0)) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i3 to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -37
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_buffer_is_null(i8* %user_context, i8* %routine) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i51 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.71, i32 0, i32 0)) #13
+  %call.i51 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.71, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i52 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.71, i32 0, i32 0)) #13
+  %call.i52 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.71, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i51, %entry.split ], [ %call.i52, %if.then6.i ]
   %ref.tmp.sroa.14.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
-  %call.i8 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.14.0, i8* %routine) #13
-  %call.i11 = tail call i8* @halide_string_to_string(i8* %call.i8, i8* %ref.tmp.sroa.14.0, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.72, i32 0, i32 0)) #13
+  %call.i8 = tail call i8* @halide_string_to_string(i8* %phi.call, i8* %ref.tmp.sroa.14.0, i8* %routine) #15
+  %call.i11 = tail call i8* @halide_string_to_string(i8* %call.i8, i8* %ref.tmp.sroa.14.0, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.72, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -5969,49 +5969,49 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -38
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_storage_bound_too_small(i8* %user_context, i8* %func_name, i8* %var_name, i32 %provided_size, i32 %required_size) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %entry.split, label %if.then6.i
 
 entry.split:                                      ; preds = %entry
-  %call.i111 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.str.73, i32 0, i32 0)) #13
+  %call.i111 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.str.73, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 if.then6.i:                                       ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i112 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.str.73, i32 0, i32 0)) #13
+  %call.i112 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.str.73, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit: ; preds = %entry.split, %if.then6.i
   %phi.call = phi i8* [ %call.i111, %entry.split ], [ %call.i112, %if.then6.i ]
   %ref.tmp.sroa.26.0 = phi i8* [ null, %entry.split ], [ %add.ptr.i, %if.then6.i ]
   %conv.i = sext i32 %provided_size to i64
-  %call.i14 = tail call i8* @halide_int64_to_string(i8* %phi.call, i8* %ref.tmp.sroa.26.0, i64 %conv.i, i32 1) #13
-  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.62, i32 0, i32 0)) #13
-  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.26.0, i8* %var_name) #13
-  %call.i23 = tail call i8* @halide_string_to_string(i8* %call.i20, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #13
-  %call.i26 = tail call i8* @halide_string_to_string(i8* %call.i23, i8* %ref.tmp.sroa.26.0, i8* %func_name) #13
-  %call.i29 = tail call i8* @halide_string_to_string(i8* %call.i26, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str.74, i32 0, i32 0)) #13
+  %call.i14 = tail call i8* @halide_int64_to_string(i8* %phi.call, i8* %ref.tmp.sroa.26.0, i64 %conv.i, i32 1) #15
+  %call.i17 = tail call i8* @halide_string_to_string(i8* %call.i14, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.62, i32 0, i32 0)) #15
+  %call.i20 = tail call i8* @halide_string_to_string(i8* %call.i17, i8* %ref.tmp.sroa.26.0, i8* %var_name) #15
+  %call.i23 = tail call i8* @halide_string_to_string(i8* %call.i20, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.51, i32 0, i32 0)) #15
+  %call.i26 = tail call i8* @halide_string_to_string(i8* %call.i23, i8* %ref.tmp.sroa.26.0, i8* %func_name) #15
+  %call.i29 = tail call i8* @halide_string_to_string(i8* %call.i26, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str.74, i32 0, i32 0)) #15
   %conv.i32 = sext i32 %required_size to i64
-  %call.i33 = tail call i8* @halide_int64_to_string(i8* %call.i29, i8* %ref.tmp.sroa.26.0, i64 %conv.i32, i32 1) #13
-  %call.i36 = tail call i8* @halide_string_to_string(i8* %call.i33, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.64.78, i32 0, i32 0)) #13
+  %call.i33 = tail call i8* @halide_int64_to_string(i8* %call.i29, i8* %ref.tmp.sroa.26.0, i64 %conv.i32, i32 1) #15
+  %call.i36 = tail call i8* @halide_string_to_string(i8* %call.i33, i8* %ref.tmp.sroa.26.0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.64.78, i32 0, i32 0)) #15
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EEC2EPvPc.exit
@@ -6020,42 +6020,42 @@ if.else.i:                                        ; preds = %_ZN6Halide7Runtime8
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -45
 }
 
 ; Function Attrs: nounwind
 define weak i32 @halide_error_device_crop_failed(i8* %user_context) local_unnamed_addr #4 {
 entry:
-  %call.i = tail call i8* @malloc(i32 1024) #13
+  %call.i = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i = icmp eq i8* %call.i, null
   br i1 %tobool.not.i, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %entry
-  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([77 x i8], [77 x i8]* @.str.75, i32 0, i32 0)) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i316 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([77 x i8], [77 x i8]* @.str.75, i32 0, i32 0)) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %entry
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([77 x i8], [77 x i8]* @.str.75, i32 0, i32 0)) #13
+  %call.i3 = tail call i8* @halide_string_to_string(i8* nonnull %call.i, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([77 x i8], [77 x i8]* @.str.75, i32 0, i32 0)) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i3 to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i) #13
+  tail call void @free(i8* %call.i) #15
   ret i32 -41
 }
 
@@ -6092,35 +6092,35 @@ entry:
 ; Function Attrs: nounwind
 define weak i32 @halide_qurt_hvx_lock(i8* %user_context) local_unnamed_addr #4 {
 entry:
-  %call = tail call i32 @qurt_hvx_lock(i32 1) #13
+  %call = tail call i32 @qurt_hvx_lock(i32 1) #15
   %cmp.not = icmp eq i32 %call, 0
   br i1 %cmp.not, label %cleanup, label %if.then
 
 if.then:                                          ; preds = %entry
-  %call.i17 = tail call i8* @malloc(i32 1024) #13
+  %call.i17 = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i19 = icmp eq i8* %call.i17, null
   br i1 %tobool.not.i19, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %if.then
-  %call.i30 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.4.91, i32 0, i32 0)) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i30 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.4.91, i32 0, i32 0)) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %if.then
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i17, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i = tail call i8* @halide_string_to_string(i8* nonnull %call.i17, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.4.91, i32 0, i32 0)) #13
+  %call.i = tail call i8* @halide_string_to_string(i8* nonnull %call.i17, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.4.91, i32 0, i32 0)) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i17 to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i17, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i17) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i17, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i17) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i17) #13
+  tail call void @free(i8* %call.i17) #15
   br label %cleanup
 
 cleanup:                                          ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit, %entry
@@ -6133,35 +6133,35 @@ declare i32 @qurt_hvx_lock(i32) local_unnamed_addr #1
 ; Function Attrs: nounwind
 define weak i32 @halide_qurt_hvx_unlock(i8* %user_context) local_unnamed_addr #4 {
 entry:
-  %call = tail call i32 @qurt_hvx_unlock() #13
+  %call = tail call i32 @qurt_hvx_unlock() #15
   %cmp.not = icmp eq i32 %call, 0
   br i1 %cmp.not, label %cleanup, label %if.then
 
 if.then:                                          ; preds = %entry
-  %call.i13 = tail call i8* @malloc(i32 1024) #13
+  %call.i13 = tail call i8* @malloc(i32 1024) #15
   %tobool.not.i15 = icmp eq i8* %call.i13, null
   br i1 %tobool.not.i15, label %if.then.i, label %if.else.i
 
 if.then.i:                                        ; preds = %if.then
-  %call.i26 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.6.93, i32 0, i32 0)) #13
-  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #13
+  %call.i26 = tail call i8* @halide_string_to_string(i8* null, i8* null, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.6.93, i32 0, i32 0)) #15
+  tail call void @halide_error(i8* %user_context, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.7.92, i32 0, i32 0)) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 if.else.i:                                        ; preds = %if.then
   %add.ptr.i = getelementptr inbounds i8, i8* %call.i13, i32 1023
   store i8 0, i8* %add.ptr.i, align 1, !tbaa !22
-  %call.i = tail call i8* @halide_string_to_string(i8* nonnull %call.i13, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.6.93, i32 0, i32 0)) #13
+  %call.i = tail call i8* @halide_string_to_string(i8* nonnull %call.i13, i8* nonnull %add.ptr.i, i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.6.93, i32 0, i32 0)) #15
   %sub.ptr.lhs.cast.i.i = ptrtoint i8* %call.i to i32
   %sub.ptr.rhs.cast.i.i = ptrtoint i8* %call.i13 to i32
   %sub.ptr.sub.i.i = sub i32 1, %sub.ptr.rhs.cast.i.i
   %add.i.i = add i32 %sub.ptr.sub.i.i, %sub.ptr.lhs.cast.i.i
   %conv.i.i = sext i32 %add.i.i to i64
-  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i13, i64 %conv.i.i) #13
-  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i13) #13
+  %call.i.i = tail call i32 @halide_msan_annotate_memory_is_initialized(i8* %user_context, i8* nonnull %call.i13, i64 %conv.i.i) #15
+  tail call void @halide_error(i8* %user_context, i8* nonnull %call.i13) #15
   br label %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit
 
 _ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit: ; preds = %if.else.i, %if.then.i
-  tail call void @free(i8* %call.i13) #13
+  tail call void @free(i8* %call.i13) #15
   br label %cleanup
 
 cleanup:                                          ; preds = %_ZN6Halide7Runtime8Internal12_GLOBAL__N_17PrinterILNS1_11PrinterTypeE1ELy1024EED2Ev.exit, %entry
@@ -6174,7 +6174,7 @@ declare i32 @qurt_hvx_unlock() local_unnamed_addr #1
 ; Function Attrs: nounwind mustprogress
 define weak void @halide_qurt_hvx_unlock_as_destructor(i8* %user_context, i8* %0) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 @halide_qurt_hvx_unlock(i8* %user_context) #14
+  %call = tail call i32 @halide_qurt_hvx_unlock(i8* %user_context) #16
   ret void
 }
 
@@ -6185,15 +6185,12 @@ declare <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32>) #9
 declare <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32>) #9
 
 ; Function Attrs: nounwind readnone
-declare <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32>, <32 x i32>) #9
-
-; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32>, <32 x i32>) #9
+declare <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind mustprogress
 define weak i8* @halide_vtcm_malloc(i8* %user_context, i32 %size) local_unnamed_addr #0 {
 entry:
-  %call = tail call i8* @HAP_request_VTCM(i32 %size, i32 1) #13
+  %call = tail call i8* @HAP_request_VTCM(i32 %size, i32 1) #15
   ret i8* %call
 }
 
@@ -6202,7 +6199,7 @@ declare i8* @HAP_request_VTCM(i32, i32) local_unnamed_addr #1
 ; Function Attrs: nounwind mustprogress
 define weak void @halide_vtcm_free(i8* %user_context, i8* %addr) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 @HAP_release_VTCM(i8* %addr) #13
+  %call = tail call i32 @HAP_release_VTCM(i8* %addr) #15
   ret void
 }
 
@@ -6212,27 +6209,27 @@ declare i32 @HAP_release_VTCM(i8*) local_unnamed_addr #1
 define weak i32 @halide_default_can_use_target_features(i32 %count, i64* %features) #4 {
 entry:
   %tmp = alloca %"struct.Halide::Runtime::Internal::CpuFeatures", align 8
-  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal36halide_cpu_features_initialized_lockE) #13
+  tail call void @halide_mutex_lock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal36halide_cpu_features_initialized_lockE) #15
   %0 = load i8, i8* @_ZN6Halide7Runtime8Internal31halide_cpu_features_initializedE, align 1, !tbaa !18, !range !21
   %tobool.not = icmp eq i8 %0, 0
   br i1 %tobool.not, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   %1 = bitcast %"struct.Halide::Runtime::Internal::CpuFeatures"* %tmp to i8*
-  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %1) #15
-  call void @_ZN6Halide7Runtime8Internal23halide_get_cpu_featuresEv(%"struct.Halide::Runtime::Internal::CpuFeatures"* nonnull sret(%"struct.Halide::Runtime::Internal::CpuFeatures") align 8 %tmp) #13
-  %call = call i8* @memcpy(i8* bitcast ([4 x i64]* @_ZN6Halide7Runtime8Internal27halide_cpu_features_storageE to i8*), i8* nonnull %1, i32 32) #13
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %1) #12
+  call void @_ZN6Halide7Runtime8Internal23halide_get_cpu_featuresEv(%"struct.Halide::Runtime::Internal::CpuFeatures"* nonnull sret(%"struct.Halide::Runtime::Internal::CpuFeatures") align 8 %tmp) #15
+  %call = call i8* @memcpy(i8* bitcast ([4 x i64]* @_ZN6Halide7Runtime8Internal27halide_cpu_features_storageE to i8*), i8* nonnull %1, i32 32) #15
   store i8 1, i8* @_ZN6Halide7Runtime8Internal31halide_cpu_features_initializedE, align 1, !tbaa !18
-  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %1) #15
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %1) #12
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %entry
-  call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal36halide_cpu_features_initialized_lockE) #13
+  call void @halide_mutex_unlock(%struct.halide_mutex* nonnull @_ZN6Halide7Runtime8Internal36halide_cpu_features_initialized_lockE) #15
   %cmp.not = icmp eq i32 %count, 2
   br i1 %cmp.not, label %if.end2, label %if.then1
 
 if.then1:                                         ; preds = %if.end
-  call void @halide_error(i8* null, i8* getelementptr inbounds ([81 x i8], [81 x i8]* @.str.94, i32 0, i32 0)) #13
+  call void @halide_error(i8* null, i8* getelementptr inbounds ([81 x i8], [81 x i8]* @.str.94, i32 0, i32 0)) #15
   br label %if.end2
 
 if.end2:                                          ; preds = %if.then1, %if.end
@@ -6282,7 +6279,7 @@ entry:
 define weak i32 @halide_can_use_target_features(i32 %count, i64* %features) local_unnamed_addr #0 {
 entry:
   %0 = load i32 (i32, i64*)*, i32 (i32, i64*)** @_ZN6Halide7Runtime8Internal30custom_can_use_target_featuresE, align 4, !tbaa !10
-  %call = tail call i32 %0(i32 %count, i64* %features) #13
+  %call = tail call i32 %0(i32 %count, i64* %features) #15
   ret i32 %call
 }
 
@@ -6313,821 +6310,779 @@ entry:
 }
 
 ; Function Attrs: nounwind readnone
-declare <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32>) #9
+declare <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32>, <32 x i32>) #9
+declare <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32>, <32 x i32>) #9
 
-; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32>, <32 x i32>) #9
-
-; Function Attrs: nounwind readnone
-declare <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32>, <64 x i32>) #9
-
-; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32>, <32 x i32>, <32 x i32>) #9
-
-define i32 @gaussian3x3_hvx128(%struct.halide_buffer_t* noalias nocapture readonly %input.buffer, %struct.halide_buffer_t* noalias nocapture readonly %output.buffer) local_unnamed_addr #10 {
+define i32 @blur3x3_hvx128_par_for_blur_y_s0_y_y(i8* %__user_context, i32 %blur_y.s0.y.y, i8* nocapture readonly %closure_arg) #10 {
 entry:
-  %hvx_lock_result = tail call i32 @halide_qurt_hvx_lock(i8* null) #15
-  %host.i = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %input.buffer, i32 0, i32 2
-  %0 = load i8*, i8** %host.i, align 4, !tbaa !43
-  %dim.i = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %input.buffer, i32 0, i32 6
-  %1 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i, align 8, !tbaa !46
-  %stride.i7 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 2
-  %2 = load i32, i32* %stride.i7, align 4, !tbaa !50
-  %host.i8 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %output.buffer, i32 0, i32 2
-  %3 = load i8*, i8** %host.i8, align 4, !tbaa !43
-  %dim.i9 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %output.buffer, i32 0, i32 6
-  %4 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i9, align 8, !tbaa !46
-  %extent.i = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %4, i32 0, i32 1
-  %5 = load i32, i32* %extent.i, align 4, !tbaa !49
-  %extent.i17 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %4, i32 1, i32 1
-  %6 = load i32, i32* %extent.i17, align 4, !tbaa !49
-  %stride.i19 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %4, i32 1, i32 2
-  %7 = load i32, i32* %stride.i19, align 4, !tbaa !50
-  %8 = add nsw i32 %6, 3
-  %9 = ashr i32 %8, 2
-  %10 = icmp sgt i32 %6, 0
-  br i1 %10, label %"for output.s0.y.y.preheader", label %call_destructor.exit, !prof !95
+  %hvx_lock_result = tail call i32 @halide_qurt_hvx_lock(i8* %__user_context) #12
+  %0 = bitcast i8* %closure_arg to i16**
+  %blur_y31 = load i16*, i16** %0, align 4
+  %1 = getelementptr inbounds i8, i8* %closure_arg, i32 4
+  %2 = bitcast i8* %1 to i8**
+  %input = load i8*, i8** %2, align 4
+  %3 = getelementptr inbounds i8, i8* %closure_arg, i32 8
+  %4 = bitcast i8* %3 to i32*
+  %blur_y.extent.0 = load i32, i32* %4, align 4
+  %5 = getelementptr inbounds i8, i8* %closure_arg, i32 12
+  %6 = bitcast i8* %5 to i32*
+  %b2 = load i32, i32* %6, align 4
+  %7 = getelementptr inbounds i8, i8* %closure_arg, i32 16
+  %8 = bitcast i8* %7 to i32*
+  %blur_y.stride.1 = load i32, i32* %8, align 4
+  %9 = getelementptr inbounds i8, i8* %closure_arg, i32 20
+  %10 = bitcast i8* %9 to i32*
+  %input.extent.1 = load i32, i32* %10, align 4
+  %11 = getelementptr inbounds i8, i8* %closure_arg, i32 24
+  %12 = bitcast i8* %11 to i32*
+  %input.stride.1 = load i32, i32* %12, align 4
+  %13 = getelementptr inbounds i8, i8* %closure_arg, i32 28
+  %14 = bitcast i8* %13 to i32*
+  %t84 = load i32, i32* %14, align 4
+  %15 = getelementptr inbounds i8, i8* %closure_arg, i32 32
+  %16 = bitcast i8* %15 to i32*
+  %t90 = load i32, i32* %16, align 4
+  %17 = getelementptr inbounds i8, i8* %closure_arg, i32 36
+  %18 = bitcast i8* %17 to i32*
+  %t91 = load i32, i32* %18, align 4
+  %19 = getelementptr inbounds i8, i8* %closure_arg, i32 40
+  %20 = bitcast i8* %19 to i32*
+  %t92 = load i32, i32* %20, align 4
+  %21 = getelementptr inbounds i8, i8* %closure_arg, i32 44
+  %22 = bitcast i8* %21 to i32*
+  %a4 = load i32, i32* %22, align 4
+  %23 = getelementptr inbounds i8, i8* %closure_arg, i32 48
+  %24 = bitcast i8* %23 to i32*
+  %t94 = load i32, i32* %24, align 4
+  %25 = getelementptr inbounds i8, i8* %closure_arg, i32 52
+  %26 = bitcast i8* %25 to i1*
+  %t82 = load i1, i1* %26, align 1
+  %27 = getelementptr inbounds i8, i8* %closure_arg, i32 53
+  %28 = bitcast i8* %27 to i1*
+  %t87 = load i1, i1* %28, align 1
+  %29 = shl nsw i32 %blur_y.s0.y.y, 7
+  %a0 = add nsw i32 %29, 384
+  %30 = icmp slt i32 %a0, %b2
+  %t108 = select i1 %30, i32 %a0, i32 %b2
+  %31 = icmp sgt i32 %t108, 127
+  %32 = and i1 %31, %t82
+  %33 = add nsw i32 %t108, 2
+  %34 = icmp sle i32 %33, %input.extent.1
+  %35 = and i1 %34, %32
+  br i1 %35, label %then_bb, label %entry.after_bb_crit_edge
 
-"for output.s0.y.y.preheader":                    ; preds = %entry
-  %11 = mul nsw i32 %2, 7
-  %12 = add nsw i32 %5, -1
-  %13 = and i32 %12, -128
-  %14 = add nsw i32 %13, 130
-  %conv9.i = zext i32 %2 to i64
-  %shl.i = shl nuw i64 %conv9.i, 32
-  %conv1.i = sext i32 %14 to i64
-  %shl2.i = shl nsw i64 %conv1.i, 16
-  %or.i = or i64 %shl.i, %shl2.i
-  %or6.i = or i64 %or.i, 281474976710662
-  %15 = add nsw i32 %5, 127
-  %16 = ashr i32 %15, 7
-  %17 = icmp sgt i32 %5, 0
-  %18 = getelementptr inbounds i8, i8* %0, i32 -1
-  br i1 %17, label %"for output.s0.y.y.us", label %"for output.s0.y.y.preheader24", !prof !95
+entry.after_bb_crit_edge:                         ; preds = %entry
+  %.pre = bitcast i8* %input to i16*
+  br label %after_bb
 
-"for output.s0.y.y.preheader24":                  ; preds = %"for output.s0.y.y.preheader"
-  %19 = add nsw i32 %9, -1
-  %xtraiter = and i32 %9, 7
-  %20 = icmp ult i32 %19, 7
-  br i1 %20, label %call_destructor.exit.loopexit25.unr-lcssa, label %"for output.s0.y.y.preheader24.new"
-
-"for output.s0.y.y.preheader24.new":              ; preds = %"for output.s0.y.y.preheader24"
-  %unroll_iter = and i32 %9, -8
-  br label %"for output.s0.y.y"
-
-"for output.s0.y.y.us":                           ; preds = %"for output.s0.y.y.preheader", %"end for output.s0.x.x.loopexit.us"
-  %output.s0.y.y.us = phi i32 [ %313, %"end for output.s0.x.x.loopexit.us" ], [ 0, %"for output.s0.y.y.preheader" ]
-  %21 = mul nsw i32 %output.s0.y.y.us, %2
-  %22 = shl nsw i32 %21, 2
-  %23 = add nsw i32 %22, %11
-  %24 = getelementptr inbounds i8, i8* %18, i32 %23
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %24, i64 %or6.i) #15, !srcloc !96
-  %25 = mul nsw i32 %output.s0.y.y.us, %7
-  %26 = shl nsw i32 %output.s0.y.y.us, 2
-  %27 = or i32 %26, 1
-  %28 = mul nsw i32 %27, %2
-  %29 = mul nsw i32 %27, %7
-  %30 = or i32 %26, 2
-  %31 = mul nsw i32 %30, %2
-  %32 = mul nsw i32 %30, %7
-  %33 = or i32 %26, 3
-  %34 = mul nsw i32 %33, %2
-  %35 = mul nsw i32 %33, %7
-  br label %"for output.s0.x.x.us"
-
-"for output.s0.x.x.us":                           ; preds = %"for output.s0.y.y.us", %"for output.s0.x.x.us"
-  %output.s0.x.x.us = phi i32 [ %312, %"for output.s0.x.x.us" ], [ 0, %"for output.s0.y.y.us" ]
-  %36 = shl nsw i32 %output.s0.x.x.us, 5
-  %t6.us = add nsw i32 %36, %21
-  %37 = shl nsw i32 %t6.us, 2
-  %38 = getelementptr inbounds i8, i8* %0, i32 %37
-  %39 = getelementptr inbounds i8, i8* %38, i32 1
-  %40 = bitcast i8* %39 to <32 x i32>*
-  %41 = load <32 x i32>, <32 x i32>* %40, align 1, !tbaa !97
-  %42 = bitcast i8* %38 to <32 x i32>*
-  %43 = load <32 x i32>, <32 x i32>* %42, align 1, !tbaa !97
-  %44 = sub nsw i32 %37, %2
-  %45 = getelementptr inbounds i8, i8* %0, i32 %44
-  %46 = bitcast i8* %45 to <32 x i32>*
-  %47 = load <32 x i32>, <32 x i32>* %46, align 1, !tbaa !97
-  %48 = add nsw i32 %37, %2
-  %49 = getelementptr inbounds i8, i8* %0, i32 %48
-  %50 = bitcast i8* %49 to <32 x i32>*
-  %51 = load <32 x i32>, <32 x i32>* %50, align 1, !tbaa !97
-  %52 = getelementptr inbounds i8, i8* %38, i32 -1
-  %53 = bitcast i8* %52 to <32 x i32>*
-  %54 = load <32 x i32>, <32 x i32>* %53, align 1, !tbaa !97
-  %55 = getelementptr inbounds i8, i8* %45, i32 -1
-  %56 = bitcast i8* %55 to <32 x i32>*
-  %57 = load <32 x i32>, <32 x i32>* %56, align 1, !tbaa !97
-  %58 = getelementptr inbounds i8, i8* %49, i32 -1
-  %59 = bitcast i8* %58 to <32 x i32>*
-  %60 = load <32 x i32>, <32 x i32>* %59, align 1, !tbaa !97
-  %61 = getelementptr inbounds i8, i8* %45, i32 1
-  %62 = bitcast i8* %61 to <32 x i32>*
-  %63 = load <32 x i32>, <32 x i32>* %62, align 1, !tbaa !97
-  %64 = getelementptr inbounds i8, i8* %49, i32 1
-  %65 = bitcast i8* %64 to <32 x i32>*
-  %66 = load <32 x i32>, <32 x i32>* %65, align 1, !tbaa !97
-  %67 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %63) #15
-  %68 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %60) #15
-  %69 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %51) #15
-  %70 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %47) #15
-  %71 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %43) #15
-  %72 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %71) #15
-  %73 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %72) #15
-  %74 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %71) #15
-  %75 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %74) #15
-  %76 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %73, <32 x i32> %75) #15
-  %77 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %70, <64 x i32> %76) #15
-  %78 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %69, <64 x i32> %77) #15
-  %79 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %54) #15
-  %80 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %79, <64 x i32> %79) #15
-  %81 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %78, <64 x i32> %80) #15
-  %82 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %57) #15
-  %83 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %82, <64 x i32> %78) #15
-  %84 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %81, <64 x i32> %83) #15
-  %85 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %68, <64 x i32> %84) #15
-  %86 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %41) #15
-  %87 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %86) #15
-  %88 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %87) #15
-  %89 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %86) #15
-  %90 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %89) #15
-  %91 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %88, <32 x i32> %90) #15
-  %92 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %85, <64 x i32> %91) #15
-  %93 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %67, <64 x i32> %92) #15
-  %94 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %66) #15
-  %95 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %93, <64 x i32> %94) #15
-  %96 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %95) #15
-  %97 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %96) #15
-  %98 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %97, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %99 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %95) #15
-  %100 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %99) #15
-  %101 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %100, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %102 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %98, <32 x i32> %101) #15
-  %103 = add nsw i32 %36, %25
-  %104 = shl nsw i32 %103, 2
-  %105 = getelementptr inbounds i8, i8* %3, i32 %104
-  %106 = bitcast i8* %105 to <32 x i32>*
-  store <32 x i32> %102, <32 x i32>* %106, align 1, !tbaa !100
-  %107 = shl nsw i32 %output.s0.x.x.us, 7
-  %t9.us = add nsw i32 %107, %28
-  %108 = getelementptr inbounds i8, i8* %0, i32 %t9.us
-  %109 = getelementptr inbounds i8, i8* %108, i32 1
-  %110 = bitcast i8* %109 to <32 x i32>*
-  %111 = load <32 x i32>, <32 x i32>* %110, align 1, !tbaa !97
-  %112 = bitcast i8* %108 to <32 x i32>*
-  %113 = load <32 x i32>, <32 x i32>* %112, align 1, !tbaa !97
-  %114 = sub nsw i32 %t9.us, %2
-  %115 = getelementptr inbounds i8, i8* %0, i32 %114
-  %116 = bitcast i8* %115 to <32 x i32>*
-  %117 = load <32 x i32>, <32 x i32>* %116, align 1, !tbaa !97
-  %118 = add nsw i32 %t9.us, %2
-  %119 = getelementptr inbounds i8, i8* %0, i32 %118
-  %120 = bitcast i8* %119 to <32 x i32>*
-  %121 = load <32 x i32>, <32 x i32>* %120, align 1, !tbaa !97
-  %122 = getelementptr inbounds i8, i8* %108, i32 -1
-  %123 = bitcast i8* %122 to <32 x i32>*
-  %124 = load <32 x i32>, <32 x i32>* %123, align 1, !tbaa !97
-  %125 = getelementptr inbounds i8, i8* %115, i32 -1
-  %126 = bitcast i8* %125 to <32 x i32>*
-  %127 = load <32 x i32>, <32 x i32>* %126, align 1, !tbaa !97
-  %128 = getelementptr inbounds i8, i8* %119, i32 -1
-  %129 = bitcast i8* %128 to <32 x i32>*
-  %130 = load <32 x i32>, <32 x i32>* %129, align 1, !tbaa !97
-  %131 = getelementptr inbounds i8, i8* %115, i32 1
-  %132 = bitcast i8* %131 to <32 x i32>*
-  %133 = load <32 x i32>, <32 x i32>* %132, align 1, !tbaa !97
-  %134 = getelementptr inbounds i8, i8* %119, i32 1
-  %135 = bitcast i8* %134 to <32 x i32>*
-  %136 = load <32 x i32>, <32 x i32>* %135, align 1, !tbaa !97
-  %137 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %133) #15
-  %138 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %130) #15
-  %139 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %121) #15
-  %140 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %117) #15
-  %141 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %113) #15
-  %142 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %141) #15
-  %143 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %142) #15
-  %144 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %141) #15
-  %145 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %144) #15
-  %146 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %143, <32 x i32> %145) #15
-  %147 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %140, <64 x i32> %146) #15
-  %148 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %139, <64 x i32> %147) #15
-  %149 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %124) #15
-  %150 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %149, <64 x i32> %149) #15
-  %151 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %148, <64 x i32> %150) #15
-  %152 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %127) #15
-  %153 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %152, <64 x i32> %148) #15
-  %154 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %151, <64 x i32> %153) #15
-  %155 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %138, <64 x i32> %154) #15
-  %156 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %111) #15
-  %157 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %156) #15
-  %158 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %157) #15
-  %159 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %156) #15
-  %160 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %159) #15
-  %161 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %158, <32 x i32> %160) #15
-  %162 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %155, <64 x i32> %161) #15
-  %163 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %137, <64 x i32> %162) #15
-  %164 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %136) #15
-  %165 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %163, <64 x i32> %164) #15
-  %166 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %165) #15
-  %167 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %166) #15
-  %168 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %167, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %169 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %165) #15
-  %170 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %169) #15
-  %171 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %170, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %172 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %168, <32 x i32> %171) #15
-  %173 = add nsw i32 %107, %29
-  %174 = getelementptr inbounds i8, i8* %3, i32 %173
-  %175 = bitcast i8* %174 to <32 x i32>*
-  store <32 x i32> %172, <32 x i32>* %175, align 1, !tbaa !100
-  %t12.us = add nsw i32 %107, %31
-  %176 = getelementptr inbounds i8, i8* %0, i32 %t12.us
-  %177 = getelementptr inbounds i8, i8* %176, i32 1
-  %178 = bitcast i8* %177 to <32 x i32>*
-  %179 = load <32 x i32>, <32 x i32>* %178, align 1, !tbaa !97
-  %180 = bitcast i8* %176 to <32 x i32>*
-  %181 = load <32 x i32>, <32 x i32>* %180, align 1, !tbaa !97
-  %182 = sub nsw i32 %t12.us, %2
-  %183 = getelementptr inbounds i8, i8* %0, i32 %182
-  %184 = bitcast i8* %183 to <32 x i32>*
-  %185 = load <32 x i32>, <32 x i32>* %184, align 1, !tbaa !97
-  %186 = add nsw i32 %t12.us, %2
-  %187 = getelementptr inbounds i8, i8* %0, i32 %186
-  %188 = bitcast i8* %187 to <32 x i32>*
-  %189 = load <32 x i32>, <32 x i32>* %188, align 1, !tbaa !97
-  %190 = getelementptr inbounds i8, i8* %176, i32 -1
-  %191 = bitcast i8* %190 to <32 x i32>*
-  %192 = load <32 x i32>, <32 x i32>* %191, align 1, !tbaa !97
-  %193 = getelementptr inbounds i8, i8* %183, i32 -1
-  %194 = bitcast i8* %193 to <32 x i32>*
-  %195 = load <32 x i32>, <32 x i32>* %194, align 1, !tbaa !97
-  %196 = getelementptr inbounds i8, i8* %187, i32 -1
-  %197 = bitcast i8* %196 to <32 x i32>*
-  %198 = load <32 x i32>, <32 x i32>* %197, align 1, !tbaa !97
-  %199 = getelementptr inbounds i8, i8* %183, i32 1
-  %200 = bitcast i8* %199 to <32 x i32>*
-  %201 = load <32 x i32>, <32 x i32>* %200, align 1, !tbaa !97
-  %202 = getelementptr inbounds i8, i8* %187, i32 1
-  %203 = bitcast i8* %202 to <32 x i32>*
-  %204 = load <32 x i32>, <32 x i32>* %203, align 1, !tbaa !97
-  %205 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %201) #15
-  %206 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %198) #15
-  %207 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %189) #15
-  %208 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %185) #15
-  %209 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %181) #15
-  %210 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %209) #15
-  %211 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %210) #15
-  %212 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %209) #15
-  %213 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %212) #15
-  %214 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %211, <32 x i32> %213) #15
-  %215 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %208, <64 x i32> %214) #15
-  %216 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %207, <64 x i32> %215) #15
-  %217 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %192) #15
-  %218 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %217, <64 x i32> %217) #15
-  %219 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %216, <64 x i32> %218) #15
-  %220 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %195) #15
-  %221 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %220, <64 x i32> %216) #15
-  %222 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %219, <64 x i32> %221) #15
-  %223 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %206, <64 x i32> %222) #15
-  %224 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %179) #15
-  %225 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %224) #15
-  %226 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %225) #15
-  %227 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %224) #15
-  %228 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %227) #15
-  %229 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %226, <32 x i32> %228) #15
-  %230 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %223, <64 x i32> %229) #15
-  %231 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %205, <64 x i32> %230) #15
-  %232 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %204) #15
-  %233 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %231, <64 x i32> %232) #15
-  %234 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %233) #15
-  %235 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %234) #15
-  %236 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %235, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %237 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %233) #15
-  %238 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %237) #15
-  %239 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %238, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %240 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %236, <32 x i32> %239) #15
-  %241 = add nsw i32 %107, %32
-  %242 = getelementptr inbounds i8, i8* %3, i32 %241
-  %243 = bitcast i8* %242 to <32 x i32>*
-  store <32 x i32> %240, <32 x i32>* %243, align 1, !tbaa !100
-  %t15.us = add nsw i32 %107, %34
-  %244 = getelementptr inbounds i8, i8* %0, i32 %t15.us
-  %245 = getelementptr inbounds i8, i8* %244, i32 1
-  %246 = bitcast i8* %245 to <32 x i32>*
-  %247 = load <32 x i32>, <32 x i32>* %246, align 1, !tbaa !97
-  %248 = bitcast i8* %244 to <32 x i32>*
-  %249 = load <32 x i32>, <32 x i32>* %248, align 1, !tbaa !97
-  %250 = sub nsw i32 %t15.us, %2
-  %251 = getelementptr inbounds i8, i8* %0, i32 %250
-  %252 = bitcast i8* %251 to <32 x i32>*
-  %253 = load <32 x i32>, <32 x i32>* %252, align 1, !tbaa !97
-  %254 = add nsw i32 %t15.us, %2
-  %255 = getelementptr inbounds i8, i8* %0, i32 %254
-  %256 = bitcast i8* %255 to <32 x i32>*
-  %257 = load <32 x i32>, <32 x i32>* %256, align 1, !tbaa !97
-  %258 = getelementptr inbounds i8, i8* %244, i32 -1
-  %259 = bitcast i8* %258 to <32 x i32>*
-  %260 = load <32 x i32>, <32 x i32>* %259, align 1, !tbaa !97
-  %261 = getelementptr inbounds i8, i8* %251, i32 -1
-  %262 = bitcast i8* %261 to <32 x i32>*
-  %263 = load <32 x i32>, <32 x i32>* %262, align 1, !tbaa !97
-  %264 = getelementptr inbounds i8, i8* %255, i32 -1
-  %265 = bitcast i8* %264 to <32 x i32>*
-  %266 = load <32 x i32>, <32 x i32>* %265, align 1, !tbaa !97
-  %267 = getelementptr inbounds i8, i8* %251, i32 1
-  %268 = bitcast i8* %267 to <32 x i32>*
-  %269 = load <32 x i32>, <32 x i32>* %268, align 1, !tbaa !97
-  %270 = getelementptr inbounds i8, i8* %255, i32 1
-  %271 = bitcast i8* %270 to <32 x i32>*
-  %272 = load <32 x i32>, <32 x i32>* %271, align 1, !tbaa !97
-  %273 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %269) #15
-  %274 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %266) #15
-  %275 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %257) #15
-  %276 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %253) #15
-  %277 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %249) #15
-  %278 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %277) #15
-  %279 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %278) #15
-  %280 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %277) #15
-  %281 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %280) #15
-  %282 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %279, <32 x i32> %281) #15
-  %283 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %276, <64 x i32> %282) #15
-  %284 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %275, <64 x i32> %283) #15
-  %285 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %260) #15
-  %286 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %285, <64 x i32> %285) #15
-  %287 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %284, <64 x i32> %286) #15
-  %288 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %263) #15
-  %289 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %288, <64 x i32> %284) #15
-  %290 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %287, <64 x i32> %289) #15
-  %291 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %274, <64 x i32> %290) #15
-  %292 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %247) #15
-  %293 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %292) #15
-  %294 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %293) #15
-  %295 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %292) #15
-  %296 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %295) #15
-  %297 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %294, <32 x i32> %296) #15
-  %298 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %291, <64 x i32> %297) #15
-  %299 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %273, <64 x i32> %298) #15
-  %300 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %272) #15
-  %301 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %299, <64 x i32> %300) #15
-  %302 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %301) #15
-  %303 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %302) #15
-  %304 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %303, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %305 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %301) #15
-  %306 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %305) #15
-  %307 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %306, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>) #15
-  %308 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %304, <32 x i32> %307) #15
-  %309 = add nsw i32 %107, %35
-  %310 = getelementptr inbounds i8, i8* %3, i32 %309
-  %311 = bitcast i8* %310 to <32 x i32>*
-  store <32 x i32> %308, <32 x i32>* %311, align 1, !tbaa !100
-  %312 = add nuw nsw i32 %output.s0.x.x.us, 1
-  %.not2.us = icmp eq i32 %312, %16
-  br i1 %.not2.us, label %"end for output.s0.x.x.loopexit.us", label %"for output.s0.x.x.us"
-
-"end for output.s0.x.x.loopexit.us":              ; preds = %"for output.s0.x.x.us"
-  %313 = add nuw nsw i32 %output.s0.y.y.us, 1
-  %.not.us = icmp eq i32 %313, %9
-  br i1 %.not.us, label %call_destructor.exit, label %"for output.s0.y.y.us"
-
-"for output.s0.y.y":                              ; preds = %"for output.s0.y.y", %"for output.s0.y.y.preheader24.new"
-  %output.s0.y.y = phi i32 [ 0, %"for output.s0.y.y.preheader24.new" ], [ %353, %"for output.s0.y.y" ]
-  %niter = phi i32 [ %unroll_iter, %"for output.s0.y.y.preheader24.new" ], [ %niter.nsub.7, %"for output.s0.y.y" ]
-  %314 = mul nsw i32 %output.s0.y.y, %2
-  %315 = shl nsw i32 %314, 2
-  %316 = add nsw i32 %315, %11
-  %317 = getelementptr inbounds i8, i8* %18, i32 %316
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %317, i64 %or6.i) #15, !srcloc !96
-  %318 = or i32 %output.s0.y.y, 1
-  %319 = mul nsw i32 %318, %2
-  %320 = shl nsw i32 %319, 2
-  %321 = add nsw i32 %320, %11
-  %322 = getelementptr inbounds i8, i8* %18, i32 %321
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %322, i64 %or6.i) #15, !srcloc !96
-  %323 = or i32 %output.s0.y.y, 2
-  %324 = mul nsw i32 %323, %2
-  %325 = shl nsw i32 %324, 2
-  %326 = add nsw i32 %325, %11
-  %327 = getelementptr inbounds i8, i8* %18, i32 %326
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %327, i64 %or6.i) #15, !srcloc !96
-  %328 = or i32 %output.s0.y.y, 3
-  %329 = mul nsw i32 %328, %2
-  %330 = shl nsw i32 %329, 2
-  %331 = add nsw i32 %330, %11
-  %332 = getelementptr inbounds i8, i8* %18, i32 %331
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %332, i64 %or6.i) #15, !srcloc !96
-  %333 = or i32 %output.s0.y.y, 4
-  %334 = mul nsw i32 %333, %2
-  %335 = shl nsw i32 %334, 2
-  %336 = add nsw i32 %335, %11
-  %337 = getelementptr inbounds i8, i8* %18, i32 %336
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %337, i64 %or6.i) #15, !srcloc !96
-  %338 = or i32 %output.s0.y.y, 5
-  %339 = mul nsw i32 %338, %2
-  %340 = shl nsw i32 %339, 2
-  %341 = add nsw i32 %340, %11
-  %342 = getelementptr inbounds i8, i8* %18, i32 %341
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %342, i64 %or6.i) #15, !srcloc !96
-  %343 = or i32 %output.s0.y.y, 6
-  %344 = mul nsw i32 %343, %2
-  %345 = shl nsw i32 %344, 2
-  %346 = add nsw i32 %345, %11
-  %347 = getelementptr inbounds i8, i8* %18, i32 %346
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %347, i64 %or6.i) #15, !srcloc !96
-  %348 = or i32 %output.s0.y.y, 7
-  %349 = mul nsw i32 %348, %2
-  %350 = shl nsw i32 %349, 2
-  %351 = add nsw i32 %350, %11
-  %352 = getelementptr inbounds i8, i8* %18, i32 %351
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %352, i64 %or6.i) #15, !srcloc !96
-  %353 = add nuw nsw i32 %output.s0.y.y, 8
-  %niter.nsub.7 = add i32 %niter, -8
-  %niter.ncmp.7 = icmp eq i32 %niter.nsub.7, 0
-  br i1 %niter.ncmp.7, label %call_destructor.exit.loopexit25.unr-lcssa, label %"for output.s0.y.y"
-
-call_destructor.exit.loopexit25.unr-lcssa:        ; preds = %"for output.s0.y.y", %"for output.s0.y.y.preheader24"
-  %output.s0.y.y.unr = phi i32 [ 0, %"for output.s0.y.y.preheader24" ], [ %353, %"for output.s0.y.y" ]
+after_bb:                                         ; preds = %entry.after_bb_crit_edge, %then_bb
+  %.pre-phi = phi i16* [ %.pre, %entry.after_bb_crit_edge ], [ %68, %then_bb ]
+  %b3 = add nsw i32 %b2, -128
+  %36 = icmp slt i32 %29, %b3
+  %blur_y.s0.y.yi.base = select i1 %36, i32 %29, i32 %b3
+  %37 = icmp sgt i32 %a4, 0
+  %38 = select i1 %37, i32 %a4, i32 0
+  %39 = shl i32 %38, 3
+  %40 = add i32 %39, 134
+  %41 = tail call i8* @halide_malloc(i8* %__user_context, i32 %40)
+  %blur_x = bitcast i8* %41 to i16*
+  %42 = icmp sgt i32 %t84, 0
+  %43 = add i32 %t94, %t91
+  %44 = add nsw i32 %t91, %blur_y.extent.0
+  %45 = icmp sgt i32 %t92, 0
+  %46 = icmp sgt i32 %t90, 0
+  %47 = getelementptr inbounds i8, i8* %41, i32 -128
+  %48 = bitcast i8* %47 to i16*
+  %49 = getelementptr inbounds i8, i8* %41, i32 128
+  %50 = bitcast i8* %49 to i16*
+  %51 = getelementptr inbounds i8, i8* %41, i32 128
+  %52 = bitcast i8* %51 to i16*
+  %53 = getelementptr inbounds i8, i8* %41, i32 128
+  %54 = bitcast i8* %53 to i16*
+  %55 = getelementptr inbounds i8, i8* %41, i32 -128
+  %56 = bitcast i8* %55 to i16*
+  %57 = getelementptr inbounds i8, i8* %41, i32 -128
+  %58 = bitcast i8* %57 to i16*
+  %59 = getelementptr inbounds i8, i8* %41, i32 -128
+  %60 = bitcast i8* %59 to i16*
+  %61 = getelementptr inbounds i16, i16* %blur_y31, i32 -64
+  %62 = add i32 %t84, -1
+  %63 = add i32 %t92, -1
+  %xtraiter = and i32 %t84, 3
+  %64 = icmp ult i32 %62, 3
+  %unroll_iter = and i32 %t84, -4
   %lcmp.mod.not = icmp eq i32 %xtraiter, 0
-  br i1 %lcmp.mod.not, label %call_destructor.exit, label %"for output.s0.y.y.epil"
+  %xtraiter32 = and i32 %t92, 3
+  %65 = icmp ult i32 %63, 3
+  %unroll_iter35 = and i32 %t92, -4
+  %lcmp.mod34.not = icmp eq i32 %xtraiter32, 0
+  br label %"for blur_y.s0.y.yi.$n.rebased"
 
-"for output.s0.y.y.epil":                         ; preds = %call_destructor.exit.loopexit25.unr-lcssa, %"for output.s0.y.y.epil"
-  %output.s0.y.y.epil = phi i32 [ %358, %"for output.s0.y.y.epil" ], [ %output.s0.y.y.unr, %call_destructor.exit.loopexit25.unr-lcssa ]
-  %epil.iter = phi i32 [ %epil.iter.sub, %"for output.s0.y.y.epil" ], [ %xtraiter, %call_destructor.exit.loopexit25.unr-lcssa ]
-  %354 = mul nsw i32 %output.s0.y.y.epil, %2
-  %355 = shl nsw i32 %354, 2
-  %356 = add nsw i32 %355, %11
-  %357 = getelementptr inbounds i8, i8* %18, i32 %356
-  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* nonnull %357, i64 %or6.i) #15, !srcloc !96
-  %358 = add nuw nsw i32 %output.s0.y.y.epil, 1
+then_bb:                                          ; preds = %entry
+  %66 = add nsw i32 %t108, -128
+  %67 = mul nsw i32 %66, %input.stride.1
+  %68 = bitcast i8* %input to i16*
+  %69 = getelementptr inbounds i16, i16* %68, i32 %67
+  %70 = shl i32 %blur_y.extent.0, 1
+  %71 = add i32 %70, 4
+  %72 = shl nsw i32 %input.stride.1, 1
+  %73 = bitcast i16* %69 to i8*
+  %conv9.i = zext i32 %72 to i64
+  %shl.i = shl nuw i64 %conv9.i, 32
+  %conv1.i = sext i32 %71 to i64
+  %shl2.i = shl nsw i64 %conv1.i, 16
+  %or.i = or i64 %shl2.i, %shl.i
+  %or6.i = or i64 %or.i, 281474976710786
+  tail call void asm sideeffect "l2fetch($0,$1)", "r,r"(i8* %73, i64 %or6.i) #12, !srcloc !95
+  br label %after_bb
+
+"for blur_y.s0.y.yi.$n.rebased":                  ; preds = %after_bb, %after_bb4
+  %"blur_y.s0.y.yi.$n.rebased" = phi i32 [ 0, %after_bb ], [ %210, %after_bb4 ]
+  br i1 %42, label %"for blur_x.s0.x.x.preheader", label %"end for blur_x.s0.x.x", !prof !96
+
+"for blur_x.s0.x.x.preheader":                    ; preds = %"for blur_y.s0.y.yi.$n.rebased"
+  %74 = add nsw i32 %"blur_y.s0.y.yi.$n.rebased", %blur_y.s0.y.yi.base
+  %75 = add nsw i32 %74, -2
+  %76 = mul nsw i32 %75, %input.stride.1
+  %77 = add i32 %43, %76
+  %78 = and i32 %74, 3
+  %79 = mul nsw i32 %78, %a4
+  br i1 %64, label %"end for blur_x.s0.x.x.loopexit.unr-lcssa", label %"for blur_x.s0.x.x"
+
+"end for blur_y.s0.y.yi.$n.rebased":              ; preds = %after_bb4
+  %tobool.not.i.not = icmp eq i8* %41, null
+  br i1 %tobool.not.i.not, label %call_destructor.exit28, label %if.then.i
+
+if.then.i:                                        ; preds = %"end for blur_y.s0.y.yi.$n.rebased"
+  tail call void @halide_free(i8* %__user_context, i8* nonnull %41) #15
+  br label %call_destructor.exit28
+
+call_destructor.exit28:                           ; preds = %"end for blur_y.s0.y.yi.$n.rebased", %if.then.i
+  tail call void @halide_qurt_hvx_unlock_as_destructor(i8* %__user_context, i8* nonnull inttoptr (i32 1 to i8*)) #15
+  ret i32 0
+
+"for blur_x.s0.x.x":                              ; preds = %"for blur_x.s0.x.x.preheader", %"for blur_x.s0.x.x"
+  %blur_x.s0.x.x = phi i32 [ %163, %"for blur_x.s0.x.x" ], [ 0, %"for blur_x.s0.x.x.preheader" ]
+  %niter = phi i32 [ %niter.nsub.3, %"for blur_x.s0.x.x" ], [ %unroll_iter, %"for blur_x.s0.x.x.preheader" ]
+  %80 = shl nsw i32 %blur_x.s0.x.x, 6
+  %t68 = add i32 %77, %80
+  %81 = getelementptr inbounds i16, i16* %.pre-phi, i32 %t68
+  %82 = getelementptr inbounds i16, i16* %81, i32 -63
+  %83 = bitcast i16* %82 to <32 x i32>*
+  %t10921 = load <32 x i32>, <32 x i32>* %83, align 2, !tbaa !97
+  %84 = getelementptr inbounds i16, i16* %81, i32 -62
+  %85 = bitcast i16* %84 to <32 x i32>*
+  %t11022 = load <32 x i32>, <32 x i32>* %85, align 2, !tbaa !97
+  %86 = getelementptr inbounds i16, i16* %81, i32 -64
+  %87 = bitcast i16* %86 to <32 x i32>*
+  %t11123 = load <32 x i32>, <32 x i32>* %87, align 2, !tbaa !97
+  %88 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11022, <32 x i32> %t10921) #12
+  %89 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %88, <32 x i32> %t11123) #12
+  %90 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %89) #12
+  %91 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %90, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %92 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %91) #12
+  %93 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %92, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %94 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %91) #12
+  %95 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %94, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %96 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %93, <32 x i32> %95) #12
+  %97 = add nsw i32 %80, %79
+  %98 = getelementptr inbounds i16, i16* %blur_x, i32 %97
+  %99 = bitcast i16* %98 to <32 x i32>*
+  store <32 x i32> %96, <32 x i32>* %99, align 2, !tbaa !100
+  %100 = shl i32 %blur_x.s0.x.x, 6
+  %101 = or i32 %100, 64
+  %t68.1 = add i32 %77, %101
+  %102 = getelementptr inbounds i16, i16* %.pre-phi, i32 %t68.1
+  %103 = getelementptr inbounds i16, i16* %102, i32 -63
+  %104 = bitcast i16* %103 to <32 x i32>*
+  %t10921.1 = load <32 x i32>, <32 x i32>* %104, align 2, !tbaa !97
+  %105 = getelementptr inbounds i16, i16* %102, i32 -62
+  %106 = bitcast i16* %105 to <32 x i32>*
+  %t11022.1 = load <32 x i32>, <32 x i32>* %106, align 2, !tbaa !97
+  %107 = getelementptr inbounds i16, i16* %102, i32 -64
+  %108 = bitcast i16* %107 to <32 x i32>*
+  %t11123.1 = load <32 x i32>, <32 x i32>* %108, align 2, !tbaa !97
+  %109 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11022.1, <32 x i32> %t10921.1) #12
+  %110 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %109, <32 x i32> %t11123.1) #12
+  %111 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %110) #12
+  %112 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %111, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %113 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %112) #12
+  %114 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %113, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %115 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %112) #12
+  %116 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %115, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %117 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %114, <32 x i32> %116) #12
+  %118 = add nsw i32 %101, %79
+  %119 = getelementptr inbounds i16, i16* %blur_x, i32 %118
+  %120 = bitcast i16* %119 to <32 x i32>*
+  store <32 x i32> %117, <32 x i32>* %120, align 2, !tbaa !100
+  %121 = shl i32 %blur_x.s0.x.x, 6
+  %122 = or i32 %121, 128
+  %t68.2 = add i32 %77, %122
+  %123 = getelementptr inbounds i16, i16* %.pre-phi, i32 %t68.2
+  %124 = getelementptr inbounds i16, i16* %123, i32 -63
+  %125 = bitcast i16* %124 to <32 x i32>*
+  %t10921.2 = load <32 x i32>, <32 x i32>* %125, align 2, !tbaa !97
+  %126 = getelementptr inbounds i16, i16* %123, i32 -62
+  %127 = bitcast i16* %126 to <32 x i32>*
+  %t11022.2 = load <32 x i32>, <32 x i32>* %127, align 2, !tbaa !97
+  %128 = getelementptr inbounds i16, i16* %123, i32 -64
+  %129 = bitcast i16* %128 to <32 x i32>*
+  %t11123.2 = load <32 x i32>, <32 x i32>* %129, align 2, !tbaa !97
+  %130 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11022.2, <32 x i32> %t10921.2) #12
+  %131 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %130, <32 x i32> %t11123.2) #12
+  %132 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %131) #12
+  %133 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %132, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %134 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %133) #12
+  %135 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %134, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %136 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %133) #12
+  %137 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %136, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %138 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %135, <32 x i32> %137) #12
+  %139 = add nsw i32 %122, %79
+  %140 = getelementptr inbounds i16, i16* %blur_x, i32 %139
+  %141 = bitcast i16* %140 to <32 x i32>*
+  store <32 x i32> %138, <32 x i32>* %141, align 2, !tbaa !100
+  %142 = shl i32 %blur_x.s0.x.x, 6
+  %143 = or i32 %142, 192
+  %t68.3 = add i32 %77, %143
+  %144 = getelementptr inbounds i16, i16* %.pre-phi, i32 %t68.3
+  %145 = getelementptr inbounds i16, i16* %144, i32 -63
+  %146 = bitcast i16* %145 to <32 x i32>*
+  %t10921.3 = load <32 x i32>, <32 x i32>* %146, align 2, !tbaa !97
+  %147 = getelementptr inbounds i16, i16* %144, i32 -62
+  %148 = bitcast i16* %147 to <32 x i32>*
+  %t11022.3 = load <32 x i32>, <32 x i32>* %148, align 2, !tbaa !97
+  %149 = getelementptr inbounds i16, i16* %144, i32 -64
+  %150 = bitcast i16* %149 to <32 x i32>*
+  %t11123.3 = load <32 x i32>, <32 x i32>* %150, align 2, !tbaa !97
+  %151 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11022.3, <32 x i32> %t10921.3) #12
+  %152 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %151, <32 x i32> %t11123.3) #12
+  %153 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %152) #12
+  %154 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %153, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %155 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %154) #12
+  %156 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %155, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %157 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %154) #12
+  %158 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %157, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %159 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %156, <32 x i32> %158) #12
+  %160 = add nsw i32 %143, %79
+  %161 = getelementptr inbounds i16, i16* %blur_x, i32 %160
+  %162 = bitcast i16* %161 to <32 x i32>*
+  store <32 x i32> %159, <32 x i32>* %162, align 2, !tbaa !100
+  %163 = add nuw nsw i32 %blur_x.s0.x.x, 4
+  %niter.nsub.3 = add i32 %niter, -4
+  %niter.ncmp.3 = icmp eq i32 %niter.nsub.3, 0
+  br i1 %niter.ncmp.3, label %"end for blur_x.s0.x.x.loopexit.unr-lcssa", label %"for blur_x.s0.x.x"
+
+"end for blur_x.s0.x.x.loopexit.unr-lcssa":       ; preds = %"for blur_x.s0.x.x", %"for blur_x.s0.x.x.preheader"
+  %blur_x.s0.x.x.unr = phi i32 [ 0, %"for blur_x.s0.x.x.preheader" ], [ %163, %"for blur_x.s0.x.x" ]
+  br i1 %lcmp.mod.not, label %"end for blur_x.s0.x.x", label %"for blur_x.s0.x.x.epil"
+
+"for blur_x.s0.x.x.epil":                         ; preds = %"end for blur_x.s0.x.x.loopexit.unr-lcssa", %"for blur_x.s0.x.x.epil"
+  %blur_x.s0.x.x.epil = phi i32 [ %184, %"for blur_x.s0.x.x.epil" ], [ %blur_x.s0.x.x.unr, %"end for blur_x.s0.x.x.loopexit.unr-lcssa" ]
+  %epil.iter = phi i32 [ %epil.iter.sub, %"for blur_x.s0.x.x.epil" ], [ %xtraiter, %"end for blur_x.s0.x.x.loopexit.unr-lcssa" ]
+  %164 = shl nsw i32 %blur_x.s0.x.x.epil, 6
+  %t68.epil = add i32 %77, %164
+  %165 = getelementptr inbounds i16, i16* %.pre-phi, i32 %t68.epil
+  %166 = getelementptr inbounds i16, i16* %165, i32 -63
+  %167 = bitcast i16* %166 to <32 x i32>*
+  %t10921.epil = load <32 x i32>, <32 x i32>* %167, align 2, !tbaa !97
+  %168 = getelementptr inbounds i16, i16* %165, i32 -62
+  %169 = bitcast i16* %168 to <32 x i32>*
+  %t11022.epil = load <32 x i32>, <32 x i32>* %169, align 2, !tbaa !97
+  %170 = getelementptr inbounds i16, i16* %165, i32 -64
+  %171 = bitcast i16* %170 to <32 x i32>*
+  %t11123.epil = load <32 x i32>, <32 x i32>* %171, align 2, !tbaa !97
+  %172 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11022.epil, <32 x i32> %t10921.epil) #12
+  %173 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %172, <32 x i32> %t11123.epil) #12
+  %174 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %173) #12
+  %175 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %174, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %176 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %175) #12
+  %177 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %176, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %178 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %175) #12
+  %179 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %178, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %180 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %177, <32 x i32> %179) #12
+  %181 = add nsw i32 %164, %79
+  %182 = getelementptr inbounds i16, i16* %blur_x, i32 %181
+  %183 = bitcast i16* %182 to <32 x i32>*
+  store <32 x i32> %180, <32 x i32>* %183, align 2, !tbaa !100
+  %184 = add nuw nsw i32 %blur_x.s0.x.x.epil, 1
   %epil.iter.sub = add i32 %epil.iter, -1
   %epil.iter.cmp.not = icmp eq i32 %epil.iter.sub, 0
-  br i1 %epil.iter.cmp.not, label %call_destructor.exit, label %"for output.s0.y.y.epil", !llvm.loop !102
+  br i1 %epil.iter.cmp.not, label %"end for blur_x.s0.x.x", label %"for blur_x.s0.x.x.epil", !llvm.loop !102
 
-call_destructor.exit:                             ; preds = %call_destructor.exit.loopexit25.unr-lcssa, %"for output.s0.y.y.epil", %"end for output.s0.x.x.loopexit.us", %entry
-  tail call void @halide_qurt_hvx_unlock_as_destructor(i8* null, i8* nonnull inttoptr (i32 1 to i8*)) #13
+"end for blur_x.s0.x.x":                          ; preds = %"end for blur_x.s0.x.x.loopexit.unr-lcssa", %"for blur_x.s0.x.x.epil", %"for blur_y.s0.y.yi.$n.rebased"
+  br i1 %t87, label %then_bb2, label %"consume blur_x"
+
+then_bb2:                                         ; preds = %"end for blur_x.s0.x.x"
+  %185 = add nsw i32 %"blur_y.s0.y.yi.$n.rebased", %blur_y.s0.y.yi.base
+  %186 = add nsw i32 %185, -2
+  %187 = mul nsw i32 %186, %input.stride.1
+  %t70 = add nsw i32 %44, %187
+  %188 = getelementptr inbounds i16, i16* %.pre-phi, i32 %t70
+  %189 = getelementptr inbounds i16, i16* %188, i32 -63
+  %190 = bitcast i16* %189 to <32 x i32>*
+  %t11218 = load <32 x i32>, <32 x i32>* %190, align 2, !tbaa !97
+  %191 = getelementptr inbounds i16, i16* %188, i32 -62
+  %192 = bitcast i16* %191 to <32 x i32>*
+  %t11319 = load <32 x i32>, <32 x i32>* %192, align 2, !tbaa !97
+  %193 = getelementptr inbounds i16, i16* %188, i32 -64
+  %194 = bitcast i16* %193 to <32 x i32>*
+  %t11420 = load <32 x i32>, <32 x i32>* %194, align 2, !tbaa !97
+  %195 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11319, <32 x i32> %t11218) #12
+  %196 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %195, <32 x i32> %t11420) #12
+  %197 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %196) #12
+  %198 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %197, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %199 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %198) #12
+  %200 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %199, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %201 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %198) #12
+  %202 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %201, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %203 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %200, <32 x i32> %202) #12
+  %204 = and i32 %185, 3
+  %205 = add nuw nsw i32 %204, 1
+  %206 = mul nsw i32 %205, %a4
+  %207 = getelementptr inbounds i16, i16* %48, i32 %206
+  %208 = bitcast i16* %207 to <32 x i32>*
+  store <32 x i32> %203, <32 x i32>* %208, align 2, !tbaa !100
+  br label %"consume blur_x"
+
+"consume blur_x":                                 ; preds = %"end for blur_x.s0.x.x", %then_bb2
+  %209 = icmp ugt i32 %"blur_y.s0.y.yi.$n.rebased", 1
+  br i1 %209, label %then_bb5, label %after_bb4
+
+after_bb4:                                        ; preds = %"for blur_y.s0.x.x7.preheader", %"end for blur_y.s0.x.x", %"consume blur_x"
+  %210 = add nuw nsw i32 %"blur_y.s0.y.yi.$n.rebased", 1
+  %.not = icmp eq i32 %210, 130
+  br i1 %.not, label %"end for blur_y.s0.y.yi.$n.rebased", label %"for blur_y.s0.y.yi.$n.rebased"
+
+then_bb5:                                         ; preds = %"consume blur_x"
+  br i1 %45, label %"for blur_y.s0.x.x.preheader", label %"end for blur_y.s0.x.x", !prof !96
+
+"for blur_y.s0.x.x.preheader":                    ; preds = %then_bb5
+  %211 = add nsw i32 %"blur_y.s0.y.yi.$n.rebased", %blur_y.s0.y.yi.base
+  %212 = add nsw i32 %211, 3
+  %213 = and i32 %212, 3
+  %214 = mul nsw i32 %213, %a4
+  %215 = and i32 %211, 3
+  %216 = mul nsw i32 %215, %a4
+  %217 = add nsw i32 %211, 2
+  %218 = and i32 %217, 3
+  %219 = mul nsw i32 %218, %a4
+  %220 = add nsw i32 %211, -2
+  %221 = mul nsw i32 %220, %blur_y.stride.1
+  br i1 %65, label %"end for blur_y.s0.x.x.loopexit.unr-lcssa", label %"for blur_y.s0.x.x"
+
+"for blur_y.s0.x.x":                              ; preds = %"for blur_y.s0.x.x.preheader", %"for blur_y.s0.x.x"
+  %blur_y.s0.x.x = phi i32 [ %317, %"for blur_y.s0.x.x" ], [ 0, %"for blur_y.s0.x.x.preheader" ]
+  %niter36 = phi i32 [ %niter36.nsub.3, %"for blur_y.s0.x.x" ], [ %unroll_iter35, %"for blur_y.s0.x.x.preheader" ]
+  %222 = shl nsw i32 %blur_y.s0.x.x, 6
+  %223 = sub nsw i32 %222, %t94
+  %224 = add nsw i32 %223, %214
+  %225 = getelementptr inbounds i16, i16* %50, i32 %224
+  %226 = bitcast i16* %225 to <32 x i32>*
+  %t11714 = load <32 x i32>, <32 x i32>* %226, align 2, !tbaa !100
+  %227 = add nsw i32 %223, %216
+  %228 = getelementptr inbounds i16, i16* %52, i32 %227
+  %229 = bitcast i16* %228 to <32 x i32>*
+  %t11815 = load <32 x i32>, <32 x i32>* %229, align 2, !tbaa !100
+  %230 = add nsw i32 %223, %219
+  %231 = getelementptr inbounds i16, i16* %54, i32 %230
+  %232 = bitcast i16* %231 to <32 x i32>*
+  %t11916 = load <32 x i32>, <32 x i32>* %232, align 2, !tbaa !100
+  %233 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11815, <32 x i32> %t11714) #12
+  %234 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %233, <32 x i32> %t11916) #12
+  %235 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %234) #12
+  %236 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %235, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %237 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %236) #12
+  %238 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %237, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %239 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %236) #12
+  %240 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %239, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %241 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %238, <32 x i32> %240) #12
+  %242 = add nsw i32 %222, %221
+  %243 = getelementptr inbounds i16, i16* %blur_y31, i32 %242
+  %244 = bitcast i16* %243 to <32 x i32>*
+  store <32 x i32> %241, <32 x i32>* %244, align 2, !tbaa !103
+  %245 = shl i32 %blur_y.s0.x.x, 6
+  %246 = or i32 %245, 64
+  %247 = sub nsw i32 %246, %t94
+  %248 = add nsw i32 %247, %214
+  %249 = getelementptr inbounds i16, i16* %50, i32 %248
+  %250 = bitcast i16* %249 to <32 x i32>*
+  %t11714.1 = load <32 x i32>, <32 x i32>* %250, align 2, !tbaa !100
+  %251 = add nsw i32 %247, %216
+  %252 = getelementptr inbounds i16, i16* %52, i32 %251
+  %253 = bitcast i16* %252 to <32 x i32>*
+  %t11815.1 = load <32 x i32>, <32 x i32>* %253, align 2, !tbaa !100
+  %254 = add nsw i32 %247, %219
+  %255 = getelementptr inbounds i16, i16* %54, i32 %254
+  %256 = bitcast i16* %255 to <32 x i32>*
+  %t11916.1 = load <32 x i32>, <32 x i32>* %256, align 2, !tbaa !100
+  %257 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11815.1, <32 x i32> %t11714.1) #12
+  %258 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %257, <32 x i32> %t11916.1) #12
+  %259 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %258) #12
+  %260 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %259, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %261 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %260) #12
+  %262 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %261, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %263 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %260) #12
+  %264 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %263, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %265 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %262, <32 x i32> %264) #12
+  %266 = add nsw i32 %246, %221
+  %267 = getelementptr inbounds i16, i16* %blur_y31, i32 %266
+  %268 = bitcast i16* %267 to <32 x i32>*
+  store <32 x i32> %265, <32 x i32>* %268, align 2, !tbaa !103
+  %269 = shl i32 %blur_y.s0.x.x, 6
+  %270 = or i32 %269, 128
+  %271 = sub nsw i32 %270, %t94
+  %272 = add nsw i32 %271, %214
+  %273 = getelementptr inbounds i16, i16* %50, i32 %272
+  %274 = bitcast i16* %273 to <32 x i32>*
+  %t11714.2 = load <32 x i32>, <32 x i32>* %274, align 2, !tbaa !100
+  %275 = add nsw i32 %271, %216
+  %276 = getelementptr inbounds i16, i16* %52, i32 %275
+  %277 = bitcast i16* %276 to <32 x i32>*
+  %t11815.2 = load <32 x i32>, <32 x i32>* %277, align 2, !tbaa !100
+  %278 = add nsw i32 %271, %219
+  %279 = getelementptr inbounds i16, i16* %54, i32 %278
+  %280 = bitcast i16* %279 to <32 x i32>*
+  %t11916.2 = load <32 x i32>, <32 x i32>* %280, align 2, !tbaa !100
+  %281 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11815.2, <32 x i32> %t11714.2) #12
+  %282 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %281, <32 x i32> %t11916.2) #12
+  %283 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %282) #12
+  %284 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %283, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %285 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %284) #12
+  %286 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %285, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %287 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %284) #12
+  %288 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %287, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %289 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %286, <32 x i32> %288) #12
+  %290 = add nsw i32 %270, %221
+  %291 = getelementptr inbounds i16, i16* %blur_y31, i32 %290
+  %292 = bitcast i16* %291 to <32 x i32>*
+  store <32 x i32> %289, <32 x i32>* %292, align 2, !tbaa !103
+  %293 = shl i32 %blur_y.s0.x.x, 6
+  %294 = or i32 %293, 192
+  %295 = sub nsw i32 %294, %t94
+  %296 = add nsw i32 %295, %214
+  %297 = getelementptr inbounds i16, i16* %50, i32 %296
+  %298 = bitcast i16* %297 to <32 x i32>*
+  %t11714.3 = load <32 x i32>, <32 x i32>* %298, align 2, !tbaa !100
+  %299 = add nsw i32 %295, %216
+  %300 = getelementptr inbounds i16, i16* %52, i32 %299
+  %301 = bitcast i16* %300 to <32 x i32>*
+  %t11815.3 = load <32 x i32>, <32 x i32>* %301, align 2, !tbaa !100
+  %302 = add nsw i32 %295, %219
+  %303 = getelementptr inbounds i16, i16* %54, i32 %302
+  %304 = bitcast i16* %303 to <32 x i32>*
+  %t11916.3 = load <32 x i32>, <32 x i32>* %304, align 2, !tbaa !100
+  %305 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11815.3, <32 x i32> %t11714.3) #12
+  %306 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %305, <32 x i32> %t11916.3) #12
+  %307 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %306) #12
+  %308 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %307, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %309 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %308) #12
+  %310 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %309, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %311 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %308) #12
+  %312 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %311, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %313 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %310, <32 x i32> %312) #12
+  %314 = add nsw i32 %294, %221
+  %315 = getelementptr inbounds i16, i16* %blur_y31, i32 %314
+  %316 = bitcast i16* %315 to <32 x i32>*
+  store <32 x i32> %313, <32 x i32>* %316, align 2, !tbaa !103
+  %317 = add nuw nsw i32 %blur_y.s0.x.x, 4
+  %niter36.nsub.3 = add i32 %niter36, -4
+  %niter36.ncmp.3 = icmp eq i32 %niter36.nsub.3, 0
+  br i1 %niter36.ncmp.3, label %"end for blur_y.s0.x.x.loopexit.unr-lcssa", label %"for blur_y.s0.x.x"
+
+"end for blur_y.s0.x.x.loopexit.unr-lcssa":       ; preds = %"for blur_y.s0.x.x", %"for blur_y.s0.x.x.preheader"
+  %blur_y.s0.x.x.unr = phi i32 [ 0, %"for blur_y.s0.x.x.preheader" ], [ %317, %"for blur_y.s0.x.x" ]
+  br i1 %lcmp.mod34.not, label %"end for blur_y.s0.x.x", label %"for blur_y.s0.x.x.epil"
+
+"for blur_y.s0.x.x.epil":                         ; preds = %"end for blur_y.s0.x.x.loopexit.unr-lcssa", %"for blur_y.s0.x.x.epil"
+  %blur_y.s0.x.x.epil = phi i32 [ %341, %"for blur_y.s0.x.x.epil" ], [ %blur_y.s0.x.x.unr, %"end for blur_y.s0.x.x.loopexit.unr-lcssa" ]
+  %epil.iter33 = phi i32 [ %epil.iter33.sub, %"for blur_y.s0.x.x.epil" ], [ %xtraiter32, %"end for blur_y.s0.x.x.loopexit.unr-lcssa" ]
+  %318 = shl nsw i32 %blur_y.s0.x.x.epil, 6
+  %319 = sub nsw i32 %318, %t94
+  %320 = add nsw i32 %319, %214
+  %321 = getelementptr inbounds i16, i16* %50, i32 %320
+  %322 = bitcast i16* %321 to <32 x i32>*
+  %t11714.epil = load <32 x i32>, <32 x i32>* %322, align 2, !tbaa !100
+  %323 = add nsw i32 %319, %216
+  %324 = getelementptr inbounds i16, i16* %52, i32 %323
+  %325 = bitcast i16* %324 to <32 x i32>*
+  %t11815.epil = load <32 x i32>, <32 x i32>* %325, align 2, !tbaa !100
+  %326 = add nsw i32 %319, %219
+  %327 = getelementptr inbounds i16, i16* %54, i32 %326
+  %328 = bitcast i16* %327 to <32 x i32>*
+  %t11916.epil = load <32 x i32>, <32 x i32>* %328, align 2, !tbaa !100
+  %329 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t11815.epil, <32 x i32> %t11714.epil) #12
+  %330 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %329, <32 x i32> %t11916.epil) #12
+  %331 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %330) #12
+  %332 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %331, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %333 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %332) #12
+  %334 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %333, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %335 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %332) #12
+  %336 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %335, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %337 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %334, <32 x i32> %336) #12
+  %338 = add nsw i32 %318, %221
+  %339 = getelementptr inbounds i16, i16* %blur_y31, i32 %338
+  %340 = bitcast i16* %339 to <32 x i32>*
+  store <32 x i32> %337, <32 x i32>* %340, align 2, !tbaa !103
+  %341 = add nuw nsw i32 %blur_y.s0.x.x.epil, 1
+  %epil.iter33.sub = add i32 %epil.iter33, -1
+  %epil.iter33.cmp.not = icmp eq i32 %epil.iter33.sub, 0
+  br i1 %epil.iter33.cmp.not, label %"end for blur_y.s0.x.x", label %"for blur_y.s0.x.x.epil", !llvm.loop !105
+
+"end for blur_y.s0.x.x":                          ; preds = %"end for blur_y.s0.x.x.loopexit.unr-lcssa", %"for blur_y.s0.x.x.epil", %then_bb5
+  br i1 %46, label %"for blur_y.s0.x.x7.preheader", label %after_bb4, !prof !96
+
+"for blur_y.s0.x.x7.preheader":                   ; preds = %"end for blur_y.s0.x.x"
+  %342 = add nsw i32 %"blur_y.s0.y.yi.$n.rebased", %blur_y.s0.y.yi.base
+  %343 = add nsw i32 %342, 3
+  %344 = and i32 %343, 3
+  %345 = add nuw nsw i32 %344, 1
+  %346 = mul nsw i32 %345, %a4
+  %347 = getelementptr inbounds i16, i16* %56, i32 %346
+  %348 = bitcast i16* %347 to <32 x i32>*
+  %t12110 = load <32 x i32>, <32 x i32>* %348, align 2, !tbaa !100
+  %349 = and i32 %342, 3
+  %350 = add nuw nsw i32 %349, 1
+  %351 = mul nsw i32 %350, %a4
+  %352 = getelementptr inbounds i16, i16* %58, i32 %351
+  %353 = bitcast i16* %352 to <32 x i32>*
+  %t12211 = load <32 x i32>, <32 x i32>* %353, align 2, !tbaa !100
+  %354 = add nsw i32 %342, 2
+  %355 = and i32 %354, 3
+  %356 = add nuw nsw i32 %355, 1
+  %357 = mul nsw i32 %356, %a4
+  %358 = getelementptr inbounds i16, i16* %60, i32 %357
+  %359 = bitcast i16* %358 to <32 x i32>*
+  %t12312 = load <32 x i32>, <32 x i32>* %359, align 2, !tbaa !100
+  %360 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %t12211, <32 x i32> %t12110) #12
+  %361 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %360, <32 x i32> %t12312) #12
+  %362 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %361) #12
+  %363 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %362, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>) #12
+  %364 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %363) #12
+  %365 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %364, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %366 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %363) #12
+  %367 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %366, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>) #12
+  %368 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %365, <32 x i32> %367) #12
+  %369 = add nsw i32 %342, -2
+  %370 = mul nsw i32 %369, %blur_y.stride.1
+  %371 = add nsw i32 %370, %blur_y.extent.0
+  %372 = getelementptr inbounds i16, i16* %61, i32 %371
+  %373 = bitcast i16* %372 to <32 x i32>*
+  store <32 x i32> %368, <32 x i32>* %373, align 2, !tbaa !103
+  br label %after_bb4
+}
+
+; Function Attrs: nounwind
+define i32 @blur3x3_hvx128(%struct.halide_buffer_t* noalias nocapture readonly %input.buffer, %struct.halide_buffer_t* noalias nocapture readonly %blur_y.buffer) local_unnamed_addr #11 {
+entry:
+  %parallel_closure = alloca { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, align 4
+  %host.i = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %blur_y.buffer, i32 0, i32 2
+  %0 = load i8*, i8** %host.i, align 4, !tbaa !43
+  %dim.i = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %blur_y.buffer, i32 0, i32 6
+  %1 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i, align 8, !tbaa !46
+  %extent.i = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 0, i32 1
+  %2 = load i32, i32* %extent.i, align 4, !tbaa !49
+  %extent.i6 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 1
+  %3 = load i32, i32* %extent.i6, align 4, !tbaa !49
+  %stride.i8 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 2
+  %4 = load i32, i32* %stride.i8, align 4, !tbaa !50
+  %host.i9 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %input.buffer, i32 0, i32 2
+  %5 = load i8*, i8** %host.i9, align 4, !tbaa !43
+  %dim.i10 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %input.buffer, i32 0, i32 6
+  %6 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i10, align 8, !tbaa !46
+  %extent.i13 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 0, i32 1
+  %7 = load i32, i32* %extent.i13, align 4, !tbaa !49
+  %extent.i19 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 1
+  %8 = load i32, i32* %extent.i19, align 4, !tbaa !49
+  %stride.i21 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 2
+  %9 = load i32, i32* %stride.i21, align 4, !tbaa !50
+  %10 = icmp slt i32 %2, 64
+  %11 = select i1 %10, i32 %2, i32 64
+  %12 = icmp sgt i32 %2, 64
+  %13 = select i1 %12, i32 %2, i32 64
+  %14 = add nsw i32 %13, -1
+  %15 = and i32 %14, -64
+  %a5 = add nsw i32 %15, %11
+  %a9 = ashr i32 %2, 6
+  %16 = icmp sgt i32 %a9, 0
+  %17 = select i1 %16, i32 %a9, i32 0
+  %18 = add nsw i32 %2, 63
+  %19 = ashr i32 %18, 6
+  %t90 = sub nsw i32 %19, %17
+  %20 = and i32 %13, 63
+  %t87 = icmp ne i32 %20, 0
+  %21 = icmp sgt i32 %2, 63
+  %22 = icmp slt i32 %a5, %2
+  %23 = select i1 %22, i32 %a5, i32 %2
+  %24 = add nsw i32 %23, 2
+  %25 = icmp sle i32 %24, %7
+  %t82 = and i1 %21, %25
+  %26 = lshr i32 %13, 6
+  %27 = shl nsw i32 %9, 1
+  %28 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 0
+  store i8* %0, i8** %28, align 4
+  %29 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 1
+  store i8* %5, i8** %29, align 4
+  %30 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 2
+  store i32 %2, i32* %30, align 4
+  %31 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 3
+  store i32 %3, i32* %31, align 4
+  %32 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 4
+  store i32 %4, i32* %32, align 4
+  %33 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 5
+  store i32 %8, i32* %33, align 4
+  %34 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 6
+  store i32 %9, i32* %34, align 4
+  %35 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 7
+  store i32 %26, i32* %35, align 4
+  %36 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 8
+  store i32 %t90, i32* %36, align 4
+  %37 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 9
+  store i32 %27, i32* %37, align 4
+  %38 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 10
+  store i32 %17, i32* %38, align 4
+  %39 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 11
+  store i32 %13, i32* %39, align 4
+  %40 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 12
+  store i32 %11, i32* %40, align 4
+  %41 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 13
+  store i1 %t82, i1* %41, align 4
+  %42 = getelementptr inbounds { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }, { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure, i32 0, i32 14
+  store i1 %t87, i1* %42, align 1
+  %43 = add nsw i32 %3, 127
+  %44 = ashr i32 %43, 7
+  %45 = bitcast { i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i1, i1 }* %parallel_closure to i8*
+  %call4.i = call i32 @halide_do_par_for(i8* null, i32 (i8*, i32, i8*)* nonnull @blur3x3_hvx128_par_for_blur_y_s0_y_y, i32 0, i32 %44, i8* nonnull %45) #15
   ret i32 0
 }
 
-define i32 @gaussian3x3_hvx128_argv(i8** nocapture readonly %0) local_unnamed_addr {
+; Function Attrs: nounwind
+define i32 @blur3x3_hvx128_argv(i8** nocapture readonly %0) local_unnamed_addr #12 {
 entry:
   %1 = bitcast i8** %0 to %struct.halide_buffer_t**
   %2 = load %struct.halide_buffer_t*, %struct.halide_buffer_t** %1, align 4
   %3 = getelementptr i8*, i8** %0, i32 1
   %4 = bitcast i8** %3 to %struct.halide_buffer_t**
   %5 = load %struct.halide_buffer_t*, %struct.halide_buffer_t** %4, align 4
-  %6 = tail call i32 @gaussian3x3_hvx128(%struct.halide_buffer_t* %2, %struct.halide_buffer_t* %5) #16
+  %6 = tail call i32 @blur3x3_hvx128(%struct.halide_buffer_t* %2, %struct.halide_buffer_t* %5) #17
   ret i32 0
 }
 
 ; Function Attrs: norecurse nounwind readnone willreturn
-define nonnull %struct.halide_filter_metadata_t* @gaussian3x3_hvx128_metadata() local_unnamed_addr #11 {
+define nonnull %struct.halide_filter_metadata_t* @blur3x3_hvx128_metadata() local_unnamed_addr #13 {
 entry:
-  ret %struct.halide_filter_metadata_t* @gaussian3x3_hvx128_metadata_storage
+  ret %struct.halide_filter_metadata_t* @blur3x3_hvx128_metadata_storage
 }
 
 ; Function Attrs: nounwind readnone willreturn
-define <128 x i8> @hydride.node.gaussian3x3_hvx_depth3.0(<128 x i8> %arg, <128 x i8> %arg.1, <128 x i8> %arg.2, <128 x i8> %arg.3, <128 x i8> %arg.4, <128 x i8> %arg.5, <128 x i8> %arg.6, <128 x i8> %arg.7, <128 x i8> %arg.8, <128 x i8> %arg.9, <128 x i8> %arg.10, <128 x i8> %arg.11, <128 x i8> %arg.12, <128 x i8> %arg.13, <128 x i8> %arg.14, <128 x i8> %arg.15, <128 x i8> %arg.16, <128 x i8> %arg.17) local_unnamed_addr #12 {
+define <64 x i16> @hydride.node.blur3x3_hvx_depth3.0(<64 x i16> %arg, <64 x i16> %arg.1, <64 x i16> %arg.2, <64 x i16> %arg.3, <64 x i16> %arg.4, <64 x i16> %arg.5) local_unnamed_addr #14 {
 entry:
-  %0 = bitcast <128 x i8> %arg.7 to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i8> %arg.6 to <32 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %2)
-  %4 = bitcast <128 x i8> %arg.3 to <32 x i32>
-  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %4)
-  %6 = bitcast <128 x i8> %arg.2 to <32 x i32>
-  %7 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %6)
-  %8 = bitcast <128 x i8> %arg.1 to <32 x i32>
-  %9 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %8)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %12)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %11, <32 x i32> %13)
-  %15 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %7, <64 x i32> %14)
-  %16 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %5, <64 x i32> %15)
-  %17 = bitcast <128 x i8> %arg.4 to <32 x i32>
-  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %18, <64 x i32> %18)
-  %20 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %16, <64 x i32> %19)
-  %21 = bitcast <128 x i8> %arg.5 to <32 x i32>
-  %22 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %21)
-  %23 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %22, <64 x i32> %16)
-  %24 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %20, <64 x i32> %23)
-  %25 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %3, <64 x i32> %24)
-  %26 = bitcast <128 x i8> %arg to <32 x i32>
-  %27 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %28)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %27)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %30)
-  %32 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %29, <32 x i32> %31)
-  %33 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %25, <64 x i32> %32)
-  %34 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %1, <64 x i32> %33)
-  %35 = bitcast <128 x i8> %arg.8 to <32 x i32>
-  %36 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %35)
-  %37 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %34, <64 x i32> %36)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %38)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %39, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %41 = bitcast <128 x i8> %arg.16 to <32 x i32>
-  %42 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %41)
-  %43 = bitcast <128 x i8> %arg.15 to <32 x i32>
-  %44 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %43)
-  %45 = bitcast <128 x i8> %arg.12 to <32 x i32>
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %45)
-  %47 = bitcast <128 x i8> %arg.11 to <32 x i32>
-  %48 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %47)
-  %49 = bitcast <128 x i8> %arg.10 to <32 x i32>
-  %50 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %49)
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %50)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %50)
-  %54 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %53)
-  %55 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %52, <32 x i32> %54)
-  %56 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %48, <64 x i32> %55)
-  %57 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %46, <64 x i32> %56)
-  %58 = bitcast <128 x i8> %arg.13 to <32 x i32>
-  %59 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %58)
-  %60 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %59, <64 x i32> %59)
-  %61 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %57, <64 x i32> %60)
-  %62 = bitcast <128 x i8> %arg.14 to <32 x i32>
-  %63 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %62)
-  %64 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %63, <64 x i32> %57)
-  %65 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %61, <64 x i32> %64)
-  %66 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %44, <64 x i32> %65)
-  %67 = bitcast <128 x i8> %arg.9 to <32 x i32>
-  %68 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %67)
-  %69 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %68)
-  %70 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %69)
-  %71 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %68)
-  %72 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %71)
-  %73 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %70, <32 x i32> %72)
-  %74 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %66, <64 x i32> %73)
-  %75 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %42, <64 x i32> %74)
-  %76 = bitcast <128 x i8> %arg.17 to <32 x i32>
-  %77 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %76)
-  %78 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %75, <64 x i32> %77)
-  %79 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %78)
-  %80 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %79)
-  %81 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %80, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %82 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %40, <32 x i32> %81)
-  %83 = bitcast <32 x i32> %82 to <128 x i8>
-  ret <128 x i8> %83
+  %0 = bitcast <64 x i16> %arg.1 to <32 x i32>
+  %1 = bitcast <64 x i16> %arg to <32 x i32>
+  %2 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %0, <32 x i32> %1)
+  %3 = bitcast <64 x i16> %arg.2 to <32 x i32>
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %2, <32 x i32> %3)
+  %5 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %4)
+  %6 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %5, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %7 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %6)
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %7, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %9 = bitcast <64 x i16> %arg.4 to <32 x i32>
+  %10 = bitcast <64 x i16> %arg.3 to <32 x i32>
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %9, <32 x i32> %10)
+  %12 = bitcast <64 x i16> %arg.5 to <32 x i32>
+  %13 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %11, <32 x i32> %12)
+  %14 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %13)
+  %15 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %14, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %16 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %16, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %18 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %8, <32 x i32> %17)
+  %19 = bitcast <32 x i32> %18 to <64 x i16>
+  ret <64 x i16> %19
 }
 
 ; Function Attrs: nounwind readnone
-declare <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32>, <64 x i32>) #9
+declare <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32>, <32 x i32>) #9
+
+; Function Attrs: nounwind readnone
+declare <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32>) #9
 
 ; Function Attrs: nounwind readnone willreturn
-define <128 x i8> @hydride.node.gaussian3x3_hvx_depth3.1(<128 x i8> %arg, <128 x i8> %arg.1, <128 x i8> %arg.2, <128 x i8> %arg.3, <128 x i8> %arg.4, <128 x i8> %arg.5, <128 x i8> %arg.6, <128 x i8> %arg.7, <128 x i8> %arg.8, <128 x i8> %arg.9, <128 x i8> %arg.10, <128 x i8> %arg.11, <128 x i8> %arg.12, <128 x i8> %arg.13, <128 x i8> %arg.14, <128 x i8> %arg.15, <128 x i8> %arg.16) local_unnamed_addr #12 {
+define <64 x i16> @hydride.node.blur3x3_hvx_depth3.1(<64 x i16> %arg, <64 x i16> %arg.1, <64 x i16> %arg.2, <64 x i16> %arg.3, <64 x i16> %arg.4, <64 x i16> %arg.5) local_unnamed_addr #14 {
 entry:
-  %0 = bitcast <128 x i8> %arg.7 to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i8> %arg.6 to <32 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %2)
-  %4 = bitcast <128 x i8> %arg.3 to <32 x i32>
-  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %4)
-  %6 = bitcast <128 x i8> %arg.2 to <32 x i32>
-  %7 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %6)
-  %8 = bitcast <128 x i8> %arg.1 to <32 x i32>
-  %9 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %8)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %12)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %11, <32 x i32> %13)
-  %15 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %7, <64 x i32> %14)
-  %16 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %5, <64 x i32> %15)
-  %17 = bitcast <128 x i8> %arg.4 to <32 x i32>
-  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %18, <64 x i32> %18)
-  %20 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %16, <64 x i32> %19)
-  %21 = bitcast <128 x i8> %arg.5 to <32 x i32>
-  %22 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %21)
-  %23 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %22, <64 x i32> %16)
-  %24 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %20, <64 x i32> %23)
-  %25 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %3, <64 x i32> %24)
-  %26 = bitcast <128 x i8> %arg to <32 x i32>
-  %27 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %28)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %27)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %30)
-  %32 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %29, <32 x i32> %31)
-  %33 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %25, <64 x i32> %32)
-  %34 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %1, <64 x i32> %33)
-  %35 = bitcast <128 x i8> %arg.8 to <32 x i32>
-  %36 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %35)
-  %37 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %34, <64 x i32> %36)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %38)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %39, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %41 = bitcast <128 x i8> %arg.15 to <32 x i32>
-  %42 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %41)
-  %43 = bitcast <128 x i8> %arg.14 to <32 x i32>
-  %44 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %43)
-  %45 = bitcast <128 x i8> %arg.11 to <32 x i32>
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %45)
-  %47 = bitcast <128 x i8> %arg.10 to <32 x i32>
-  %48 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %47)
-  %49 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %48, <64 x i32> %14)
-  %50 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %46, <64 x i32> %49)
-  %51 = bitcast <128 x i8> %arg.12 to <32 x i32>
-  %52 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %51)
-  %53 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %52, <64 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %50, <64 x i32> %53)
-  %55 = bitcast <128 x i8> %arg.13 to <32 x i32>
-  %56 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %55)
-  %57 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %56, <64 x i32> %50)
-  %58 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %54, <64 x i32> %57)
-  %59 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %44, <64 x i32> %58)
-  %60 = bitcast <128 x i8> %arg.9 to <32 x i32>
-  %61 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %60)
-  %62 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %61)
-  %63 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %62)
-  %64 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %61)
-  %65 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %64)
-  %66 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %63, <32 x i32> %65)
-  %67 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %59, <64 x i32> %66)
-  %68 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %42, <64 x i32> %67)
-  %69 = bitcast <128 x i8> %arg.16 to <32 x i32>
-  %70 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %69)
-  %71 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %68, <64 x i32> %70)
-  %72 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %71)
-  %73 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %72)
-  %74 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %73, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %75 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %40, <32 x i32> %74)
-  %76 = bitcast <32 x i32> %75 to <128 x i8>
-  ret <128 x i8> %76
+  %0 = bitcast <64 x i16> %arg.1 to <32 x i32>
+  %1 = bitcast <64 x i16> %arg to <32 x i32>
+  %2 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %0, <32 x i32> %1)
+  %3 = bitcast <64 x i16> %arg.2 to <32 x i32>
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %2, <32 x i32> %3)
+  %5 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %4)
+  %6 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %5, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %7 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %6)
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %7, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %9 = bitcast <64 x i16> %arg.4 to <32 x i32>
+  %10 = bitcast <64 x i16> %arg.3 to <32 x i32>
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %9, <32 x i32> %10)
+  %12 = bitcast <64 x i16> %arg.5 to <32 x i32>
+  %13 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %11, <32 x i32> %12)
+  %14 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %13)
+  %15 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %14, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %16 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %16, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %18 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %8, <32 x i32> %17)
+  %19 = bitcast <32 x i32> %18 to <64 x i16>
+  ret <64 x i16> %19
 }
 
 ; Function Attrs: nounwind readnone willreturn
-define <128 x i8> @hydride.node.gaussian3x3_hvx_depth3.2(<128 x i8> %arg, <128 x i8> %arg.1, <128 x i8> %arg.2, <128 x i8> %arg.3, <128 x i8> %arg.4, <128 x i8> %arg.5, <128 x i8> %arg.6, <128 x i8> %arg.7, <128 x i8> %arg.8, <128 x i8> %arg.9, <128 x i8> %arg.10, <128 x i8> %arg.11, <128 x i8> %arg.12, <128 x i8> %arg.13, <128 x i8> %arg.14, <128 x i8> %arg.15, <128 x i8> %arg.16) local_unnamed_addr #12 {
+define <64 x i16> @hydride.node.blur3x3_hvx_depth3.2(<64 x i16> %arg, <64 x i16> %arg.1, <64 x i16> %arg.2, <64 x i16> %arg.3, <64 x i16> %arg.4, <64 x i16> %arg.5) local_unnamed_addr #14 {
 entry:
-  %0 = bitcast <128 x i8> %arg.7 to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i8> %arg.6 to <32 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %2)
-  %4 = bitcast <128 x i8> %arg.3 to <32 x i32>
-  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %4)
-  %6 = bitcast <128 x i8> %arg.2 to <32 x i32>
-  %7 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %6)
-  %8 = bitcast <128 x i8> %arg.1 to <32 x i32>
-  %9 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %8)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %12)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %11, <32 x i32> %13)
-  %15 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %7, <64 x i32> %14)
-  %16 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %5, <64 x i32> %15)
-  %17 = bitcast <128 x i8> %arg.4 to <32 x i32>
-  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %18, <64 x i32> %18)
-  %20 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %16, <64 x i32> %19)
-  %21 = bitcast <128 x i8> %arg.5 to <32 x i32>
-  %22 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %21)
-  %23 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %22, <64 x i32> %16)
-  %24 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %20, <64 x i32> %23)
-  %25 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %3, <64 x i32> %24)
-  %26 = bitcast <128 x i8> %arg to <32 x i32>
-  %27 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %28)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %27)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %30)
-  %32 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %29, <32 x i32> %31)
-  %33 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %25, <64 x i32> %32)
-  %34 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %1, <64 x i32> %33)
-  %35 = bitcast <128 x i8> %arg.8 to <32 x i32>
-  %36 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %35)
-  %37 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %34, <64 x i32> %36)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %38)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %39, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %41 = bitcast <128 x i8> %arg.15 to <32 x i32>
-  %42 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %41)
-  %43 = bitcast <128 x i8> %arg.14 to <32 x i32>
-  %44 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %43)
-  %45 = bitcast <128 x i8> %arg.11 to <32 x i32>
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %45)
-  %47 = bitcast <128 x i8> %arg.10 to <32 x i32>
-  %48 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %47)
-  %49 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %48, <64 x i32> %14)
-  %50 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %46, <64 x i32> %49)
-  %51 = bitcast <128 x i8> %arg.12 to <32 x i32>
-  %52 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %51)
-  %53 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %52, <64 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %50, <64 x i32> %53)
-  %55 = bitcast <128 x i8> %arg.13 to <32 x i32>
-  %56 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %55)
-  %57 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %56, <64 x i32> %50)
-  %58 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %54, <64 x i32> %57)
-  %59 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %44, <64 x i32> %58)
-  %60 = bitcast <128 x i8> %arg.9 to <32 x i32>
-  %61 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %60)
-  %62 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %61)
-  %63 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %62)
-  %64 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %61)
-  %65 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %64)
-  %66 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %63, <32 x i32> %65)
-  %67 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %59, <64 x i32> %66)
-  %68 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %42, <64 x i32> %67)
-  %69 = bitcast <128 x i8> %arg.16 to <32 x i32>
-  %70 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %69)
-  %71 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %68, <64 x i32> %70)
-  %72 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %71)
-  %73 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %72)
-  %74 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %73, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %75 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %40, <32 x i32> %74)
-  %76 = bitcast <32 x i32> %75 to <128 x i8>
-  ret <128 x i8> %76
+  %0 = bitcast <64 x i16> %arg.1 to <32 x i32>
+  %1 = bitcast <64 x i16> %arg to <32 x i32>
+  %2 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %0, <32 x i32> %1)
+  %3 = bitcast <64 x i16> %arg.2 to <32 x i32>
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %2, <32 x i32> %3)
+  %5 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %4)
+  %6 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %5, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %7 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %6)
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %7, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %9 = bitcast <64 x i16> %arg.4 to <32 x i32>
+  %10 = bitcast <64 x i16> %arg.3 to <32 x i32>
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %9, <32 x i32> %10)
+  %12 = bitcast <64 x i16> %arg.5 to <32 x i32>
+  %13 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %11, <32 x i32> %12)
+  %14 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %13)
+  %15 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %14, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %16 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %16, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %18 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %8, <32 x i32> %17)
+  %19 = bitcast <32 x i32> %18 to <64 x i16>
+  ret <64 x i16> %19
 }
 
 ; Function Attrs: nounwind readnone willreturn
-define <128 x i8> @hydride.node.gaussian3x3_hvx_depth3.3(<128 x i8> %arg, <128 x i8> %arg.1, <128 x i8> %arg.2, <128 x i8> %arg.3, <128 x i8> %arg.4, <128 x i8> %arg.5, <128 x i8> %arg.6, <128 x i8> %arg.7, <128 x i8> %arg.8, <128 x i8> %arg.9, <128 x i8> %arg.10, <128 x i8> %arg.11, <128 x i8> %arg.12, <128 x i8> %arg.13, <128 x i8> %arg.14, <128 x i8> %arg.15, <128 x i8> %arg.16) local_unnamed_addr #12 {
+define <64 x i16> @hydride.node.blur3x3_hvx_depth3.3(<64 x i16> %arg, <64 x i16> %arg.1, <64 x i16> %arg.2, <64 x i16> %arg.3, <64 x i16> %arg.4, <64 x i16> %arg.5) local_unnamed_addr #14 {
 entry:
-  %0 = bitcast <128 x i8> %arg.7 to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i8> %arg.6 to <32 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %2)
-  %4 = bitcast <128 x i8> %arg.3 to <32 x i32>
-  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %4)
-  %6 = bitcast <128 x i8> %arg.2 to <32 x i32>
-  %7 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %6)
-  %8 = bitcast <128 x i8> %arg.1 to <32 x i32>
-  %9 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %8)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %12)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %11, <32 x i32> %13)
-  %15 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %7, <64 x i32> %14)
-  %16 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %5, <64 x i32> %15)
-  %17 = bitcast <128 x i8> %arg.4 to <32 x i32>
-  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %18, <64 x i32> %18)
-  %20 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %16, <64 x i32> %19)
-  %21 = bitcast <128 x i8> %arg.5 to <32 x i32>
-  %22 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %21)
-  %23 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %22, <64 x i32> %16)
-  %24 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %20, <64 x i32> %23)
-  %25 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %3, <64 x i32> %24)
-  %26 = bitcast <128 x i8> %arg to <32 x i32>
-  %27 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %28)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %27)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %30)
-  %32 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %29, <32 x i32> %31)
-  %33 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %25, <64 x i32> %32)
-  %34 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %1, <64 x i32> %33)
-  %35 = bitcast <128 x i8> %arg.8 to <32 x i32>
-  %36 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %35)
-  %37 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %34, <64 x i32> %36)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <32 x i32> %38)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %39, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %41 = bitcast <128 x i8> %arg.15 to <32 x i32>
-  %42 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %41)
-  %43 = bitcast <128 x i8> %arg.14 to <32 x i32>
-  %44 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %43)
-  %45 = bitcast <128 x i8> %arg.11 to <32 x i32>
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %45)
-  %47 = bitcast <128 x i8> %arg.10 to <32 x i32>
-  %48 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %47)
-  %49 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %48, <64 x i32> %14)
-  %50 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %46, <64 x i32> %49)
-  %51 = bitcast <128 x i8> %arg.12 to <32 x i32>
-  %52 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %51)
-  %53 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %52, <64 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %50, <64 x i32> %53)
-  %55 = bitcast <128 x i8> %arg.13 to <32 x i32>
-  %56 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %55)
-  %57 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %56, <64 x i32> %50)
-  %58 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %54, <64 x i32> %57)
-  %59 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %44, <64 x i32> %58)
-  %60 = bitcast <128 x i8> %arg.9 to <32 x i32>
-  %61 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %60)
-  %62 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %61)
-  %63 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %62)
-  %64 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %61)
-  %65 = tail call <32 x i32> @llvm.hexagon.V6.vmpyih.acc.128B(<32 x i32> zeroinitializer, <32 x i32> <i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074, i32 131074>, <32 x i32> %64)
-  %66 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %63, <32 x i32> %65)
-  %67 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %59, <64 x i32> %66)
-  %68 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %42, <64 x i32> %67)
-  %69 = bitcast <128 x i8> %arg.16 to <32 x i32>
-  %70 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %69)
-  %71 = tail call <64 x i32> @llvm.hexagon.V6.vaddh.dv.128B(<64 x i32> %68, <64 x i32> %70)
-  %72 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296, i32 524296>, <64 x i32> %71)
-  %73 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %72)
-  %74 = tail call <32 x i32> @llvm.hexagon.V6.vasrhv.128B(<32 x i32> %73, <32 x i32> <i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148, i32 262148>)
-  %75 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %40, <32 x i32> %74)
-  %76 = bitcast <32 x i32> %75 to <128 x i8>
-  ret <128 x i8> %76
+  %0 = bitcast <64 x i16> %arg.1 to <32 x i32>
+  %1 = bitcast <64 x i16> %arg to <32 x i32>
+  %2 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %0, <32 x i32> %1)
+  %3 = bitcast <64 x i16> %arg.2 to <32 x i32>
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %2, <32 x i32> %3)
+  %5 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %4)
+  %6 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %5, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %7 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %6)
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %7, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %9 = bitcast <64 x i16> %arg.4 to <32 x i32>
+  %10 = bitcast <64 x i16> %arg.3 to <32 x i32>
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %9, <32 x i32> %10)
+  %12 = bitcast <64 x i16> %arg.5 to <32 x i32>
+  %13 = tail call <32 x i32> @llvm.hexagon.V6.vaddh.128B(<32 x i32> %11, <32 x i32> %12)
+  %14 = tail call <32 x i32> @llvm.hexagon.V6.vshuffh.128B(<32 x i32> %13)
+  %15 = tail call <64 x i32> @llvm.hexagon.V6.vmpyuhv.128B(<32 x i32> %14, <32 x i32> <i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229, i32 -1431590229>)
+  %16 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.vlsrwv.128B(<32 x i32> %16, <32 x i32> <i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17, i32 17>)
+  %18 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %8, <32 x i32> %17)
+  %19 = bitcast <32 x i32> %18 to <64 x i16>
+  ret <64 x i16> %19
 }
 
 attributes #0 = { nounwind mustprogress "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-builtins" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
@@ -7141,12 +7096,13 @@ attributes #7 = { nounwind willreturn "disable-tail-calls"="false" "frame-pointe
 attributes #8 = { nofree nosync nounwind readnone speculatable willreturn }
 attributes #9 = { nounwind readnone }
 attributes #10 = { "reciprocal-estimates"="none" }
-attributes #11 = { norecurse nounwind readnone willreturn }
-attributes #12 = { nounwind readnone willreturn }
-attributes #13 = { nobuiltin nounwind "no-builtins" }
-attributes #14 = { nobuiltin "no-builtins" }
-attributes #15 = { nounwind }
-attributes #16 = { noinline }
+attributes #11 = { nounwind "reciprocal-estimates"="none" }
+attributes #12 = { nounwind }
+attributes #13 = { norecurse nounwind readnone willreturn }
+attributes #14 = { nounwind readnone willreturn }
+attributes #15 = { nobuiltin nounwind "no-builtins" }
+attributes #16 = { nobuiltin "no-builtins" }
+attributes #17 = { noinline }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4, !5, !6, !7, !8}
 !llvm.ident = !{!9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9, !9}
@@ -7246,11 +7202,14 @@ attributes #16 = { noinline }
 !92 = !{!74, !11, i64 48}
 !93 = !{!74, !11, i64 52}
 !94 = !{i32 22, i32 33}
-!95 = !{!"branch_weights", i32 1073741824, i32 0}
-!96 = !{i32 1974}
+!95 = !{i32 1974}
+!96 = !{!"branch_weights", i32 1073741824, i32 0}
 !97 = !{!98, !98, i64 0}
 !98 = !{!"input", !99, i64 0}
 !99 = !{!"Halide buffer"}
 !100 = !{!101, !101, i64 0}
-!101 = !{!"output", !99, i64 0}
+!101 = !{!"blur_x", !99, i64 0}
 !102 = distinct !{!102, !32}
+!103 = !{!104, !104, i64 0}
+!104 = !{!"blur_y", !99, i64 0}
+!105 = distinct !{!105, !32}
