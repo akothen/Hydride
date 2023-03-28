@@ -1,9 +1,11 @@
+
+
 #lang rosette
 
 (require racket/pretty)
 
 
-(define (hexagon_V6_vshuff_128B  Vu Vv Rt)
+(define (hexagon_V6_vshuffvdd_128B  Vu Vv Rt)
 (define Rt_int (bitvector->integer Rt))
 (define %elem_size (* (- 0 Rt_int) 8))
 (define Vdd
@@ -33,12 +35,12 @@
 (define Rt2 (bv -2 32))
 (define Rt3 (bv -4 32))
 
-(pretty-print "hexagon_V6_vshuff_128B 8-elem interleave:")
-(pretty-print (hexagon_V6_vshuff_128B a1024 b1024 Rt1))
+(pretty-print "hexagon_V6_vshuffvdd_128B 8-elem interleave:")
+(pretty-print (hexagon_V6_vshuffvdd_128B a1024 b1024 Rt1))
 
-(pretty-print "hexagon_V6_vshuff_128B 16-elem interleave:")
-(pretty-print (hexagon_V6_vshuff_128B a1024 b1024 Rt2))
+(pretty-print "hexagon_V6_vshuffvdd_128B 16-elem interleave:")
+(pretty-print (hexagon_V6_vshuffvdd_128B a1024 b1024 Rt2))
 
-(pretty-print "hexagon_V6_vshuff_128B 32-elem interleave:")
-(pretty-print (hexagon_V6_vshuff_128B a1024 b1024 Rt3))
+(pretty-print "hexagon_V6_vshuffvdd_128B 32-elem interleave:")
+(pretty-print (hexagon_V6_vshuffvdd_128B a1024 b1024 Rt3))
 
