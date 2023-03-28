@@ -523,6 +523,7 @@ SOURCE_FILES = \
   RemoveExternLoops.cpp \
   RemoveUndef.cpp \
   VectorInfo.cpp \
+  HydrideCodeGen.cpp \
   DistributeVec.cpp \
   Rosette.cpp \
   Schedule.cpp \
@@ -708,6 +709,7 @@ HEADER_FILES = \
   runtime/HalideBuffer.h \
   runtime/HalideRuntime.h \
   VectorInfo.h \
+  HydrideCodeGen.h \
   DistributeVec.h \
   Rosette.h \
   Schedule.h \
