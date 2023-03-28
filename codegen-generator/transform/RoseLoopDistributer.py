@@ -92,16 +92,29 @@ def FixDependencyInBlockExternalToBlock(Block : RoseBlock, Loop : RoseForLoop, \
   BlocksInLoop = Loop.getRegionsOfType(RoseBlock)
   assert Block in BlocksInLoop
 
+  print("FixDependencyInBlockExternalToBlock")
+  print("Block:")
+  Block.print()
+  print("Loop:")
+  Loop.print()
+  print("len(NewLoops):")
+  print(len(NewLoops))
+
   OpList = list()
   OpList.extend(Block.getOperations())
   while len(OpList) != 0:
     Op = OpList.pop()
-    if isinstance(Op, RoseBVInsertSliceOp) \
-      or isinstance(Op, RoseBVExtractSliceOp):
+    if isinstance(Op, RoseBVInsertSliceOp):
       continue
     print("********Operation:")
     Op.print()
-    for Operand in Op.getOperands():
+    OperandList = list()
+    if isinstance(Op, RoseBVExtractSliceOp):
+      OperandList.append(Op.getLowIndex())
+      OperandList.append(Op.getHighIndex())
+    else:
+      OperandList.extend(Op.getOperands())
+    for Operand in OperandList:
       if not isinstance(Operand, RoseOperation):
         continue
       ParentBlock = Operand.getParent()
@@ -127,6 +140,10 @@ def FixDependencyInBlockExternalToBlock(Block : RoseBlock, Loop : RoseForLoop, \
           or isinstance(CheckOperand, RoseConstant):
           continue
         for CheckLoop in NewLoops:
+          print("CheckLoop.getIterator():")
+          CheckLoop.getIterator().print()
+          print("CheckOperand:")
+          CheckOperand.print()
           if CheckLoop.getIterator() == CheckOperand:
             NewOp.setOperand(OperandIndex, Loop.getIterator())
             print("NewOp iterator changed:")
@@ -217,3 +234,4 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("RUN LOOP DISTRIBUTER")
   RunLoopDistributerOnFunction(Function, Context)
   Function.print()
+
