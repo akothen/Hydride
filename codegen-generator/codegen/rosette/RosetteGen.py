@@ -102,36 +102,19 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
         BVInsertOpsList.append(Operation)
       continue
     LastOp = Operation
-    # Extracts are dealt with a little differently
-    #if isinstance(Operation, RoseBVExtractSliceOp):
-      # There are situations where value being extracted is defined
-      # outside a loop. In Rosette, the indexing into bitvectors takes
-      # place from right to left, instead of left to right. So we need
-      # to reverse the order of extraction as well.
-    #  if Operation.getInputBitVector() in Block.getOperations():
-    #    RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
-    #    continue
-    #if isinstance(Operation, RoseBVTruncateHighOp):
-      # There are situations where value being extracted is defined
-      # outside a loop. In Rosette, the indexing into bitvectors takes
-      # place from right to left, instead of left to right. So we need
-      # to reverse the order of extraction as well.
-      #if Operation.getInputBitVector() in Block.getOperations():
-      #  RosetteCode += Operation.to_rosette(NumSpace)#, ReverseIndexing=True)
-      #  continue
-    #if isinstance(Operation, RoseBVTruncateLowOp):
-      # There are situations where value being extracted is defined
-      # outside a loop. In Rosette, the indexing into bitvectors takes
-      # place from right to left, instead of left to right. So we need
-      # to reverse the order of extraction as well.
-      #if Operation.getInputBitVector() in Block.getOperations():
-      #  RosetteCode += Operation.to_rosette(NumSpace)#, ReverseIndexing=True)
-      #  continue
     # Skip emitting rosette code for op that pads high bits
     if isinstance(Operation, RoseBVPadHighBitsOp):
       continue
     #print("Operation:")
     #Operation.print()
+    # Conditional extracts have to be handled delicately.
+    if isinstance(Operation, RoseBVExtractSliceOp):
+      # Is this used in a select op?
+      if Operation.getParent().getFunction().getNumUsersOf(Operation) == 1:
+        [User] = Operation.getParent().getFunction().getUsersOf(Operation)
+        if isinstance(User, RoseSelectOp):
+          # This is a conditional extract so we will skip emission of code for this one
+          continue
     RosetteCode += Operation.to_rosette(NumSpace)
   
   if len(SkipOps) != 0:
