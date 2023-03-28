@@ -44,7 +44,6 @@ class RoseUndefValue(RoseValue):
 class RoseConstant(RoseValue):
   def __init__(self, Value, Type : RoseType):
     # Some sanity checks
-    assert type(Value) != float
     if type(Value) == int:
       assert isinstance(Type, RoseBitVectorType) \
           or isinstance(Type, RoseIntegerType) \
@@ -259,20 +258,29 @@ class RoseArgument(RoseValue):
 # An operation in Rosette
 # An operation is either an instruction.
 class RoseOperation(RoseValue):
-  def __init__(self, Opcode : RoseOpcode, Name : str, Operands : list, \
+  def __init__(self, Opcode : RoseOpcode, Name : str, OperandsBundle : tuple, \
               ParentBlock = RoseAbstractions.RoseUndefRegion()):
     if not isinstance(ParentBlock, RoseAbstractions.RoseUndefRegion):
       assert isinstance(ParentBlock, RoseAbstractions.RoseBlock)
-    self.Opcode = Opcode
-    self.Operands = Operands
     self.ParentBlock = ParentBlock
-    # The result of an operation is a RoseValue
-    super().__init__(Name, Opcode.getOutputType(Operands))
-    # Sanity check to see that the operand list is complete
+    self.Opcode = Opcode
+    # The given operands can be a list or a tuple
+    if isinstance(OperandsBundle, list):
+      self.Operands = OperandsBundle
+      # The result of an operation is a RoseValue
+      Type = Opcode.getOutputType(self.Operands)
+      super().__init__(Name, Type)
+    else:
+      assert isinstance(OperandsBundle, tuple)
+      self.Operands = OperandsBundle[0]
+      # The result of an operation is a RoseValue
+      OpInfoBundle = OperandsBundle[1]
+      super().__init__(Name, Opcode.getOutputType(self.Operands, OpInfoBundle))
+    # Sanity check
     self.assertValidationOfInputs()
   
   def assertValidationOfInputs(self):
-    assert self.getOpcode().inputsAreValid(self.getOperands())
+    assert self.getOpcode().inputsAreValid(self.getOperands(), self.getType(), self.getOpInfoBundle())
   
   def __eq__(self, Other):
     if not isinstance(Other, RoseValue):
@@ -287,6 +295,7 @@ class RoseOperation(RoseValue):
         return False
     assert isinstance(Other, RoseOperation)
     return self.Opcode == Other.Opcode and self.Operands == Other.Operands \
+        and self.getOpInfoBundle() == Other.getOpInfoBundle() \
         and self.ParentBlock.getRegionID() == Other.ParentBlock.getRegionID() \
         and super().__eq__(Other)
 
@@ -303,6 +312,7 @@ class RoseOperation(RoseValue):
         return True
     assert isinstance(Other, RoseOperation)
     return self.Opcode != Other.Opcode or self.Operands != Other.Operands \
+        or self.getOpInfoBundle() != Other.getOpInfoBundle() \
         or self.ParentBlock.getRegionID() != Other.ParentBlock.getRegionID() \
         or super().__ne__(Other)
   
@@ -437,9 +447,14 @@ class RoseOperation(RoseValue):
       return
     assert False, "Illegal number of arguments to replaceUsesWith"
 
+  # Subclass must implement this
+  def getOpInfoBundle(self):
+    return None
+
   def replaceOperands(self, OperandList : list):
     # Check if the operands are valid
-    assert self.getOpcode().inputsAreValid(OperandList)
+    assert self.getOpcode().inputsAreValid(OperandList, self.getType(), \
+                                          self.getOpInfoBundle())
     # Now replace each operand
     for Index, Operand in enumerate(OperandList):
       self.setOperand(Index, Operand)
@@ -454,7 +469,8 @@ class RoseOperation(RoseValue):
 
   def verify(self):
     # Verify the input operations
-    if self.getOpcode().inputsAreValid(self.getOperands()) == False:
+    if self.getOpcode().inputsAreValid(self.getOperands(), self.getType(), \
+                                       self.getOpInfoBundle()) == False:
       return False
     if self.getType() != self.getOpcode().getOutputType():
       return False
