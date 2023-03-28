@@ -163,7 +163,7 @@ class RoseOpaqueCallOp(RoseOperation):
     return RoseOpaqueCallOp(Name, CalleeName, OperandList, ReturnType, Macro, ParentBlock)
   
   def getCallee(self):
-    return self.Callee
+    return self.CalleeName
   
   def getCallOperands(self):
     return self.getOperands()
