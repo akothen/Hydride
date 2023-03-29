@@ -9,18 +9,23 @@ reserved = {
     'INSTRUCTIONS',
     'INSTRUCTION',
     'INSTRUCTIONENCODING',
+    'INSTRUCTIONUNPREDICTABLEUNLESS',
     'LIST',
     'INSTRUCTIONFIELD',
     'EXPRLITBIN',
+    'EXPRLITMASK',
     'EXPRLITNAT',
+    'EXPRLITHEX',
     'EXPRVARREF',
     'EXPRSLICE',
     'EXPRINDEX',
     'EXPRUNOP',
     'EXPRBINOP',
     'EXPRCALL',
+    'EXPRMEMBERBITS',
     'EXPRINSET',
     'EXPRUNKNOWN',
+    'EXPRTUPLE',
     'EXPRIF',
     'EXPRMEMBER',
     'QUALIFIEDIDENTIFIER',
@@ -60,6 +65,7 @@ reserved = {
     'TO',
     'CASEALTWHEN',
     'CASEALTOTHERWISE',
+    'CASEPATTERNNAT',
     'CASEPATTERNBIN',
     'CASEPATTERNMASK',
     'CASEPATTERNIDENTIFIER',
@@ -84,7 +90,7 @@ binOps = {
     r'"<="': 'BINOPLTEQ',
     r'"<<"': 'BINOPSHIFTLEFT',
     r'"\+"': 'BINOPADD',
-    r'"-"':  'BINOPSUB',
+    # r'"-"':  'BINOPSUB', use UNOPNEG
     r'"\*"': 'BINOPMUL',
     r'"/"':  'BINOPDIVIDE',
     r'"\^"': 'BINOPPOW',
@@ -105,6 +111,7 @@ punc = {
     r'\)': "RPAREN",
 }
 tokens = [
+    'HEXNUMBER',
     'NUMBER',
     'SEEMESSAGE',
     'BITSTRING',
@@ -124,6 +131,10 @@ for k, v in punc.items():
 
 Parser = None
 
+def t_HEXNUMBER(t):
+    r'\"0x[0-9A-F]+\"'
+    t.value = t.value[1:-1]
+    return t
 
 def t_NUMBER(t):
     r'\d+'
@@ -141,7 +152,7 @@ def t_BITSTRING(t):
     return t
 
 def t_ID(t):
-    r'[a-zA-Z_#][a-zA-Z_0-9]*'
+    r'[a-zA-Z_#][a-zA-Z_0-9\.]*'
     lexed = t.value.upper()
     if lexed in reserved:
         t.type = lexed
@@ -289,11 +300,14 @@ def p_lvalexprs(p):
 
 def p_casepattern(p):
     '''casepattern : LPAREN CASEPATTERNBIN BITSTRING RPAREN
+                   | LPAREN CASEPATTERNNAT NUMBER RPAREN
                    | LPAREN CASEPATTERNMASK BITSTRING RPAREN
                    | LPAREN CASEPATTERNIDENTIFIER ID RPAREN
                    '''
     if p[2] == "CASEPATTERNBIN":
         p[0] = CasePatternBin(p[3])
+    elif p[2] == "CASEPATTERNNAT":
+        p[0] = CasePatternInt(p[3])
     elif p[2] == "CASEPATTERNMASK":
         p[0] = CasePatternMask(p[3])
     elif p[2] == "CASEPATTERNIDENTIFIER":
@@ -440,7 +454,7 @@ def p_binop(p):
              | BINOPLTEQ
              | BINOPSHIFTLEFT
              | BINOPADD
-             | BINOPSUB
+             | UNOPNEG
              | BINOPMUL
              | BINOPDIVIDE
              | BINOPPOW
@@ -456,6 +470,8 @@ def p_binop(p):
              | BINOPMOD
              | BINOPCONCAT
              '''
+    if p[1] == "UNOPNEG":
+        p[1] = "BINOPSUB"
     p[0] = p[1]
 
 def p_setelement(p):
@@ -473,7 +489,9 @@ def p_setelements(p):
 
 def p_expr(p):
     '''expr : LPAREN EXPRLITBIN BITSTRING RPAREN
+            | LPAREN EXPRLITMASK BITSTRING RPAREN
             | LPAREN EXPRLITNAT NUMBER RPAREN
+            | LPAREN EXPRLITHEX HEXNUMBER RPAREN
             | LPAREN EXPRVARREF qid RPAREN
             | LPAREN EXPRSLICE expr LPAREN LIST slices RPAREN RPAREN
             | LPAREN EXPRSLICE expr LPAREN LIST RPAREN RPAREN
@@ -483,16 +501,24 @@ def p_expr(p):
             | LPAREN EXPRBINOP binop expr expr RPAREN
             | LPAREN EXPRCALL qid LPAREN LIST exprs RPAREN RPAREN
             | LPAREN EXPRCALL qid LPAREN LIST RPAREN RPAREN
+            | LPAREN EXPRMEMBERBITS expr LPAREN LIST ids RPAREN RPAREN
+            | LPAREN EXPRMEMBERBITS expr LPAREN LIST RPAREN RPAREN
             | LPAREN EXPRINSET expr LPAREN SET LPAREN LIST setelements RPAREN RPAREN RPAREN
             | LPAREN EXPRINSET expr LPAREN SET LPAREN LIST RPAREN RPAREN RPAREN
             | LPAREN EXPRUNKNOWN type RPAREN
+            | LPAREN EXPRTUPLE LPAREN LIST exprs RPAREN RPAREN
+            | LPAREN EXPRTUPLE LPAREN LIST RPAREN RPAREN
             | LPAREN EXPRIF expr expr LPAREN LIST RPAREN expr RPAREN
             | LPAREN EXPRMEMBER expr ID RPAREN
             '''
     if p[2] == "EXPRLITBIN":
         p[0] = ExprLitBin(p[3])
+    elif p[2] == "EXPRLITMASK":
+        p[0] = ExprLitMask(p[3])
     elif p[2] == "EXPRLITNAT":
         p[0] = ExprLitInt(p[3])
+    elif p[2] == "EXPRLITHEX":
+        p[0] = ExprLitInt(int(p[3], 0))
     elif p[2] == "EXPRVARREF":
         p[0] = ExprVarRef(p[3])
     elif p[2] == "EXPRSLICE" and len(p) == 9:
@@ -511,12 +537,20 @@ def p_expr(p):
         p[0] = ExprCall(p[3], p[6])
     elif p[2] == "EXPRCALL" and len(p) == 8:
         p[0] = ExprCall(p[3], [])
+    elif p[2] == "EXPRMEMBERBITS" and len(p) == 9:
+        p[0] = ExprMemberBits(p[3], p[6])
+    elif p[2] == "EXPRMEMBERBITS" and len(p) == 8:
+        p[0] = ExprMemberBits(p[3], [])
     elif p[2] == "EXPRINSET" and len(p) == 12:
         p[0] = ExprInSet(p[3], p[8])
     elif p[2] == "EXPRINSET" and len(p) == 11:
         p[0] = ExprInSet(p[3], [])
     elif p[2] == "EXPRUNKNOWN":
         p[0] = ExprUnknown(p[4])
+    elif p[2] == "EXPRTUPLE" and len(p) == 8:
+        p[0] = ExprTuple(p[5])
+    elif p[2] == "EXPRTUPLE" and len(p) == 7:
+        p[0] = ExprTuple([])
     elif p[2] == "EXPRIF":
         p[0] = ExprIf(p[3], p[4], p[8])
     elif p[2] == "EXPRMEMBER":
@@ -553,14 +587,34 @@ def p_encfields(p):
     else:
         p[0] = p[1]+[p[2]]
 
+def p_instunpredictable(p):
+    '''instunpredictable : LPAREN INSTRUCTIONUNPREDICTABLEUNLESS NUMBER BITSTRING RPAREN'''
+    boolval = p[4] == '1'
+    p = InstructionUnpredictable(p[3], boolval)
+
+def p_instunpredictables(p):
+    '''instunpredictables : instunpredictable
+                          | instunpredictables instunpredictable
+                          '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1]+[p[2]]
+
+
 def p_instencoding(p):
     '''instencoding : LPAREN INSTRUCTIONENCODING ID ID LPAREN LIST encfields RPAREN BITSTRING maybeexpr LPAREN LIST RPAREN maybestmtblock RPAREN
                     | LPAREN INSTRUCTIONENCODING ID ID LPAREN LIST RPAREN BITSTRING maybeexpr LPAREN LIST RPAREN maybestmtblock RPAREN
+                    | LPAREN INSTRUCTIONENCODING ID ID LPAREN LIST encfields RPAREN BITSTRING maybeexpr LPAREN LIST instunpredictables RPAREN maybestmtblock RPAREN
+                    | LPAREN INSTRUCTIONENCODING ID ID LPAREN LIST RPAREN BITSTRING maybeexpr LPAREN LIST instunpredictables RPAREN maybestmtblock RPAREN
                     '''
-    # TODO: nontrivial encUnpredictable
-    if len(p) == 16:
+    if len(p) == 16 and p[8] == ")":
         p[0] = InstructionEncoding(p[3], p[4], p[7], p[9], p[10], [], p[14])
-    else:
+    elif len(p) == 16:
+        p[0] = InstructionEncoding(p[3], p[4], [], p[8], p[9], p[12], p[14])
+    elif len(p) == 17:
+        p[0] = InstructionEncoding(p[3], p[4], p[7], p[9], p[10], p[13], p[15])
+    elif len(p) == 15:
         p[0] = InstructionEncoding(p[3], p[4], [], p[8], p[9], [], p[13])
 
 def p_instencodings(p):
@@ -620,17 +674,9 @@ if __name__ == "__main__":
         filename = 'arm_instrs.sexpr'
         # filename = 'simple.sexpr'
         # filename = 'parser_tests/stmtif2.sexpr'
+        # filename = 'parser_tests/binminus.sexpr'
         with open(filename) as f:
             data = f.read()
-        # lexer = lex.lex()
-        # lexer.input(data)
-        # tok = None
-        # while True:
-        #     prev = tok
-        #     tok = lexer.token()
-        #     if not tok:
-        #         print(prev)
-        #         break
 
     lexer = lex.lex()
     Parser = yacc.yacc(start='program')

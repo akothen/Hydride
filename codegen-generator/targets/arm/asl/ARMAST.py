@@ -11,6 +11,7 @@ Nothing = namedtuple('Nothing', [])
 Instruction = namedtuple('Instruction', ['instName', 'instEncodings', 'instPostDecode', 'instExecute', 'instConditional'])
 InstructionEncoding = namedtuple('InstructionEncoding', ['encName', 'encInstrSet', 'encFields', 'encOpcodeMask', 'encGuard', 'encUnpredictable', 'encDecode'])
 InstructionField = namedtuple('InstructionField', ['instFieldName', 'instFieldBegin', 'instFieldOffset'])
+InstructionUnpredictable = namedtuple('InstructionUnpredictable', ['integer', 'boolval'])
 
 # Definitions
 DefTypeBuiltin = namedtuple('DefTypeBuiltin', ['id'])
@@ -73,7 +74,7 @@ StmtDefEnum = namedtuple('StmtDefEnum', ['id', 'ids']) # unused
 CaseWhen = namedtuple('CaseWhen', ['casepatterns', 'maybe_expr', 'stmts'])
 CaseOtherwise = namedtuple('CaseOtherwise', ['stmts'])
 
-CasePatternInt = namedtuple('CasePatternInt', ['integer']) # unused
+CasePatternInt = namedtuple('CasePatternInt', ['integer'])
 CasePatternBin = namedtuple('CasePatternBin', ['bitvector'])
 CasePatternMask = namedtuple('CasePatternMask', ['mask'])
 CasePatternIdentifier = namedtuple('CasePatternIdentifier', ['id'])
@@ -88,7 +89,7 @@ ExprLitString = namedtuple('ExprLitString', ['text']) # unused
 ExprLitInt = namedtuple('ExprLitInt', ['integer'])
 ExprLitReal = namedtuple('ExprLitReal', ['interger0', 'integer1']) # unused
 ExprLitBin = namedtuple('ExprLitBin', ['bitvector'])
-ExprLitMask = namedtuple('ExprLitMask', ['mask']) # unused
+ExprLitMask = namedtuple('ExprLitMask', ['mask'])
 ExprVarRef = namedtuple('ExprVarRef', ['qid'])
 ExprImpDef = namedtuple('ExprImpDef', ['maybe_text', 'ty']) # unused
 ExprSlice = namedtuple('ExprSlice', ['expr', 'slices'])
@@ -97,11 +98,11 @@ ExprUnOp = namedtuple('ExprUnOp', ['unop', 'expr'])
 ExprBinOp = namedtuple('ExprBinOp', ['binop', 'lhs', 'rhs'])
 ExprMembers = namedtuple('ExprMembers', ['expr', 'ids']) # unused
 ExprInMask = namedtuple('ExprInMask', ['expr', 'mask']) # unused
-ExprMemberBits = namedtuple('ExprMemberBits', ['expr', 'ids']) # unused
+ExprMemberBits = namedtuple('ExprMemberBits', ['expr', 'ids'])
 ExprCall = namedtuple('ExprCall', ['qid', 'exprs'])
 ExprInSet = namedtuple('ExprInSet', ['expr', 'setelements'])
 ExprUnknown = namedtuple('ExprUnknown', ['ty'])
-ExprTuple = namedtuple('ExprTuple', ['exprs']) # unused
+ExprTuple = namedtuple('ExprTuple', ['exprs'])
 ExprIf = namedtuple('ExprIf', ['exprtest', 'exprresult', 'exprelse']) # TODO
 ExprMember = namedtuple('ExprMember', ['expr', 'id'])
 
