@@ -3,3 +3,4 @@ parsetab.py
 __pycache__
 arm_
 .vscode
+**/*.pyc
