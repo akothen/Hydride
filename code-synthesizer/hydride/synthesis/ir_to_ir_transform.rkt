@@ -24,6 +24,9 @@
 (require hydride/ir/hydride/length)
 (require hydride/ir/hydride/prec)
 (require hydride/ir/hydride/interpreter)
+(require hydride/ir/hydride/sub_expr)
+(require hydride/ir/hydride/extract)
+(require hydride/ir/hydride/binder)
 
 
 (require hydride/ir/hvx/definition)
@@ -376,6 +379,7 @@
 
 ;; High level wrapper to invoke inst-combine on input hydride expression
 (define (inst-combine-hydride-expr hydride-expr window-depth target type-info)
+  (debug-log "inst-combine-hydride-expr")
 
 
   ;; type-info needed to identify the precisions and the vector lengths of (reg _)
@@ -383,14 +387,21 @@
   ;; is the precision and the second in the total size
 
   (define-values 
-    (extract-expr sub-expr get-length get-prec bind-expr cost-fn)
+    (extract-expr sub-expr get-length get-prec bind-expr-fn cost-fn)
     (cond
       [(equal? target "hvx")
        (values hvx:extract-expr  hvx:get-sub-exprs hvx:get-length hvx:get-prec hvx:bind-expr hvx:cost)
        ]
+      [(equal? target "x86")
+       (values hydride:extract-expr  hydride:get-sub-exprs hydride:get-length hydride:get-prec bind-expr hydride:cost)
+       ]
+      [else
+        (error "Unsupported target for inst-combine-hydride-expr " target)
+        ]
       )
     )
 
+  (debug-log "here")
 
   ;; Extract list of expression at a given depth away
 
@@ -462,7 +473,7 @@
 
 
 
-     (define disjoint-simplified (bind-expr simplified-current-expr (list->vector simplified-leaves)))
+     (define disjoint-simplified (bind-expr-fn simplified-current-expr (list->vector simplified-leaves)))
     
     disjoint-simplified
 
