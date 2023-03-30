@@ -75,6 +75,7 @@ set(HEADER_FILES
     Generator.h
     HexagonOffload.h
     HexagonOptimize.h
+    HydrideCodeGen.h
     ImageParam.h
     InferArguments.h
     InjectHostDevBufferCopies.h
@@ -239,6 +240,7 @@ set(SOURCE_FILES
     Generator.cpp
     HexagonOffload.cpp
     HexagonOptimize.cpp
+    HydrideCodeGen.cpp
     ImageParam.cpp
     InferArguments.cpp
     InjectHostDevBufferCopies.cpp
