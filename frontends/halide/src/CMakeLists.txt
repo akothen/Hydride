@@ -527,9 +527,9 @@ endif ()
 # Add autoschedulers to the build.
 ##
 
-if (BUILD_SHARED_LIBS)
-    message(STATUS "Building autoschedulers enabled")
-    add_subdirectory(autoschedulers)
-else ()
-    message(STATUS "Building autoschedulers disabled (static Halide)")
-endif ()
+#if (BUILD_SHARED_LIBS)
+#    message(STATUS "Building autoschedulers enabled")
+#    add_subdirectory(autoschedulers)
+#else ()
+#    message(STATUS "Building autoschedulers disabled (static Halide)")
+#endif ()
