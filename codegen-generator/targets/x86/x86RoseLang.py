@@ -5098,6 +5098,11 @@ def Compile_Tests():
 
 
 if __name__ == '__main__':
-  Compile_Tests()
+#   Compile_Tests()
+	FunctionInfo=Compile("_mm256_mullo_epi16")[0]
+	import RosetteGen
+	Function = FunctionInfo.getLatestFunction()
+	RosetteCode = RosetteGen.CodeGen(Function)
+	# print(RosetteCode)
 
 

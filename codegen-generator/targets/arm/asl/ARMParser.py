@@ -2,8 +2,7 @@
 
 import ply.lex as lex
 import ply.yacc as yacc
-import re
-from ARMAST import *
+from .ARMAST import *
 
 reserved = {
     'INSTRUCTIONS',
@@ -118,12 +117,17 @@ tokens = [
     'ID'
 ] + list(reserved) + ['UNOPNOT', 'UNOPNEG'] + list(binOps.values()) + list(punc.values())
 
+
 def t_UNOPNOT(t):
     r'("NOT")|("\!")'
     return t
+
+
 def t_UNOPNEG(t):
     r'"\-"'
     return t
+
+
 for k, v in binOps.items():
     locals()['t_'+v] = k
 for k, v in punc.items():
@@ -131,25 +135,30 @@ for k, v in punc.items():
 
 Parser = None
 
+
 def t_HEXNUMBER(t):
     r'\"0x[0-9A-F]+\"'
     t.value = t.value[1:-1]
     return t
+
 
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
+
 def t_SEEMESSAGE(t):
     r'\"SEE.*\"'
     t.value = t.value[1:-1]
     return t
 
+
 def t_BITSTRING(t):
     r'\'[01x ]+\''
     t.value = t.value[1:-1]
     return t
+
 
 def t_ID(t):
     r'[a-zA-Z_#][a-zA-Z_0-9\.]*'
@@ -182,12 +191,7 @@ def t_error(t):
     print(t.lexer.lineno)
     assert False
 
-PARSER_ID_COUNTER = 0
-def GenUniqueID():
-    global PARSER_ID_COUNTER
-    ID = PARSER_ID_COUNTER
-    PARSER_ID_COUNTER += 1
-    return str(ID)
+
 
 def p_archqualifier(p):
     '''archqualifier : AARCH32
@@ -196,13 +200,16 @@ def p_archqualifier(p):
                      '''
     p[0] = p[1]
 
+
 def p_qid(p):
     '''qid : LPAREN QUALIFIEDIDENTIFIER archqualifier ID RPAREN'''
     p[0] = QualifiedIdentifier(p[3], p[4])
 
+
 def p_indextype(p):
     '''indextype : LPAREN IXTYPERANGE expr expr RPAREN'''
     p[0] = IxTypeRange(p[3], p[4])
+
 
 def p_type(p):
     '''type : LPAREN TYPEREF   qid RPAREN
@@ -216,9 +223,11 @@ def p_type(p):
     elif p[2] == "TYPEARRAY":
         p[0] = TypeArray(p[3], p[4])
 
+
 def p_symdecl(p):
     '''symdecl : LPAREN SYMDECL ID type RPAREN'''
     p[0] = SymbolDecl(p[3], p[4])
+
 
 def p_ids(p):
     '''ids : ID
@@ -229,6 +238,7 @@ def p_ids(p):
     else:
         p[0] = p[1]+[p[2]]
 
+
 def p_slice(p):
     '''slice : LPAREN SLICESINGLE expr RPAREN
              | LPAREN SLICERANGE expr expr RPAREN
@@ -238,6 +248,7 @@ def p_slice(p):
     elif p[2] == "SLICERANGE":
         p[0] = SliceRange(p[3], p[4])
 
+
 def p_slices(p):
     '''slices : slice
               | slices slice
@@ -246,6 +257,7 @@ def p_slices(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_lvalexpr(p):
     '''lvalexpr : LPAREN LVALIGNORE RPAREN
@@ -289,6 +301,7 @@ def p_lvalexpr(p):
     elif p[2] == "LVALSLICE" and len(p) == 7:
         p[0] = LValSlice([])
 
+
 def p_lvalexprs(p):
     '''lvalexprs : lvalexpr
                  | lvalexprs lvalexpr
@@ -297,6 +310,7 @@ def p_lvalexprs(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_casepattern(p):
     '''casepattern : LPAREN CASEPATTERNBIN BITSTRING RPAREN
@@ -313,6 +327,7 @@ def p_casepattern(p):
     elif p[2] == "CASEPATTERNIDENTIFIER":
         p[0] = CasePatternIdentifier(p[3])
 
+
 def p_casepatterns(p):
     '''casepatterns : casepattern
                     | casepatterns casepattern
@@ -321,6 +336,7 @@ def p_casepatterns(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_casealternative(p):
     '''casealternative : LPAREN CASEALTWHEN LPAREN LIST casepatterns RPAREN maybeexpr stmtblock RPAREN
@@ -334,6 +350,7 @@ def p_casealternative(p):
     elif p[2] == "CASEALTOTHERWISE":
         p[0] = CaseOtherwise(p[3])
 
+
 def p_casealternatives(p):
     '''casealternatives : casealternative
                         | casealternatives casealternative
@@ -343,9 +360,11 @@ def p_casealternatives(p):
     else:
         p[0] = p[1]+[p[2]]
 
+
 def p_elseif(p):
     '''elseif : LPAREN STMTELSIF expr stmtblock RPAREN'''
     p[0] = StmtIfCase(p[3], p[4])
+
 
 def p_elseifs(p):
     '''elseifs : elseif
@@ -355,6 +374,7 @@ def p_elseifs(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_stmt(p):
     '''stmt : LPAREN STMTVARSDECL LPAREN LIST ids RPAREN type RPAREN
@@ -410,6 +430,7 @@ def p_stmt(p):
     elif p[2] == "STMTSEE":
         p[0] = StmtSeeString(p[3])
 
+
 def p_stmts(p):
     '''stmts : stmt
              | stmts stmt
@@ -418,6 +439,7 @@ def p_stmts(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_stmtblock(p):
     '''stmtblock : LPAREN STMTBLOCK LPAREN LIST stmts RPAREN RPAREN
@@ -429,6 +451,8 @@ def p_stmtblock(p):
         p[0] = []
 
 # The stmts should be maybestmtblock and with ancestor StmtBlock
+
+
 def p_maybestmtblock(p):
     '''maybestmtblock : LPAREN JUST stmtblock RPAREN
                       | NOTHING
@@ -438,11 +462,13 @@ def p_maybestmtblock(p):
     else:
         p[0] = p[3]
 
+
 def p_unop(p):
     '''unop : UNOPNOT
             | UNOPNEG
             '''
     p[0] = p[1]
+
 
 def p_binop(p):
     '''binop : BINOPEQ
@@ -474,9 +500,11 @@ def p_binop(p):
         p[1] = "BINOPSUB"
     p[0] = p[1]
 
+
 def p_setelement(p):
     '''setelement : LPAREN SETELEMENTSINGLE expr RPAREN'''
     p[0] = SetEltSingle(p[3])
+
 
 def p_setelements(p):
     '''setelements : setelement
@@ -486,6 +514,7 @@ def p_setelements(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_expr(p):
     '''expr : LPAREN EXPRLITBIN BITSTRING RPAREN
@@ -556,6 +585,7 @@ def p_expr(p):
     elif p[2] == "EXPRMEMBER":
         p[0] = ExprMember(p[3], p[4])
 
+
 def p_exprs(p):
     '''exprs : expr
              | exprs expr
@@ -564,6 +594,7 @@ def p_exprs(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_maybeexpr(p):
     '''maybeexpr : LPAREN JUST expr RPAREN
@@ -574,9 +605,11 @@ def p_maybeexpr(p):
     else:
         p[0] = p[3]
 
+
 def p_encfield(p):
     '''encfield : LPAREN INSTRUCTIONFIELD ID NUMBER NUMBER RPAREN'''
     p[0] = InstructionField(p[3], p[4], p[5])
+
 
 def p_encfields(p):
     '''encfields : encfield
@@ -587,10 +620,12 @@ def p_encfields(p):
     else:
         p[0] = p[1]+[p[2]]
 
+
 def p_instunpredictable(p):
     '''instunpredictable : LPAREN INSTRUCTIONUNPREDICTABLEUNLESS NUMBER BITSTRING RPAREN'''
     boolval = p[4] == '1'
     p = InstructionUnpredictable(p[3], boolval)
+
 
 def p_instunpredictables(p):
     '''instunpredictables : instunpredictable
@@ -617,6 +652,7 @@ def p_instencoding(p):
     elif len(p) == 15:
         p[0] = InstructionEncoding(p[3], p[4], [], p[8], p[9], [], p[13])
 
+
 def p_instencodings(p):
     '''instencodings : instencoding
                      | instencodings instencoding
@@ -626,12 +662,14 @@ def p_instencodings(p):
     else:
         p[0] = p[1]+[p[2]]
 
+
 def p_inst(p):
     '''inst : LPAREN INSTRUCTION ID LPAREN LIST instencodings RPAREN maybestmtblock maybestmtblock LPAREN CONDITIONAL ID RPAREN RPAREN'''
     if p[12] == 'False':
         p[0] = Instruction(p[3], p[6], p[8], p[9], False)
     if p[12] == 'True':
         p[0] = Instruction(p[3], p[6], p[8], p[9], True)
+
 
 def p_insts(p):
     '''insts : inst
@@ -641,6 +679,7 @@ def p_insts(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
+
 
 def p_program(p):
     '''program : LPAREN INSTRUCTIONS insts RPAREN'''
@@ -654,9 +693,9 @@ def preprocess_data():
         f.write(data)
 
 
-def get_parser():
+def get_parser(start='program'):
     lexer = lex.lex()
-    Parser = yacc.yacc(start='program')
+    Parser = yacc.yacc(start=start)
     return Parser
 
 

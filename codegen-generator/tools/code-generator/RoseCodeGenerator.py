@@ -190,7 +190,7 @@ class RoseCodeGenerator:
 
 
 if __name__ == '__main__':
-  CodeGenerator = RoseCodeGenerator(Target="Hexagon")
-  #CodeGenerator = RoseCodeGenerator(Target="x86")
+  # CodeGenerator = RoseCodeGenerator(Target="Hexagon")
+  CodeGenerator = RoseCodeGenerator(Target="x86")
   CodeGenerator.codeGen(JustGenRosette=False, ExtractConstants=True)
 

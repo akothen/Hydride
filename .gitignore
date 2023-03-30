@@ -4,3 +4,4 @@ __pycache__
 arm_
 .vscode
 **/*.pyc
+*.tmp
