@@ -1302,6 +1302,14 @@
 )
 
 	]
+[(hexagon_V6_vshuffvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8)
+		(cond 
+		[(and  (equal? size_o 2048) (equal? num_4 2048) (equal? num_5 0) (equal? size_i 1024) (equal? num_7 8) (equal? num_8 0)) 
+   (append (list  "hexagon_V6_vshuffvdd_128B") (hvx:get-target-name v0) (hvx:get-target-name v1))]
+		[else (error "Unable to get name  for hexagon_V6_vshuffvdd_128B")]
+)
+
+	]
  )
 )
 ;; ================================================================================

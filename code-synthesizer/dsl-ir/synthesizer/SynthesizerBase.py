@@ -213,9 +213,9 @@ class SynthesizerBase:
             input_vector_sizes.append(input_size)
             precisions.append(precision)
 
-        #if (self.output_slice_length, self.spec.output_precision) not in memo:
-        #    input_vector_sizes.append(self.output_slice_length)
-        #    precisions.append(self.spec.output_precision)
+        if (self.output_slice_length, self.spec.output_precision) not in memo and self.depth <= 2:
+            input_vector_sizes.append(self.output_slice_length)
+            precisions.append(self.spec.output_precision)
 
 
         return create_interleave_dsl(
@@ -255,9 +255,9 @@ class SynthesizerBase:
             precisions.append(precision)
 
 
-        #if (self.output_slice_length, self.spec.output_precision) not in memo:
-        #    input_vector_sizes.append(self.output_slice_length)
-        #    precisions.append(self.spec.output_precision)
+        if (self.output_slice_length, self.spec.output_precision) not in memo and self.depth <= 2 :
+            input_vector_sizes.append(self.output_slice_length)
+            precisions.append(self.spec.output_precision)
 
 
         return create_deinterleave_dsl(
@@ -913,6 +913,13 @@ class SynthesizerBase:
 
 
         contexts = []
+
+        if dsl_inst.has_bounded_behavior:
+            for ctx in dsl_inst.contexts:
+                if ctx.is_bounded:
+                    ctx.specialize_context_bounded(self.spec.output_precision)
+
+
 
         check = dsl_inst.name in DEBUG_LIST and DEBUG
         if check:

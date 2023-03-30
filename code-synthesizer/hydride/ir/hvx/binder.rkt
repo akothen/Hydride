@@ -850,6 +850,11 @@
 		 (hvx:bind-expr num_21 env) (hvx:bind-expr num_22 env) (hvx:bind-expr prec_i env) 
 		 (hvx:bind-expr num_24 env))
 	]
+[ (hexagon_V6_vshuffvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8)
+		(hexagon_V6_vshuffvdd_128B_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr v2 env) 
+		 (hvx:bind-expr size_o env) (hvx:bind-expr num_4 env) (hvx:bind-expr num_5 env) 
+		 (hvx:bind-expr size_i env) (hvx:bind-expr num_7 env) (hvx:bind-expr num_8 env))
+	]
 	[v v]
  )
 )

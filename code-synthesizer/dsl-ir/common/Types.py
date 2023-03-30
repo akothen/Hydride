@@ -10,6 +10,7 @@ class OperandType:
         IndexVariable = auto()
         ShapeVariable = auto()
         IndexExpr = auto()
+        BoundedBitVector = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
@@ -66,6 +67,34 @@ class BitVector(OperandType):
         print("{} {}\t| Symbolic Bitvector {}".format(prefix, self.name, self.size))
 
 
+
+# Bitvector type operand which essentially
+# controls the precision on which the operation will be performed
+class BoundedBitVector(OperandType):
+
+    def __init__(self, name , size):
+
+        self.size = size
+        self.name = name
+        super().__init__(OperandType.OperandTypeEnum.BoundedBitVector)
+        self.is_hole = True
+
+
+    def define_symbolic(self):
+        label = "sym_"+self.name
+        def_str = "(define-symbolic {} (bitvector {}))".format(label, self.size)
+
+        return (label, def_str)
+
+    def get_rkt_value(self):
+        return "BV_"+str(self.size)
+
+    def get_rkt_comment(self):
+        return ";; {}-bit Bitvector operand".format(self.size)
+
+
+    def print_operand(self, prefix = ""):
+        print("{} {}\t| Bounded Bitvector {}".format(prefix, self.name, self.size))
 
 class ConstBitVector(OperandType):
 
@@ -377,4 +406,4 @@ class InstructionType:
 
 
 def isBitVectorType(arg):
-    return isinstance(arg, BitVector) or isinstance(arg, ConstBitVector)
+    return isinstance(arg, BitVector) or isinstance(arg, ConstBitVector) or isinstance(arg, BoundedBitVector)

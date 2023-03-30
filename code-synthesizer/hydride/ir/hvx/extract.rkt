@@ -2601,6 +2601,18 @@
                        )
 
                      ]
+                    [(hexagon_V6_vshuffvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8)
+                     (cond 
+                       [(and  (equal? size_o 2048) (equal? num_4 2048) (equal? num_5 0) (equal? size_i 1024) (equal? num_7 8) (equal? num_8 0)); hexagon_V6_vshuffvdd_128B
+
+                                                                                                                                                 (define-values (expr-0 num-consumed-0) (hvx:extract-expr v0 num-consumed (- depth 1)))
+                                                                                                                                                 (define-values (expr-1 num-consumed-1) (hvx:extract-expr v1 num-consumed-0 (- depth 1)))
+
+                                                                                                                                                 (values (hexagon_V6_vshuffvdd_128B_dsl expr-0 expr-1 v2 size_o num_4 num_5 size_i num_7 num_8 ) num-consumed-1)]
+                       [else (error "Unable to extract  for hexagon_V6_vshuffvdd_128B")]
+                       )
+
+                     ]
                     )
           ]
         ))

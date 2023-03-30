@@ -1242,8 +1242,9 @@ concat
   (define %6.norm (extract  %1.norm i.new0.norm VuV.norm))
   (define %10.norm (bvshl  %6.norm  %2.norm))
   (define %17.norm (bvashr  %6.norm  %2.norm))
-  (define %18.norm (if (equal? %3.ab0.norm #t) %10.norm %17.norm))
-  %18.norm
+  ;(define %18.norm (if (equal? %3.ab0.norm #t) %10.norm %17.norm))
+  ;%18.norm
+  %10.norm
  )
  )
 )
@@ -3029,12 +3030,16 @@ concat
   (define %factor1 (*  %alpha.arg0  %factor0))
   (define i.new0.new.mul (*  i.new0.new  %factor1))
   (define %0 (bvand  RtV  %arg7))
+  ;(printf "%0: ~a\n" %0)
   (define %lastidx1 (-  %arg4  1))
   (define %2 (+  i.new0.new.mul  %lastidx1))
   (define %3 (extract  %2 i.new0.new.mul VvV))
   (define %4.ab0 (bvsizeext  %3 %arg3 %arg6))
+  ;(printf "%4.ab0: ~a\n" %4.ab0)
   (define %5 (bvashr  %4.ab0  %0))
+  ;(printf "%5 (shift-right result): ~a\n" %5)
   (define %6.ab0 (bvsaturate  %5 %arg3 %elemsize0 %arg5))
+  ;(printf "%6.ab0 (saturate result): ~a\n" %6.ab0)
   (define %13 (extract  %2 i.new0.new.mul VuV))
   (define %14.ab0 (bvsizeext  %13 %arg3 %arg2))
   (define %15 (bvashr  %14.ab0  %0))
@@ -3442,8 +3447,9 @@ concat
   (define %6.norm (extract  %1.norm i.new0.norm VuV.norm))
   (define %10.norm (bvashr  %6.norm  %2.norm))
   (define %17.norm (bvshl  %6.norm  %2.norm))
-  (define %18.norm (if (equal? %3.ab0.norm #t) %10.norm %17.norm))
-  %18.norm
+  ;(define %18.norm (if (equal? %3.ab0.norm #t) %10.norm %17.norm))
+  ;%18.norm
+  %10.norm
  )
  )
 )
@@ -3648,5 +3654,28 @@ concat
 (bvpadhighbits  Vdd %arg12)
 )
 
+
+(define (hexagon_V6_vshuffvdd_128B  Vu Vv Rt %vectsize %outerlanesize %laneoffset %innerlanesize %arg0 %arg1)
+  (define Rt_int (bitvector->integer Rt))
+  (define %elem_size (* (- 0 Rt_int) %arg0))
+  (define Vdd
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 %vectsize %outerlanesize))])
+                (apply
+                  concat
+                  (for/list ([%inner.it (reverse (range %laneoffset %innerlanesize %elem_size))])
+                            (define %low %inner.it)
+                            (define %high (+ %inner.it (- %elem_size 1)))
+                            (define %a (extract  %high %low Vu))
+                            (define %b (extract  %high %low Vv))
+                            (concat %b %a)
+                            )
+                  )
+                )
+      )
+    )
+  (bvpadhighbits  Vdd %arg1)
+  )
 
 ;; ================================================================================

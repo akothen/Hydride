@@ -703,7 +703,13 @@
 		(define v3-visited (hvx:visitor v3 fn))
 		(fn ( hexagon_V6_vmpyewuh_64_128B_dsl vc_0-visited vc_1-visited v2-visited v3-visited size_i_o num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 prec_o num_18 num_19 num_20 num_21 num_22 prec_i num_24 ))
 	]
-	[_ (error "Unrecognized expression")]
+[ (hexagon_V6_vshuffvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(define v2-visited (hvx:visitor v2 fn))
+		(fn ( hexagon_V6_vshuffvdd_128B_dsl v0-visited v1-visited v2-visited size_o num_4 num_5 size_i num_7 num_8 ))
+	]
+	[_ (error "Unrecognized expression in visitor")]
  )
 )
 ;; ================================================================================
