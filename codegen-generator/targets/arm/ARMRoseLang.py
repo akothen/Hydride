@@ -22,8 +22,10 @@ from ARMAST import *
 
 
 if __name__ == "__main__":
-    for sema in getSemasofar():
-        Function = CompileSemantics(sema, ARMRoseContext())
-        from RosetteGen import GenerateRosetteForFunction
-        RosetteCode = GenerateRosetteForFunction(Function, "")
-        print(RosetteCode)
+    func = vsubq_s16()
+    Function = CompileSemantics(func, ARMRoseContext())
+    from RosetteGen import GenerateRosetteForFunction
+    RosetteCode = GenerateRosetteForFunction(Function, "")
+    with open(f'rosette_test/{func.intrin}', 'w') as f:
+        f.write(RosetteCode)
+    print(RosetteCode)
