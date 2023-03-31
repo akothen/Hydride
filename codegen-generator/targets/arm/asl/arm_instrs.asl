@@ -32390,7 +32390,8 @@ __instruction LD2W_Z.P.BR_Contiguous
             Z[(t+r) MOD 32] = values[r];
 
 __instruction aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd
-    __encoding aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd
+    __encoding 
+    
         __instruction_set A64
         __field U 29 +: 1
         __field size 22 +: 2

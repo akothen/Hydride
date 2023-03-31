@@ -14,7 +14,8 @@ DoubleTyBitwidth = DoubleTy.getBitwidth()
 
 # Define types used in ARM pseudocodes
 ARMTypes = {
-    "float32x2_t": RoseVectorType.create(FloatTy, 2),
+    "float32x2_t": RoseBitVectorType(64),
+    "int16x8_t": RoseBitVectorType(128),
 }
 
 ARMSema = namedtuple('ARMSema', [
