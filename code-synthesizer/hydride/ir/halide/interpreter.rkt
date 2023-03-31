@@ -184,6 +184,7 @@
     [(vec-sub v1 v2) (vec-len v1)]
     [(vec-sat-sub v1 v2) (vec-len v1)]
     [(vec-mul v1 v2) (vec-len v1)]
+    [(vec-widen-mul v1 v2) (vec-len v2)]
     [(vec-div v1 v2) (vec-len v1)]
     [(vec-mod v1 v2) (vec-len v1)]
     [(vec-min v1 v2) (vec-len v1)]
@@ -337,6 +338,7 @@
     [(vec-sub v1 v2) (list v1 v2)]
     [(vec-sat-sub v1 v2) (list v1 v2)]
     [(vec-mul v1 v2) (list v1 v2)]
+    [(vec-widen-mul v1 v2) (list v1 v2)]
     [(vec-div v1 v2) (list v1 v2)]
     [(vec-mod v1 v2) (list v1 v2)]
     [(vec-min v1 v2) (list v1 v2)]
@@ -554,6 +556,9 @@
     [(vec-sub v1 v2) (lambda (i) (do-sub ((interpret v1) i) ((interpret v2) i)))]
     [(vec-sat-sub v1 v2) (lambda (i) (do-sat-sub ((interpret v1) i) ((interpret v2) i)))]
     [(vec-mul v1 v2) (lambda (i) (do-mul ((interpret v1) i) ((interpret v2) i)))]
+    [(vec-widen-mul v1 v2) 
+     (lambda (i) (do-widened-mul ((interpret v1) i) ((interpret v2) i)))
+     ]
     [(vec-div v1 v2) (lambda (i) (do-div ((interpret v1) i) ((interpret v2) i)))]
     [(vec-mod v1 v2) (lambda (i) (do-mod ((interpret v1) i) ((interpret v2) i)))]
     [(vec-min v1 v2) (lambda (i) (do-min ((interpret v1) i) ((interpret v2) i)))]
@@ -727,7 +732,7 @@
      ;])
      )
 
-(define (do-widening-mul a b signed?)
+(define (do-widening-mul-extract a b signed?)
 
   (define bitwidth (bvlength a))
   (cond 
@@ -754,10 +759,37 @@
   ;   (* lhs rhs)]
   ;  [else
      (define outT (infer-out-type lhs rhs))
-     ;(define result  (do-widening-mul (cpp:eval lhs) (cpp:eval rhs) (cpp:signed-type? outT)) )
-     ;(mk-cpp-expr result outT)
-     (mk-cpp-expr (bvmul (cpp:eval lhs) (cpp:eval rhs)) outT)
+     (define result  (do-widening-mul-extract (cpp:eval lhs) (cpp:eval rhs) #f) )
+     (mk-cpp-expr result outT)
+     ;(mk-cpp-expr (bvmul (cpp:eval lhs) (cpp:eval rhs)) outT)
   ;   ])
+)
+
+
+(define (do-widening-mul-no-extract a b signed?)
+
+  (define bitwidth (bvlength a))
+  (cond 
+    [signed?
+      (define a-sext (sign-extend a (bitvector (* 2 bitwidth))))
+      (define b-sext (sign-extend b (bitvector (* 2 bitwidth))))
+      (define result (bvmul a-sext b-sext) )
+      result
+      ]
+
+    [else
+      (define a-zext (zero-extend a (bitvector (* 2 bitwidth))))
+      (define b-zext (zero-extend b (bitvector (* 2 bitwidth))))
+      (define result (bvmul a-zext b-zext) )
+      result
+      ]
+    )
+  )
+
+(define (do-widened-mul lhs rhs)
+     (define outT (infer-out-type lhs rhs))
+     (define result  (do-widening-mul-no-extract (cpp:eval lhs) (cpp:eval rhs)  (cpp:signed-type? outT)) )
+     (mk-cpp-expr result (mk-cpp-type (* 2 (cpp:expr-bw lhs)) (cpp:signed-type? outT)))
 )
 
 (define (widening-div a b)
