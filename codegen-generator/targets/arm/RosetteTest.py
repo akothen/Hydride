@@ -21,10 +21,11 @@ def genC(func, va, vb):
     singletype = vtype.split('x')[0] + "_t"
     rttype = func.rettype
     singlerttype = rttype.split('x')[0] + "_t"
-    stra = ", ".join(map(lambda x: f"({singletype})" + str(x), va))
-    strb = ", ".join(map(lambda x: f"({singletype})" + str(x), vb))
+    stra = ", ".join(map(lambda x: f"({singletype})" + str(x) + "UL", va))
+    strb = ", ".join(map(lambda x: f"({singletype})" + str(x) + "UL", vb))
     vtohex = "vld1" + name[4:]
     hextov = "vst1" + name[4:]
+    prefix = "ll" if esize >= 64 else ""
     ccode = f'''
 #include <arm_neon.h>
 #include <stdio.h>
@@ -39,7 +40,7 @@ int main()
     {singlerttype} datac[{elements}];
     {hextov}(datac, ret);
     for (int i = 0; i < {elements}; i++) {{
-        printf("%0{esize // 4}x", (uint16_t)datac[i]);
+        printf("%0{esize // 4}{prefix}x", (uint{esize}_t)datac[i]);
     }}
     return 0;
 }}
@@ -66,9 +67,15 @@ def rosetteTest(func):
         RosetteCode += f"(define b{i} (bv #x{hexb} {datasize}))\n"
         RosetteCode += f"(assert (eq? ({func.intrin} a{i} b{i}) (bv #x{returnVal} {datasize})))\n"
 
+    rosetteName = f'rosette_test/{func.intrin}.rkt'
     with open(f'rosette_test/{func.intrin}.rkt', 'w') as f:
         f.write(RosetteCode)
+    return f'racket {rosetteName}'
 
 if __name__ == "__main__":
-    # rosetteTest(vaddq_s16())
-    rosetteTest(vsubq_s16())
+    commands = []
+    for func in getSemasofar():
+        commands.append(rosetteTest(func))
+    
+    for command in commands:
+        os.system(command)

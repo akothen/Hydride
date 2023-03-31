@@ -4,8 +4,8 @@
 
 int main()
 {
-    int16_t dataa[8] = {(int16_t)57042, (int16_t)9299, (int16_t)61134, (int16_t)31975, (int16_t)6476, (int16_t)16896, (int16_t)18792, (int16_t)49565};
-    int16_t datab[8] = {(int16_t)58831, (int16_t)27991, (int16_t)45356, (int16_t)12504, (int16_t)34201, (int16_t)56726, (int16_t)53569, (int16_t)44802};
+    int16_t dataa[8] = {(int16_t)58444UL, (int16_t)26801UL, (int16_t)43765UL, (int16_t)15896UL, (int16_t)51396UL, (int16_t)65055UL, (int16_t)38924UL, (int16_t)30413UL};
+    int16_t datab[8] = {(int16_t)24619UL, (int16_t)42687UL, (int16_t)44194UL, (int16_t)56421UL, (int16_t)16309UL, (int16_t)4882UL, (int16_t)29817UL, (int16_t)58123UL};
     int16x8_t a = vld1q_s16(dataa);
     int16x8_t b = vld1q_s16(datab);
     int16x8_t ret = vsubq_s16(a, b);

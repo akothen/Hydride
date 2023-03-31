@@ -6,3 +6,4 @@ arm_
 **/*.pyc
 *.tmp
 a.out
+codegen-generator/targets/arm/rosette_test/*.c
