@@ -921,3 +921,54 @@ def vsubq_s16():
         None, None, None, None,
         preparation, resolving
     )
+
+
+def genSema(Q: int, U: bool, size: int, unsigned: bool):
+    Parser = get_parser('inst')
+    ResetUniqueID()
+    encoding = Parser.parse(
+        aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
+    realExe = ASTShrink(encoding.instExecute)
+    esize = 8 << size
+    datasize = 128 if Q else 64
+    elements = datasize//esize
+    sub_op = U
+    add = not U
+    resolving = {
+        "datasize": datasize,
+        "esize": esize,
+        "elements": elements,
+        "sub_op": sub_op,
+    }
+    preparation = {
+        "n": "a",
+        "m": "b",
+        "d": "result",
+    }
+    itype = f"{'u'if unsigned else ''}int{esize}x{elements}_t"
+    instr = "ADD" if add else "SUB"
+    instrFormat = f"{instr} Vd.{elements}{'H' if esize==16 else 'B'},Vn.{elements}{'H' if esize==16 else 'B'},Vm.{elements}{'H' if esize==16 else 'B'}"
+    return ARMSema(
+        f"v{'add' if add else 'sub'}{'q'if Q else ''}_{'u'if unsigned else 's'}{esize}",
+        instr,
+        [Parameter("a", itype, not unsigned, False, False),
+         Parameter("b", itype, not unsigned, False, False)],
+        realExe,
+        itype,
+        True,
+        instrFormat,
+        None, None, None, None,
+        preparation, resolving
+    )
+
+
+def getSemasofar():
+    l = []
+    for Q in range(2):
+        for U in [True, False]:
+            for size in range(4):
+                for unsigned in [True, False]:
+                    z = genSema(Q, U, size, unsigned)
+                    print(z)
+                    l.append(z)
+    return l

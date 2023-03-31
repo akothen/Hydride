@@ -22,7 +22,8 @@ from ARMAST import *
 
 
 if __name__ == "__main__":
-    Function = CompileSemantics(vsubq_s16(), ARMRoseContext())
-    from RosetteGen import GenerateRosetteForFunction
-    RosetteCode = GenerateRosetteForFunction(Function, "")
-    print(RosetteCode)
+    for sema in getSemasofar():
+        Function = CompileSemantics(sema, ARMRoseContext())
+        from RosetteGen import GenerateRosetteForFunction
+        RosetteCode = GenerateRosetteForFunction(Function, "")
+        print(RosetteCode)

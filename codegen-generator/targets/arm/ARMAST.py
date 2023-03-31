@@ -5,6 +5,11 @@ import asl.ARMAST as asl
 PARSER_ID_COUNTER = 0
 
 
+def ResetUniqueID():
+    global PARSER_ID_COUNTER
+    PARSER_ID_COUNTER = 0
+
+
 def GenUniqueID():
     global PARSER_ID_COUNTER
     ID = PARSER_ID_COUNTER
