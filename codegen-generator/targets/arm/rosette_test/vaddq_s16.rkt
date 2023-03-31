@@ -1,4 +1,5 @@
-(define (vsubq_s16  a b )
+#lang rosette
+(define (vaddq_s16  a b )
 (define result
 (apply
 concat
@@ -13,7 +14,7 @@ concat
  (define %8 (*  %7  16))
  (define %9 (-  %8  1))
  (define %10 (extract  %9 %6 b))
- (define %11 (bvsub  %5  %10))
+ (define %11 (bvadd  %5  %10))
  %11
 )
 )
