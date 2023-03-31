@@ -2,6 +2,6 @@ parser.out
 parsetab.py
 __pycache__
 arm_
-.vscode
+# .vscode
 **/*.pyc
 *.tmp
