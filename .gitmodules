@@ -1,0 +1,3 @@
+[submodule "frontends/taco"]
+	path = frontends/taco
+	url = https://github.com/vimarsh6739/taco.git
