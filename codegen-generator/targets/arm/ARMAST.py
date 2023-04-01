@@ -24,7 +24,7 @@ class ASTNode:
 class Number(ASTNode):
     val: int
 
-    def __init__(self, val: str):
+    def __init__(self, val: int):
         self.val = val
 
     def __repr__(self):
@@ -86,7 +86,7 @@ class For(ASTNode):
     inc: int
     id: str
 
-    def __init__(self, iterator: ASTNode, begin: ASTNode, end: ASTNode, stmts: List[ASTNode], inc: int, id: str):
+    def __init__(self, iterator: Var, begin: ASTNode, end: ASTNode, stmts: List[ASTNode], inc: int, id: str):
         self.iterator, self.begin, self.end, self.stmts, self.inc, self.id = iterator, begin, end, stmts, inc, id
 
     def __repr__(self):
@@ -234,7 +234,7 @@ def ASTShrink(AST):
     elif isinstance(AST, asl.SliceSingle):
         return ASTShrink(AST.expr)
     elif isinstance(AST, asl.StmtFor):
-        return For(Var(AST.id, GenUniqueID()), ASTShrink(AST.expr0), ASTShrink(AST.expr1), ASTShrink(AST.stmts), Number(1), GenUniqueID())
+        return For(Var(AST.id, GenUniqueID()), ASTShrink(AST.expr0), ASTShrink(AST.expr1), ASTShrink(AST.stmts), 1, GenUniqueID())
     elif isinstance(AST, asl.ExprLitInt):
         return Number(AST.integer)
     elif isinstance(AST, asl.ExprBinOp):
@@ -251,7 +251,7 @@ def ASTShrink(AST):
                 print(AST)
                 assert False
         else:
-            return If(ASTShrink(AST.stmtifcases.expr), ASTShrink(AST.stmtifcases.stmts))
+            return If(ASTShrink(AST.stmtifcases.expr), ASTShrink(AST.stmtifcases.stmts), GenUniqueID())
     else:
         print(AST)
         assert False

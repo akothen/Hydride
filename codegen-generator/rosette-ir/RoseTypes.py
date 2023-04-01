@@ -56,7 +56,7 @@ class RoseVoidType(RoseType):
 class RoseBitVectorType(RoseType):
     def __init__(self, Bitwidth):
         # Some sanity checks
-        print(type(Bitwidth))
+        # print(type(Bitwidth))
         assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
         if isinstance(Bitwidth, int):
             # Bitwidth of a bitvector must be more than 1.
