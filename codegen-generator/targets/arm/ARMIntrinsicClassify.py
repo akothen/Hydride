@@ -1,4 +1,4 @@
-# from ARMAST import *
+from ARMAST import Flag
 from ARMTypes import *
 import json
 from typing import Set, List
@@ -275,13 +275,16 @@ def wedo(instr):
         return False
     skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT"
             ]  # TODO: do we need to support these?
-    tosupport = ["LD", "ST", "TBL", "TBX"]  # TODO: need to support
+    tosupport = ["TBL", "TBX"]  # TODO: need to support
+    # tosupport = ["LD", "ST", "TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):
         return False
     return True
 
 
 def generateARMIntrinsics():
+    with open("intr.json", 'r') as fi:
+        I = json.load(fi)
     allnames = []
     for i in I:
         # filter instructions we cares
@@ -290,13 +293,26 @@ def generateARMIntrinsics():
         if "Complex" in i["instruction_group"]:
             continue
         allnames.append(i["name"])
-    print(parse_flag(allnames))
+    # print(parse_flag(allnames))
+    return parse_flag(allnames)
 
 
 def findMatchingEncoding():
-    from ARMIntrinsics import Intrinsics
+    Intrinsics = generateARMIntrinsics()
     with open("encodingmap.json", 'r') as fi:
         enc = json.load(fi)
+    with open("intr.json", 'r') as fi:
+        I = json.load(fi)
+    
+    # LS = {'LD2', 'ST1', 'LD1R', 'LD4R', 'LD1', 'LD2R', 'LD4', 'LD3R', 'ST4', 'ST3', 'ST2', 'LD3'}
+    # mmap = {k: set() for k in LS}
+    # for k, v in enc.items():
+    #     for pre in LS:
+    #         if k.startswith(pre):
+    #             mmap[pre].add(v)
+    # for k, v in mmap.items():
+    #     print(k, v)
+
     enckeys = enc.keys()
     result = {}
     for i in I:
@@ -320,19 +336,31 @@ def findMatchingEncoding():
                 if j.startswith(x):
                     ans.add(enc[j])
             return list(ans)[0] if len(ans) == 1 else ""
+
         # print(intrin, desiredprefix)
         if (z := checkUniqueness(desiredprefix)):
             ans = z
+        elif desiredprefix.startswith("LD") or desiredprefix.startswith("ST"):
+            if desiredprefix.endswith("R"):
+                ans = "aarch64_memory_vector_single_no_wb"
+            else:
+                ans = "aarch64_memory_vector_multiple_no_wb"
         else:
             if desiredprefix == "INS":
                 desiredprefix += "_asimdins_IV_v" if flag.x else "_asimdins_IR_r"
             elif desiredprefix == "DUP":
                 desiredprefix += "_asimdins_DV_v" if flag.x else "_asimdins_DR_r"
+            elif desiredprefix in ["ORR", "BIC"]:
+                desiredprefix += "_asimd"
             else:
                 if flag.high == "high":
                     assert desiredprefix.endswith("2")
                     desiredprefix = desiredprefix[:-1]
-                desiredprefix += "_asisd" if flag.x else "_asimd"
+                # desiredprefix += "_asisd" if flag.x else "_asimd"
+                if (z := checkUniqueness(desiredprefix + "_asi")):
+                    desiredprefix += "_asi"
+                else:
+                    desiredprefix += "_asisd" if flag.q and flag.type.endswith("64") else "_asimd"
             # print(intrin, desiredprefix)
             if (z := checkUniqueness(desiredprefix)):
                 ans = z
@@ -342,18 +370,17 @@ def findMatchingEncoding():
                 if (z := checkUniqueness(desiredprefix)):
                     ans = z
                 else:
+                    print(intrin, desiredprefix)
                     assert False
         result[intrin] = ans
         # print(intrin, ans)
 
         # Need to verify the similarity of the auto matched encodings
         # with the ones extract from the intrinsics
-    print(result)
+    # print(result)
+    return result
+
 
 
 if __name__ == "__main__":
-    with open("intr.json", 'r') as fi:
-        I = json.load(fi)
-    # generateARMIntrinsics()
-    # findMatchingEncoding()
-    
+    pass
