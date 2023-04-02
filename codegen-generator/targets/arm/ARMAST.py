@@ -181,12 +181,37 @@ class UnaryExpr(ASTNode):
 #     ['cond', 'then', 'otherwise', 'id']
 
 
-# class Match(ASTNode):
-#     ['val', 'cases', 'id']
+class CaseBase(ASTNode):
+    body: List[ASTNode]
+    id: str
+
+    def __init__(self, body: List[ASTNode], id: str):
+        self.body, self.id = body, id
+
+    def __repr__(self):
+        return f"CaseBase({self.body}, {self.id})"
 
 
-# class Case(ASTNode):
-#     ['val', 'stmts', 'id']
+class Case(CaseBase):
+    val: ASTNode
+
+    def __init__(self, val: ASTNode, body: List[ASTNode], id: str):
+        self.val, self.body, self.id = val, body, id
+
+    def __repr__(self):
+        return f"Case({self.val}, {self.body}, {self.id})"
+
+
+class Match(ASTNode):
+    val: ASTNode
+    cases: List[CaseBase]
+    id: str
+
+    def __init__(self, val: ASTNode, cases: List[CaseBase], id: str):
+        self.val, self.cases, self.id = val, cases, id
+
+    def __repr__(self):
+        return f"Match({self.val}, {self.cases}, {self.id})"
 
 
 class VarsDecl(ASTNode):
@@ -246,6 +271,8 @@ def ASTShrink(AST):
         return ArrayIndex(ASTShrink(AST.expr), ASTShrink(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.ExprSlice):
         return ArraySlice(ASTShrink(AST.expr), ASTShrink(AST.slices), GenUniqueID())
+    elif isinstance(AST, asl.SliceRange):
+        return [ASTShrink(AST.expr0), ASTShrink(AST.expr1)]
     elif isinstance(AST, asl.SliceSingle):
         return ASTShrink(AST.expr)
     elif isinstance(AST, asl.StmtFor):
@@ -254,12 +281,13 @@ def ASTShrink(AST):
         return Number(AST.integer)
     elif isinstance(AST, asl.ExprBinOp):
         return BinaryExpr(AST.binop[1:-1], ASTShrink(AST.lhs), ASTShrink(AST.rhs), GenUniqueID())
+    elif isinstance(AST, asl.ExprUnOp):
+        return UnaryExpr(AST.unop[1:-1], ASTShrink(AST.expr), GenUniqueID())
     elif isinstance(AST, asl.StmtAssign):
         return Update(ASTShrink(AST.lvalexpr), ASTShrink(AST.expr))
     elif isinstance(AST, asl.ExprCall):
         return Call(ASTShrink(AST.qid), ASTShrink(AST.exprs), GenUniqueID())
     elif isinstance(AST, asl.StmtIf):
-
         if AST.maybe_stmts != asl.Nothing():
             if len(AST.stmtifcases) == 1:
                 return IfElse(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), ASTShrink(AST.maybe_stmts), GenUniqueID())
@@ -280,6 +308,20 @@ def ASTShrink(AST):
         return Undefiend()
     elif isinstance(AST, asl.ExprIf):
         return IfElse(ASTShrink(AST.exprtest), ASTShrink(AST.exprresult), ASTShrink(AST.exprelse), GenUniqueID())
+    elif isinstance(AST, asl.ExprUnknown):
+        return Number(0)
+    elif isinstance(AST, asl.StmtCase):
+        return Match(ASTShrink(AST.expr), ASTShrink(AST.casealternatives), GenUniqueID())
+    elif isinstance(AST, asl.CaseWhen):
+        return Case(ASTShrink(AST.casepatterns), ASTShrink(AST.stmts), GenUniqueID())
+    elif isinstance(AST, asl.CaseOtherwise):
+        return CaseBase(ASTShrink(AST.stmts), GenUniqueID())
+    elif isinstance(AST, asl.CasePatternMask):
+        return BitVec(AST.mask)
+    elif isinstance(AST, asl.CasePatternBin):
+        return BitVec(AST.bitvector)
+    elif isinstance(AST, asl.ExprLitMask):
+        return BitVec(AST.mask)
     else:
         print(AST)
         assert False
