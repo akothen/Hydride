@@ -31,6 +31,16 @@ class Number(ASTNode):
         return f"Number({self.val})"
 
 
+class BitVec(ASTNode):
+    bv: str
+
+    def __init__(self, bv: int):
+        self.bv = bv
+
+    def __repr__(self):
+        return f"BitVec({self.bv})"
+
+
 class ArraySlice(ASTNode):
     bv: ASTNode
     slices: List[ASTNode]
@@ -203,6 +213,11 @@ class VarDeclInit(ASTNode):
         return f"VarDeclInit({self.decl}, {self.expr}, {self.id})"
 
 
+class Undefiend(ASTNode):
+    def __repr__(self):
+        return f"Undefiend()"
+
+
 def ASTShrink(AST):
     if isinstance(AST, list):
         w = [ASTShrink(i) for i in AST]
@@ -244,14 +259,31 @@ def ASTShrink(AST):
     elif isinstance(AST, asl.ExprCall):
         return Call(ASTShrink(AST.qid), ASTShrink(AST.exprs), GenUniqueID())
     elif isinstance(AST, asl.StmtIf):
-        if AST.maybe_stmts:
+
+        if AST.maybe_stmts != asl.Nothing():
             if len(AST.stmtifcases) == 1:
                 return IfElse(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), ASTShrink(AST.maybe_stmts), GenUniqueID())
             else:
                 print(AST)
                 assert False
         else:
-            return If(ASTShrink(AST.stmtifcases.expr), ASTShrink(AST.stmtifcases.stmts), GenUniqueID())
+            if len(AST.stmtifcases) == 1:
+                return If(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), GenUniqueID())
+            else:
+                print(AST)
+                assert False
+    elif isinstance(AST, asl.TypeRef):
+        return 32
+    elif isinstance(AST, asl.ExprLitBin):
+        return BitVec(AST.bitvector)
+    elif isinstance(AST, asl.StmtUndefined):
+        return Undefiend()
+    elif isinstance(AST, asl.ExprIf):
+        return IfElse(ASTShrink(AST.exprtest), ASTShrink(AST.exprresult), ASTShrink(AST.exprelse), GenUniqueID())
     else:
         print(AST)
         assert False
+
+
+Flag = namedtuple(
+    "Flag", "pair sat round base s2u narrow q x high lane n result type")

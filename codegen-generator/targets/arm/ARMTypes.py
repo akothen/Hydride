@@ -139,6 +139,3 @@ def get_total_bits(typed_reg):
     if isinstance(typed_reg, VectorRegLane):
         return data_bits_spec[typed_reg.bitspec]*typed_reg.elements
     assert False
-
-Flag = namedtuple(
-    "Flag", "pair sat round base s2u narrow q x high lane n result type")

@@ -1,4 +1,4 @@
-from ARMTypes import Flag
+from ARMAST import Flag
 Intrinsics ={
     'vadd_s8': Flag(False, False, False, 'add', False, '', False, '', False, '', False, '', 's8'),
     'vaddq_s8': Flag(False, False, False, 'add', False, '', True, '', False, '', False, '', 's8'),

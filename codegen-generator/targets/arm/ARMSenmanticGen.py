@@ -7,7 +7,7 @@ import json
 
 with open("intr.json", 'r') as fi:
     I = json.load(fi)
-with open("asl/arm_instrs.asl") as f:
+with open("asl/arm_instrs.sexpr") as f:
     data = f.read()
 parser = get_parser()
 Instrs: List[Instruction] = parser.parse(data)
@@ -20,9 +20,11 @@ def genByEncodingFields(enc: str):
     for i in Instrs:
         for j in i.instEncodings:
             if j.encName == enc:
-                io = i.instExecute
+                op = i.instExecute
                 encoding = j
                 break
+        if op:
+            break
     assert op is not None
     print(encoding)
 
