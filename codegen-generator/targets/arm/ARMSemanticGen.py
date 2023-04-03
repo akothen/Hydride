@@ -1,6 +1,6 @@
+import pickle
 from asl.ARMParser import get_parser
 from asl.ARMAST import Instruction
-from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
 from ARMTypes import *
 from ARMAST import *
 import json
@@ -333,32 +333,44 @@ def parse_instr_attr(instr: InstrDesc):
 
 
 class SemaGenerator():
-    def __init__(self):
-        print("loading...")
+    '''
+    SemaGenerator initialized by deserializing shouldn't call 
+    getSemaByInstrDesc() cause we are not saving parsing files
+    and map2AST
+    '''
+
+    def __init__(self, deserialize=False):
+        self.result = {}
         with open("intr.json", 'r') as fi:
             self.I = json.load(fi)
-        with open("asl/arm_instrs.sexpr") as f:
-            data = f.read()
-        parser = get_parser()
-        print("parsing...")
-        Instrs: List[Instruction] = parser.parse(data)
-        print("parse done...")
+        if deserialize:
+            self.deserialize()
+        else:
+            from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
+            print("loading...")
+            with open("asl/arm_instrs.sexpr") as f:
+                data = f.read()
+            parser = get_parser()
+            print("parsing...")
+            Instrs: List[Instruction] = parser.parse(data)
+            print("parse done...")
 
-        zzzz = set(Intrinsics2Encodings.values())
-        map2AST = {}
-        for i in Instrs:
-            for j in i.instEncodings:
-                if j.encName in zzzz:
-                    wholeCode = j.encDecode
-                    if type(j.encDecode) != asl.Nothing:
-                        wholeCode += i.instPostDecode
-                    map2AST[j.encName] = (
-                        i.instExecute, wholeCode)
-        assert len(map2AST) == len(zzzz)
-        self.map2AST = map2AST
-        print("map2AST done...")
+            zzzz = set(Intrinsics2Encodings.values())
+            map2AST = {}
+            for i in Instrs:
+                for j in i.instEncodings:
+                    if j.encName in zzzz:
+                        wholeCode = j.encDecode
+                        if type(j.encDecode) != asl.Nothing:
+                            wholeCode += i.instPostDecode
+                        map2AST[j.encName] = (
+                            i.instExecute, wholeCode)
+            assert len(map2AST) == len(zzzz)
+            self.map2AST = map2AST
+            print("map2AST done...")
 
     def getSemaByInstrDesc(self, intrin):
+        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
         if intrin.name not in Intrinsics2Fields:
             return None
         # print(intrin)
@@ -393,6 +405,8 @@ class SemaGenerator():
                        )
 
     def getSemaByName(self, name):
+        if self.result:
+            return self.result.get(name, None)
         for i in self.I:
             if i["name"] == name:
                 return self.getSemaByInstrDesc(InstrDesc(**i))
@@ -402,19 +416,30 @@ class SemaGenerator():
         for i in self.I:
             yield self.getSemaByInstrDesc(InstrDesc(**i))
 
-    def GenPy(self):
-        result = {}
-        for i in self.I:
-            if (z := self.getSemaByInstrDesc(InstrDesc(**i))) is not None:
-                result[i["name"]] = z
-        program = "from . import *\n"
-        program += "AllSemas="+repr(result)
-        with open("ARMIntrinsics.py", "w") as f:
-            f.write(program)
+    def getResult(self):
+        if self.result:
+            return self.result
+        else:
+            for i in self.I:
+                if (z := self.getSemaByInstrDesc(InstrDesc(**i))) is not None:
+                    self.result[i["name"]] = z
+        return self.result
+
+    def serialize(self):
+        self.result = self.getResult()
+        with open('AllSema.pickle', 'wb') as f:
+            pickle.dump(self.result, f)
+
+    def deserialize(self):
+        with open('AllSema.pickle', 'rb') as f:
+            self.result = pickle.load(f)
 
 
 if __name__ == "__main__":
-    S = SemaGenerator()
-    print([i for i in S.SemaGenerator() if i is not None])
+    # S.serialize()
+    # print([i for i in S.SemaGenerator() if i is not None])
+    # S = SemaGenerator()
+    S = SemaGenerator(deserialize=True)
+    print(S.getSemaByName("vsubq_s16"))
     # S.GenPy()
     # print(list(S.SemaGenerator()))
