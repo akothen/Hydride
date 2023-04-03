@@ -247,71 +247,71 @@ class SatException(Exception):
     pass
 
 
-def ASTShrink(AST):
+def ASTShrink_(AST):
     if isinstance(AST, list):
-        w = [ASTShrink(i) for i in AST]
+        w = [ASTShrink_(i) for i in AST]
         return [i for i in w if i is not None]
     if isinstance(AST, asl.StmtCall):
         return None  # Assume StmtCall useless
     elif isinstance(AST, asl.StmtVarDeclInit):
-        return VarDeclInit(ASTShrink(AST.symboldecl), ASTShrink(AST.expr), GenUniqueID())
+        return VarDeclInit(ASTShrink_(AST.symboldecl), ASTShrink_(AST.expr), GenUniqueID())
     elif isinstance(AST, asl.StmtConstDecl):
-        return VarDeclInit(ASTShrink(AST.symboldecl), ASTShrink(AST.expr), GenUniqueID())
+        return VarDeclInit(ASTShrink_(AST.symboldecl), ASTShrink_(AST.expr), GenUniqueID())
     elif isinstance(AST, asl.SymbolDecl):
-        return VarsDecl([Var(AST.id, GenUniqueID())], ASTShrink(AST.ty), GenUniqueID())
+        return VarsDecl([Var(AST.id, GenUniqueID())], ASTShrink_(AST.ty), GenUniqueID())
     elif isinstance(AST, asl.StmtVarsDecl):
-        return VarsDecl([Var(i, GenUniqueID()) for i in AST.ids], ASTShrink(AST.ty), GenUniqueID())
+        return VarsDecl([Var(i, GenUniqueID()) for i in AST.ids], ASTShrink_(AST.ty), GenUniqueID())
     elif isinstance(AST, asl.TypeFun):  # Only Returns Type width
         if AST.id == "bits":
-            return ASTShrink(AST.expr)
+            return ASTShrink_(AST.expr)
         raise NotImplementedError
     elif isinstance(AST, asl.ExprVarRef):
-        if ASTShrink(AST.qid) in ["sat", "sat1", "sat2"]:
+        if ASTShrink_(AST.qid) in ["sat", "sat1", "sat2"]:
             raise SatException("sat/sat1/sat2 is striped")
-        return Var(ASTShrink(AST.qid), GenUniqueID())
+        return Var(ASTShrink_(AST.qid), GenUniqueID())
     elif isinstance(AST, asl.LValVarRef):
-        return Var(ASTShrink(AST.qid), GenUniqueID())
+        return Var(ASTShrink_(AST.qid), GenUniqueID())
     elif isinstance(AST, asl.CasePatternIdentifier):
         return Var(AST.id, GenUniqueID())
     elif isinstance(AST, asl.LValArrayIndex):
-        return ArrayIndex(ASTShrink(AST.lvalexpr), ASTShrink(AST.slices), GenUniqueID())
+        return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.QualifiedIdentifier):
         return AST.id
     elif isinstance(AST, asl.ExprIndex):
-        return ArrayIndex(ASTShrink(AST.expr), ASTShrink(AST.slices), GenUniqueID())
+        return ArrayIndex(ASTShrink_(AST.expr), ASTShrink_(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.ExprSlice):
         assert len(AST.slices) == 1
-        return ArraySlice(ASTShrink(AST.expr), ASTShrink(AST.slices[0]), GenUniqueID())
+        return ArraySlice(ASTShrink_(AST.expr), ASTShrink_(AST.slices[0]), GenUniqueID())
     elif isinstance(AST, asl.LValSliceOf):
         assert len(AST.slices) == 1
-        return ArraySlice(ASTShrink(AST.lvalexpr), ASTShrink(AST.slices[0]), GenUniqueID())
+        return ArraySlice(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices[0]), GenUniqueID())
     elif isinstance(AST, asl.SliceRange):
-        return [ASTShrink(AST.expr0), ASTShrink(AST.expr1)]
+        return [ASTShrink_(AST.expr0), ASTShrink_(AST.expr1)]
     elif isinstance(AST, asl.SliceSingle):
-        return [ASTShrink(AST.expr)]
+        return [ASTShrink_(AST.expr)]
     elif isinstance(AST, asl.StmtFor):
-        return For(Var(AST.id, GenUniqueID()), ASTShrink(AST.expr0), ASTShrink(AST.expr1), ASTShrink(AST.stmts), 1, GenUniqueID())
+        return For(Var(AST.id, GenUniqueID()), ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), ASTShrink_(AST.stmts), 1, GenUniqueID())
     elif isinstance(AST, asl.ExprLitInt):
         return Number(AST.integer)
     elif isinstance(AST, asl.ExprBinOp):
-        return BinaryExpr(AST.binop[1:-1], ASTShrink(AST.lhs), ASTShrink(AST.rhs), GenUniqueID())
+        return BinaryExpr(AST.binop[1:-1], ASTShrink_(AST.lhs), ASTShrink_(AST.rhs), GenUniqueID())
     elif isinstance(AST, asl.ExprUnOp):
-        return UnaryExpr(AST.unop[1:-1], ASTShrink(AST.expr), GenUniqueID())
+        return UnaryExpr(AST.unop[1:-1], ASTShrink_(AST.expr), GenUniqueID())
     elif isinstance(AST, asl.StmtAssign):
-        return Update(ASTShrink(AST.lvalexpr), ASTShrink(AST.expr))
+        return Update(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.expr))
     elif isinstance(AST, asl.ExprCall):
-        return Call(ASTShrink(AST.qid), ASTShrink(AST.exprs), GenUniqueID())
+        return Call(ASTShrink_(AST.qid), ASTShrink_(AST.exprs), GenUniqueID())
     elif isinstance(AST, asl.StmtIf):
         if AST.maybe_stmts != asl.Nothing():
             if len(AST.stmtifcases) == 1:
-                return IfElse(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), ASTShrink(AST.maybe_stmts), GenUniqueID())
+                return IfElse(ASTShrink_(AST.stmtifcases[0].expr), ASTShrink_(AST.stmtifcases[0].stmts), ASTShrink_(AST.maybe_stmts), GenUniqueID())
             else:
                 print(AST)
                 raise NotImplementedError
         else:
             if len(AST.stmtifcases) == 1:
                 try:
-                    return If(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), GenUniqueID())
+                    return If(ASTShrink_(AST.stmtifcases[0].expr), ASTShrink_(AST.stmtifcases[0].stmts), GenUniqueID())
                 except SatException as e:
                     return None
             else:
@@ -324,15 +324,15 @@ def ASTShrink(AST):
     elif isinstance(AST, asl.StmtUndefined):
         return Undefiend()
     elif isinstance(AST, asl.ExprIf):
-        return IfElse(ASTShrink(AST.exprtest), ASTShrink(AST.exprresult), ASTShrink(AST.exprelse), GenUniqueID())
+        return IfElse(ASTShrink_(AST.exprtest), ASTShrink_(AST.exprresult), ASTShrink_(AST.exprelse), GenUniqueID())
     elif isinstance(AST, asl.ExprUnknown):
         return Number(0)
     elif isinstance(AST, asl.StmtCase):
-        return Match(ASTShrink(AST.expr), ASTShrink(AST.casealternatives), GenUniqueID())
+        return Match(ASTShrink_(AST.expr), ASTShrink_(AST.casealternatives), GenUniqueID())
     elif isinstance(AST, asl.CaseWhen):
-        return Case(ASTShrink(AST.casepatterns), ASTShrink(AST.stmts), GenUniqueID())
+        return Case(ASTShrink_(AST.casepatterns), ASTShrink_(AST.stmts), GenUniqueID())
     elif isinstance(AST, asl.CaseOtherwise):
-        return CaseBase(ASTShrink(AST.stmts), GenUniqueID())
+        return CaseBase(ASTShrink_(AST.stmts), GenUniqueID())
     elif isinstance(AST, asl.CasePatternMask):
         return BitVec(AST.mask)
     elif isinstance(AST, asl.CasePatternBin):
@@ -343,10 +343,15 @@ def ASTShrink(AST):
         return BitVec(AST.mask)
     elif isinstance(AST, asl.LValTuple):  # strip out sat
         assert AST.lvalexprs[1].qid.id in ["sat", "sat1", "sat2"]
-        return ASTShrink(AST.lvalexprs[0])
+        return ASTShrink_(AST.lvalexprs[0])
     else:
         print(AST)
         raise NotImplementedError
+
+
+def ASTShrink(AST):
+    ResetUniqueID()
+    return ASTShrink_(AST)
 
 
 Flag = namedtuple(

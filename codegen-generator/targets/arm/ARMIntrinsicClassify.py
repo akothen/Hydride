@@ -1,4 +1,5 @@
 
+from ARMEncodingFields import EncodingFields
 from ARMAST import Flag
 from ARMTypes import *
 import json
@@ -163,10 +164,17 @@ def wedo(instr):
     unsupportedGroup = ["Complex", "Cryptography"]
     if any([i in instr["instruction_group"] for i in unsupportedGroup]):
         return False
-    for arg in instr["arguments"]:
-        if "float" in arg or "poly" in arg:
+
+    def doType(i: str):
+        if "float" in i or "poly" in i:
             return False
-    if "float" in instr["return_type"]["value"] or "poly" in instr["return_type"]["value"]:
+        if i.count('x') > 1:  # QWQ
+            return False
+        return True
+    for arg in instr["arguments"]:
+        if not doType(arg):
+            return False
+    if not doType(instr["return_type"]["value"]):
         return False
     if len(instr["base_instruction"]) > 1:
         return False
@@ -175,7 +183,6 @@ def wedo(instr):
     skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT"
             ]  # TODO: do we need to support these?
     tosupport = ["TBL", "TBX"]  # TODO: need to support
-    # tosupport = ["LD", "ST", "TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):
         return False
     return True
@@ -315,13 +322,14 @@ def genPossibleOpcode(fields):
 
 
 def Intrin2Field():
-    from ARMIntrinsics import EncodingFields
     result = {}
     inv_map = {}
 
+    notwedo = 0
     for i in I:
         intrin = InstrDesc(**i)
         if not wedo(i):
+            notwedo += 1
             continue
         k, v = searchEncodingForIntrinsic(i)
         field = EncodingFields[k]
@@ -331,10 +339,8 @@ def Intrin2Field():
     def selectField(opcd, k, v):
         return [i for i in opcd if i[k] == v]
 
-    skip = ["LD1_asisdlse_R1_1v", "ST1_asisdlse_R1_1v"]  # TODO: handle these
+    skip = []
     for encodings, intrins in inv_map.items():
-        if encodings in skip:
-            continue
         # print(encodings, intrins)
         # if encodings in skip:
         #     continue
@@ -347,8 +353,8 @@ def Intrin2Field():
         # print(encodings, field)
         # print(len(intrins), len(opcd), intrins)
 
-        for c in intrins:
-            Flag = IntrinsicsFlags[c]
+        for cc in intrins:
+            Flag = IntrinsicsFlags[cc]
             if Flag.n or Flag.lane:
                 # TODO: handle this: expand by n
                 # select lane by lane
@@ -387,24 +393,42 @@ def Intrin2Field():
                     if Flag.type.endswith('32'):
                         return selectField(o, 'sz', '0')
                     assert False
-                checkers = ['Q', 'size', 'sz']
+
+                def selectopcode():
+                    if encodings in ["LD1_asisdlse_R1_1v", "ST1_asisdlse_R1_1v"]:
+                        if Flag.type == "x2":
+                            return selectField(o, 'opcode', '1010')
+                        if Flag.type == "x3":
+                            return selectField(o, 'opcode', '0110')
+                        if Flag.type == "x4":
+                            return selectField(o, 'opcode', '0010')
+                        return selectField(o, 'opcode', '0111')
+                    assert False
+
+                checkers = ['Q', 'size', 'sz', 'opcode']
                 for c in checkers:
                     if c in field:
                         o = locals()['select'+c]()
                     if len(o) == 1:
                         return o[0]
                     assert len(o) > 0
-                print(field)
+                print(cc, encodings)
+                for _ in o:
+                    print(_)
                 assert False
             # print(c, guess())
-            result[c] = guess()
+            result[cc] = guess()
 
             # assert len(intrins) <= len(opcd)
 
             # print(result)
             # return result
 
+    print("==============         Summary         ==============")
+    print(f"We do {len(I) - notwedo} and discarded {notwedo} instrisics")
     print("Skipped encodings:", skip)
+    print(f"Solved {len(result)} out of {len(I)} instrisics")
+    print("==============           End           ==============")
     return result
 
 
@@ -412,6 +436,10 @@ def genThree():
     return generateARMIntrinsicsFlags(), findMatchingEncoding(), Intrin2Field()
 
 
+IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
+
+
 if __name__ == "__main__":
     # genThree()
+    # Intrin2Field()
     pass

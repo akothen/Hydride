@@ -1,6 +1,6 @@
 from asl.ARMParser import get_parser
 from asl.ARMAST import Instruction
-from ARMIntrinsics import Intrinsics2Encodings, Intrinsics2Fields
+from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
 from ARMTypes import *
 from ARMAST import *
 import json
@@ -272,6 +272,14 @@ def parse_instr_attr(instr: InstrDesc):
         "uint16_t const *",
         "uint32_t const *",
         "uint64_t const *",
+        "int8_t *",
+        "int16_t *",
+        "int32_t *",
+        "int64_t *",
+        "uint8_t *",
+        "uint16_t *",
+        "uint32_t *",
+        "uint64_t *",
     }
 
     def isSigned(t: str):
@@ -318,8 +326,9 @@ def parse_instr_attr(instr: InstrDesc):
     # print(instr.results)
     assert len(instr.results) == 1
     assert len(instr.results[0]) == 1
-    reg = parse_reg(list(instr.results[0].keys())[0])
-    preparation[reg.idx] = "returnVal"
+    if "void" not in instr.results[0]:
+        reg = parse_reg(list(instr.results[0].keys())[0])
+        preparation[reg.idx] = "returnVal"
     return Params, retSign, preparation
 
 
@@ -350,11 +359,7 @@ class SemaGenerator():
         print("map2AST done...")
 
     def getSemaByInstrDesc(self, intrin):
-        if intrin.name not in Intrinsics2Encodings:
-            return None
         if intrin.name not in Intrinsics2Fields:
-            return None
-        if any(i in intrin.name for i in ["ld1", "st1", "ld2", "st2", "ld3", "st3", "ld4", "st4"]):
             return None
         # print(intrin)
         # assert False
@@ -397,7 +402,19 @@ class SemaGenerator():
         for i in self.I:
             yield self.getSemaByInstrDesc(InstrDesc(**i))
 
+    def GenPy(self):
+        result = {}
+        for i in self.I:
+            if (z := self.getSemaByInstrDesc(InstrDesc(**i))) is not None:
+                result[i["name"]] = z
+        program = "from . import *\n"
+        program += "AllSemas="+repr(result)
+        with open("ARMIntrinsics.py", "w") as f:
+            f.write(program)
+
 
 if __name__ == "__main__":
     S = SemaGenerator()
-    print(list(S.SemaGenerator()))
+    print([i for i in S.SemaGenerator() if i is not None])
+    # S.GenPy()
+    # print(list(S.SemaGenerator()))

@@ -835,7 +835,7 @@ def vmul_f32():
     Parser = get_parser('inst')
     encoding = Parser.parse(
         aarch64_vector_arithmetic_binary_uniform_mul_fp16_extended_sisd)
-    realExe = ASTShrink(encoding.instExecute)
+    realExe = ASTShrink_(encoding.instExecute)
     resolving = {
         "datasize": 128,
         "esize": 16,
@@ -865,7 +865,7 @@ def vaddq_s16():
     Parser = get_parser('inst')
     encoding = Parser.parse(
         aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
-    realExe = ASTShrink(encoding.instExecute)
+    realExe = ASTShrink_(encoding.instExecute)
     resolving = {
         "datasize": 128,
         "esize": 16,
@@ -896,7 +896,7 @@ def vsubq_s16():
     Parser = get_parser('inst')
     encoding = Parser.parse(
         aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
-    realExe = ASTShrink(encoding.instExecute)
+    realExe = ASTShrink_(encoding.instExecute)
     resolving = {
         "datasize": 128,
         "esize": 16,
@@ -928,7 +928,7 @@ def genSema(Q: int, U: bool, size: int, unsigned: bool):
     ResetUniqueID()
     encoding = Parser.parse(
         aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
-    realExe = ASTShrink(encoding.instExecute)
+    realExe = ASTShrink_(encoding.instExecute)
     esize = 8 << size
     datasize = 128 if Q else 64
     elements = datasize//esize

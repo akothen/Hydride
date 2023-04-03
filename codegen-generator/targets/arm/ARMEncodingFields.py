@@ -1,4 +1,3 @@
-from ARMIntrinsicClassify import genThree
 EncodingFields = {
     'ABS_asisdmisc_R': ('01011110xx100000101110xxxxxxxxxx', {'U': '0', 'size': 'xx', 'opcode': '01011', 'Rn': 'xxxxx', 'Rd': 'xxxxx', 'constraint_ne': []}),
     'ABS_asimdmisc_R': ('0x001110xx100000101110xxxxxxxxxx', {'Q': 'x', 'U': '0', 'size': 'xx', 'opcode': '01011', 'Rn': 'xxxxx', 'Rd': 'xxxxx', 'constraint_ne': []}),
@@ -687,4 +686,4 @@ EncodingFields = {
     'XTN_asimdmisc_N': ('0x001110xx100001001010xxxxxxxxxx', {'Q': 'x', 'U': '0', 'size': 'xx', 'opcode': '10010', 'Rn': 'xxxxx', 'Rd': 'xxxxx', 'constraint_ne': []}),
     'ZIP1_asimdperm_only': ('0x001110xx0xxxxx001110xxxxxxxxxx', {'Q': 'x', 'size': 'xx', 'Rm': 'xxxxx', 'op': '0', 'Rn': 'xxxxx', 'Rd': 'xxxxx', 'constraint_ne': []}),
     'ZIP2_asimdperm_only': ('0x001110xx0xxxxx011110xxxxxxxxxx', {'Q': 'x', 'size': 'xx', 'Rm': 'xxxxx', 'op': '1', 'Rn': 'xxxxx', 'Rd': 'xxxxx', 'constraint_ne': []})}
-IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
+
