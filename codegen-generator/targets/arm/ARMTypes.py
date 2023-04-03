@@ -1,38 +1,6 @@
 import re
 from collections import namedtuple
-from RoseTypes import *
 
-
-HalfFloatTy = RoseHalfFloatType.create()
-HalfFloatTyBitwidth = HalfFloatTy.getBitwidth()
-
-FloatTy = RoseFloatType.create()
-FloatTyBitwidth = FloatTy.getBitwidth()
-
-DoubleTy = RoseDoubleType.create()
-DoubleTyBitwidth = DoubleTy.getBitwidth()
-
-
-# Define types used in ARM pseudocodes
-ARMTypes = {
-    "float32x2_t": RoseBitVectorType(64),
-    "int8x16_t": RoseBitVectorType(128),
-    "int16x8_t": RoseBitVectorType(128),
-    "int32x4_t": RoseBitVectorType(128),
-    "int64x2_t": RoseBitVectorType(128),
-    "uint8x16_t": RoseBitVectorType(128),
-    "uint16x8_t": RoseBitVectorType(128),
-    "uint32x4_t": RoseBitVectorType(128),
-    "uint64x2_t": RoseBitVectorType(128),
-    "int8x8_t": RoseBitVectorType(64),
-    "int16x4_t": RoseBitVectorType(64),
-    "int32x2_t": RoseBitVectorType(64),
-    "int64x1_t": RoseBitVectorType(64),
-    "uint8x8_t": RoseBitVectorType(64),
-    "uint16x4_t": RoseBitVectorType(64),
-    "uint32x2_t": RoseBitVectorType(64),
-    "uint64x1_t": RoseBitVectorType(64),
-}
 C2ARMType = {
     "8x8": "8B",
     "8x16": "16B",
@@ -96,8 +64,8 @@ def parse_reg(regname):
         return VectorReg(m.group(2), 1, m.group(1))
     elif m := vector.match(regname):
         return VectorReg(m.group(1), int(m.group(2)), m.group(3))
-    # elif m := vector_lane.match(regname):
-    #     return VectorRegLane(m.group(1), m.group(3), m.group(2))
+    elif m := vector_lane.match(regname):
+        return VectorRegLane(m.group(1), 0, m.group(3), m.group(2))  # TODO:0?
     elif m := immediate1.match(regname):
         assert False, "Not implemented"
         newreg = m.group(1)

@@ -1,113 +1,12 @@
+
 from ARMAST import Flag
 from ARMTypes import *
 import json
-from typing import Set, List
-I = None
-OP = None
-
-
-def get_instr(ID) -> (InstrDesc):
-    global I, OP
-    if I is None or OP is None:
-        with open("intr.json", 'r') as fi:
-            I = json.load(fi)
-        # with open("op.json", 'r') as fo:
-        #     OP = json.load(fo)
-    return InstrDesc(**I[ID])
-
-
-def get_and_parse_instr(ID):
-    instr = get_instr(ID)
-
-    # print(ID, instr.name, instr.base_instruction,
-    #       instr.return_type["value"], instr.arguments, instr.Operation)
-    # if "lane" in instr.name:
-    #     print("[Lane] not supported.")
-    #     return instr
-    # if any([instr.base_instruction.startswith(i) for i in ["ST", "LD", "TB", "ZIP", "UZP"]]):
-    #     print("[ST/LD/TB/ZIP/UZP] not supported.")
-    #     return instr, None
-    # if any([instr.name.startswith(i) for i in ["vabdh"]]):
-    #     print("[vabdh] not supported.")
-    #     return instr, None
-    # if instr.Operation == "NeonOperationId_00015":
-    #     print("[NeonOperationId_00015] not supported.")
-    #     return instr, None
-    return instr
-
-
-def parse_instr_attr(instr: InstrDesc):
-    # Note: Modified Vm.4S[imm2] to Vm.S[imm2] in intr.json
-
-    # - Parse Arguments_Preparation like:
-    # - {"a": {"register": "Vn.8B"}, "b": {"register": "Vm.8B"}}
-    # It gives prolog:
-    # V[n]=a;
-    # V[m]=b;
-    # And also records
-    # a: bits(64)
-    # b: bits(64)
-    # global defined_sym
-    # prolog = ""
-    # parsed_input_reg = []
-    # for a, reg in instr.Arguments_Preparation.items():
-    #     if len(reg) == 1:
-    #         assert list(reg.keys())[0] == "register"
-    #         reg = parse_reg(list(reg.values())[0])
-    #         parsed_input_reg.append(reg)
-    #     else:
-    #         assert "minimum" in reg and "maximum" in reg
-    # not a reg
-
-    # - Parse results: [{"Vd.8B": "result"}]
-    # It gives epilog:
-    # return V[d];
-    # assert len(instr.results) == 1
-    # assert len(instr.results[0]) == 1
-    # if "void" in instr.results[0]:
-    #     epilog = ""
-    #     parsed_result_reg = None
-    # else:
-    #     reg = parse_reg(list(instr.results[0].keys())[0])
-    #     parsed_result_reg = reg
-
-    #     epilog = f"\nreturn V[{reg.idx}];"
-
-    # - Parse input type: ["int8x8_t a", "int8x8_t b"]
-    parsed_input_type = []
-    for arg in instr.arguments:
-        arg = parse_type(' '.join(arg.split()[:-1]))
-        if isinstance(arg, CType):
-            parsed_input_type.append(arg)
-
-    # - Parse return type:
-    # - {"return_base_type": "int", "element_bit_size": "8", "value": "int8x8_t"}
-    # parsed_return_type = parse_type(instr.return_type["value"])
-    # esize = int(instr.return_type["element_bit_size"])
-
-    # - Sanity check
-    # print(parsed_input_reg, parsed_input_type)
-    # assert(len(parsed_input_reg) == len(parsed_input_type))
-    # for preg in parsed_input_reg:
-    #     if isinstance(preg, VectorReg) and preg.elements != 1:
-    #         assert(f"{preg.elements}{preg.bitspec}" in {
-    #             "8B", "16B",  "4H", "8H", "2S", "4S", "2D"})  # WTF is Vn.2H
-    # for typ in parsed_input_type+[parsed_return_type]:
-    #     assert(typ.basetype in {"int", "uint",
-    #            "float", "bfloat", "poly", "const int"})
-    # allregs = parsed_input_reg+[parsed_result_reg]
-    # datasize = min(get_total_bits(reg) for reg in allregs)
-
-    # for regname, typ in zip(parsed_input_reg, parsed_input_type):
-    #     assert(regname.elements == typ.num)
-    #     assert(data_bits_spec[regname.bitspec] == typ.bits)
-    # assert (len(set(reg.elements for reg in allregs))
-    #         == 1) != ("high" in instr.name)
-    # elements = parsed_result_reg.elements
-
+from typing import Set, List, Dict
 
 # v[p][q][r]name[u][n][q][x][_high][_lane | laneq][_n][_result]_type
 # https://developer.arm.com/documentation/102467/0200/Program-conventions?lang=en
+
 
 def printParsedName(parsed, full=False):
     start = "v"
@@ -249,7 +148,7 @@ def parse_flag(names: List[str]):
         ans = printParsedName(f, full=True)
         # f["parsedname"] = ans
         # print(k, printParsedName(k, v))
-        print(i, ans)
+        # print(i, ans)
         ans = ans.replace("[", "")
         ans = ans.replace("]", "")
         assert len(suffix) == 1
@@ -282,9 +181,14 @@ def wedo(instr):
     return True
 
 
-def generateARMIntrinsics():
-    with open("intr.json", 'r') as fi:
-        I = json.load(fi)
+with open("encodingmap.json", 'r') as fi:
+    enc = json.load(fi)
+enckeys = enc.keys()
+with open("intr.json", 'r') as fi:
+    I = json.load(fi)
+
+
+def generateARMIntrinsicsFlags() -> (Dict[str, Flag]):
     allnames = []
     for i in I:
         # filter instructions we cares
@@ -297,90 +201,217 @@ def generateARMIntrinsics():
     return parse_flag(allnames)
 
 
-def findMatchingEncoding():
-    Intrinsics = generateARMIntrinsics()
-    with open("encodingmap.json", 'r') as fi:
-        enc = json.load(fi)
-    with open("intr.json", 'r') as fi:
-        I = json.load(fi)
-    
-    # LS = {'LD2', 'ST1', 'LD1R', 'LD4R', 'LD1', 'LD2R', 'LD4', 'LD3R', 'ST4', 'ST3', 'ST2', 'LD3'}
-    # mmap = {k: set() for k in LS}
-    # for k, v in enc.items():
-    #     for pre in LS:
-    #         if k.startswith(pre):
-    #             mmap[pre].add(v)
-    # for k, v in mmap.items():
-    #     print(k, v)
+IntrinsicsFlags = generateARMIntrinsicsFlags()
 
-    enckeys = enc.keys()
-    result = {}
-    for i in I:
-        if not wedo(i):
-            continue
-        intrin = i["name"]
-        assert type(intrin) == str
 
-        flag = Intrinsics[intrin]
-        ans = ""
-        desiredprefix = i["base_instruction"][0]
-        alias = {
-            "MVN": "NOT",
-            "MOV": "ORR",
-        }
-        desiredprefix = alias.get(desiredprefix, desiredprefix)
+def searchEncodingForIntrinsic(intrinsic: InstrDesc):
 
-        def checkUniqueness(x):
-            ans = set()
-            for j in enckeys:
-                if j.startswith(x):
-                    ans.add(enc[j])
-            return list(ans)[0] if len(ans) == 1 else ""
+    intrin = intrinsic["name"]
+    # print("Dealing with", intrin)
+    assert type(intrin) == str
 
+    flag = IntrinsicsFlags[intrin]
+    desiredprefix = intrinsic["base_instruction"][0]
+    alias = {
+        "MVN": "NOT",
+        "MOV": "ORR",
+    }
+    desiredprefix = alias.get(desiredprefix, desiredprefix)
+
+    def checkUniqueness(x):
+        ans = set()
+        for j in enckeys:
+            if j.startswith(x):
+                ans.add(j)
+        # print("Try", x, "got", ans)
+        if len(ans) != 1:
+            return False
+        k = list(ans)[0]
+        return (k, enc[k])
+
+    # print(intrin, desiredprefix)
+    if (z := checkUniqueness(desiredprefix)):
+        return z
+    else:
+        if desiredprefix in ["LD1", "LD2", "LD3", "LD4",
+                             "ST1", "ST2", "ST3", "ST4"]:
+            i = desiredprefix[-1]
+            desiredprefix += f"_asisdlse_R{i}"
+        elif desiredprefix in ["LD1R", "LD2R", "LD3R", "LD4R"]:
+            i = desiredprefix[-2]
+            desiredprefix += f"_asisdlso_R{i}"
+        elif desiredprefix in ["UMOV", "SMOV"]:
+            desiredprefix += "_asimdins_X_x"
+        elif desiredprefix == "INS":
+            desiredprefix += "_asimdins_IV_v" if flag.x else "_asimdins_IR_r"
+        elif desiredprefix == "DUP":
+            desiredprefix += "_asimdins_DV_v" if flag.x else "_asimdins_DR_r"
+        elif desiredprefix in ["ORR", "BIC"]:
+            desiredprefix += "_asimd"
+        else:
+            if flag.high == "high":
+                assert desiredprefix.endswith("2")
+                desiredprefix = desiredprefix[:-1]
+            # desiredprefix += "_asisd" if flag.x else "_asimd"
+            if (z := checkUniqueness(desiredprefix + "_asi")):
+                desiredprefix += "_asi"
+            else:
+                def isSisd(flag):
+                    if not flag.q and flag.type.endswith("64"):
+                        return True
+                    if flag.x:
+                        return True
+                    return False
+                desiredprefix += "_asisd" if isSisd(flag) else "_asimd"
         # print(intrin, desiredprefix)
         if (z := checkUniqueness(desiredprefix)):
-            ans = z
-        elif desiredprefix.startswith("LD") or desiredprefix.startswith("ST"):
-            if desiredprefix.endswith("R"):
-                ans = "aarch64_memory_vector_single_no_wb"
-            else:
-                ans = "aarch64_memory_vector_multiple_no_wb"
+            return z
         else:
-            if desiredprefix == "INS":
-                desiredprefix += "_asimdins_IV_v" if flag.x else "_asimdins_IR_r"
-            elif desiredprefix == "DUP":
-                desiredprefix += "_asimdins_DV_v" if flag.x else "_asimdins_DR_r"
-            elif desiredprefix in ["ORR", "BIC"]:
-                desiredprefix += "_asimd"
-            else:
-                if flag.high == "high":
-                    assert desiredprefix.endswith("2")
-                    desiredprefix = desiredprefix[:-1]
-                # desiredprefix += "_asisd" if flag.x else "_asimd"
-                if (z := checkUniqueness(desiredprefix + "_asi")):
-                    desiredprefix += "_asi"
-                else:
-                    desiredprefix += "_asisd" if flag.q and flag.type.endswith("64") else "_asimd"
+            desiredprefix += "diff" if flag.narrow else "same"
             # print(intrin, desiredprefix)
             if (z := checkUniqueness(desiredprefix)):
-                ans = z
+                return z
             else:
-                desiredprefix += "diff" if flag.narrow else "same"
-                # print(intrin, desiredprefix)
-                if (z := checkUniqueness(desiredprefix)):
-                    ans = z
-                else:
-                    print(intrin, desiredprefix)
-                    assert False
-        result[intrin] = ans
-        # print(intrin, ans)
+                print(intrin, desiredprefix)
+                assert False
 
-        # Need to verify the similarity of the auto matched encodings
-        # with the ones extract from the intrinsics
-    # print(result)
+
+def findMatchingEncoding():
+    result = {}
+    for i in I:
+        intrin = InstrDesc(**i)
+        if not wedo(i):
+            continue
+        k, v = searchEncodingForIntrinsic(i)
+        assert type(intrin.name) == str
+
+        result[intrin.name] = v
+
     return result
 
 
+def genPossibleOpcode(fields):
+    qwq = [fields]
+    for i, v in fields.items():
+        if i.startswith('R'):
+            continue
+        if 'x' in v:
+            # print(fields[i])
+            # assert fields[i] == 'x'*len(fields[i])
+            ln = fields[i].count('x')
+            nqwq = []
+            zz = fields[i]
+            for z in range(2**ln):
+                z = bin(z)[2:]
+                z = '0'*(ln-len(z)) + z
+                zz = fields[i]
+                for j in z:
+                    zz = zz.replace('x', j, 1)
+                nqwq = nqwq + [dict(q, **{i: zz})for q in qwq]
+            qwq = nqwq
+    for m, v in fields['constraint_ne']:
+        qwq = [q for q in qwq if q[m] != v]
+    return qwq
+
+
+def Intrin2Field():
+    from ARMIntrinsics import EncodingFields
+    result = {}
+    inv_map = {}
+
+    for i in I:
+        intrin = InstrDesc(**i)
+        if not wedo(i):
+            continue
+        k, v = searchEncodingForIntrinsic(i)
+        field = EncodingFields[k]
+        # print(intrin.name, field)
+        inv_map[k] = inv_map.get(k, []) + [intrin.name]
+
+    def selectField(opcd, k, v):
+        return [i for i in opcd if i[k] == v]
+
+    skip = ["LD1_asisdlse_R1_1v", "ST1_asisdlse_R1_1v"]  # TODO: handle these
+    for encodings, intrins in inv_map.items():
+        if encodings in skip:
+            continue
+        # print(encodings, intrins)
+        # if encodings in skip:
+        #     continue
+        field = EncodingFields[encodings][1]
+        if any(i in field for i in ["immh", "immb", "imm4", "imm5", "imm6"]):
+            skip.append(encodings)
+            # TODO: handle this: expand by n
+            continue
+        opcd = genPossibleOpcode(field)
+        # print(encodings, field)
+        # print(len(intrins), len(opcd), intrins)
+
+        for c in intrins:
+            Flag = IntrinsicsFlags[c]
+            if Flag.n or Flag.lane:
+                # TODO: handle this: expand by n
+                # select lane by lane
+                continue
+
+            def guess():
+                o = opcd
+
+                def selectQ():
+                    if Flag.q:
+                        return selectField(o, 'Q', '1')
+                    else:
+                        return selectField(o, 'Q', '0')
+
+                def selectsize():
+                    if Flag.narrow != "n":
+                        if Flag.type.endswith('64'):
+                            return selectField(o, 'size', '11')
+                        elif Flag.type.endswith('32'):
+                            return selectField(o, 'size', '10')
+                        elif Flag.type.endswith('16'):
+                            return selectField(o, 'size', '01')
+                        elif Flag.type.endswith('8'):
+                            return selectField(o, 'size', '00')
+                    elif Flag.narrow == "n":
+                        if Flag.type.endswith('64'):
+                            return selectField(o, 'size', '10')
+                        elif Flag.type.endswith('32'):
+                            return selectField(o, 'size', '01')
+                        elif Flag.type.endswith('16'):
+                            return selectField(o, 'size', '00')
+
+                    assert False
+
+                def selectsz():
+                    if Flag.type.endswith('32'):
+                        return selectField(o, 'sz', '0')
+                    assert False
+                checkers = ['Q', 'size', 'sz']
+                for c in checkers:
+                    if c in field:
+                        o = locals()['select'+c]()
+                    if len(o) == 1:
+                        return o[0]
+                    assert len(o) > 0
+                print(field)
+                assert False
+            # print(c, guess())
+            result[c] = guess()
+
+            # assert len(intrins) <= len(opcd)
+
+            # print(result)
+            # return result
+
+    print("Skipped encodings:", skip)
+    return result
+
+
+def genThree():
+    return generateARMIntrinsicsFlags(), findMatchingEncoding(), Intrin2Field()
+
 
 if __name__ == "__main__":
+    # genThree()
     pass

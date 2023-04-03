@@ -243,6 +243,10 @@ class Undefiend(ASTNode):
         return f"Undefiend()"
 
 
+class SatException(Exception):
+    pass
+
+
 def ASTShrink(AST):
     if isinstance(AST, list):
         w = [ASTShrink(i) for i in AST]
@@ -251,6 +255,8 @@ def ASTShrink(AST):
         return None  # Assume StmtCall useless
     elif isinstance(AST, asl.StmtVarDeclInit):
         return VarDeclInit(ASTShrink(AST.symboldecl), ASTShrink(AST.expr), GenUniqueID())
+    elif isinstance(AST, asl.StmtConstDecl):
+        return VarDeclInit(ASTShrink(AST.symboldecl), ASTShrink(AST.expr), GenUniqueID())
     elif isinstance(AST, asl.SymbolDecl):
         return VarsDecl([Var(AST.id, GenUniqueID())], ASTShrink(AST.ty), GenUniqueID())
     elif isinstance(AST, asl.StmtVarsDecl):
@@ -258,11 +264,15 @@ def ASTShrink(AST):
     elif isinstance(AST, asl.TypeFun):  # Only Returns Type width
         if AST.id == "bits":
             return ASTShrink(AST.expr)
-        assert False
+        raise NotImplementedError
     elif isinstance(AST, asl.ExprVarRef):
+        if ASTShrink(AST.qid) in ["sat", "sat1", "sat2"]:
+            raise SatException("sat/sat1/sat2 is striped")
         return Var(ASTShrink(AST.qid), GenUniqueID())
     elif isinstance(AST, asl.LValVarRef):
         return Var(ASTShrink(AST.qid), GenUniqueID())
+    elif isinstance(AST, asl.CasePatternIdentifier):
+        return Var(AST.id, GenUniqueID())
     elif isinstance(AST, asl.LValArrayIndex):
         return ArrayIndex(ASTShrink(AST.lvalexpr), ASTShrink(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.QualifiedIdentifier):
@@ -270,11 +280,15 @@ def ASTShrink(AST):
     elif isinstance(AST, asl.ExprIndex):
         return ArrayIndex(ASTShrink(AST.expr), ASTShrink(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.ExprSlice):
-        return ArraySlice(ASTShrink(AST.expr), ASTShrink(AST.slices), GenUniqueID())
+        assert len(AST.slices) == 1
+        return ArraySlice(ASTShrink(AST.expr), ASTShrink(AST.slices[0]), GenUniqueID())
+    elif isinstance(AST, asl.LValSliceOf):
+        assert len(AST.slices) == 1
+        return ArraySlice(ASTShrink(AST.lvalexpr), ASTShrink(AST.slices[0]), GenUniqueID())
     elif isinstance(AST, asl.SliceRange):
         return [ASTShrink(AST.expr0), ASTShrink(AST.expr1)]
     elif isinstance(AST, asl.SliceSingle):
-        return ASTShrink(AST.expr)
+        return [ASTShrink(AST.expr)]
     elif isinstance(AST, asl.StmtFor):
         return For(Var(AST.id, GenUniqueID()), ASTShrink(AST.expr0), ASTShrink(AST.expr1), ASTShrink(AST.stmts), 1, GenUniqueID())
     elif isinstance(AST, asl.ExprLitInt):
@@ -293,13 +307,16 @@ def ASTShrink(AST):
                 return IfElse(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), ASTShrink(AST.maybe_stmts), GenUniqueID())
             else:
                 print(AST)
-                assert False
+                raise NotImplementedError
         else:
             if len(AST.stmtifcases) == 1:
-                return If(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), GenUniqueID())
+                try:
+                    return If(ASTShrink(AST.stmtifcases[0].expr), ASTShrink(AST.stmtifcases[0].stmts), GenUniqueID())
+                except SatException as e:
+                    return None
             else:
                 print(AST)
-                assert False
+                raise NotImplementedError
     elif isinstance(AST, asl.TypeRef):
         return 32
     elif isinstance(AST, asl.ExprLitBin):
@@ -320,11 +337,16 @@ def ASTShrink(AST):
         return BitVec(AST.mask)
     elif isinstance(AST, asl.CasePatternBin):
         return BitVec(AST.bitvector)
+    elif isinstance(AST, asl.CasePatternInt):
+        return Number(AST.integer)
     elif isinstance(AST, asl.ExprLitMask):
         return BitVec(AST.mask)
+    elif isinstance(AST, asl.LValTuple):  # strip out sat
+        assert AST.lvalexprs[1].qid.id in ["sat", "sat1", "sat2"]
+        return ASTShrink(AST.lvalexprs[0])
     else:
         print(AST)
-        assert False
+        raise NotImplementedError
 
 
 Flag = namedtuple(
