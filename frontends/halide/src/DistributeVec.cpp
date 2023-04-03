@@ -982,6 +982,7 @@ namespace Halide {
                     continue;
                 }
 
+                // Need to distribute
 
                 unsigned num_chunks = max_bitwidth / bitvector_size;
 
@@ -1008,6 +1009,7 @@ namespace Halide {
 
                 bool single_store = is_divisible_into_vector_size(expr_bitwidth);
 
+                //if (single_store && num_chunks != 1){
                 if (single_store && num_chunks != 1){
                     debug(0) << "Using single store for OrigStore:"<<OrigStore<<"\n";
                     Expr CombinedExpr = Shuffle::make_concat(distributed_value);
@@ -1017,6 +1019,16 @@ namespace Halide {
                     debug(0) << "New Store: "<< CombinedStore <<"\n";
 
                     return CombinedStore;
+
+                } else if(single_store){
+                    internal_assert(distributed_value.size() == 1) << "Single store distribute requires single returned value after distribution\n"<<"\n";
+                    debug(0) << "Single Store where immediate child is also one value"<<"\n";
+                    Stmt SingleStore = Store::make(op->name, distributed_value[0], op->index, op->param, op->predicate, op->alignment);
+
+
+                    debug(0) << "New Store: "<< SingleStore <<"\n";
+
+                    return SingleStore;
 
 
                 } else {
