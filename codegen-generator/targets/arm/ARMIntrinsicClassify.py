@@ -161,6 +161,8 @@ def parse_flag(names: List[str]):
 def wedo(instr):
     if not instr["name"].startswith("v"):
         return False
+    if instr["name"] in ["vmaxv_s32", "vmaxv_u32", "vminv_s32", "vminv_u32"]:
+        return False
     unsupportedGroup = ["Complex", "Cryptography"]
     if any([i in instr["instruction_group"] for i in unsupportedGroup]):
         return False
@@ -240,6 +242,8 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
     if (z := checkUniqueness(desiredprefix)):
         return z
     else:
+        # if desiredprefix in ["ADDP"]:
+        #     print(intrin, flag)
         if desiredprefix in ["LD1", "LD2", "LD3", "LD4",
                              "ST1", "ST2", "ST3", "ST4"]:
             i = desiredprefix[-1]
@@ -255,6 +259,14 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
             desiredprefix += "_asimdins_DV_v" if flag.x else "_asimdins_DR_r"
         elif desiredprefix in ["ORR", "BIC"]:
             desiredprefix += "_asimd"
+        elif desiredprefix in ["ADDP"]:
+            def handleADDP():
+                if "addv" in intrin:
+                    return "_asisd"
+                if flag.x == "d":
+                    return "_asisd"
+                return "_asimd"
+            desiredprefix += handleADDP()
         else:
             if flag.high == "high":
                 assert desiredprefix.endswith("2")
@@ -264,6 +276,8 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
                 desiredprefix += "_asi"
             else:
                 def isSisd(flag):
+                    if flag.pair:
+                        return False
                     if not flag.q and flag.type.endswith("64"):
                         return True
                     if flag.x:
@@ -374,18 +388,28 @@ def Intrin2Field():
                     if Flag.q:
                         return selectField(o, 'Q', '1')
                     else:
-                        return selectField(o, 'Q', '0')
+                        if Flag.pair:
+                            return selectField(o, 'Q', '1')
+                        else:
+                            return selectField(o, 'Q', '0')
 
                 def selectsize():
                     if Flag.narrow != "n":
-                        if Flag.type.endswith('64'):
-                            return selectField(o, 'size', '11')
-                        elif Flag.type.endswith('32'):
-                            return selectField(o, 'size', '10')
-                        elif Flag.type.endswith('16'):
-                            return selectField(o, 'size', '01')
-                        elif Flag.type.endswith('8'):
-                            return selectField(o, 'size', '00')
+                        if "pair" in encodings:
+                            if Flag.type.endswith('64'):
+                                return selectField(o, 'size', '11')
+                            if Flag.type.endswith('32'):
+                                return selectField(o, 'size', '11')
+                            assert False, (cc, encodings)
+                        else:
+                            if Flag.type.endswith('64'):
+                                return selectField(o, 'size', '11')
+                            elif Flag.type.endswith('32'):
+                                return selectField(o, 'size', '10')
+                            elif Flag.type.endswith('16'):
+                                return selectField(o, 'size', '01')
+                            elif Flag.type.endswith('8'):
+                                return selectField(o, 'size', '00')
                     elif Flag.narrow == "n":
                         if Flag.type.endswith('64'):
                             return selectField(o, 'size', '10')

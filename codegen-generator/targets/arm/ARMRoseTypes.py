@@ -40,3 +40,24 @@ ARMTypes = {
     "uint32_t": RoseBitVectorType(32),
     "uint64_t": RoseBitVectorType(64),
 }
+ReservedImmTypes = {
+    "const int"
+}
+PointerType = {
+    "int8_t const *",
+    "int16_t const *",
+    "int32_t const *",
+    "int64_t const *",
+    "uint8_t const *",
+    "uint16_t const *",
+    "uint32_t const *",
+    "uint64_t const *",
+    "int8_t *",
+    "int16_t *",
+    "int32_t *",
+    "int64_t *",
+    "uint8_t *",
+    "uint16_t *",
+    "uint32_t *",
+    "uint64_t *",
+}

@@ -327,6 +327,8 @@ def parse_instr_attr(instr: InstrDesc):
         if v:
             reg = parse_reg(v["register"])
             preparation[reg.idx] = k
+            # if instr.name in ["vpaddd_s64"]:  # My guess
+            #     preparation["m"] = k
         else:  # EOR3 gives empty b and c. LOL
             # print(instr.name, instr.base_instruction[0])
             assert instr.base_instruction[0] in ["EOR3", "RAX1", "BCAX"]

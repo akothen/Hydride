@@ -7,7 +7,7 @@ from RoseBitVectorOperations import *
 from RoseContext import *
 
 from ARMAST import *
-from ARMRoseTypes import ARMTypes
+from ARMRoseTypes import *
 
 
 class ARMRoseContext(RoseContext):
@@ -103,6 +103,9 @@ def CompileSemantics(Sema, RootContext: ARMRoseContext):
     ParamValues = []
     ParamsIDs = []
     for Index, Param in enumerate(Sema.params):
+        if Param.type in ReservedImmTypes | PointerType:
+            raise NotImplementedError(
+                f"Parameter type {Param.type} not supported yet")
         ParamType = ARMTypes[Param.type]
         # Create a new rosette value
         ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue())
@@ -402,30 +405,33 @@ def ComputeBitSliceWidth(Low: RoseValue, High: RoseValue, TotalBitwidth: int = N
 def Slicing(Stmt: ArrayIndex, Context: ARMRoseContext):
     assert len(
         Stmt.slices) == 1, f"Only one dim slicing is supported, but got {Stmt.slices}"
-    SR: SliceRange = Stmt.slices[0]
-    Low = CompileRValueExpr(SR.lo, Context)
-    High = CompileRValueExpr(SR.hi, Context)
-    # Context.setIndexNumberType(OriginalNumberTy)
-    BitVector = CompileRValueExpr(Stmt.obj, Context)
-    assert isinstance(BitVector.getType(
-    ), RoseBitVectorType), f"Only bitvector type is supported, but got {BitVector}: {BitVector.getType()}"
+    SR = Stmt.slices[0]
+    if isinstance(SR, SliceRange):
+        Low = CompileRValueExpr(SR.lo, Context)
+        High = CompileRValueExpr(SR.hi, Context)
+        # Context.setIndexNumberType(OriginalNumberTy)
+        BitVector = CompileRValueExpr(Stmt.obj, Context)
+        assert isinstance(BitVector.getType(
+        ), RoseBitVectorType), f"Only bitvector type is supported, but got {BitVector}: {BitVector.getType()}"
 
-    # Do some sanity check if possible
-    if isinstance(Low, RoseConstant):
-        assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
-    if isinstance(High, RoseConstant):
-        assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
-    if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
-        assert High.getValue() >= Low.getValue()
+        # Do some sanity check if possible
+        if isinstance(Low, RoseConstant):
+            assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
+        if isinstance(High, RoseConstant):
+            assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
+        if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
+            assert High.getValue() >= Low.getValue()
 
-    # Compute the bitwidth that is extracted in this slice
-    if hasattr(SR, 'wid'):
-        BitwidthValue = CompileRValueExpr(SR.wid, Context)
+        # Compute the bitwidth that is extracted in this slice
+        if hasattr(SR, 'wid'):
+            BitwidthValue = CompileRValueExpr(SR.wid, Context)
+        else:
+            Bitwidth = ComputeBitSliceWidth(
+                Low, High, BitVector.getType().getBitwidth())
+            BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
+        return BitVector, Low, High, BitwidthValue
     else:
-        Bitwidth = ComputeBitSliceWidth(
-            Low, High, BitVector.getType().getBitwidth())
-        BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
-    return BitVector, Low, High, BitwidthValue
+        raise NotImplementedError(f"{SR}")
 
 
 def ComputeArrayIndexOrSliceRv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -566,8 +572,12 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
     RHSExprVal = CompileRValueExpr(Stmt.rhs, Context)
     if type(Stmt.lhs) == Var:
         print(Stmt.lhs, Stmt.rhs, RHSExprVal)
-        Context.addVariable(Stmt.lhs.name, Stmt.rhs.id)
-        Context.addCompiledAbstraction(Stmt.rhs.id, RHSExprVal)
+        if hasattr(Stmt.rhs, "id"):
+            ID = Stmt.rhs.id
+        else:
+            ID = Context.genName()
+        Context.addVariable(Stmt.lhs.name, ID)
+        Context.addCompiledAbstraction(ID, RHSExprVal)
     elif type(Stmt.lhs) == ArrayIndex:
         LVal = SimplifyArrayIndexLv(Stmt.lhs, Context)
         if type(LVal) == Var:  # V[d]
@@ -637,6 +647,43 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
     return RHSExprVal
 
 
+def CompileIf(IfStmt, Context: ARMRoseContext):
+    # Generate a cond region
+    Cond = CompileRValueExpr(IfStmt.cond, Context)
+    #CondRegion = RoseCond(Cond, [], [], RoseUndefRegion())
+    CondRegion = RoseCond.create([Cond], 1)
+
+    # Add cond region as root abstraction
+    ChildContext = ARMRoseContext()
+    ChildContext.pushRootAbstraction(CondRegion)
+
+    # Add the then key for this cond region
+    ThenRegionKey = CondRegion.getKeyForThenRegion()
+    ChildContext.addKeyForCompiledAbstraction(ThenRegionKey, CondRegion)
+
+    # Add the generated cond region to the current context
+    Context.addCompiledAbstraction(IfStmt.id, CondRegion)
+
+    # Add a new context for this cond region
+    Context.createContext(IfStmt.id, ChildContext)
+
+    # Compile all the statements in then cond region
+    for Stmt in IfStmt.then:
+        CompileStatement(Stmt, ChildContext)
+
+    # Pop the root cond region from the child context
+    CompiledCondRegion = ChildContext.getRootAbstraction()
+
+    # Add cond region to the root abstraction
+    Context.addAbstractionToIR(CompiledCondRegion)
+
+    # Update the compiled cond region to the current context
+    Context.updateCompiledAbstraction(IfStmt.id, CompiledCondRegion)
+
+    # Remove the child context now
+    Context.destroyContext(IfStmt.id)
+
+
 def CompileIfElse(Stmt: IfElse, Context: ARMRoseContext):
     '''
     if ({cond}) {then} else {otherwise}
@@ -653,6 +700,61 @@ def CompileIfElse(Stmt: IfElse, Context: ARMRoseContext):
             CompileStatement(s, Context)
     else:
         assert False
+
+
+def CompileMatch(MatchExpr, Context: ARMRoseContext):
+    # assert type(MatchExpr.val) == ArrayIndex
+    # Compile the bit slice
+    CompiledValue = CompileRValueExpr(MatchExpr.val, Context)
+    # Compile the cases
+    Conditions = list()
+    for Case in MatchExpr.cases:
+        # Compile case value
+        assert type(Case.val) == Number
+        # Generate a bitvector
+        ConstantVal = RoseConstant.create(
+            Case.val.val, CompiledValue.getType())
+        Condition = RoseBVEQOp.create(Context.genName(
+            "%cond"), CompiledValue, ConstantVal)
+        # Add the op to the IR
+        Context.addAbstractionToIR(Condition)
+        # Add the operation to the context
+        Context.addCompiledAbstraction(Case.id, Condition)
+        Conditions.append(Condition)
+
+    # Generate a cond region
+    CondRegion = RoseCond.create(Conditions, len(MatchExpr.cases))
+
+    # Add cond region as root abstraction
+    ChildContext = ARMRoseContext()
+    ChildContext.pushRootAbstraction(CondRegion)
+
+    # Add the generated cond region to the current context
+    Context.addCompiledAbstraction(MatchExpr.id, CondRegion)
+
+    # Add a new context for this cond region
+    Context.createContext(MatchExpr.id, ChildContext)
+
+    # Now compile all the case statements
+    for Idx, Key in enumerate(CondRegion.getKeys()):
+        # Add key to this cond region
+        ChildContext.addKeyForCompiledAbstraction(Key, CondRegion)
+        # Compile the case statements
+        for Stmt in MatchExpr.cases[Idx].stmts:
+            CompileStatement(Stmt, ChildContext)
+        CondRegion = ChildContext.getRootAbstraction()
+
+    # Pop the root cond region from the child context
+    CompiledCondRegion = ChildContext.getRootAbstraction()
+
+    # Add cond region to the root abstraction
+    Context.addAbstractionToIR(CompiledCondRegion)
+
+    # Update the compiled cond region to the current context
+    Context.updateCompiledAbstraction(MatchExpr.id, CompiledCondRegion)
+
+    # Remove the child context now
+    Context.destroyContext(MatchExpr.id)
 
 
 def CompileBuiltIn(CallStmt, Context: ARMRoseContext):
@@ -750,6 +852,8 @@ CompileAbstractions = {
     For: CompileFor,
     Update: CompileUpdate,
     IfElse: CompileIfElse,
+    If: CompileIf,
+    Match: CompileMatch,
 }
 CompileAbstractionsRV = {
     ArrayIndex: CompileArrayIndexRv,
@@ -762,6 +866,12 @@ CompileAbstractionsRV = {
 }
 CompileAbstractionsLV = {
 }
+
+
+def QWQ():
+    def qwq(*args, **kwargs):
+        raise NotImplementedError("QWQ")
+    return qwq
 
 
 def HandleToNot():
@@ -822,6 +932,13 @@ def ComputeConstant(op: str, Operand1: RoseValue, Operand2: RoseValue,
         if op in ['+', '-', '*', '<<', '>>']:
             assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
                 Operand2.getType(), RoseIntegerType)
+            val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
+            return RoseConstant.create(val, Context.NumberType)
+        if op =="//":
+            assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
+                Operand2.getType(), RoseIntegerType)
+            assert Operand2.getValue() != 0
+            assert Operand1.getValue() % Operand2.getValue() == 0
             val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
             return RoseConstant.create(val, Context.NumberType)
     return None
@@ -886,6 +1003,10 @@ def HandleToMul():
 def HandleToDiv():
     def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                       Context: ARMRoseContext):
+        if (z := ComputeConstant('//', Operand1, Operand2, Context)) != None:
+            return z
+        Operands = TypePromotion(Operand1, Operand2, Context)
+        [Operand1, Operand2] = Operands
         if isinstance(Operand1.getType(), RoseBitVectorType) \
                 and isinstance(Operand2.getType(), RoseBitVectorType):
             if Context.isValueSigned(Operand1) == True \
@@ -1086,6 +1207,8 @@ def HandleToShl():
                       Context: ARMRoseContext):
         if (z := ComputeConstant('<<', Operand1, Operand2, Context)) != None:
             return z
+        Operands = TypePromotion(Operand1, Operand2, Context)
+        [Operand1, Operand2] = Operands
         assert isinstance(Operand1.getType(), RoseBitVectorType) == True
         assert isinstance(Operand2.getType(), RoseBitVectorType) == True
         Op = RoseBVShlOp.create(Name, Operand1, Operand2)
@@ -1100,6 +1223,7 @@ BinaryOps = {
     '-': HandleToSub,
     '*': HandleToMul,
     '/': HandleToDiv,
+    'DIV': HandleToDiv,
     '%': HandleToMod,
     '<': HandleToLessThan,
     '<=': HandleToLessThanEqual,
@@ -1113,7 +1237,8 @@ BinaryOps = {
     '|': HandleToOr,
     'AND': HandleToAnd,
     'OR': HandleToOr,
-    'XOR': HandleToXor,
+    'EOR': HandleToXor,
+    ':': QWQ,
 }
 
 
@@ -1343,12 +1468,6 @@ def HandleToRemainder(_):
     return LamdaImplFunc
 
 
-def QWQ():
-    def qwq(*args, **kwargs):
-        raise NotImplementedError("QWQ")
-    return qwq
-
-
 # Builtin functions
 Builtins = {
     'Saturate32': HandleToSSaturate(32),
@@ -1386,6 +1505,16 @@ Builtins = {
     'SignedSatQ': HandleToSignedSatQ(None),
     'UnsignedSatQ': HandleToUnsignedSatQ(None),
     'Ones': QWQ(),
+    'Zeros': QWQ(),
+    'IsZero': QWQ(),
+    'Min': QWQ(),
+    'Abs': QWQ(),
+    'BitCount': QWQ(),
+    'UnsignedRecipEstimate': QWQ(),
+    'UnsignedRSqrtEstimate': QWQ(),
+    'NOT': QWQ(),
+    'Reduce': QWQ(),
+    'ROL': QWQ(),
 
     'REMAINDER': None,
 }

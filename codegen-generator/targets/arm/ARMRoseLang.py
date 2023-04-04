@@ -31,7 +31,7 @@ if __name__ == "__main__":
             print("Compiling", k)
             print(func.intrin, func.spec)
             Function = CompileSemantics(func, ARMRoseContext())
-        except Exception as e:
+        except NotImplementedError as e:
             print("Failed to compile", k)
             # print(e)
             continue
