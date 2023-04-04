@@ -1,5 +1,6 @@
 from collections import namedtuple
 from typing import List, Tuple
+from ARMTypes import ARMGlobalConst
 import asl.ARMAST as asl
 
 PARSER_ID_COUNTER = 0
@@ -286,7 +287,8 @@ def ASTShrink_(AST):
     elif isinstance(AST, asl.LValVarRef):
         return Var(ASTShrink_(AST.qid), GenUniqueID())
     elif isinstance(AST, asl.CasePatternIdentifier):
-        return Var(AST.id, GenUniqueID())
+        return Number(ARMGlobalConst[AST.id])
+        # return Var(AST.id, GenUniqueID())
     elif isinstance(AST, asl.LValArrayIndex):
         assert type(AST.slices) == list, f"{AST}"
         return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())
@@ -344,6 +346,9 @@ def ASTShrink_(AST):
     elif isinstance(AST, asl.StmtCase):
         return Match(ASTShrink_(AST.expr), ASTShrink_(AST.casealternatives), GenUniqueID())
     elif isinstance(AST, asl.CaseWhen):
+        if type(AST.casepatterns) == list:
+            assert len(AST.casepatterns) == 1, f"{AST}"
+            return Case(ASTShrink_(AST.casepatterns[0]), ASTShrink_(AST.stmts), GenUniqueID())
         return Case(ASTShrink_(AST.casepatterns), ASTShrink_(AST.stmts), GenUniqueID())
     elif isinstance(AST, asl.CaseOtherwise):
         return CaseBase(ASTShrink_(AST.stmts), GenUniqueID())

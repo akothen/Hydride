@@ -244,7 +244,7 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
   for _ in range(NumSpace):
     Spaces += " "
   
-  assert len(CondRegion.getKeys()) > 1
+  assert len(CondRegion.getKeys()) > 1, CondRegion
   TmpRosetteCode = Spaces + "(cond\n"
   for Idx, Key in enumerate(CondRegion.getKeys()):
     if len(CondRegion.getConditions()) > Idx:

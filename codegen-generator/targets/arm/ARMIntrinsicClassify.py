@@ -182,7 +182,7 @@ def wedo(instr):
         return False
     if instr["base_instruction"][0] == "NOP":
         return False
-    skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT"
+    skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT", "SADDLP", "UADDLP"
             ]  # TODO: do we need to support these?
     tosupport = ["TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):

@@ -73,7 +73,7 @@ class RoseContext:
     def addCompiledAbstraction(self, ID: str, Abstraction):
         if isinstance(Abstraction, RoseValue):
             print("Add compiled abstraction for:",
-                  ID, "type:", Abstraction.getType())
+                  ID, Abstraction, Abstraction.getType())
         self.CompiledAbstractions[ID] = Abstraction
 
     def addKeyForCompiledAbstraction(self, Key, Abstraction):
@@ -112,6 +112,7 @@ class RoseContext:
         self.Variables[Name] = ID
 
     def getVariableID(self, Name: str):
+        print("Try to find", Name, " from ", self.Variables)
         assert Name in self.Variables
         print("Found here:", Name, "->", self.Variables[Name])
         return self.Variables[Name]

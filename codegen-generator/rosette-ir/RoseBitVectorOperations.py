@@ -233,7 +233,6 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
 #         return String
 
 
-
 class RoseBVSSaturateOp(RoseBitVectorOp):
     def __init__(self, Name: str, Bitvector: RoseValue, TargetBitwidth: RoseValue, ParentBlock):
         assert isinstance(Bitvector.getType(), RoseBitVectorType)
@@ -1765,3 +1764,56 @@ class RoseBVAbsOp(RoseBitVectorOp):
         if SolvedResult != None:
             return RoseConstant(SolvedResult, self.getType())
         return RoseUndefValue()
+
+
+class RoseBVLshrOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
+        assert isinstance(Operand1.getType(), RoseBitVectorType)
+        assert isinstance(Operand2.getType(), RoseBitVectorType)
+        OperandList = [Operand1, Operand2]
+        super().__init__(RoseOpcode.bvlshr, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+               ParentBlock=RoseUndefRegion()):
+        return RoseBVLshrOp(Name, Operand1, Operand2, ParentBlock)
+
+    def getInputBitVector(self):
+        return self.getOperand(0)
+
+    def to_llvm_ir(self, Context: RoseLLVMContext):
+        assert len(self.getOperands()) == 2
+        Operand1 = Context.getLLVMValueFor(self.getOperand(0))
+        assert Operand1 != LLVMUndefined
+        Operand2 = Context.getLLVMValueFor(self.getOperand(1))
+        assert Operand2 != LLVMUndefined
+        IRBuilder = Context.getLLVMBuilder()
+        return IRBuilder.lshr(Operand1, Operand2, self.getName())
+
+
+class RoseBVConcatOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
+        assert isinstance(Operand1.getType(), RoseBitVectorType)
+        assert isinstance(Operand2.getType(), RoseBitVectorType)
+        OperandList = [Operand1, Operand2]
+        super().__init__(RoseOpcode.bvconcat, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+               ParentBlock=RoseUndefRegion()):
+        return RoseBVConcatOp(Name, Operand1, Operand2, ParentBlock)
+
+    def to_rosette(self, NumSpace=0):
+        # if not isinstance(self.getExtensionKind(), RoseConstant):
+        #  return super().to_rosette(NumSpace, ReverseIndexing)
+        # Use existing Rosette function
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        String += "concat"
+        String += " " + self.getOperand(0).getName()
+        String += " " + self.getOperand(1).getName()
+        String += "))\n"
+        return String

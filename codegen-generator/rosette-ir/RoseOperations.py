@@ -240,7 +240,7 @@ class RoseOpaqueCallOp(RoseOperation):
 class RoseSelectOp(RoseOperation):
     def __init__(self, Name: str, Cond: RoseValue, Then: RoseValue, Else: RoseValue, ParentBlock):
         assert isinstance(Cond.getType(), RoseBooleanType) \
-            or isinstance(Cond.getType(), RoseBitVectorType), f"Condition must be boolean or bitvector, not {Cond.getType()}"
+            or isinstance(Cond.getType(), RoseBitVectorType), f"Condition must be boolean or bitvector, not {Cond}"
         OperandList = [Cond, Then, Else]
         super().__init__(RoseOpcode.select, Name, OperandList, ParentBlock)
 

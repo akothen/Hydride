@@ -29,34 +29,7 @@ class DecodeContext:
 
     def __init__(self, fields):
         self.fields = fields
-        self.globals = {
-            "FALSE": False,
-            "TRUE": True,
-            "MemOp_LOAD": "00",
-            "MemOp_STORE": "01",
-            "MemOp_PREFETCH": "10",
-            "CountOp_CLZ": "00",
-            "CountOp_CLS": "01",
-            "CountOp_CNT": "10",
-            "LogicalOp_AND": "00",
-            "LogicalOp_EOR": "01",
-            "LogicalOp_ORR": "10",
-            "CompareOp_GT": "000",
-            "CompareOp_GE": "001",
-            "CompareOp_EQ": "010",
-            "CompareOp_LE": "011",
-            "CompareOp_LT": "100",
-            "VBitOp_VBIF": "00",
-            "VBitOp_VBIT": "01",
-            "VBitOp_VBSL": "10",
-            "VBitOp_VEOR": "11",
-            "ReduceOp_FMINNUM": "000",
-            "ReduceOp_FMAXNUM": "001",
-            "ReduceOp_FMIN": "010",
-            "ReduceOp_FMAX": "011",
-            "ReduceOp_FADD": "100",
-            "ReduceOp_ADD": "101"
-        }
+        self.globals = ARMGlobalConst
         self.result = {}
 
     def EQ(self, a, b):
@@ -218,12 +191,12 @@ class DecodeContext:
             for c in AST.cases:
                 if isinstance(c, Case):  # not default
                     # print(c)
-                    if len(c.val) == 1:
-                        if self.EQ(Rval, self.walkConstExprRV(c.val[0])):
-                            self.walkConstExprStmt(c.body)
-                            break
-                    else:
-                        assert False
+                    # if len(c.val) == 1:
+                    if self.EQ(Rval, self.walkConstExprRV(c.val)):
+                        self.walkConstExprStmt(c.body)
+                        break
+                    # else:
+                    #     assert False
                 else:
                     # print(c)
                     assert c == AST.cases[-1]
@@ -318,10 +291,18 @@ def parse_instr_attr(instr: InstrDesc):
     # - {"return_base_type": "int", "element_bit_size": "8", "value": "int8x8_t"}
     retSign = isSigned(instr.return_type["value"])
 
+    # - Parse results: [{"Vd.8B": "result"}]
+    # print(instr.results)
+    preparation = {}
+    assert len(instr.results) == 1
+    assert len(instr.results[0]) == 1
+    if "void" not in instr.results[0]:
+        reg = parse_reg(list(instr.results[0].keys())[0])
+        preparation[reg.idx] = "returnVal"
+
     # - Parse preparation:
     # - {'a': {'register': 'Vn.8B'}, 'b': {'register': 'Vm.8B'}}
     # - results=[{'Vd.8B': 'result'}]
-    preparation = {}
     # print(instr.name, instr.Arguments_Preparation.items())
     for k, v in instr.Arguments_Preparation.items():
         if v:
@@ -336,13 +317,7 @@ def parse_instr_attr(instr: InstrDesc):
                 preparation["m"] = k
             if k == "c":
                 preparation["a"] = k
-    # - Parse results: [{"Vd.8B": "result"}]
-    # print(instr.results)
-    assert len(instr.results) == 1
-    assert len(instr.results[0]) == 1
-    if "void" not in instr.results[0]:
-        reg = parse_reg(list(instr.results[0].keys())[0])
-        preparation[reg.idx] = "returnVal"
+    
     return Params, retSign, preparation
 
 
