@@ -3,6 +3,7 @@ from asl.ARMParser import get_parser
 from asl.ARMAST import Instruction
 from ARMTypes import *
 from ARMAST import *
+from typing import Dict
 import json
 
 
@@ -49,6 +50,12 @@ class DecodeContext:
             "VBitOp_VBIT": "01",
             "VBitOp_VBSL": "10",
             "VBitOp_VEOR": "11",
+            "ReduceOp_FMINNUM": "000",
+            "ReduceOp_FMAXNUM": "001",
+            "ReduceOp_FMIN": "010",
+            "ReduceOp_FMAX": "011",
+            "ReduceOp_FADD": "100",
+            "ReduceOp_ADD": "101"
         }
         self.result = {}
 
@@ -94,17 +101,22 @@ class DecodeContext:
             assert False
         elif isinstance(AST, BitVec):
             return AST.bv
-        elif isinstance(AST, ArraySlice):
-            obj = self.walkConstExprRV(AST.bv)
+        elif isinstance(AST, ArrayIndex):
+            obj = self.walkConstExprRV(AST.obj)
             assert type(obj) == str
             sliceRV = [self.walkConstExprRV(i) for i in AST.slices]
             wid = len(obj)
+            assert type(AST.slices) == list, f"{AST}"
             if len(sliceRV) == 1:
-                return obj[wid-sliceRV[0]-1]
-            if len(sliceRV) == 2:
-                return obj[wid-sliceRV[0]-1:wid-sliceRV[1]]
+                if type(sliceRV[0]) == int:
+                    return obj[wid-sliceRV[0]-1]
+                elif type(sliceRV[0]) == tuple:
+                    return obj[wid-sliceRV[0][0]-1:wid-sliceRV[0][1]]
+
             print(sliceRV)
             assert False
+        elif isinstance(AST, SliceRange):
+            return (self.walkConstExprRV(AST.hi), self.walkConstExprRV(AST.lo))
         elif isinstance(AST, Number):
             return AST.val
         elif isinstance(AST, IfElse):
@@ -416,7 +428,7 @@ class SemaGenerator():
         for i in self.I:
             yield self.getSemaByInstrDesc(InstrDesc(**i))
 
-    def getResult(self):
+    def getResult(self) -> (Dict[str, ARMSema]):
         if self.result:
             return self.result
         else:
@@ -438,8 +450,9 @@ class SemaGenerator():
 if __name__ == "__main__":
     # S.serialize()
     # print([i for i in S.SemaGenerator() if i is not None])
-    # S = SemaGenerator()
-    S = SemaGenerator(deserialize=True)
+    S = SemaGenerator()
+    # S = SemaGenerator(deserialize=True)
     print(S.getSemaByName("vsubq_s16"))
+    S.serialize()
     # S.GenPy()
     # print(list(S.SemaGenerator()))

@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List
+from typing import List, Tuple
 import asl.ARMAST as asl
 
 PARSER_ID_COUNTER = 0
@@ -41,29 +41,29 @@ class BitVec(ASTNode):
         return f"BitVec({self.bv})"
 
 
-class ArraySlice(ASTNode):
-    bv: ASTNode
-    slices: List[ASTNode]
+class SliceRange(ASTNode):
+    hi: ASTNode
+    lo: ASTNode
     id: str
     wid: ASTNode
 
-    def __init__(self, bv: ASTNode, slices: List[ASTNode], id: str):
-        self.bv, self.slices, self.id = bv, slices, id
+    def __init__(self, hi: ASTNode, lo: ASTNode, id: str):
+        self.lo, self.hi, self.id = lo, hi, id
 
     def __repr__(self):
-        return f"ArraySlice({self.bv}, {self.slices}, {self.id})"
+        return f"SliceRange({self.lo}, {self.hi}, {self.id})"
 
 
 class ArrayIndex(ASTNode):
     obj: ASTNode
-    idxs: List[ASTNode]
+    slices: List[ASTNode]
     id: str
 
-    def __init__(self, obj: ASTNode, idxs: List[ASTNode], id: str):
-        self.obj, self.idxs, self.id = obj, idxs, id
+    def __init__(self, obj: ASTNode, slices: List[ASTNode], id: str):
+        self.obj, self.slices, self.id = obj, slices, id
 
     def __repr__(self):
-        return f"ArrayIndex({self.obj}, {self.idxs}, {self.id})"
+        return f"ArrayIndex({self.obj}, {self.slices}, {self.id})"
 
 
 class Var(ASTNode):
@@ -216,14 +216,14 @@ class Match(ASTNode):
 
 class VarsDecl(ASTNode):
     ids: List[Var]
-    width: ASTNode
+    basetype: Tuple[str, ASTNode]
     id: str
 
-    def __init__(self, ids: List[Var], width: ASTNode, id: str):
-        self.ids, self.width, self.id = ids, width, id
+    def __init__(self, ids: List[Var], basetype: Tuple[str, ASTNode], id: str):
+        self.ids, self.basetype, self.id = ids, basetype, id
 
     def __repr__(self):
-        return f"VarsDecl({self.ids}, {self.width}, {self.id})"
+        return f"VarsDecl({self.ids}, {self.basetype}, {self.id})"
 
 
 class VarDeclInit(ASTNode):
@@ -261,9 +261,23 @@ def ASTShrink_(AST):
         return VarsDecl([Var(AST.id, GenUniqueID())], ASTShrink_(AST.ty), GenUniqueID())
     elif isinstance(AST, asl.StmtVarsDecl):
         return VarsDecl([Var(i, GenUniqueID()) for i in AST.ids], ASTShrink_(AST.ty), GenUniqueID())
+    elif isinstance(AST, asl.TypeRef):
+        d = {
+            "integer": 32,
+            "boolean": 1,
+            "CompareOp": 3,
+            "MemOp": 2,
+            "CountOp": 2,
+            "LogicalOp": 2,
+            "VBitOp": 2,
+            "ReduceOp": 3,
+        }
+        if AST.qid.id in d:
+            return (AST.qid.id, Number(d[AST.qid.id]))
+        raise NotImplementedError(f"{AST}")
     elif isinstance(AST, asl.TypeFun):  # Only Returns Type width
         if AST.id == "bits":
-            return ASTShrink_(AST.expr)
+            return ("bits", ASTShrink_(AST.expr))
         raise NotImplementedError
     elif isinstance(AST, asl.ExprVarRef):
         if ASTShrink_(AST.qid) in ["sat", "sat1", "sat2"]:
@@ -274,21 +288,23 @@ def ASTShrink_(AST):
     elif isinstance(AST, asl.CasePatternIdentifier):
         return Var(AST.id, GenUniqueID())
     elif isinstance(AST, asl.LValArrayIndex):
+        assert type(AST.slices) == list, f"{AST}"
         return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.QualifiedIdentifier):
         return AST.id
     elif isinstance(AST, asl.ExprIndex):
+        assert type(AST.slices) == list, f"{AST}"
         return ArrayIndex(ASTShrink_(AST.expr), ASTShrink_(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.ExprSlice):
-        assert len(AST.slices) == 1
-        return ArraySlice(ASTShrink_(AST.expr), ASTShrink_(AST.slices[0]), GenUniqueID())
+        assert type(AST.slices) == list, f"{AST}"
+        return ArrayIndex(ASTShrink_(AST.expr), ASTShrink_(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.LValSliceOf):
-        assert len(AST.slices) == 1
-        return ArraySlice(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices[0]), GenUniqueID())
+        assert type(AST.slices) == list, f"{AST}"
+        return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())
     elif isinstance(AST, asl.SliceRange):
-        return [ASTShrink_(AST.expr0), ASTShrink_(AST.expr1)]
+        return SliceRange(ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), GenUniqueID)
     elif isinstance(AST, asl.SliceSingle):
-        return [ASTShrink_(AST.expr)]
+        return ASTShrink_(AST.expr)
     elif isinstance(AST, asl.StmtFor):
         return For(Var(AST.id, GenUniqueID()), ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), ASTShrink_(AST.stmts), 1, GenUniqueID())
     elif isinstance(AST, asl.ExprLitInt):
@@ -317,8 +333,6 @@ def ASTShrink_(AST):
             else:
                 print(AST)
                 raise NotImplementedError
-    elif isinstance(AST, asl.TypeRef):
-        return 32
     elif isinstance(AST, asl.ExprLitBin):
         return BitVec(AST.bitvector)
     elif isinstance(AST, asl.StmtUndefined):

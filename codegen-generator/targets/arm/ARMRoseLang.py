@@ -1,5 +1,6 @@
 
-from ARMTestCases import *
+from ARMSemanticGen import SemaGenerator
+import ARMTestCases
 from ARMRoseCompiler import ARMRoseContext, CompileSemantics
 from ARMTypes import *
 from ARMAST import *
@@ -20,12 +21,26 @@ from ARMAST import *
 
 # V[d] = result;
 
-
+from RosetteGen import GenerateRosetteForFunction
 if __name__ == "__main__":
-    func = vsubq_s16()
-    Function = CompileSemantics(func, ARMRoseContext())
-    from RosetteGen import GenerateRosetteForFunction
-    RosetteCode = GenerateRosetteForFunction(Function, "")
-    with open(f'rosette_test/{func.intrin}', 'w') as f:
-        f.write(RosetteCode)
-    print(RosetteCode)
+    AllSema = SemaGenerator(deserialize=True).getResult()
+    # AllSema = {"vaddq_s16": ARMTestCases.vaddq_s16()}
+    compiled = []
+    for k, func in AllSema.items():
+        try:
+            print("Compiling", k)
+            print(func.intrin, func.spec)
+            Function = CompileSemantics(func, ARMRoseContext())
+        except Exception as e:
+            print("Failed to compile", k)
+            # print(e)
+            continue
+        compiled.append(k)
+        # RosetteCode = GenerateRosetteForFunction(Function, "")
+        # print(RosetteCode)
+    print(len(compiled), "functions compiled:")
+    print(compiled)
+
+    # with open(f'rosette_test/{func.intrin}', 'w') as f:
+    #     f.write(RosetteCode)
+    # print(RosetteCode)

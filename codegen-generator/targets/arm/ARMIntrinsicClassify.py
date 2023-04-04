@@ -274,7 +274,14 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
         if (z := checkUniqueness(desiredprefix)):
             return z
         else:
-            desiredprefix += "diff" if flag.narrow else "same"
+            if any(desiredprefix.startswith(i) for i in ["CMEQ", "CMGE", "CMGT", "CMLE", "CMLT"]):
+                # print(intrin, flag)
+                if flag.base.endswith("z"):
+                    desiredprefix += "misc_Z"
+                else:
+                    desiredprefix += "same"
+            else:
+                desiredprefix += "diff" if flag.narrow else "same"
             # print(intrin, desiredprefix)
             if (z := checkUniqueness(desiredprefix)):
                 return z

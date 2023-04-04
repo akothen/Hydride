@@ -896,7 +896,7 @@ def vsubq_s16():
     Parser = get_parser('inst')
     encoding = Parser.parse(
         aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
-    realExe = ASTShrink_(encoding.instExecute)
+    realExe = ASTShrink(encoding.instExecute)
     resolving = {
         "datasize": 128,
         "esize": 16,
