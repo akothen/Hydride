@@ -57,7 +57,7 @@ class DecodeContext:
 
     def walkConstExprRV(self, AST: ASTNode):
         if isinstance(AST, Var):
-            if AST.name.startswith("R"):
+            if AST.name.startswith("R") and AST.name != "R":
                 return '00000'  # We just don't care about register
             else:
                 return self.lookup(AST.name)
@@ -430,6 +430,7 @@ if __name__ == "__main__":
     # S.serialize()
     # print([i for i in S.SemaGenerator() if i is not None])
     S = SemaGenerator()
+    # print(S.getSemaByName("vrshl_s8"))
     # S = SemaGenerator(deserialize=True)
     # print(S.getSemaByName("vsubq_s16"))
     S.serialize()

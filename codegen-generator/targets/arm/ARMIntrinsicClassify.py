@@ -295,6 +295,8 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
                 desiredprefix += "_asi"
             else:
                 def isSisd(flag):
+                    if 'qmovn' in intrin or 'qmovun' in intrin:
+                        return True if flag.x else False
                     if flag.pair:
                         return False
                     if not flag.q and flag.type.endswith("64"):
@@ -411,10 +413,10 @@ def Intrin2Field():
                     else:
                         if Flag.narrow == "n" and Flag.high == "high":
                             return selectField(o, 'Q', '1')
-                        if Flag.pair:
-                            return selectField(o, 'Q', '1')
-                        else:
-                            return selectField(o, 'Q', '0')
+                        # if Flag.pair:
+                        #     return selectField(o, 'Q', '1')
+                        # else:
+                        return selectField(o, 'Q', '0')
 
                 def selectsize():
                     if Flag.narrow != "n":
@@ -494,7 +496,8 @@ IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
 
 
 if __name__ == "__main__":
-    check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8"]
+    check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8",
+             "vrshl_s8", "vqmovn_s64", "vpadd_s8"]
     for v in check:
 
         print(v, IntrinsicsFlags[v])

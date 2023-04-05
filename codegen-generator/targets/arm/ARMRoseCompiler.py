@@ -8,6 +8,7 @@ from RoseContext import *
 
 from ARMAST import *
 from ARMRoseTypes import *
+IntSimWidth = 192
 
 
 class ARMRoseContext(RoseContext):
@@ -643,7 +644,7 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
             if LVal.id.startswith('part'):
                 print("thisway")
                 RHSExprVal = HandleToConcat()(
-                    Context.genName(), CompileRValueExpr(Var("r", Context.genName()), Context), RHSExprVal, Context)
+                    Context.genName(), RHSExprVal, CompileRValueExpr(Var("r", Context.genName()), Context),  Context)
                 Context.addAbstractionToIR(RHSExprVal)
             RetOp = RoseReturnOp.create(RHSExprVal)
             Context.addAbstractionToIR(RetOp)
@@ -1272,7 +1273,7 @@ def HandleToShl():
         [Operand1, Operand2] = Operands
         assert isinstance(Operand1.getType(), RoseBitVectorType) == True
         assert isinstance(Operand2.getType(), RoseBitVectorType) == True
-        Op = RoseBVShlOp.create(Name, Operand1, Operand2)
+        Op = RoseARMShlOp.create(Name, Operand1, Operand2)
         Context.addSignednessInfoForValue(Op, Context.isValueSigned(Operand1))
         return Op
 
@@ -1284,7 +1285,7 @@ def HandleToConcat():
                       Context: ARMRoseContext):
         assert isinstance(Operand1.getType(), RoseBitVectorType) == True
         assert isinstance(Operand2.getType(), RoseBitVectorType) == True
-        Op = RoseBVConcatOp.create(Name, Operand1, Operand2)
+        Op = RoseBVConcatOp.create(Name, Operand2, Operand1)
         return Op
 
     return LamdaImplFunc
@@ -1348,9 +1349,9 @@ def HandleToInt(_):
         # Consider using BVSizeExtension?
         BitWith = Value.getType().getBitwidth()
         if unsigned.getValue():
-            Op = RoseBVZeroExtendOp.create(Name, Value, 128)
+            Op = RoseBVZeroExtendOp.create(Name, Value, IntSimWidth)
         else:
-            Op = RoseBVSignExtendOp.create(Name, Value, 128)
+            Op = RoseBVSignExtendOp.create(Name, Value, IntSimWidth)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc
@@ -1361,7 +1362,7 @@ def HandleToSInt(_):
         [Value] = Args
         assert isinstance(Value.getType(), RoseBitVectorType) == True
         BitWith = Value.getType().getBitwidth()
-        Op = RoseBVSignExtendOp.create(Name, Value, 128)
+        Op = RoseBVSignExtendOp.create(Name, Value, IntSimWidth)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc
@@ -1372,7 +1373,7 @@ def HandleToUInt(_):
         [Value] = Args
         assert isinstance(Value.getType(), RoseBitVectorType) == True
         BitWith = Value.getType().getBitwidth()
-        Op = RoseBVZeroExtendOp.create(Name, Value, 128)
+        Op = RoseBVZeroExtendOp.create(Name, Value, IntSimWidth)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc

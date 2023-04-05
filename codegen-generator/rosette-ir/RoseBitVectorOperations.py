@@ -923,6 +923,51 @@ class RoseBVShlOp(RoseBitVectorOp):
         return IRBuilder.shl(Operand1, Operand2, self.getName())
 
 
+class RoseARMShlOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
+        assert isinstance(Operand1.getType(), RoseBitVectorType)
+        assert isinstance(Operand2.getType(), RoseBitVectorType)
+        OperandList = [Operand1, Operand2]
+        super().__init__(RoseOpcode.armshl, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+               ParentBlock=RoseUndefRegion()):
+        return RoseARMShlOp(Name, Operand1, Operand2, ParentBlock)
+
+    def getInputBitVector(self):
+        return self.getOperand(0)
+
+    def to_llvm_ir(self, Context: RoseLLVMContext):
+        pass
+        # assert len(self.getOperands()) == 2
+        # Operand1 = Context.getLLVMValueFor(self.getOperand(0))
+        # assert Operand1 != LLVMUndefined
+        # Operand2 = Context.getLLVMValueFor(self.getOperand(1))
+        # assert Operand2 != LLVMUndefined
+        # IRBuilder = Context.getLLVMBuilder()
+        # return IRBuilder.shl(Operand1, Operand2, self.getName())
+
+    # def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+    #     assert ReverseIndexing == False
+    #     Spaces = ""
+    #     for _ in range(NumSpace):
+    #         Spaces += " "
+    #     Name = super().getName()
+    #     String = Spaces + "(define " + Name + " ("
+    #     String += (self.Opcode.getRosetteOp() + " ")
+    #     for Index, Operand in enumerate(self.getOperands()):
+    #         if isinstance(Operand, RoseConstant) \
+    #                 and isinstance(Operand.getType(), RoseBitVectorType):
+    #             String += " " + Operand.to_rosette()
+    #         else:
+    #             String += " " + Operand.getName()
+    #         if Index != len(self.getOperands()) - 1:
+    #             String += " "
+    #     String += "))\n"
+    #     return String
+
+
 class RoseBVLshrOp(RoseBitVectorOp):
     def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
         assert isinstance(Operand1.getType(), RoseBitVectorType)

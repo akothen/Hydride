@@ -24,10 +24,10 @@ from ARMAST import *
 from RosetteGen import GenerateRosetteForFunction
 if __name__ == "__main__":
     AllSema = SemaGenerator(deserialize=True).getResult()
-    # AllSema = {k: AllSema[k] for k in ["vcle_s8"]}
+    AllSema = {k: AllSema[k] for k in ["vzip1_s8"]}
     compiled = []
     # Across vector cannot be convert to SSA easily
-    skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit', 'dot', 'aba']
+    skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit', 'dot', 'aba', 'rev']
     import sys
     AllRosetteCode = "#lang rosette\n(require \"bvops.rkt\")\n"
     for k, func in AllSema.items():

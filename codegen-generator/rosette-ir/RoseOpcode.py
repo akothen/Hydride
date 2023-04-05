@@ -44,6 +44,7 @@ class RoseOpcode(Enum):
     bvor = auto()
     bvxor = auto()
     bvshl = auto()
+    armshl = auto()
     bvlshr = auto()
     bvashr = auto()
     bvneg = auto()
@@ -194,6 +195,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
@@ -490,6 +492,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
@@ -666,6 +669,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
@@ -759,6 +763,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
@@ -860,6 +865,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
@@ -970,6 +976,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
@@ -1041,6 +1048,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvxor.value \
                 or self.value == self.bvand.value \
                 or self.value == self.bvshl.value \
+                or self.value == self.armshl.value \
                 or self.value == self.bvlshr.value \
                 or self.value == self.bvashr.value \
                 or self.value == self.bvsmin.value \
