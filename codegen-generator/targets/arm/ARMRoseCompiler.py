@@ -1334,13 +1334,16 @@ def HandleToSpecialSignExtend(_):
 def HandleToInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
         [Value, unsigned] = Args
+        print("unsigned: ", unsigned)
         assert isinstance(Value.getType(), RoseBitVectorType) == True
         assert type(unsigned) == RoseConstant, "Only constant is supported."
         # Consider using BVSizeExtension?
         BitWith = Value.getType().getBitwidth()
-        if unsigned.getValue:
+        if unsigned.getValue():
+            print("thisway")
             Op = RoseBVZeroExtendOp.create(Name, Value, BitWith*2)
         else:
+            print("thatway")
             Op = RoseBVSignExtendOp.create(Name, Value, BitWith*2)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op

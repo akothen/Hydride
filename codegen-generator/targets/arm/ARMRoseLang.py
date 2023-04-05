@@ -24,7 +24,7 @@ from ARMAST import *
 from RosetteGen import GenerateRosetteForFunction
 if __name__ == "__main__":
     AllSema = SemaGenerator(deserialize=True).getResult()
-    # AllSema = {k: AllSema[k] for k in ["vrax1q_u64"]}
+    # AllSema = {k: AllSema[k] for k in ["vaddl_s8"]}
     compiled = []
     # Across vector cannot be convert to SSA easily
     skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit', 'dot']
