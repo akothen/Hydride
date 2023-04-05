@@ -317,7 +317,9 @@ def parse_instr_attr(instr: InstrDesc):
                 preparation["m"] = k
             if k == "c":
                 preparation["a"] = k
-    
+    if any(i in instr.name for i in ["vclt", "vcle"]):  # LOL
+        if "vcltz" not in instr.name and "vclez" not in instr.name:
+            preparation["m"], preparation["n"] = preparation["n"], preparation["m"]
     return Params, retSign, preparation
 
 
@@ -429,7 +431,7 @@ if __name__ == "__main__":
     # print([i for i in S.SemaGenerator() if i is not None])
     S = SemaGenerator()
     # S = SemaGenerator(deserialize=True)
-    print(S.getSemaByName("vsubq_s16"))
+    # print(S.getSemaByName("vsubq_s16"))
     S.serialize()
     # S.GenPy()
     # print(list(S.SemaGenerator()))

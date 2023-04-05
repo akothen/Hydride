@@ -3,10 +3,17 @@ from ARMEncodingFields import EncodingFields
 from ARMAST import Flag
 from ARMTypes import *
 import json
-from typing import Set, List, Dict
+from typing import Set, List, Dict, Tuple
 
 # v[p][q][r]name[u][n][q][x][_high][_lane | laneq][_n][_result]_type
 # https://developer.arm.com/documentation/102467/0200/Program-conventions?lang=en
+
+with open("encodingmap.json", 'r') as fi:
+    enc = json.load(fi)
+enckeys = enc.keys()
+with open("intr.json", 'r') as fi:
+    I = json.load(fi)
+toI = {i["name"]: InstrDesc(**i) for i in I}
 
 
 def printParsedName(parsed, full=False):
@@ -41,20 +48,40 @@ def printParsedName(parsed, full=False):
     return start
 
 
-def find_basename(names: Set[str]):
+def find_basename(names: Set[Tuple[str, str]]):
     namelist = list(names)
-    namelist.sort(key=len)
+    namelist.sort(key=lambda x: len(x[0]))
     # print(namelist)
     firmnames = set()
     result = {}
     # count = {}
 
-    def check_attendance_if_stripped(i):
-        for j in firmnames:
-            if j in i:
-                return True
-        return False
-    for k in namelist:
+    def check_suffix(base, intrin):
+        base = base.lower()
+        if base in intrin:
+            return base
+        if base[1:] in intrin:
+            return base[1:]
+        if base[: -1] in intrin:
+            return base[: -1]
+        if base[1: -1] in intrin:
+            return base[1: -1]
+        return None
+
+    for k, iiiii in namelist:
+        Intrin = toI[iiiii]
+        baseinstruction = Intrin.base_instruction[0]
+        suffix_to_check = check_suffix(baseinstruction, k)
+
+        def check_attendance_if_stripped(i, onlyInIntrin=False):
+            if suffix_to_check and onlyInIntrin:
+                if suffix_to_check not in i:
+                    return False
+            for j in firmnames:
+                if j in i:
+                    return True
+            return False
+
         i = k
         assert i.startswith("v")
         i = i[1:]
@@ -67,20 +94,8 @@ def find_basename(names: Set[str]):
             "q": False,
             "x": "",
         }
-        if i.startswith("p"):
-            if check_attendance_if_stripped(i[1:]):
-                f["pair"] = True
-                i = i[1:]
-        if i.startswith("q"):
-            if check_attendance_if_stripped(i[1:]):
-                f["sat"] = True
-                i = i[1:]
-        if i.startswith("r"):
-            if check_attendance_if_stripped(i[1:]):
-                f["round"] = True
-                i = i[1:]
         if i.endswith("b") or i.endswith("h") or i.endswith("s") or i.endswith("d"):
-            if check_attendance_if_stripped(i[:-1]):
+            if check_attendance_if_stripped(i[:-1], True):
                 f["x"] = i[-1]
                 i = i[:-1]
         if i.endswith("q"):
@@ -95,9 +110,22 @@ def find_basename(names: Set[str]):
             if check_attendance_if_stripped(i[:-1]):
                 f["s2u"] = True
                 i = i[:-1]
+        if i.startswith("p"):
+            if check_attendance_if_stripped(i[1:]):
+                f["pair"] = True
+                i = i[1:]
+        if i.startswith("q"):
+            if check_attendance_if_stripped(i[1:]):
+                f["sat"] = True
+                i = i[1:]
+        if i.startswith("r"):
+            if check_attendance_if_stripped(i[1:]):
+                f["round"] = True
+                i = i[1:]
         f["base"] = i
         result[k] = f
         firmnames.add(i)
+        # assert iiiii != 'vqaddb_s8', f"{suffix_to_check} {i}"
         # print(k, i)
         # count[i] = count.get(i, 0) + 1
     # for k, v in sorted(result.items(), key=lambda x: x[0]):
@@ -110,7 +138,7 @@ def find_basename(names: Set[str]):
 
 
 def parse_flag(names: List[str]):
-    qwq = set(i.split("_")[0] for i in names)
+    qwq = set((i.split("_")[0], i) for i in names)
     # print(qwq)
     bases = find_basename(qwq)
 
@@ -118,7 +146,7 @@ def parse_flag(names: List[str]):
     result = {}
     for i in names:
         f = {
-            "high": False,
+            "high": "",
             "lane": "",
             "n": False,
             "result": "",
@@ -190,13 +218,6 @@ def wedo(instr):
     return True
 
 
-with open("encodingmap.json", 'r') as fi:
-    enc = json.load(fi)
-enckeys = enc.keys()
-with open("intr.json", 'r') as fi:
-    I = json.load(fi)
-
-
 def generateARMIntrinsicsFlags() -> (Dict[str, Flag]):
     allnames = []
     for i in I:
@@ -242,8 +263,6 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
     if (z := checkUniqueness(desiredprefix)):
         return z
     else:
-        # if desiredprefix in ["ADDP"]:
-        #     print(intrin, flag)
         if desiredprefix in ["LD1", "LD2", "LD3", "LD4",
                              "ST1", "ST2", "ST3", "ST4"]:
             i = desiredprefix[-1]
@@ -294,6 +313,8 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
                     desiredprefix += "misc_Z"
                 else:
                     desiredprefix += "same"
+            elif any(desiredprefix.startswith(i) for i in ["SMLAL", "UMLAL", "SMLSL", "UMLSL", "SQDMLAL", "UQDMLAL", "SQDMLSL", "UQDMLSL", "SMULL", "UMULL", "SQDMULL", "UQDMULL"]):
+                desiredprefix += "diff"
             else:
                 desiredprefix += "diff" if flag.narrow else "same"
             # print(intrin, desiredprefix)
@@ -388,6 +409,8 @@ def Intrin2Field():
                     if Flag.q:
                         return selectField(o, 'Q', '1')
                     else:
+                        if Flag.narrow == "n" and Flag.high == "high":
+                            return selectField(o, 'Q', '1')
                         if Flag.pair:
                             return selectField(o, 'Q', '1')
                         else:
@@ -471,6 +494,12 @@ IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
 
 
 if __name__ == "__main__":
+    check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8"]
+    for v in check:
+
+        print(v, IntrinsicsFlags[v])
+        print(v, Intrinsics2Encodings[v])
+        print(v, Intrinsics2Fields[v])
     # genThree()
     # Intrin2Field()
     pass

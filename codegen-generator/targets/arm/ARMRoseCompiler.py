@@ -317,6 +317,7 @@ def ElemToSlicedArray(Stmt: ArrayIndex):
 
 def VorVpartToVar(Stmt: ArrayIndex, Context: ARMRoseContext):
     args = Stmt.slices
+    part = ""
     if Stmt.obj.name == 'V':
         assert len(
             args) == 1, f"V can only be indexed by one argument, but got {args}"
@@ -327,12 +328,16 @@ def VorVpartToVar(Stmt: ArrayIndex, Context: ARMRoseContext):
             args) == 2, f"Vpart can only be indexed by two arguments, but got {args}"
         assert type(
             args[0]) == Var, f"Vpart can only be indexed by a variable, but got {args[0]}"
+        Part = CompileRValueExpr(args[1], Context)
+        assert isinstance(Part, RoseConstant)
+        if Part.getValue():
+            part = "part."
     else:
         assert False, f"Only V or Vpart can reach this function, but got {Stmt}"
     reg = args[0].name
     # print(reg, Context.preparation)
     assert reg in Context.preparation, f"Register {reg} is not defined"
-    return Var(Context.getArgumentForRegister(reg), Stmt.id)
+    return Var(Context.getArgumentForRegister(reg), part+Stmt.id)
 
 
 def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -635,6 +640,11 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
             Context.removeLHSType()
 
             print("OXO", LVal, Stmt.rhs.id,  RHSExprVal)
+            if LVal.id.startswith('part'):
+                print("thisway")
+                RHSExprVal = HandleToConcat()(
+                    Context.genName(), CompileRValueExpr(Var("r", Context.genName()), Context), RHSExprVal, Context)
+                Context.addAbstractionToIR(RHSExprVal)
             RetOp = RoseReturnOp.create(RHSExprVal)
             Context.addAbstractionToIR(RetOp)
             Context.setReturned(RHSExprVal.getName())
@@ -955,13 +965,11 @@ def TypePromotion(Operand1: RoseValue, Operand2: RoseValue, Context: ARMRoseCont
         return [Operand1, Operand2]  # Nothing to do
     if isinstance(Operand1.getType(), RoseBitVectorType) \
             and isinstance(Operand2.getType(), RoseIntegerType) and isinstance(Operand2, RoseConstant):
-        print("thisway")
         bvliteral = RoseConstant.create(
             Operand2.getValue(), Operand1.getType())
         return [Operand1, bvliteral]
     if isinstance(Operand1.getType(), RoseIntegerType) and isinstance(Operand1, RoseConstant)\
             and isinstance(Operand2.getType(), RoseBitVectorType):
-        print("thatway")
         bvliteral = RoseConstant.create(
             Operand1.getValue(), Operand2.getType())
         return [bvliteral, Operand2]
@@ -1340,11 +1348,9 @@ def HandleToInt(_):
         # Consider using BVSizeExtension?
         BitWith = Value.getType().getBitwidth()
         if unsigned.getValue():
-            print("thisway")
-            Op = RoseBVZeroExtendOp.create(Name, Value, BitWith*2)
+            Op = RoseBVZeroExtendOp.create(Name, Value, 128)
         else:
-            print("thatway")
-            Op = RoseBVSignExtendOp.create(Name, Value, BitWith*2)
+            Op = RoseBVSignExtendOp.create(Name, Value, 128)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc
@@ -1355,7 +1361,7 @@ def HandleToSInt(_):
         [Value] = Args
         assert isinstance(Value.getType(), RoseBitVectorType) == True
         BitWith = Value.getType().getBitwidth()
-        Op = RoseBVSignExtendOp.create(Name, Value, BitWith*2)
+        Op = RoseBVSignExtendOp.create(Name, Value, 128)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc
@@ -1366,7 +1372,7 @@ def HandleToUInt(_):
         [Value] = Args
         assert isinstance(Value.getType(), RoseBitVectorType) == True
         BitWith = Value.getType().getBitwidth()
-        Op = RoseBVZeroExtendOp.create(Name, Value, BitWith*2)
+        Op = RoseBVZeroExtendOp.create(Name, Value, 128)
         # Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc

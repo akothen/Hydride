@@ -1,5 +1,8 @@
 #lang rosette
-(define (vaddl_s8  a b )
+(require "rosette_test/bvops.rkt")
+
+
+(define (vshl_s8  a b )
 (define result
 (apply
 concat
@@ -8,20 +11,22 @@ concat
  (define %3 (+  e0  1))
  (define %4 (*  %3  8))
  (define %5 (-  %4  1))
- (define %6 (extract  %5 %2 a))
- (define %7 (sign-extend  %6 (bitvector 16)))
- (define %8 (*  e0  8))
- (define %9 (+  e0  1))
- (define %10 (*  %9  8))
- (define %11 (-  %10  1))
- (define %12 (extract  %11 %8 b))
- (define %13 (sign-extend  %12 (bitvector 16)))
- (define %14 (bvadd  %7  %13))
- (define %24 (extract  15 0 %14))
- %24
+ (define %6 (extract  %5 %2 b))
+ (define %7 (extract  7 0 %6))
+ (define %8 (sign-extend  %7 (bitvector 128)))
+ (define %9 (*  e0  8))
+ (define %10 (+  e0  1))
+ (define %11 (*  %10  8))
+ (define %12 (-  %11  1))
+ (define %13 (extract  %12 %9 a))
+ (define %14 (sign-extend  %13 (bitvector 128)))
+ (define %15 (bvadd  %14  (bv 0 128)))
+ (define %16 (bvshl  %15  %8))
+ (define %22 (extract  7 0 %16))
+ %22
 )
 )
 )
 result)
-(vaddl_s8 (bv #xedd1a4e079cf1ea4 64) (bv #x1115ccef91315b74 64))
-(assert (eq? (vaddl_s8 (bv #xedd1a4e079cf1ea4 64) (bv #x1115ccef91315b74 64)) (bv #xfffeffe6ff70ffcf000a000000790018 128)))
+(vshl_s8 (bv #xf4db1c1c24a1128a 64) (bv #x67588f700642e7e3 64))
+(assert (eq? (vshl_s8 (bv #xf4db1c1c24a1128a 64) (bv #x67588f700642e7e3 64)) (bv #x00000000000000ff 64)))
