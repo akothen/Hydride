@@ -644,7 +644,7 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
             if LVal.id.startswith('part'):
                 print("thisway")
                 RHSExprVal = HandleToConcat()(
-                    Context.genName(), RHSExprVal, CompileRValueExpr(Var("r", Context.genName()), Context),  Context)
+                    Context.genName(), RHSExprVal, CompileRValueExpr(Var("r", Context.genName()), Context),   Context)
                 Context.addAbstractionToIR(RHSExprVal)
             RetOp = RoseReturnOp.create(RHSExprVal)
             Context.addAbstractionToIR(RetOp)
