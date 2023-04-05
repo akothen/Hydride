@@ -91,7 +91,7 @@ RegisterRandomScalar(int64_t);
         TypeRet ret = intrin(a);                    \
         printf("(assert (eq? (" #intrin " (bv #x"); \
         printVector(a);                             \
-        printf(" %lu) (bv #x", sizeof(Type1) * 8);  \
+        printf(" %lu)) (bv #x", sizeof(Type1) * 8);  \
         printVector(ret);                           \
         printf(" %lu)))\n", sizeof(TypeRet) * 8);   \
     }
