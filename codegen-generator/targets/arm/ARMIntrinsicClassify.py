@@ -411,7 +411,7 @@ def Intrin2Field():
                     if Flag.q:
                         return selectField(o, 'Q', '1')
                     else:
-                        if Flag.narrow == "n" and Flag.high == "high":
+                        if Flag.high == "high":
                             return selectField(o, 'Q', '1')
                         # if Flag.pair:
                         #     return selectField(o, 'Q', '1')
@@ -497,7 +497,7 @@ IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
 
 if __name__ == "__main__":
     check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8",
-             "vrshl_s8", "vqmovn_s64", "vpadd_s8"]
+             "vrshl_s8", "vqmovn_s64", "vpadd_s8", "vaddl_high_s8"]
     for v in check:
 
         print(v, IntrinsicsFlags[v])

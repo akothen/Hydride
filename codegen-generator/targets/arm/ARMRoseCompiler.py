@@ -235,6 +235,7 @@ def CompileVarDeclInit(Stmt: VarDeclInit, Context: ARMRoseContext):
     '''
     assert len(
         Stmt.decl.ids) == 1, f"Only one variable can be declared, but got {Stmt.decl.ids}"
+    CompileVarsDecl(Stmt.decl, Context)
     return CompileUpdate(Update(Stmt.decl.ids[0], Stmt.expr), Context)
 
 
@@ -316,29 +317,44 @@ def ElemToSlicedArray(Stmt: ArrayIndex):
     return Node
 
 
-def VorVpartToVar(Stmt: ArrayIndex, Context: ARMRoseContext):
+def VorVpartToLv(Stmt: ArrayIndex, Context: ARMRoseContext):
     args = Stmt.slices
-    part = ""
+    ID = Stmt.id
     if Stmt.obj.name == 'V':
-        assert len(
-            args) == 1, f"V can only be indexed by one argument, but got {args}"
-        assert type(
-            args[0]) == Var, f"V can only be indexed by a variable, but got {args[0]}"
+        assert len(args) == 1, f"Got {Stmt}"
+        assert type(args[0]) == Var, f"Got {Stmt}"
+
+        reg = args[0].name
+        assert reg in Context.preparation, f"Register {reg} is not defined"
+
+        return Var(Context.getArgumentForRegister(reg), ID)
     elif Stmt.obj.name == 'Vpart':
-        assert len(
-            args) == 2, f"Vpart can only be indexed by two arguments, but got {args}"
-        assert type(
-            args[0]) == Var, f"Vpart can only be indexed by a variable, but got {args[0]}"
+        assert len(args) == 2, f"Got {Stmt}"
+        assert type(args[0]) == Var, f"Got {Stmt}"
         Part = CompileRValueExpr(args[1], Context)
         assert isinstance(Part, RoseConstant)
+
+        reg = args[0].name
+        assert reg in Context.preparation, f"Register {reg} is not defined"
         if Part.getValue():
-            part = "part."
+            ID = "part." + ID
+
+        return Var(Context.getArgumentForRegister(reg), ID)
     else:
-        assert False, f"Only V or Vpart can reach this function, but got {Stmt}"
-    reg = args[0].name
-    # print(reg, Context.preparation)
-    assert reg in Context.preparation, f"Register {reg} is not defined"
-    return Var(Context.getArgumentForRegister(reg), part+Stmt.id)
+        assert False, f"Got {Stmt}"
+
+
+def CompileVorVpartToRv(Stmt: ArrayIndex, Context: ARMRoseContext):
+
+    tmp = VorVpartToLv(Stmt, Context)
+    if tmp.id.startswith("part."):
+        lhs = Context.getLHSType()
+        width = lhs[1]
+        assert lhs[0] == 'bits', f"Got {lhs}"
+        assert width in [32, 64]
+
+        return CompileRValueExpr(ArrayIndex(tmp, [SliceRange(Number(2*width-1), Number(width), Context.genName())], Context.genName()), Context)
+    return CompileRValueExpr(tmp, Context)
 
 
 def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -350,7 +366,7 @@ def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
     '''
     if type(Stmt.obj) == Var:
         if Stmt.obj.name in ['V', 'Vpart']:
-            return CompileVarRv(VorVpartToVar(Stmt, Context), Context)
+            return CompileVorVpartToRv(Stmt, Context)
         elif Stmt.obj.name == 'Elem':
             return CompileArrayIndexRv(ElemToSlicedArray(Stmt), Context)
         else:
@@ -368,7 +384,7 @@ def SimplifyArrayIndexLv(Stmt: ArrayIndex, Context: ARMRoseContext):
     '''
     if type(Stmt.obj) == Var:
         if Stmt.obj.name in ['V', 'Vpart']:
-            return VorVpartToVar(Stmt, Context)
+            return VorVpartToLv(Stmt, Context)
         elif Stmt.obj.name == 'Elem':
             return ElemToSlicedArray(Stmt)
         else:
@@ -1285,7 +1301,7 @@ def HandleToConcat():
                       Context: ARMRoseContext):
         assert isinstance(Operand1.getType(), RoseBitVectorType) == True
         assert isinstance(Operand2.getType(), RoseBitVectorType) == True
-        Op = RoseBVConcatOp.create(Name, Operand2, Operand1)
+        Op = RoseBVConcatOp.create(Name, Operand1, Operand2)
         return Op
 
     return LamdaImplFunc
