@@ -1,81 +1,64 @@
-from RosetteGen import GenerateRosetteForFunction
-from ARMRoseLang import CompileSemantics
-from ARMTestCases import *
-from ARMRoseCompiler import ARMRoseContext, CompileSemantics
-import random
-import os
+import sys
+from ARMSemanticGen import SemaGenerator
+
+VecTypes = {
+    "int8x16_t",
+    "int16x8_t",
+    "int32x4_t",
+    "int64x2_t",
+    "uint8x16_t",
+    "uint16x8_t",
+    "uint32x4_t",
+    "uint64x2_t",
+    "int8x8_t",
+    "int16x4_t",
+    "int32x2_t",
+    "int64x1_t",
+    "uint8x8_t",
+    "uint16x4_t",
+    "uint32x2_t",
+    "uint64x1_t",
+    "int8_t",
+    "int16_t",
+    "int32_t",
+    "int64_t",
+    "uint8_t",
+    "uint16_t",
+    "uint32_t",
+    "uint64_t",
+}
 
 
+def GenerateCTest(AllSema):
+    CannotVerify = []
+    for i, v in AllSema.items():
+        tps = [vv.type for vv in v.params]
+        try:
+            if len(tps) == 1:
+                assert tps[0] in VecTypes
+                assert v.rettype in VecTypes
+                print(f"Test1A({i}, {tps[0]}, {v.rettype});")
+            elif len(tps) == 2:
+                assert tps[0] in VecTypes
+                assert tps[1] in VecTypes
+                assert v.rettype in VecTypes
+                print(
+                    f"Test2A({i}, {tps[0]}, {tps[1]}, {v.rettype});")
+            elif len(tps) == 3:
+                assert tps[0] in VecTypes
+                assert tps[1] in VecTypes
+                assert tps[2] in VecTypes
+                assert v.rettype in VecTypes
+                print(
+                    f"Test3A({i}, {tps[0]}, {tps[1]}, {tps[2]}, {v.rettype});")
+            else:
+                assert False
+        except AssertionError:
+            CannotVerify.append(i)
 
-def genData(func):
-    esize, elements = func.resolving["esize"], func.resolving["elements"]
-    va = [random.getrandbits(esize) for _ in range(elements)]
-    vb = [random.getrandbits(esize) for _ in range(elements)]
-    return va, vb
+    print("Cannot verify", CannotVerify, file=sys.stderr)
 
-def genC(func, va, vb):
-    esize = func.resolving["esize"]
-    elements = func.resolving["elements"]
-    name = func.intrin
-    vtype = func.params[0].type
-    singletype = vtype.split('x')[0] + "_t"
-    rttype = func.rettype
-    singlerttype = rttype.split('x')[0] + "_t"
-    stra = ", ".join(map(lambda x: f"({singletype})" + str(x) + "UL", va))
-    strb = ", ".join(map(lambda x: f"({singletype})" + str(x) + "UL", vb))
-    vtohex = "vld1" + name[4:]
-    hextov = "vst1" + name[4:]
-    prefix = "ll" if esize >= 64 else ""
-    ccode = f'''
-#include <arm_neon.h>
-#include <stdio.h>
-
-int main()
-{{
-    {singletype} dataa[{elements}] = {{{stra}}};
-    {singletype} datab[{elements}] = {{{strb}}};
-    {vtype} a = {vtohex}(dataa);
-    {vtype} b = {vtohex}(datab);
-    {rttype} ret = {name}(a, b);
-    {singlerttype} datac[{elements}];
-    {hextov}(datac, ret);
-    for (int i = 0; i < {elements}; i++) {{
-        printf("%0{esize // 4}{prefix}x", (uint{esize}_t)datac[i]);
-    }}
-    return 0;
-}}
-'''
-    filename = f'rosette_test/{name}.c'
-    with open(filename, 'w') as fc:
-        fc.write(ccode)
-    cmd = f'gcc {filename}; ./a.out'
-    result = os.popen(cmd).readlines()
-    return result[0]
-
-def rosetteTest(func):
-    Function = CompileSemantics(func, ARMRoseContext())
-    RosetteCode = GenerateRosetteForFunction(Function, "#lang rosette\n")
-
-    datasize = func.resolving["datasize"]
-    nbits = func.resolving["esize"] // 4
-    for i in range(10):
-        va, vb = genData(func)
-        hexa = ''.join(list(map(lambda x: '0' * (nbits - len(hex(x)[2:])) + hex(x)[2:], va)))
-        hexb = ''.join(list(map(lambda x: '0' * (nbits - len(hex(x)[2:])) + hex(x)[2:], vb)))
-        returnVal = genC(func, va, vb)
-        RosetteCode += f"(define a{i} (bv #x{hexa} {datasize}))\n"
-        RosetteCode += f"(define b{i} (bv #x{hexb} {datasize}))\n"
-        RosetteCode += f"(assert (eq? ({func.intrin} a{i} b{i}) (bv #x{returnVal} {datasize})))\n"
-
-    rosetteName = f'rosette_test/{func.intrin}.rkt'
-    with open(f'rosette_test/{func.intrin}.rkt', 'w') as f:
-        f.write(RosetteCode)
-    return f'racket {rosetteName}'
 
 if __name__ == "__main__":
-    commands = []
-    for func in getSemasofar():
-        commands.append(rosetteTest(func))
-    
-    for command in commands:
-        os.system(command)
+    AllSema = SemaGenerator(deserialize=True).getResult()
+    GenerateCTest(AllSema)

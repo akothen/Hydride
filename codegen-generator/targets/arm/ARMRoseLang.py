@@ -27,9 +27,9 @@ if __name__ == "__main__":
     # AllSema = {k: AllSema[k] for k in ["vrax1q_u64"]}
     compiled = []
     # Across vector cannot be convert to SSA easily
-    skip = ['addlv', 'maxv', 'minv', 'abd']
+    skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit', 'dot']
     import sys
-    AllRosetteCode = "#lang rosette\n"
+    AllRosetteCode = "#lang rosette\n(require \"bvops.rkt\")\n"
     for k, func in AllSema.items():
         if any(kk in k for kk in skip):
             continue
@@ -47,7 +47,8 @@ if __name__ == "__main__":
         AllRosetteCode += RosetteCode
     print(len(compiled), "functions compiled:", file=sys.stderr)
     print(compiled, file=sys.stderr)
-    with open(f'rosette_test/Test.rkt', 'w') as f:
+    AllRosetteCode += "(provide (all-defined-out))"
+    with open(f'rosette_test/compiled.rkt', 'w') as f:
         f.write(AllRosetteCode)
     # print(RosetteCode)
 

@@ -20,6 +20,4 @@
      )
     )
   result)
-(define a128 (bv #xf001f001f001f001f001f001f001f001 128))
-(define b128 (bv #x10021003100210031002100310021003 128))
-(assert (eq? (vsubq_s16 a128 b128) (bv #xdfffdffedfffdffedfffdffedfffdffe 128)))
+(provide (all-defined-out))
