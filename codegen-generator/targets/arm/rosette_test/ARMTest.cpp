@@ -11,7 +11,7 @@ mt19937 mt(time(nullptr));
     {                                                         \
         cType data[sizeof(ret) / sizeof(cType)];              \
         Store(data, ret);                                     \
-        for (int i = 0; i < sizeof(ret) / sizeof(cType); i++) \
+        for (int i = sizeof(ret) / sizeof(cType) - 1; i >= 0; i--) \
             printf(spec, data[i]);                            \
     }
 #define RegisterRandomVector(Type, Load, cType) \
