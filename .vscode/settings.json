@@ -39,4 +39,13 @@
     "codegen-generator/tools/llvmlite",
     "code-synthesizer/dsl-ir"
   ],
+  "files.associations": {
+    "array": "cpp",
+    "string": "cpp",
+    "string_view": "cpp",
+    "vector": "cpp",
+    "atomic": "cpp",
+    "bitset": "cpp",
+    "random": "cpp"
+  },
 }

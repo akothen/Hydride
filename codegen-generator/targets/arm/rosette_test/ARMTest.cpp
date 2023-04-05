@@ -120,7 +120,7 @@ RegisterRandomScalar(int64_t);
         printVector(a);                              \
         printf(" %lu) (bv #x", sizeof(Type1) * 8);   \
         printVector(b);                              \
-        printf(" %lu)) (bv #x", sizeof(Type2) * 8);  \
+        printf(" %lu) (bv #x", sizeof(Type2) * 8);  \
         printVector(c);                              \
         printf(" %lu)) (bv #x", sizeof(Type3) * 8);  \
         printVector(ret);                            \
