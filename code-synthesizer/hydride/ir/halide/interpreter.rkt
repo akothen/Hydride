@@ -185,6 +185,8 @@
     [(vec-sat-sub v1 v2) (vec-len v1)]
     [(vec-mul v1 v2) (vec-len v1)]
     [(vec-widen-mul v1 v2) (vec-len v2)]
+    [(vec-rounding_mul_shift_right v1 v2 v3) (vec-len v1)]
+    [(vec-rounding_shift_right v1 v2) (vec-len v1)]
     [(vec-div v1 v2) (vec-len v1)]
     [(vec-mod v1 v2) (vec-len v1)]
     [(vec-min v1 v2) (vec-len v1)]
@@ -338,6 +340,9 @@
     [(vec-sub v1 v2) (list v1 v2)]
     [(vec-sat-sub v1 v2) (list v1 v2)]
     [(vec-mul v1 v2) (list v1 v2)]
+    ;[(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2 v3)]
+    [(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2)]
+    [(vec-rounding_shift_right v1 v2) (list v1 v2)]
     [(vec-widen-mul v1 v2) (list v1 v2)]
     [(vec-div v1 v2) (list v1 v2)]
     [(vec-mod v1 v2) (list v1 v2)]
@@ -558,6 +563,12 @@
     [(vec-mul v1 v2) (lambda (i) (do-mul ((interpret v1) i) ((interpret v2) i)))]
     [(vec-widen-mul v1 v2) 
      (lambda (i) (do-widened-mul ((interpret v1) i) ((interpret v2) i)))
+     ]
+    [(vec-rounding_shift_right v1 v2) 
+     (lambda (i) (do-rounding-shift-right ((interpret v1) i) ((interpret v2) i)))
+     ]
+    [(vec-rounding_mul_shift_right v1 v2 v3) 
+     (lambda (i) (do-rounding-mul-shift-right ((interpret v1) i) ((interpret v2) i) ((interpret v3) i) ))
      ]
     [(vec-div v1 v2) (lambda (i) (do-div ((interpret v1) i) ((interpret v2) i)))]
     [(vec-mod v1 v2) (lambda (i) (do-mod ((interpret v1) i) ((interpret v2) i)))]
@@ -791,6 +802,77 @@
      (define result  (do-widening-mul-no-extract (cpp:eval lhs) (cpp:eval rhs)  (cpp:signed-type? outT)) )
      (mk-cpp-expr result (mk-cpp-type (* 2 (cpp:expr-bw lhs)) (cpp:signed-type? outT)))
 )
+
+
+
+(define (do-rounding-mul-shift-right lhs rhs shift)
+  (define outT (infer-out-type lhs rhs))
+  (define widened-mul (do-widened-mul lhs rhs))
+  (define round_shift_right (do-rounding-shift-right widened-mul shift))
+  (define lhs-bv (cpp:eval lhs))
+  (define rhs-bv (cpp:eval rhs))
+  (define size (bvlength lhs-bv))
+  (define widened-size (* 2 size))
+  (define result
+    (cond
+      [(cpp:signed-type? outT)
+       (mk-cpp-expr (bvssat (cpp:eval round_shift_right) widened-size size) outT )
+       ]
+      [else
+       (mk-cpp-expr (bvusat (cpp:eval round_shift_right) widened-size size) outT )
+        ]
+      )
+    )
+  result
+
+  )
+
+
+;; saturating_narrow(widening_add(a, (1 << max(b, 0)) / 2) >> b).
+(define (do-rounding-shift-right lhs rhs)
+  (define outT (infer-out-type lhs rhs))
+  (define lhs-bv (cpp:eval lhs))
+  (define rhs-orig-bv (cpp:eval rhs))
+  (define size (bvlength lhs-bv))
+  (define rhs-bv 
+    (cond
+      [(and (< (bvlength rhs-orig-bv) size) (cpp:signed-type? outT) )
+       (sign-extend rhs-orig-bv (bitvector size))
+       ]
+      [(and (< (bvlength rhs-orig-bv) size))
+       (zero-extend rhs-orig-bv (bitvector size))
+       ]
+      [else
+        rhs-orig-bv
+        ]
+      )
+    )
+  (define widened-size (* 2 size))
+  (define result 
+    (cond
+      [(cpp:signed-type? outT)
+       (define max-b-0 (bvsmax rhs-bv (bv 0 (bitvector size))))
+       (define one-lsh (bvshl (bv 1 (bitvector size)) max-b-0))
+       (define div-2 (bvsdiv one-lsh (bv 2 (bitvector size))))
+       (define widened-add (bvadd (sign-extend lhs-bv (bitvector widened-size)) (sign-extend div-2 (bitvector widened-size)) ))
+       (define shr-bv (bvashr widened-add (sign-extend rhs-bv (bitvector widened-size))))
+       (define saturated (bvssat shr-bv widened-size size))
+
+       (mk-cpp-expr saturated outT)
+       ]
+      [else
+       (define max-b-0 (bvumax rhs-bv (bv 0 (bitvector size))))
+       (define one-lsh (bvshl (bv 1 (bitvector size)) max-b-0))
+       (define div-2 (bvudiv one-lsh (bv 2 (bitvector size))))
+       (define widened-add (bvadd (zero-extend lhs-bv (bitvector widened-size)) (zero-extend div-2 (bitvector widened-size)) ))
+       (define shr-bv (bvlshr widened-add (zero-extend rhs-bv (bitvector widened-size))))
+       (define saturated (bvusat shr-bv widened-size size))
+       (mk-cpp-expr saturated outT)
+        ]
+      )
+    )
+  result
+  )
 
 (define (widening-div a b)
   (define bvlen (bvlength a))

@@ -130,6 +130,8 @@
     [(vec-sat-sub v1 v2) (handler (vec-sat-sub (visit v1 handler) (visit v2 handler)))]
     [(vec-mul v1 v2) (handler (vec-mul (visit v1 handler) (visit v2 handler)))]
     [(vec-widen-mul v1 v2) (handler (vec-widen-mul (visit v1 handler) (visit v2 handler)))]
+    [(vec-rounding_shift_right v1 v2) (handler (vec-rounding_shift_right (visit v1 handler) (visit v2 handler)))]
+    [(vec-rounding_mul_shift_right v1 v2 v3) (handler (vec-rounding_mul_shift_right (visit v1 handler) (visit v2 handler) (visit v3 handler) ))]
     [(vec-div v1 v2) (handler (vec-div (visit v1 handler) (visit v2 handler)))]
     [(vec-mod v1 v2) (handler (vec-mod (visit v1 handler) (visit v2 handler)))]
     [(vec-min v1 v2) (handler (vec-min (visit v1 handler) (visit v2 handler)))]
