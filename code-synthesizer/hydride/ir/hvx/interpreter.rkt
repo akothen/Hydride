@@ -849,6 +849,15 @@
                                         size_o num_4 num_5 
                                         size_i num_7 num_8)
              ]
+[ (hexagon_V6_vdealvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
+		(hexagon_V6_vdealvdd_128B (hvx:interpret v0 env) (hvx:interpret v1 env) (hvx:interpret v2 env) 
+		 size_o num_4 num_5 
+		 num_6 num_7 num_8 
+		 num_9 num_10 num_11 
+		 num_12 num_13 num_14 
+		 num_15 num_16 num_17 
+		 num_18 num_19 num_20)
+	]
             [v (error "Unrecognized Term in Interpreter" v)]
             )
   )

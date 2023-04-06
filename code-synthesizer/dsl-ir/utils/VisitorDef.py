@@ -31,7 +31,7 @@ class VisitorDef:
 
 
     def emit_fallback_def(self):
-        return "\t[_ (error \"Unrecognized expression\")]"
+        return "\t[_ (error \"Unrecognized expression in visitor\")]"
 
 
 

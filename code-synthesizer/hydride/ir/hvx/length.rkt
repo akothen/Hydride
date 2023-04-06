@@ -1000,6 +1000,14 @@
                )
 
              ]
+[(hexagon_V6_vdealvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
+		(cond 
+		[(and  (equal? size_o 2048) (equal? num_4 2048) (equal? num_5 0) (equal? num_6 512) (equal? num_7 0) (equal? num_8 512) (equal? num_9 0) (equal? num_10 512) (equal? num_11 0) (equal? num_12 512) (equal? num_13 8) (equal? num_14 2) (equal? num_15 2) (equal? num_16 2) (equal? num_17 1) (equal? num_18 2) (equal? num_19 1) (equal? num_20 0)) 2048]
+		[else (error "Unable to infer length for hexagon_V6_vdealvdd_128B: "  prog)]
+)
+
+	]
+            [_ (error "Unrecognized expression in get length")]
 
             )
   )

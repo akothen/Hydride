@@ -144,7 +144,7 @@ class ExtractExprDepth:
         sufix = "\n;; "+"="*80 + "\n"
 
 
-        condition = "(cond [(equal? depth 0) (values (reg (bv num-consumed 8)) (+ 1 num-consumed))] \n[else\n(destruct prog\n{}\n )\n]\n))".format("\n".join(ops_clauses))
+        condition = "(cond [(equal? depth 0) (values (reg (bv num-consumed 8)) (+ 1 num-consumed))] \n[else\n(destruct prog\n{}\n )\n]\n)".format("\n".join(ops_clauses))
 
         get_bv_ops = "(define ({} prog num-consumed depth)\n {} \n)".format(self.extract_name , condition)
         return prefix + get_bv_ops + sufix

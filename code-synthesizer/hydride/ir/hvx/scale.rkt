@@ -170,7 +170,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -465,7 +465,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -605,7 +605,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -628,7 +628,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpabus_128B")
                 (hexagon_V6_vmpabus_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -666,7 +666,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpabuu_128B")
                 (hexagon_V6_vmpabus_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -711,7 +711,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -1097,7 +1097,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyh_128B")
                 (hexagon_V6_vmpyh_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -1125,7 +1125,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyuh_128B")
                 (hexagon_V6_vmpyh_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -1229,7 +1229,7 @@
                [(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 32) (equal? size_i 1) (equal? num_6 0))
                 (displayln "Scaling case for hexagon_V6_lvsplatw_128B")
                 (hexagon_V6_lvsplatw_128B_dsl
-                  (hvx:scale-expr v0 scale-factor)
+                  v0
                   (* scale-factor size_o)
                   (* scale-factor num_2)
                   num_3
@@ -1672,7 +1672,7 @@
                   vc_0
                   vc_1
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -2159,7 +2159,7 @@
                   vc_2
                   (hvx:scale-expr v3 scale-factor)
                   (hvx:scale-expr v4 scale-factor)
-                  (hvx:scale-expr v5 scale-factor)
+                  v5
                   (* scale-factor size_i_o)
                   (* scale-factor num_7)
                   num_8
@@ -2188,7 +2188,7 @@
                   vc_2
                   (hvx:scale-expr v3 scale-factor)
                   (hvx:scale-expr v4 scale-factor)
-                  (hvx:scale-expr v5 scale-factor)
+                  v5
                   (* scale-factor size_i_o)
                   (* scale-factor num_7)
                   num_8
@@ -2217,7 +2217,7 @@
                   vc_2
                   (hvx:scale-expr v3 scale-factor)
                   (hvx:scale-expr v4 scale-factor)
-                  (hvx:scale-expr v5 scale-factor)
+                  v5
                   (* scale-factor size_i_o)
                   (* scale-factor num_7)
                   num_8
@@ -2447,7 +2447,7 @@
                 (hexagon_V6_vmpyiwh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2471,7 +2471,7 @@
                 (hexagon_V6_vmpyiwh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2495,7 +2495,7 @@
                 (hexagon_V6_vmpyiwh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2519,7 +2519,7 @@
                 (hexagon_V6_vmpyiwh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2569,7 +2569,7 @@
                 (hexagon_V6_vlsrh_128B_dsl
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   (* scale-factor num_4)
                   num_5
@@ -2585,7 +2585,7 @@
                 (hexagon_V6_vlsrh_128B_dsl
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   (* scale-factor num_4)
                   num_5
@@ -2606,7 +2606,7 @@
                 (hexagon_V6_vmpabus_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2647,7 +2647,7 @@
                 (hexagon_V6_vmpabus_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2784,7 +2784,7 @@
                 (hexagon_V6_vaslh_128B_dsl
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   (* scale-factor num_4)
                   num_5
@@ -2804,7 +2804,7 @@
                 (displayln "Scaling case for hexagon_V6_vandnqrt_acc_128B")
                 (hexagon_V6_vandnqrt_acc_128B_dsl
                   vc_0
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (hvx:scale-expr v2 scale-factor)
                   (hvx:scale-expr v3 scale-factor)
                   (* scale-factor size_i_o)
@@ -2873,7 +2873,7 @@
                 (hexagon_V6_vmpahb_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -2918,7 +2918,7 @@
                 (hexagon_V6_vmpahb_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -3045,7 +3045,7 @@
                 (hexagon_V6_vlsrw_128B_dsl
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   (* scale-factor num_4)
                   num_5
@@ -3271,7 +3271,7 @@
                 (hexagon_V6_vmpyub_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -3305,7 +3305,7 @@
                 (hexagon_V6_vmpyub_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -3502,7 +3502,7 @@
                 (hexagon_V6_vrmpybus_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   prec_o
                   num_5
@@ -3521,7 +3521,7 @@
                 (hexagon_V6_vrmpybus_acc_128B_dsl
                   v0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   prec_o
                   num_5
@@ -3540,7 +3540,7 @@
                 (hexagon_V6_vrmpybus_acc_128B_dsl
                   v0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   prec_o
                   num_5
@@ -3559,7 +3559,7 @@
                 (hexagon_V6_vrmpybus_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   prec_o
                   num_5
@@ -3641,7 +3641,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyuhe_128B")
                 (hexagon_V6_vmpyuhe_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -3712,7 +3712,7 @@
                [(and  (equal? vc_1 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 4) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? num_7 1) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 4) (equal? num_11 0))
                 (displayln "Scaling case for hexagon_V6_vandnqrt_128B")
                 (hexagon_V6_vandnqrt_128B_dsl
-                  (hvx:scale-expr v0 scale-factor)
+                  v0
                   vc_1
                   (hvx:scale-expr v2 scale-factor)
                   (* scale-factor size_i_o)
@@ -3767,7 +3767,7 @@
                [(and  (equal? vc_1 (lit (bv #b1 (bitvector 1)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? vc_3 (lit (bv #b0 (bitvector 1)))) (equal? size_i_o 4) (equal? num_7 4) (equal? num_8 0) (equal? num_9 4) (equal? prec_o 1) (equal? prec_i 8) (equal? num_12 4) (equal? num_13 1) (equal? num_14 0))
                 (displayln "Scaling case for hexagon_V6_vandvrt_acc_128B")
                 (hexagon_V6_vandvrt_acc_128B_dsl
-                  (hvx:scale-expr v0 scale-factor)
+                  v0
                   vc_1
                   vc_2
                   vc_3
@@ -3886,7 +3886,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -3906,7 +3906,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -3926,7 +3926,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -4179,7 +4179,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyihb_128B")
                 (hexagon_V6_vmpyihb_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -4199,7 +4199,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyiwh_128B")
                 (hexagon_V6_vmpyihb_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -4219,7 +4219,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyiwub_128B")
                 (hexagon_V6_vmpyihb_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -4239,7 +4239,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyiwb_128B")
                 (hexagon_V6_vmpyihb_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -4283,7 +4283,7 @@
                 (hexagon_V6_vandvrt_128B_dsl
                   vc_0
                   vc_1
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   vc_3
                   (hvx:scale-expr v4 scale-factor)
                   (* scale-factor size_i_o)
@@ -4308,7 +4308,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -4584,7 +4584,7 @@
                 (hexagon_V6_vmpyuhe_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -4683,7 +4683,7 @@
                 (displayln "Scaling case for hexagon_V6_vandqrt_acc_128B")
                 (hexagon_V6_vandqrt_acc_128B_dsl
                   vc_0
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (hvx:scale-expr v2 scale-factor)
                   vc_3
                   (hvx:scale-expr v4 scale-factor)
@@ -4707,7 +4707,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpyub_128B")
                 (hexagon_V6_vmpyub_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -4738,7 +4738,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpybus_128B")
                 (hexagon_V6_vmpyub_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -4778,7 +4778,7 @@
                   vc_2
                   (hvx:scale-expr v3 scale-factor)
                   (hvx:scale-expr v4 scale-factor)
-                  (hvx:scale-expr v5 scale-factor)
+                  v5
                   (* scale-factor size_i_o)
                   (* scale-factor num_7)
                   num_8
@@ -4803,7 +4803,7 @@
                   vc_2
                   (hvx:scale-expr v3 scale-factor)
                   (hvx:scale-expr v4 scale-factor)
-                  (hvx:scale-expr v5 scale-factor)
+                  v5
                   (* scale-factor size_i_o)
                   (* scale-factor num_7)
                   num_8
@@ -4828,7 +4828,7 @@
                   vc_2
                   (hvx:scale-expr v3 scale-factor)
                   (hvx:scale-expr v4 scale-factor)
-                  (hvx:scale-expr v5 scale-factor)
+                  v5
                   (* scale-factor size_i_o)
                   (* scale-factor num_7)
                   num_8
@@ -4855,7 +4855,7 @@
                 (hexagon_V6_vaslw_128B_dsl
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   (* scale-factor num_4)
                   num_5
@@ -4976,7 +4976,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -4999,7 +4999,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -5022,7 +5022,7 @@
                   vc_0
                   (hvx:scale-expr v1 scale-factor)
                   (hvx:scale-expr v2 scale-factor)
-                  (hvx:scale-expr v3 scale-factor)
+                  v3
                   (* scale-factor size_i_o)
                   (* scale-factor num_5)
                   num_6
@@ -5182,7 +5182,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpauhb_128B")
                 (hexagon_V6_vmpauhb_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -5224,7 +5224,7 @@
                 (displayln "Scaling case for hexagon_V6_vmpahb_128B")
                 (hexagon_V6_vmpauhb_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
-                  (hvx:scale-expr v1 scale-factor)
+                  v1
                   (* scale-factor size_i_o)
                   num_3
                   num_4
@@ -6005,7 +6005,7 @@
                 (hexagon_V6_vmpyh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -6036,7 +6036,7 @@
                 (hexagon_V6_vmpyh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5
@@ -6067,7 +6067,7 @@
                 (hexagon_V6_vmpyh_acc_128B_dsl
                   (hvx:scale-expr v0 scale-factor)
                   (hvx:scale-expr v1 scale-factor)
-                  (hvx:scale-expr v2 scale-factor)
+                  v2
                   (* scale-factor size_i_o)
                   num_4
                   num_5

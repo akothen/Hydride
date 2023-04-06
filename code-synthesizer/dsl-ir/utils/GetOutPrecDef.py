@@ -94,7 +94,7 @@ class GetOutPrecDef:
 
             arg_name = get_arg(setting[0]).name
 
-            condition = "(equal? {} (bv {} (bitvector {})))".format(arg_name, setting[1], ctx.get_bounded_bv_size())
+            condition = "(equal? {} (lit (bv {} (bitvector {}))) )".format(arg_name, setting[1], ctx.get_bounded_bv_size())
 
             clause = "[{} {}]".format(condition, out_prec)
             conditional += clause +"\n"

@@ -6687,6 +6687,30 @@ semantics = {
 "semantics" : ['"(define (hexagon_V6_vshuffvdd_128B  Vu Vv Rt %vectsize %outerlanesize %laneoffset %innerlanesize %arg0 %arg1)"','"(define Rt_int (bitvector->integer Rt))"','"(define %elem_size (* (- 0 Rt_int) %arg0))"','"(define Vdd"','"(apply"','"concat"','"(for/list ([%outer.it (reverse (range 0 %vectsize %outerlanesize))])"','"(apply"','"concat"','"(for/list ([%inner.it (reverse (range %laneoffset %innerlanesize %elem_size))])"','"(define %low %inner.it)"','"(define %high (+ %inner.it (- %elem_size 1)))"','"(define %a (extract  %high %low Vu))"','"(define %b (extract  %high %low Vv))"','"(concat %b %a)"','")"','")"','")"','")"','")"','"(bvpadhighbits  Vdd %arg1)"','")"']
 },
 
+"hexagon_V6_vdealvdd_128B" : {
+  "target_instructions" : {
+    "hexagon_V6_vdealvdd_128B" : {
+        "args" : ["SYMBOLIC_BV_1024", "SYMBOLIC_BV_1024","BOUNDED_SYMBOLIC_BV_32","2048","2048","0","512", "0","512", "0","512", "0","512", "8", "2", "2", "2", "1", "2", "1", "0"],
+        "in_vectsize" : 1024,
+        "out_vectsize" : 2048,
+        "lanesize" : 1024,
+        "in_precision" : None,
+        "out_precision" : None,
+        "in_vectsize_index" : None,
+        "out_vectsize_index" : 3,
+        "in_lanesize_index" : 6,
+        "out_lanesize_index" : 4,
+        "in_precision_index" : [("variable_idx", 2), ("precision8", -1), ("precision16", -2), ("precision32", -4)],
+        "out_precision_index" : [("variable_idx", 2), ("precision8", -1), ("precision16", -2), ("precision32", -4)],
+        "arg_permute_map" : [0, 1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        "Signedness" : None,
+        "Cost" : "None",
+        "SIMD" : "False",
+        "Extensions" : "['hvx']",
+  },
+  },
+"semantics" : ['"(define (hexagon_V6_vdealvdd_128B  Vu Vv Rt %vectsize %outerlanesize %laneoffset0 %innerlanesize0 %laneoffset1 %innerlanesize1 %laneoffset2 %innerlanesize2 %laneoffset3 %innerlanesize3 %arg0 %arg1 %arg2 %arg3 %arg4 %arg5 %arg6 %arg7)"','"(define Rt_int (bitvector->integer Rt))"','"(define %elem_size (* (- 0 Rt_int) %arg0))"','"(define Vdd"','"(apply"','"concat"','"(for/list ([%outer.it (reverse (range 0 %vectsize %outerlanesize))])"','"(concat"','"(apply"','"concat"','"(for/list ([%inner.it.0 (reverse (range %laneoffset0 %innerlanesize0 %elem_size))])"','"(define %low.0 (* %arg1 %inner.it.0))"','"(define %high.0 (+ %low.0 (- %elem_size 1)))"','"(define %ext.Vv.0 (extract  %high.0 %low.0 Vv))"','"%ext.Vv.0"','")"','")"','"(apply"','"concat"','"(for/list ([%inner.it.1 (reverse (range %laneoffset1 %innerlanesize1 %elem_size))])"','"(define %low.1 (* %arg2 %inner.it.1))"','"(define %high.1 (+ %low.1 (- %elem_size 1)))"','"(define %ext.Vu.0 (extract  %high.1 %low.1 Vu))"','"%ext.Vu.0"','")"','")"','"(apply"','"concat"','"(for/list ([%inner.it.2 (reverse (range %laneoffset2 %innerlanesize2 %elem_size))])"','"(define %low.2 (+ %arg4 (* %arg3 %inner.it.2)))"','"(define %high.2 (+ %low.2 (- %elem_size 1)))"','"(define %ext.Vv.1 (extract  %high.2 %low.2 Vv))"','"%ext.Vv.1"','")"','")"','"(apply"','"concat"','"(for/list ([%inner.it.3 (reverse (range %laneoffset3 %innerlanesize3 %elem_size))])"','"(define %low.3 (+ %arg6 (* %arg5 %inner.it.3)))"','"(define %high.3 (+ %low.3 (- %elem_size 1)))"','"(define %ext.Vu.1 (extract  %high.3 %low.3 Vu))"','"%ext.Vu.1"','")"','")"','")"','")"','")"','")"','"(bvpadhighbits  Vdd %arg7)"','")"']
+},
 
 
         }
