@@ -163,3 +163,80 @@ ARMGlobalConstSTR = {
     "ReduceOp_FADD": "100",
     "ReduceOp_ADD": "101"
 }
+ReservedImmTypes = {
+    "const int"
+}
+PointerType = {
+    "int8_t const *",
+    "int16_t const *",
+    "int32_t const *",
+    "int64_t const *",
+    "uint8_t const *",
+    "uint16_t const *",
+    "uint32_t const *",
+    "uint64_t const *",
+    "int8_t *",
+    "int16_t *",
+    "int32_t *",
+    "int64_t *",
+    "uint8_t *",
+    "uint16_t *",
+    "uint32_t *",
+    "uint64_t *",
+}
+ReservedVecTypes = {
+    "int8x16_t",
+    "int16x8_t",
+    "int32x4_t",
+    "int64x2_t",
+    "uint8x16_t",
+    "uint16x8_t",
+    "uint32x4_t",
+    "uint64x2_t",
+    "int8x8_t",
+    "int16x4_t",
+    "int32x2_t",
+    "int64x1_t",
+    "uint8x8_t",
+    "uint16x4_t",
+    "uint32x2_t",
+    "uint64x1_t",
+    "int8_t",
+    "int16_t",
+    "int32_t",
+    "int64_t",
+    "uint8_t",
+    "uint16_t",
+    "uint32_t",
+    "uint64_t",
+}
+
+
+def HighestSetBit(x: str):
+    N = len(x)
+    for i in range(N-1, -1, -1):
+        if x[N-i-1] == '1':
+            return i
+    return -1
+
+
+def LowestSetBit(x: str):
+    N = len(x)
+    for i in range(N):
+        if x[N-i-1] == '1':
+            return i
+    return N
+
+
+def ASLArrayIndex(x: str, idx: int, width: int):
+    assert len(x) == width
+    return x[width-idx-1]
+
+
+def ASLArraySlice(x: str, hi: int, lo: int, width: int):
+    assert len(x) == width
+    return x[width-hi-1:width-lo]
+
+
+def UInt(x: str):
+    return int(x, 2)

@@ -189,7 +189,7 @@ def parse_flag(names: List[str]):
 def wedo(instr):
     if not instr["name"].startswith("v"):
         return False
-    if instr["name"] in ["vmaxv_s32", "vmaxv_u32", "vminv_s32", "vminv_u32"]:
+    if instr["name"] in ["vmaxv_s32", "vmaxv_u32", "vminv_s32", "vminv_u32"]:  # TODO: intrinsic mismatch
         return False
     unsupportedGroup = ["Complex", "Cryptography"]
     if any([i in instr["instruction_group"] for i in unsupportedGroup]):
@@ -198,7 +198,7 @@ def wedo(instr):
     def doType(i: str):
         if "float" in i or "poly" in i:
             return False
-        if i.count('x') > 1:  # QWQ
+        if i.count('x') > 1:  # TODO: matrix type
             return False
         return True
     for arg in instr["arguments"]:
@@ -206,12 +206,12 @@ def wedo(instr):
             return False
     if not doType(instr["return_type"]["value"]):
         return False
-    if len(instr["base_instruction"]) > 1:
+    if len(instr["base_instruction"]) > 1:  # TODO: vcombine
         return False
-    if instr["base_instruction"][0] == "NOP":
+    if instr["base_instruction"][0] == "NOP":  # TODO: vreinterpret
         return False
-    skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT", "SADDLP", "UADDLP"
-            ]  # TODO: do we need to support these?
+    skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT",
+            "SADDLP", "UADDLP"]  # TODO: not found in XML
     tosupport = ["TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):
         return False
@@ -273,7 +273,7 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
         elif desiredprefix in ["UMOV", "SMOV"]:
             desiredprefix += "_asimdins_X_x"
         elif desiredprefix == "INS":
-            desiredprefix += "_asimdins_IV_v" if flag.x else "_asimdins_IR_r"
+            desiredprefix += "_asimdins_IV_v" if flag.x or flag.base == 'copy' else "_asimdins_IR_r"
         elif desiredprefix == "DUP":
             desiredprefix += "_asimdins_DV_v" if flag.x else "_asimdins_DR_r"
         elif desiredprefix in ["ORR", "BIC"]:
@@ -365,6 +365,31 @@ def genPossibleOpcode(fields):
     return qwq
 
 
+def expand_instr(instr: InstrDesc):
+    # - "Arguments_Preparation": {"a": {"register": "Vn.2S"}, "v": {"register": "Vm.2S"}, "lane": {"minimum": "0", "maximum": "1"}}
+    expansion = [instr.name]
+    for k, v in instr.Arguments_Preparation.items():
+        if "minimum" in v:
+            assert "maximum" in v
+            # print(instr.name, k, v["minimum"], v["maximum"])
+            exp = []
+            for i in range(int(v["minimum"]), int(v["maximum"])+1):
+                assert "__" not in instr.name
+                for j in expansion:
+                    exp.append(f"{j}__{k}_{i}")
+            expansion = exp
+    return expansion
+
+
+def extract_assignment_from_name(instrName: str):
+    qwq = instrName.split("__")
+    assignment = {}
+    for a in qwq[1:]:
+        i = a.split("_")
+        assignment[i[0]] = int(i[1])
+    return qwq[0], assignment
+
+
 def Intrin2Field():
     result = {}
     inv_map = {}
@@ -377,32 +402,44 @@ def Intrin2Field():
             continue
         k, v = searchEncodingForIntrinsic(i)
         field = EncodingFields[k]
-        # print(intrin.name, field)
-        inv_map[k] = inv_map.get(k, []) + [intrin.name]
+        for expanded_name in expand_instr(intrin):
+            # print(expanded_name, extract_assignment_from_name(expanded_name))
+            inv_map[k] = inv_map.get(k, []) + [expanded_name]
+
+    def maskeq(f, mask):
+        assert len(f) == len(mask)
+        for i, j in zip(mask, f):
+            if i != 'x' and i != j:
+                return False
+        return True
 
     def selectField(opcd, k, v):
-        return [i for i in opcd if i[k] == v]
+        return [i for i in opcd if maskeq(i[k], v)]
 
     skip = []
+    skipintrin = []
     for encodings, intrins in inv_map.items():
         # print(encodings, intrins)
         # if encodings in skip:
         #     continue
         field = EncodingFields[encodings][1]
-        if any(i in field for i in ["immh", "immb", "imm4", "imm5", "imm6"]):
-            skip.append(encodings)
-            # TODO: handle this: expand by n
-            continue
+        # if any(i in field for i in ["immh", "immb", "imm4", "imm5", "imm6"]):
+        #     skip.append(encodings)
+        #     # TODO: handle this: expand by n
+        #     continue
         opcd = genPossibleOpcode(field)
         # print(encodings, field)
         # print(len(intrins), len(opcd), intrins)
 
-        for cc in intrins:
+        for cc2 in intrins:
+            cc, assignments = extract_assignment_from_name(cc2)
             Flag = IntrinsicsFlags[cc]
-            if Flag.n or Flag.lane:
-                # TODO: handle this: expand by n
-                # select lane by lane
-                continue
+            # if Flag.n or Flag.lane:
+
+            # skipintrin.append(cc)
+            # TODO: handle this: expand by n
+            # select lane by lane
+            # continue
 
             def guess():
                 o = opcd
@@ -413,9 +450,6 @@ def Intrin2Field():
                     else:
                         if Flag.high == "high":
                             return selectField(o, 'Q', '1')
-                        # if Flag.pair:
-                        #     return selectField(o, 'Q', '1')
-                        # else:
                         return selectField(o, 'Q', '0')
 
                 def selectsize():
@@ -459,21 +493,83 @@ def Intrin2Field():
                         if Flag.type == "x4":
                             return selectField(o, 'opcode', '0010')
                         return selectField(o, 'opcode', '0111')
-                    assert False
+                    assert False, f"{cc2}, {encodings}, {assignments}"
 
-                checkers = ['Q', 'size', 'sz', 'opcode']
+                def selectimmh():
+                    if Flag.type.endswith('64'):
+                        return selectField(o, 'immh', '1xxx')
+                    elif Flag.type.endswith('32'):
+                        return selectField(o, 'immh', '01xx')
+                    elif Flag.type.endswith('16'):
+                        return selectField(o, 'immh', '001x')
+                    elif Flag.type.endswith('8'):
+                        return selectField(o, 'immh', '0001')
+
+                def selectimmb():
+                    def calc(immh, immb):
+                        return ((8 << HighestSetBit(immh)) * 2) - UInt(immh + immb)
+
+                    def calc2(immh, immb):
+                        return UInt(immh+immb) - (8 << HighestSetBit(immh))
+                    # print(f"{cc}, {encodings}, {assignments}, {Flag}")
+                    if any(i in encodings for i in ["SHR", 'SRA', "SRI"]):
+                        return [i for i in o if calc(i["immh"], i["immb"]) == assignments.get("n", 0)]
+                    if any(i in encodings for i in ["SHL", "SLI"]):
+                        return [i for i in o if calc2(i["immh"], i["immb"]) == assignments.get("n", 0)]
+                    assert False, f"{cc2}, {encodings}, {assignments}, {Flag}"
+
+                def selectimm5():
+                    def dst(imm5):
+                        size = LowestSetBit(imm5)
+                        if size > 3:
+                            return "UNDEFINED"
+                        return UInt(ASLArraySlice(imm5, 4, size+1, 5))
+
+                    oo = [i for i in o if dst(
+                        i["imm5"]) == assignments.get("lane1", 0)]
+                    # return oo
+                    if Flag.type.endswith('64'):
+                        return selectField(oo, 'imm5', 'x1000')
+                    elif Flag.type.endswith('32'):
+                        return selectField(oo, 'imm5', 'xx100')
+                    elif Flag.type.endswith('16'):
+                        return selectField(oo, 'imm5', 'xxx10')
+                    elif Flag.type.endswith('8'):
+                        return selectField(oo, 'imm5', 'xxxx1')
+                    assert False, (Flag,)
+
+                def selectimm4():
+                    if "imm5" in field:  # vcopy_lane
+                        def src(imm5, imm4):
+                            size = LowestSetBit(imm5)
+                            if "1" in ASLArraySlice(imm4, size-1, 0, 4):
+                                # Unspecified bits in "imm4" are ignored but should be set to zero by an assembler.
+                                return "UNDEFINED"
+                            if size > 3:
+                                return "UNDEFINED"
+                            return UInt(ASLArraySlice(imm4, 3, size, 4))
+                        return [i for i in o if src(i["imm5"], i["imm4"]) == assignments.get("lane2", 0)]
+                    else:
+                        return [i for i in o if UInt(i["imm4"]) == assignments["n"]]
+
+                def selectimm6():
+                    return [i for i in o if UInt(i["imm6"]) == assignments["imm6"]]
+
+                checkers = ['Q', 'size', 'sz',
+                            'immh', 'immb', 'imm5', 'imm4', 'imm6', 'opcode', ]
                 for c in checkers:
-                    if c in field:
+                    if c in field and 'x' in field[c]:
                         o = locals()['select'+c]()
                     if len(o) == 1:
                         return o[0]
-                    assert len(o) > 0
-                print(cc, encodings)
+                    assert len(o) > 0, (cc2, c, encodings,
+                                        assignments, Flag, opcd,)
+                print(cc2, encodings, assignments)
                 for _ in o:
                     print(_)
                 assert False
-            # print(c, guess())
-            result[cc] = guess()
+            # print(cc2)
+            result[cc2] = guess()
 
             # assert len(intrins) <= len(opcd)
 
@@ -483,6 +579,7 @@ def Intrin2Field():
     print("==============         Summary         ==============")
     print(f"We do {len(I) - notwedo} and discarded {notwedo} instrisics")
     print("Skipped encodings:", skip)
+    print("Skipped intrinsics:", skipintrin)
     print(f"Solved {len(result)} out of {len(I)} instrisics")
     print("==============           End           ==============")
     return result
@@ -491,18 +588,24 @@ def Intrin2Field():
 def genThree():
     return generateARMIntrinsicsFlags(), findMatchingEncoding(), Intrin2Field()
 
+# - IntrinsicsFlags, Intrinsics2Encodings and Intrinsics2Fields be like:
+# - vaddl_high_s8 Flag(pair=False, sat=False, round=False, base='add', s2u=False, narrow='l', q=False, x='', high='high', lane='', n=False, result='', type='s8')
+# - vaddl_high_s8 aarch64_vector_arithmetic_binary_disparate_add_sub_long
+# - vaddl_high_s8 {'Q': '1', 'U': '0', 'size': '00', 'Rm': 'xxxxx', 'o1': '0', 'Rn': 'xxxxx', 'Rd': 'xxxxx', 'constraint_ne': []}
 
+
+# For lane intrinsics, we need to expand them by lane in Intrinsics2Fields
+# For these expansion, there keys in Intrinsics2Fields are different from the original ones
 IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
 
 
 if __name__ == "__main__":
-    check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8",
-             "vrshl_s8", "vqmovn_s64", "vpadd_s8", "vaddl_high_s8"]
-    for v in check:
-
-        print(v, IntrinsicsFlags[v])
-        print(v, Intrinsics2Encodings[v])
-        print(v, Intrinsics2Fields[v])
+    # check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8",
+    #          "vrshl_s8", "vqmovn_s64", "vpadd_s8", "vaddl_high_s8"]
+    # for v in check:
+    #     print(v, IntrinsicsFlags[v])
+    #     print(v, Intrinsics2Encodings[v])
+    #     print(v, Intrinsics2Fields[v])
     # genThree()
     # Intrin2Field()
     pass

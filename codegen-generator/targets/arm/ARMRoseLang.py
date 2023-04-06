@@ -26,8 +26,8 @@ if __name__ == "__main__":
     AllSema = SemaGenerator(deserialize=True).getResult()
     # AllSema = {k: AllSema[k] for k in ["vqrdmlahh_s16"]}
     compiled = []
-    # Across vector cannot be convert to SSA easily
-    skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit', 'dot', 'aba', 'rev', 'ada']
+    skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit',
+            'dot', 'aba', 'rev', 'ada']  # TODO:these intrinsic cannot be convert to SSA easily
     import sys
     AllRosetteCode = "#lang rosette\n(require \"bvops.rkt\")\n"
     for k, func in AllSema.items():

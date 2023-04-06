@@ -7,22 +7,6 @@ from typing import Dict
 import json
 
 
-def HighestSetBit(x: str):
-    N = len(x)
-    for i in range(N-1, -1, -1):
-        if x[N-i-1] == '1':
-            return i
-    return -1
-
-
-def LowestSetBit(x: str):
-    N = len(x)
-    for i in range(N):
-        if x[N-i-1] == '1':
-            return i
-    return N
-
-
 class DecodeContext:
     undefined = None
     symbolnotfound = None
@@ -63,7 +47,7 @@ class DecodeContext:
                 return self.lookup(AST.name)
         elif isinstance(AST, Call):
             if AST.funcname == "UInt":
-                return int(self.walkConstExprRV(AST.args[0]), 2)
+                return UInt(self.walkConstExprRV(AST.args[0]))
             elif AST.funcname.startswith("Have"):
                 return True
             elif AST.funcname == "LowestSetBit":
@@ -82,9 +66,9 @@ class DecodeContext:
             assert type(AST.slices) == list, f"{AST}"
             if len(sliceRV) == 1:
                 if type(sliceRV[0]) == int:
-                    return obj[wid-sliceRV[0]-1]
+                    return ASLArrayIndex(obj, sliceRV[0], wid)
                 elif type(sliceRV[0]) == tuple:
-                    return obj[wid-sliceRV[0][0]-1:wid-sliceRV[0][1]]
+                    return ASLArraySlice(obj, sliceRV[0][0], sliceRV[0][1], wid)
 
             print(sliceRV)
             assert False
@@ -219,53 +203,7 @@ class DecodeContext:
 
 
 def parse_instr_attr(instr: InstrDesc):
-    ReservedVecTypes = {
-        "int8x16_t",
-        "int16x8_t",
-        "int32x4_t",
-        "int64x2_t",
-        "uint8x16_t",
-        "uint16x8_t",
-        "uint32x4_t",
-        "uint64x2_t",
-        "int8x8_t",
-        "int16x4_t",
-        "int32x2_t",
-        "int64x1_t",
-        "uint8x8_t",
-        "uint16x4_t",
-        "uint32x2_t",
-        "uint64x1_t",
-        "int8_t",
-        "int16_t",
-        "int32_t",
-        "int64_t",
-        "uint8_t",
-        "uint16_t",
-        "uint32_t",
-        "uint64_t",
-    }
-    ReservedImmTypes = {
-        "const int"
-    }
-    PointerType = {
-        "int8_t const *",
-        "int16_t const *",
-        "int32_t const *",
-        "int64_t const *",
-        "uint8_t const *",
-        "uint16_t const *",
-        "uint32_t const *",
-        "uint64_t const *",
-        "int8_t *",
-        "int16_t *",
-        "int32_t *",
-        "int64_t *",
-        "uint8_t *",
-        "uint16_t *",
-        "uint32_t *",
-        "uint64_t *",
-    }
+    from ARMTypes import ReservedVecTypes, ReservedImmTypes, PointerType
 
     def isSigned(t: str):
         if "uint" in t:

@@ -8,6 +8,7 @@ from RoseContext import *
 
 from ARMAST import *
 from ARMRoseTypes import *
+from ARMTypes import *
 IntSimWidth = 192
 
 
@@ -187,18 +188,6 @@ def CompileSemantics(Sema, RootContext: ARMRoseContext):
     print("\n\n\n\n\nFunction:")
     CompiledFunction.print()
 
-    # Replace the uses of arguments
-    # TODO: What does it do?
-    # BlockList = CompiledFunction.getRegionsOfType(RoseBlock)
-    # for Block in BlockList:
-    #     for Op in Block:
-    #         for OperandIndex, Operand in enumerate(Op.getOperands()):
-    #             if isinstance(Operand, RoseArgument):
-    #                 for Arg in CompiledFunction.getArgs():
-    #                     if Arg == Operand:
-    #                         Op.setOperand(OperandIndex, Arg)
-    #                         break
-
     return CompiledFunction
 
 
@@ -372,7 +361,7 @@ def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
         else:
             return ComputeArrayIndexOrSliceRv(Stmt, Context)
     else:
-        return ComputeArrayIndexOrSliceRv(Stmt, Context)  # TODO?
+        return ComputeArrayIndexOrSliceRv(Stmt, Context)
 
 
 def SimplifyArrayIndexLv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -650,15 +639,11 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
     elif type(Stmt.lhs) == ArrayIndex:
         LVal = SimplifyArrayIndexLv(Stmt.lhs, Context)
         if type(LVal) == Var:  # V[d] or Vpart[d]
-            # TODO merge with the above case
-            # assert LVal.name == "returnVal", f"{LVal}"
             Context.setLHSType(Context.getTypeForVar(LVal.name))
             RHSExprVal = CompileRValueExpr(Stmt.rhs, Context)
             Context.removeLHSType()
 
-            print("OXO", LVal, Stmt.rhs.id,  RHSExprVal)
             if LVal.id.startswith('part'):
-                print("thisway")
                 RHSExprVal = HandleToConcat()(
                     Context.genName(), RHSExprVal, CompileRValueExpr(Var("r", Context.genName()), Context),   Context)
                 Context.addAbstractionToIR(RHSExprVal)
@@ -1641,6 +1626,7 @@ Builtins = {
     'MAX': HandleToMax(None),
 
     'ABS': HandleToAbs(None),
+    'REMAINDER': None,
     # above for x86
     'Int': HandleToInt(None),
     'UInt': HandleToUInt(None),
@@ -1662,5 +1648,4 @@ Builtins = {
     'NOT': HandleToNotFunc(None),
     'Reduce': QWQ(),
     'ROL': HandleToROL(None),
-    'REMAINDER': None,
 }
