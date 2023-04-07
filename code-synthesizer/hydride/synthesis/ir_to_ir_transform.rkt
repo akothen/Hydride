@@ -56,7 +56,7 @@
 
 ;; Wrapper to invoke rewrite-ir method
 
-(define (inst-combine spec-expr optimize? symbolic? solver input-sizes input-precs target-language)
+(define (inst-combine spec-expr optimize? symbolic? solver input-sizes input-precs target-language input-hash-name output-hash-name)
 
   (define language-type
     (cond
@@ -73,8 +73,44 @@
   (displayln "Expression sanatized")
   (println sanatized-expr)
 
+  (define input-hash 
+    (cond
+      [(not (equal? input-hash-name ""))
+       (define hash-path (string-append input-hash-name ".rkt"))
 
-  (define-values (solved? simplified-expr elapsed-time) (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type ))
+       (define loaded-hash (import-synth-map hash-path input-hash-name))
+       (hash-copy loaded-hash)
+       
+       ]
+      [else
+        (make-hash)
+        ]
+      )
+    )
+
+
+  (define hash-hit #f)
+
+
+  (define-values (solved? simplified-expr elapsed-time) 
+                 
+                 (cond
+                   [(hash-has-key? input-hash sanatized-expr)
+                    (debug-log "Hash hit!")
+                    (set! hash-hit #t)
+                    (values #t (hash-ref input-hash sanatized-expr) 0)
+                    ]
+                   [else
+                 (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
+                     ]
+                   )
+                 )
+
+  (cond
+    [(and solved? (not hash-hit))
+     (hash-set! input-hash sanatized-expr simplified-expr)
+     ]
+    )
 
   (debug-log (format "Inst combine transformation required ~a seconds" elapsed-time))
 
@@ -89,6 +125,15 @@
       (debug-log "Unable to simplify further: returning original expression")
       sanatized-expr
       ]
+    )
+
+
+  (cond
+    [(not (equal? output-hash-name ""))
+  (define output-hash-path (string-append "/tmp/" output-hash-name ".rkt"))
+  (save-synth-map output-hash-path output-hash-name input-hash)
+     ]
+    
     )
   
   )
@@ -421,10 +466,10 @@
 
   (define leaves (multi-level-sub-expr hydride-expr window-depth))
 
-  ;(displayln "Current Hydride-expr")
-  ;(println hydride-expr)
-  ;(displayln "Leaves")
-  ;(displayln leaves)
+  (displayln "Current Hydride-expr")
+  (println hydride-expr)
+  (displayln "Leaves")
+  (displayln leaves)
 
   (define precs 
     (for/list ([leaf leaves])
@@ -488,7 +533,7 @@
                 [_
 
                   (define start-time (current-seconds))
-                  (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target))
+                  (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target "" ""))
                   (define end-time (current-seconds))
 
                   (define elapsed-time (- end-time start-time))
