@@ -1,61 +1,42 @@
 import sys
 from ARMSemanticGen import SemaGenerator
-
-VecTypes = {
-    "int8x16_t",
-    "int16x8_t",
-    "int32x4_t",
-    "int64x2_t",
-    "uint8x16_t",
-    "uint16x8_t",
-    "uint32x4_t",
-    "uint64x2_t",
-    "int8x8_t",
-    "int16x4_t",
-    "int32x2_t",
-    "int64x1_t",
-    "uint8x8_t",
-    "uint16x4_t",
-    "uint32x2_t",
-    "uint64x1_t",
-    "int8_t",
-    "int16_t",
-    "int32_t",
-    "int64_t",
-    "uint8_t",
-    "uint16_t",
-    "uint32_t",
-    "uint64_t",
-}
+from ARMTypes import extract_assignment_from_name, ReservedImmTypes, PointerType, ReservedVecTypes
 
 
 def GenerateCTest(AllSema):
     CannotVerify = []
+    para_set = set()
+    notSSA = ['addv', 'addlv', 'maxv', 'minv', 'abd', 'rbit', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
+    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte'] # unimplemented
+    op_mismatch = ['qrdmlah', 'qrdmlsh']
+    not_compiled_in_gcc = ['dot', 'eor3q', 'rax1q', 'bcaxq', 'xarq']
     for i, v in AllSema.items():
-        tps = [vv.type for vv in v.params]
         try:
-            if len(tps) == 1:
-                assert tps[0] in VecTypes
-                assert v.rettype in VecTypes
-                print(f"Test1A({i}, {tps[0]}, {v.rettype});")
-            elif len(tps) == 2:
-                assert tps[0] in VecTypes
-                assert tps[1] in VecTypes
-                assert v.rettype in VecTypes
-                print(
-                    f"Test2A({i}, {tps[0]}, {tps[1]}, {v.rettype});")
-            elif len(tps) == 3:
-                assert tps[0] in VecTypes
-                assert tps[1] in VecTypes
-                assert tps[2] in VecTypes
-                assert v.rettype in VecTypes
-                print(
-                    f"Test3A({i}, {tps[0]}, {tps[1]}, {tps[2]}, {v.rettype});")
-            else:
+            assert not any(j in i for j in notSSA + UIP + op_mismatch + not_compiled_in_gcc)
+            basename, assignment = extract_assignment_from_name(i)
+            tps = [vv.type for vv in v.params]
+            if any(t in PointerType for t in tps):
                 assert False
+            para_key = tuple('V' if t in ReservedVecTypes else 'I' for t in tps)
+            para_set.add(para_key)
+            const_vals = []
+            if len(assignment) == 1:
+                const_vals = list(assignment.values())
+            elif len(assignment) == 2:
+                const_vals = [assignment['lane1'], assignment['lane2']]
+            assert v.rettype in ReservedVecTypes
+            funcname = 'Test' + ''.join(para_key)
+            parastr = []
+            val_index = 0
+            for t in tps:
+                if t in ReservedVecTypes:
+                    parastr.append(t)
+                else:
+                    parastr.append(str(const_vals[val_index]))
+                    val_index += 1
+            print(f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype})')
         except AssertionError:
             CannotVerify.append(i)
-
     print("Cannot verify", CannotVerify, file=sys.stderr)
 
 
