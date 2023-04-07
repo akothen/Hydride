@@ -142,6 +142,10 @@
 (struct cast-int  (vec olane oprec) #:transparent)
 (struct cast-uint (vec olane oprec) #:transparent)
 
+
+;; Generalized Saturation
+(struct vec-saturate  (vec olane oprec signed?) #:transparent)
+
 ;; Operations
 (struct sca-add (v1 v2) #:transparent)
 (struct sca-sub (v1 v2) #:transparent)

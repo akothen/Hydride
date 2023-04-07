@@ -88,6 +88,8 @@
     [(cast-int vec olane oprec) olane]
     [(cast-uint vec olane oprec) olane]
 
+    [(vec-saturate vec olane oprec signed?) olane]
+
 
     [(uint8x1 sca) 1]
     [(uint16x1 sca) 1]
@@ -244,6 +246,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) (list vec)]
     [(cast-uint vec olane oprec) (list vec)]
+    [(vec-saturate vec olane oprec signed?) (list vec)]
     [(uint8x1 sca) (list sca)]
     [(uint16x1 sca) (list sca)]
     [(uint32x1 sca) (list sca)]
@@ -439,6 +442,22 @@
                    [else (error "halide/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
                    )
                  )
+       )
+     ]
+    [(vec-saturate vec olane oprec signed?) 
+     (lambda (i) 
+                (define input-val (cpp:eval ((interpret vec) i)))
+                 (cond
+                   [(and signed? (eq? oprec 8))  (int8_t (bvssat input-val (bvlength input-val) 8))]
+                   [(and signed? (eq? oprec 16))  (int16_t (bvssat input-val (bvlength input-val) 16))]
+                   [(and signed? (eq? oprec 32))  (int32_t (bvssat input-val (bvlength input-val) 32))]
+                   [(and signed? (eq? oprec 64))  (int64_t (bvssat input-val (bvlength input-val) 64))]
+                   [(and  (eq? oprec 8))  (uint8_t (bvusat input-val (bvlength input-val) 8))]
+                   [(and  (eq? oprec 16))  (uint16_t (bvusat input-val (bvlength input-val) 16))]
+                   [(and  (eq? oprec 32))  (uint32_t (bvusat input-val (bvlength input-val) 32))]
+                   [(and  (eq? oprec 64))  (uint64_t (bvusat input-val (bvlength input-val) 64))]
+                   [else (error "halide/interpreter.rkt: Unexpected buffer type in vec-saturate" oprec )]
+                   )
        )
      ]
     [(uint8x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint8))]

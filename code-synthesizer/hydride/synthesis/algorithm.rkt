@@ -142,8 +142,18 @@
      ]
     )
     )
+
+  ;; Halide IR doesn't have operations for saturating cast,
+  ;; so it lowers into redudnant opts. Recover saturating casts
+  ;; again with a simple matching
+  (define matched-halide-expr
+    (halide:match-saturating-cast halide-expr)
+    )
+
+  (pretty-print matched-halide-expr)
+
   (define type-info (make-type-info id-map))
-  (define synthesized-sol (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
+  (define synthesized-sol (scale-down-synthesis matched-halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)

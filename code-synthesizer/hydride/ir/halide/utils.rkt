@@ -17,6 +17,8 @@
   hydride/synthesis/symbolic_synthesis
   )
 
+(require racket/match)
+
 (provide (prefix-out halide: (all-defined-out)))
 
 
@@ -149,6 +151,16 @@
        )
 
      ]
+    [(vec-saturate vec olane oprec signed?)
+     (cond
+       [signed?
+         (append (list bvssat extract) (get-bv-ops vec))
+         ]
+       [else
+        (append (list bvusat extract) (get-bv-ops vec))
+         ]
+       )
+     ]
     [(uint8x1 sca) (list extract  zero-extend)]
     [(uint16x1 sca) (list  extract  zero-extend)]    
     [(uint32x1 sca) (list  extract  zero-extend)]
@@ -275,7 +287,7 @@
     [(vec-widen-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
 
 
-    [(vec-rounding_mul_shift_right v1 v2 v3) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat ) (list  zero-extend bvlshr bvusat)) (get-bv-ops v1)  (get-bv-ops v2) (get-bv-ops v3))] ;; FIXME: add bvshl
+    [(vec-rounding_mul_shift_right v1 v2 v3) (append (list extract bvmul sign-extend zero-extend) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat ) (list  zero-extend bvlshr bvusat)) (get-bv-ops v1)  (get-bv-ops v2) (get-bv-ops v3))] 
 
     [(vec-rounding_shift_right v1 v2) (append (list extract bvshl) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat bvsdiv) (list  zero-extend bvlshr bvusat bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] ;; FIXME: add bvshl
 
@@ -441,6 +453,16 @@
         )
         )
      ]
+    [(vec-saturate vec olane oprec signed?) 
+       (if is-leaf-depth
+        (values (vec-saturate (arg 0) olane oprec signed?) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (vec-saturate leaf-sol olane oprec signed?) args-used)
+        )
+        )
+    ]
+
     [(uint8x1 sca) 
        (if is-leaf-depth
         (values (uint8x1 (arg 0)) 1)
@@ -1662,6 +1684,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) (* olane oprec)]
     [(cast-uint vec olane oprec) (* olane oprec)]
+    [(vec-saturate vec olane oprec signed?) (* olane oprec)]
     [(uint8x1 sca) 8]
     [(uint16x1 sca) 16]
     [(uint32x1 sca) 32]
@@ -1834,6 +1857,9 @@
                ]
               [(cast-uint vec olane oprec)
                (cast-uint vec (/ olane scale-factor) oprec)
+               ]
+              [(vec-saturate vec olane oprec signed?)
+               (vec-saturate vec (/ olane scale-factor) oprec signed?)
                ]
               [(xBroadcast sca factor) 
                (xBroadcast sca (/ factor scale-factor))
@@ -2267,6 +2293,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) (size-to-elemT-signed oprec #t)]
     [(cast-uint vec olane oprec) (size-to-elemT-signed oprec #f)]
+    [(vec-saturate vec olane oprec signed?) (size-to-elemT-signed oprec signed?) ]
     [(uint8x1 sca) 'uint8]
     [(uint16x1 sca) 'uint16]
     [(uint32x1 sca) 'uint32]
@@ -2426,6 +2453,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) oprec]
     [(cast-uint vec olane oprec) oprec]
+    [(vec-saturate vec olane oprec signed?) oprec]
     [(uint8x1 sca) 8]
     [(uint16x1 sca) 16]
     [(uint32x1 sca) 32]
@@ -3016,3 +3044,123 @@
   )
 
 
+
+
+(define (is-int-min? bits broadcast-expr signed?)
+  (define int-min-value 
+    (cond
+      [signed? 
+        (bvsminval bits)
+        ]
+      [else
+        (bvuminval bits)
+        ]
+      )
+    )
+
+  (define cvt-to-integer 
+    (cond
+      [signed?
+        bitvector->integer
+        ]
+      [else
+        bitvector->natural
+        ]
+      
+      )
+    )
+
+
+
+  (define expr-value (cpp:eval ((halide:interpret broadcast-expr) 0)))
+
+
+  (equal? (cvt-to-integer expr-value) (cvt-to-integer int-min-value) )
+  )
+
+(define (is-int-max? bits broadcast-expr signed?)
+  (define int-max-value 
+    (cond
+      [signed? 
+        (bvsmaxval bits)
+        ]
+      [else
+        (bvumaxval bits)
+        ]
+      )
+    )
+
+  (define cvt-to-integer 
+    (cond
+      [signed?
+        bitvector->integer
+        ]
+      [else
+        bitvector->natural
+        ]
+      
+      )
+    )
+
+
+
+  (define expr-value (cpp:eval ((halide:interpret broadcast-expr) 0)))
+
+
+  (equal? (cvt-to-integer expr-value) (cvt-to-integer int-max-value) )
+  )
+
+(define (match-saturating-cast expr)
+  (define (visitor-fn ele)
+    (match
+      ele
+      [
+       (cast-int
+         (vec-max
+           (vec-min 
+             min1
+             min2
+             )
+           max2
+           )
+         olanes prec
+         )
+
+       (cond
+         [(and  (is-int-min? prec max2 #t) (is-int-max? prec min2 #t))
+          (vec-saturate min1 olanes prec #t)
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+      [
+       (cast-uint
+         (vec-max
+           (vec-min 
+             min1
+             min2
+             )
+           max2
+           )
+         olanes prec
+         )
+
+       (displayln "HERE!")
+
+       (cond
+         [(and  (is-int-min? prec max2 #f) (is-int-max? prec min2 #f))
+          (vec-saturate min1 olanes prec #f)
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+      [_ ele]
+      )
+    )
+  (halide:visit expr visitor-fn)
+
+  )
