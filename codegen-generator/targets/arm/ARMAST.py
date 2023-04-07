@@ -264,7 +264,7 @@ def ASTShrink_(AST):
         return VarsDecl([Var(i, GenUniqueID()) for i in AST.ids], ASTShrink_(AST.ty), GenUniqueID())
     elif isinstance(AST, asl.TypeRef):
         d = {
-            "integer": 32,
+            "integer": 64,
             "boolean": 1,
             "CompareOp": 3,
             "MemOp": 2,
@@ -272,6 +272,7 @@ def ASTShrink_(AST):
             "LogicalOp": 2,
             "VBitOp": 2,
             "ReduceOp": 3,
+            "bit": 1,
         }
         if AST.qid.id in d:
             return (AST.qid.id, Number(d[AST.qid.id]))

@@ -2153,7 +2153,7 @@
   "UMINV_asimdall_only": "aarch64_vector_reduce_int_max",
   "uminv_r_p_z_": "UMINV_R_P_Z__",
   "UMLAL_asimddiff_L": "aarch64_vector_arithmetic_binary_disparate_mul_accum",
-  " ": "aarch64_vector_arithmetic_binary_element_mul_acc_long",
+  "UMLAL_asimdelem_L": "aarch64_vector_arithmetic_binary_element_mul_acc_long",
   "UMLSL_asimddiff_L": "aarch64_vector_arithmetic_binary_disparate_mul_accum",
   "UMLSL_asimdelem_L": "aarch64_vector_arithmetic_binary_element_mul_acc_long",
   "UMOV_asimdins_W_w": "aarch64_vector_transfer_integer_move_unsigned",

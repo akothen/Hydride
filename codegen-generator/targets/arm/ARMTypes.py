@@ -48,7 +48,7 @@ data_bits_spec = {
 
 
 def parse_reg(regname):
-    scalar = re.compile("^([BDSHQXWrx])(\w)$")   # WTF is rn and xn
+    scalar = re.compile("^([BDSHQXWrxR])(\w)$")   # WTF is rn and xn
     vector = re.compile("^V(\w)\.(\d*)([DSHBQ])$")
     immediate1 = re.compile("^#(\w*)$")
     immediate2 = re.compile("^#\((\w*)<<(\w*)\)$")  # WTF
@@ -57,6 +57,8 @@ def parse_reg(regname):
     vector_lane = re.compile(
         "^[VD](\w)\.([DSHB])\[(\w*)\]$")  # WTF is Dd.D[0]
     regname = regname.strip()
+    if regname == "UNUSED":
+        return None
     special_handling = {"32(Vd)": "Vd.2S"}
     if regname in special_handling:
         regname = special_handling[regname]
@@ -240,3 +242,43 @@ def ASLArraySlice(x: str, hi: int, lo: int, width: int):
 
 def UInt(x: str):
     return int(x, 2)
+
+
+def maskeq(f, mask):
+    assert len(f) == len(mask)
+    for i, j in zip(mask, f):
+        if i != 'x' and i != j:
+            return False
+    return True
+
+
+def get_arg_lo_hi(v):
+    if "minimum" in v:
+        assert "maximum" in v
+        return (int(v["minimum"]), int(v["maximum"]))
+
+
+def expand_instr(instr: InstrDesc):
+    # - "Arguments_Preparation": {"a": {"register": "Vn.2S"}, "v": {"register": "Vm.2S"}, "lane": {"minimum": "0", "maximum": "1"}}
+    expansion = [instr.name]
+    for k, v in instr.Arguments_Preparation.items():
+        if "minimum" in v:
+            assert "maximum" in v
+            # print(instr.name, k, v["minimum"], v["maximum"])
+            exp = []
+            lo, hi = get_arg_lo_hi(v)
+            for i in range(lo, hi+1):
+                assert "__" not in instr.name
+                for j in expansion:
+                    exp.append(f"{j}__{k}_{i}")
+            expansion = exp
+    return expansion
+
+
+def extract_assignment_from_name(instrName: str):
+    qwq = instrName.split("__")
+    assignment = {}
+    for a in qwq[1:]:
+        i = a.split("_")
+        assignment[i[0]] = int(i[1])
+    return qwq[0], assignment

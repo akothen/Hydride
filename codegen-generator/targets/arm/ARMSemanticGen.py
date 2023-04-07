@@ -17,10 +17,13 @@ class DecodeContext:
         self.result = {}
 
     def EQ(self, a, b):
+        assert type(a) == type(b)
+        if type(a) == str and type(b) == str:
+            return maskeq(a, b) or maskeq(b, a)
         return a == b
 
     def symtable(self):
-        # print(self.fields, self.result)
+        # print(self.fields, self.result, self.globals)
         return dict(self.fields, **self.result, **self.globals)
 
     def lookup(self, name):
@@ -32,9 +35,8 @@ class DecodeContext:
     def walkConstExprLV(self, AST: ASTNode):
         if isinstance(AST, Var):
             if AST.name.startswith("R"):
-                assert False
-            else:
-                return AST.name
+                assert AST.name == "Rmhi", f"{AST}"
+            return AST.name
         else:
             print(AST)
             assert False
@@ -202,7 +204,8 @@ class DecodeContext:
         return self.result
 
 
-def parse_instr_attr(instr: InstrDesc):
+def parse_instr_attr(instr: InstrDesc, assign):
+    from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
     from ARMTypes import ReservedVecTypes, ReservedImmTypes, PointerType
 
     def isSigned(t: str):
@@ -240,17 +243,22 @@ def parse_instr_attr(instr: InstrDesc):
 
     # - Parse preparation:
     # - {'a': {'register': 'Vn.8B'}, 'b': {'register': 'Vm.8B'}}
+    # - {"a": {"register": "Vn.4H"}, "v": {"register": "Vm.4H"}, "lane": {"minimum": "0", "maximum": "3"}}
     # - results=[{'Vd.8B': 'result'}]
     # print(instr.name, instr.Arguments_Preparation.items())
     for k, v in instr.Arguments_Preparation.items():
         if v:
-            reg = parse_reg(v["register"])
-            preparation[reg.idx] = k
-            # if instr.name in ["vpaddd_s64"]:  # My guess
-            #     preparation["m"] = k
+            if "register" in v:
+                reg = parse_reg(v["register"])
+                if reg:
+                    preparation[reg.idx] = k
+            else:
+                lo, hi = get_arg_lo_hi(v)
+                assert lo <= assign[k] <= hi, f"{lo} <= {assign[k]} <= {hi}"
+
         else:  # EOR3 gives empty b and c. LOL
             # print(instr.name, instr.base_instruction[0])
-            assert instr.base_instruction[0] in ["EOR3", "RAX1", "BCAX"]
+            assert instr.base_instruction[0] in ["EOR3", "RAX1", "BCAX", "XAR"]
             if k == "b":
                 preparation["m"] = k
             if k == "c":
@@ -272,10 +280,11 @@ class SemaGenerator():
         self.result = {}
         with open("intr.json", 'r') as fi:
             self.I = json.load(fi)
+        self.toI = {i["name"]: InstrDesc(**i) for i in self.I}
         if deserialize:
             self.deserialize()
         else:
-            from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
+            from ARMIntrinsicClassify import Intrinsics2Encodings
             print("loading...")
             with open("asl/arm_instrs.sexpr") as f:
                 data = f.read()
@@ -298,30 +307,35 @@ class SemaGenerator():
             self.map2AST = map2AST
             print("map2AST done...")
 
-    def getSemaByInstrDesc(self, intrin):
-        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
-        if intrin.name not in Intrinsics2Fields:
-            return None
-        # print(intrin)
+    def getSemaByInstrDesc(self, intrin, expandedName):
+        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+        # if intrin.name not in Intrinsics2Fields:
+        #     return None
+        expanded_name, assign = extract_assignment_from_name(expandedName)
+        assert intrin.name == expanded_name, f"{intrin.name} != {expanded_name}"
         # assert False
         inst = intrin.base_instruction[0]
-        field = Intrinsics2Fields[intrin.name]
+        field = Intrinsics2Fields[expandedName]
         enc = Intrinsics2Encodings[intrin.name]
         ASTs = self.map2AST[enc]
         D = DecodeContext(field)
 
+        # print(expandedName, field)
         resolving = D.walk(ASTShrink(ASTs[1]))
         if D.undefined or D.symbolnotfound:
             print(D.undefined, D.symbolnotfound)
-            print(intrin.name)
+            print(expandedName)
             print(enc, field)
             assert False
 
         Params, signedness, preparation = parse_instr_attr(
-            intrin)
+            intrin, assign)
         for k in preparation:
             del resolving[k]
-        return ARMSema(intrin.name,
+        if "imm6" in assign:
+            int6 = bin(assign["imm6"])[2:].zfill(6)
+            resolving["imm6"] = int6
+        return ARMSema(expandedName,
                        inst,
                        Params,
                        ASTShrink(ASTs[0]),
@@ -334,24 +348,30 @@ class SemaGenerator():
                        )
 
     def getSemaByName(self, name):
+        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
         if self.result:
             return self.result.get(name, None)
-        for i in self.I:
-            if i["name"] == name:
-                return self.getSemaByInstrDesc(InstrDesc(**i))
+        for i in Intrinsics2Fields:
+            ii, assign = extract_assignment_from_name(i)
+            if i == name or ii == name:
+                return self.getSemaByInstrDesc(self.toI[ii], i)
         return None
 
     def SemaGenerator(self):
-        for i in self.I:
-            yield self.getSemaByInstrDesc(InstrDesc(**i))
+        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+        for i in Intrinsics2Fields:
+            ii, assign = extract_assignment_from_name(i)
+            yield self.getSemaByInstrDesc(self.toI[ii], i)
 
     def getResult(self) -> (Dict[str, ARMSema]):
         if self.result:
             return self.result
         else:
-            for i in self.I:
-                if (z := self.getSemaByInstrDesc(InstrDesc(**i))) is not None:
-                    self.result[i["name"]] = z
+            from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+            for i in Intrinsics2Fields:
+                ii, assign = extract_assignment_from_name(i)
+                if (z := self.getSemaByInstrDesc(self.toI[ii], i)) is not None:
+                    self.result[i] = z
         return self.result
 
     def serialize(self):
@@ -368,7 +388,7 @@ if __name__ == "__main__":
     # S.serialize()
     # print([i for i in S.SemaGenerator() if i is not None])
     S = SemaGenerator()
-    # print(S.getSemaByName("vrshl_s8"))
+    # print(S.getSemaByName("vmls_lane_s16__lane_0"))
     # S = SemaGenerator(deserialize=True)
     # print(S.getSemaByName("vsubq_s16"))
     S.serialize()
