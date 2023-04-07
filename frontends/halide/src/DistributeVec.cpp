@@ -876,8 +876,8 @@ namespace Halide {
                 OrigShuff = Shuffle::make_slice(op->vectors[0], op->slice_begin(), op->slice_stride(), op->type.lanes());
             }
 
-            if(op->type.is_scalar() || num_chunks <= 0){
-                exprs.push_back(OrigShuff);
+            if(op->type.is_scalar() || num_chunks <= 1){
+                exprs.push_back((OrigShuff));
                 return exprs;
             }
 
