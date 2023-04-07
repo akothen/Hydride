@@ -291,6 +291,8 @@
 
     [(vec-rounding_shift_right v1 v2) (append (list extract bvshl) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat bvsdiv) (list  zero-extend bvlshr bvusat bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] ;; FIXME: add bvshl
 
+    [(vec-rounding_halving_add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvsdiv) (list  zero-extend  bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] 
+
     ;; TODO: Since we now have context specific bitvector ops, this should be safe to do?
     ;[(vec-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
     [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
@@ -1201,6 +1203,20 @@
         )
         )
      ]
+
+    [(vec-rounding_halving_add v1 v2) 
+       (if is-leaf-depth
+        (values (vec-rounding_halving_add (arg 0) (arg 1)) 2)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+          (define remaining-values (- (vector-length args) args-used1))
+          (define remaining-args (vector-take-right args remaining-values))
+          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
+          (values (vec-rounding_halving_add leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+        )
+        )
+     ]
     [(vec-rounding_mul_shift_right v1 v2 v3) 
        (if is-leaf-depth
         ;(values (vec-rounding_mul_shift_right (arg 0) (arg 1) (arg 2)) 3)
@@ -1783,6 +1799,7 @@
     [(vec-mul v1 v2) (vec-size v1)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-size v1)]
     [(vec-rounding_shift_right v1 v2) (vec-size v1)]
+    [(vec-rounding_halving_add v1 v2) (vec-size v1)]
     [(vec-widen-mul v1 v2) (* 2 (vec-size v1))]
     [(vec-div v1 v2) (vec-size v1)]
     [(vec-mod v1 v2) (vec-size v1)]
@@ -2199,6 +2216,15 @@
                e
 
                ]
+
+               [(vec-rounding_halving_add v1 v2) 
+                (define prec (* 2 (vec-precision v1)))
+                (define one (bv 1 (bitvector prec)))
+                (define two (bv 2 (bitvector prec)))
+               (set! imms-vals (append imms-vals (list one two)))
+               e
+
+               ]
               ;; When target doesn't support saturating operations
               ;; of a given size then we can decompose the operation
               ;; into 
@@ -2390,6 +2416,7 @@
     [(vec-mul v1 v2) (get-elemT v1)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (get-elemT v1)]
     [(vec-rounding_shift_right v1 v2) (get-elemT v1)]
+    [(vec-rounding_halving_add v1 v2) (get-elemT v1)]
     [(vec-widen-mul v1 v2) (get-widened-elemT (get-elemT v1))] 
     [(vec-div v1 v2) (get-elemT v1)]
     [(vec-mod v1 v2) (get-elemT v1)]
@@ -2552,6 +2579,7 @@
     [(vec-mul v1 v2) (vec-precision v1)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-precision v1)]
     [(vec-rounding_shift_right v1 v2) (vec-precision v1)]
+    [(vec-rounding_halving_add v1 v2) (vec-precision v1)]
     [(vec-widen-mul v1 v2) (* 2 (vec-precision v1))]
     [(vec-div v1 v2) (vec-precision v1)]
     [(vec-mod v1 v2) (vec-precision v1)]

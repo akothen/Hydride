@@ -189,6 +189,7 @@
     [(vec-widen-mul v1 v2) (vec-len v2)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-len v1)]
     [(vec-rounding_shift_right v1 v2) (vec-len v1)]
+    [(vec-rounding_halving_add v1 v2) (vec-len v1)]
     [(vec-div v1 v2) (vec-len v1)]
     [(vec-mod v1 v2) (vec-len v1)]
     [(vec-min v1 v2) (vec-len v1)]
@@ -346,6 +347,7 @@
     ;[(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2 v3)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2)]
     [(vec-rounding_shift_right v1 v2) (list v1 v2)]
+    [(vec-rounding_halving_add v1 v2) (list v1 v2)]
     [(vec-widen-mul v1 v2) (list v1 v2)]
     [(vec-div v1 v2) (list v1 v2)]
     [(vec-mod v1 v2) (list v1 v2)]
@@ -585,6 +587,9 @@
      ]
     [(vec-rounding_shift_right v1 v2) 
      (lambda (i) (do-rounding-shift-right ((interpret v1) i) ((interpret v2) i)))
+     ]
+    [(vec-rounding_halving_add v1 v2) 
+     (lambda (i) (do-rounding-halving-add ((interpret v1) i) ((interpret v2) i)))
      ]
     [(vec-rounding_mul_shift_right v1 v2 v3) 
      (lambda (i) (do-rounding-mul-shift-right ((interpret v1) i) ((interpret v2) i) ((interpret v3) i) ))
@@ -846,6 +851,40 @@
 
   )
 
+
+;narrow((widen(a) + widen(b) + 1) / 2)
+(define (do-rounding-halving-add lhs rhs)
+  (define outT (infer-out-type lhs rhs))
+  (define lhs-bv (cpp:eval lhs))
+  (define rhs-bv (cpp:eval rhs))
+  (define size (bvlength lhs-bv))
+  (define widened-size (* 2 size))
+  (define result 
+    (cond
+      [(cpp:signed-type? outT)
+       (define wide-lhs (sign-extend lhs-bv (bitvector widened-size)))
+       (define wide-rhs (sign-extend rhs-bv (bitvector widened-size)))
+       (define one (bv 1 (bitvector widened-size)))
+       (define two (bv 2 (bitvector widened-size)))
+       (define sum (bvadd (bvadd wide-lhs wide-rhs) one))
+       (define avg (bvsdiv sum two))
+       (define extracted (extract (- size 1) 0 avg))
+       (mk-cpp-expr extracted outT)
+       ]
+      [else
+       (define wide-lhs (zero-extend lhs-bv (bitvector widened-size)))
+       (define wide-rhs (zero-extend rhs-bv (bitvector widened-size)))
+       (define one (bv 1 (bitvector widened-size)))
+       (define two (bv 2 (bitvector widened-size)))
+       (define sum (bvadd (bvadd wide-lhs wide-rhs) one))
+       (define avg (bvudiv sum two))
+       (define extracted (extract (- size 1) 0 avg))
+       (mk-cpp-expr extracted outT)
+        ]
+      )
+    )
+  result
+  )
 
 ;; saturating_narrow(widening_add(a, (1 << max(b, 0)) / 2) >> b).
 (define (do-rounding-shift-right lhs rhs)
