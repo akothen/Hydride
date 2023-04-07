@@ -205,7 +205,6 @@ class DecodeContext:
 
 
 def parse_instr_attr(instr: InstrDesc, assign):
-    from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
     from ARMTypes import ReservedVecTypes, ReservedImmTypes, PointerType
 
     def isSigned(t: str):
@@ -308,7 +307,7 @@ class SemaGenerator():
             print("map2AST done...")
 
     def getSemaByInstrDesc(self, intrin, expandedName):
-        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields
         # if intrin.name not in Intrinsics2Fields:
         #     return None
         expanded_name, assign = extract_assignment_from_name(expandedName)
@@ -348,7 +347,7 @@ class SemaGenerator():
                        )
 
     def getSemaByName(self, name):
-        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+        from ARMIntrinsicClassify import Intrinsics2Fields
         if self.result:
             return self.result.get(name, None)
         for i in Intrinsics2Fields:
@@ -358,7 +357,7 @@ class SemaGenerator():
         return None
 
     def SemaGenerator(self):
-        from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+        from ARMIntrinsicClassify import Intrinsics2Fields
         for i in Intrinsics2Fields:
             ii, assign = extract_assignment_from_name(i)
             yield self.getSemaByInstrDesc(self.toI[ii], i)
@@ -367,7 +366,7 @@ class SemaGenerator():
         if self.result:
             return self.result
         else:
-            from ARMIntrinsicClassify import Intrinsics2Encodings, Intrinsics2Fields, extract_assignment_from_name, get_arg_lo_hi
+            from ARMIntrinsicClassify import Intrinsics2Fields
             for i in Intrinsics2Fields:
                 ii, assign = extract_assignment_from_name(i)
                 if (z := self.getSemaByInstrDesc(self.toI[ii], i)) is not None:
