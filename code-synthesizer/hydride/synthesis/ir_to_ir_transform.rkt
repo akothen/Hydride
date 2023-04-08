@@ -114,6 +114,16 @@
 
   (debug-log (format "Inst combine transformation required ~a seconds" elapsed-time))
 
+
+
+  (cond
+    [(not (equal? output-hash-name ""))
+  (define output-hash-path (string-append "/tmp/" output-hash-name ".rkt"))
+  (save-synth-map output-hash-path output-hash-name input-hash)
+     ]
+    
+    )
+
   (cond
     [solved?
       (debug-log "Possibly simplified expression!")
@@ -125,15 +135,6 @@
       (debug-log "Unable to simplify further: returning original expression")
       sanatized-expr
       ]
-    )
-
-
-  (cond
-    [(not (equal? output-hash-name ""))
-  (define output-hash-path (string-append "/tmp/" output-hash-name ".rkt"))
-  (save-synth-map output-hash-path output-hash-name input-hash)
-     ]
-    
     )
   
   )
