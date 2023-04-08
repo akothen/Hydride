@@ -7,7 +7,7 @@ def GenerateCTest(AllSema):
     CannotVerify = []
     para_set = set()
     notSSA = ['addv', 'addlv', 'maxv', 'minv', 'abd', 'rbit', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
-    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte'] # unimplemented
+    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte', 'sli','sli_n','sliq_n','slid_n','shl_n','shlq_n','shld_n','sri_n','sriq_n','srid_n'] # unimplemented
     op_mismatch = ['qrdmlah', 'qrdmlsh']
     not_compiled_in_gcc = ['dot', 'eor3q', 'rax1q', 'bcaxq', 'xarq']
     for i, v in AllSema.items():
@@ -34,7 +34,7 @@ def GenerateCTest(AllSema):
                 else:
                     parastr.append(str(const_vals[val_index]))
                     val_index += 1
-            print(f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype})')
+            print(f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype}, {i})')
         except AssertionError:
             CannotVerify.append(i)
     print("Cannot verify", CannotVerify, file=sys.stderr)
