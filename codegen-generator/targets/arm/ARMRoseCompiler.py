@@ -934,9 +934,9 @@ CompileAbstractionsLV = {
 }
 
 
-def QWQ():
+def QWQ(sss):
     def qwq(*args, **kwargs):
-        raise NotImplementedError("QWQ")
+        raise NotImplementedError(sss)
     return qwq
 
 
@@ -1683,15 +1683,15 @@ Builtins = {
     'Min': HandleToMin(None),
     'Max': HandleToMax(None),
     'Abs': HandleToAbs(None),
-    'BitCount': QWQ(),
-    'CountLeadingSignBits': QWQ(),
-    'CountLeadingZeroBits': QWQ(),
-    'UnsignedRecipEstimate': QWQ(),
-    'UnsignedRSqrtEstimate': QWQ(),
+    'BitCount': QWQ('BitCount'),
+    'CountLeadingSignBits': QWQ('CountLeadingSignBits'),
+    'CountLeadingZeroBits': QWQ('CountLeadingZeroBits'),
+    'UnsignedRecipEstimate': QWQ('UnsignedRecipEstimate'),
+    'UnsignedRSqrtEstimate': QWQ('UnsignedRSqrtEstimate'),
     'NOT': HandleToNotFunc(None),
-    'Reduce': QWQ(),
+    'Reduce': QWQ('Reduce'),
     'ROL': HandleToROL(None),
     'ROR': HandleToROL(None),
-    'LSL': QWQ(),
-    'LSR': QWQ(),
+    'LSL': QWQ('LSL'),
+    'LSR': QWQ('LSR'),
 }

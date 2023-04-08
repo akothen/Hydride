@@ -35,7 +35,7 @@ if __name__ == "__main__":
         if any(kk in k for kk in skip):
             continue
         try:
-            print("Compiling", k, file=sys.stderr)
+            # print("Compiling", k, file=sys.stderr)
             print(func.intrin, func)
             Function = CompileSemantics(func, ARMRoseContext())
         except NotImplementedError as e:
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         # print(RosetteCode)
         AllRosetteCode += RosetteCode
     print(len(compiled), "functions compiled:", file=sys.stderr)
-    print(compiled, file=sys.stderr)
+    # print(compiled, file=sys.stderr)
     AllRosetteCode += "(provide (all-defined-out))"
     with open(f'rosette_test/compiled.rkt', 'w') as f:
         f.write(AllRosetteCode)
