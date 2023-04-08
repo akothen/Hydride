@@ -13,6 +13,10 @@ IntSimWidth = 192
 IntegerWidth = 32
 
 
+def UnchangedException(Exception):
+    pass
+
+
 class ARMRoseContext(RoseContext):
     def __init__(self):
         self.constexpr = {}
@@ -853,7 +857,10 @@ def CompileBuiltIn(CallStmt, Context: ARMRoseContext):
     # Check if this is a call to a builtin function
     Operation = Builtins[CallStmt.funcname](
         Context.genName(), ArgValuesList, Context)
-
+    # Check if this function call does nothing (extract the same bit slice)
+    for Arg in ArgValuesList:
+        if Operation == Arg:
+            return Arg
     # Add the operation to the IR
     if isinstance(Operation, RoseOperation):
         Context.addAbstractionToIR(Operation)

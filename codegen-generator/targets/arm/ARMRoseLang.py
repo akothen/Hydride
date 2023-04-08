@@ -24,7 +24,7 @@ from ARMAST import *
 from RosetteGen import GenerateRosetteForFunction
 if __name__ == "__main__":
     AllSema = SemaGenerator(deserialize=True).getResult()
-    # AllSema = {k: AllSema[k] for k in ["vxarq_u64__imm6_0"]}
+    # AllSema = {k: AllSema[k] for k in ["vget_lane_u64__lane_0"]}
     compiled = []
     skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit',
             'dot', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64']  # TODO:these intrinsic cannot be convert to functional language easily
