@@ -38,6 +38,7 @@ namespace Halide {
 
     bool SIMPLIFY_RAMP = true;
     bool HVX_TARGET = true;
+    bool SIMPLIFY_WIDEN_MUL =  false;
 
     std::string target_str = "";
 
@@ -574,6 +575,9 @@ namespace Halide {
                         }
                         else if (op->is_intrinsic(Call::saturating_sub)){
                             return print_intrinsic("sat-sub", op->args, op->type.is_scalar());
+                        }
+                        else if (op->is_intrinsic(Call::widening_mul)){
+                            return print_intrinsic("widen-mul", op->args, op->type.is_scalar());
                         }
                         else if (op->is_intrinsic(Call::shift_right)) {
                             return print_intrinsic("shr", op->args, op->type.is_scalar());
@@ -1869,6 +1873,7 @@ namespace Halide {
                         return Cast::make(result_type, std::move(a));
                     }
 
+
                     Expr visit(const Ramp *op) override {
                         Expr lowered;
                         if(true  || SIMPLIFY_RAMP){
@@ -2068,11 +2073,12 @@ namespace Halide {
 
                             if(_arch ==  Architecture::HVX){
 
+                                /*
                                 if(element_bits < 32){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                                 } else {
                                     lower_using_halide = true;
-                                } 
+                                } */
                             } else if (_arch == Architecture::X86){
 
                                 if(element_bits < 64){
@@ -2160,7 +2166,8 @@ namespace Halide {
                                     One = make_const(Int(op->args[0].type().bits()), 1);
                                 }
                             if(_arch ==  Architecture::HVX){
-                                lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1]; 
+                                //lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1]; 
+                                 lower_using_halide = true;
                             } else if (_arch == Architecture::X86){
                                 lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1]; 
                             }
@@ -2168,8 +2175,13 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::widening_mul)) {
                             if(_arch ==  Architecture::HVX){
                                 size_t element_bits = op->args[0].type().bits();
-                                if(element_bits < 32){
+                                if(element_bits < 32 &&  SIMPLIFY_WIDEN_MUL ){
                                     lowered = (widen(op->args[0]) * widen(op->args[1]));
+                                } else if(element_bits < 32 &&  !SIMPLIFY_WIDEN_MUL ){
+                                    // Let it pass through
+                                } else if(!SIMPLIFY_WIDEN_MUL && element_bits >= 32) {
+                                    debug(0) << "Lowering widening mul to halide as widening beyond type supported on target: " << element_bits << "\n";
+                                    lower_using_halide = true;
                                 } else {
                                     lower_using_halide = true;
                                 } 
@@ -2264,9 +2276,10 @@ namespace Halide {
                                 //lower_using_halide = true;
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 32){
-                                    lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                                    //lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                                    //lower_using_halide = true;
                                 } else {
-                                    lower_using_halide = true;
+                                   // lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
@@ -2287,7 +2300,7 @@ namespace Halide {
                                 if(element_bits < 32){
                                     lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                                 } else {
-                                    lower_using_halide = true;
+                                    //lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
                                 size_t element_bits = op->args[0].type().bits();
@@ -2360,7 +2373,11 @@ namespace Halide {
                         Call::bitwise_and,
                         Call::bitwise_not,
                         Call::bitwise_xor,
-                        Call::if_then_else
+                        Call::if_then_else,
+                        Call::widening_mul,
+                        Call::rounding_shift_right,
+                        Call::rounding_mul_shift_right,
+                        Call::rounding_halving_add
                     };
 
                     Expr visit(const Call *op) override {
@@ -2378,6 +2395,18 @@ namespace Halide {
                             return Variable::make(op->type, uname);
                         }
 
+
+
+                        if (op->is_intrinsic(Call::widening_mul)) {
+                            size_t length =  (op->type.bits() * op->type.lanes() ) / 2 ; // Divide by 2 to get input lengths
+                            bool supported = is_length_supported_on_target(length);
+
+                            if(!supported){
+                                std::string uname = unique_name('h');
+                                abstractions[uname] = IRMutator::visit(op);
+                                return Variable::make(op->type, uname);
+                            }
+                        }
 
                         if (op->is_intrinsic(Call::dynamic_shuffle)) {
                             std::string uname = unique_name('h');
@@ -2428,6 +2457,18 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
+                            std::string uname = unique_name('h');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const Mod *op) override {
+
+                        if((_arch == Architecture::HVX)){
                             std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2667,12 +2708,28 @@ namespace Halide {
                             return Variable::make(op->type, uname);
                         }
 
+                        if(op->is_concat() && !is_length_supported_on_target(op->vectors[0].type().lanes() * op->vectors[0].type().bits())){
+                            debug(0) << "Abstracting concat vector with unsupported length\n";
+                            std::string uname = unique_name('h');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+
+                        if(op->is_slice() && !is_length_supported_on_target(op->vectors[0].type().lanes() * op->vectors[0].type().bits())){
+                            debug(0) << "Abstracting slice vector with unsupported length\n";
+                            std::string uname = unique_name('h');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
                         if(op->is_slice() && (disable_shuffles || op->vectors[0].type().lanes() * op->vectors[0].type().bits() > 2048 )){
                             debug(0) << "Abstracting slice vector!\n";
                             std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
+
 
                         if(op->is_slice() && (op->slice_begin() != 0 && op->slice_begin() != op->vectors[0].type().lanes() / 2)){
                             debug(0) << "Abstracting random access slice vector!\n";
@@ -2748,6 +2805,44 @@ namespace Halide {
                         } else {
                         return IRMutator::visit(op);
                         }
+
+                    }
+
+
+                    bool is_length_supported_on_target(size_t length){
+
+
+                        std::vector<size_t> vec_lens;
+                        switch(_arch){
+                            case Architecture::ARM:
+                                vec_lens.push_back(64);
+                                break;
+                            case Architecture::HVX:
+                                vec_lens.push_back(2048);
+                                vec_lens.push_back(1024);
+                                break;
+                            case Architecture::X86:
+                                debug(1) << "Abstraction vector sizes for X86 "<<"\n";
+                                // Push in vector register sizes in descending order
+                                vec_lens.push_back(512);
+                                vec_lens.push_back(256);
+                                vec_lens.push_back(128);
+                                vec_lens.push_back(32);
+
+
+                        };
+
+
+
+                        bool supported = false;
+                        for(auto vec_len : vec_lens){
+                            if ((length % vec_len != 0) ) {
+                            } else if (length  == vec_len) {
+                                supported = true;
+                            }
+                        }
+
+                        return supported;
 
                     }
 
@@ -2930,6 +3025,7 @@ namespace Halide {
 
                     Expr visit(const Mul *op) override{
 
+                        /*
                         size_t bits = op->type.bits();
                         size_t lanes = op->type.lanes();
 
@@ -2950,7 +3046,7 @@ namespace Halide {
                             Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
                             debug(0) << "Halide Lowered Mul to: "<<lowered_mul <<"\n";
                             return mutate(lowered_mul);
-                        }
+                        }*/
 
                         return IRMutator::visit(op);
 
