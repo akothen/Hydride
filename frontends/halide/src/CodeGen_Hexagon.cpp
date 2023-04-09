@@ -554,8 +554,10 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
         body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
         
         const char* force_opt = getenv("HL_FORCE_HEXAGON_OPT");
-        if(force_opt)
+        if(force_opt){
+            //debug(0) << "" <<
             body = optimize_hexagon_instructions(body, target);
+        }
 
     } else {
 
@@ -564,7 +566,7 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
         debug(0) << "Hexagon Code input before optimization:" << "\n";
         debug(0) << body << "\n";
         if(!disable_opt || strcmp(disable_opt, "1") != 0){
-            debug(0) << "Disable opt value:"<<disable_opt <<"\n";
+            //debug(0) << "Disable opt value:"<<disable_opt <<"\n";
             debug(0) << "Hexagon: Optimizing Hexagon instructions...\n";
             body = optimize_hexagon_instructions(body, target);
         } else {

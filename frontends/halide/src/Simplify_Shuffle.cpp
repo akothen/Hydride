@@ -89,7 +89,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
 
 
 
-        if(/*simplify_load &&*/ op->is_slice() && op->slice_stride() == 1){
+        if(/*simplify_load &&*/  op->is_slice() && op->slice_stride() == 1){
             debug(1) << "Load Index: " << first_load->index << "\n";
             debug(1) << "Index lanes: " << first_load->index.type().lanes() << "\n";
             debug(1) << "Load Predicate: " << first_load->predicate << "\n";
@@ -103,7 +103,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
             debug(1) << "Sliced predicate: " << sliced_predicate << "\n";
             Expr sliced_load =  Load::make(first_load->type.with_lanes(op->type.lanes()), first_load->name, mutate(sliced_index, nullptr), first_load->image, first_load->param, mutate(sliced_predicate, nullptr), first_load->alignment);
 
-            debug(1) << "Simplified sliced load to: " << sliced_load << "\n";
+            debug(0) << "Simplified sliced load to: " << sliced_load << "\n";
             return mutate(sliced_load, nullptr);
         }
 
@@ -114,7 +114,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
 
     // Try to convert a load with shuffled indices into a
     // shuffle of a dense load.
-    if (const Load *first_load = new_vectors[0].as<Load>()) {
+    if (const Load *first_load = new_vectors[0].as<Load>() ) {
         vector<Expr> load_predicates;
         vector<Expr> load_indices;
         bool unpredicated = true;
