@@ -227,6 +227,32 @@ int main(int argc, char **argv) {
       printf("AppReported (HVX128B-mode): Image %dx%d - mul(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+#if softmax
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+      SIM_ACQUIRE_HVX;
+      SIM_SET_HVX_DOUBLE_MODE;
+    cycles = benchmark([&]() {
+        int error = softmax_hvx128(input_buf, 0, 100, 0, 5, 225, output_buf);
+        if (error != 0) {
+        printf("softmax pipeline failed: %d\n", error);
+        }
+    });
+          SIM_RELEASE_HVX;
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+
+    printf("AppReported (HVX128B-mode): Image %dx%d - softmax(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
+#endif
+
 #if average_pool
       halide_dimension_t c_dim{ 0, 1024, 1 };
       halide_dimension_t x_dim{ 0, width/32, 128 };
@@ -395,7 +421,7 @@ int main(int argc, char **argv) {
       SIM_RELEASE_HVX;
 
 
-    printf("AppReported (): Image %dx%d - depthwise_conv128(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+    printf("AppReported (HVX128B-mode): Image %dx%d - depthwise_conv128(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 
 #endif
 
