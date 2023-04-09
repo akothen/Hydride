@@ -210,6 +210,11 @@ static bool CombineInstructions(Function &F, M &InstWindow,
     }
   }
 
+  // Set bunch of file names
+  std::string SynthesizedFuncName = "hydride.node.method";
+  std::string SynthesizedFileName = "test_combine";
+  std::string PathToFile = "/tmp/";
+
   // Generate expression for the instruction window
   std::string InstWinExprString = "(define hydride-expr \n";
   GenerateExpression(InstWindow[0], ValToRegMap, InstWinExprString);
@@ -229,11 +234,19 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   InputPrecString += "))\n\n";
 
   // Get output expression
-  std::string SynthesizedFuncName = "hydride.node.method";
-  std::string SynthesizedFileName = "test_combine";
-  std::string PathToFile = "/tmp/";
+  std::string InputHashFileName = "inst.combine.expr";
+  std::string OutputHashFileName = "inst.combine.expr";
+  if (ModuleNo == 0) {
+    InputHashFileName = "";
+    std::string RemoveOutputFileCmd = "rm " + PathToFile + OutputHashFileName + ".rkt";
+    errs() << "RUNNING...\n";
+    errs() << RemoveOutputFileCmd << "\n";
+    system(RemoveOutputFileCmd.c_str());
+  }
+  std::string HashDefinitions = "(define input-hash-name \"" + InputHashFileName + "\")\n \
+                                (define output-hash-name \"" + OutputHashFileName + "\")\n\n";
   std::string OutputExprString = 
-        "(define output-expr (inst-combine hydride-expr #t #f 'z3 input-sizes input-precs \"hvx\"))";
+        "(define output-expr (inst-combine hydride-expr #t #f 'z3 input-sizes input-precs \"hvx\" input-hash-name output-hash-name))\n\n";
   std::string PrintString = "(displayln \"Simplified expression\") \n \
                             (pretty-print output-expr) \n\n";
   std::string MethodNameString = "(define method-name \"" + SynthesizedFuncName + "\") \n\n";
@@ -245,6 +258,7 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   RktFile << InstWinExprString;
   RktFile << InputSizeString;
   RktFile << InputPrecString;
+  RktFile << HashDefinitions;
   RktFile << OutputExprString;
   RktFile << PrintString;
   RktFile << MethodNameString;
@@ -258,7 +272,7 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   errs() << "RUNNING...\n";
   errs() << RemoveRktFileCmd << "\n";
   system(RemoveRktFileCmd.c_str());
-  std::string RktCommand = "timeout 200 racket " + RktFileName;
+  std::string RktCommand = "timeout 300 racket " + RktFileName;
   errs() << "RUNNING...\n";
   errs() << RktCommand << "\n";
   system(RktCommand.c_str());
@@ -327,8 +341,17 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   }
   assert(CI != nullptr);
   assert(InlinableFunc != nullptr);
-  errs() << "REPLACING USES NOW...\n";
-  InstWindow[0]->replaceAllUsesWith(CI);
+  // If the types of call instruction and first instruction in the window
+  // mismatch, bitcast it.
+  if (CI->getType() != InstWindow[0]->getType()) {
+    auto *BI = new BitCastInst(CI, InstWindow[0]->getType(), "", InstWindow[0]);
+    InstWindow[0]->replaceAllUsesWith(BI);
+    HandledInsts.insert(BI);
+  } else {
+    errs() << "REPLACING USES NOW...\n";
+    InstWindow[0]->replaceAllUsesWith(CI);
+  }
+
   errs() << "\n\n\n=----------------------INSTRUCTION WINDOW: \n";
   for (auto *I : InstWindow) {
     errs() << *I << "\n";
@@ -379,6 +402,7 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   for (auto *I : InlinedInsts) {
     if (auto *CI = dyn_cast<CallInst>(I)) {
       // Fix the names to callees in the newly added instructions
+      bool CalleeNameFixed = false;
       for (auto &Func : *(F.getParent())) {
         if (Func.getType() == CI->getCalledFunction()->getType()
             && Func.getName().contains(CI->getCalledFunction()->getName())) {
@@ -396,9 +420,16 @@ static bool CombineInstructions(Function &F, M &InstWindow,
             //I->eraseFromParent();
             HandledInsts.insert(I);
             NewlyAddedInsts.push_back(NewCI);
+            CalleeNameFixed = true;
+            break;
           }
         }
       }
+      if (CalleeNameFixed)
+        continue;
+      errs() << "NEWLY ADDED INSTRUCTION WITH NO CALL NAME CHANGE\n";
+      errs() << *CI << "\n";
+      NewlyAddedInsts.push_back(CI);
     } else {
       errs() << "ADDED INSTRUCTIONS PUSH BACK\n";
       NewlyAddedInsts.push_back(I);
@@ -408,6 +439,9 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   if (NewlyAddedInsts.size() > 1) {
     HandledInsts.insert(NewlyAddedInsts[NewlyAddedInsts.size() - 1]);
   }
+
+  errs() << "FUNCTION: \n";
+  errs() << F << "\n";
 
   return true;
 }
@@ -510,6 +544,9 @@ bool HydrideLLVMInstCombinePass::runOnFunction(Function &F) {
     if (I->getNumUses() == 0)
       I->eraseFromParent();
   }
+
+  errs() << "FINAL FUNCTION: \n";
+  errs() << F << "\n";
 
   return Changed;
 }
