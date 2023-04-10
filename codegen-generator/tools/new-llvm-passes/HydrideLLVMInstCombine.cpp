@@ -47,6 +47,7 @@ static llvm::cl::opt<unsigned> InstCombineDepth(
 namespace llvm {
 
 class HydrideLLVMInstCombinePass : public ModulePass {
+      unsigned RacketModuleNo = 0;
 public:
     static char ID;
 
@@ -57,6 +58,14 @@ public:
     bool runOnModule(Module &M);
 
     void getAnalysisUsage(AnalysisUsage &AU) const {}
+
+    const unsigned &getRacketModuleNo() const {
+      return RacketModuleNo;
+    }
+
+    void incrementRacketModuleNo() {
+      RacketModuleNo++;
+    }
 };
 
 }  // end llvm namespace
@@ -154,7 +163,7 @@ static void GenerateExpression(CallInst *I, DenseMap<Value *, int> &ValToRegMap,
 template<typename M, typename N, typename P>
 static bool CombineInstructions(Function &F, M &InstWindow, 
                               N &HandledInsts, P &NewlyAddedInsts,
-                              unsigned &ModuleNo) {
+                              const unsigned &ModuleNo) {
   errs() << "\n\n\n========================INSTRUCTION WINDOW: \n";
   for (auto *I : InstWindow) {
     errs() << *I << "\n";
@@ -236,17 +245,27 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   // Get output expression
   std::string InputHashFileName = "inst.combine.expr";
   std::string OutputHashFileName = "inst.combine.expr";
+  std::string InputCacheFileName = "inst.cache";
+  std::string OutputCacheFileName = "inst.cache";
   if (ModuleNo == 0) {
     InputHashFileName = "";
     std::string RemoveOutputFileCmd = "rm " + PathToFile + OutputHashFileName + ".rkt";
     errs() << "RUNNING...\n";
     errs() << RemoveOutputFileCmd << "\n";
     system(RemoveOutputFileCmd.c_str());
+    InputCacheFileName = "";
+    RemoveOutputFileCmd = "rm " + PathToFile + OutputCacheFileName + ".rkt";
+    errs() << "RUNNING...\n";
+    errs() << RemoveOutputFileCmd << "\n";
+    system(RemoveOutputFileCmd.c_str());
   }
   std::string HashDefinitions = "(define input-hash-name \"" + InputHashFileName + "\")\n \
                                 (define output-hash-name \"" + OutputHashFileName + "\")\n\n";
+  std::string CacheDefinitions = "(define input-cache-name \"" + InputCacheFileName + "\")\n \
+                                (define output-cache-name \"" + OutputCacheFileName + "\")\n\n";
   std::string OutputExprString = 
-        "(define output-expr (inst-combine hydride-expr #t #f 'z3 input-sizes input-precs \"hvx\" input-hash-name output-hash-name))\n\n";
+        "(define output-expr (inst-combine hydride-expr #t #f 'z3 input-sizes input-precs \"hvx\" input-hash-name output-hash-name input-cache-name output-cache-name))\n\n";
+        //"(define output-expr (inst-combine hydride-expr #t #f 'z3 input-sizes input-precs \"hvx\" input-hash-name output-hash-name))\n\n";
   std::string PrintString = "(displayln \"Simplified expression\") \n \
                             (pretty-print output-expr) \n\n";
   std::string MethodNameString = "(define method-name \"" + SynthesizedFuncName + "\") \n\n";
@@ -259,6 +278,7 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   RktFile << InputSizeString;
   RktFile << InputPrecString;
   RktFile << HashDefinitions;
+  RktFile << CacheDefinitions;
   RktFile << OutputExprString;
   RktFile << PrintString;
   RktFile << MethodNameString;
@@ -272,7 +292,7 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   errs() << "RUNNING...\n";
   errs() << RemoveRktFileCmd << "\n";
   system(RemoveRktFileCmd.c_str());
-  std::string RktCommand = "timeout 300 racket " + RktFileName;
+  std::string RktCommand = "timeout 200 racket " + RktFileName;
   errs() << "RUNNING...\n";
   errs() << RktCommand << "\n";
   system(RktCommand.c_str());
@@ -285,7 +305,7 @@ static bool CombineInstructions(Function &F, M &InstWindow,
   }
 
   // Convert rosette code into LLVM code
-  std::string LLVMModuleName = "SynthLLVM" + std::to_string(ModuleNo++);
+  std::string LLVMModuleName = "SynthLLVM" + std::to_string(ModuleNo);
   std::string FullSynthLLVMFileName = PathToFile + LLVMModuleName + ".ll";
   std::string RemoveLLVMFileCmd = "rm " + FullSynthLLVMFileName;
   errs() << "RUNNING...\n";
@@ -451,9 +471,9 @@ bool HydrideLLVMInstCombinePass::runOnFunction(Function &F) {
   SmallVector<Instruction *, 16> Worklist;
   for (auto *BB : post_order(&F)) {
     for(Instruction &I : *BB) {
-      auto *CI = dyn_cast<CallInst>(&I);
-      if(CI != nullptr) {
-        Worklist.push_back(CI);
+      if(auto *CI = dyn_cast<CallInst>(&I)) {
+        if (CI->getCalledFunction()->getName().contains("hydride"))
+          Worklist.push_back(CI);
       }
     }
   }
@@ -461,9 +481,9 @@ bool HydrideLLVMInstCombinePass::runOnFunction(Function &F) {
   // Combine the instructions in the worklist within the 
   // scope of use-def chains.
   bool Changed = false;
-  unsigned ModuleNo = 0;
   SmallPtrSet<Instruction *, 16> HandledInsts;
   SmallVector<Instruction *, 16> NewlyAddedInsts;
+  const auto &ModuleNo = getRacketModuleNo();
   while(Worklist.size() != 0) {
     auto *I = Worklist.back();
     Worklist.pop_back();
@@ -521,6 +541,7 @@ bool HydrideLLVMInstCombinePass::runOnFunction(Function &F) {
     NewlyAddedInsts = SmallVector<Instruction *, 16>();
     Changed |= CombineInstructions(F, Window, HandledInsts, 
                                     NewlyAddedInsts, ModuleNo);
+    incrementRacketModuleNo();
     errs() << "NewlyAddedInsts: " << NewlyAddedInsts.size() << "\n";
     errs() << "Worklist: " << Worklist.size() << "\n";
     for (auto *Inst : NewlyAddedInsts)
@@ -529,7 +550,7 @@ bool HydrideLLVMInstCombinePass::runOnFunction(Function &F) {
     Window.clear();
   }
 
-  // Remove dead instructions
+  // Remove instructions rendered dead by this pass
   for (auto *BB : post_order(&F)) {
     for(Instruction &I : *BB) {
       auto *CI = dyn_cast<CallInst>(&I);
