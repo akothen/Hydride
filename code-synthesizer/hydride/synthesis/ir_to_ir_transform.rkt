@@ -56,7 +56,9 @@
 
 ;; Wrapper to invoke rewrite-ir method
 
-(define (inst-combine spec-expr optimize? symbolic? solver input-sizes input-precs target-language input-hash-name output-hash-name)
+(define (inst-combine spec-expr optimize? symbolic? solver input-sizes input-precs 
+                                target-language input-hash-name output-hash-name 
+                                in-cache-hash-name out-cache-hash-name)
 
   (define language-type
     (cond
@@ -77,52 +79,84 @@
     (cond
       [(not (equal? input-hash-name ""))
        (define hash-path (string-append input-hash-name ".rkt"))
-
        (define loaded-hash (import-synth-map hash-path input-hash-name))
        (hash-copy loaded-hash)
-       
+      ]
+      [else
+        (make-hash)
+      ]
+    )
+  )
+
+  (define cache-hash
+    (cond
+      [(not (equal? in-cache-hash-name ""))
+       (define hash-path (string-append in-cache-hash-name ".rkt"))
+       (define loaded-hash (import-synth-map hash-path in-cache-hash-name))
+       (hash-copy loaded-hash)
        ]
       [else
         (make-hash)
-        ]
-      )
+      ]
     )
+  )
 
+
+  (define cache-hit? (hash-has-key? cache-hash sanatized-expr))
+
+  (cond
+    [(not cache-hit?)
+     (hash-set! cache-hash sanatized-expr sanatized-expr)
+    ]
+  )
+
+  (cond
+    [(not (equal? out-cache-hash-name ""))
+      (define output-hash-path (string-append "/tmp/" out-cache-hash-name ".rkt"))
+      (save-synth-map output-hash-path out-cache-hash-name cache-hash)
+    ]
+  )
 
   (define hash-hit #f)
 
-
   (define-values (solved? simplified-expr elapsed-time) 
-                 
-                 (cond
-                   [(hash-has-key? input-hash sanatized-expr)
-                    (debug-log "Hash hit!")
-                    (set! hash-hit #t)
-                    (values #t (hash-ref input-hash sanatized-expr) 0)
-                    ]
-                   [else
-                 (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
-                     ]
-                   )
-                 )
+    (cond
+      [(hash-has-key? input-hash sanatized-expr)
+        (debug-log "Hash hit!")
+        (set! hash-hit #t)
+        (values #t (hash-ref input-hash sanatized-expr) 0)
+      ]
+      [else
+        (cond
+          [cache-hit?
+            (debug-log "Cache Hash hit!")
+            (error "Failed to synthesize expression on time (timeout)")
+            (values #t sanatized-expr 0)
+          ]
+          [else
+            (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
+          ]
+        )
+        ;;(rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
+      ]
+    )
+  )
 
   (cond
     [(and solved? (not hash-hit))
      (hash-set! input-hash sanatized-expr simplified-expr)
-     ]
-    )
+    ]
+  )
 
   (debug-log (format "Inst combine transformation required ~a seconds" elapsed-time))
 
 
-
   (cond
     [(not (equal? output-hash-name ""))
-  (define output-hash-path (string-append "/tmp/" output-hash-name ".rkt"))
-  (save-synth-map output-hash-path output-hash-name input-hash)
-     ]
-    
-    )
+      (define output-hash-path (string-append "/tmp/" output-hash-name ".rkt"))
+      (save-synth-map output-hash-path output-hash-name input-hash)
+    ]
+  )
 
   (cond
     [solved?
@@ -136,7 +170,6 @@
       sanatized-expr
       ]
     )
-  
   )
 
 ;; The synthesizer represents the index of the register
@@ -149,36 +182,33 @@
     (cond
       [(equal? target 'x86)
        hydride:visitor
-       ]
+      ]
       [(equal? target 'hvx)
        hvx:visitor
-       ]
-      )
+      ]
     )
-
+  )
 
   (define (sanatize-fn e)
     (destruct e
-              [(reg i)
-               (cond 
-                 [(integer? i)
-                  (reg (bv i 8))
-                  ]
-                 [else
-                   e
-                   ]
-                 )
-               ]
-              [_
-                e
-                ]
-              )
+      [(reg i)
+        (cond 
+          [(integer? i)
+          (reg (bv i 8))
+          ]
+          [else
+            e
+            ]
+          )
+      ]
+      [_
+        e
+      ]
     )
+  )
 
   (visitor-fn spec-expr sanatize-fn)
   )
-
-
 
 
 (define (rewrite-ir spec-expr  starting-depth depth-limit  optimize? symbolic? solver input-sizes input-precs scale-factor src-language target-language)
@@ -242,7 +272,7 @@
     (define spec-result-slice (extract high low spec-result))
     (debug-log (format "Spec produced: ~a\n" spec-result-slice))
     spec-result-slice
-    )
+  )
 
 
   (define (invoke-spec env-lane)
@@ -250,155 +280,136 @@
     (define spec-result (src-interpreter spec-expr env-lane))
     (debug-log (format "Spec produced: ~a\n" spec-result))
     spec-result
-    )
-
+  )
 
 
   (define sol '())
 
 
-
-
   (define start-time (current-seconds))
   (define solutions 
-
     ;; Traversal order first searchs the breadth of grammars
     ;; at the depth d before incrementing d.
     (for/list ([d (range starting-depth depth-limit)])
+      (debug-log (format "=====================\nSTARTING SYNTHESIS FOR DEPTH ~a\n=====================\n" d))
+      (define steps-per-depth
+        (cond
+          [(<= d 3) step-limit]
+          [(equal? d 4) 
+            64 
+            ]
+          [else
+            64
+            ]
+          )
+        
+        )
 
-              (debug-log (format "=====================\nSTARTING SYNTHESIS FOR DEPTH ~a\n=====================\n" d))
-              (define steps-per-depth
-                (cond
-                  [(<= d 3) step-limit]
-                  [(equal? d 4) 
-                   64 
-                   ]
-                  [else
-                    64
-                    ]
+      (define NUM_THREADS 
+        (cond 
+          [(<= d 2) 1]
+          [else
+            1 ; 4
+            ]
+          )
+        )
+
+        (for/list ([s (range 0 steps-per-depth NUM_THREADS)])
+          (cond 
+            [solved? 
+              ;; Already solved, no need to launch parallel threads
+              ;; avoid overheads
+              '()
+              ]
+            [else
+              (define step-low s)
+              (define step-high (min (+ step-low NUM_THREADS) steps-per-depth))
+
+              ;; If even one of the threads finds a valid solution,
+              ;; we can kill all other threads. Use THREADS-REF variable
+              ;; to 'hack' circular definition.
+              (define THREADS-REF '())
+              (define (kill-other-threads exclude-idx)
+                (debug-log (format "Killing all other threads except ~a!, num threads currently executing: ~a\n" exclude-idx (length THREADS-REF)))
+                (for/list ([t-idx (range (length THREADS-REF))])
+                  (define actual-thread-idx (+ step-low t-idx))
+                  (cond
+                    [(equal? actual-thread-idx exclude-idx)
+                      '()
+                      ]
+                    [else
+                      (debug-log (format "Killing thread at relative index ~a\n" t-idx))
+                      (kill-thread (list-ref THREADS-REF t-idx))
+                      ]
+                    )
                   )
-                
-                )
-
-              (define NUM_THREADS 
-                (cond 
-                  [(<= d 2) 1]
-                  [else
-                    1 ; 4
-                    ]
-                  )
-                )
-
-              (for/list ([s (range 0 steps-per-depth NUM_THREADS)])
-
-
-
-                        (cond 
-                          [solved? 
-                            ;; Already solved, no need to launch parallel threads
-                            ;; avoid overheads
-                            '()
-                            ]
-                          [else
-
-
-                        (define step-low s)
-                        (define step-high (min (+ step-low NUM_THREADS) steps-per-depth))
-
-                        ;; If even one of the threads finds a valid solution,
-                        ;; we can kill all other threads. Use THREADS-REF variable
-                        ;; to 'hack' circular definition.
-                        (define THREADS-REF '())
-                        (define (kill-other-threads exclude-idx)
-                            (debug-log (format "Killing all other threads except ~a!, num threads currently executing: ~a\n" exclude-idx (length THREADS-REF)))
-                            (for/list ([t-idx (range (length THREADS-REF))])
-                                      (define actual-thread-idx (+ step-low t-idx))
-                                      (cond
-                                        [(equal? actual-thread-idx exclude-idx)
-                                         '()
-                                         ]
-                                        [else
-                                          (debug-log (format "Killing thread at relative index ~a\n" t-idx))
-                                          (kill-thread (list-ref THREADS-REF t-idx))
-                                          ]
-                                        )
-                                      )
-                          )
-
-                        (define thds  
-                              (for/list ([t (range step-low step-high )])
-
-                                  ;; Reset context for next synthesis
-                                  (set-optimize-bound-found #f)
-                                (parameterize 
-                                  ([current-solver (if (equal? solver 'z3) (z3) (boolector))] 
-                                   [current-bitwidth 16]
-                                   )
-                                      (thread (thunk
-                                        (clear-vc!)
-                                        (clear-terms!)
-                                        (collect-garbage)
-
-
-
-                                        ;; if solution already found in previous
-                                        ;; iteration, do nothing.
-
-                                        (cond
-                                          [(not solved?)
-                                           (define base_name (string-append "base_" (~s (random 10000)) "_s" (~s t) "_d" (~s d)))
-
-
-                                           ;; get-grammar step-i, depth d
-                                           ;; get-interpreter step-i, depth d
-                                           ;; get-cost-model step-i, depth d
-                                           (define-values (grammar interpreter cost-model) 
-                                                          (get-expr-grammar-step-hydride spec-expr base_name src-get-ops src-visitor src-length-fn src-prec-fn input-precs input-sizes expr-VF t d scale-factor))
-
-                                        (define (grammar-fn i)
-                                            (grammar i)
-                                          )
-
-                                         (debug-log (format "Specification: ~a\n" spec-expr ))
-
-                                           ;; perform synthesis
-                                           (define-values (sat? mat el) 
-                                                          (synthesize-sol-with-depth 
-                                                            d 
-                                                            d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
-                                                            optimize? interpreter cost-model  symbolic? cost-bound solver) 
-                                                          )
-                                           ;; if sat set solution? to be true
-                                           (if sat?
-                                             (begin
-                                               (set! solved? #t)
-                                               (set! sol mat)
-                                               ;(kill-other-threads t)
-                                               )
-                                             '()
-                                             )
-                                           ]
-                                          )
-                                        ) ) ; (thread thunk
-                                    ) ;; paramterize
-                                
-                            ) ;; threads list
-                        ) ;; thds
-
-                        (set! THREADS-REF thds)
-
-                        (debug-log (format "Waiting on parallel threads range ~a to ~a for synthesis depth ~a \n" step-low step-high d))
-                        (for/list ([thd thds])
-                                  (thread-wait thd)
-                                  )
-
-                            ]
-                          )
-
-
-                    ) 
               )
+
+              (define thds  
+                  (for/list ([t (range step-low step-high )])
+                    ;; Reset context for next synthesis
+                    (set-optimize-bound-found #f)
+                    (parameterize 
+                      ([current-solver (if (equal? solver 'z3) (z3) (boolector))] 
+                        [current-bitwidth 16]
+                      )
+                      (thread (thunk
+                        (clear-vc!)
+                        (clear-terms!)
+                        (collect-garbage)
+
+                        ;; if solution already found in previous
+                        ;; iteration, do nothing.
+                        (cond
+                          [(not solved?)
+                            (define base_name (string-append "base_" (~s (random 10000)) "_s" (~s t) "_d" (~s d)))
+
+                            ;; get-grammar step-i, depth d
+                            ;; get-interpreter step-i, depth d
+                            ;; get-cost-model step-i, depth d
+                            (define-values (grammar interpreter cost-model) 
+                                          (get-expr-grammar-step-hydride spec-expr base_name src-get-ops src-visitor src-length-fn src-prec-fn input-precs input-sizes expr-VF t d scale-factor))
+
+                        (define (grammar-fn i)
+                            (grammar i)
+                        )
+                        (debug-log (format "Specification: ~a\n" spec-expr ))
+
+                          ;; perform synthesis
+                          (define-values (sat? mat el) 
+                            (synthesize-sol-with-depth 
+                              d 
+                              d invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                              optimize? interpreter cost-model  symbolic? cost-bound solver) 
+                          )
+                          ;; if sat set solution? to be true
+                          (if sat?
+                            (begin
+                              (set! solved? #t)
+                              (set! sol mat)
+                              ;(kill-other-threads t)
+                              )
+                            '()
+                            )
+                          ]
+                        )
+                      ) 
+                    ) ; (thread thunk
+                  ) ;; paramterize 
+                ) ;; threads list
+              ) ;; thds
+
+              (set! THREADS-REF thds)
+
+              (debug-log (format "Waiting on parallel threads range ~a to ~a for synthesis depth ~a \n" step-low step-high d))
+              (for/list ([thd thds])
+                        (thread-wait thd)
+              )
+            ]
+          )
+        ) 
     )
+  )
 
 
   (define end-time (current-seconds))
@@ -417,11 +428,6 @@
     (values solved? sol (- end-time start-time))
     )
   )
-
-
-
-
-
 
 ;; High level wrapper to invoke inst-combine on input hydride expression
 (define (inst-combine-hydride-expr hydride-expr window-depth target type-info)
@@ -474,28 +480,27 @@
 
   (define precs 
     (for/list ([leaf leaves])
-              (destruct leaf
-                        [(reg id)  ;; Get precision from type-info 
-                         (define type-details (vector-ref type-info (bitvector->integer id)))
-                         (vector-ref type-details 0)
-                         ] 
-                        [_ (get-prec leaf (vector))]
-                        )
-              )
+      (destruct leaf
+        [(reg id)  ;; Get precision from type-info 
+          (define type-details (vector-ref type-info (bitvector->integer id)))
+          (vector-ref type-details 0)
+          ] 
+        [_ (get-prec leaf (vector))]
+      )
     )
+  )
 
   (define sizes 
     (for/list ([leaf leaves])
-              (destruct leaf
-                        [(reg id)  ;; Get size from type-info 
-                         
-                         (define type-details (vector-ref type-info (bitvector->integer id)))
-                         (vector-ref type-details 1)
-                         ] 
-                        [_ (get-length leaf (vector))]
-                        )
-              )
+      (destruct leaf
+        [(reg id)  ;; Get size from type-info 
+          (define type-details (vector-ref type-info (bitvector->integer id)))
+          (vector-ref type-details 1)
+        ] 
+        [_ (get-length leaf (vector))]
+      )
     )
+  )
 
 
   (displayln "Precs")
@@ -509,65 +514,41 @@
   (displayln current-expr)
 
   (cond 
-
     [(hash-has-key? inst-combine-cache current-expr)
      (displayln (format "cache hit for ~a" current-expr))
      (define simplified-current-expr (hash-ref inst-combine-cache current-expr))
      (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
-
-
-
-
-
      (define disjoint-simplified (bind-expr-fn simplified-current-expr (list->vector simplified-leaves)))
-    
-    disjoint-simplified
-
-
-
-     ]
+      disjoint-simplified
+    ]
     [else
       (destruct hydride-expr
-                [(reg id) 
-                 hydride-expr
-                 ]
-                [_
-
-                  (define start-time (current-seconds))
-                  (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target "" ""))
-                  (define end-time (current-seconds))
-
-                  (define elapsed-time (- end-time start-time))
-                  (displayln (format "Inst Combine Query Elapsed ~a seconds" elapsed-time))
-
-                  (hash-set! inst-combine-cache current-expr simplified-current-expr)
-
-
-                  (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
-
-
-                  (define disjoint-simplified (bind-expr simplified-current-expr (list->vector simplified-leaves)))
-
-                  (cond
-                    [(< (cost-fn simplified-current-expr) (cost-fn current-expr))
-                     ;; If current query was simplified, it may be possible to simply the leaves 
-                     ;; with the new expression. Test by running again.
-                     (displayln "Current query simplified, re-run inst combine on new expression")
-                     (inst-combine-hydride-expr hydride-expr window-depth target type-info)
-                     ]
-                    [else
-                      disjoint-simplified
-                      ]
-                    )
-
-
-
-
-                  ]
-
-                )
+        [(reg id) 
+          hydride-expr
+          ]
+        [_
+          (define start-time (current-seconds))
+          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target "" "" "" ""))
+          (define end-time (current-seconds))
+          (define elapsed-time (- end-time start-time))
+          (displayln (format "Inst Combine Query Elapsed ~a seconds" elapsed-time))
+          (hash-set! inst-combine-cache current-expr simplified-current-expr)
+          (define simplified-leaves (for/list ([leaf leaves]) (inst-combine-hydride-expr leaf window-depth target type-info)))
+          (define disjoint-simplified (bind-expr simplified-current-expr (list->vector simplified-leaves)))
+          (cond
+            [(< (cost-fn simplified-current-expr) (cost-fn current-expr))
+              ;; If current query was simplified, it may be possible to simply the leaves 
+              ;; with the new expression. Test by running again.
+              (displayln "Current query simplified, re-run inst combine on new expression")
+              (inst-combine-hydride-expr hydride-expr window-depth target type-info)
+              ]
+            [else
+              disjoint-simplified
+              ]
+            )
+          ]
+        )
       ]
-
     )
-
   )
+
