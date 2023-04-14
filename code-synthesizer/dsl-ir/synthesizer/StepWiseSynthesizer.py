@@ -191,7 +191,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 dsl_inst = ops[idx]
                 ctx = ctxs[idx]
                 dsl_ops = dsl_inst.get_semantics_ops_list()
-                ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
+                ctx_ops = ctx.get_bv_ops() #self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
 
                 key = str(sorted(ctx_ops, key = lambda x : BV_OPS.index(x)))
 
@@ -238,20 +238,6 @@ class StepWiseSynthesizer(SynthesizerBase):
             debug("Count: ",count)
             debug("Num Buckets: ", len(bucket.keys()))
 
-        #prinddt("OPs buckets:")
-        #print(json.dumps(ops_bucket, indent = 2))
-        #print_total_count(ops_bucket)
-
-        #print("Lengths buckets:")
-        #print(json.dumps(lengths_bucket, indent = 2))
-        #print_total_count(lengths_bucket)
-
-
-        #print("Precs buckets:")
-        #print(json.dumps(precs_bucket, indent = 2))
-        #print_total_count(precs_bucket)
-
-        #print("="*50)
 
 
         # Using ops wise bucket to partition operations
@@ -261,7 +247,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             dsl_inst = ops[idx]
             ctx = ctxs[idx]
             dsl_ops = dsl_inst.get_semantics_ops_list()
-            ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
+            ctx_ops = ctx.get_bv_ops()#self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
 
             ctx_ops = sorted(ctx_ops, key = lambda x : BV_OPS.index(x))
 
@@ -392,7 +378,13 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         debug(sample_key_sizes)
 
-        for flexibility in range(0,self.partition_flexibility):
+        flexibility_start = 0
+        if "bvmul" in spec_ops:
+            flexibility_start = 0
+
+        print("flexibility_start:", flexibility_start)
+
+        for flexibility in range(flexibility_start ,self.partition_flexibility):
             helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
             test_flex = list(filter(helper_fn, sample_keys))
 
@@ -598,7 +590,13 @@ class StepWiseSynthesizer(SynthesizerBase):
             return  (non_matching_count < non_matching_lim)
 
 
-        for flexibility in range(0,self.partition_flexibility):
+
+        flexibility_start = 0
+        if "bvmul" in spec_ops and self.target == 'hvx':
+            flexibility_start = 0
+
+        print("flexibility_start:", flexibility_start)
+        for flexibility in range(flexibility_start,self.partition_flexibility):
             helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
             test_flex = list(filter(helper_fn, sample_keys))
 
@@ -645,7 +643,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             sorted_keys = []
 
-            if self.target == 'hvx':
+            if self.target == 'hvx' :
                 # traverse shuffle keys first as more important in hvx
                 sorted_keys = list(sample_key) + shuffle_key
             else:
@@ -908,6 +906,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         if not self.is_shuffle:
             MAX_NUM_CLAUSES = 16
+
+            if self.target == 'x86':
+                MAX_NUM_CLAUSES = 18
             if self.depth >= 4:
                 MAX_NUM_CLAUSES = 7 #7 7 by default changing to 8 for matmul
 
@@ -1023,9 +1024,6 @@ class StepWiseSynthesizer(SynthesizerBase):
             return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
             return 15
-
-        #elif self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE  ) and self.spec.output_precision == 32 and  ctx.name == "hexagon_V6_vmpyieoh_128B_alt":
-        #    return 7
         else:
             return super().score_context(dsl_inst, ctx)
 

@@ -35,6 +35,25 @@ class Specification:
         return self.target not in ["hvx"]
 
 
+    ## Currently for mullo and hvx multiplication ops
+    ## some variants used signed and unsigned interchangeably
+    ## even when the types of the operands are the same.
+    ## Once that get's resolved this would not be needed.
+    def get_target_specific_ops(self, ops):
+
+        if self.target == "hvx":
+
+            if "bvmul" in ops and (32 == self.output_precision or 32 in self.input_precision) and False:
+                ops += ["sign-extend", "zero-extend"]
+        elif self.target == "x86":
+            if "bvmul" in ops:
+                ops += ["sign-extend", "zero-extend"]
+
+
+        return ops
+
+
+
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True, supports_absd = True):
         operations = []
         for line in self.semantics:
@@ -89,6 +108,7 @@ class Specification:
 
 
 
+        operations = self.get_target_specific_ops(operations)
 
 
 

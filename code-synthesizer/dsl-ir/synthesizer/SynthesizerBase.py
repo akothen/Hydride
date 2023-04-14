@@ -196,12 +196,14 @@ class SynthesizerBase:
             #if input_size <= 32:
             #    continue
 
+
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
 
             # Scalar case, no need to shuffle
             if number_elems == 1:
                 continue
+
 
             datum = (input_size,precision)
 
@@ -243,6 +245,7 @@ class SynthesizerBase:
             # Scalar case, no need to shuffle
             if number_elems == 1:
                 continue
+
 
             datum = (input_size,precision)
 
@@ -946,14 +949,23 @@ class SynthesizerBase:
                 # of variants
                 spec_variant_ops = [op for op in spec_ops if op in variants]
 
+                #print("Spec Variant ops", spec_variant_ops)
+                #print("Variant ops", variants)
+
                 if len(spec_variant_ops) == 0:
                     continue
 
                 for v in variants:
 
+                    # Flexible accumulation for dot product like operations
+                    if  v in ctx_ops and v not in spec_ops and "bvmul" in spec_ops and v == "bvadd":
+                        #print("Continuing here for", ctx.name)
+                        continue
+
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
-                    if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
+
+                    if v in ctx_ops and v not in spec_ops and not skip :#and v != "bvadd":
                         print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
                         skip = True
 
@@ -1001,6 +1013,11 @@ class SynthesizerBase:
 
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
+
+            #if self.FLEXIBLE_CASTING  :
+            #    supports_output_length = supports_output_length or any([ctx.supports_output_size(input_size) for input_size in self.input_sizes])
+
+
             supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
 
             supports_input_basevect = False
@@ -1046,6 +1063,7 @@ class SynthesizerBase:
                 print("Hexagon cond for",ctx.name,hexagon_cond)
                 print("Hexagon cond op for",ctx.name,hexagon_precision_cond_op)
                 print("Hexagon cond op br",ctx.name,hexagon_precision_cond_br)
+                print("Cast inter input?:", casts_inter_inputs)
 
 
             if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length or supports_input_basevect)) or casts_inter_inputs:
@@ -1225,6 +1243,10 @@ class SynthesizerBase:
 
             EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"] ]
 
+            if self.target == "hvx":
+                EXPENSIVE_OPS.append(["bvaddnuw", "bvaddnsw", "bvadd", "bvmul"])
+                EXPENSIVE_OPS.append(["bvsubnuw", "bvsubnsw", "bvsub"])
+
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
             # hence, we limit dot-product operations to be included
@@ -1236,7 +1258,8 @@ class SynthesizerBase:
                 expensive_cond = all([(op not in spec_ops) and (op in dsl_ops) for op in expensive_op])
                 if  expensive_cond : #expensive_op in dsl_ops and expensive_op not in spec_ops:
                     if dsl_inst.name in DEBUG_LIST and DEBUG :
-                        print("Ops overlap failed due to expensive op in DSL")
+                        print("Ops overlap failed due to expensive op in DSL for ", expensive_op)
+
                     return False
 
 
