@@ -577,6 +577,8 @@
                              ]
                             [else
                                 (verify-upscaled-equal? upscaled-mat)
+                                
+                                
                               ]
                             )
                           )
@@ -668,11 +670,11 @@
   (define sol '())
 
 
-  (set! depth-limit (max depth-limit (+ 2 starting-depth) ))
+  ;(set! depth-limit (max depth-limit (+ 2 starting-depth) ))
 
-  ;(set! starting-depth 5)
-  ;(set! starting-depth 2)
-  ;(set! depth-limit 6)
+  (set! starting-depth 2)
+  (set! depth-limit 4)
+
 
   (define start-time (current-seconds))
   (define solutions 
