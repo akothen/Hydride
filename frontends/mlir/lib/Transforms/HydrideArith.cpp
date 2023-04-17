@@ -48,6 +48,10 @@ std::map<void *, unsigned> VariableToRegMap;
 
 std::map<unsigned, vector::LoadOp> RegToLoadMap;
 std::map<vector::LoadOp, unsigned> LoadToRegMap;
+
+std::map<unsigned, vector::TransferReadOp> RegToTransferReadMap;
+std::map<vector::TransferReadOp, unsigned> TransferReadToRegMap;
+
 Encoding encoding;
 
 std::queue<Operation *> RootExprOp;
@@ -192,6 +196,64 @@ public:
     return define_bitvector_str + "\n" + define_buffer_str;
   }
 
+  std::string define_transfer_buffer(vector::TransferReadOp op) {
+    // std::string reg_name = "reg_";
+    std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
+    size_t bitwidth = 0;
+    std::string define_bitvector_str;
+    std::string define_buffer_str;
+    auto vecType = op.getResult().getType().dyn_cast<VectorType>();
+    std::string elemT = "'";
+    if (vecType && vecType.getElementType()) {
+      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
+      elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
+      // llvm::outs() << "elemT is: " << elemT << "\n";
+      unsigned rank = vecType.getRank();
+
+      define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
+                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
+                             ")" + "))";
+
+      // todo: mlir interpreter for create-buffer
+      define_buffer_str = "(define " + reg_name + " (arith:create-tensor " +
+                          reg_name + "_tensor " + "(vector";
+
+      for (unsigned d = 0; d < rank; d++) {
+
+        define_buffer_str += " " + std::to_string(vecType.getShape()[d]);
+      }
+
+      define_buffer_str += ") ";
+
+      define_buffer_str += "(shape";
+
+      for (unsigned d = 0; d < rank; d++) {
+
+        define_buffer_str += " " + std::to_string(d);
+      }
+
+      define_buffer_str += ") ";
+
+      define_buffer_str += elemT + ")" + ")";
+    } else {
+      define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
+                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
+                             ")" + "))";
+
+      // todo: mlir interpreter for create-buffer
+      define_buffer_str = "(define " + reg_name + " (arith:create-buffer " +
+                          reg_name + "_bitvector " + elemT + ")" + ")";
+    }
+
+    if (elemT == "'") {
+      /* llvm::outs() << "Define_load_buffer escaping early for " << reg_name
+                   << "of bitwidth " << bitwidth << "\n"; */
+      return "";
+    }
+
+    return define_bitvector_str + "\n" + define_buffer_str;
+  }
+
   //>>>>>>>>>>>>>>>>> Hydride Decls
   std::string define_variable_buffer(void *val_ptr) {
     // std::string reg_name = "reg_";
@@ -240,6 +302,13 @@ public:
                    std::to_string(id) + " " + get_reg_id(id) + ")" + "\n";
     }
 
+    for (auto bi = TransferReadToRegMap.begin();
+         bi != TransferReadToRegMap.end(); bi++) {
+      unsigned id = bi->second;
+      add_entry += "(hash-set! " + map_name + " " + "reg_" +
+                   std::to_string(id) + " " + get_reg_id(id) + ")" + "\n";
+    }
+
     for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end();
          bi++) {
       unsigned id = bi->second;
@@ -253,8 +322,14 @@ public:
   std::string emit_symbolic_buffers() {
     std::string buffers = "";
     for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
-      const vector::LoadOp loadOp = bi->first;
+      auto loadOp = bi->first;
       buffers += define_load_buffer(loadOp) + "\n";
+    }
+
+    for (auto bi = TransferReadToRegMap.begin();
+         bi != TransferReadToRegMap.end(); bi++) {
+      auto transferReadOp = bi->first;
+      buffers += define_transfer_buffer(transferReadOp) + "\n";
     }
 
     for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end();
@@ -269,8 +344,15 @@ public:
   std::string emit_symbolic_buffers_vector(std::string vector_name) {
     std::string buffers = "(define " + vector_name + " (vector ";
     for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
-      const vector::LoadOp loadOp = bi->first;
+      auto loadOp = bi->first;
       buffers += "reg_" + std::to_string(LoadToRegMap[loadOp]) + " ";
+    }
+
+    for (auto bi = TransferReadToRegMap.begin();
+         bi != TransferReadToRegMap.end(); bi++) {
+      auto transferReadOp = bi->first;
+      buffers +=
+          "reg_" + std::to_string(TransferReadToRegMap[transferReadOp]) + " ";
     }
 
     buffers += "))";
@@ -377,6 +459,14 @@ protected:
   std::string visit(arith::ConstantOp constantOp) {
     auto constInt = constantOp.getValue().cast<IntegerAttr>().getInt();
     return std::to_string(constInt);
+  }
+
+  std::string visit(arith::MulIOp mulOp) {
+    Value a = mulOp.getLhs();
+    Value b = mulOp.getRhs();
+    bool is_vec = mulOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("mul", a, b, is_vec);
+    return ret_str;
   }
 
   std::string visit(vector::BitCastOp bitcastOp) {
@@ -605,7 +695,8 @@ protected:
     if (is_sca) {
       auto intType = loadOp->getResult(0).getType().dyn_cast<VectorType>();
       std::string bits = std::to_string(intType.getElementTypeBitWidth() * 1);
-      unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
       std::string reg_name = "reg_" + std::to_string(reg_counter);
       RegToLoadMap[reg_counter] = loadOp;
       LoadToRegMap[loadOp] = reg_counter;
@@ -615,7 +706,8 @@ protected:
       auto vecType = loadOp->getResult(0).getType().dyn_cast<VectorType>();
       std::string bits = std::to_string(vecType.getElementTypeBitWidth() *
                                         vecType.getNumElements());
-      unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
       std::string reg_name = "reg_" + std::to_string(reg_counter);
       RegToLoadMap[reg_counter] = loadOp;
       LoadToRegMap[loadOp] = reg_counter;
@@ -623,6 +715,43 @@ protected:
       return reg_name; //+ load_buff + "\n"+ "(load " + reg_name
                        //+ " " + rkt_idx + " " + alignment + ")";
       // return tabs() + "(load " + op->name + " " + rkt_idx + " " +
+      // alignment
+      // + ")";
+    }
+  }
+
+  std::string visit(vector::TransferReadOp transferReadOp) {
+    bool is_sca = transferReadOp->getResult(0).getType().isa<IntegerType>();
+    if (TransferReadToRegMap.find(transferReadOp) !=
+        TransferReadToRegMap.end()) {
+      return "reg_" + std::to_string(TransferReadToRegMap[transferReadOp]);
+    }
+
+    if (is_sca) {
+      auto intType =
+          transferReadOp->getResult(0).getType().dyn_cast<VectorType>();
+      std::string bits = std::to_string(intType.getElementTypeBitWidth() * 1);
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
+      std::string reg_name = "reg_" + std::to_string(reg_counter);
+      RegToTransferReadMap[reg_counter] = transferReadOp;
+      TransferReadToRegMap[transferReadOp] = reg_counter;
+      return reg_name;
+    } else {
+
+      auto vecType =
+          transferReadOp->getResult(0).getType().dyn_cast<VectorType>();
+      std::string bits = std::to_string(vecType.getElementTypeBitWidth() *
+                                        vecType.getNumElements());
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
+      std::string reg_name = "reg_" + std::to_string(reg_counter);
+      RegToTransferReadMap[reg_counter] = transferReadOp;
+      TransferReadToRegMap[transferReadOp] = reg_counter;
+      // std::string transferRead_buff = define_transferRead_buffer(op);
+      return reg_name; //+ transferRead_buff + "\n"+ "(transferRead " + reg_name
+                       //+ " " + rkt_idx + " " + alignment + ")";
+      // return tabs() + "(transferRead " + op->name + " " + rkt_idx + " " +
       // alignment
       // + ")";
     }
@@ -675,7 +804,7 @@ void HydrideArithPass::runOnOperation() {
     // if store, expr from MLIRValVisit on single source vector
     // if other op, expr from MLIRValVisit for all operands
     std::string expr;
-    llvm::outs() << "op: " << *op << "\n";
+    // llvm::outs() << "op: " << *op << "\n";
     if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
       for (Value operand : op->getOperands()) {
         expr = MLIRValVisit(operand);
@@ -683,10 +812,19 @@ void HydrideArithPass::runOnOperation() {
 
         EmitSynthesis(curr_func_name, expr, expr_id);
         std::vector<Type> arg_types(RegToLoadMap.size() +
+                                    RegToTransferReadMap.size() +
                                     RegToVariableMap.size());
         std::vector<Value> args_vec(RegToLoadMap.size() +
+                                    RegToTransferReadMap.size() +
                                     RegToVariableMap.size());
         for (auto reg : RegToLoadMap) {
+          arg_types[reg.first] = reg.second.getType();
+          llvm::outs() << "reg.second.getType(): " << reg.second.getType()
+                       << "\n";
+          args_vec[reg.first] = reg.second;
+        }
+
+        for (auto reg : RegToTransferReadMap) {
           arg_types[reg.first] = reg.second.getType();
           llvm::outs() << "reg.second.getType(): " << reg.second.getType()
                        << "\n";
@@ -755,12 +893,13 @@ void HydrideArithPass::runOnOperation() {
 
     if (auto transferWriteOp = dyn_cast<vector::TransferWriteOp>(op)) {
       auto valToStore = transferWriteOp.getVector();
+      llvm::outs() << valToStore << "\n";
       auto valToStoreType = valToStore.getType();
-      std::vector<Type> arg_types(RegToLoadMap.size() +
+      std::vector<Type> arg_types(RegToTransferReadMap.size() +
                                   RegToVariableMap.size());
-      std::vector<Value> args_vec(RegToLoadMap.size() +
+      std::vector<Value> args_vec(RegToTransferReadMap.size() +
                                   RegToVariableMap.size());
-      for (auto reg : RegToLoadMap) {
+      for (auto reg : RegToTransferReadMap) {
         arg_types[reg.first] = reg.second.getType();
         args_vec[reg.first] = reg.second;
       }
@@ -786,7 +925,7 @@ void HydrideArithPass::runOnOperation() {
       // ValueRange(args_vec));
       auto callOp = rewriter.create<LLVM::CallOp>(
           loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
-      valToStore.replaceAllUsesWith(callOp.getResult(0));
+      // valToStore.replaceAllUsesWith(callOp.getResult(0));
       expr_id++;
     }
 
@@ -848,6 +987,8 @@ void HydrideArithPass::runOnOperation() {
     VariableToRegMap.clear();
     RegToLoadMap.clear();
     LoadToRegMap.clear();
+    RegToTransferReadMap.clear();
+    TransferReadToRegMap.clear();
     RootExprOp.pop();
   }
 }
@@ -893,7 +1034,9 @@ std::string HydrideArithPass::MLIRValVisit(Value val) {
           return reg_name;
         }
 
-        unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+        unsigned reg_counter =
+            (RegToLoadMap.size() + RegToTransferReadMap.size() +
+             RegToVariableMap.size());
 
         std::string reg_name = "reg_" + std::to_string(reg_counter);
 
@@ -913,7 +1056,8 @@ std::string HydrideArithPass::MLIRValVisit(Value val) {
       return reg_name;
     }
 
-    unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+    unsigned reg_counter = (RegToLoadMap.size() + RegToTransferReadMap.size() +
+                            RegToVariableMap.size());
 
     std::string reg_name = "reg_" + std::to_string(reg_counter);
 
@@ -934,7 +1078,7 @@ std::string HydrideArithPass::print_binary_op(std::string bv_name, Value a,
     // indent.push(indent.top() + 1);
     std::string rkt_lhs = MLIRValVisit(a);
     std::string rkt_rhs = MLIRValVisit(b);
-    // indent.pop();
+
     return "(arith:tensor-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
   } else {
 
@@ -947,11 +1091,14 @@ std::string HydrideArithPass::print_binary_op(std::string bv_name, Value a,
 std::string HydrideArithPass::MLIRArithOpVisit(Operation *op) {
 
   if (auto addOp = dyn_cast<arith::AddIOp>(op)) {
-
     return visit(addOp);
   }
   if (auto constantOp = dyn_cast<arith::ConstantOp>(op)) {
     return visit(constantOp);
+  }
+
+  if (auto mulOp = dyn_cast<arith::MulIOp>(op)) {
+    return visit(mulOp);
   }
 
   for (Value operand : op->getOperands()) {
@@ -968,7 +1115,6 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
   if (auto loadOp = dyn_cast<vector::LoadOp>(op)) {
     return visit(loadOp);
   }
-
   if (auto transferReadOp = dyn_cast<vector::TransferReadOp>(op)) {
     return visit(transferReadOp);
   }
@@ -1025,6 +1171,11 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
   for (Value operand : op->getOperands()) {
     if (auto OpOperandRoot = operand.getDefiningOp()) {
       if (!isa<vector::LoadOp>(OpOperandRoot) &&
+          !isa<vector::LoadOp>(OpOperandRoot)) {
+        RootExprOp.push(OpOperandRoot);
+      }
+
+      if (!isa<vector::TransferReadOp>(OpOperandRoot) &&
           !isa<vector::TransferReadOp>(OpOperandRoot)) {
         RootExprOp.push(OpOperandRoot);
       }
@@ -1036,7 +1187,8 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
     return reg_name;
   }
 
-  unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+  unsigned reg_counter = (RegToLoadMap.size() + RegToTransferReadMap.size() +
+                          RegToVariableMap.size());
 
   std::string reg_name = "reg_" + std::to_string(reg_counter);
 
