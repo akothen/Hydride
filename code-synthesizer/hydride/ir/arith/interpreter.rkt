@@ -917,6 +917,10 @@
             [(arith:tensor-add v1 v2)
              (list v1 v2)
              ]
+
+            [(arith:tensor-mul v1 v2)
+             (list v1 v2)
+             ]
             )
   )
 

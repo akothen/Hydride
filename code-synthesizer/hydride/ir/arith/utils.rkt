@@ -150,6 +150,21 @@
                  )
                )
              ]
+            [(arith:tensor-mul v1 v2)
+             (if is-leaf-depth
+               (values (arith:tensor-mul (arg 0) (arg 1)) 2)
+               (begin
+                 (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                 (define remaining-values (- (vector-length args) args-used1))
+                 (define remaining-args (vector-take-right args remaining-values))
+
+                 (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
+
+                 (values (arith:tensor-mul leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+                 )
+               )
+             ]
             
             )
 
@@ -232,6 +247,8 @@
              (list (if (arith:is-buffer-signed expr)  (list sign-extend)  (list zero-extend)))
              ]
             [(arith:tensor-add v1 v2) (append (list extract bvadd) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+
+            [(arith:tensor-mul v1 v2) (append (list extract bvmul) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
             )
 
 

@@ -17,6 +17,7 @@
 (require hydride/ir/hydride/printer)
 
 (require hydride/ir/hvx/printer)
+(require hydride/ir/arith/utils)
 
 
 
@@ -31,7 +32,20 @@
 (define (hydride-to-str hydride-expr id-map)
   (define (print-helper k v)
    (define type-str  
-     (string-append "; (reg " (~s  (bitvector->natural v)) ") " (halide:print-buffer-type-info k) "\n")
+     (string-append "; (reg " (~s  (bitvector->natural v)) ") " 
+                    (cond
+                      [(equal? input-lang 'mlir)
+                       (arith:print-buffer-type-info k) 
+                       ]
+                      [(equal? input-lang 'halide)
+                       (halide:print-buffer-type-info k) 
+                       ]
+                      [else
+                        (error "llvm_codegen.rtk: Unsupported input language in hydride-to-str")
+                        ]
+                      
+                      )
+                    "\n")
      )
    type-str
    )
