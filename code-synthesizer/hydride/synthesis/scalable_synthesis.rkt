@@ -72,8 +72,8 @@
        (max 1 (- expr-depth 1))
        ]
       [(not (halide:contains-mul-op-in-subexpr halide-expr expr-depth))
-       (define max-no-mul-depth 5)
-       (debug-log (format "Does not contain mul op, reduce depth to maximum of 4, hence decrement depth from ~a to ~a\n" expr-depth (min max-no-mul-depth expr-depth )))
+       (define max-no-mul-depth 4)
+       (debug-log (format "Does not contain mul op, reduce depth to maximum of 5, hence decrement depth from ~a to ~a\n" expr-depth (min max-no-mul-depth expr-depth )))
        (min max-no-mul-depth expr-depth)
        ]
       [else
@@ -173,67 +173,103 @@
       (pretty-print hydride-expr)
       (define leave-sizes (get-expr-bv-sizes leaves))
 
-      (debug-log (format "Symbolic bv sizes: ~a" leave-sizes))
+      ;; First test if the expressions are equivalent on a concrete value
+      ;; instead of falling back to expensive verification
 
-      (define sym-bvs (create-symbolic-bvs leaves-sizes))
+      (define conc-bvs (create-concrete-bvs leaves-sizes))
+      (define halide-expr-args-conc (create-buffers leaves conc-bvs))
+      (define-values (expr-extract-conc num-used-conc) (bind-expr-args halide-expr  halide-expr-args-conc actual-expr-depth))
 
-      (define halide-expr-args (create-buffers leaves sym-bvs))
-      (define-values (expr-extract num-used) (bind-expr-args halide-expr  halide-expr-args actual-expr-depth))
+      (define conc-halide-res (assemble-result expr-extract-conc))
 
-      (debug-log expr-extract)
-
-      ;(define halide-res (halide:assemble-bitvector (halide:interpret expr-extract) (halide:vec-len expr-extract)))
-      (define halide-res (assemble-result expr-extract))
-      (define hydride-res 
+      (define conc-hydride-res 
         (cond
           [(equal? target 'hvx)
-           (hvx:interpret hydride-expr sym-bvs)
+           (hvx:interpret hydride-expr conc-bvs)
            ]
 
           [(equal? target 'x86)
-           (hydride:interpret hydride-expr sym-bvs)
+           (hydride:interpret hydride-expr conc-bvs)
            ]
           ))
 
+      (define conc-equal? (equal? conc-halide-res conc-hydride-res))
 
-      (define verification-timeout? #t)
-      (define cex
-        (cond 
-          [verification-timeout? 
-            (with-handlers ([exn:fail? (lambda (exn) (unsat))])
-                           (with-deep-time-limit 60
-                                                 (verify 
-                                                   (begin
-                                                     (assert (equal?   halide-res hydride-res))
+      (cond
+        [conc-equal?
+          ;; Try expensive equivalnce verification
+
+          (debug-log (format "Symbolic bv sizes: ~a" leave-sizes))
+
+          (define sym-bvs (create-symbolic-bvs leaves-sizes))
+
+
+
+          (define halide-expr-args (create-buffers leaves sym-bvs))
+          (define-values (expr-extract num-used) (bind-expr-args halide-expr  halide-expr-args actual-expr-depth))
+
+          (debug-log expr-extract)
+
+          ;(define halide-res (halide:assemble-bitvector (halide:interpret expr-extract) (halide:vec-len expr-extract)))
+          (define halide-res (assemble-result expr-extract))
+          (define hydride-res 
+            (cond
+              [(equal? target 'hvx)
+               (hvx:interpret hydride-expr sym-bvs)
+               ]
+
+              [(equal? target 'x86)
+               (hydride:interpret hydride-expr sym-bvs)
+               ]
+              ))
+
+
+          (define verification-timeout? #t)
+          (define cex
+            (cond 
+              [verification-timeout? 
+                (with-handlers ([exn:fail? (lambda (exn) (unsat))])
+                               (with-deep-time-limit 30
+                                                     (verify 
+                                                       (begin
+                                                         (assert (equal?   halide-res hydride-res))
+                                                         )
+                                                       )
                                                      )
-                                                   )
-                                                 )
 
-                           )
-            ]
-          [else
-            (verify 
-              (begin
-                (assert (equal?   halide-res hydride-res))
-                )
+                               )
+                ]
+              [else
+                (verify 
+                  (begin
+                    (assert (equal?   halide-res hydride-res))
+                    )
+                  )
+                ]
+
+
               )
-            ]
+            )
 
-
-          )
-        )
-
-      (cond 
-        [(sat? cex)
-         (debug-log "Up scaled version not equivalent")
-         (debug-log cex)
-         #f
-         ]
-        [else
-         (debug-log "Up scaled version  equivalent!")
-          #t
+          (cond 
+            [(sat? cex)
+             (debug-log "Up scaled version not equivalent")
+             (debug-log cex)
+             #f
+             ]
+            [else
+              (debug-log "Up scaled version  equivalent!")
+              #t
+              ]
+            )
           ]
+        [else
+          (debug-log "verification failed on initial concrete values for cex")
+          #f
+          ]
+
         )
+
     )
 
 
@@ -577,8 +613,6 @@
                              ]
                             [else
                                 (verify-upscaled-equal? upscaled-mat)
-                                
-                                
                               ]
                             )
                           )
@@ -677,6 +711,11 @@
 
 
   (define start-time (current-seconds))
+
+  ;; Set timeout for overall time spent trying the synthesize any one query
+  (set-start-time-global-timeout)
+  (set-global-timeout #t)
+
   (define solutions 
 
     ;; Traversal order first searchs the breadth of grammars
@@ -827,6 +866,7 @@
 
   ;; Reset context for next synthesis
   (set-optimize-bound-found #f)
+  (set-global-timeout #f)
 
   (debug-log "Stepwise synthesis completed!")
 

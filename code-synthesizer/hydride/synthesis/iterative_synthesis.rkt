@@ -59,6 +59,24 @@
   )
 
 
+;; Global timeout between threads if overall
+;; synthesis timeout exceeded
+
+
+(define start-time -1)
+
+(define (set-start-time-global-timeout)
+  (set! start-time (current-seconds))
+  )
+
+(define global-timeout? #f)
+
+(define (set-global-timeout val)
+  (set! global-timeout? val)
+  )
+
+(define GLOBAL_TIMEOUT 10000); timeout after 10000 seconds for any single input expression
+
 
 
 ;; Evaluate the symbol defined at index i
@@ -130,6 +148,8 @@
           (set! uneq? #t)
           '()
           )
+
+        (current-solver (z3))
 
         verified?
 
@@ -643,6 +663,10 @@
   (cond 
     [(and optimize? (not iterative-optimize) optimize-bound-found)
      (debug-log "Escaping early as other thread found optimize bound solution")
+     (values #f '() -1)
+     ]
+    [(and global-timeout? (>= (- (current-seconds) start-time)  GLOBAL_TIMEOUT))
+     (debug-log "Global Timeout exceeded: exiting ...")
      (values #f '() -1)
      ]
     [(>= (length cexs) 15)
