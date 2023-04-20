@@ -57,7 +57,7 @@
 ;; Wrapper to invoke rewrite-ir method
 
 (define (inst-combine spec-expr optimize? symbolic? solver input-sizes input-precs 
-                                target-language input-hash-name output-hash-name 
+                                target-language cost-model-type input-hash-name output-hash-name 
                                 in-cache-hash-name out-cache-hash-name)
 
   (define language-type
@@ -134,10 +134,9 @@
             (values #t sanatized-expr 0)
           ]
           [else
-            (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
+            (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type cost-model-type)
           ]
         )
-        ;;(rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type )
       ]
     )
   )
@@ -211,7 +210,7 @@
   )
 
 
-(define (rewrite-ir spec-expr  starting-depth depth-limit  optimize? symbolic? solver input-sizes input-precs scale-factor src-language target-language)
+(define (rewrite-ir spec-expr  starting-depth depth-limit  optimize? symbolic? solver input-sizes input-precs scale-factor src-language target-language cost-model-type)
   (debug-log (format "Invoked step-wise-synthesis!\n"))
 
   (define step-limit 5)
@@ -225,6 +224,9 @@
        (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
        ]
 
+      [(and (equal? src-language 'hvx) (equal? cost-model-type 'instcombine))
+       (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       ]
       [(equal? src-language 'hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
@@ -528,7 +530,7 @@
           ]
         [_
           (define start-time (current-seconds))
-          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target "" "" "" ""))
+          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target 'regular "" "" "" ""))
           (define end-time (current-seconds))
           (define elapsed-time (- end-time start-time))
           (displayln (format "Inst Combine Query Elapsed ~a seconds" elapsed-time))
