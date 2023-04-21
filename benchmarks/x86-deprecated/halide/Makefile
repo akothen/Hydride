@@ -1,4 +1,4 @@
-HALIDE_DISTRIB ?= /home/arnoor2/Racket/TensorSynth/Rosette-experiments/frontends/halide/distrib/
+HALIDE_DISTRIB = /home/scarlet/Hydride/frontends/halide/distrib
 LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 
 benchmarks = gaussian3x3 \

@@ -282,3 +282,9 @@ def extract_assignment_from_name(instrName: str):
         i = a.split("_")
         assignment[i[0]] = int(i[1])
     return qwq[0], assignment
+
+
+PUT0_LANE_N_ELEM_DIFF = ["SMLAL", "UMLAL", "SMLSL", "UMLSL", "SQDMLAL",
+                         "UQDMLAL", "SQDMLSL", "UQDMLSL", "SMULL", "UMULL", "SQDMULL", "UQDMULL"]
+PUT0_LANE_N_ELEM_SAME = ["MLS", "MUL", "MLA",
+                         "SQDMULH", "SDOT", "UDOT", "SQRDMLSH", "SQRDMLAH", "SQRDMULH"]

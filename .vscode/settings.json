@@ -3,6 +3,7 @@
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.extraPaths": [
     "codegen-generator/targets/x86/",
+    "codegen-generator/targets/arm/",
     "codegen-generator/targets/hexagon/",
     "codegen-generator/codegen/rosette/",
     "codegen-generator/codegen/llvm/",
@@ -22,6 +23,7 @@
   ],
   "pylint.path": [
     "codegen-generator/targets/x86/",
+    "codegen-generator/targets/arm/",
     "codegen-generator/targets/hexagon/",
     "codegen-generator/codegen/rosette/",
     "codegen-generator/codegen/llvm/",
@@ -39,6 +41,7 @@
     "codegen-generator/tools/llvmlite",
     "code-synthesizer/dsl-ir"
   ],
+  "pylint.args": ["--indent-string=\"  \""],
   "files.associations": {
     "array": "cpp",
     "string": "cpp",
@@ -50,5 +53,6 @@
   },
   "terminal.integrated.env.linux": {
     "ZSH_INIT_COMMAND_FOR_VSCODE": "source setup.sh"
-}
+  },
+  "editor.autoIndent": "full"
 }

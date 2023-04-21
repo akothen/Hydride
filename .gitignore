@@ -6,4 +6,9 @@ arm_
 **/*.pyc
 *.tmp
 a.out
+build/*
 # codegen-generator/targets/arm/rosette_test/*.c
+**/build/
+backends/*
+**/llvm-build/
+**/llvm-project/

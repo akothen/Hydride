@@ -13,9 +13,9 @@ from RoseBitVectorOperations import *
 from RoseContext import *
 
 
-# The cananonical for a function is a loop nest with 
-# one outer loop and at least one inner loop. 
-def IsFunctionInCanonicalForm(Function : RoseFunction):
+# The cananonical for a function is a loop nest with
+# one outer loop and at least one inner loop.
+def IsFunctionInCanonicalForm(Function: RoseFunction):
   # This function must not have a parent
   if Function.isTopLevelFunction() == False:
     return False
@@ -148,10 +148,10 @@ def GetBVExtractsToBeSkipped(Abstraction):
   return SkipBVExtracts
 
 
-# The loop bounds must be determined by the bvinsert or bvextract to inputs/output 
+# The loop bounds must be determined by the bvinsert or bvextract to inputs/output
 # of the smallest bitwidth.
-def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : list, \
-                                          SkipBVExtracts : set = set()):
+def GetOpDeterminingLoopBoundsInBlockList(Function: RoseFunction, BlockList: list,
+                                          SkipBVExtracts: set = set()):
   # Sanity check
   assert isinstance(Function, RoseFunction)
   # Now gather the bvinserts and bvextracts.
@@ -160,7 +160,7 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
   BVInsertOps = list()
   BVExtractOps = list()
   Result = list()
-  #BlockToBVInsertOp = dict()
+  # BlockToBVInsertOp = dict()
   for Block in BlockList:
     print("BLOCK IN BLOCKLIST:")
     Block.print()
@@ -170,15 +170,16 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
       if isinstance(Op, RoseBVInsertSliceOp):
         if Op.getInputBitVector() == FunctionOutput:
           if isinstance(Op.getOutputBitwidth(), RoseArgument):
-            #if Block in BlockToBVInsertOp:
+            # if Block in BlockToBVInsertOp:
+
             #  return None
             Result.append(Op)
-            #BlockToBVInsertOp[Block] = Op
+            # BlockToBVInsertOp[Block] = Op
             continue
-          #if Block in BlockToBVInsertOp:
+          # if Block in BlockToBVInsertOp:
           # return None
           BVInsertOps.append(Op)
-          #BlockToBVInsertOp[Block] = Op
+          # BlockToBVInsertOp[Block] = Op
           continue
       if isinstance(Op, RoseBVExtractSliceOp):
         if Op in SkipBVExtracts:
@@ -195,12 +196,11 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
   if len(Result) != 0:
     print("RETUTNING RESULT")
     return Result
-
-  # The bvinserts and bvextracts have output bitwidths that are integers 
+  # The bvinserts and bvextracts have output bitwidths that are integers
   # (and not rose values).
   BitWidth = RoseUndefValue()
   if len(BVInsertOps) != 0:
-    # But first make sure the bitwidth for all bvinserts is the same.    
+    # But first make sure the bitwidth for all bvinserts is the same.
     BitWidth = BVInsertOps[0].getOutputBitwidth()
     Result.append(BVInsertOps[0])
     # Sanity check
@@ -209,7 +209,7 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
         BitWidth = Op.getOutputBitwidth()
         Result.clear()
       Result.append(Op)
-  
+
   if len(BVExtractOps) != 0:
     # Now check get extract ops with smallest output bitwidths
     ExtractBitWidth = BVExtractOps[0].getOutputBitwidth()
@@ -236,9 +236,9 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
   return None
 
 
-# The loop bounds must be determined by the bvinsert or bvextract to inputs/output 
+# The loop bounds must be determined by the bvinsert or bvextract to inputs/output
 # of the smallest bitwidth.
-def GetOpDeterminingLoopBoundsFor(RegionList : list, SkipBVExtracts : set = set()):
+def GetOpDeterminingLoopBoundsFor(RegionList: list, SkipBVExtracts: set = set()):
   print("FIX BOUNDS OF LOOP FOR REGION LIST")
   # Get all the blocks in this region list at level 0.
   BlockList = list()
@@ -250,7 +250,8 @@ def GetOpDeterminingLoopBoundsFor(RegionList : list, SkipBVExtracts : set = set(
       BlockList.extend(Region.getRegionsOfType(RoseBlock, Level=0))
     else:
       for Key in Region.getKeys():
-        BlockList.extend(Region.getRegionsOfType(RoseBlock, Level=0, Key=Key))
+        BlockList.extend(Region.getRegionsOfType(
+            RoseBlock, Level=0, Key=Key))
   # Take into account any cond blocks in the region list
   CondRegions = list()
   for Region in RegionList:
@@ -260,11 +261,13 @@ def GetOpDeterminingLoopBoundsFor(RegionList : list, SkipBVExtracts : set = set(
       CondRegions.extend(Region.getRegionsOfType(RoseCond, Level=0))
     else:
       for Key in Region.getKeys():
-        CondRegions.extend(Region.getRegionsOfType(RoseCond, Level=0, Key=Key))
+        CondRegions.extend(Region.getRegionsOfType(
+            RoseCond, Level=0, Key=Key))
   for CondRegion in CondRegions:
     CondRegionBlockList = list()
     for Key in CondRegion.getKeys():
-      CondRegionBlockList.extend(CondRegion.getRegionsOfType(RoseBlock, Level=0, Key=Key))
+      CondRegionBlockList.extend(
+          CondRegion.getRegionsOfType(RoseBlock, Level=0, Key=Key))
     print("CondRegionBlockList:")
     for Block in CondRegionBlockList:
       print("BLOCK:")
@@ -286,7 +289,7 @@ def GetOpDeterminingLoopBoundsFor(RegionList : list, SkipBVExtracts : set = set(
   return GetOpDeterminingLoopBoundsInBlockList(RegionList[0].getFunction(), BlockList, SkipBVExtracts)
 
 
-def HasInlinableSubRegion(Function : RoseFunction):
+def HasInlinableSubRegion(Function: RoseFunction):
   InsertOps = list()
   ExtractOps = list()
   BlockList = Function.getRegionsOfType(RoseBlock)
@@ -308,8 +311,8 @@ def HasInlinableSubRegion(Function : RoseFunction):
     return
   # Check if extract ops and insert ops are in disjoint regions.
   # This means that the only common parent region must be the function.
-  #xtractOpToInsertRegion = dict()
-  #InsertRegionToExtractOps = dict()
+  # xtractOpToInsertRegion = dict()
+  # InsertRegionToExtractOps = dict()
   InsertRegions = list()
   for InsertOp in InsertOps:
     for ExtractOp in ExtractOps:
@@ -339,18 +342,18 @@ def HasInlinableSubRegion(Function : RoseFunction):
       ExtractRegion.print()
       print("---ExtractRegion.getParent():")
       ExtractRegion.getParent().print()
-      if isinstance(InsertRegion.getParent() , RoseFunction):
+      if isinstance(InsertRegion.getParent(), RoseFunction):
         assert isinstance(ExtractRegion.getParent(), RoseFunction)
-        #ExtractOpToInsertRegion[ExtractOp] = InsertRegion
-        #if InsertRegion not in InsertRegionToExtractOps:
+        # ExtractOpToInsertRegion[ExtractOp] = InsertRegion
+        # if InsertRegion not in InsertRegionToExtractOps:
         #  InsertRegionToExtractOps[InsertRegion] = set()
-        #InsertRegionToExtractOps[InsertRegion].add(ExtractOp)
+        # InsertRegionToExtractOps[InsertRegion].add(ExtractOp)
         if InsertRegion not in InsertRegions:
           InsertRegions.append(InsertRegion)
   return InsertRegions
 
 
-def GenConcreteValue(ConcreteValue : RoseConstant):
+def GenConcreteValue(ConcreteValue: RoseConstant):
   assert isinstance(ConcreteValue, RoseConstant)
   if isinstance(ConcreteValue.getType(), RoseBitVectorType):
     if ConcreteValue.getType().getBitwidth() >= 4:
@@ -370,7 +373,7 @@ def GenConcreteValue(ConcreteValue : RoseConstant):
       for _ in range(LeftOver):
         HexValString = "0" + HexValString
       Input += HexValString
-      Input += " " + str(ConcreteValue.getType().getBitwidth()) + ")"    
+      Input += " " + str(ConcreteValue.getType().getBitwidth()) + ")"
   else:
     assert isinstance(ConcreteValue.getType(), RoseIntegerType) \
         or isinstance(ConcreteValue.getType(), RoseBooleanType)
@@ -380,7 +383,7 @@ def GenConcreteValue(ConcreteValue : RoseConstant):
 
 # The names in Rosette IR need to be changed to names of instructions
 # in LLVM IR.
-def RoseIRToLLVM(Name : str):
+def RoseIRToLLVM(Name: str):
   assert isinstance(Name, str)
   NameList = list(Name)
   Index = 0
@@ -390,4 +393,3 @@ def RoseIRToLLVM(Name : str):
     Index += 1
   Name = "".join(NameList[Index:])
   return "hydride_" + Name
-

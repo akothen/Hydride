@@ -189,7 +189,9 @@ def parse_flag(names: List[str]):
 def wedo(instr):
     if not instr["name"].startswith("v"):
         return False
-    if instr["name"] in ["vmaxv_s32", "vmaxv_u32", "vminv_s32", "vminv_u32"]:  # TODO: intrinsic mismatch
+    if any(instr["name"].startswith(i) for i in ["vget", "vset"]):  # TODO: buxiangzuole
+        return False
+    if instr["name"] in ["vmaxv_s32", "vmaxv_u32", "vminv_s32", "vminv_u32", "vmov_n_s64", "vmov_n_u64"]:  # TODO: intrinsic mismatch
         return False
     unsupportedGroup = ["Complex", "Cryptography"]
     if any([i in instr["instruction_group"] for i in unsupportedGroup]):
@@ -277,10 +279,15 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
         elif desiredprefix == "INS":
             desiredprefix += "_asimdins_IV_v" if flag.x or flag.base == 'copy' else "_asimdins_IR_r"
         elif desiredprefix == "DUP":
-            if flag.n or flag.high or flag.lane:
+            # vdup_n_s8 -> DUP_asimdins_DR_r
+            # vdup_lane_s8 -> DUP_asimdins_DV_v
+            # vdup_lane_s64 -> DUP_asisdone_only
+            # vcopy_lane_s64 -> DUP_asisdone_only
+
+            if flag.high or (any(i in intrin for i in ["_lane_s64", "_lane_u64", "_laneq_s64", "_laneq_u64"]) and not flag.q):
                 desiredprefix += "_asisdone_only"
             else:
-                desiredprefix += "_asimdins_DV_v" if flag.x else "_asimdins_DR_r"
+                desiredprefix += "_asimdins_DV_v" if flag.x or flag.lane else "_asimdins_DR_r"
         elif desiredprefix in ["ORR", "BIC"]:
             desiredprefix += "_asimd"
         elif desiredprefix in ["ADDP"]:
@@ -304,7 +311,7 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
                         return True if flag.x else False
                     if flag.pair:
                         return False
-                    if not flag.q and flag.type.endswith("64"):
+                    if not flag.q and flag.type.endswith("64") and desiredprefix not in ["SHRN",  "RSHRN", "SQSHRUN", "SQSHRN", "SQRSHRUN", "SQRSHRN", "UQSHRUN", "UQSHRN", "UQRSHRUN", "UQRSHRN"]:
                         return True
                     if flag.x:
                         return True
@@ -320,10 +327,10 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
                     desiredprefix += "misc_Z"
                 else:
                     desiredprefix += "same"
-            elif any(desiredprefix.startswith(i) for i in ["SMLAL", "UMLAL", "SMLSL", "UMLSL", "SQDMLAL", "UQDMLAL", "SQDMLSL", "UQDMLSL", "SMULL", "UMULL", "SQDMULL", "UQDMULL"]):
+            elif any(desiredprefix.startswith(i) for i in PUT0_LANE_N_ELEM_DIFF):
                 desiredprefix += "elem" if flag.n or flag.lane else "diff"
-            elif any(desiredprefix.startswith(i) for i in ["MLS"]):
-                desiredprefix += "elem" if flag.lane else "same"
+            elif any(desiredprefix.startswith(i) for i in PUT0_LANE_N_ELEM_SAME):
+                desiredprefix += "elem" if flag.n or flag.lane else "same"
             elif any(desiredprefix.startswith(i) for i in ["SQSHL", "UQSHL"]):
                 desiredprefix += "shf" if flag.n else "same"
             else:
@@ -401,6 +408,13 @@ def Intrin2Field():
         if "lane" not in dicttt and "lane2" not in dicttt:
             return dicttt["n"]
         assert False
+
+    def LaneOrN(dicttt):
+        if "n" not in dicttt:
+            return dicttt["lane"]
+        if "lane" not in dicttt:
+            return dicttt["n"]
+        assert False
     skip = []
     skipintrin = []
     for encodings, intrins in inv_map.items():
@@ -425,7 +439,7 @@ def Intrin2Field():
                 if not Flag.lane:
                     assert "lane" not in assignments
                     assignments["lane"] = 0
-            if any(encodings.startswith(i) for i in ["SMLAL", "UMLAL", "SMLSL", "UMLSL", "SQDMLAL", "UQDMLAL", "SQDMLSL", "UQDMLSL", "SMULL", "UMULL", "SQDMULL", "UQDMULL"]):
+            if any(encodings.startswith(i) for i in PUT0_LANE_N_ELEM_DIFF+PUT0_LANE_N_ELEM_SAME):
                 if "lane" not in assignments:
                     assignments["lane"] = 0
             if "vget_high" in cc:
@@ -564,7 +578,9 @@ def Intrin2Field():
                             return UInt(ASLArraySlice(imm4, 3, size, 4))
                         return [i for i in o if src(i["imm5"], i["imm4"]) == assignments["lane2"]]
                     else:
-                        return [i for i in o if UInt(i["imm4"]) == assignments["n"]]
+                        wari = (
+                            assignments["n"] * int(Flag.type[1:])//8) if Flag.base == 'ext' else assignments["n"]
+                        return [i for i in o if UInt(i["imm4"]) == wari]
 
                 def selectimm6():
                     return [i for i in o if UInt(i["imm6"]) == assignments["imm6"]]
@@ -621,7 +637,7 @@ if __name__ == "__main__":
     # check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8",
     #          "vrshl_s8", "vqmovn_s64", "vpadd_s8", "vaddl_high_s8"]
     check = ["vmlal_high_n_s16", "vget_lane_s32__lane_0",
-             "vmlal_high_lane_s16__lane_0"]
+             "vmlal_high_lane_s16__lane_0", "vmul_n_s16", "vmla_lane_s16__lane_0", "vqshrun_n_s64__n_1", "vqshrn_n_u64__n_1", "vqshrn_n_u64__n_1", "vdup_n_s8", "vdup_lane_s8__lane_0"]
     for v in check:
         vv, _ = extract_assignment_from_name(v)
         print(vv, IntrinsicsFlags[vv])

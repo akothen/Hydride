@@ -48,3 +48,5 @@ The default expression depth (i.e. depth of sub-expressions synthesized at a tim
 ```
 EXPR_DEPTH=3 make median3x3
 ```
+
+-- frontends/halide/src/Rosette.cpp

@@ -71,9 +71,9 @@ class RoseContext:
         return False
 
     def addCompiledAbstraction(self, ID: str, Abstraction):
-        if isinstance(Abstraction, RoseValue):
-            print("Add compiled abstraction for:",
-                  ID, Abstraction, Abstraction.getType())
+        # if isinstance(Abstraction, RoseValue):
+        #     print("Add compiled abstraction for:",
+        #           ID, Abstraction, Abstraction.getType())
         self.CompiledAbstractions[ID] = Abstraction
 
     def addKeyForCompiledAbstraction(self, Key, Abstraction):
@@ -84,15 +84,15 @@ class RoseContext:
         self.CompiledAbstractions[ID] = NewAbstraction
 
     def getCompiledAbstractionForID(self, ID: str):
-        print("Try to find", ID, " from ", self.CompiledAbstractions.keys())
+        # print("Try to find", ID, " from ", self.CompiledAbstractions.keys())
         assert ID in self.CompiledAbstractions
         return self.CompiledAbstractions[ID]
 
     def addSignednessInfoForValue(self, Value: RoseValue, IsSigned: bool):
         assert not isinstance(Value, RoseUndefValue)
-        print("addSignednessInfoForValue:")
-        print(IsSigned)
-        print("VALUE:")
+        # print("addSignednessInfoForValue:")
+        # print(IsSigned)
+        # print("VALUE:")
         Value.print()
         self.CompiledValToSignedness[Value] = IsSigned
 
@@ -108,13 +108,13 @@ class RoseContext:
         return Value in self.CompiledValToSignedness
 
     def addVariable(self, Name: str, ID: str):
-        print("Define here:", Name, "with ID:", ID)
+        # print("Define here:", Name, "with ID:", ID)
         self.Variables[Name] = ID
 
     def getVariableID(self, Name: str):
-        print("Try to find", Name, " from ", self.Variables)
+        # print("Try to find", Name, " from ", self.Variables)
         assert Name in self.Variables
-        print("Found here:", Name, "->", self.Variables[Name])
+        # print("Found here:", Name, "->", self.Variables[Name])
         return self.Variables[Name]
 
     def isVariableDefined(self, Name: str):

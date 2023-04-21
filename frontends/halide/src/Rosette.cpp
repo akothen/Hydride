@@ -3436,7 +3436,7 @@ namespace Halide {
             std::string codegen_script_path = std::string(hydride_src) + "/codegen-generator/tools/low-level-codegen/RoseLowLevelCodeGen.py";
 
 
-            std::string cmd = "python " + codegen_script_path + " " + input_file + " " + std::string(legalizer_so) + " " + std::string(intrin_wrapper) +" "+ target_flag + " " + output_file;
+            std::string cmd = "python3 " + codegen_script_path + " " + input_file + " " + std::string(legalizer_so) + " " + std::string(intrin_wrapper) +" "+ target_flag + " " + output_file;
             debug(0) << cmd << "\n";
 
             auto start = std::chrono::system_clock::now();

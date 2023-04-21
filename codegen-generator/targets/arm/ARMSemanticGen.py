@@ -387,7 +387,7 @@ if __name__ == "__main__":
     # S.serialize()
     # print([i for i in S.SemaGenerator() if i is not None])
     S = SemaGenerator()
-    # print(S.getSemaByName("vmls_lane_s16__lane_0"))
+    print(S.getSemaByName("vqshrun_n_s64__n_1"))
     # S = SemaGenerator(deserialize=True)
     # print(S.getSemaByName("vsubq_s16"))
     S.serialize()

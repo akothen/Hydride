@@ -7,27 +7,27 @@ LLVM_BRANCH="release/12.x"
 LLVM_SRC=$HALIDE_ROOT/llvm-project/llvm
 
 # Install options
-NUM_THREADS=2
-NUM_THREADS_INPUT=2
+NUM_THREADS=8
+NUM_THREADS_INPUT=8
 
 echo "#############################################################################"
-read -p "Number of threads: " NUM_THREADS_INPUT
+# read -p "Number of threads: " NUM_THREADS_INPUT
 
-if [[ $NUM_THREADS_INPUT == "" ]]; then
-  echo "No input given. Using default: $NUM_THREADS"
-elif ! [[ $NUM_THREADS_INPUT =~ ^[0-9]+$ ]]; then
-  echo "Given input is not an integer. Using default: $NUM_THREADS"
-elif [ ! $NUM_THREADS_INPUT -gt 0 ]; then
-  echo "Given input is not greater than 0. Using default: $NUM_THREADS"
-else
-  NUM_THREADS=$NUM_THREADS_INPUT
-fi
+# if [[ $NUM_THREADS_INPUT == "" ]]; then
+#   echo "No input given. Using default: $NUM_THREADS"
+# elif ! [[ $NUM_THREADS_INPUT =~ ^[0-9]+$ ]]; then
+#   echo "Given input is not an integer. Using default: $NUM_THREADS"
+# elif [ ! $NUM_THREADS_INPUT -gt 0 ]; then
+#   echo "Given input is not greater than 0. Using default: $NUM_THREADS"
+# else
+#   NUM_THREADS=$NUM_THREADS_INPUT
+# fi
 
 if [ -d $LLVM_SRC ]; then
     echo Found $LLVM_SRC! Not downloading source again.
 else
-    echo git clone $LLVM_URL -b $LLVM_BRANCH
-    git clone $LLVM_URL -b $LLVM_BRANCH
+    echo git clone $LLVM_URL -b $LLVM_BRANCH --depth 1
+    git clone $LLVM_URL -b $LLVM_BRANCH --depth 1
 fi
 
 if [ -d $LLVM_SRC/tools ]; then
@@ -47,11 +47,11 @@ fi
 
 cd $BUILD_DIR
 
-echo cmake $LLVM_SRC -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" -DLLVM_TARGETS_TO_BUILD="X86;ARM;NVPTX;AArch64;Mips;Hexagon;WebAssembly" -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_EH=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_BUILD_32_BITS=OFF 
-cmake $LLVM_SRC -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" -DLLVM_TARGETS_TO_BUILD="X86;ARM;NVPTX;AArch64;Mips;Hexagon;WebAssembly" -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_EH=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_BUILD_32_BITS=OFF  
+set -x
+
+cmake $LLVM_SRC -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" -DLLVM_TARGETS_TO_BUILD="X86;ARM;NVPTX;AArch64;Mips;Hexagon;WebAssembly" -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_EH=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_BUILD_32_BITS=OFF -DLLVM_INCLUDE_BENCHMARKS=Off -DLLVM_ENABLE_LLD=ON
 echo "Generated build files"
 
-echo make -j$NUM_THREADS
 make -j$NUM_THREADS
 
 echo "Installation complete"

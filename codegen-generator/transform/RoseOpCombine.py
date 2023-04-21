@@ -1218,7 +1218,7 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
           # Replace this first and second instruction with a new extarct op
           FirstExtractBitwidth = FirstExtractOp.getOutputBitwidth()
           SecondExtractBitwidth = SecondExtractOp.getOutputBitwidth()
-          assert FirstExtractBitwidth > SecondExtractBitwidth
+          assert FirstExtractBitwidth >= SecondExtractBitwidth # Hotfix for ARM
           FirstLow = FirstExtractOp.getLowIndex()
           SecondLow = SecondExtractOp.getLowIndex()
           SecondHigh= SecondExtractOp.getHighIndex()

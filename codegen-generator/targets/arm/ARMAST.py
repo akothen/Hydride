@@ -376,3 +376,4 @@ def ASTShrink(AST):
 
 Flag = namedtuple(
     "Flag", "pair sat round base s2u narrow q x high lane n result type")
+

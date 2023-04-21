@@ -13,7 +13,7 @@ from RoseContext import *
 from RoseUtilities import *
 
 
-def RunBVLengthReductionOnFunction(Function : RoseFunction, Context : RoseContext):
+def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext):
   print("RUN BV LENGTH REDUCTION ON FUNCTION")
   print("FUNCTION:")
   Function.print()
@@ -30,10 +30,11 @@ def RunBVLengthReductionOnFunction(Function : RoseFunction, Context : RoseContex
       # Just remove this extract op
       Block.eraseOperation(ReturnVal)
     elif not isinstance(ReturnVal.getInputBitVector(), RoseOperation) \
-      and not isinstance(ReturnVal.getInputBitVector(), RoseArgument):
+            and not isinstance(ReturnVal.getInputBitVector(), RoseArgument):
       # Get all the uses of the input vector of the return value
       Users = Function.getUsersOf(ReturnVal.getInputBitVector())
-      NewReturnValue = RoseValue.create(Context.genName("%" + "dst"), ReturnVal.getType())
+      NewReturnValue = RoseValue.create(
+          Context.genName("%" + "dst"), ReturnVal.getType())
       # Replace all the return value input bitvectors with the new one.
       for User in Users:
         Index = User.getIndexForOperand(ReturnVal.getInputBitVector())
@@ -76,7 +77,7 @@ def RunBVLengthReductionOnFunction(Function : RoseFunction, Context : RoseContex
           continue
         # We do not expect the inserted bitslices to be extracted
         # in the same block.
-        #if isinstance(Op, RoseBVExtractSliceOp):
+        # if isinstance(Op, RoseBVExtractSliceOp):
         #  if not isinstance(TempReg, RoseUndefValue):
         #    if Op.getInputBitVector() == TempReg:
         #      del TempRegToBlock[TempReg]
@@ -98,7 +99,8 @@ def RunBVLengthReductionOnFunction(Function : RoseFunction, Context : RoseContex
       if TempReg.getType().getBitwidth() != InsertedSize:
         assert TempReg.getType().getBitwidth() > InsertedSize
         NewType = RoseBitVectorType.create(InsertedSize)
-        NewTempReg = RoseValue.create(Context.genName(TempReg.getName()), NewType)
+        NewTempReg = RoseValue.create(
+            Context.genName(TempReg.getName()), NewType)
         # Replace all the temp registers with the new one.
         Users = Function.getUsersOf(TempReg)
         for User in Users:
@@ -112,12 +114,12 @@ def RunBVLengthReductionOnFunction(Function : RoseFunction, Context : RoseContex
     if isinstance(Abstraction, RoseFunction):
       print("Abstraction:")
       Abstraction.print()
-      RunBVLengthReductionOnFunction(Abstraction, Context.getContextOfChildFunction(Abstraction))
+      RunBVLengthReductionOnFunction(
+          Abstraction, Context.getContextOfChildFunction(Abstraction))
 
 
 # Runs a transformation
-def Run(Function : RoseFunction, Context : RoseContext):
+def Run(Function: RoseFunction, Context: RoseContext):
   RunBVLengthReductionOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
