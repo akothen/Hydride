@@ -15,8 +15,8 @@ from RoseEquivalenceClass import *
 from RoseSimilarityCheckerUtilities import *
 from RoseSimilarityCheckerSummaryGen import *
 from RoseValidityChecker import *
-#from RoseLLVMIntrinsicsGen import *
-#from RoseIRToLLVMMappingGen import *
+from RoseLLVMIntrinsicsGen import *
+from RoseIRToLLVMIRMapGen import *
 from RoseTargetInfo import *
 from RoseTransformationsVerifier import *
 
@@ -391,15 +391,15 @@ class RoseSimilarityChecker():
     SummaryGen.summarize(SummaryFileName)
     return True
 
-  # def genLLVMIntrinsics(self):
-  #  IntrinsicsFileName = "hydride_llvm_intrinsics.td"
-  #  LLVMIntrinsicsGen = RoseLLVMIntrinsicsGen(self.EquivalenceClasses)
-  #  LLVMIntrinsicsGen.generateLLVMIntrinsics(IntrinsicsFileName)
+  def genLLVMIntrinsics(self):
+   IntrinsicsFileName = "hydride_llvm_intrinsics.td"
+   LLVMIntrinsicsGen = RoseLLVMIntrinsicsGen(self.EquivalenceClasses)
+   LLVMIntrinsicsGen.generateLLVMIntrinsics(IntrinsicsFileName)
 
-  # def genRoseIRToLLVMIRMappings(self):
-  #  FileName = "RoseToLLVMMap.py"
-  #  RoseIRToLLVMMappingGenerator = RoseIRToLLVMMappingGen(self.EquivalenceClasses)
-  #  RoseIRToLLVMMappingGenerator.generateRoseIRToLLVMMappings(FileName)
+  def genRoseIRToLLVMIRMappings(self):
+   FileName = "RoseToLLVMMap.py"
+   RoseIRToLLVMMappingGenerator = RoseIRToLLVMMappingGen(self.EquivalenceClasses)
+   RoseIRToLLVMMappingGenerator.generateLLVMIntrinsics(FileName)
 
   def performSimilarityChecking(self):
     # Track verification results
@@ -541,9 +541,9 @@ class RoseSimilarityChecker():
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
-    # self.genLLVMIntrinsics()
+    self.genLLVMIntrinsics()
     # Generate Rose IR to LLVM IR mappings
-    # self.genRoseIRToLLVMIRMappings()
+    self.genRoseIRToLLVMIRMappings()
 
   def doFunctionsQualifyForSimilarityChecking(self, Function1: RoseFunction, Function2: RoseFunction):
     # Number of arguments must be equal

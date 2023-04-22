@@ -1,4 +1,4 @@
-HALIDE_DISTRIB = /home/scarlet/Hydride/frontends/halide/distrib
+HALIDE_DISTRIB = $(HYDRIDE_ROOT)/frontends/halide/distrib
 LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 
 benchmarks = gaussian3x3 \

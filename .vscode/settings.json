@@ -43,13 +43,7 @@
   ],
   "pylint.args": ["--indent-string=\"  \""],
   "files.associations": {
-    "array": "cpp",
-    "string": "cpp",
-    "string_view": "cpp",
-    "vector": "cpp",
-    "atomic": "cpp",
-    "bitset": "cpp",
-    "random": "cpp"
+    "*.inc": "cpp"
   },
   "terminal.integrated.env.linux": {
     "ZSH_INIT_COMMAND_FOR_VSCODE": "source setup.sh"
