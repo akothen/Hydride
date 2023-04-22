@@ -131,7 +131,7 @@ class x86CIntrinsicsWrappersEmitter():
 
   def compileFileWithWrappers(self, FileName : str):
     BitcodeFile = FileName + ".bc"
-    SOut, SErr = RunCommand("clang -O0 -march=aarch64 -c {} -emit-llvm -o {}"\
+    SOut, SErr = RunCommand("clang -O0 -c {} -emit-llvm -o {}"\
                             .format(FileName, BitcodeFile))
     print("SOUT:")
     print(SOut)
