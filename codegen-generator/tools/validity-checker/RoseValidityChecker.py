@@ -23,6 +23,7 @@ class RoseISAValidityChecker:
   TargetAPI = {
     "x86" : x86RoseLang,
     #"Hexagon" : HexRoseLang,
+    "ARM": ARMRoseLang,
   }
 
   def genRandomInputs(self, Function : RoseFunction):

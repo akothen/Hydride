@@ -13,4 +13,4 @@ if(NOT LLVM_ENABLE_RTTI)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif()
 
-add_library(Legalizer SHARED InstSelectors/x86/x86Legalizer.cpp)
+add_library(X86Legalizer SHARED InstSelectors/x86/x86LegalizerAllArgs.cpp)
