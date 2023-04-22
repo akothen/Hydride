@@ -217,6 +217,12 @@ def wedo(instr):
     tosupport = ["TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):
         return False
+    notSSA = ['addv', 'addlv', 'maxv', 'minv', 'abd', 'rbit', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
+    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte', 'sli','sli_n','sliq_n','slid_n','shl_n','shlq_n','shld_n','sri_n','sriq_n','srid_n'] # unimplemented
+    op_mismatch = ['qrdmlah', 'qrdmlsh']
+    not_compiled_in_gcc = ['dot', 'eor3q', 'rax1q', 'bcaxq', 'xarq']
+    if any([j in instr["name"] for j in notSSA + UIP + op_mismatch + not_compiled_in_gcc]):
+        return False
     return True
 
 
