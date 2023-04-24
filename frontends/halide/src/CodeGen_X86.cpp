@@ -88,10 +88,18 @@ protected:
 
 private:
     Scope<MemoryType> mem_type;
+
+    // For reference, disabling any hexagon specific codegen and falling back to LLVM
+    // (Disabled by default)
+    bool defer_to_llvm = false;
 };
 
 CodeGen_X86::CodeGen_X86(Target t)
     : CodeGen_Posix(complete_x86_target(t)) {
+    const char* compile_via_llvm = getenv("HALIDE_COMPILE_LLVM");
+    if(compile_via_llvm){
+        defer_to_llvm = true;
+    }
 }
 
 const int max_intrinsic_args = 6;
@@ -263,8 +271,6 @@ bool should_use_dot_product(const Expr &a, const Expr &b, vector<Expr> &result) 
         return false;
     }
 
-
-
     Type t = a.type();
     internal_assert(b.type() == t);
 
@@ -307,6 +313,10 @@ bool should_use_dot_product(const Expr &a, const Expr &b, vector<Expr> &result) 
 }
 
 void CodeGen_X86::visit(const Add *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     vector<Expr> matches;
     if (should_use_dot_product(op->a, op->b, matches)) {
         Expr ac = Shuffle::make_interleave({matches[0], matches[2]});
@@ -320,6 +330,10 @@ void CodeGen_X86::visit(const Add *op) {
 }
 
 void CodeGen_X86::visit(const Sub *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     vector<Expr> matches;
     if (should_use_dot_product(op->a, op->b, matches)) {
         // Negate one of the factors in the second expression
@@ -343,6 +357,10 @@ void CodeGen_X86::visit(const Sub *op) {
 }
 
 void CodeGen_X86::visit(const GT *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     Type t = op->a.type();
 
     if (t.is_vector() &&
@@ -376,6 +394,10 @@ void CodeGen_X86::visit(const GT *op) {
 }
 
 void CodeGen_X86::visit(const EQ *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     Type t = op->a.type();
 
     if (t.is_vector() &&
@@ -407,22 +429,42 @@ void CodeGen_X86::visit(const EQ *op) {
 }
 
 void CodeGen_X86::visit(const LT *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     codegen(op->b > op->a);
 }
 
 void CodeGen_X86::visit(const LE *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     codegen(!(op->a > op->b));
 }
 
 void CodeGen_X86::visit(const GE *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     codegen(!(op->b > op->a));
 }
 
 void CodeGen_X86::visit(const NE *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     codegen(!(op->a == op->b));
 }
 
 void CodeGen_X86::visit(const Select *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->condition.type().is_vector()) {
         // LLVM handles selects on vector conditions much better at native width
         Value *cond = codegen(op->condition);
@@ -448,7 +490,10 @@ void CodeGen_X86::visit(const Select *op) {
 }
 
 void CodeGen_X86::visit(const Cast *op) {
-
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (!op->type.is_vector()) {
         // We only have peephole optimizations for vectors in here.
         CodeGen_Posix::visit(op);
@@ -500,6 +545,10 @@ void CodeGen_X86::visit(const Cast *op) {
 }
 
 void CodeGen_X86::visit(const Call *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (!op->type.is_vector()) {
         // We only have peephole optimizations for vectors in here.
         CodeGen_Posix::visit(op);
@@ -665,11 +714,19 @@ void CodeGen_X86::codegen_vector_reduce(const VectorReduce *op, const Expr &init
 }
 
 void CodeGen_X86::visit(const Allocate *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     ScopedBinding<MemoryType> bind(mem_type, op->name, op->memory_type);
     CodeGen_Posix::visit(op);
 }
 
 void CodeGen_X86::visit(const Load *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (mem_type.contains(op->name) && mem_type.get(op->name) == MemoryType::AMXTile) {
         const Ramp *ramp = op->index.as<Ramp>();
         internal_assert(ramp) << "Expected AMXTile to have index ramp\n";
@@ -683,6 +740,10 @@ void CodeGen_X86::visit(const Load *op) {
 }
 
 void CodeGen_X86::visit(const Store *op) {
+    if(defer_to_llvm){
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (mem_type.contains(op->name) && mem_type.get(op->name) == MemoryType::AMXTile) {
         Value *val = codegen(op->value);
         Halide::Type value_type = op->value.type();
@@ -821,3 +882,4 @@ std::unique_ptr<CodeGen_Posix> new_CodeGen_X86(const Target &target) {
 
 }  // namespace Internal
 }  // namespace Halide
+
