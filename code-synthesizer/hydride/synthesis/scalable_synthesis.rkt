@@ -33,6 +33,14 @@
 (require hydride/ir/hvx/scale)
 (require hydride/ir/hvx/interpreter)
 
+(require hydride/ir/arm/definition)
+(require hydride/ir/arm/cost_model)
+(require hydride/ir/arm/const_fold)
+(require hydride/ir/arm/printer)
+(require hydride/ir/arm/binder)
+(require hydride/ir/arm/scale)
+(require hydride/ir/arm/interpreter)
+
 
 
 (provide (all-defined-out))
@@ -140,6 +148,10 @@
            (hvx:interpret hydride-expr sym-bvs)
            ]
 
+          [(equal? target 'arm)
+           (arm:interpret hydride-expr sym-bvs)
+           ]
+
           [(equal? target 'x86)
            (hydride:interpret hydride-expr sym-bvs)
            ]
@@ -244,6 +256,9 @@
                        5
                        ]
                       [(equal? target 'x86)
+                       5
+                       ]
+                      [(equal? target 'arm)
                        5
                        ]
                       )
@@ -382,6 +397,9 @@
                       [(equal? target 'hvx)
                        hvx:cost
                        ]
+                      [(equal? target 'arm)
+                       arm:cost
+                       ]
                       [(equal? target 'x86)
                        hydride:cost
                        ]
@@ -411,6 +429,9 @@
                       [(equal? target 'hvx)
                        hvx:bind-expr
                        ]
+                      [(equal? target 'arm)
+                       arm:bind-expr
+                       ]
                       [(equal? target 'x86)
                        bind-expr
                        ]
@@ -427,6 +448,9 @@
                        ]
                       [(equal? target 'hvx) 
                         (hvx:scale-expr materialize effective-scale-factor)
+                        ]
+                      [(equal? target 'arm) 
+                        (arm:scale-expr materialize effective-scale-factor)
                         ]
                       [(equal? target 'x86) 
                         (hydride:scale-expr materialize effective-scale-factor)
@@ -513,6 +537,7 @@
 ;; into buckets and sampling operations from buckets in the grammar. 
 (define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver scale-factor)
   (debug-log (format "Invoked step-wise-synthesis!\n"))
+  (debug-log (format "~a ~a\n" starting-depth depth-limit))
 
   (define step-limit 5)
 

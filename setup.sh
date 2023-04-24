@@ -8,8 +8,10 @@ export LLVM_CONFIG=$LLVM_DIS_ROOT/bin/llvm-config
 export HALIDE_SRC=$CUR_DIR/frontends/halide
 export HALIDE_DISTRIB=$HALIDE_SRC/distrib
 
-export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/x86/x86_wrappers.c.ll
-export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libX86Legalizer.so
+# export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/x86/x86_wrappers.c.ll
+# export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libX86Legalizer.so
+export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
+export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.so
 
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/arm/:$PYTHONPATH

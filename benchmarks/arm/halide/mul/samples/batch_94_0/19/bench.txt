@@ -1,0 +1,2 @@
+Benchmark for mul_batch_0094_sample_0019 produces best case of 0.000307838 sec/iter (over 9 samples, 1026 iterations, accuracy 2.7%).
+Best output throughput is 6.4e+03 mpix/sec.

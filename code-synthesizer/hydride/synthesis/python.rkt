@@ -36,6 +36,9 @@
       [(equal? target 'hvx)
        "hvx"
        ]
+      [(equal? target 'arm)
+       "arm"
+       ]
       )
     )
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
@@ -54,6 +57,9 @@
        ]
       [(equal? target 'hvx)
        "hvx"
+       ]
+      [(equal? target 'arm)
+       "arm"
        ]
       )
     )

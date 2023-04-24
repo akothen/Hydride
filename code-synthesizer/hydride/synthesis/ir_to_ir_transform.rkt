@@ -38,6 +38,18 @@
 (require hydride/ir/hvx/visitor)
 (require hydride/ir/hvx/interpreter)
 
+(require hydride/ir/arm/definition)
+(require hydride/ir/arm/cost_model)
+(require hydride/ir/arm/const_fold)
+(require hydride/ir/arm/printer)
+(require hydride/ir/arm/binder)
+(require hydride/ir/arm/scale)
+(require hydride/ir/arm/get_ops)
+(require hydride/ir/arm/length)
+(require hydride/ir/arm/prec)
+(require hydride/ir/arm/visitor)
+(require hydride/ir/arm/interpreter)
+
 
 
 (provide (all-defined-out))
@@ -54,6 +66,9 @@
     (cond
       [(equal? target-language "hvx")
        'hvx
+       ]
+      [(equal? target-language "arm")
+       'arm
        ]
       [(equal? target-language "x86")
        'x86
@@ -85,6 +100,10 @@
       [(equal? src-language 'hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
+
+      [(equal? src-language 'arm)
+       (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
+       ]
       [else
         (error "Unsupported src language in rewrite-ir" src-language)
         ]
@@ -103,6 +122,11 @@
       [(equal? target-language 'hvx)
        (set-target-hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       ]
+
+      [(equal? target-language 'arm)
+       (set-target-arm)
+       (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
        ]
       [else
         (error "Unsupported target language in rewrite-ir" target-language)

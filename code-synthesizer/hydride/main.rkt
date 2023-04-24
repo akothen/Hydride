@@ -64,6 +64,23 @@
 (require hydride/ir/hvx/get_name)
 
 
+
+;; ARM IR
+(require hydride/ir/arm/semantics)
+(require hydride/ir/arm/definition)
+(require hydride/ir/arm/cost_model)
+(require hydride/ir/arm/length)
+(require hydride/ir/arm/prec)
+(require hydride/ir/arm/printer)
+(require hydride/ir/arm/interpreter)
+(require hydride/ir/arm/binder)
+(require hydride/ir/arm/const_fold)
+(require hydride/ir/arm/visitor)
+(require hydride/ir/arm/scale)
+(require hydride/ir/arm/get_ops)
+(require hydride/ir/arm/get_name)
+
+
 ;; CPP IR
 (require hydride/cpp)
 
@@ -127,6 +144,21 @@
   (all-from-out hydride/ir/hvx/scale)
   (all-from-out hydride/ir/hvx/get_ops)
   (all-from-out hydride/ir/hvx/get_name)
+
+
+  (all-from-out hydride/ir/arm/semantics)
+  (all-from-out hydride/ir/arm/definition)
+  (all-from-out hydride/ir/arm/cost_model)
+  (all-from-out hydride/ir/arm/length)
+  (all-from-out hydride/ir/arm/prec)
+  (all-from-out hydride/ir/arm/printer)
+  (all-from-out hydride/ir/arm/interpreter)
+  (all-from-out hydride/ir/arm/binder)
+  (all-from-out hydride/ir/arm/const_fold)
+  (all-from-out hydride/ir/arm/visitor)
+  (all-from-out hydride/ir/arm/scale)
+  (all-from-out hydride/ir/arm/get_ops)
+  (all-from-out hydride/ir/arm/get_name)
 
 
   (all-from-out hydride/cpp)

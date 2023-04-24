@@ -1,0 +1,2 @@
+Benchmark for dilate7x7_batch_0054_sample_0007 produces best case of 7.82155e-05 sec/iter (over 7 samples, 2702 iterations, accuracy 1.2%).
+Best output throughput is 2.5e+04 mpix/sec.

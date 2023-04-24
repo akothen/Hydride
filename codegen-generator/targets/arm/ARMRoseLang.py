@@ -57,6 +57,7 @@ def Compile(InstName: str = None):
   if SemaList == None:
     return [None]
   FunctionInfoList = list()
+  compiled = []
   for Index, Spec in enumerate(SemaList):
     # if Index < 1100:
     #     continue
@@ -78,15 +79,16 @@ def Compile(InstName: str = None):
       print("CompiledFunction:")
       CompiledFunction.print()
       FunctionInfoList.append(FunctionInfo)
+      compiled.append(Spec.intrin)
     except NotImplementedError as e:
       print("Failed to compile", Spec.intrin, e, file=sys.stderr)
       # print(e)
       continue
   print("FunctionInfoList length:", len(FunctionInfoList))
+  print(compiled)
   return FunctionInfoList
 
-
-if __name__ == "__main__":
+def qwq():
   AllSema = SemaGenerator(deserialize=True).getResult()
   # AllSema = {k: AllSema[k] for k in ["vget_lane_u64__lane_0"]}
   compiled = []
@@ -110,10 +112,13 @@ if __name__ == "__main__":
     # print(RosetteCode)
     AllRosetteCode += RosetteCode
   print(len(compiled), "functions compiled:", file=sys.stderr)
-  # print(compiled, file=sys.stderr)
+  print(compiled, file=sys.stderr)
   AllRosetteCode += "(provide (all-defined-out))"
   with open(f'rosette_test/compiled.rkt', 'w') as f:
     f.write(AllRosetteCode)
+if __name__ == "__main__":
+  Compile()
+  
   # print(RosetteCode)
 
   # with open(f'rosette_test/{func.intrin}', 'w') as f:

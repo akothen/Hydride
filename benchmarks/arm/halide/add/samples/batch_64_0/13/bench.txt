@@ -1,0 +1,2 @@
+Benchmark for add_batch_0064_sample_0013 produces best case of 0.000176214 sec/iter (over 8 samples, 1856 iterations, accuracy 11%).
+Best output throughput is 1.1e+04 mpix/sec.

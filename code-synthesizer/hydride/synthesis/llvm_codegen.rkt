@@ -17,6 +17,7 @@
 (require hydride/ir/hydride/printer)
 
 (require hydride/ir/hvx/printer)
+(require hydride/ir/arm/printer)
 
 
 
@@ -42,6 +43,9 @@
     (cond
       [(equal? target 'hvx)
        hvx:hydride-printer
+       ]
+      [(equal? target 'arm)
+       arm:hydride-printer
        ]
       [(equal? target 'x86)
        hydride:hydride-printer

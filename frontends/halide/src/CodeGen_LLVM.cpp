@@ -899,6 +899,8 @@ void CodeGen_LLVM::compile_func(const LoweredFunc &f, const std::string &simple_
             body = optimize_x86_instructions_synthesis(body, target, this->func_value_bounds);
         } else if(target.arch == Target::Hexagon){
             //body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+        } else if(target.arch == Target::ARM){
+            body = optimize_arm_instructions_synthesis(body, target, this->func_value_bounds);
         }
     }
     body.accept(this);

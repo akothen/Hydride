@@ -18,7 +18,7 @@
   (define intr-expr (interpret expr))
   (cpp:type (intr-expr 0)))
 
-(define target-hvx #t)
+;;; (define target-hvx #t)
 
 
 (define (intr-elemT-size elemT) 

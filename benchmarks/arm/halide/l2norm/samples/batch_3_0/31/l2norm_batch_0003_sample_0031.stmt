@@ -1,0 +1,146 @@
+module name=l2norm_batch_0003_sample_0031, target=x86-64-linux-avx-avx2-disable_llvm_loop_opt-f16c-fma-sse41
+external_plus_metadata func l2norm_batch_0003_sample_0031 (input, input_zero, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)input.buffer)
+let input.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)input.buffer)
+let input.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)output.buffer)
+let output.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)output.buffer)
+let output.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let input.extent.0.required = max(input.extent.0 + input.min.0, output.extent.0 + output.min.0) - min((min(output.extent.0, 32) + output.min.0) + -32, input.min.0)
+let input.min.0.required = min((min(output.extent.0, 32) + output.min.0) + -32, input.min.0)
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)input.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)input.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)input.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct(input.min.0.required, input.extent.0.required, 1, 0, (min(output.extent.1, 34) + output.min.1) + -34, max(output.extent.1, 34), input.extent.0.required, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)output.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)output.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct((min(output.extent.0, 32) + output.min.0) + -32, max(output.extent.0, 32), 1, 0, (min(output.extent.1, 34) + output.min.1) + -34, max(output.extent.1, 34), max(output.extent.0, 32), 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)input.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer))) {
+ assert(input.type == (uint32)67585, halide_error_bad_type("Input buffer input", input.type, (uint32)67585))
+ assert(input.dimensions == 2, halide_error_bad_dimensions("Input buffer input", input.dimensions, 2))
+ assert(output.type == (uint32)67585, halide_error_bad_type("Output buffer output", output.type, (uint32)67585))
+ assert(output.dimensions == 2, halide_error_bad_dimensions("Output buffer output", output.dimensions, 2))
+ assert((input.min.0 <= input.min.0.required) && ((input.extent.0.required + input.min.0.required) <= (input.extent.0 + input.min.0)), halide_error_access_out_of_bounds("Input buffer input", 0, input.min.0.required, (input.extent.0.required + input.min.0.required) + -1, input.min.0, (input.extent.0 + input.min.0) + -1))
+ assert(0 <= input.extent.0, halide_error_buffer_extents_negative("Input buffer input", 0, input.extent.0))
+ assert(((input.min.1 + 34) <= (min(output.extent.1, 34) + output.min.1)) && ((output.extent.1 + output.min.1) <= (input.extent.1 + input.min.1)), halide_error_access_out_of_bounds("Input buffer input", 1, (min(output.extent.1, 34) + output.min.1) + -34, (output.extent.1 + output.min.1) + -1, input.min.1, (input.extent.1 + input.min.1) + -1))
+ assert(0 <= input.extent.1, halide_error_buffer_extents_negative("Input buffer input", 1, input.extent.1))
+ assert(32 <= output.extent.0, halide_error_access_out_of_bounds("Output buffer output", 0, (min(output.extent.0, 32) + output.min.0) + -32, (output.extent.0 + output.min.0) + -1, output.min.0, (output.extent.0 + output.min.0) + -1))
+ assert(34 <= output.extent.1, halide_error_access_out_of_bounds("Output buffer output", 1, (min(output.extent.1, 34) + output.min.1) + -34, (output.extent.1 + output.min.1) + -1, output.min.1, (output.extent.1 + output.min.1) + -1))
+ assert(input.stride.0 == 1, halide_error_constraint_violated("input.stride.0", input.stride.0, "1", 1))
+ assert(output.stride.0 == 1, halide_error_constraint_violated("output.stride.0", output.stride.0, "1", 1))
+ let input.total_extent.1 = int64(input.extent.1)*int64(input.extent.0)
+ let output.total_extent.1 = int64(output.extent.1)*int64(output.extent.0)
+ assert(uint64(input.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", uint64(input.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(input.extent.1)*int64(input.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", (uint64)abs(int64(input.extent.1)*int64(input.stride.1)), (uint64)2147483647))
+ assert(input.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("input", input.total_extent.1, (int64)2147483647))
+ assert(uint64(output.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", uint64(output.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(output.extent.1)*int64(output.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", (uint64)abs(int64(output.extent.1)*int64(output.stride.1)), (uint64)2147483647))
+ assert(output.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("output", output.total_extent.1, (int64)2147483647))
+ assert(!input.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer input"))
+ assert(!output.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer output"))
+ assert(input != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer input"))
+ assert(output != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer output"))
+ produce output {
+  let t124 = input.min.1*input.stride.1
+  let t125 = output.min.1*output.stride.1
+  let t120 = (output.extent.0 % 32) != 0
+  let t115 = (output.extent.1 + 33)/34
+  let t117 = output.extent.0/32
+  let t118 = (output.min.0 - t124) - input.min.0
+  let t121 = output.extent.0 + output.min.0
+  parallel (output.s0.y.y, 0, t115) {
+   let output.s0.y.yi.base.s = min(output.s0.y.y*34, output.extent.1 + -34)
+   allocate sum_input_sq[int32 * 48]
+   produce sum_input_sq {
+    sum_input_sq[ramp(0, 1, 8)] = x8(0)
+    sum_input_sq[ramp(8, 1, 8)] = x8(0)
+    sum_input_sq[ramp(16, 1, 8)] = x8(0)
+    sum_input_sq[ramp(24, 1, 8)] = x8(0)
+    sum_input_sq[ramp(32, 1, 8)] = x8(0)
+    let t130 = output.min.1 + output.s0.y.yi.base.s
+    let t127 = ((t130 + 16)*input.stride.1) - t124
+    let t126 = (input.stride.1*t130) - t124
+    let t128 = 0 - t124
+    for (sum_input_sq.s1.r8$x.rebased, 0, input.extent.0) {
+     let t76.s = (int16x16)widening_sub(input[ramp(sum_input_sq.s1.r8$x.rebased + t126, input.stride.1, 16)], x16((uint8)input_zero))
+     sum_input_sq[ramp(0, 1, 16)] = sum_input_sq[ramp(0, 1, 16)] + (int32x16)widening_mul(t76.s, t76.s)
+     let t77.s = (int16x16)widening_sub(input[ramp(sum_input_sq.s1.r8$x.rebased + t127, input.stride.1, 16)], x16((uint8)input_zero))
+     sum_input_sq[ramp(16, 1, 16)] = sum_input_sq[ramp(16, 1, 16)] + (int32x16)widening_mul(t77.s, t77.s)
+     let t131 = sum_input_sq.s1.r8$x.rebased + t128
+     for (sum_input_sq.s1.y.yi, 0, 2) {
+      let t78.s = int16(input[(((sum_input_sq.s1.y.yi + t130) + 32)*input.stride.1) + t131]) - int16((uint8)input_zero)
+      sum_input_sq[sum_input_sq.s1.y.yi + 32] = sum_input_sq[sum_input_sq.s1.y.yi + 32] + (int32(t78.s)*int32(t78.s))
+     }
+    }
+   }
+   allocate inv_sqrt[int32 * 48]
+   produce inv_sqrt {
+    consume sum_input_sq {
+     let t79 = sum_input_sq[ramp(0, 1, 16)]
+     let t80 = int16x16((int32x16)count_leading_zeros(t79))
+     let t81 = (int16x16)bitwise_and(int16x16((int32x16)shift_left(t79, int32x16((t80 + x16((int16)-16))))), x16((int16)32767))
+     let t82 = (int16x16)rounding_mul_shift_right(t81, t81, x16((uint16)15))
+     let t83 = (int32x16)saturating_add((int32x16)widening_shift_left(x16((int16)31) - t80, x16((uint16)14)), int32x16((((int16x16)rounding_mul_shift_right(x16((int16)-9421), t82, x16((uint16)15)) + ((int16x16)rounding_mul_shift_right(x16((int16)23249), t81, x16((uint16)15)) + (int16x16)rounding_mul_shift_right(x16((int16)2555), (int16x16)rounding_mul_shift_right(t82, t81, x16((uint16)15)), x16((uint16)15)))) + x16((int16)5))))
+     let t84 = (int32x16)shift_left(x16(1), (int32x16)shift_right(x16(0) - t83, x16((uint32)15)) + x16(15))
+     let t85 = int16x16(((x16(0) - t83) % x16(32768)))
+     let t86 = (int16x16)rounding_mul_shift_right(t85, t85, x16((uint16)15))
+     inv_sqrt[ramp(0, 1, 16)] = (int32x16)saturating_add(t84, (int32x16)rounding_mul_shift_right(t84, (int32x16)widening_shift_left((int16x16)rounding_mul_shift_right(x16((int16)7363), t86, x16((uint16)15)) + ((int16x16)rounding_mul_shift_right(x16((int16)22812), t85, x16((uint16)15)) + (int16x16)rounding_mul_shift_right(x16((int16)2592), (int16x16)rounding_mul_shift_right(t86, t85, x16((uint16)15)), x16((uint16)15))), x16((uint16)16)), x16((uint32)31)))
+     let t87 = sum_input_sq[ramp(16, 1, 16)]
+     let t88 = int16x16((int32x16)count_leading_zeros(t87))
+     let t89 = (int16x16)bitwise_and(int16x16((int32x16)shift_left(t87, int32x16((t88 + x16((int16)-16))))), x16((int16)32767))
+     let t90 = (int16x16)rounding_mul_shift_right(t89, t89, x16((uint16)15))
+     let t91 = (int32x16)saturating_add((int32x16)widening_shift_left(x16((int16)31) - t88, x16((uint16)14)), int32x16((((int16x16)rounding_mul_shift_right(x16((int16)-9421), t90, x16((uint16)15)) + ((int16x16)rounding_mul_shift_right(x16((int16)23249), t89, x16((uint16)15)) + (int16x16)rounding_mul_shift_right(x16((int16)2555), (int16x16)rounding_mul_shift_right(t90, t89, x16((uint16)15)), x16((uint16)15)))) + x16((int16)5))))
+     let t92 = (int32x16)shift_left(x16(1), (int32x16)shift_right(x16(0) - t91, x16((uint32)15)) + x16(15))
+     let t93 = int16x16(((x16(0) - t91) % x16(32768)))
+     let t94 = (int16x16)rounding_mul_shift_right(t93, t93, x16((uint16)15))
+     inv_sqrt[ramp(16, 1, 16)] = (int32x16)saturating_add(t92, (int32x16)rounding_mul_shift_right(t92, (int32x16)widening_shift_left((int16x16)rounding_mul_shift_right(x16((int16)7363), t94, x16((uint16)15)) + ((int16x16)rounding_mul_shift_right(x16((int16)22812), t93, x16((uint16)15)) + (int16x16)rounding_mul_shift_right(x16((int16)2592), (int16x16)rounding_mul_shift_right(t94, t93, x16((uint16)15)), x16((uint16)15))), x16((uint16)16)), x16((uint32)31)))
+     let t95 = sum_input_sq[ramp(32, 1, 16)]
+     let t96 = int16x16((int32x16)count_leading_zeros(t95))
+     let t97 = (int16x16)bitwise_and(int16x16((int32x16)shift_left(t95, int32x16((t96 + x16((int16)-16))))), x16((int16)32767))
+     let t98 = (int16x16)rounding_mul_shift_right(t97, t97, x16((uint16)15))
+     let t99 = (int32x16)saturating_add((int32x16)widening_shift_left(x16((int16)31) - t96, x16((uint16)14)), int32x16((((int16x16)rounding_mul_shift_right(x16((int16)-9421), t98, x16((uint16)15)) + ((int16x16)rounding_mul_shift_right(x16((int16)23249), t97, x16((uint16)15)) + (int16x16)rounding_mul_shift_right(x16((int16)2555), (int16x16)rounding_mul_shift_right(t98, t97, x16((uint16)15)), x16((uint16)15)))) + x16((int16)5))))
+     let t100 = (int32x16)shift_left(x16(1), (int32x16)shift_right(x16(0) - t99, x16((uint32)15)) + x16(15))
+     let t101 = int16x16(((x16(0) - t99) % x16(32768)))
+     let t102 = (int16x16)rounding_mul_shift_right(t101, t101, x16((uint16)15))
+     inv_sqrt[ramp(32, 1, 16)] = (int32x16)saturating_add(t100, (int32x16)rounding_mul_shift_right(t100, (int32x16)widening_shift_left((int16x16)rounding_mul_shift_right(x16((int16)7363), t102, x16((uint16)15)) + ((int16x16)rounding_mul_shift_right(x16((int16)22812), t101, x16((uint16)15)) + (int16x16)rounding_mul_shift_right(x16((int16)2592), (int16x16)rounding_mul_shift_right(t102, t101, x16((uint16)15)), x16((uint16)15))), x16((uint16)16)), x16((uint32)31)))
+     free sum_input_sq
+    }
+   }
+   consume inv_sqrt {
+    let t135 = (t121 - t125) - output.min.0
+    let t134 = (t121 - t124) - input.min.0
+    let t133 = 0 - t125
+    let t132 = output.min.1 + output.s0.y.yi.base.s
+    for (output.s0.y.yi, 0, 34) {
+     let t136 = output.s0.y.yi + t132
+     for (output.s0.x.x, 0, t117) {
+      output[ramp((output.s0.x.x*32) + ((output.stride.1*t136) + t133), 1, 32)] = uint8x32(max(min((int16x32)saturating_add(int16x32(max(min((int32x32)rounding_shift_right(int32x32((int16x32)widening_sub(input[ramp((output.s0.x.x*32) + ((input.stride.1*t136) + t118), 1, 32)], x32((uint8)input_zero)))*x32(inv_sqrt[output.s0.y.yi]), x32((uint32)8)), x32(32767)), x32(-32768))), x32((int16)128)), x32((int16)255)), x32((int16)0)))
+     }
+     if (t120) {
+      let t114 = output.s0.y.yi + t132
+      output[ramp(((output.stride.1*t114) + t135) + -32, 1, 32)] = uint8x32(max(min((int16x32)saturating_add(int16x32(max(min((int32x32)rounding_shift_right(int32x32((int16x32)widening_sub(input[ramp(((input.stride.1*t114) + t134) + -32, 1, 32)], x32((uint8)input_zero)))*x32(inv_sqrt[output.s0.y.yi]), x32((uint32)8)), x32(32767)), x32(-32768))), x32((int16)128)), x32((int16)255)), x32((int16)0)))
+     }
+    }
+   }
+   free inv_sqrt
+  }
+ }
+}
+}
+
+

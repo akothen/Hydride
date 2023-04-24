@@ -155,6 +155,9 @@ class StepWiseSynthesizer(SynthesizerBase):
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.BASE_VECT_SIZE = self.BASE_VECT_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 15
+        elif self.target == "arm":
+            self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
+            self.SWIZZLE_BOUND = 10
 
 
 

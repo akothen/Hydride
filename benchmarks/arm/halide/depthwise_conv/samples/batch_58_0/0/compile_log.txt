@@ -1,0 +1,9 @@
+generate_schedule for target=x86-64-linux-avx-avx2-avx512-avx512_sapphirerapids-avx512_skylake-disable_llvm_loop_opt-f16c-fma-sse41
+Pass 0 of 5, cost: 0.311718, time (ms): 589
+Pass 1 of 5, cost: 0.254893, time (ms): 339
+Pass 2 of 5, cost: 0.254893, time (ms): 419
+Pass 3 of 5, cost: 0.254893, time (ms): 387
+Pass 4 of 5, cost: 0.254893, time (ms): 510
+Best cost: 0.254893
+Cache (block) hits: 881
+Cache (block) misses: 94

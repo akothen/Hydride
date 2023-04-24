@@ -22,6 +22,12 @@
 (require hydride/ir/hvx/binder)
 (require hydride/ir/hvx/interpreter)
 
+
+(require hydride/ir/arm/definition)
+(require hydride/ir/arm/visitor)
+(require hydride/ir/arm/binder)
+(require hydride/ir/arm/interpreter)
+
 (require hydride/synthesis/synth_main)
 
 (require hydride/synthesis/iterative_synthesis)
@@ -66,6 +72,9 @@
     (cond
       [(equal? target 'hvx)
        hvx:visitor
+       ]
+      [(equal? target 'arm)
+       arm:visitor
        ]
       [(equal? target 'x86)
        hydride:visitor
@@ -277,6 +286,9 @@
       [(equal? target 'hvx)
        hvx:interpret
        ]
+      [(equal? target 'arm)
+       arm:interpret
+       ]
       [(equal? target 'x86)
        hydride:interpret
        ]
@@ -331,6 +343,9 @@
     (cond
       [(equal? target 'hvx)
        hvx:bind-expr
+       ]
+      [(equal? target 'arm)
+       arm:bind-expr
        ]
       [(equal? target 'x86)
        bind-expr

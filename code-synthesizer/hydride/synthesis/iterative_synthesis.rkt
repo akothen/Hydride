@@ -18,6 +18,10 @@
 (require hydride/ir/hvx/const_fold)
 (require hydride/ir/hvx/visitor)
 
+(require hydride/ir/arm/interpreter)
+(require hydride/ir/arm/const_fold)
+(require hydride/ir/arm/visitor)
+
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
@@ -519,6 +523,9 @@
       [(equal? target 'hvx)
        hvx:interpret
        ]
+      [(equal? target 'arm)
+       arm:interpret
+       ]
       )
     )
 
@@ -746,6 +753,9 @@
           [(equal? target 'hvx)
            hvx:visitor
            ]
+          [(equal? target 'arm)
+           arm:visitor
+           ]
           )
         )
 
@@ -819,6 +829,9 @@
            ]
           [(equal? target 'hvx)
            hvx:const-fold
+           ]
+          [(equal? target 'arm)
+           arm:const-fold
            ]
           )
         )

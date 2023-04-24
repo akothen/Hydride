@@ -1,0 +1,2 @@
+Benchmark for blur5x5_batch_0015_sample_0001 produces best case of 0.000182586 sec/iter (over 9 samples, 2124 iterations, accuracy 4.7%).
+Best output throughput is 5.4e+03 mpix/sec.

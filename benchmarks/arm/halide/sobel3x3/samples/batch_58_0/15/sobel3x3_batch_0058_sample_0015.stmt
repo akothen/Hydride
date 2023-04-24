@@ -1,0 +1,382 @@
+module name=sobel3x3_batch_0058_sample_0015, target=x86-64-linux-avx-avx2-disable_llvm_loop_opt-f16c-fma-sse41
+external_plus_metadata func sobel3x3_batch_0058_sample_0015 (input, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)input.buffer)
+let input.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)input.buffer)
+let input.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)output.buffer)
+let output.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)output.buffer)
+let output.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let input.extent.0.required.s = max(min(min((min(output.extent.0, 64) + (((max(output.extent.0, 64) + 1)/32)*32)) + -34, output.extent.0) + output.min.0, (input.extent.0 + input.min.0) + -1), input.min.0) - max(min(min(output.extent.0, 64) + output.min.0, (input.extent.0 + input.min.0) + 64) + -65, input.min.0)
+let input.min.0.required = max(min(min(output.extent.0, 64) + output.min.0, (input.extent.0 + input.min.0) + 64) + -65, input.min.0)
+let input.extent.1.required.s = max(min(output.extent.1 + output.min.1, (input.extent.1 + input.min.1) + -1), input.min.1) - max(min(min(output.extent.1, 36) + output.min.1, (input.extent.1 + input.min.1) + 36) + -37, input.min.1)
+let input.min.1.required = max(min(min(output.extent.1, 36) + output.min.1, (input.extent.1 + input.min.1) + 36) + -37, input.min.1)
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)input.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)input.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)input.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct(input.min.0.required, input.extent.0.required.s + 1, 1, 0, input.min.1.required, input.extent.1.required.s + 1, input.extent.0.required.s + 1, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)output.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)output.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct((min(output.extent.0, 64) + output.min.0) + -64, max(output.extent.0, 64), 1, 0, (min(output.extent.1, 36) + output.min.1) + -36, max(output.extent.1, 36), max(output.extent.0, 64), 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)input.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer))) {
+ assert(input.type == (uint32)67585, halide_error_bad_type("Input buffer input", input.type, (uint32)67585))
+ assert(input.dimensions == 2, halide_error_bad_dimensions("Input buffer input", input.dimensions, 2))
+ assert(output.type == (uint32)67585, halide_error_bad_type("Output buffer output", output.type, (uint32)67585))
+ assert(output.dimensions == 2, halide_error_bad_dimensions("Output buffer output", output.dimensions, 2))
+ assert((input.min.0 <= input.min.0.required) && (((input.extent.0.required.s + input.min.0.required) + 1) <= (input.extent.0 + input.min.0)), halide_error_access_out_of_bounds("Input buffer input", 0, input.min.0.required, input.extent.0.required.s + input.min.0.required, input.min.0, (input.extent.0 + input.min.0) + -1))
+ assert(0 <= input.extent.0, halide_error_buffer_extents_negative("Input buffer input", 0, input.extent.0))
+ assert((input.min.1 <= input.min.1.required) && (((input.extent.1.required.s + input.min.1.required) + 1) <= (input.extent.1 + input.min.1)), halide_error_access_out_of_bounds("Input buffer input", 1, input.min.1.required, input.extent.1.required.s + input.min.1.required, input.min.1, (input.extent.1 + input.min.1) + -1))
+ assert(0 <= input.extent.1, halide_error_buffer_extents_negative("Input buffer input", 1, input.extent.1))
+ assert(64 <= output.extent.0, halide_error_access_out_of_bounds("Output buffer output", 0, (min(output.extent.0, 64) + output.min.0) + -64, (output.extent.0 + output.min.0) + -1, output.min.0, (output.extent.0 + output.min.0) + -1))
+ assert(36 <= output.extent.1, halide_error_access_out_of_bounds("Output buffer output", 1, (min(output.extent.1, 36) + output.min.1) + -36, (output.extent.1 + output.min.1) + -1, output.min.1, (output.extent.1 + output.min.1) + -1))
+ assert(input.stride.0 == 1, halide_error_constraint_violated("input.stride.0", input.stride.0, "1", 1))
+ assert(output.stride.0 == 1, halide_error_constraint_violated("output.stride.0", output.stride.0, "1", 1))
+ let input.total_extent.1 = int64(input.extent.1)*int64(input.extent.0)
+ let output.total_extent.1 = int64(output.extent.1)*int64(output.extent.0)
+ assert(uint64(input.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", uint64(input.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(input.extent.1)*int64(input.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", (uint64)abs(int64(input.extent.1)*int64(input.stride.1)), (uint64)2147483647))
+ assert(input.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("input", input.total_extent.1, (int64)2147483647))
+ assert(uint64(output.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", uint64(output.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(output.extent.1)*int64(output.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", (uint64)abs(int64(output.extent.1)*int64(output.stride.1)), (uint64)2147483647))
+ assert(output.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("output", output.total_extent.1, (int64)2147483647))
+ assert(!input.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer input"))
+ assert(!output.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer output"))
+ assert(input != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer input"))
+ assert(output != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer output"))
+ produce output {
+  let t395 = input.extent.0 + input.min.0
+  let t396 = input.extent.1 + input.min.1
+  let t397 = output.min.1*output.stride.1
+  let t398 = ((output.extent.0 + -1)/128)*128
+  let t399 = output.extent.0 + 1
+  let t400 = (t399/32)*32
+  let t401 = (output.extent.0 + 33)/32
+  let t402 = min(max((input.min.0 - output.min.0)/32, -1) + 1, t401)
+  let t403 = t395 - output.min.0
+  let t393 = (output.extent.0 % 64) != 0
+  let t386 = max((min(min(min(output.extent.0 + -30, t403), min(t399, t403) + -31), t399)/32) + 1, t402)
+  let t379 = max(t398 + 112, t400)
+  let t377 = (output.extent.1 + 35)/36
+  let t390 = (output.extent.0 + 127)/128
+  let t391 = output.extent.0/64
+  let t394 = output.extent.0 - t397
+  let t392 = 0 - t397
+  parallel (output.s0.y.y, 0, t377) {
+   let output.s0.y.yi.base.s = min(output.s0.y.y*36, output.extent.1 + -36)
+   allocate repeat_edge[uint8 * (t400 + 32) * 16] in Stack
+   allocate input_16[uint16 * (t379 + 32) * 16] in Stack
+   produce repeat_edge {
+    let t404 = (output.min.1 - input.min.1) + output.s0.y.yi.base.s
+    let t405 = output.min.1 + output.s0.y.yi.base.s
+    for (repeat_edge.s0._1.rebased, 0, 2) {
+     let t407 = (((repeat_edge.s0._1.rebased + t405) + 15) % 16)*(t400 + 32)
+     let t406 = ((max(min(repeat_edge.s0._1.rebased + t404, input.extent.1), 1) + -1)*input.stride.1) - input.min.0
+     for (repeat_edge.s0._0._0, 0, t401) {
+      let repeat_edge.s0._0._0i.base.s = min((repeat_edge.s0._0._0*32) + 30, output.extent.0)
+      repeat_edge[ramp((repeat_edge.s0._0._0i.base.s + t407) + -30, 1, 32)] = input[max(min(ramp((output.min.0 + repeat_edge.s0._0._0i.base.s) + -31, 1, 32), x32(t395 + -1)), x32(input.min.0)) + x32(t406)]
+     }
+    }
+   }
+   produce input_16 {
+    consume repeat_edge {
+     let t412 = output.min.1 + output.s0.y.yi.base.s
+     let t413 = t412 % 16
+     let t414 = t379 + 32
+     let t415 = t400 + 32
+     let t416 = (t412 + 15) % 16
+     let t408 = t415*t416
+     let t410 = t414*t416
+     let t409 = t413*t415
+     let t411 = t413*t414
+     for (input_16.s0.x.x, 0, t401) {
+      allocate bounded_input[uint8 * 64] in Stack
+      produce bounded_input {
+       bounded_input[ramp(0, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t408, 1, 32) aligned(32, 0)]
+       bounded_input[ramp(32, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t409, 1, 32) aligned(32, 0)]
+      }
+      consume bounded_input {
+       input_16[ramp((input_16.s0.x.x*32) + t410, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(0, 1, 32)])
+       input_16[ramp((input_16.s0.x.x*32) + t411, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(32, 1, 32)])
+       free bounded_input
+      }
+     }
+    }
+   }
+   let t424 = min(output.s0.y.y*36, output.extent.1 + -36)
+   let t418 = (input.min.1 - output.min.1) - t424
+   let t423 = (output.min.1 - t396) + t424
+   let t419 = output.min.1 + t424
+   let t417 = output.min.1 + output.s0.y.yi.base.s
+   for (output.s0.y.yi.yi.$n, 0, 4) {
+    produce repeat_edge {
+     let repeat_edge.s0._1.prologue = min(max(((output.s0.y.yi.yi.$n*9) + t417) + 1, input.min.1), ((output.s0.y.yi.yi.$n*9) + t417) + 10)
+     let repeat_edge.s0._1.epilogue = min(max(max(((output.s0.y.yi.yi.$n*9) + t417) + 1, input.min.1), t396), ((output.s0.y.yi.yi.$n*9) + t417) + 10)
+     let t427 = output.s0.y.yi.yi.$n*9
+     let t425 = max(min(t418 - t427, 10), 1)
+     let t426 = t417 + t427
+     for (repeat_edge.s0._1.rebased, 0, t425 + -1) {
+      let t429 = (((repeat_edge.s0._1.rebased + t426) + 1) % 16)*(t400 + 32)
+      let t428 = ((max(min(((t426 - input.min.1) + repeat_edge.s0._1.rebased) + 2, input.extent.1), 1) + -1)*input.stride.1) - input.min.0
+      for (repeat_edge.s0._0._0, 0, t401) {
+       let repeat_edge.s0._0._0i.base.s = min((repeat_edge.s0._0._0*32) + 30, output.extent.0)
+       repeat_edge[ramp((repeat_edge.s0._0._0i.base.s + t429) + -30, 1, 32)] = input[max(min(ramp((output.min.0 + repeat_edge.s0._0._0i.base.s) + -31, 1, 32), x32(t395 + -1)), x32(input.min.0)) + x32(t428)]
+      }
+     }
+     let t435 = (output.s0.y.yi.yi.$n*9) + t419
+     let t436 = t435 + 1
+     let t437 = t435 + 10
+     let t430 = min(max(t396, t436), t437) - min(max(input.min.1, t436), t437)
+     let t434 = t401 - t386
+     let t431 = repeat_edge.s0._1.prologue - input.min.1
+     for (repeat_edge.s0._1.rebased, 0, t430) {
+      let t439 = ((repeat_edge.s0._1.prologue + repeat_edge.s0._1.rebased) % 16)*(t400 + 32)
+      let t438 = ((repeat_edge.s0._1.rebased + t431)*input.stride.1) - input.min.0
+      for (repeat_edge.s0._0._0, 0, t402) {
+       let repeat_edge.s0._0._0i.base.s = min((repeat_edge.s0._0._0*32) + 30, output.extent.0)
+       repeat_edge[ramp((repeat_edge.s0._0._0i.base.s + t439) + -30, 1, 32)] = input[max(min(ramp((output.min.0 + repeat_edge.s0._0._0i.base.s) + -31, 1, 32), x32(t395 + -1)), x32(input.min.0)) + x32(t438)]
+      }
+      let t442 = ((repeat_edge.s0._1.prologue + repeat_edge.s0._1.rebased) % 16)*(t400 + 32)
+      let t440 = t386 - t402
+      let t441 = ((repeat_edge.s0._1.rebased + t431)*input.stride.1) + (output.min.0 - input.min.0)
+      for (repeat_edge.s0._0._0.rebased, 0, t440) {
+       let t364 = repeat_edge.s0._0._0.rebased + t402
+       repeat_edge[ramp((t364*32) + t442, 1, 32) aligned(32, 0)] = input[ramp(((t364*32) + t441) + -1, 1, 32)]
+      }
+      let t444 = ((repeat_edge.s0._1.prologue + repeat_edge.s0._1.rebased) % 16)*(t400 + 32)
+      let t443 = ((repeat_edge.s0._1.rebased + t431)*input.stride.1) - input.min.0
+      for (repeat_edge.s0._0._0.rebased, 0, t434) {
+       let repeat_edge.s0._0._0i.base.s = min(((repeat_edge.s0._0._0.rebased + t386)*32) + 30, output.extent.0)
+       repeat_edge[ramp((repeat_edge.s0._0._0i.base.s + t444) + -30, 1, 32)] = input[max(min(ramp((output.min.0 + repeat_edge.s0._0._0i.base.s) + -31, 1, 32), x32(t395 + -1)), x32(input.min.0)) + x32(t443)]
+      }
+     }
+     let t445 = max(min((output.s0.y.yi.yi.$n*9) + t423, -1), -10)
+     let t446 = repeat_edge.s0._1.epilogue - input.min.1
+     for (repeat_edge.s0._1.rebased, 0, t445 + 10) {
+      let t448 = ((repeat_edge.s0._1.epilogue + repeat_edge.s0._1.rebased) % 16)*(t400 + 32)
+      let t447 = (max(min(repeat_edge.s0._1.rebased + t446, input.extent.1 + -1), 0)*input.stride.1) - input.min.0
+      for (repeat_edge.s0._0._0, 0, t401) {
+       let repeat_edge.s0._0._0i.base.s = min((repeat_edge.s0._0._0*32) + 30, output.extent.0)
+       repeat_edge[ramp((repeat_edge.s0._0._0i.base.s + t448) + -30, 1, 32)] = input[max(min(ramp((output.min.0 + repeat_edge.s0._0._0i.base.s) + -31, 1, 32), x32(t395 + -1)), x32(input.min.0)) + x32(t447)]
+      }
+     }
+    }
+    produce input_16 {
+     consume repeat_edge {
+      let t467 = (output.s0.y.yi.yi.$n*9) + t417
+      let t468 = (t467 + 1) % 16
+      let t469 = t379 + 32
+      let t470 = t400 + 32
+      let t471 = (t467 + 2) % 16
+      let t472 = (t467 + 3) % 16
+      let t473 = (t467 + 4) % 16
+      let t474 = (t467 + 5) % 16
+      let t475 = (t467 + 6) % 16
+      let t476 = (t467 + 7) % 16
+      let t477 = (t467 + 8) % 16
+      let t478 = (t467 + 9) % 16
+      let t457 = t470*t478
+      let t466 = t469*t478
+      let t456 = t470*t477
+      let t465 = t469*t477
+      let t455 = t470*t476
+      let t464 = t469*t476
+      let t454 = t470*t475
+      let t463 = t469*t475
+      let t453 = t470*t474
+      let t462 = t469*t474
+      let t452 = t470*t473
+      let t461 = t469*t473
+      let t451 = t470*t472
+      let t460 = t469*t472
+      let t450 = t470*t471
+      let t459 = t469*t471
+      let t449 = t468*t470
+      let t458 = t468*t469
+      for (input_16.s0.x.x, 0, t401) {
+       allocate bounded_input[uint8 * 288] in Stack
+       produce bounded_input {
+        bounded_input[ramp(0, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t449, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(32, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t450, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(64, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t451, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(96, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t452, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(128, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t453, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(160, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t454, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(192, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t455, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(224, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t456, 1, 32) aligned(32, 0)]
+        bounded_input[ramp(256, 1, 32)] = repeat_edge[ramp((input_16.s0.x.x*32) + t457, 1, 32) aligned(32, 0)]
+       }
+       consume bounded_input {
+        input_16[ramp((input_16.s0.x.x*32) + t458, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(0, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t459, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(32, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t460, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(64, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t461, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(96, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t462, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(128, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t463, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(160, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t464, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(192, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t465, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(224, 1, 32)])
+        input_16[ramp((input_16.s0.x.x*32) + t466, 1, 32) aligned(16, 0)] = uint16x32(bounded_input[ramp(256, 1, 32)])
+        free bounded_input
+       }
+      }
+     }
+    }
+    consume input_16 {
+     let t479 = (output.s0.y.yi.yi.$n*9) + t417
+     for (output.s0.y.yi.yii, 0, 9) {
+      allocate sobel_y[uint16 * (t398 + 128) * 1] in Stack
+      produce sobel_y {
+       let t480 = output.s0.y.yi.yii + t479
+       for (sobel_y.s0.x.x, 0, t390) {
+        allocate sobel_y_avg[uint16 * 144] in Stack
+        produce sobel_y_avg {
+         sobel_y_avg[ramp(0, 1, 16)] = (uint16x16)shift_left(input_16[ramp(((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128), 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128), 1, 16) aligned(16, 0)] + input_16[ramp((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128), 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(16, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 16, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 16, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 16, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(32, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 32, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 32, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 32, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(48, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 48, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 48, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 48, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(64, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 64, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 64, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 64, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(80, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 80, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 80, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 80, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(96, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 96, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 96, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 96, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(112, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 112, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 112, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 112, 1, 16) aligned(16, 0)])
+         sobel_y_avg[ramp(128, 1, 16)] = (uint16x16)shift_left(input_16[ramp((((t480 % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 128, 1, 16) aligned(16, 0)], x16((uint16)1)) + (input_16[ramp(((((t480 + 1) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 128, 1, 16) aligned(16, 0)] + input_16[ramp(((((t480 + 15) % 16)*(t379 + 32)) + (sobel_y.s0.x.x*128)) + 128, 1, 16) aligned(16, 0)])
+        }
+        consume sobel_y_avg {
+         sobel_y[ramp(sobel_y.s0.x.x*128, 1, 16) aligned(128, 0)] = (uint16x16)absd(sobel_y_avg[ramp(0, 1, 16)], sobel_y_avg[ramp(2, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 16, 1, 16) aligned(128, 16)] = (uint16x16)absd(sobel_y_avg[ramp(16, 1, 16)], sobel_y_avg[ramp(18, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 32, 1, 16) aligned(128, 32)] = (uint16x16)absd(sobel_y_avg[ramp(32, 1, 16)], sobel_y_avg[ramp(34, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 48, 1, 16) aligned(128, 48)] = (uint16x16)absd(sobel_y_avg[ramp(48, 1, 16)], sobel_y_avg[ramp(50, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 64, 1, 16) aligned(128, 64)] = (uint16x16)absd(sobel_y_avg[ramp(64, 1, 16)], sobel_y_avg[ramp(66, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 80, 1, 16) aligned(128, 80)] = (uint16x16)absd(sobel_y_avg[ramp(80, 1, 16)], sobel_y_avg[ramp(82, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 96, 1, 16) aligned(128, 96)] = (uint16x16)absd(sobel_y_avg[ramp(96, 1, 16)], sobel_y_avg[ramp(98, 1, 16)])
+         sobel_y[ramp((sobel_y.s0.x.x*128) + 112, 1, 16) aligned(128, 112)] = (uint16x16)absd(sobel_y_avg[ramp(112, 1, 16)], sobel_y_avg[ramp(114, 1, 16)])
+         free sobel_y_avg
+        }
+       }
+      }
+      consume sobel_y {
+       let t485 = output.s0.y.yi.yii + t479
+       let t486 = t379 + 32
+       let t481 = ((t485 + 15) % 16)*t486
+       let t483 = ((t485 + 1) % 16)*t486
+       let t482 = (t485 % 16)*t486
+       let t484 = (output.stride.1*t485) + t392
+       for (output.s0.x.x, 0, t391) {
+        allocate sobel_x_avg[uint16 * 192] in Stack
+        produce sobel_x_avg {
+         let t281 = (output.s0.x.x*64) + t481
+         sobel_x_avg[ramp(0, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t281 + 1, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t281 + 2, 1, 16) aligned(16, 2)] + input_16[ramp(t281, 1, 16) aligned(16, 0)])
+         let t282 = (output.s0.x.x*64) + t481
+         sobel_x_avg[ramp(16, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t282 + 17, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t282 + 18, 1, 16) aligned(16, 2)] + input_16[ramp(t282 + 16, 1, 16) aligned(16, 0)])
+         let t283 = (output.s0.x.x*64) + t481
+         sobel_x_avg[ramp(32, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t283 + 33, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t283 + 34, 1, 16) aligned(16, 2)] + input_16[ramp(t283 + 32, 1, 16) aligned(16, 0)])
+         let t284 = (output.s0.x.x*64) + t481
+         sobel_x_avg[ramp(48, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t284 + 49, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t284 + 50, 1, 16) aligned(16, 2)] + input_16[ramp(t284 + 48, 1, 16) aligned(16, 0)])
+         let t285 = (output.s0.x.x*64) + t482
+         sobel_x_avg[ramp(64, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t285 + 1, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t285 + 2, 1, 16) aligned(16, 2)] + input_16[ramp(t285, 1, 16) aligned(16, 0)])
+         let t286 = (output.s0.x.x*64) + t482
+         sobel_x_avg[ramp(80, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t286 + 17, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t286 + 18, 1, 16) aligned(16, 2)] + input_16[ramp(t286 + 16, 1, 16) aligned(16, 0)])
+         let t287 = (output.s0.x.x*64) + t482
+         sobel_x_avg[ramp(96, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t287 + 33, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t287 + 34, 1, 16) aligned(16, 2)] + input_16[ramp(t287 + 32, 1, 16) aligned(16, 0)])
+         let t288 = (output.s0.x.x*64) + t482
+         sobel_x_avg[ramp(112, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t288 + 49, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t288 + 50, 1, 16) aligned(16, 2)] + input_16[ramp(t288 + 48, 1, 16) aligned(16, 0)])
+         let t350 = (output.s0.x.x*64) + t483
+         sobel_x_avg[ramp(128, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t350 + 1, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t350 + 2, 1, 16) aligned(16, 2)] + input_16[ramp(t350, 1, 16) aligned(16, 0)])
+         sobel_x_avg[ramp(144, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t350 + 17, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t350 + 18, 1, 16) aligned(16, 2)] + input_16[ramp(t350 + 16, 1, 16) aligned(16, 0)])
+         sobel_x_avg[ramp(160, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t350 + 33, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t350 + 34, 1, 16) aligned(16, 2)] + input_16[ramp(t350 + 32, 1, 16) aligned(16, 0)])
+         sobel_x_avg[ramp(176, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t350 + 49, 1, 16) aligned(16, 1)], x16((uint16)1)) + (input_16[ramp(t350 + 50, 1, 16) aligned(16, 2)] + input_16[ramp(t350 + 48, 1, 16) aligned(16, 0)])
+        }
+        allocate sobel_x[uint16 * 64] in Stack
+        produce sobel_x {
+         consume sobel_x_avg {
+          sobel_x[ramp(0, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(0, 1, 16)], sobel_x_avg[ramp(128, 1, 16)])
+          sobel_x[ramp(16, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(16, 1, 16)], sobel_x_avg[ramp(144, 1, 16)])
+          sobel_x[ramp(32, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(32, 1, 16)], sobel_x_avg[ramp(160, 1, 16)])
+          sobel_x[ramp(48, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(48, 1, 16)], sobel_x_avg[ramp(176, 1, 16)])
+          free sobel_x_avg
+         }
+        }
+        consume sobel_x {
+         output[ramp((output.s0.x.x*64) + t484, 1, 32)] = uint8x32(min(sobel_x[ramp(0, 1, 32)] + sobel_y[ramp(output.s0.x.x*64, 1, 32) aligned(64, 0)], x32((uint16)255)))
+         output[ramp(((output.s0.x.x*64) + t484) + 32, 1, 32)] = uint8x32(min(sobel_x[ramp(32, 1, 32)] + sobel_y[ramp((output.s0.x.x*64) + 32, 1, 32) aligned(64, 32)], x32((uint16)255)))
+         free sobel_x
+        }
+       }
+       if (t393) {
+        allocate sobel_x_avg[uint16 * 192] in Stack
+        produce sobel_x_avg {
+         let t293.s = (((output.s0.y.yi.yii + t479) + 15) % 16)*(t379 + 32)
+         let t365 = output.extent.0 + t293.s
+         sobel_x_avg[ramp(0, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t365 + -63, 1, 16)], x16((uint16)1)) + (input_16[ramp(t365 + -62, 1, 16)] + input_16[ramp(t365 + -64, 1, 16)])
+         let t294.s = (((output.s0.y.yi.yii + t479) + 15) % 16)*(t379 + 32)
+         let t366 = output.extent.0 + t294.s
+         sobel_x_avg[ramp(16, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t366 + -47, 1, 16)], x16((uint16)1)) + (input_16[ramp(t366 + -46, 1, 16)] + input_16[ramp(t366 + -48, 1, 16)])
+         let t295.s = (((output.s0.y.yi.yii + t479) + 15) % 16)*(t379 + 32)
+         let t367 = output.extent.0 + t295.s
+         sobel_x_avg[ramp(32, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t367 + -31, 1, 16)], x16((uint16)1)) + (input_16[ramp(t367 + -30, 1, 16)] + input_16[ramp(t367 + -32, 1, 16)])
+         let t296.s = (((output.s0.y.yi.yii + t479) + 15) % 16)*(t379 + 32)
+         let t368 = output.extent.0 + t296.s
+         sobel_x_avg[ramp(48, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t368 + -15, 1, 16)], x16((uint16)1)) + (input_16[ramp(t368 + -14, 1, 16)] + input_16[ramp(t368 + -16, 1, 16)])
+         let t297.s = ((output.s0.y.yi.yii + t479) % 16)*(t379 + 32)
+         let t369 = output.extent.0 + t297.s
+         sobel_x_avg[ramp(64, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t369 + -63, 1, 16)], x16((uint16)1)) + (input_16[ramp(t369 + -62, 1, 16)] + input_16[ramp(t369 + -64, 1, 16)])
+         let t298.s = ((output.s0.y.yi.yii + t479) % 16)*(t379 + 32)
+         let t370 = output.extent.0 + t298.s
+         sobel_x_avg[ramp(80, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t370 + -47, 1, 16)], x16((uint16)1)) + (input_16[ramp(t370 + -46, 1, 16)] + input_16[ramp(t370 + -48, 1, 16)])
+         let t299.s = ((output.s0.y.yi.yii + t479) % 16)*(t379 + 32)
+         let t371 = output.extent.0 + t299.s
+         sobel_x_avg[ramp(96, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t371 + -31, 1, 16)], x16((uint16)1)) + (input_16[ramp(t371 + -30, 1, 16)] + input_16[ramp(t371 + -32, 1, 16)])
+         let t300.s = ((output.s0.y.yi.yii + t479) % 16)*(t379 + 32)
+         let t372 = output.extent.0 + t300.s
+         sobel_x_avg[ramp(112, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t372 + -15, 1, 16)], x16((uint16)1)) + (input_16[ramp(t372 + -14, 1, 16)] + input_16[ramp(t372 + -16, 1, 16)])
+         let t353 = (((output.s0.y.yi.yii + t479) + 1) % 16)*(t379 + 32)
+         let t373 = output.extent.0 + t353
+         sobel_x_avg[ramp(128, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t373 + -63, 1, 16)], x16((uint16)1)) + (input_16[ramp(t373 + -62, 1, 16)] + input_16[ramp(t373 + -64, 1, 16)])
+         let t374 = output.extent.0 + t353
+         sobel_x_avg[ramp(144, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t374 + -47, 1, 16)], x16((uint16)1)) + (input_16[ramp(t374 + -46, 1, 16)] + input_16[ramp(t374 + -48, 1, 16)])
+         let t375 = output.extent.0 + t353
+         sobel_x_avg[ramp(160, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t375 + -31, 1, 16)], x16((uint16)1)) + (input_16[ramp(t375 + -30, 1, 16)] + input_16[ramp(t375 + -32, 1, 16)])
+         let t376 = output.extent.0 + t353
+         sobel_x_avg[ramp(176, 1, 16)] = (uint16x16)shift_left(input_16[ramp(t376 + -15, 1, 16)], x16((uint16)1)) + (input_16[ramp(t376 + -14, 1, 16)] + input_16[ramp(t376 + -16, 1, 16)])
+        }
+        allocate sobel_x[uint16 * 64] in Stack
+        produce sobel_x {
+         consume sobel_x_avg {
+          sobel_x[ramp(0, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(0, 1, 16)], sobel_x_avg[ramp(128, 1, 16)])
+          sobel_x[ramp(16, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(16, 1, 16)], sobel_x_avg[ramp(144, 1, 16)])
+          sobel_x[ramp(32, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(32, 1, 16)], sobel_x_avg[ramp(160, 1, 16)])
+          sobel_x[ramp(48, 1, 16)] = (uint16x16)absd(sobel_x_avg[ramp(48, 1, 16)], sobel_x_avg[ramp(176, 1, 16)])
+          free sobel_x_avg
+         }
+        }
+        consume sobel_x {
+         output[ramp((((output.s0.y.yi.yii + t479)*output.stride.1) + t394) + -64, 1, 32)] = uint8x32(min(sobel_x[ramp(0, 1, 32)] + sobel_y[ramp(output.extent.0 + -64, 1, 32)], x32((uint16)255)))
+         output[ramp((((output.s0.y.yi.yii + t479)*output.stride.1) + t394) + -32, 1, 32)] = uint8x32(min(sobel_x[ramp(32, 1, 32)] + sobel_y[ramp(output.extent.0 + -32, 1, 32)], x32((uint16)255)))
+         free sobel_x
+        }
+       }
+       free sobel_y
+      }
+     }
+    }
+   }
+   free repeat_edge
+   free input_16
+  }
+ }
+}
+}
+
+

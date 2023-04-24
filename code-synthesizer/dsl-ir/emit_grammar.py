@@ -16,6 +16,7 @@ from Specification import Specification, parse_spec
 
 
 from hexsemantics_new import semantics as hvx_semantics
+from ARMSemantics import semantics as arm_semantics
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
@@ -53,8 +54,10 @@ print("TARGET:", TARGET)
 
 if TARGET == 'x86':
     dsl_list = parse_dict(semantcs)
-else:
+elif TARGET == 'hvx':
     dsl_list = parse_dict(hvx_semantics)
+elif TARGET == 'arm':
+    dsl_list = parse_dict(arm_semantics)
 
 
 #print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))

@@ -1,0 +1,607 @@
+module name=matmul_batch_0063_sample_0019, target=x86-64-linux-avx-avx2-disable_llvm_loop_opt-f16c-fma-sse41
+external_plus_metadata func matmul_batch_0063_sample_0019 (mat_a, mat_b, bias, mat_a_offset, mat_b_offset, output_multiplier, output_shift, output_offset, output_min, output_max, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)mat_b.buffer) != (uint64)0, halide_error_buffer_argument_is_null("mat_b"))
+assert((uint64)reinterpret((halide_buffer_t *)mat_a.buffer) != (uint64)0, halide_error_buffer_argument_is_null("mat_a"))
+assert((uint64)reinterpret((halide_buffer_t *)bias.buffer) != (uint64)0, halide_error_buffer_argument_is_null("bias"))
+let bias = (void *)_halide_buffer_get_host((halide_buffer_t *)bias.buffer)
+let bias.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)bias.buffer)
+let bias.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)bias.buffer)
+let bias.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)bias.buffer)
+let bias.min.0 = _halide_buffer_get_min((halide_buffer_t *)bias.buffer, 0)
+let bias.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)bias.buffer, 0)
+let bias.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)bias.buffer, 0)
+let mat_a = (void *)_halide_buffer_get_host((halide_buffer_t *)mat_a.buffer)
+let mat_a.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)mat_a.buffer)
+let mat_a.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)mat_a.buffer)
+let mat_a.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)mat_a.buffer)
+let mat_a.min.0 = _halide_buffer_get_min((halide_buffer_t *)mat_a.buffer, 0)
+let mat_a.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)mat_a.buffer, 0)
+let mat_a.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)mat_a.buffer, 0)
+let mat_a.min.1 = _halide_buffer_get_min((halide_buffer_t *)mat_a.buffer, 1)
+let mat_a.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)mat_a.buffer, 1)
+let mat_a.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)mat_a.buffer, 1)
+let mat_b = (void *)_halide_buffer_get_host((halide_buffer_t *)mat_b.buffer)
+let mat_b.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)mat_b.buffer)
+let mat_b.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)mat_b.buffer)
+let mat_b.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)mat_b.buffer)
+let mat_b.min.0 = _halide_buffer_get_min((halide_buffer_t *)mat_b.buffer, 0)
+let mat_b.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)mat_b.buffer, 0)
+let mat_b.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)mat_b.buffer, 0)
+let mat_b.min.1 = _halide_buffer_get_min((halide_buffer_t *)mat_b.buffer, 1)
+let mat_b.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)mat_b.buffer, 1)
+let mat_b.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)mat_b.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)output.buffer)
+let output.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)output.buffer)
+let output.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let bias.extent.0.required.s = min(max(max(-960 - output.extent.0, output.extent.0 + -1)/960, 0)*960, output.extent.0 + -960)
+let mat_a.extent.1.required = let t342 = (0 < output.extent.0) in (let t343 = (((((output.extent.0 + 959)/960)*((output.extent.1 + 67)/68)) + -1)/((output.extent.0 + 959)/960)) in (min(max((select(t342, t343, 0)*68) + 68, min(output.extent.1, 32) + (((output.extent.1 + -1)/32)*32)), output.extent.1) - min(min(select(t342, 0, t343)*68, output.extent.1 + -68), 0)))
+let mat_a.min.1.required.s = min(select(0 < output.extent.0, 0, ((((output.extent.0 + 959)/960)*((output.extent.1 + 67)/68)) + -1)/((output.extent.0 + 959)/960))*68, output.extent.1 + -68)
+let mat_b.extent.1.required.s = max((min(((mat_a.extent.0 + -4)/32)*8, (mat_a.extent.0/4) + -8)*4) + 32, mat_a.extent.0) - (min(mat_a.extent.0/4, 8)*4)
+let output.extent.1.required.s.s = min(select(0 < output.extent.0, ((((output.extent.0 + 959)/960)*((output.extent.1 + 67)/68)) + -1)/((output.extent.0 + 959)/960), 0)*68, output.extent.1 + -68)
+assert(!(uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)mat_a.buffer) || ((mat_a.extent.0 % 4) == 0), halide_error_constraints_make_required_region_smaller("Input buffer mat_a", 0, 0, ((mat_a.extent.0/4)*4) + -1, 0, mat_a.extent.0 + -1))
+assert(!(uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)mat_b.buffer) || ((((min(mat_a.extent.0/4, 8)*4) + mat_b.extent.1.required.s) + 32) <= ((min(mat_a.extent.0/4, 8) + (mat_a.extent.0/4))*4)), halide_error_constraints_make_required_region_smaller("Input buffer mat_b", 1, (min(mat_a.extent.0/4, 8)*4) + -32, ((min(mat_a.extent.0/4, 8) + (mat_a.extent.0/4))*4) + -33, (min(mat_a.extent.0/4, 8)*4) + -32, ((min(mat_a.extent.0/4, 8)*4) + mat_b.extent.1.required.s) + -1))
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)bias.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)bias.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)bias.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 1, (halide_dimension_t *)make_struct((min(output.extent.0, 960) + output.min.0) + -960, max(bias.extent.0.required.s, 0) + 960, 1, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)mat_a.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)mat_a.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)mat_a.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct(0, (mat_a.extent.0/4)*4, 1, 0, min(mat_a.min.1.required.s, 0) + output.min.1, mat_a.extent.1.required, mat_a.extent.0, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)mat_b.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)mat_b.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)mat_b.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct((min(output.extent.0, 32) + output.min.0) + -32, max(output.extent.0, 32), 1, 0, (min(mat_a.extent.0/4, 8)*4) + -32, (mat_a.extent.0/4)*4, max(output.extent.0, 32), 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)output.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)output.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 2, (halide_dimension_t *)make_struct((min(output.extent.0, 960) + output.min.0) + -960, max(bias.extent.0.required.s, 0) + 960, 1, 0, mat_a.min.1.required.s + output.min.1, (output.extent.1.required.s.s - mat_a.min.1.required.s) + 68, max(bias.extent.0.required.s, 0) + 960, 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer) || ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)mat_b.buffer) || ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)bias.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)mat_a.buffer))))) {
+ assert(bias.type == (uint32)73728, halide_error_bad_type("Input buffer bias", bias.type, (uint32)73728))
+ assert(bias.dimensions == 1, halide_error_bad_dimensions("Input buffer bias", bias.dimensions, 1))
+ assert(mat_a.type == (uint32)67585, halide_error_bad_type("Input buffer mat_a", mat_a.type, (uint32)67585))
+ assert(mat_a.dimensions == 2, halide_error_bad_dimensions("Input buffer mat_a", mat_a.dimensions, 2))
+ assert(mat_b.type == (uint32)67585, halide_error_bad_type("Input buffer mat_b", mat_b.type, (uint32)67585))
+ assert(mat_b.dimensions == 2, halide_error_bad_dimensions("Input buffer mat_b", mat_b.dimensions, 2))
+ assert(output.type == (uint32)67585, halide_error_bad_type("Output buffer output", output.type, (uint32)67585))
+ assert(output.dimensions == 2, halide_error_bad_dimensions("Output buffer output", output.dimensions, 2))
+ assert(((bias.min.0 + 960) <= (min(output.extent.0, 960) + output.min.0)) && (((max(bias.extent.0.required.s, 0) + min(output.extent.0, 960)) + output.min.0) <= (bias.extent.0 + bias.min.0)), halide_error_access_out_of_bounds("Input buffer bias", 0, (min(output.extent.0, 960) + output.min.0) + -960, ((max(bias.extent.0.required.s, 0) + min(output.extent.0, 960)) + output.min.0) + -1, bias.min.0, (bias.extent.0 + bias.min.0) + -1))
+ assert(0 <= bias.extent.0, halide_error_buffer_extents_negative("Input buffer bias", 0, bias.extent.0))
+ assert((mat_a.min.0 <= 0) && (0 <= mat_a.min.0), halide_error_access_out_of_bounds("Input buffer mat_a", 0, 0, mat_a.extent.0 + -1, mat_a.min.0, (mat_a.extent.0 + mat_a.min.0) + -1))
+ assert(0 <= mat_a.extent.0, halide_error_buffer_extents_negative("Input buffer mat_a", 0, mat_a.extent.0))
+ assert((mat_a.min.1 <= (min(mat_a.min.1.required.s, 0) + output.min.1)) && (((min(mat_a.min.1.required.s, 0) + output.min.1) + mat_a.extent.1.required) <= (mat_a.extent.1 + mat_a.min.1)), halide_error_access_out_of_bounds("Input buffer mat_a", 1, min(mat_a.min.1.required.s, 0) + output.min.1, ((min(mat_a.min.1.required.s, 0) + output.min.1) + mat_a.extent.1.required) + -1, mat_a.min.1, (mat_a.extent.1 + mat_a.min.1) + -1))
+ assert(0 <= mat_a.extent.1, halide_error_buffer_extents_negative("Input buffer mat_a", 1, mat_a.extent.1))
+ assert(((mat_b.min.0 + 32) <= (min(output.extent.0, 32) + output.min.0)) && ((output.extent.0 + output.min.0) <= (mat_b.extent.0 + mat_b.min.0)), halide_error_access_out_of_bounds("Input buffer mat_b", 0, (min(output.extent.0, 32) + output.min.0) + -32, (output.extent.0 + output.min.0) + -1, mat_b.min.0, (mat_b.extent.0 + mat_b.min.0) + -1))
+ assert(0 <= mat_b.extent.0, halide_error_buffer_extents_negative("Input buffer mat_b", 0, mat_b.extent.0))
+ assert(((mat_b.min.1 + 32) <= (min(mat_a.extent.0/4, 8)*4)) && (((min(mat_a.extent.0/4, 8)*4) + mat_b.extent.1.required.s) <= (mat_b.extent.1 + mat_b.min.1)), halide_error_access_out_of_bounds("Input buffer mat_b", 1, (min(mat_a.extent.0/4, 8)*4) + -32, ((min(mat_a.extent.0/4, 8)*4) + mat_b.extent.1.required.s) + -1, mat_b.min.1, (mat_b.extent.1 + mat_b.min.1) + -1))
+ assert(0 <= mat_b.extent.1, halide_error_buffer_extents_negative("Input buffer mat_b", 1, mat_b.extent.1))
+ assert(max(max(bias.extent.0.required.s, 0) + min(output.extent.0, 960), 960) <= output.extent.0, halide_error_access_out_of_bounds("Output buffer output", 0, (min(output.extent.0, 960) + output.min.0) + -960, ((max(bias.extent.0.required.s, 0) + min(output.extent.0, 960)) + output.min.0) + -1, output.min.0, (output.extent.0 + output.min.0) + -1))
+ assert((0 <= mat_a.min.1.required.s) && ((output.extent.1.required.s.s + 68) <= output.extent.1), halide_error_access_out_of_bounds("Output buffer output", 1, mat_a.min.1.required.s + output.min.1, (output.extent.1.required.s.s + output.min.1) + 67, output.min.1, (output.extent.1 + output.min.1) + -1))
+ assert(0 <= output.extent.1, halide_error_buffer_extents_negative("Output buffer output", 1, output.extent.1))
+ assert(bias.stride.0 == 1, halide_error_constraint_violated("bias.stride.0", bias.stride.0, "1", 1))
+ assert(mat_a.stride.0 == 1, halide_error_constraint_violated("mat_a.stride.0", mat_a.stride.0, "1", 1))
+ assert((mat_a.extent.0 % 4) == 0, halide_error_constraint_violated("mat_a.extent.0", mat_a.extent.0, "((mat_a.extent.0/4)*4)", (mat_a.extent.0/4)*4))
+ assert(mat_b.stride.0 == 1, halide_error_constraint_violated("mat_b.stride.0", mat_b.stride.0, "1", 1))
+ assert(mat_b.extent.1 == ((mat_a.extent.0/4)*4), halide_error_constraint_violated("mat_b.extent.1", mat_b.extent.1, "((mat_a.extent.0/4)*4)", (mat_a.extent.0/4)*4))
+ assert(output.stride.0 == 1, halide_error_constraint_violated("output.stride.0", output.stride.0, "1", 1))
+ let mat_a.total_extent.1 = int64(mat_a.extent.1)*int64(mat_a.extent.0)
+ let mat_b.total_extent.1 = int64(mat_b.extent.1)*int64(mat_b.extent.0)
+ let output.total_extent.1 = int64(output.extent.1)*int64(output.extent.0)
+ assert(uint64(bias.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("bias", uint64(bias.extent.0), (uint64)2147483647))
+ assert(uint64(mat_a.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("mat_a", uint64(mat_a.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(mat_a.extent.1)*int64(mat_a.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("mat_a", (uint64)abs(int64(mat_a.extent.1)*int64(mat_a.stride.1)), (uint64)2147483647))
+ assert(mat_a.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("mat_a", mat_a.total_extent.1, (int64)2147483647))
+ assert(uint64(mat_b.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("mat_b", uint64(mat_b.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(mat_b.extent.1)*int64(mat_b.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("mat_b", (uint64)abs(int64(mat_b.extent.1)*int64(mat_b.stride.1)), (uint64)2147483647))
+ assert(mat_b.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("mat_b", mat_b.total_extent.1, (int64)2147483647))
+ assert(uint64(output.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", uint64(output.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(output.extent.1)*int64(output.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", (uint64)abs(int64(output.extent.1)*int64(output.stride.1)), (uint64)2147483647))
+ assert(output.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("output", output.total_extent.1, (int64)2147483647))
+ assert(!bias.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer bias"))
+ assert(!mat_a.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer mat_a"))
+ assert(!mat_b.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer mat_b"))
+ assert(!output.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer output"))
+ assert(bias != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer bias"))
+ assert(mat_a != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer mat_a"))
+ assert(mat_b != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer mat_b"))
+ assert(output != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer output"))
+ assert(output_offset <= 255, halide_error_param_too_large_i64("output_offset", int64(output_offset), (int64)255))
+ assert(0 <= output_offset, halide_error_param_too_small_i64("output_offset", int64(output_offset), (int64)0))
+ assert(max((int16)mat_b_offset, (int16)-255) <= (int16)0, halide_error_param_too_large_i64("mat_b_offset", int64(max((int16)mat_b_offset, (int16)-255)), (int64)0))
+ assert((int16)-255 <= (int16)mat_b_offset, halide_error_param_too_small_i64("mat_b_offset", int64((int16)mat_b_offset), (int64)-255))
+ assert(max((int16)mat_a_offset, (int16)-255) <= (int16)0, halide_error_param_too_large_i64("mat_a_offset", int64(max((int16)mat_a_offset, (int16)-255)), (int64)0))
+ assert((int16)-255 <= (int16)mat_a_offset, halide_error_param_too_small_i64("mat_a_offset", int64((int16)mat_a_offset), (int64)-255))
+ allocate sum$1[uint32 * ((((output.extent.0 + -1)/16)*16) + 16)]
+ produce sum$1 {
+  let t418 = (output.extent.0 + 15)/16
+  parallel (sum$1.s0.x.x, 0, t418) {
+   sum$1[ramp(sum$1.s0.x.x*16, 1, 8) aligned(16, 0)] = x8((uint32)0)
+   sum$1[ramp((sum$1.s0.x.x*16) + 8, 1, 8) aligned(16, 8)] = x8((uint32)0)
+  }
+  let t419 = (output.extent.0 + 31)/32
+  let t420 = output.extent.0/32
+  let t421 = (output.min.0 - (mat_b.min.1*mat_b.stride.1)) - mat_b.min.0
+  parallel (sum$1.s1.x.x, 0, t419) {
+   if (sum$1.s1.x.x < t420) {
+    let t424 = sum$1.s1.x.x*32
+    let t423 = t421 + t424
+    for (sum$1.s1.fk$x, 0, mat_a.extent.0) {
+     sum$1[ramp(t424, 1, 32) aligned(32, 0)] = sum$1[ramp(t424, 1, 32) aligned(32, 0)] + uint32x32(mat_b[ramp((mat_b.stride.1*sum$1.s1.fk$x) + t423, 1, 32)])
+    }
+   } else {
+    let t428 = sum$1.s1.x.x*32
+    let t425 = output.extent.0 - t428
+    let t427 = t421 + t428
+    for (sum$1.s1.fk$x, 0, mat_a.extent.0) {
+     let t429 = min(t425, 32)
+     let t430 = (mat_b.stride.1*sum$1.s1.fk$x) + t427
+     for (sum$1.s1.x.xi, 0, t429) {
+      let t357 = sum$1.s1.x.xi + t428
+      sum$1[t357] = sum$1[t357] + uint32(mat_b[sum$1.s1.x.xi + t430])
+     }
+    }
+   }
+  }
+ }
+ allocate mat_b_swizzled[uint8 * output.extent.0 * max(mat_a.extent.0/4, 8) * 4]
+ produce mat_b_swizzled {
+  let t439 = mat_b.min.1*mat_b.stride.1
+  let t440 = mat_a.extent.0/4
+  let t437 = (output.extent.0 % 32) != 0
+  let t436 = min(t440, 8)
+  let t431 = (mat_a.extent.0 + 28)/32
+  let t433 = output.extent.0/32
+  let t435 = max(t440, 8)*output.extent.0
+  let t438 = ((output.extent.0 + output.min.0) - t439) - mat_b.min.0
+  let t434 = (output.min.0 - t439) - mat_b.min.0
+  parallel (mat_b_swizzled.s0.y.y, 0, t431) {
+   let mat_b_swizzled.s0.y.yi.base = min(mat_b_swizzled.s0.y.y*8, t440 + -8)
+   let t441 = mat_b_swizzled.s0.y.yi.base - t436
+   for (mat_b_swizzled.s0.k, 0, 4) {
+    let t442 = mat_b_swizzled.s0.k*t435
+    for (mat_b_swizzled.s0.y.yi, 0, 8) {
+     let t443 = ((((mat_b_swizzled.s0.y.yi + mat_b_swizzled.s0.y.yi.base)*4) + mat_b_swizzled.s0.k)*mat_b.stride.1) + t434
+     let t444 = (((mat_b_swizzled.s0.y.yi + t441) + 8)*output.extent.0) + t442
+     for (mat_b_swizzled.s0.x.x, 0, t433) {
+      mat_b_swizzled[ramp((mat_b_swizzled.s0.x.x*32) + t444, 1, 32)] = mat_b[ramp((mat_b_swizzled.s0.x.x*32) + t443, 1, 32)]
+     }
+     if (t437) {
+      mat_b_swizzled[ramp(((((mat_b_swizzled.s0.y.yi + t441) + 9)*output.extent.0) + t442) + -32, 1, 32)] = mat_b[ramp((((((mat_b_swizzled.s0.y.yi + mat_b_swizzled.s0.y.yi.base)*4) + mat_b_swizzled.s0.k)*mat_b.stride.1) + t438) + -32, 1, 32)]
+     }
+    }
+   }
+  }
+ }
+ let sum.y.extent_realized.s = max(min(min(output.extent.1, 32) + (((output.extent.1 + -1)/32)*32), output.extent.1), max(((output.extent.1 + -1)/8)*8, output.extent.1 + -4) + 8) - min(output.extent.1, 68)
+ allocate sum[uint32 * (sum.y.extent_realized.s + 68)]
+ produce sum {
+  let t446 = min(output.extent.1, 68)
+  let t445 = (output.extent.1 + 7)/8
+  parallel (sum.s0.y.y, 0, t445) {
+   sum[ramp(((sum.s0.y.y*8) - t446) + 68, 1, 8)] = x8((uint32)0)
+  }
+  let t452 = min(output.extent.1, 68)
+  let t447 = (output.extent.1 + 31)/32
+  let t448 = output.extent.1/32
+  let t450 = output.min.1 - mat_a.min.1
+  parallel (sum.s1.y.y, 0, t447) {
+   if (sum.s1.y.y < t448) {
+    let t455 = sum.s1.y.y*32
+    let t454 = (t450 + t455)*mat_a.stride.1
+    let t453 = t455 - t452
+    for (sum.s1.fk$x, 0, mat_a.extent.0) {
+     sum[ramp(t453 + 68, 1, 32)] = sum[ramp(t453 + 68, 1, 32)] + uint32x32(mat_a[ramp(sum.s1.fk$x + t454, mat_a.stride.1, 32)])
+    }
+   } else {
+    let t459 = sum.s1.y.y*32
+    let t457 = t459 - t452
+    let t456 = output.extent.1 - t459
+    let t458 = t450 + t459
+    for (sum.s1.fk$x, 0, mat_a.extent.0) {
+     let t460 = min(t456, 32)
+     for (sum.s1.y.yi, 0, t460) {
+      let t244 = sum.s1.y.yi + t457
+      sum[t244 + 68] = sum[t244 + 68] + uint32(mat_a[((sum.s1.y.yi + t458)*mat_a.stride.1) + sum.s1.fk$x])
+     }
+    }
+   }
+  }
+ }
+ let output.s0.x.x.x.loop_extent = ((output.extent.0 + 959)/960)*((output.extent.1 + 67)/68)
+ produce output {
+  consume sum {
+   consume mat_b_swizzled {
+    consume sum$1 {
+     let t471 = mat_a.extent.0/4
+     let t468 = max(min((int16)mat_b_offset, (int16)0), (int16)-255)
+     let t467 = max(min((int16)mat_a_offset, (int16)0), (int16)-255)
+     let t464 = min(t471, 8)
+     let t462 = min(output.extent.1, 68)
+     let t461 = (output.extent.0 + 959)/960
+     let t466 = max(t471, 8)*output.extent.0
+     let t465 = output.min.1 - mat_a.min.1
+     let t470 = 0 - (output.min.1*output.stride.1)
+     parallel (output.s0.x.x.x, 0, output.s0.x.x.x.loop_extent) {
+      let output.s0.x.xi.base.s = min((output.s0.x.x.x % t461)*960, output.extent.0 + -960)
+      let output.s0.y.yi.base.s = min((output.s0.x.x.x/t461)*68, output.extent.1 + -68)
+      allocate row_sums_a[uint32 * 72]
+      produce row_sums_a {
+       row_sums_a[ramp(0, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 68, 1, 8)]
+       row_sums_a[ramp(8, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 76, 1, 8)]
+       row_sums_a[ramp(16, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 84, 1, 8)]
+       row_sums_a[ramp(24, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 92, 1, 8)]
+       row_sums_a[ramp(32, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 100, 1, 8)]
+       row_sums_a[ramp(40, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 108, 1, 8)]
+       row_sums_a[ramp(48, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 116, 1, 8)]
+       row_sums_a[ramp(56, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 124, 1, 8)]
+       row_sums_a[ramp(64, 1, 8)] = sum[ramp((output.s0.y.yi.base.s - t462) + 132, 1, 8)]
+      }
+      consume row_sums_a {
+       let t476 = (output.min.0 - bias.min.0) + output.s0.x.xi.base.s
+       let t472 = output.s0.y.yi.base.s + t465
+       let t477 = output.s0.x.xi.base.s + t470
+       let t478 = output.min.1 + output.s0.y.yi.base.s
+       let t475 = output.min.0 + output.s0.x.xi.base.s
+       for (output.s0.x.xi.xi, 0, 10) {
+        allocate column_sums_b[uint32 * 96] in Stack
+        produce column_sums_b {
+         column_sums_b[ramp(0, 1, 8)] = sum$1[ramp((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s, 1, 8)]
+         column_sums_b[ramp(8, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 8, 1, 8)]
+         column_sums_b[ramp(16, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 16, 1, 8)]
+         column_sums_b[ramp(24, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 24, 1, 8)]
+         column_sums_b[ramp(32, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 32, 1, 8)]
+         column_sums_b[ramp(40, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 40, 1, 8)]
+         column_sums_b[ramp(48, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 48, 1, 8)]
+         column_sums_b[ramp(56, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 56, 1, 8)]
+         column_sums_b[ramp(64, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 64, 1, 8)]
+         column_sums_b[ramp(72, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 72, 1, 8)]
+         column_sums_b[ramp(80, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 80, 1, 8)]
+         column_sums_b[ramp(88, 1, 8)] = sum$1[ramp(((output.s0.x.xi.xi*96) + output.s0.x.xi.base.s) + 88, 1, 8)]
+        }
+        consume column_sums_b {
+         let t485 = output.s0.x.xi.xi*96
+         let t484 = t477 + t485
+         let t483 = t476 + t485
+         let t482 = t475 + t485
+         let t479 = output.s0.x.xi.base.s + t485
+         for (output.s0.y.yi.yi, 0, 17) {
+          allocate multiplied_no_offsets[uint32 * 384] in Stack
+          produce multiplied_no_offsets {
+           for (multiplied_no_offsets.s0.y.rebased, 0, 4) {
+            let t486 = multiplied_no_offsets.s0.y.rebased*12
+            for (multiplied_no_offsets.s0.x.x, 0, 12) {
+             multiplied_no_offsets[ramp((multiplied_no_offsets.s0.x.x + t486)*8, 1, 8) aligned(8, 0)] = x8((uint32)0)
+            }
+           }
+           let t493 = (output.s0.y.yi.yi*4) + t472
+           let t487 = mat_a.stride.1*t493
+           let t492 = (t493 + 3)*mat_a.stride.1
+           let t491 = (t493 + 2)*mat_a.stride.1
+           let t490 = (t493 + 1)*mat_a.stride.1
+           for (multiplied_no_offsets.s1.k$x, 0, t471) {
+            let t341 = (((multiplied_no_offsets.s1.k$x - t464) + 8)*output.extent.0) + t479
+            let t246 = (multiplied_no_offsets.s1.k$x*4) + t487
+            multiplied_no_offsets[ramp(0, 1, 32)] = (((multiplied_no_offsets[ramp(0, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341, 1, 32)], x32(mat_a[t246])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + t466, 1, 32)], x32(mat_a[t246 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*2) + t341, 1, 32)], x32(mat_a[t246 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*3) + t341, 1, 32)], x32(mat_a[t246 + 3])))
+            let t249 = (multiplied_no_offsets.s1.k$x*4) + t487
+            multiplied_no_offsets[ramp(32, 1, 32)] = (((multiplied_no_offsets[ramp(32, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 32, 1, 32)], x32(mat_a[t249])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 32, 1, 32)], x32(mat_a[t249 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 32, 1, 32)], x32(mat_a[t249 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 32, 1, 32)], x32(mat_a[t249 + 3])))
+            let t252 = (multiplied_no_offsets.s1.k$x*4) + t487
+            multiplied_no_offsets[ramp(64, 1, 32)] = (((multiplied_no_offsets[ramp(64, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 64, 1, 32)], x32(mat_a[t252])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 64, 1, 32)], x32(mat_a[t252 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 64, 1, 32)], x32(mat_a[t252 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 64, 1, 32)], x32(mat_a[t252 + 3])))
+            let t255 = (multiplied_no_offsets.s1.k$x*4) + t490
+            multiplied_no_offsets[ramp(96, 1, 32)] = (((multiplied_no_offsets[ramp(96, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341, 1, 32)], x32(mat_a[t255])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + t466, 1, 32)], x32(mat_a[t255 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*2) + t341, 1, 32)], x32(mat_a[t255 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*3) + t341, 1, 32)], x32(mat_a[t255 + 3])))
+            let t258 = (multiplied_no_offsets.s1.k$x*4) + t490
+            multiplied_no_offsets[ramp(128, 1, 32)] = (((multiplied_no_offsets[ramp(128, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 32, 1, 32)], x32(mat_a[t258])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 32, 1, 32)], x32(mat_a[t258 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 32, 1, 32)], x32(mat_a[t258 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 32, 1, 32)], x32(mat_a[t258 + 3])))
+            let t261 = (multiplied_no_offsets.s1.k$x*4) + t490
+            multiplied_no_offsets[ramp(160, 1, 32)] = (((multiplied_no_offsets[ramp(160, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 64, 1, 32)], x32(mat_a[t261])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 64, 1, 32)], x32(mat_a[t261 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 64, 1, 32)], x32(mat_a[t261 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 64, 1, 32)], x32(mat_a[t261 + 3])))
+            let t264 = (multiplied_no_offsets.s1.k$x*4) + t491
+            multiplied_no_offsets[ramp(192, 1, 32)] = (((multiplied_no_offsets[ramp(192, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341, 1, 32)], x32(mat_a[t264])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + t466, 1, 32)], x32(mat_a[t264 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*2) + t341, 1, 32)], x32(mat_a[t264 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*3) + t341, 1, 32)], x32(mat_a[t264 + 3])))
+            let t267 = (multiplied_no_offsets.s1.k$x*4) + t491
+            multiplied_no_offsets[ramp(224, 1, 32)] = (((multiplied_no_offsets[ramp(224, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 32, 1, 32)], x32(mat_a[t267])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 32, 1, 32)], x32(mat_a[t267 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 32, 1, 32)], x32(mat_a[t267 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 32, 1, 32)], x32(mat_a[t267 + 3])))
+            let t270 = (multiplied_no_offsets.s1.k$x*4) + t491
+            multiplied_no_offsets[ramp(256, 1, 32)] = (((multiplied_no_offsets[ramp(256, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 64, 1, 32)], x32(mat_a[t270])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 64, 1, 32)], x32(mat_a[t270 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 64, 1, 32)], x32(mat_a[t270 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 64, 1, 32)], x32(mat_a[t270 + 3])))
+            let t331 = (multiplied_no_offsets.s1.k$x*4) + t492
+            multiplied_no_offsets[ramp(288, 1, 32)] = (((multiplied_no_offsets[ramp(288, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341, 1, 32)], x32(mat_a[t331])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + t466, 1, 32)], x32(mat_a[t331 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*2) + t341, 1, 32)], x32(mat_a[t331 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t466*3) + t341, 1, 32)], x32(mat_a[t331 + 3])))
+            multiplied_no_offsets[ramp(320, 1, 32)] = (((multiplied_no_offsets[ramp(320, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 32, 1, 32)], x32(mat_a[t331])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 32, 1, 32)], x32(mat_a[t331 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 32, 1, 32)], x32(mat_a[t331 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 32, 1, 32)], x32(mat_a[t331 + 3])))
+            multiplied_no_offsets[ramp(352, 1, 32)] = (((multiplied_no_offsets[ramp(352, 1, 32)] + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(t341 + 64, 1, 32)], x32(mat_a[t331])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp((t341 + t466) + 64, 1, 32)], x32(mat_a[t331 + 1])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*2) + t341) + 64, 1, 32)], x32(mat_a[t331 + 2])))) + uint32x32((uint16x32)widening_mul(mat_b_swizzled[ramp(((t466*3) + t341) + 64, 1, 32)], x32(mat_a[t331 + 3])))
+           }
+          }
+          consume multiplied_no_offsets {
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t370 = int32(t467)
+            let t371 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(0, 1, 16)])*x16(t370)) + int32x16(multiplied_no_offsets[ramp(0, 1, 16)])) + x16(((t370*t371)*mat_a.extent.0) + (t371*int32(row_sums_a[output.s0.y.yi.yi*4])))
+            let t372 = int32(t467)
+            let t373 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(16, 1, 16)])*x16(t372)) + int32x16(multiplied_no_offsets[ramp(16, 1, 16)])) + x16(((t372*t373)*mat_a.extent.0) + (t373*int32(row_sums_a[output.s0.y.yi.yi*4])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp(t482 - bias.min.0, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 8, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 16, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 24, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((output.s0.y.yi.yi*4) + t478)*output.stride.1) + t484, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t374 = int32(t467)
+            let t375 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(32, 1, 16)])*x16(t374)) + int32x16(multiplied_no_offsets[ramp(32, 1, 16)])) + x16(((t374*t375)*mat_a.extent.0) + (t375*int32(row_sums_a[output.s0.y.yi.yi*4])))
+            let t376 = int32(t467)
+            let t377 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(48, 1, 16)])*x16(t376)) + int32x16(multiplied_no_offsets[ramp(48, 1, 16)])) + x16(((t376*t377)*mat_a.extent.0) + (t377*int32(row_sums_a[output.s0.y.yi.yi*4])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 32, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 40, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 48, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 56, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp(((((output.s0.y.yi.yi*4) + t478)*output.stride.1) + t484) + 32, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t378 = int32(t467)
+            let t379 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(64, 1, 16)])*x16(t378)) + int32x16(multiplied_no_offsets[ramp(64, 1, 16)])) + x16(((t378*t379)*mat_a.extent.0) + (t379*int32(row_sums_a[output.s0.y.yi.yi*4])))
+            let t380 = int32(t467)
+            let t381 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(80, 1, 16)])*x16(t380)) + int32x16(multiplied_no_offsets[ramp(80, 1, 16)])) + x16(((t380*t381)*mat_a.extent.0) + (t381*int32(row_sums_a[output.s0.y.yi.yi*4])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 64, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 72, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 80, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 88, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp(((((output.s0.y.yi.yi*4) + t478)*output.stride.1) + t484) + 64, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t382 = int32(t467)
+            let t383 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(0, 1, 16)])*x16(t382)) + int32x16(multiplied_no_offsets[ramp(96, 1, 16)])) + x16(((t382*t383)*mat_a.extent.0) + (t383*int32(row_sums_a[(output.s0.y.yi.yi*4) + 1])))
+            let t384 = int32(t467)
+            let t385 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(16, 1, 16)])*x16(t384)) + int32x16(multiplied_no_offsets[ramp(112, 1, 16)])) + x16(((t384*t385)*mat_a.extent.0) + (t385*int32(row_sums_a[(output.s0.y.yi.yi*4) + 1])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp(t482 - bias.min.0, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 8, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 16, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 24, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp(((((output.s0.y.yi.yi*4) + t478) + 1)*output.stride.1) + t484, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t386 = int32(t467)
+            let t387 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(32, 1, 16)])*x16(t386)) + int32x16(multiplied_no_offsets[ramp(128, 1, 16)])) + x16(((t386*t387)*mat_a.extent.0) + (t387*int32(row_sums_a[(output.s0.y.yi.yi*4) + 1])))
+            let t388 = int32(t467)
+            let t389 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(48, 1, 16)])*x16(t388)) + int32x16(multiplied_no_offsets[ramp(144, 1, 16)])) + x16(((t388*t389)*mat_a.extent.0) + (t389*int32(row_sums_a[(output.s0.y.yi.yi*4) + 1])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 32, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 40, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 48, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 56, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((((output.s0.y.yi.yi*4) + t478) + 1)*output.stride.1) + t484) + 32, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t390 = int32(t467)
+            let t391 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(64, 1, 16)])*x16(t390)) + int32x16(multiplied_no_offsets[ramp(160, 1, 16)])) + x16(((t390*t391)*mat_a.extent.0) + (t391*int32(row_sums_a[(output.s0.y.yi.yi*4) + 1])))
+            let t392 = int32(t467)
+            let t393 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(80, 1, 16)])*x16(t392)) + int32x16(multiplied_no_offsets[ramp(176, 1, 16)])) + x16(((t392*t393)*mat_a.extent.0) + (t393*int32(row_sums_a[(output.s0.y.yi.yi*4) + 1])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 64, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 72, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 80, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 88, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((((output.s0.y.yi.yi*4) + t478) + 1)*output.stride.1) + t484) + 64, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t394 = int32(t467)
+            let t395 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(0, 1, 16)])*x16(t394)) + int32x16(multiplied_no_offsets[ramp(192, 1, 16)])) + x16(((t394*t395)*mat_a.extent.0) + (t395*int32(row_sums_a[(output.s0.y.yi.yi*4) + 2])))
+            let t396 = int32(t467)
+            let t397 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(16, 1, 16)])*x16(t396)) + int32x16(multiplied_no_offsets[ramp(208, 1, 16)])) + x16(((t396*t397)*mat_a.extent.0) + (t397*int32(row_sums_a[(output.s0.y.yi.yi*4) + 2])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp(t482 - bias.min.0, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 8, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 16, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 24, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp(((((output.s0.y.yi.yi*4) + t478) + 2)*output.stride.1) + t484, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t398 = int32(t467)
+            let t399 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(32, 1, 16)])*x16(t398)) + int32x16(multiplied_no_offsets[ramp(224, 1, 16)])) + x16(((t398*t399)*mat_a.extent.0) + (t399*int32(row_sums_a[(output.s0.y.yi.yi*4) + 2])))
+            let t400 = int32(t467)
+            let t401 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(48, 1, 16)])*x16(t400)) + int32x16(multiplied_no_offsets[ramp(240, 1, 16)])) + x16(((t400*t401)*mat_a.extent.0) + (t401*int32(row_sums_a[(output.s0.y.yi.yi*4) + 2])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 32, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 40, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 48, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 56, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((((output.s0.y.yi.yi*4) + t478) + 2)*output.stride.1) + t484) + 32, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t402 = int32(t467)
+            let t403 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(64, 1, 16)])*x16(t402)) + int32x16(multiplied_no_offsets[ramp(256, 1, 16)])) + x16(((t402*t403)*mat_a.extent.0) + (t403*int32(row_sums_a[(output.s0.y.yi.yi*4) + 2])))
+            let t404 = int32(t467)
+            let t405 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(80, 1, 16)])*x16(t404)) + int32x16(multiplied_no_offsets[ramp(272, 1, 16)])) + x16(((t404*t405)*mat_a.extent.0) + (t405*int32(row_sums_a[(output.s0.y.yi.yi*4) + 2])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 64, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 72, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 80, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 88, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((((output.s0.y.yi.yi*4) + t478) + 2)*output.stride.1) + t484) + 64, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t406 = int32(t467)
+            let t407 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(0, 1, 16)])*x16(t406)) + int32x16(multiplied_no_offsets[ramp(288, 1, 16)])) + x16(((t406*t407)*mat_a.extent.0) + (t407*int32(row_sums_a[(output.s0.y.yi.yi*4) + 3])))
+            let t408 = int32(t467)
+            let t409 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(16, 1, 16)])*x16(t408)) + int32x16(multiplied_no_offsets[ramp(304, 1, 16)])) + x16(((t408*t409)*mat_a.extent.0) + (t409*int32(row_sums_a[(output.s0.y.yi.yi*4) + 3])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp(t482 - bias.min.0, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 8, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 16, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 24, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp(((((output.s0.y.yi.yi*4) + t478) + 3)*output.stride.1) + t484, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t410 = int32(t467)
+            let t411 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(32, 1, 16)])*x16(t410)) + int32x16(multiplied_no_offsets[ramp(320, 1, 16)])) + x16(((t410*t411)*mat_a.extent.0) + (t411*int32(row_sums_a[(output.s0.y.yi.yi*4) + 3])))
+            let t412 = int32(t467)
+            let t413 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(48, 1, 16)])*x16(t412)) + int32x16(multiplied_no_offsets[ramp(336, 1, 16)])) + x16(((t412*t413)*mat_a.extent.0) + (t413*int32(row_sums_a[(output.s0.y.yi.yi*4) + 3])))
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 32, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 40, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 48, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 56, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((((output.s0.y.yi.yi*4) + t478) + 3)*output.stride.1) + t484) + 32, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+           allocate multiplied[int32 * 32] in Stack
+           produce multiplied {
+            let t414 = int32(t467)
+            let t415 = int32(t468)
+            multiplied[ramp(0, 1, 16)] = ((int32x16(column_sums_b[ramp(64, 1, 16)])*x16(t414)) + int32x16(multiplied_no_offsets[ramp(352, 1, 16)])) + x16(((t414*t415)*mat_a.extent.0) + (t415*int32(row_sums_a[(output.s0.y.yi.yi*4) + 3])))
+            let t416 = int32(t467)
+            let t417 = int32(t468)
+            multiplied[ramp(16, 1, 16)] = ((int32x16(column_sums_b[ramp(80, 1, 16)])*x16(t416)) + int32x16(multiplied_no_offsets[ramp(368, 1, 16)])) + x16(((t416*t417)*mat_a.extent.0) + (t417*int32(row_sums_a[(output.s0.y.yi.yi*4) + 3])))
+            free multiplied_no_offsets
+           }
+           allocate scaled_plus_offset[int32 * 32] in Stack
+           produce scaled_plus_offset {
+            consume multiplied {
+             scaled_plus_offset[ramp(0, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)] + bias[ramp((t482 - bias.min.0) + 64, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(8, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(8, 1, 8)] + bias[ramp((t482 - bias.min.0) + 72, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(16, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(16, 1, 8)] + bias[ramp((t482 - bias.min.0) + 80, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             scaled_plus_offset[ramp(24, 1, 8)] = (int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(24, 1, 8)] + bias[ramp(t483 + 88, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)) + x8(output_offset)
+             free multiplied
+            }
+           }
+           consume scaled_plus_offset {
+            output[ramp((((((output.s0.y.yi.yi*4) + t478) + 3)*output.stride.1) + t484) + 64, 1, 32)] = max(min(uint8x32(max(min(scaled_plus_offset[ramp(0, 1, 32)], x32(255)), x32(0))), x32((uint8)output_max)), x32((uint8)output_min))
+           }
+           free scaled_plus_offset
+          }
+         }
+        }
+        free column_sums_b
+       }
+      }
+      free row_sums_a
+     }
+    }
+   }
+  }
+ }
+ free sum$1
+ free mat_b_swizzled
+ free sum
+}
+}
+
+

@@ -12,3 +12,4 @@ build/*
 backends/*
 **/llvm-build/
 **/llvm-project/
+tmp.txt

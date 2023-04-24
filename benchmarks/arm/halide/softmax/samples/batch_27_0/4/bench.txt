@@ -1,0 +1,2 @@
+Benchmark for softmax_batch_0027_sample_0004 produces best case of 0.000889366 sec/iter (over 11 samples, 440 iterations, accuracy 2.9%).
+Best output throughput is 2.2e+03 mpix/sec.
