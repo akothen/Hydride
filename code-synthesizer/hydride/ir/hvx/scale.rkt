@@ -1069,7 +1069,7 @@
              ]
             [ (hexagon_V6_vmpyewuh_128B_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
              (cond 
-               [(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000010 (bitvector 64)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 16) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 0))
+               [(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000010 (bitvector 64)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 16) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 64) (equal? num_12 1) (equal? num_13 0))
                 (displayln "Scaling case for hexagon_V6_vmpyewuh_128B")
                 (hexagon_V6_vmpyewuh_128B_dsl
                   vc_0
