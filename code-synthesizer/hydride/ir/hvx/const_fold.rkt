@@ -79,6 +79,56 @@
 		[else ( llvm_shuffle_vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 )]
 		)
 	]
+[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-add_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-add_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-sub_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-sub_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-mul_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-mul_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-sdiv_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-sdiv_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-udiv_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-udiv_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
 	[ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(define v0-folded (hvx:const-fold v0))
 		(define v1-folded (hvx:const-fold v1))

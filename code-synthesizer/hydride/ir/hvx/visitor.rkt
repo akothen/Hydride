@@ -51,6 +51,31 @@
 		(define v4-visited (hvx:visitor v4 fn))
 		(fn ( llvm_shuffle_vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
 	]
+[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-add_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-sub_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-mul_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-sdiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-udiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
 	[ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(define v0-visited (hvx:visitor v0 fn))
 		(define v1-visited (hvx:visitor v1 fn))

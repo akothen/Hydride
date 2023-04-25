@@ -52,6 +52,27 @@
              (llvm_shuffle_vectors_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr num_2 env) 
                                        (hvx:bind-expr prec_i_o env) (hvx:bind-expr v4 env) (hvx:bind-expr num_5 env))
              ]
+
+	[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-add_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr num_2 env) 
+		 (hvx:bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sub_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr num_2 env) 
+		 (hvx:bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-mul_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr num_2 env) 
+		 (hvx:bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sdiv_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr num_2 env) 
+		 (hvx:bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-udiv_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr num_2 env) 
+		 (hvx:bind-expr prec_i_o env))
+	]
             [ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
              (hexagon_V6_vshuffob_128B_dsl (hvx:bind-expr v0 env) (hvx:bind-expr v1 env) (hvx:bind-expr size_i_o env) 
                                            (hvx:bind-expr num_3 env) (hvx:bind-expr num_4 env) (hvx:bind-expr num_5 env) 

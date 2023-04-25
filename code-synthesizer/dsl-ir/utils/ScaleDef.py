@@ -22,7 +22,8 @@ class ScaleDef:
 
 
         for structs in default_structs:
-            defaults.append(self.emit_scale_def(structs, struct_definer, scale_name = scale_name , conditional = False )[1:])
+            if structs.supports_scaling():
+                defaults.append(self.emit_scale_def(structs, struct_definer, scale_name = scale_name , conditional = False )[1:])
 
 
         return ["\t{}".format(d) for d in defaults]
@@ -71,11 +72,13 @@ class ScaleDef:
 
                     condition += "(displayln \"Scaling case for {}\")\n".format(ctx.name)
 
+
+
                     condition+= "("+dsl_inst.get_dsl_name()+"\n"
                     for idx,arg in enumerate(sample_ctx.context_args):
                         if idx in scalable_arg_indices:
                             condition += ("(* scale-factor {})\n".format(arg.name))
-                        elif isinstance(ctx.context_args[idx], BitVector): #or isinstance(arg, ConstBitVector):
+                        elif isinstance(ctx.context_args[idx], BitVector) and idx not in ctx.unscaled_sym_bvs_idx:
                             condition += ("({} {} scale-factor)\n".format(scale_name, arg.name))
                         else:
                             condition += (arg.name)+"\n"

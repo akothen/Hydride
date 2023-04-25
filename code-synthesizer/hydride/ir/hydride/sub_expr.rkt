@@ -35,6 +35,22 @@
             [(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
              (list v0 v1 v4)
              ]
+
+		[(llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(list v0 v1)
+	]
+		[(llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(list v0 v1)
+	]
+		[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(list v0 v1)
+	]
+		[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(list v0 v1)
+	]
+		[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(list v0 v1)
+	]
             [(_mm512_rem_epu32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
                [(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); _mm512_rem_epu32

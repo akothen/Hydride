@@ -49,6 +49,31 @@
 		(define v4-visited (hydride:visitor v4 fn))
 		(fn ( llvm_shuffle_vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
 	]
+	[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hydride:visitor v0 fn))
+		(define v1-visited (hydride:visitor v1 fn))
+		(fn ( llvm-vect-add_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hydride:visitor v0 fn))
+		(define v1-visited (hydride:visitor v1 fn))
+		(fn ( llvm-vect-sub_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hydride:visitor v0 fn))
+		(define v1-visited (hydride:visitor v1 fn))
+		(fn ( llvm-vect-mul_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hydride:visitor v0 fn))
+		(define v1-visited (hydride:visitor v1 fn))
+		(fn ( llvm-vect-sdiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hydride:visitor v0 fn))
+		(define v1-visited (hydride:visitor v1 fn))
+		(fn ( llvm-vect-udiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
 	[ (_mm512_rem_epu32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(define v0-visited (hydride:visitor v0 fn))
 		(define v1-visited (hydride:visitor v1 fn))
@@ -1027,7 +1052,7 @@
 		(define v3-visited (hydride:visitor v3 fn))
 		(fn ( _mm_srlv_epi32_dsl v0-visited vc_1-visited vc_2-visited v3-visited size_i_o num_5 num_6 num_7 num_8 num_9 num_10 prec_i_o num_12 ))
 	]
-	[_ (error "Unrecognized expression")]
+	[v (error "Unrecognized expression in visitor" v)]
  )
 )
 ;; ================================================================================

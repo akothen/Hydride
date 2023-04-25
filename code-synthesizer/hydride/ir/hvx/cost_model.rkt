@@ -157,6 +157,27 @@
              (+ 5 (hvx:cost  v0)  (hvx:cost  v1)  
                 (hvx:cost  v4) )
              ]
+
+		[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx:cost  v0)  (hvx:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx:cost  v0)  (hvx:cost  v1)  
+		)
+	]
+		[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx:cost  v0)  (hvx:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx:cost  v0)  (hvx:cost  v1)  
+		)
+	]
+		[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx:cost  v0)  (hvx:cost  v1)  
+		)
+	]
             [ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
              (+ cost_hexagon_V6_vshuffob_128B_dsl (hvx:cost  v0)  (hvx:cost  v1)  
 
@@ -1110,6 +1131,27 @@
 		[ (llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
 		(+ 5 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  
 		 (hvx-instcombine:cost  v4) )
+	]
+
+		[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  
+		)
+	]
+		[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  
+		)
+	]
+		[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  
+		)
 	]
 	[ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(+ instcombine:cost_hexagon_V6_vshuffob_128B_dsl (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  

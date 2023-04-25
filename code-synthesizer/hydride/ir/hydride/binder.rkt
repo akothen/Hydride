@@ -51,6 +51,26 @@
 		(llvm_shuffle_vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
 		 (bind-expr prec_i_o env) (bind-expr v4 env) (bind-expr num_5 env))
 	]
+	[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-add_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sub_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-mul_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sdiv_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-udiv_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
 	[ (_mm512_rem_epu32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(_mm512_rem_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
 		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 

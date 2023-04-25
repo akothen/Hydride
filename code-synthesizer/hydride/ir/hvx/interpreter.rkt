@@ -46,6 +46,26 @@
              (llvm_shuffle_vectors (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
                                    prec_i_o (hvx:interpret v4 env) num_5)
              ]
+[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-add (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sub (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-mul (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sdiv (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-udiv (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
+		 prec_i_o)
+	]
             [ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
              (hexagon_V6_vshuffob_128B (hvx:interpret v0 env) (hvx:interpret v1 env) size_i_o 
                                        num_3 num_4 num_5 

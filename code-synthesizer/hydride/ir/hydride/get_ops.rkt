@@ -38,6 +38,23 @@
             [(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
              (remove-duplicates (append (list  'if) (hydride:get-bv-ops v0) (hydride:get-bv-ops v1) (hydride:get-bv-ops v4)))
              ]
+[(llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(remove-duplicates (append (list  'bvadd) (hydride:get-bv-ops v0) (hydride:get-bv-ops v1)))
+	]
+		[(llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(remove-duplicates (append (list  'bvsub) (hydride:get-bv-ops v0) (hydride:get-bv-ops v1)))
+	]
+		[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(remove-duplicates (append (list  'bvmul) (hydride:get-bv-ops v0) (hydride:get-bv-ops v1)))
+	]
+		[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(remove-duplicates (append (list  'bvsdiv) (hydride:get-bv-ops v0) (hydride:get-bv-ops v1)))
+	]
+		[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(remove-duplicates (append (list  'bvudiv) (hydride:get-bv-ops v0) (hydride:get-bv-ops v1)))
+	]
+
+
             [(_mm512_rem_epu32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
                [(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
@@ -2075,25 +2092,25 @@
             [(_mm_avg_epu8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
              (cond 
                [(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0)) 
-                (remove-duplicates (append (list  'bvadd 'bvashr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
+                (remove-duplicates (append (list  'bvadd 'bvlshr) (hydride:get-bv-ops v2) (hydride:get-bv-ops v3)))]
                [else (error "Unable to get ops  for _mm_avg_epu8")]
                )
 
@@ -4962,6 +4979,9 @@
                )
 
              ]
+            [else
+              (error "Unrecognized expression in get-ops ")
+              ]
             )
   )
 ;; ================================================================================
