@@ -137,7 +137,7 @@ def get_variant_by_sign(op, sign):
 
 
 class Context:
-    def __init__(self, name = "", in_vectsize = None, out_vectsize = None,
+    def __init__(self, name = "", dsl_name = "", in_vectsize = None, out_vectsize = None,
                  lane_size = None, in_precision = None,
                  out_precision = None, SIMD = False, args = [],
                  in_vectsize_index = None, out_vectsize_index = None,
@@ -147,6 +147,7 @@ class Context:
                  out_lanesize_index = None, semantics = None,
                  ):
         self.name= name
+        self.dsl_name  = dsl_name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
         self.in_lanesize_index = in_lanesize_index
@@ -509,10 +510,10 @@ class Context:
     def supports_input_precision(self, prec):
 
         for k in self.in_bound_map:
-            print("Bounded Precision:",k)
+            #print("Bounded Precision:",k)
             if int(k) == prec:
 
-                print("SUCCESS!")
+                #print("SUCCESS!")
                 return True
 
         return self.in_precision == prec
@@ -572,13 +573,40 @@ class Context:
         print("out_vectsize: ",self.out_vectsize)
 
         for arg in self.context_args:
-            arg.print_operand(prefix = prefix+"------>")
+            if isinstance(arg, Context):
+                arg.print_context(prefix = prefix + "\t")
+            else:
+                arg.print_operand(prefix = prefix+"------>")
+
+
+    def get_expr_type_info(self):
+
+        type_info = []
+
+        for arg in self.context_args:
+            if isinstance(arg, Context):
+                type_info += arg.get_expr_type_info()
+            elif isinstance(arg, Reg):
+                type_info.append((arg.precision, arg.size))
+
+        return type_info
+
+    def print_context_expr(self, prefix = ""):
+        print("{} ({} ; {}".format(prefix, self.dsl_name + "_dsl", self.name))
+
+        for arg in self.context_args:
+            if isinstance(arg, Context):
+                arg.print_context_expr(prefix = prefix + "\t")
+            else:
+                print(prefix +"\t" + arg.get_dsl_value() )
+
+        print("{} )".format(prefix))
 
 
     def specialize_context_bounded(self, prec):
         new_context_args = []
 
-        print("Specializing context ", self.name)
+        #print("Specializing context ", self.name)
         bounded_bv_size = self.get_bounded_bv_size()
         for arg in self.context_args:
             if isinstance(arg, BoundedBitVector):
@@ -770,7 +798,7 @@ class DSLInstruction(InstructionType):
                     out_lanesize_index = None):
 
         self.contexts.append(
-            Context(name = name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
+            Context(name = name, dsl_name = self.name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
                     lane_size = lane_size, in_precision = in_precision,
                     out_precision = out_precision, SIMD = SIMD, args = args,
                     in_vectsize_index = in_vectsize_index,

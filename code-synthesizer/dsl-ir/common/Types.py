@@ -11,6 +11,7 @@ class OperandType:
         ShapeVariable = auto()
         IndexExpr = auto()
         BoundedBitVector = auto()
+        Reg = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
@@ -378,6 +379,34 @@ def create_affine_index_expr(i_coef, j_coef, bias):
 
     return expr
 
+
+
+class Reg(OperandType):
+
+    def __init__(self, index , precision, size):
+
+        self.index = index
+        self.precision = precision
+        self.size = size
+
+        assert self.precision != None, "precision for reg needs to be provied"
+        assert self.size != None, "size for reg needs to be provided"
+        super().__init__(OperandType.OperandTypeEnum.Reg)
+
+
+
+    def get_rkt_value(self):
+        return "(reg (bv "+str(self.index) +" (bitvector 8)))"
+
+    def get_dsl_value(self):
+        return "(reg (bv "+str(self.index) +" (bitvector 8))) ; < {} x i{}>".format(self.size // self.precision, self.precision)
+
+    def get_rkt_comment(self):
+        return ";; {}-bit reg operand".format(self.size)
+
+
+    def print_operand(self, prefix = ""):
+        print("{} Reg {} \t| <{} x i{}>".format(prefix, self.index, self.size // self.precision, self.precision))
 
 
 
