@@ -401,10 +401,10 @@
 		 prec_i num_7 num_8 
 		 num_9 num_10)
 	]
-	[ (vpmin_s8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
-		(vpmin_s8 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
+	[ (vpmin_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(vpmin_s8 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
+		 prec_i_o num_7 num_8 
 		 num_9 num_10 num_11 
 		 num_12 num_13 num_14 
 		 num_15 num_16)
@@ -593,10 +593,10 @@
 		 prec_i_o num_7 num_8 
 		 num_9 num_10)
 	]
-	[ (vpmax_s8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
-		(vpmax_s8 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
+	[ (vpmax_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(vpmax_s8 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
+		 prec_i_o num_7 num_8 
 		 num_9 num_10 num_11 
 		 num_12 num_13 num_14 
 		 num_15 num_16)

@@ -681,14 +681,14 @@
 		[else ( vqmovn_high_u64_dsl v0-folded v1-folded size_i num_3 num_4 num_5 prec_i num_7 num_8 num_9 num_10 )]
 		)
 	]
-	[ (vpmin_s8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+	[ (vpmin_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
 		(define v0-folded (arm:const-fold v0))
 		(define v1-folded (arm:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vpmin_s8_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 ) (vector)))
+(lit (arm:interpret ( vpmin_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 ) (vector)))
 ]
-		[else ( vpmin_s8_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 )]
+		[else ( vpmin_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 )]
 		)
 	]
 	[ (vmla_n_u32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
@@ -991,14 +991,14 @@
 		[else ( vqaddq_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 )]
 		)
 	]
-	[ (vpmax_s8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+	[ (vpmax_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
 		(define v0-folded (arm:const-fold v0))
 		(define v1-folded (arm:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vpmax_s8_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 ) (vector)))
+(lit (arm:interpret ( vpmax_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 ) (vector)))
 ]
-		[else ( vpmax_s8_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 )]
+		[else ( vpmax_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 )]
 		)
 	]
 	[ (vqdmull_n_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i num_8 prec_o num_10 num_11 num_12)

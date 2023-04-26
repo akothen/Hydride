@@ -17,8 +17,9 @@ DEBUG_LIST = [
     # "hexagon_V6_lo_128B",
     # "hexagon_V6_pred_and_128B",
     "hexagon_V6_vmpyih_acc_128B",
-    "_mm512_mulhi_epu16"
-
+    "_mm512_mulhi_epu16",
+    "vpmin_s8",
+    "vmin_s8",
 
 
 ]

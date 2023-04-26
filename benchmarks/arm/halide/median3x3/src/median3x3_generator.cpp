@@ -39,7 +39,16 @@ public:
 
         output(x,y) = mid(minmax_x(x, y), maxmin_x(x, y), midmid_x(x, y));
         Pipeline p(output);
-        apply_schedule_median3x3_batch_0056_sample_0026(p, target);
+        // apply_schedule_median3x3_batch_0056_sample_0026(p, target);
+        int vector_size = natural_vector_size<uint8_t>();
+        output
+            .tile(x, y, xi, yi, 64, 4, TailStrategy::RoundUp)
+            .vectorize(xi, vector_size)
+            .unroll(yi);
+        bounded_input
+            .compute_at(output, y)
+            .align_storage(x, 64)
+            .vectorize(x, vector_size, TailStrategy::RoundUp);
     }
 
     void schedule() {
@@ -50,10 +59,10 @@ public:
         }
     }
 private:
-    Var x{"x"}, y{"y"}, yo{"yo"};
-    Func max_y{"max_y"}, min_y{"min_y"}, mid_y{"mid_y"};
-    Func minmax_x{"minmax_x"}, maxmin_x{"maxmin_x"}, midmid_x{"midmid_x"};
-    Func bounded_input{"bounded_input"};
+    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};
+    Func max_y{"max_y"}, min_y{"min_y"}, mid_y{"mid_y"},
+        minmax_x{"minmax_x"}, maxmin_x{"maxmin_x"}, midmid_x{"midmid_x"}, 
+        bounded_input{"bounded_input"};
 };
 
 HALIDE_REGISTER_GENERATOR(Median3x3, median3x3)

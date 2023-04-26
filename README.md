@@ -47,3 +47,7 @@ Now you are ready to use Hydride!
 - x86 (SSE, AVX (includes VNNI, AMX, etc.), MMX, FMA)
 - Hexagon (HVX)
 - ARM A64
+
+None
+Signed
+Modify benchmarks
