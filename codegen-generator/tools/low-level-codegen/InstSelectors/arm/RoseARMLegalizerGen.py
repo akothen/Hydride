@@ -204,7 +204,7 @@ public:
   def generateCodeForRegisteringPass(self):
     String = '''
 char ARMLegalizationPass::ID = 0;
-static RegisterPass<ARMLegalizationPass> X("ARM-hydride-legalize", 
+static RegisterPass<ARMLegalizationPass> X("arm-hydride-legalize", 
                                           "Pass to legalize tensor intrinsics");
     '''
     return String
@@ -227,6 +227,6 @@ static RegisterPass<ARMLegalizationPass> X("ARM-hydride-legalize",
 
 
 if __name__ == '__main__':
-  from ARMsemantics import semantics
+  from ARMSemantics import semantcs as semantics
   InstSelectorGenerator = RoseInstSelectorGenerator(semantics)
   InstSelectorGenerator.generateFileWithInstSelector()

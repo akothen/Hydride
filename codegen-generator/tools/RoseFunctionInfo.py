@@ -43,8 +43,8 @@ class RoseFunctionInfo():
 
   def __hash__(self):
     return hash(self.ID)
-  
-  def destroyAllRecentFunctionVersions(self, KeepOldestFunction : bool = True):
+
+  def destroyAllRecentFunctionVersions(self, KeepOldestFunction: bool = True):
     if KeepOldestFunction:
       self.FunctionAtStages = [self.FunctionAtStages[0]]
     else:
@@ -85,7 +85,7 @@ class RoseFunctionInfo():
 
   def isSIMD(self):
     return self.IsSIMD
-  
+
   def isShuffle(self):
     return self.IsShuffle
 
@@ -95,74 +95,74 @@ class RoseFunctionInfo():
   def setOutElemType(self, ElemType):
     self.OutElemType = ElemType
 
-  def setInVectorLength(self, Length : int):
+  def setInVectorLength(self, Length: int):
     self.InVectorLength = Length
 
-  def setOutVectorLength(self, Length : int):
+  def setOutVectorLength(self, Length: int):
     self.OutVectorLength = Length
 
-  def setLaneSize(self, Size : int):
+  def setLaneSize(self, Size: int):
     self.LaneSize = Size
 
-  def setInElemTypeIndex(self, Idx : int):
+  def setInElemTypeIndex(self, Idx: int):
     self.InElemTypeIndex = Idx
 
-  def setOutElemTypeIndex(self, Idx : int):
+  def setOutElemTypeIndex(self, Idx: int):
     self.OutElemTypeIndex = Idx
 
-  def setInVectorLengthIndex(self, Idx : int):
+  def setInVectorLengthIndex(self, Idx: int):
     self.InVectorLengthIndex = Idx
 
-  def setOutVectorLengthIndex(self, Idx : int):
+  def setOutVectorLengthIndex(self, Idx: int):
     self.OutVectorLengthIndex = Idx
 
-  def setLaneSizeIndex(self, Idx : int):
+  def setLaneSizeIndex(self, Idx: int):
     self.LaneSizeIndex = Idx
 
-  def setSignedness(self, Signedness : bool):
+  def setSignedness(self, Signedness: bool):
     self.Signedness = Signedness
 
-  def setIsSIMD(self, IsSIMD : bool):
+  def setIsSIMD(self, IsSIMD: bool):
     self.IsSIMD = IsSIMD
-  
-  def setIsShuffle(self, IsShuffle : bool):
+
+  def setIsShuffle(self, IsShuffle: bool):
     self.IsShuffle = IsShuffle
 
-  def addTargetSpecificFunction(self, Function : RoseFunction):
+  def addTargetSpecificFunction(self, Function: RoseFunction):
     self.TargetSpecificFunction = Function
 
-  def addTargetAgnosticFunction(self, Function : RoseFunction):
+  def addTargetAgnosticFunction(self, Function: RoseFunction):
     self.TargetAgnosticFunction = Function
 
-  def addArgsToConcreteMap(self, ArgsToConcreteValMap : dict):
+  def addArgsToConcreteMap(self, ArgsToConcreteValMap: dict):
     # Sanity checking
     for Arg, _ in ArgsToConcreteValMap.items():
       assert Arg.getFunction() in self.FunctionAtStages
     self.ArgsToConcreteValMap = ArgsToConcreteValMap
-  
-  def eraseConcreteValForArg(self, Arg : RoseArgument):
+
+  def eraseConcreteValForArg(self, Arg: RoseArgument):
     del self.ArgsToConcreteValMap[Arg]
 
-  def getConcreteValFor(self, Arg : RoseFunction):
+  def getConcreteValFor(self, Arg: RoseFunction):
     assert Arg in self.ArgsToConcreteValMap
     return self.ArgsToConcreteValMap[Arg]
 
-  def argHasConcreteVal(self, Arg : RoseArgument):
+  def argHasConcreteVal(self, Arg: RoseArgument):
     return Arg in self.ArgsToConcreteValMap
 
   def getArgsToConcreteValMap(self):
     return self.ArgsToConcreteValMap
-  
+
   def getRosetteCode(self):
     return self.RosetteCode
-  
-  def addRosetteCode(self, RosetteCode : str):
+
+  def addRosetteCode(self, RosetteCode: str):
     self.RosetteCode = RosetteCode
 
-  def addContext(self, Context : RoseContext):
+  def addContext(self, Context: RoseContext):
     assert isinstance(Context, RoseContext)
     self.Context = Context
-  
+
   def getContext(self):
     return self.Context
 
@@ -171,31 +171,31 @@ class RoseFunctionInfo():
 
   def getRawSemantics(self):
     return self.InstSema
-  
-  def addFunctionAtNewStage(self, Function : RoseFunction):
+
+  def addFunctionAtNewStage(self, Function: RoseFunction):
     self.FunctionAtStages.append(Function)
-  
+
   def getOriginalFunction(self):
     return self.FunctionAtStages[0]
 
   def getLatestFunction(self):
     if len(self.FunctionAtStages) == 0:
       return RoseUndefRegion()
-    return self.FunctionAtStages[len(self.FunctionAtStages) -1]
-  
-  def addCodeGenerator(self, CodeGenerator : RoseCodeGenerator):
-    #assert isinstance(CodeGenerator, RoseCodeGenerator)
+    return self.FunctionAtStages[len(self.FunctionAtStages) - 1]
+
+  def addCodeGenerator(self, CodeGenerator: RoseCodeGenerator):
+    # assert isinstance(CodeGenerator, RoseCodeGenerator)
     self.CodeGenerator = CodeGenerator
-  
+
   def getCodeGenerator(self):
     return self.CodeGenerator
-  
+
   def getTargetAgnoticFunction(self):
     return self.TargetAgnosticFunction
-  
+
   def getTargetSpecificFunction(self):
     return self.TargetSpecificFunction
-  
+
   def computeSemanticsInfo(self):
     self.computeSemanticsInfoFromTargetSpecficFunction()
     self.computeSemanticsInfoFromTargetAgnosticFunction()
@@ -229,38 +229,39 @@ class RoseFunctionInfo():
           continue
         if isinstance(Op, RoseBVExtractSliceOp):
           if Op.getInputBitVector() != Function.getReturnValue():
-            if isinstance(Op.getInputBitVector(), RoseArgument):
+            # Hotfix for ARM Neon vpmax_**
+            if isinstance(Op.getInputBitVector(), RoseArgument) or hasattr(Op.getInputBitVector(), "isPureConcatOfArgs"):
               Bitwidth = Op.getOutputBitwidth()
               if Bitwidth != 1:
                 self.InElemType = Op.getOutputBitwidth()
                 self.InVectorLength = Op.getInputBitVector().getType().getBitwidth()
           continue
         if isinstance(Op, RoseBVSdivOp) \
-          or isinstance(Op, RoseBVSremOp) \
-          or isinstance(Op, RoseBVSmaxOp) \
-          or isinstance(Op, RoseBVSminOp) \
-          or isinstance(Op, RoseBVSignExtendOp) \
-          or isinstance(Op, RoseBVSSaturateOp) \
-          or (isinstance(Op, RoseSaturableBitVectorOp) and Op.noSignedWrapAllowed()) \
-          or (isinstance(Op, RoseGeneralSaturableBitVectorOp) and Op.noSignedWrapAllowed()) \
-          or isinstance(Op, RoseBVSLTOp) \
-          or isinstance(Op, RoseBVSLEOp) \
-          or isinstance(Op, RoseBVSGTOp) \
-          or isinstance(Op, RoseBVSGEOp):
+                or isinstance(Op, RoseBVSremOp) \
+                or isinstance(Op, RoseBVSmaxOp) \
+                or isinstance(Op, RoseBVSminOp) \
+                or isinstance(Op, RoseBVSignExtendOp) \
+                or isinstance(Op, RoseBVSSaturateOp) \
+                or (isinstance(Op, RoseSaturableBitVectorOp) and Op.noSignedWrapAllowed()) \
+                or (isinstance(Op, RoseGeneralSaturableBitVectorOp) and Op.noSignedWrapAllowed()) \
+                or isinstance(Op, RoseBVSLTOp) \
+                or isinstance(Op, RoseBVSLEOp) \
+                or isinstance(Op, RoseBVSGTOp) \
+                or isinstance(Op, RoseBVSGEOp):
           self.Signedness = 1
           continue
         if isinstance(Op, RoseBVUdivOp) \
-          or isinstance(Op, RoseBVUremOp) \
-          or isinstance(Op, RoseBVUmaxOp) \
-          or isinstance(Op, RoseBVUminOp) \
-          or isinstance(Op, RoseBVZeroExtendOp) \
-          or isinstance(Op, RoseBVUSaturateOp) \
-          or (isinstance(Op, RoseSaturableBitVectorOp) and Op.noUnsignedWrapAllowed()) \
-          or (isinstance(Op, RoseGeneralSaturableBitVectorOp) and Op.noUnsignedWrapAllowed()) \
-          or isinstance(Op, RoseBVULTOp) \
-          or isinstance(Op, RoseBVULEOp) \
-          or isinstance(Op, RoseBVUGTOp) \
-          or isinstance(Op, RoseBVUGEOp):
+                or isinstance(Op, RoseBVUremOp) \
+                or isinstance(Op, RoseBVUmaxOp) \
+                or isinstance(Op, RoseBVUminOp) \
+                or isinstance(Op, RoseBVZeroExtendOp) \
+                or isinstance(Op, RoseBVUSaturateOp) \
+                or (isinstance(Op, RoseSaturableBitVectorOp) and Op.noUnsignedWrapAllowed()) \
+                or (isinstance(Op, RoseGeneralSaturableBitVectorOp) and Op.noUnsignedWrapAllowed()) \
+                or isinstance(Op, RoseBVULTOp) \
+                or isinstance(Op, RoseBVULEOp) \
+                or isinstance(Op, RoseBVUGTOp) \
+                or isinstance(Op, RoseBVUGEOp):
           if self.Signedness == None:
             self.Signedness = 0
           continue
@@ -332,7 +333,7 @@ class RoseFunctionInfo():
           if Op.getInputBitVector() != Function.getReturnValue():
             print("Op:")
             Op.print()
-            if isinstance(Op.getInputBitVector(), RoseArgument):
+            if isinstance(Op.getInputBitVector(), RoseArgument) or hasattr(Op.getInputBitVector(), "isPureConcatOfArgs"):
               Bitwidth = Op.getOutputBitwidth()
               print("Op.getOutputBitwidth():")
               print(Op.getOutputBitwidth())
@@ -395,5 +396,3 @@ class RoseFunctionInfo():
     print("SIMD?:")
     print(self.IsSIMD)
     print("***************************************")
-
-

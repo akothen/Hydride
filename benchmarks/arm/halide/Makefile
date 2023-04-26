@@ -81,7 +81,7 @@ $(benchmarks): %: %/bin
 ifeq ($(BENCHMARK),1) 
 
 # Benchmark the generated binary
-	LD_PRELOAD=/home/scarlet/libstdc++.so $@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
 
 endif
 

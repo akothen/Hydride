@@ -16,7 +16,7 @@ from Specification import Specification, parse_spec
 
 
 from hexsemantics_new import semantics as hvx_semantics
-from ARMSemantics import semantics as arm_semantics
+from ARMSemantics import semantcs as arm_semantics
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator

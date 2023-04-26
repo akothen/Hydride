@@ -32,10 +32,12 @@ def Compile(InstName: str = None):
 
   if InstName == None:
     interested = []
+    interested = ["max", "min"]
     # interested = ["vrax1q_u64", "veorq_s8"]
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
-      AllSema = {k: v for k, v in AllSema.items() if k in interested}
+      AllSema = {k: v for k, v in AllSema.items(
+      ) if k in interested or any(kk in k for kk in interested)}
     # SemaList = [SemaGenerator(deserialize=True).getSemaByName("vand_s8")]
     SemaList = []
     for k, func in AllSema.items():
@@ -56,7 +58,7 @@ def Compile(InstName: str = None):
 
   if SemaList == None:
     return [None]
-  FunctionInfoList = list()
+  FunctionInfoList = []
   compiled = []
   for Index, Spec in enumerate(SemaList):
     # if Index < 1100:
@@ -86,7 +88,9 @@ def Compile(InstName: str = None):
       continue
   print("FunctionInfoList length:", len(FunctionInfoList))
   print(compiled)
+  print(FunctionInfoList[0].getInVectorLength())
   return FunctionInfoList
+
 
 def qwq():
   AllSema = SemaGenerator(deserialize=True).getResult()
@@ -116,9 +120,11 @@ def qwq():
   AllRosetteCode += "(provide (all-defined-out))"
   with open(f'rosette_test/compiled.rkt', 'w') as f:
     f.write(AllRosetteCode)
+
+
 if __name__ == "__main__":
   Compile()
-  
+
   # print(RosetteCode)
 
   # with open(f'rosette_test/{func.intrin}', 'w') as f:

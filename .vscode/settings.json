@@ -48,5 +48,10 @@
   "terminal.integrated.env.linux": {
     "ZSH_INIT_COMMAND_FOR_VSCODE": "source setup.sh"
   },
-  "editor.autoIndent": "full"
+  "editor.autoIndent": "full",
+  "clangd.fallbackFlags": [
+    "-I${workspaceFolder}/frontends/halide/llvm-project/llvm/include",
+    "-I${workspaceFolder}/frontends/halide/llvm-build/include",
+    "-I${workspaceFolder}/codegen-generator/tools/low-level-codegen/InstSelectors/common",
+]
 }

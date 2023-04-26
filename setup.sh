@@ -1,4 +1,3 @@
-
 CUR_DIR=$(pwd)
 
 export HYDRIDE_ROOT=$CUR_DIR
@@ -7,6 +6,8 @@ export LLVM_DIS_ROOT=$LLVM_ROOT
 export LLVM_CONFIG=$LLVM_DIS_ROOT/bin/llvm-config
 export HALIDE_SRC=$CUR_DIR/frontends/halide
 export HALIDE_DISTRIB=$HALIDE_SRC/distrib
+export SIMILARITY_ENV=$CUR_DIR/similarityenv
+export SIMILARITY_SUMMARY=$CUR_DIR/codegen-generator/tools/similarity-checker/summary/arm
 
 # export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/x86/x86_wrappers.c.ll
 # export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libX86Legalizer.so

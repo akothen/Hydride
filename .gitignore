@@ -6,10 +6,11 @@ arm_
 **/*.pyc
 *.tmp
 a.out
-build/*
+similarityenv/*
 # codegen-generator/targets/arm/rosette_test/*.c
 **/build/
 backends/*
 **/llvm-build/
 **/llvm-project/
 tmp.txt
+*.~*~

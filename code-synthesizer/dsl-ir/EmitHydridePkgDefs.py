@@ -4,7 +4,7 @@ import time
 import subprocess as sb
 from common.DSLParser import parse_dict
 from x86SemanticsAllArgs import semantcs
-from ARMSemantics import semantics as arm_semantics
+from ARMSemantics import semantcs as arm_semantics
 from common.PredefinedDSL import *
 from common.StructDef import StructDef
 from interpreter.InterpreterDef import InterpreterDef

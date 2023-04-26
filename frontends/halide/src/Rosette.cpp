@@ -3229,6 +3229,9 @@ void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::
     case Target::Hexagon:
         target_flag = "-hex-hydride-legalize";
         break;
+    case Target::ARM:
+        target_flag = "-arm-hydride-legalize";
+        break;
     default:
         assert(false && "Unsupported target for hydride code-generation");
         break;

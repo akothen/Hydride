@@ -14,3 +14,4 @@ if(NOT LLVM_ENABLE_RTTI)
 endif()
 
 add_library(X86Legalizer SHARED InstSelectors/x86/x86LegalizerAllArgs.cpp)
+add_library(ARMLegalizer SHARED InstSelectors/arm/ARMLegalizer.cpp)

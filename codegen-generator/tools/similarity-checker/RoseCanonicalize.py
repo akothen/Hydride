@@ -443,7 +443,6 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction, Context : RoseContext):
         break
 
     # Now another sanity check to see if there are 2 blocks at level zero
-    # - Hotfix for ARM
     if(isinstance(LastBVInsertOp, RoseUndefValue)):
       return 
     # assert not isinstance(LastBVInsertOp, RoseUndefValue)
