@@ -13,7 +13,7 @@ from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseSimilarityCheckerUtilities import *
-from RoseISAValidityChecker import *
+from RoseValidityChecker import *
 
 
 
@@ -76,14 +76,8 @@ public:
             ArgVal = ArgVal.replace("(bv #", "").strip()
             ArgVal = ArgVal[:ArgVal.index(" ")]
             ArgVal = "0" + ArgVal
-            print("ArgVal hex string:")
-            print(ArgVal)
-            ArgVal = int(ArgVal, 16)
-            print("ArgVal hex:")
-            print(ArgVal)
-            ArgVal = int(ArgVal)
-            print("ArgVal:")
-            print(ArgVal)
+            intArg = int(ArgVal, 16)
+            ArgVal = hex(intArg)+"_cppi"  # Use boost literal to support int512_t initialization
           if len(Checks) == 0:
             Checks.append(
             '''isAMatch(CI, {}, {})'''.format(str(Idx), ArgVal))

@@ -1,12 +1,18 @@
+UNAME_S = $(shell uname -s)
+EXT = so
+ifeq ($(UNAME_S),Darwin)
+    EXT = dylib
+endif
+
 armmedian: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide median3x3 -f Makefile
 armadd: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide add -f Makefile
 armmul: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f Makefile
-LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.so
+LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
 $(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
-	make -C $(HALIDE_SRC) distrib/lib/libHalide.so
+	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT)
 x86median: $(LIB_HALIDE)
 	make -C $(HYDRIDE_ROOT)/benchmarks/x86-deprecated/halide median3x3
 x86mul: $(LIB_HALIDE)
