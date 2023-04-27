@@ -854,11 +854,6 @@ void HydrideArithPass::runOnOperation() {
         args_vec[reg.first] = reg.second;
       }
 
-      for (auto reg : RegToTransferReadMap) {
-        arg_types[reg.first] = reg.second.getVector().getType();
-        args_vec[reg.first] = reg.second;
-      }
-
       for (auto reg : RegToVariableMap) {
         auto val = Value::getFromOpaquePointer(reg.second);
         arg_types[reg.first] = val.getType();
@@ -871,11 +866,12 @@ void HydrideArithPass::runOnOperation() {
           getOrInsertHydrideFunc(rewriter, this->mainModule, expr_id,
                                  curr_func_name, valToStoreType, arg_types);
       // get all args in
-      rewriter.setInsertionPointAfter(storeOp);
+      rewriter.setInsertionPoint(storeOp);
       Location loc = storeOp->getLoc();
-      storeOp.erase();
       auto callOp = rewriter.create<LLVM::CallOp>(
           loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
+      storeOp->setOperands(0, 1, callOp.getResult(0));
+
       expr_id++;
     }
 
@@ -890,11 +886,6 @@ void HydrideArithPass::runOnOperation() {
       std::vector<Value> args_vec(RegToLoadMap.size() +
                                   RegToTransferReadMap.size() +
                                   RegToVariableMap.size());
-
-      for (auto reg : RegToLoadMap) {
-        arg_types[reg.first] = reg.second.getType();
-        args_vec[reg.first] = reg.second;
-      }
 
       for (auto reg : RegToTransferReadMap) {
         arg_types[reg.first] = reg.second.getVector().getType();
@@ -914,11 +905,11 @@ void HydrideArithPass::runOnOperation() {
           getOrInsertHydrideFunc(rewriter, this->mainModule, expr_id,
                                  curr_func_name, valToStoreType, arg_types);
       // get all args in
-      rewriter.setInsertionPointAfter(transferWriteOp);
+      rewriter.setInsertionPoint(transferWriteOp);
       Location loc = transferWriteOp->getLoc();
-      transferWriteOp.erase();
       auto callOp = rewriter.create<LLVM::CallOp>(
           loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
+      transferWriteOp->setOperands(0, 1, callOp.getResult(0));
       expr_id++;
     }
 
