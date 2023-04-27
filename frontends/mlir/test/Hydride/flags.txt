@@ -1,0 +1,15 @@
+func.func @contraction_matmul(%A: memref<1584x1584xi32>, %B: memref<1584x1584xi32>, %C: memref<1584x1584xi32>) {
+// CHECK: arith.mulf %{{.*}}, %{{.*}} : vector<1584x1584x1584xi32>
+// CHECK: vector.multi_reduction <add>, %{{.*}}, {{.*}} [2] : vector<1584x1584x1584xi32> to vector<1584x1584xi32>
+  linalg.matmul ins(%A, %B: memref<1584x1584xi32>, memref<1584x1584xi32>)
+            outs(%C: memref<1584x1584xi32>)
+  return
+}
+
+
+mlir-opt -convert-linalg-to-affine-loops -split-input-file -canonicalize test/Hydride/1.mlir  > test/Hydride/2.mlir
+mlir-opt --affine-super-vectorize="virtual-vector-size=8" test/Hydride/2.mlir > test/Hydride/3.mlir 
+mlir-opt -affine-loop-unroll="unroll-factor=4" test/Hydride/3.mlir > test/Hydride/4.mlir
+
+
+clear && mlir-opt -convert-linalg-to-affine-loops -split-input-file -canonicalize test/Hydride/extra/conv-vec.mlir > test/Hydride/extra/conv-vec-affine.mlir
