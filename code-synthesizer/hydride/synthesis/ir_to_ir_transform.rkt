@@ -58,7 +58,7 @@
 
 (define (inst-combine spec-expr optimize? symbolic? solver input-sizes input-precs 
                                 target-language cost-model-type input-hash-name output-hash-name 
-                                in-cache-hash-name out-cache-hash-name)
+                                in-cache-hash-name out-cache-hash-name depth)
 
   (define language-type
     (cond
@@ -134,7 +134,7 @@
             (values #t sanatized-expr 0)
           ]
           [else
-            (rewrite-ir sanatized-expr 2 3 optimize? symbolic? solver input-sizes input-precs 1 language-type language-type cost-model-type)
+            (rewrite-ir sanatized-expr 2 (+ depth 1) optimize? symbolic? solver input-sizes input-precs 1 language-type language-type cost-model-type)
           ]
         )
       ]
@@ -530,7 +530,7 @@
           ]
         [_
           (define start-time (current-seconds))
-          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target 'regular "" "" "" ""))
+          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target 'regular "" "" "" "" 3))
           (define end-time (current-seconds))
           (define elapsed-time (- end-time start-time))
           (displayln (format "Inst Combine Query Elapsed ~a seconds" elapsed-time))
