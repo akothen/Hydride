@@ -134,7 +134,7 @@
             (values #t sanatized-expr 0)
           ]
           [else
-            (rewrite-ir sanatized-expr 2 (+ depth 1) optimize? symbolic? solver input-sizes input-precs 1 language-type language-type cost-model-type)
+            (rewrite-ir sanatized-expr depth (+ depth 1) optimize? symbolic? solver input-sizes input-precs 1 language-type language-type cost-model-type)
           ]
         )
       ]

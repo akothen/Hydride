@@ -4,9 +4,14 @@ ShuffleList =  ['_mm_packus_epi16', '_mm256_unpackhi_epi8', '_mm512_unpacklo_epi
                 "hexagon_V6_vshufoh_128B", # "hexagon_V6_vpackeh_128B",
                 "hexagon_V6_vpackob_128B", "hexagon_V6_vshufoeh_128B", "hexagon_V6_vshufeh_128B",
                 "hexagon_V6_vdealb_128B", "hexagon_V6_vshuffb_128B",
-                "hexagon_V6_vdealb4w_128B", "hexagon_V6_vshuffob_128B",
+                "hexagon_V6_vdealb4w_128B", #"hexagon_V6_vshuffob_128B",
                 "hexagon_V6_vshuffh_128B", "hexagon_V6_vpackoh_128B",
-                "hexagon_V6_vshuffeb_128B", #"hexagon_V6_vassign_128B"
+                #"hexagon_V6_vshuffeb_128B", #"hexagon_V6_vassign_128B"
+                "hexagon_V6_vshuffob_128B",
+                "_mm_unpacklo_pi32",
+"hexagon_V6_vshuffvdd_128B",
+                "hexagon_V6_vdealvdd_128B",
+                #"hexagon_V6_vshuffeb_128B",
                 ]
 
 

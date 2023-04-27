@@ -1241,11 +1241,12 @@ class SynthesizerBase:
             ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"] ]
+            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"] , ["sign-extend", "zero-extend"] ]
 
             if self.target == "hvx":
                 EXPENSIVE_OPS.append(["bvaddnuw", "bvaddnsw", "bvadd", "bvmul"])
                 EXPENSIVE_OPS.append(["bvsubnuw", "bvsubnsw", "bvsub"])
+                #EXPENSIVE_OPS.append(["bvssat", "bvusat"])
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
