@@ -7,6 +7,7 @@ class OperandType:
         LaneSize = auto()
         Precision = auto()
         Integer = auto()
+        Bool = auto()
         IndexVariable = auto()
         ShapeVariable = auto()
         IndexExpr = auto()
@@ -215,6 +216,32 @@ class Integer(OperandType):
         print("{} {} {} \t| Integer {}".format(prefix, self.name, self.value,  self.value))
 
 
+class Bool(OperandType):
+
+    def __init__(self, name, value = None):
+
+        self.name = name
+        self.value = value
+        super().__init__(OperandType.OperandTypeEnum.Bool)
+
+
+    def get_rkt_value(self):
+        if self.value != None:
+            return str(self.value)
+        else:
+            return str(self.name)
+
+
+    def get_rkt_comment(self):
+        return ";; Boolean Operand "
+
+    def get_dsl_value(self):
+        return self.get_rkt_value()
+
+
+    def print_operand(self, prefix = ""):
+        print("{} {} {} \t| Boolean {}".format(prefix, self.name, self.value,  self.value))
+
 class IndexVariable(OperandType):
 
     def __init__(self, name = "idx-i"):
@@ -383,11 +410,12 @@ def create_affine_index_expr(i_coef, j_coef, bias):
 
 class Reg(OperandType):
 
-    def __init__(self, index , precision, size):
+    def __init__(self, index , precision, size, signed = False):
 
         self.index = index
         self.precision = precision
         self.size = size
+        self.signed = signed
 
         assert self.precision != None, "precision for reg needs to be provied"
         assert self.size != None, "size for reg needs to be provided"
@@ -399,7 +427,7 @@ class Reg(OperandType):
         return "(reg (bv "+str(self.index) +" (bitvector 8)))"
 
     def get_dsl_value(self):
-        return "(reg (bv "+str(self.index) +" (bitvector 8))) ; < {} x i{}>".format(self.size // self.precision, self.precision)
+        return "(reg (bv "+str(self.index) +" (bitvector 8))) ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
 
     def get_rkt_comment(self):
         return ";; {}-bit reg operand".format(self.size)

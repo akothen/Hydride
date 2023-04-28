@@ -123,7 +123,7 @@ def create_random_expression(intrinsics, required_output_precision = None,
                     input_prec = arg.size
 
 
-                reg_ = Reg(arg_start_idx, input_prec, arg.size)
+                reg_ = Reg(arg_start_idx, input_prec, arg.size, signed = sample_ctx.signedness)
                 arg_start_idx += 1
                 sample_ctx.context_args[idx] = reg_
 

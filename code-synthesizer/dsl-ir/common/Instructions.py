@@ -145,6 +145,7 @@ class Context:
                  out_precision_index = None, cost = None,
                  signedness = None, in_lanesize_index = None,
                  out_lanesize_index = None, semantics = None,
+                 ctx_sema = None
                  ):
         self.name= name
         self.dsl_name  = dsl_name
@@ -167,6 +168,7 @@ class Context:
         self.enable_mixed_scaling = False
         self.unscaled_sym_bvs_idx = []
         self.is_bounded = False
+        self.ctx_sema = ctx_sema
 
         self.num_args = len(args)
         self.parse_args(args)
@@ -175,6 +177,11 @@ class Context:
 
 
     def get_bv_ops(self):
+
+        if self.ctx_sema != None:
+            return self.ctx_sema
+
+
         function_prototype = self.semantics[0].replace("(define", "").lstrip()
 
         # Map the formal parameter names to instructions
@@ -587,7 +594,7 @@ class Context:
             if isinstance(arg, Context):
                 type_info += arg.get_expr_type_info()
             elif isinstance(arg, Reg):
-                type_info.append((arg.precision, arg.size))
+                type_info.append((arg.precision, arg.size, arg.signed))
 
         return type_info
 
@@ -725,6 +732,9 @@ class Context:
 
                 context_arg = Integer("num_{}".format(idx), int(arg))
 
+
+            elif arg == "#t" or arg == "#f":
+                context_arg = Bool("bool_{}".format(idx), arg)
             else:
                 print("ARG {}:\t{}".format(idx, arg ))
                 print(issubclass(type(arg), OperandType))
@@ -795,7 +805,8 @@ class DSLInstruction(InstructionType):
                     in_precision_index = None,
                     out_precision_index = None, cost = None,
                     signedness = None, in_lanesize_index = None,
-                    out_lanesize_index = None):
+                    out_lanesize_index = None,
+                    ctx_sema = None):
 
         self.contexts.append(
             Context(name = name, dsl_name = self.name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
@@ -808,7 +819,8 @@ class DSLInstruction(InstructionType):
                     cost = cost, signedness = signedness,
                     in_lanesize_index = in_lanesize_index,
                     out_lanesize_index = out_lanesize_index,
-                    semantics = self.semantics
+                    semantics = self.semantics,
+                    ctx_sema = ctx_sema
                     )
         )
 
