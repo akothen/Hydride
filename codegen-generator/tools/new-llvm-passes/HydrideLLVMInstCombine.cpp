@@ -577,8 +577,6 @@ bool HydrideLLVMInstCombinePass::runOnModule(Module &M) {
   for (auto &F : M) {
     if (F.empty())
       continue;
-    if (F.getName() != "hydride.node.conv_nn_hvx_depth5.51")
-      continue;
     FunctionList.push_back(&F);
   }
   bool Changed = false;
