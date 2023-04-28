@@ -52,6 +52,8 @@ std::map<vector::LoadOp, unsigned> LoadToRegMap;
 std::map<unsigned, vector::TransferReadOp> RegToTransferReadMap;
 std::map<vector::TransferReadOp, unsigned> TransferReadToRegMap;
 
+DenseMap<Value, Value> LoadLocToStoreLocMap;
+
 Encoding encoding;
 
 std::queue<Operation *> RootExprOp;
@@ -191,7 +193,8 @@ public:
   }
 
   std::string define_transfer_buffer(vector::TransferReadOp op) {
-    // std::string reg_name = "reg_";
+    // std::string reg_name = "reg_"
+
     std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
     size_t bitwidth = 0;
     std::string define_bitvector_str;
@@ -718,6 +721,18 @@ protected:
   }
 
   std::string visit(vector::TransferReadOp transferReadOp) {
+
+
+    if (LoadLocToStoreLocMap.count(transferReadOp.getSource()) > 0) {
+      auto val = LoadLocToStoreLocMap[transferReadOp.getSource()];
+      transferReadOp->getResult(0).replaceAllUsesWith(val);
+      // std::string ret_str = "";
+      LoadLocToStoreLocMap.erase(transferReadOp.getSource());
+      transferReadOp.erase();
+      std::string ret_str = MLIRValVisit(val);
+      return ret_str;
+    }
+
     bool is_sca = transferReadOp->getResult(0).getType().isa<IntegerType>();
     if (TransferReadToRegMap.find(transferReadOp) !=
         TransferReadToRegMap.end()) {
@@ -910,6 +925,7 @@ void HydrideArithPass::runOnOperation() {
       auto callOp = rewriter.create<LLVM::CallOp>(
           loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
       transferWriteOp->setOperands(0, 1, callOp.getResult(0));
+      LoadLocToStoreLocMap.insert(std::pair<Value, Value>(transferWriteOp.getSource(), valToStore));
       expr_id++;
     }
 
