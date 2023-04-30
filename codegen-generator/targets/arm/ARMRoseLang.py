@@ -32,8 +32,8 @@ def Compile(InstName: str = None):
 
   if InstName == None:
     interested = []
-    interested = ["max", "min"]
-    # interested = ["vrax1q_u64", "veorq_s8"]
+    # interested = ["max", "min"]
+    interested = ["vqmovn_high_s64", "vqmovn_high_s32"]
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
       AllSema = {k: v for k, v in AllSema.items(

@@ -36,7 +36,7 @@ SYNTH_BITWIDTH ?= 16
 
 BENCHMARK ?=1
 
-CC=clang
+CC=aarch64-linux-gnu-g++
 TARGET=host-arm-64 #host-noos-no_bounds_query-no_asserts
 STARTING_HASH_FLAG=#HYDRIDE_INITIAL_HASH=starting_hash
 
@@ -69,7 +69,7 @@ $(benchmarks): %: %/bin
 		target=$(TARGET)
 
 	$(CC) -Dbenchmark_$@ --std=c++17 \
-		-O0 -march=native -mavx512vl -mavx512ifma \
+		-O0 \
 		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
 		-lstdc++ -ldl -pthread \
 		test/run.cpp \
@@ -81,7 +81,7 @@ $(benchmarks): %: %/bin
 ifeq ($(BENCHMARK),1) 
 
 # Benchmark the generated binary
-	$@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	qemu-aarch64 -L /usr/aarch64-linux-gnu $@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
 
 endif
 

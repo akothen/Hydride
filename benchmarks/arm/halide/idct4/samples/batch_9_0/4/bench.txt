@@ -1,2 +1,0 @@
-Benchmark for idct4_batch_0009_sample_0004 produces best case of 1.31929e-06 sec/iter (over 5 samples, 135935 iterations, accuracy 1.7e+02%).
-Best output throughput is 12 mpix/sec.

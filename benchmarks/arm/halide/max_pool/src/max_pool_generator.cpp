@@ -1,7 +1,7 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../common_params.h"
-#include "../samples/batch_86_0/2/max_pool_batch_0086_sample_0002.schedule.h"
+
 
 using namespace Halide;
 using namespace Halide::BoundaryConditions;
@@ -28,9 +28,6 @@ public:
     Output<Buffer<uint8_t>> output_{ "output", 4 };
 
     void generate() {
-        // The algorithm.
-        Var c("c"), x("x"), y("y"), b("b");
-
         Expr min_x = input_.dim(1).min();
         Expr max_x = input_.dim(1).max();
         Expr min_y = input_.dim(2).min();
@@ -52,26 +49,20 @@ public:
 
         output_(c, x, y, b) = min(maximum(c, x, y, b), output_max_);
 
-        Pipeline p(output_);
-        apply_schedule_max_pool_batch_0086_sample_0002(p, target);
+        // Schedules for x86
+        output_
+            .compute_root()
+            .reorder(c, b, x, y)
+            .vectorize(c, 64);
+
+        output_.print_loop_nest();
     }
 
-    void schedule() {
-        if (auto_schedule) {
-            // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L256
-            input_.set_estimates({{0, 1024}, {0, stef_width/32}, {0, stef_height/32}, {0, 1}});
+    void schedule() {}
 
-            stride_x_.set_estimate(2);
-            stride_y_.set_estimate(2);
-            filter_width_.set_estimate(8);
-            filter_height_.set_estimate(8);
-
-            output_min_.set_estimate(5);
-            output_max_.set_estimate(225);
-
-            output_.set_estimates({{0, 1024}, {0, stef_width/32}, {0, stef_height/32}, {0, 1}});
-        }
-    }
+private:
+    Var c{"c"}, x{"x"}, y{"y"}, b{"b"};
+    Func sum{"sum"}, input_bounded{"input_bounded"};
 };
 
 }  // namespace hannk

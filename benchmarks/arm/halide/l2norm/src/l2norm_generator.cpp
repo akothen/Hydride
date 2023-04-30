@@ -1,7 +1,6 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
-#include "../../common_params.h"
-#include "../samples/batch_3_0/31/l2norm_batch_0003_sample_0031.schedule.h"
+
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
@@ -16,8 +15,6 @@ public:
     Output<Buffer<uint8_t>> output_{ "output", 2 };
 
     void generate() {
-        Var x("x"), y("y");
-
         // We don't need the input scale, because the result of L2
         // normalization doesn't depend on it.
         Func input_zeroed("input_zeroed");
@@ -36,18 +33,26 @@ public:
         Expr output = i32(input_zeroed(x, y)) * i32(inv_sqrt(y));
         output = i16_sat(rounding_shift_right(output, q - 7));
         output_(x, y) = u8_sat(saturating_add(output, i16(128)));
-        Pipeline p(output_);
-        apply_schedule_l2norm_batch_0003_sample_0031(p, target);
+
+        // Schedules for x86
+        output_
+            .compute_root()
+            .vectorize(x, 64, TailStrategy::Predicate);
+        inv_sqrt
+            .compute_at(output_, y);
+        sum_input_sq
+            .compute_at(output_, y)
+            .update()
+            .atomic()
+            .vectorize(rx, 64);
+
+        output_.print_loop_nest();
     }
 
-    void schedule() {
-        if (auto_schedule) {
-            // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L282
-            input_.set_estimates({{0, stef_width}, {0, stef_height}});
-            input_zero_.set_estimate(0);
-            output_.set_estimates({{0, stef_width}, {0, stef_height}});
-        }
-    }
+    void schedule() {}
+
+private:
+    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
 }  // namespace hannk

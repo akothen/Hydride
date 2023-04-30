@@ -2,8 +2,7 @@
 #include "../../hannk/common_halide.h"
 #include "../../hannk/constants.h"
 #include "../../hannk/interpreter/elementwise_program.h"
-#include "../../common_params.h"
-#include "../samples/batch_64_0/13/add_batch_0064_sample_0013.schedule.h"
+
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
@@ -12,7 +11,6 @@ namespace hannk {
 
 class Add : public Generator<Add> {
 public:
-    // Input buffers and quantization parameters.
     Input<Buffer<uint8_t>> input1_{"input1", 2};
     Input<uint8_t> input1_zero_{"input1_zero"};
     Input<int16_t> input1_multiplier_{"input1_multiplier"};
@@ -28,8 +26,6 @@ public:
     Output<Buffer<uint8_t>> output_{"output", 2};
 
     void generate() {
-        Var x("x"), y("y");
-
         Expr input1 = (i16(input1_(x, y)) - i16(input1_zero_)) << add_input_shift;
         Expr input2 = (i16(input2_(x, y)) - i16(input2_zero_)) << add_input_shift;
 
@@ -40,26 +36,21 @@ public:
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
 
-        apply_schedule_add_batch_0064_sample_0013(Pipeline(output_), target);
+        // Schedules for x86
+        output_
+            .compute_root()
+            .vectorize(x, 64);
 
-        if (auto_schedule) {
-            // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L161
-            // NOTE(Stefanos): You have to look around a bit, e.g., for dims or width
-            input1_.set_estimates({{0, stef_width}, {0, stef_height}});
-            input1_zero_.set_estimate(0);
-            input1_multiplier_.set_estimate(100);
-
-            input2_.set_estimates({{0, stef_width}, {0, stef_height}});
-            input2_zero_.set_estimate(0);
-            input2_multiplier_.set_estimate(100);
-
-            output_zero_.set_estimate(0);
-            output_min_.set_estimate(5);
-            output_max_.set_estimate(225);
-
-            output_.set_estimates({{0, stef_width}, {0, stef_height}});
-        }
+        input2_.dim(0).set_stride(Expr());
+        output_.specialize(input2_.dim(0).stride() == 1);
+        output_.specialize(input2_.dim(0).stride() == 0);
+        output_.specialize_fail("input2 dimension 0 must have a stride of 0 or 1.");
+        
+        output_.print_loop_nest();
     }
+
+private:
+    Var x{ "x" }, y{ "y" };
 };
 
 }  // namespace hannk

@@ -1,8 +1,6 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../hannk/constants.h"
-#include "../../common_params.h"
-#include "../samples/batch_94_0/19/mul_batch_0094_sample_0019.schedule.h"
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
@@ -26,8 +24,6 @@ public:
     Output<Buffer<uint8_t>> output_{ "output", 2 };
 
     void generate() {
-        Var x("x"), y("y");
-
         Expr input1 = (i16(input1_(x, y)) - i16(input1_zero_)) << mul_input_shift;
         Expr input2 = (i16(input2_(x, y)) - i16(input2_zero_)) << mul_input_shift;
 
@@ -36,29 +32,28 @@ public:
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
 
-        Pipeline p(output_);
-        apply_schedule_mul_batch_0094_sample_0019(p, target);
+        // Schedules for x86
+        const int vector_size = natural_vector_size<uint8_t>();
+        const int hydride_vector_size = 2048 / 64; ;//natural_vector_size<uint8_t>();
 
+        output_.compute_root()
+            .vectorize(x, hydride_vector_size, TailStrategy::Predicate);
+        output_
+            .compute_root()
+            .vectorize(x, 64);
+
+        input2_.dim(0).set_stride(Expr());
+        output_.specialize(input2_.dim(0).stride() == 1);
+        output_.specialize(input2_.dim(0).stride() == 0);
+        output_.specialize_fail("input2 dimension 0 must have a stride of 0 or 1.");
+
+        output_.print_loop_nest();
     }
 
-    void schedule() {
-        if (auto_schedule) {
-            // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L200
-            input1_.set_estimates({{0, stef_width}, {0, stef_height}});
-            input1_zero_.set_estimate(2);
+    void schedule() {}
 
-            input2_.set_estimates({{0, stef_width}, {0, stef_height}});
-            input2_zero_.set_estimate(5);
-
-            output_zero_.set_estimate(5);
-            output_multiplier_.set_estimate(10000);
-            output_shift_.set_estimate(1);
-            output_min_.set_estimate(5);
-            output_max_.set_estimate(225);
-
-            output_.set_estimates({{0, stef_width}, {0, stef_height}});
-        }
-    }
+private:
+    Var x{ "x" }, y{ "y" };
 };
 
 }  // namespace hannk

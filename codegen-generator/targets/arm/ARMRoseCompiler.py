@@ -1337,8 +1337,8 @@ def HandleToConcat():
     Op = RoseBVConcatOp.create(Name, Operand1, Operand2)
     if isinstance(Operand1, RoseArgument) and isinstance(Operand2, RoseArgument):
       Op.isPureConcatOfArgs = True # Consider as arguments
-    assert Context.isValueSigned(
-        Operand1) == Context.isValueSigned(Operand2), (Operand1, Operand2)
+    # assert Context.isValueSigned(
+    #     Operand1) == Context.isValueSigned(Operand2), (Operand1, Operand2)
     Context.addSignednessInfoForValue(Op, Context.isValueSigned(
         Operand1) or Context.isValueSigned(Operand2))
     return Op

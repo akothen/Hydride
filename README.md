@@ -47,6 +47,21 @@ Now you are ready to use Hydride!
 - x86 (SSE, AVX (includes VNNI, AMX, etc.), MMX, FMA)
 - Hexagon (HVX)
 - ARM A64
+    - succeed
+        - average_pool
+        - gaussian5x5
+        - gaussian3x3
+        - max_pool
+        - median3x3
+        - dilate5x5
+        - dilate3x3
+    - failed:
+        - mul: shl
+        - matmul_256_32bit: cast?
+        - l2norm: ?
+        - blur3x3: repeat_edge or /3
+        - add: shl, sat, rsr
+
 
 None
 Signed

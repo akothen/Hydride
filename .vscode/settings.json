@@ -1,5 +1,7 @@
 {
-  "cSpell.enableFiletypes": ["!python"],
+  "cSpell.enableFiletypes": [
+    "!python"
+  ],
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.extraPaths": [
     "codegen-generator/targets/x86/",
@@ -41,7 +43,9 @@
     "codegen-generator/tools/llvmlite",
     "code-synthesizer/dsl-ir"
   ],
-  "pylint.args": ["--indent-string=\"  \""],
+  "pylint.args": [
+    "--indent-string=\"  \""
+  ],
   "files.associations": {
     "*.inc": "cpp"
   },
@@ -50,8 +54,11 @@
   },
   "editor.autoIndent": "full",
   "clangd.fallbackFlags": [
+    "-std=c++17",
     "-I${workspaceFolder}/frontends/halide/llvm-project/llvm/include",
     "-I${workspaceFolder}/frontends/halide/llvm-build/include",
     "-I${workspaceFolder}/codegen-generator/tools/low-level-codegen/InstSelectors/common",
-]
+    "-I${workspaceFolder}/frontends/halide/distrib/include",
+    "-I${workspaceFolder}/frontends/halide/include",
+  ]
 }

@@ -1,10 +1,16 @@
 armmedian: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide median3x3
-LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/lbHalide.so
+	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide median3x3 -f Makefile
+armadd: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide add -f Makefile
+armmul: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f Makefile
+LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.so
 $(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
 	make -C $(HALIDE_SRC) distrib/lib/libHalide.so
 x86median: $(LIB_HALIDE)
 	make -C $(HYDRIDE_ROOT)/benchmarks/x86-deprecated/halide median3x3
+x86mul: $(LIB_HALIDE)
+	make -C $(HYDRIDE_ROOT)/benchmarks/x86/halide mul
 ALL_ARM_SEMA=$(HYDRIDE_ROOT)/codegen-generator/targets/arm/AllSema.pickle
 LEGALIZER=$(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.so
 LEGALIZER_CPP=$(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMLegalizer.cpp
@@ -38,9 +44,12 @@ hydride_sema:
 	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && python3 -m EmitHydridePkgDefs)
 	raco pkg update $(HYDRIDE_ROOT)/code-synthesizer/hydride/
 legalizer:
-	make -C $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build
-legalizer_cpp:
 	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && python3 RoseARMLegalizerGen.py)
+	make -C $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build
 arm_sema:
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
+syncsema:
+	cp $(SIMILARITY_SUMMARY)/semantics.py $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
+	cp $(SIMILARITY_SUMMARY)/semantics.py $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
+
 .PHONY: similarity hydride_sema arm_sema halide legalizer

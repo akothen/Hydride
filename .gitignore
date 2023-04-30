@@ -14,3 +14,4 @@ backends/*
 **/llvm-project/
 tmp.txt
 *.~*~
+tmp/

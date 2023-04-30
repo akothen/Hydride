@@ -19,14 +19,14 @@ from x86InstsCosts import x86Costs
 
 
 class RoseSimilarityCheckerSummaryGen():
-  def __init__(self, FunctionToFunctionInfo : dict, FunctionToRosetteCodeMap : dict, \
-                    FunctionToArgPermuteMap : dict, EquivalenceClasses : set):
+  def __init__(self, FunctionToFunctionInfo: dict, FunctionToRosetteCodeMap: dict,
+               FunctionToArgPermuteMap: dict, EquivalenceClasses: set):
     self.FunctionToFunctionInfo = FunctionToFunctionInfo
     self.FunctionToRosetteCodeMap = FunctionToRosetteCodeMap
     self.EquivalenceClasses = EquivalenceClasses
     self.FunctionToArgPermuteMap = FunctionToArgPermuteMap
 
-  def genDictionarySubEntry(self, Function : RoseFunction):
+  def genDictionarySubEntry(self, Function: RoseFunction):
     print("FUNCTION IN EQUIVALENCE CLASS:")
     Function.print()
     FunctionInfo = self.FunctionToFunctionInfo[Function]
@@ -80,43 +80,61 @@ class RoseSimilarityCheckerSummaryGen():
                   "Extensions" : "{SemaInfo.extensions}",
       '''
     TempEntryString = "{" + TempEntryString + "}"
+    for _, v in eval(TempEntryString).items():
+      if v == None:
+        raise NotImplementedError(
+            Function.getName()+TempEntryString)
     return TempEntryString
 
-  def genDictionaryEntry(self, EquivalenceClass : RoseEquivalenceClass):
+  def genDictionaryEntry(self, EquivalenceClass: RoseEquivalenceClass):
     # List of arguments for functions in this equivalent class
     # and  track names of functions and track vector information
-    EntryString = ""
-    for Function in EquivalenceClass.getEquivalentFunctions():
-      TempEntryString = f'''
-              "{Function.getName()}" : {self.genDictionarySubEntry(Function)},
+
+    try:
+      EntryString = ""
+      for Function in EquivalenceClass.getEquivalentFunctions():
+        TempEntryString = f'''
+                "{Function.getName()}" : {self.genDictionarySubEntry(Function)},
+          '''
+        EntryString += TempEntryString
+      EntryString = "{" + EntryString + "}"
+      # Get the rosette code for this equivalence class
+      RosetteCode = self.FunctionToRosetteCodeMap[EquivalenceClass.getAFunction(
+      )]
+      # Replace all newlines with quotes
+      RosetteCodeList = RosetteCode.split("\n")
+      for Index, Line in enumerate(RosetteCodeList):
+        RosetteCodeList[Index] = "\"" + Line + "\""
+      String = f'''
+              "target_instructions" : {EntryString},
+              "semantics" : {RosetteCodeList}, 
         '''
-      EntryString += TempEntryString
-    EntryString = "{" + EntryString + "}"
-    # Get the rosette code for this equivalence class
-    RosetteCode = self.FunctionToRosetteCodeMap[EquivalenceClass.getAFunction()]
-    # Replace all newlines with quotes
-    RosetteCodeList = RosetteCode.split("\n")
-    for Index, Line in enumerate(RosetteCodeList):
-      RosetteCodeList[Index] = "\"" + Line + "\""
-    String = f'''
-            "target_instructions" : {EntryString},
-            "semantics" : {RosetteCodeList}, 
-      '''
-    String = "{" + String + "}"
-    return String
-  
+      String = "{" + String + "}"
+      return String
+    except NotImplementedError as e:
+      raise NotImplementedError("Previous:\n"+EntryString+"Last:\n"+str(e))
+
   def genDictionary(self):
     String = "\n\nsemantcs = {\n"
+    abnormalList = []
     for EquivalenceClass in self.EquivalenceClasses:
       FunctionName = EquivalenceClass.getAFunction().getName()
-      TempEntryString = f'''
-          "{FunctionName}" : {self.genDictionaryEntry(EquivalenceClass)},
-        '''
+      try:
+        TempEntryString = f'''
+            "{FunctionName}" : {self.genDictionaryEntry(EquivalenceClass)},
+          '''
+      except NotImplementedError as e:
+        abnormalList.append((FunctionName, str(e)))
+        TempEntryString = ""
       String += TempEntryString
     String += "}\n"
+    with open("abnormal.txt", "w") as f:
+      for item in abnormalList:
+        f.write("Equivalance Class%s\n" % item[0])
+        f.write("%s\n" % item[1])
     return String
 
-  def summarize(self, DSLFile : str):
+  def summarize(self, DSLFile: str):
     String = GenHeadersForAutoGenFiles("#")
     String += self.genDictionary()
     try:
@@ -125,7 +143,3 @@ class RoseSimilarityCheckerSummaryGen():
       File.close()
     except IOError:
       print("Error making: {}".format(DSLFile))
-
-
-
-

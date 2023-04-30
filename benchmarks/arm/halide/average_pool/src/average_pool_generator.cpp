@@ -1,7 +1,7 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../common_params.h"
-#include "../samples/batch_9_0/25/average_pool_batch_0009_sample_0025.schedule.h"
+
 
 using namespace Halide;
 using namespace Halide::BoundaryConditions;
@@ -27,11 +27,8 @@ public:
 
     Output<Buffer<uint8_t>> output_{ "output", 4 };
 
-
     void generate() {
         // The algorithm.
-        Var c("c"), x("x"), y("y"), b("b");
-
         Expr min_x = input_.dim(1).min();
         Expr max_x = input_.dim(1).max();
         Expr min_y = input_.dim(2).min();
@@ -41,7 +38,6 @@ public:
         // However, zero padding is messy. To avoid this, we'll just use a clamp to
         // avoid out of bounds reads, and then use 'where' on the RDom to avoid
         // including these values in the reduction.
-        Func input_bounded("input_bounded");
         input_bounded(c, x, y, b) =
             input_(c, clamp(x, min_x, max_x), clamp(y, min_y, max_y), b);
 
@@ -51,7 +47,6 @@ public:
         r.where(min_x <= x_rx && x_rx <= max_x && min_y <= y_ry && y_ry <= max_y);
 
         // Accumulating in 16 bits limits filter_width * filter_height <= 256.
-        Func sum("sum");
         sum(c, x, y, b) += u16(input_bounded(c, x_rx, y_ry, b));
 
         // TODO: We should probably specialize/optimize for the case
@@ -75,25 +70,18 @@ public:
 
         output_(c, x, y, b) = clamp(u8_sat(average), output_min_, output_max_);
 
-        Pipeline p(output_);
-        apply_schedule_average_pool_batch_0009_sample_0025(p, target);
+        // Schedules for x86
+        output_
+            .compute_root()
+            .reorder(c, b, x, y)
+            .vectorize(c, 64);
 
-        if (auto_schedule) {
-            // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L228
-            input_.set_estimates({{0, 1024}, {0, stef_width/32}, {0, stef_height/32}, {0, 1}});
-            
-            stride_x_.set_estimate(2);
-            stride_y_.set_estimate(2);
-            filter_width_.set_estimate(8);
-            filter_height_.set_estimate(8);
-
-            output_min_.set_estimate(5);
-            output_max_.set_estimate(225);
-
-            output_.set_estimates({{0, 1024}, {0, stef_width/32}, {0, stef_height/32}, {0, 1}});
-        }
-
+        output_.print_loop_nest();
     }
+
+private:
+    Var c{"c"}, x{"x"}, y{"y"}, b{"b"}, yi{"yi"}, xi{"xi"}, ci{"ci"}, cii{"cii"};
+    Func sum{"sum"}, input_bounded{"input_bounded"};
 };
 
 }  // namespace hannk

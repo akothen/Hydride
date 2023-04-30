@@ -1,2 +1,0 @@
-Benchmark for l2norm_batch_0003_sample_0031 produces best case of 0.000291728 sec/iter (over 10 samples, 1420 iterations, accuracy 5.1%).
-Best output throughput is 6.8e+03 mpix/sec.
