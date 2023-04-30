@@ -1,15 +1,24 @@
 UNAME_S = $(shell uname -s)
 EXT = so
+MAKEFILE=Makefile
 ifeq ($(UNAME_S),Darwin)
+	MAKEFILE=Makefile.native
     EXT = dylib
 endif
 
-armmedian: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide median3x3 -f Makefile
+arme.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
+armd.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	ENABLE_HYDRIDE=0 make -C $(HYDRIDE_ROOT)/benchmarks/arm-disable-hydride/halide $* -f $(MAKEFILE)
+armr.%:
+	echo "Hydride Disable"
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm-disable-hydride/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
+	echo "Hydride Enable"
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 armadd: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide add -f Makefile
+	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide add -f $(MAKEFILE)
 armmul: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f Makefile
+	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f $(MAKEFILE)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
 $(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
 	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT)
@@ -63,3 +72,4 @@ syncsema:
 	cp $(SIMILARITY_SUMMARY)/semantics.py $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 
 .PHONY: similarity hydride_sema arm_sema halide legalizer
+compileall: armd.average_pool armd.gaussian5x5 armd.gaussian3x3 armd.max_pool armd.median3x3 armd.dilate5x5 armd.dilate3x3 arme.average_pool arme.gaussian5x5 arme.gaussian3x3 arme.max_pool arme.median3x3 arme.dilate5x5 arme.dilate3x3

@@ -2,4 +2,8 @@
 *.rkt
 */*/*/bin
 */*/tmp.txt
+<<<<<<< HEAD
 */ref
+=======
+arm-disable-hydride
+>>>>>>> 0bb03e643 (native)
