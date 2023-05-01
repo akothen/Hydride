@@ -282,7 +282,7 @@
                (reg (hash-ref! id-map halide-expr -1)) ;; have a map to use accurate reg number
                ]
 
-              [(arith:tensor data shape layout elemT buffsize)
+              [(arith:tensor data shape layout elemT buffsize id)
                (debug-log "Arith:leaf buffer:")
 
                (debug-log halide-expr)

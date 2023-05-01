@@ -35,7 +35,7 @@
 )
 
 
-(define (create-tensor data shape-vector layout-vector elemT)
+(define (create-tensor data shape-vector layout-vector elemT id)
   (define step-size
     (cond
         [(eq? elemT 'int8) 8]
@@ -52,7 +52,7 @@
   ;; Create buffer object with
   ;; specified buffer function
 
-  (arith:tensor data shape-vector layout-vector elemT (bvlength data))
+  (arith:tensor data shape-vector layout-vector elemT (bvlength data) id)
 
 )
 
@@ -69,7 +69,7 @@
 (define (is-buffer-signed buf)
   (destruct buf
 
-            [(arith:tensor data shape layout elemT buffsize) 
+            [(arith:tensor data shape layout elemT buffsize id) 
              (cond
                [(eq? elemT 'int8) #t]
                [(eq? elemT 'int16) #t]
@@ -180,7 +180,7 @@
 
             ;; Constructors
 
-            [(arith:tensor data shape-vector layout-vector elemT buffSize)
+            [(arith:tensor data shape-vector layout-vector elemT buffSize id)
 
              ;; To account for differing layouts, we can simply sort 
              ;; the indices and the shape vector according to the 
@@ -703,7 +703,7 @@
     
     ;; Constructors
     [(arith:int-imm data signed?) (vector 1)]
-    [(arith:tensor data shape layout elemT buffsize) shape]
+    [(arith:tensor data shape layout elemT buffsize id) shape]
 
     ;; Type Casts
 
@@ -803,7 +803,7 @@
     
     ;; Constructors
     [(arith:int-imm data signed?) (vector 0)]
-    [(arith:tensor data shape layout elemT buffsize) layout]
+    [(arith:tensor data shape layout elemT buffsize id) layout]
 
     ;; Type Casts
 
@@ -911,16 +911,122 @@
 
 (define (sub-exprs expr)
   (destruct expr
-            [(arith:tensor data shape layout elemT buffsize)
+            [(arith:tensor data shape layout elemT buffsize id)
              (list expr)
+             ]
+            [(arith:int-imm data signed?) (list)]
+            [(arith:cast-int vec olane oprec) 
+             (list vec)
+             ]
+            [(arith:cast-uint vec olane oprec) 
+             (list vec)
              ]
             [(arith:tensor-add v1 v2)
              (list v1 v2)
              ]
-
+            [(arith:tensor-sat-add v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-sub v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-sat-sub v1 v2)
+             (list v1 v2)
+             ]
             [(arith:tensor-mul v1 v2)
              (list v1 v2)
              ]
+            [(arith:tensor-div v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-mod v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-max v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-min v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-if v1 v2 v3)
+             (list v1 v2 v3)
+             ]
+            [(arith:tensor-lt v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-le v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-eq v1 v2)
+             (list v1 v2)
+             ]
+            [(arith:tensor-abs v1)
+             (list v1)
+             ]
+            [(arith:tensor-clz v1)
+             (list v1)
+             ]
+            [(arith:tensor-absd v1 v2)
+             (list v1 v2)
+             ]
+
+            [(arith:tensor-shl v1 v2)
+             (list v1 v2)
+             ]
+
+            [(arith:tensor-shr v1 v2)
+             (list v1 v2)
+             ]
+
+            [(arith:tensor-bwand v1 v2)
+             (list v1 v2)
+             ]
+
+            [(vector:bitcast v1 signed? out-prec)
+             (list v1)
+             ]
+
+            [(vector:broadcast v1 output-shape)
+             (list v1)
+             ]
+
+            [(vector:extract v1 extract_indices)
+             (list v1)
+             ]
+
+            [(vector:extract_strided_slice v1 offsets sizes strides)
+             (list v1)
+             ]
+
+            [(vector:matrix_multiply v1 v2 lhs_rows lhs_cols rhs_cols)
+             (list v1 v2)
+             ]
+
+            [(vector:flat_transpose v1 trows tcols)
+             (list v1)
+             ]
+
+            [(vector:transpose v1 rank_perm)
+             (list v1)
+             ]
+
+            [(vector:reduction v1 operation)
+             (list v1)
+             ]
+
+            [(vector:splat v1 output-shape)
+             (list v1)
+             ]
+
+            [(vector:outer_product v1 v2)
+             (list v1 v2)
+             ]
+
+            [(vector:shape_cast v1 input_shape output_shape)
+             (list v1)
+             ]
+
+            [v (error "Unrecognized expression in arith sub-exprs" v)]
             )
   )
 
