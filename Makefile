@@ -12,6 +12,10 @@ arme1.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	EXPR_DEPTH=1 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 arme3.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	EXPR_DEPTH=3 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
+arme4.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	EXPR_DEPTH=4 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
+arme10.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	EXPR_DEPTH=10 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 armd.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	ENABLE_HYDRIDE=0 make -C $(HYDRIDE_ROOT)/benchmarks/arm-disable-hydride/halide $* -f $(MAKEFILE)
 armr.%:
@@ -76,4 +80,4 @@ syncsema:
 	cp $(SIMILARITY_SUMMARY)/semantics.py $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 
 .PHONY: similarity hydride_sema arm_sema halide legalizer
-compileall: armd.average_pool armd.gaussian5x5 armd.gaussian3x3 armd.max_pool armd.median3x3 armd.dilate5x5 armd.dilate3x3 arme3.average_pool arme1.gaussian5x5 arme1.gaussian3x3 arme.max_pool arme.median3x3 arme.dilate5x5 arme.dilate3x3
+compileall: armd.average_pool armd.gaussian5x5 armd.gaussian3x3 armd.max_pool armd.median3x3 armd.dilate5x5 armd.dilate3x3 arme3.average_pool arme1.gaussian5x5 arme1.gaussian3x3 arme.max_pool arme.median3x3 arme.dilate5x5 arme.dilate3x3 arme10.sobel3x3 armd.sobel3x3
