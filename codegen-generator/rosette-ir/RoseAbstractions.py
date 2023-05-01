@@ -40,7 +40,7 @@ class RoseFunction(RoseValue, RoseRegion):
               RegionList : list, ParentRegion : RoseRegion):
     # Sanity checks
     for ArgIndex, Arg in enumerate(ArgsList):
-        assert isinstance(Arg, RoseArgument)
+        assert isinstance(Arg, RoseArgument), Arg
     ArgTyList = [Arg.getType() for Arg in ArgsList]
     FunctionType = RoseFunctionType.create(ArgTyList, RetType)
     self.ArgList = ArgsList

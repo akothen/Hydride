@@ -2,3 +2,4 @@
 *.rkt
 */*/*/bin
 */*/tmp.txt
+*/ref

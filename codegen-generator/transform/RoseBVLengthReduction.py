@@ -92,6 +92,8 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
         InsertOp.print()
         InsertedSize += InsertOp.getOutputBitwidth()
         TempReg = InsertOp.getInputBitVector()
+      if TempReg.getName() == 'result':  # Hotfix for ARM vaddhn_high_s16
+        continue
       print("InsertedSize:")
       print(InsertedSize)
       print("TempReg.getType().getBitwidth():")

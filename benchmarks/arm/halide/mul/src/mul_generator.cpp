@@ -33,11 +33,6 @@ public:
         output_(x, y) = clamp(output, output_min_, output_max_);
 
         // Schedules for x86
-        const int vector_size = natural_vector_size<uint8_t>();
-        const int hydride_vector_size = 2048 / 64; ;//natural_vector_size<uint8_t>();
-
-        output_.compute_root()
-            .vectorize(x, hydride_vector_size, TailStrategy::Predicate);
         output_
             .compute_root()
             .vectorize(x, 64);

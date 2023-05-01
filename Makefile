@@ -39,6 +39,10 @@ $(LEGALIZER): $(LEGALIZER_CPP)
 $(ALL_ARM_SEMA):
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
 halide: $(LIB_HALIDE)
+similaritytest:
+	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	
+	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 similarity:
 	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
 	

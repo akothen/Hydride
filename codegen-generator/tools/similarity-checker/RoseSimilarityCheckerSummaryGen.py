@@ -80,8 +80,8 @@ class RoseSimilarityCheckerSummaryGen():
                   "Extensions" : "{SemaInfo.extensions}",
       '''
     TempEntryString = "{" + TempEntryString + "}"
-    for _, v in eval(TempEntryString).items():
-      if v == None:
+    for k, v in eval(TempEntryString).items():
+      if v == None and k in ["in_vectsize", "out_vectsize"]:
         raise NotImplementedError(
             Function.getName()+TempEntryString)
     return TempEntryString

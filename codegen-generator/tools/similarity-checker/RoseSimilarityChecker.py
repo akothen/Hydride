@@ -761,7 +761,7 @@ class RoseSimilarityChecker():
     BVArgsMap = dict()
     BVArgs = list()
     RemainingArgs = list()
-    if len(Function.getArgs()) > 10:  # Hot fix for ARM
+    if len(Function.getArgs()) > 10:  # Hotfix for ARM
       return list()
     for Idx, Arg in enumerate(Function.getArgs()):
       if isinstance(Arg.getType(), RoseBitVectorType):
@@ -1832,7 +1832,7 @@ class RoseSimilarityChecker():
                     or isinstance(OlderArg.getType(), RoseIntegerType) \
                     or isinstance(OlderArg.getType(), RoseBooleanType):
               BW = OlderArg.getType().getBitwidth()
-              if type(BW) == RoseConstant:  # Hot fix for ARM,
+              if type(BW) == RoseConstant:  # Hotfix for ARM,
                 BW = BW.getValue()  # FIXME: Find the root cause
 
               if isinstance(BW, int):

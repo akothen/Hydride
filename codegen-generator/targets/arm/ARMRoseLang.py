@@ -33,7 +33,8 @@ def Compile(InstName: str = None):
   if InstName == None:
     interested = []
     # interested = ["max", "min"]
-    interested = ["vqmovn_high_s64", "vqmovn_high_s32"]
+    # interested = ["vmovl_s8","vdupq_n_s16"]
+    # interested = ["vceqq_u32","vceqq_s32"]
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
       AllSema = {k: v for k, v in AllSema.items(
@@ -45,7 +46,7 @@ def Compile(InstName: str = None):
         continue
       k, assignment = extract_assignment_from_name(k)
       if len(assignment) > 0:
-        continue  # skip the assignment instructions
+        continue  # skip the immediates
       SemaList.append(func)
     # print(SemaList)
     print("SemaList length:")
@@ -124,6 +125,7 @@ def qwq():
 
 if __name__ == "__main__":
   Compile()
+  # qwq()
 
   # print(RosetteCode)
 

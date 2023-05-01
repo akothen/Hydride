@@ -207,6 +207,11 @@ class RoseFunctionInfo():
     Function.print()
     # Go over all the blocks in the function
     BlockList = Function.getRegionsOfType(RoseBlock)
+    # Hofix for ARM Neon vdup_**
+    if Function.getNumArgs() == 1:
+      self.InElemType = Function.getArg(0).getType().getBitwidth()
+      self.InVectorLength = Function.getArg(0).getType().getBitwidth()
+      self.InElemTypeIndex = Function.getArg(0).getArgIndex()
     for Block in BlockList:
       for Op in reversed(Block.getOperations()):
         if isinstance(Op, RoseBVInsertSliceOp):
@@ -230,7 +235,7 @@ class RoseFunctionInfo():
         if isinstance(Op, RoseBVExtractSliceOp):
           if Op.getInputBitVector() != Function.getReturnValue():
             # Hotfix for ARM Neon vpmax_**
-            if isinstance(Op.getInputBitVector(), RoseArgument) or hasattr(Op.getInputBitVector(), "isPureConcatOfArgs"):
+            if isinstance(Op.getInputBitVector(), RoseArgument) or hasattr(Op.getInputBitVector(), "isPureArgs"):
               Bitwidth = Op.getOutputBitwidth()
               if Bitwidth != 1:
                 self.InElemType = Op.getOutputBitwidth()
@@ -333,7 +338,7 @@ class RoseFunctionInfo():
           if Op.getInputBitVector() != Function.getReturnValue():
             print("Op:")
             Op.print()
-            if isinstance(Op.getInputBitVector(), RoseArgument) or hasattr(Op.getInputBitVector(), "isPureConcatOfArgs"):
+            if isinstance(Op.getInputBitVector(), RoseArgument) or hasattr(Op.getInputBitVector(), "isPureArgs"):
               Bitwidth = Op.getOutputBitwidth()
               print("Op.getOutputBitwidth():")
               print(Op.getOutputBitwidth())

@@ -55,9 +55,9 @@ Now you are ready to use Hydride!
         - median3x3
         - dilate5x5
         - dilate3x3
+        - matmul_256_32bit
     - failed:
         - mul: shl
-        - matmul_256_32bit: cast?
         - l2norm: ?
         - blur3x3: repeat_edge or /3
         - add: shl, sat, rsr

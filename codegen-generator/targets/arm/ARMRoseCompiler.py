@@ -360,6 +360,13 @@ def CompileVorVpartToRv(Stmt: ArrayIndex, Context: ARMRoseContext):
 
     return CompileRValueExpr(ArrayIndex(tmp, [SliceRange(Number(2*width-1), Number(width), Context.genName())], Context.genName()), Context)
   return CompileRValueExpr(tmp, Context)
+  # assert lhs[0] == 'bits', f"Got {lhs}"
+  # assert width in [8, 16, 32, 64, 128], f"Got {width}"
+  if Context.isVariableDefined(tmp.name):
+    ID = Context.getVariableID(tmp.name)
+    Vec = Context.getCompiledAbstractionForID(ID)
+    return CompileRValueExpr(ArrayIndex(tmp, [SliceRange(Number(Vec.getType().getBitwidth()-1), Number(0), Context.genName())], Context.genName()), Context)
+  raise NotImplementedError(f"Got {tmp}")
 
 
 def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -511,6 +518,11 @@ def ComputeArrayIndexOrSliceRv(Stmt: ArrayIndex, Context: ARMRoseContext):
 
   # Add an bitslice operation
   print(Low, High, BitwidthValue)
+  # if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
+  #   if Low.getValue() == 0 and High.getValue() == BitVector.getType().getBitwidth()-1:
+  #     if isinstance(BitVector, RoseBVExtractSliceOp):
+  #       return BitVector
+
   Operation = RoseBVExtractSliceOp.create(
       Context.genName(), BitVector, Low, High, BitwidthValue)
 
@@ -916,13 +928,15 @@ def CompileIfElseRv(Stmt: IfElse, Context: ARMRoseContext):
 
   # Compile the operation
   Cond = CompileRValueExpr(Stmt.cond, Context)
-  Then = CompileRValueExpr(Stmt.then, Context)
-  Otherwise = CompileRValueExpr(Stmt.otherwise, Context)
   if isinstance(Cond, RoseConstant):
     if Cond.getValue():
+      Then = CompileRValueExpr(Stmt.then, Context)
       return Then
     else:
+      Otherwise = CompileRValueExpr(Stmt.otherwise, Context)
       return Otherwise
+  Then = CompileRValueExpr(Stmt.then, Context)
+  Otherwise = CompileRValueExpr(Stmt.otherwise, Context)
   print(type(Cond), Cond, Cond.Type)
   Operation = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
 
@@ -1336,7 +1350,7 @@ def HandleToConcat():
     assert isinstance(Operand2.getType(), RoseBitVectorType) == True
     Op = RoseBVConcatOp.create(Name, Operand1, Operand2)
     if isinstance(Operand1, RoseArgument) and isinstance(Operand2, RoseArgument):
-      Op.isPureConcatOfArgs = True # Consider as arguments
+      Op.isPureArgs = True  # Consider as arguments
     # assert Context.isValueSigned(
     #     Operand1) == Context.isValueSigned(Operand2), (Operand1, Operand2)
     Context.addSignednessInfoForValue(Op, Context.isValueSigned(
