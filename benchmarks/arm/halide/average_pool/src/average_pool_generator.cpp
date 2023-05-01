@@ -71,10 +71,11 @@ public:
         output_(c, x, y, b) = clamp(u8_sat(average), output_min_, output_max_);
 
         // Schedules for x86
+        int vector_size = natural_vector_size<uint8_t>();
         output_
             .compute_root()
             .reorder(c, b, x, y)
-            .vectorize(c, 64);
+            .vectorize(c, vector_size);
 
         output_.print_loop_nest();
     }
