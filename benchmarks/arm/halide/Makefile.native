@@ -4,6 +4,7 @@ LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
 			 dilate3x3 \
+			 dilate5x5 \
 			 median3x3 \
 			 sobel3x3 \
 			 blur3x3 \
