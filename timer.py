@@ -10,13 +10,14 @@ for b in benchmarks[:]:
         cmd=template.format(f,b)
         print(f,b)
         # print(cmd)
-        time =0
+        time =[]
         n=5
         for i in range(n):
             k=subprocess.check_output(cmd.split(' '))
             # print(k)
             for d in k.split(b"\n"):
                 if b"Execution took" in d:
-                    time+=float(d[15:-1])
-        print(time/n)
+                    time.append(float(d[15:-1]))
+        time.sort()
+        print(sum(time[1:-1])/(n-2))
         

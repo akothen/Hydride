@@ -63,6 +63,35 @@ Now you are ready to use Hydride!
         - add: shl, sat, rsr
 
 
-None
-Signed
-Modify benchmarks
+arm average_pool
+7.8048
+arm-disable-hydride average_pool
+3.524233333333333
+arm gaussian5x5
+2.9406
+arm-disable-hydride gaussian5x5
+2.9254999999999995
+arm gaussian3x3
+1.9744666666666666
+arm-disable-hydride gaussian3x3
+1.9127333333333334
+arm max_pool
+1.9614
+arm-disable-hydride max_pool
+1.963
+arm median3x3
+3.435033333333333
+arm-disable-hydride median3x3
+3.4415666666666667
+arm dilate5x5
+1.2488666666666666
+arm-disable-hydride dilate5x5
+1.2304666666666666
+arm dilate3x3
+1.2101333333333335
+arm-disable-hydride dilate3x3
+1.2274
+arm sobel3x3
+8.312366666666668
+arm-disable-hydride sobel3x3
+6.992400000000001
