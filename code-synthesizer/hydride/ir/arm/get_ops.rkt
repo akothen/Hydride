@@ -50,40 +50,40 @@
 		(cond 
 		[(and  (equal? size_i_o 32) (equal? num_6 32) (equal? num_7 0) (equal? num_8 32) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqdmulhs_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqdmulhq_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulh_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 16) (equal? num_6 16) (equal? num_7 0) (equal? num_8 16) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulhh_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqdmulh_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulhq_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 32) (equal? num_6 32) (equal? num_7 0) (equal? num_8 32) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulhs_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 16) (equal? num_6 16) (equal? num_7 0) (equal? num_8 16) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqdmulhh_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulhq_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqdmulhq_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqdmulh_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulh_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[else (error "Unable to get ops  for vqdmulhs_s32")]
 )
 
@@ -185,10 +185,10 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 0) (equal? num_13 0)); vmlal_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 0) (equal? num_13 0)); vmlal_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 1) (equal? num_13 1)); vmlal_s8
  
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -197,7 +197,7 @@
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 0) (equal? num_13 0)); vmlal_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 1) (equal? num_13 1)); vmlal_s32
  
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -209,16 +209,16 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulhq_n_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqdmulhq_n_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqdmulh_n_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 16) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulh_n_s16
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[else (error "Unable to get ops  for vqrdmulhq_n_s16")]
 )
 
@@ -272,10 +272,10 @@
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)); vmaxq_s32
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)); vmaxq_s16
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 0) (equal? num_9 0) (equal? num_10 0)); vmax_u16
  
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -293,16 +293,16 @@
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)); vmax_s32
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)); vmaxq_s8
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)); vmax_s8
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)); vmax_s16
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vmaxq_u8")]
 )
 
@@ -359,7 +359,7 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 16) (equal? num_9 1) (equal? prec_o 32) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 2) (equal? num_16 1) (equal? num_17 32) (equal? num_18 1)); vqdmlsl_n_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlsl_n_s16")]
 )
 
@@ -368,58 +368,58 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1)); vceqz_s8
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1)); vceqzq_s16
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1)); vceqz_u64
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1)); vceqzq_s32
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1)); vceqzq_u16
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1)); vceqz_s64
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1)); vceqzq_u8
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1)); vceqzq_s8
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1)); vceqzq_u32
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1)); vceqz_u16
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1)); vceqzq_s64
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1)); vceqz_u8
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1)); vceqz_s32
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1)); vceqz_s16
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1)); vceqzd_u64
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1)); vceqzq_u64
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1)); vceqz_u32
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1)); vceqzd_s64
  
-  (remove-duplicates (append (list  'if 'sign-extend 'bveq) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bveq 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vceqz_s8")]
 )
 
@@ -428,58 +428,58 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vqrshl_u32
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vqrshlh_s16
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vqrshls_s32
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vqrshl_s32
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vqrshlq_u16
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vqrshlq_s32
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vqrshl_s64
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vqrshl_u16
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vqrshlh_u16
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vqrshlq_s64
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vqrshl_u64
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vqrshlq_u64
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vqrshld_u64
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vqrshlq_u32
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vqrshl_s16
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vqrshls_u32
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vqrshlq_s16
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vqrshld_s64
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqrshl_u32")]
 )
 
@@ -524,7 +524,7 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? num_8 0) (equal? prec_o 64) (equal? num_10 -1) (equal? num_11 2) (equal? num_12 0) (equal? num_13 0)); vmlal_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? num_8 1) (equal? prec_o 64) (equal? num_10 -1) (equal? num_11 2) (equal? num_12 0) (equal? num_13 1)); vmlal_n_s32
  
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -563,7 +563,7 @@
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 16) (equal? num_13 2)); vmlsl_high_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlsl_high_n_s16")]
 )
 
@@ -572,7 +572,7 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 32) (equal? num_9 1) (equal? prec_o 64) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 2) (equal? num_16 1) (equal? num_17 64) (equal? num_18 1)); vqdmlsl_n_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlsl_n_s32")]
 )
 
@@ -653,7 +653,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 32) (equal? num_16 1) (equal? num_17 16) (equal? num_18 2)); vqdmlal_high_n_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlal_high_n_s16")]
 )
 
@@ -758,10 +758,10 @@
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubq_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubq_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqsubh_u16
  
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -770,10 +770,10 @@
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsub_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsub_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqsub_u16
  
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -785,19 +785,19 @@
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsub_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubq_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsub_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubd_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubq_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqsub_u32
  
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -809,10 +809,10 @@
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubh_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubb_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqsub_u64
  
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -821,7 +821,7 @@
   (remove-duplicates (append (list  'zero-extend 'bvusat 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqsubs_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vqsubd_u64")]
 )
 
@@ -854,58 +854,58 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcge_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcge_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgeq_s32
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgeq_s16
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgeq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcge_s32
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcge_s16
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcge_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgeq_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcge_s8
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgeq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgeq_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcge_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgeq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgeq_s8
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcged_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcged_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcge_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vcge_u8")]
 )
 
@@ -914,16 +914,16 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlaq_n_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlaq_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmla_n_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmla_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlaq_n_s16")]
 )
 
@@ -932,22 +932,22 @@
 		(cond 
 		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrshlb_s8
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)); vqrshlq_u8
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrshlq_s8
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrshl_s8
  
-  (remove-duplicates (append (list  'bvneg 'bvssat 'bvsub 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)); vqrshlb_u8
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)); vqrshl_u8
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvusat 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqrshlb_s8")]
 )
 
@@ -959,10 +959,10 @@
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 32) (equal? num_12 0) (equal? num_13 2)); vmlsl_high_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 16) (equal? num_12 0) (equal? num_13 2)); vmlsl_high_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1) (equal? num_11 32) (equal? num_12 1) (equal? num_13 2)); vmlsl_high_s32
  
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -971,7 +971,7 @@
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 8) (equal? num_12 0) (equal? num_13 2)); vmlsl_high_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlsl_high_s8")]
 )
 
@@ -1028,7 +1028,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 32) (equal? num_18 2)); vqdmlal_high_n_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlal_high_n_s32")]
 )
 
@@ -1055,58 +1055,58 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcleq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcle_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcle_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcleq_s16
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcle_s8
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcleq_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcled_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcle_s16
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcleq_s32
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcleq_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcle_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcle_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcled_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcleq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcleq_s8
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcleq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvsge 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'zero-extend 'bvsge) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcle_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcle_s32
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vcleq_u16")]
 )
 
@@ -1115,31 +1115,31 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vclez_s32
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vclez_s16
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vclezq_s8
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vclezq_s16
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vclezd_s64
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vclezq_s32
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vclez_s64
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vclez_s8
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vclezq_s64
  
-  (remove-duplicates (append (list  'if 'bvsle 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsle 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vclez_s32")]
 )
 
@@ -1148,16 +1148,16 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulh_n_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqdmulhq_n_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqdmulh_n_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulhq_n_s32
  
-  (remove-duplicates (append (list  'bvashr 'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
+  (remove-duplicates (append (list  'bvadd 'bvmul 'bvssat 'sign-extend 'bvashr) (arm:get-bv-ops v3) (arm:get-bv-ops v4)))]
 		[else (error "Unable to get ops  for vqrdmulh_n_s32")]
 )
 
@@ -1226,31 +1226,31 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vcltzq_s32
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcltzd_s64
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vcltz_s32
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vcltzq_s16
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vcltz_s8
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcltz_s64
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vcltz_s16
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vcltzq_s8
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcltzq_s64
  
-  (remove-duplicates (append (list  'bvslt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvslt 'sign-extend) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vcltzq_s32")]
 )
 
@@ -1259,58 +1259,58 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)); vqshlq_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)); vqshl_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)); vqshl_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)); vqshlq_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)); vqshl_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)); vqshlq_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)); vqshlh_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)); vqshlq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)); vqshlh_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)); vqshld_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)); vqshls_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)); vqshld_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)); vqshlq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)); vqshl_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)); vqshl_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)); vqshls_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)); vqshl_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)); vqshlq_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vqshlq_s32")]
 )
 
@@ -1325,16 +1325,16 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vrhadd_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vrhaddq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vrhaddq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vrhaddq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1)); vrhaddq_s8
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1346,10 +1346,10 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vrhadd_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vrhadd_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1)); vrhaddq_s16
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1361,10 +1361,10 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 64) (equal? num_15 1) (equal? num_16 32) (equal? num_17 1) (equal? num_18 2)); vqdmlsl_high_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 32) (equal? num_15 1) (equal? num_16 16) (equal? num_17 1) (equal? num_18 2)); vqdmlsl_high_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlsl_high_s32")]
 )
 
@@ -1400,22 +1400,22 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vhadd_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vhadd_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vhaddq_s8
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vhaddq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vhaddq_s16
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vhaddq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vhaddq_s32
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -1424,13 +1424,13 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vhaddq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vhadd_s32
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vhadd_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vhadd_s8")]
 )
 
@@ -1442,16 +1442,16 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)); vshlq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)); vshl_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)); vshlq_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)); vshl_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)); vshl_s32
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1463,13 +1463,13 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)); vshld_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)); vshlq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)); vshl_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)); vshld_s64
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1490,10 +1490,10 @@
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 32) (equal? num_12 0) (equal? num_13 2)); vmlal_high_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 8) (equal? num_12 0) (equal? num_13 2)); vmlal_high_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1) (equal? num_11 8) (equal? num_12 1) (equal? num_13 2)); vmlal_high_s8
  
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1502,7 +1502,7 @@
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 16) (equal? num_12 0) (equal? num_13 2)); vmlal_high_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlal_high_s16")]
 )
 
@@ -1511,76 +1511,76 @@
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddh_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddq_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddq_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqadds_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddb_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqadd_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddq_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqadd_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqadds_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddq_s64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqadd_s64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddh_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqadd_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddd_s64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqadd_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqadd_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 0)); vuqaddq_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqadd_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddb_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqadd_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 1)); vsqaddd_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vsqaddh_u16")]
 )
 
@@ -1709,40 +1709,40 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlsq_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlsq_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlsq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlsq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmls_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmls_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmls_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmls_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmls_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlsq_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlsq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmls_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlsq_s32")]
 )
 
@@ -1757,13 +1757,13 @@
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 0) (equal? num_13 0)); vmlsl_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 0) (equal? num_13 0)); vmlsl_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 0) (equal? num_13 0)); vmlsl_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 1) (equal? num_13 1)); vmlsl_s32
  
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1799,16 +1799,16 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmla_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlaq_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlaq_n_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmla_n_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmla_n_u32")]
 )
 
@@ -1820,7 +1820,7 @@
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 32) (equal? num_8 0) (equal? prec_o 64) (equal? num_10 -1) (equal? num_11 2) (equal? num_12 0) (equal? num_13 0)); vmlsl_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlsl_n_s32")]
 )
 
@@ -1829,7 +1829,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 32) (equal? num_13 2)); vmlal_high_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1) (equal? num_12 32) (equal? num_13 2)); vmlal_high_n_s32
  
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -1844,28 +1844,28 @@
   (remove-duplicates (append (list  'bvadd 'bvsub 'bvneg 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vrshlq_u64
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vrshl_u16
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vrshld_u64
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vrshl_u32
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vrshl_u64
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vrshl_s32
  
   (remove-duplicates (append (list  'bvadd 'bvsub 'bvneg 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)); vrshlq_u16
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)); vrshlq_u32
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)); vrshl_s64
  
   (remove-duplicates (append (list  'bvadd 'bvsub 'bvneg 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
@@ -1892,7 +1892,7 @@
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 16) (equal? num_8 0) (equal? prec_o 32) (equal? num_10 -1) (equal? num_11 2) (equal? num_12 0) (equal? num_13 0)); vmlsl_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlsl_n_s16")]
 )
 
@@ -1946,40 +1946,40 @@
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcltq_s8
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcltq_s16
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcltq_u32
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vclt_s32
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vclt_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcltq_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vclt_u64
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vclt_s8
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcltd_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vclt_s16
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcltq_u8
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcltq_s32
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vclt_u32
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
@@ -1994,10 +1994,10 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 32) (equal? num_15 1) (equal? num_16 16) (equal? num_17 1) (equal? num_18 2)); vqdmlal_high_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 64) (equal? num_15 1) (equal? num_16 32) (equal? num_17 1) (equal? num_18 2)); vqdmlal_high_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlal_high_s16")]
 )
 
@@ -2273,40 +2273,40 @@
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? num_2 16) (equal? num_3 0) (equal? num_4 16) (equal? prec_i_o 16) (equal? num_6 1) (equal? num_7 1)); vqabsh_s16
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 8) (equal? prec_i_o 8) (equal? num_6 1) (equal? num_7 1)); vqabsb_s8
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 64) (equal? num_6 1) (equal? num_7 1)); vqabsq_s64
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 32) (equal? num_6 1) (equal? num_7 1)); vqabs_s32
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 1) (equal? num_7 1)); vqabs_s64
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 16) (equal? num_6 1) (equal? num_7 1)); vqabsq_s16
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 1) (equal? num_7 1)); vqabsd_s64
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 32) (equal? prec_i_o 32) (equal? num_6 1) (equal? num_7 1)); vqabss_s32
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 8) (equal? num_6 1) (equal? num_7 1)); vqabs_s8
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 8) (equal? num_6 1) (equal? num_7 1)); vqabsq_s8
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 32) (equal? num_6 1) (equal? num_7 1)); vqabsq_s32
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 16) (equal? num_6 1) (equal? num_7 1)); vqabs_s16
  
-  (remove-duplicates (append (list  'abs 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvssat 'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[else (error "Unable to get ops  for vqabsh_s16")]
 )
 
@@ -2315,16 +2315,16 @@
 		(cond 
 		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 8) (equal? num_11 0) (equal? num_12 2)); vaddl_high_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 16) (equal? num_11 1) (equal? num_12 2)); vaddl_high_s16
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 32) (equal? num_11 0) (equal? num_12 2)); vaddl_high_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 16) (equal? num_11 0) (equal? num_12 2)); vaddl_high_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 8) (equal? num_11 1) (equal? num_12 2)); vaddl_high_s8
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -2339,76 +2339,76 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqadd_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddb_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqadd_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddh_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddq_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqadd_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddq_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddb_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddq_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqadd_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddq_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddh_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqadd_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqadds_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddd_u64
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddq_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqadd_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqadd_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqadd_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqaddq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0)); vqadds_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 1) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 1)); vqaddd_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vqadd_u64")]
 )
 
@@ -2435,16 +2435,16 @@
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 16) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 32) (equal? num_17 1) (equal? num_18 1)); vqdmlalh_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 32) (equal? num_17 1) (equal? num_18 1)); vqdmlal_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 32) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 64) (equal? num_17 1) (equal? num_18 1)); vqdmlals_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 64) (equal? num_17 1) (equal? num_18 1)); vqdmlal_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlalh_s16")]
 )
 
@@ -2459,13 +2459,13 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 32) (equal? num_11 2) (equal? num_12 0)); vaddw_high_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 16) (equal? num_11 2) (equal? num_12 0)); vaddw_high_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 8) (equal? num_11 2) (equal? num_12 0)); vaddw_high_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 -1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 2) (equal? num_12 1)); vaddw_high_s32
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -2477,7 +2477,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)); vshlq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)); vshlq_s8
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -2486,7 +2486,7 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)); vshl_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vshlq_u8")]
 )
 
@@ -2537,40 +2537,40 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmla_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmla_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmla_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlaq_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmla_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlaq_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlaq_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlaq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlaq_s8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmla_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmla_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)); vmlaq_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmla_s8")]
 )
 
@@ -2579,22 +2579,22 @@
 		(cond 
 		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)); vqshlb_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)); vqshl_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)); vqshlq_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)); vqshlq_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvusat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)); vqshlb_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)); vqshl_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vqshlb_u8")]
 )
 
@@ -2606,7 +2606,7 @@
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 16) (equal? num_13 2)); vmlal_high_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmlal_high_n_s16")]
 )
 
@@ -2615,16 +2615,16 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmls_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmls_n_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlsq_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlsq_n_s16
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmls_n_u16")]
 )
 
@@ -2633,16 +2633,16 @@
 		(cond 
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 32) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 64) (equal? num_17 1) (equal? num_18 1)); vqdmlsls_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 64) (equal? num_17 1) (equal? num_18 1)); vqdmlsl_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 32) (equal? num_17 1) (equal? num_18 1)); vqdmlsl_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 16) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1) (equal? num_16 32) (equal? num_17 1) (equal? num_18 1)); vqdmlslh_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlsls_s32")]
 )
 
@@ -2651,7 +2651,7 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 32) (equal? num_9 1) (equal? prec_o 64) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 2) (equal? num_16 1) (equal? num_17 64) (equal? num_18 1)); vqdmlal_n_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlal_n_s32")]
 )
 
@@ -2660,40 +2660,40 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 32) (equal? num_6 1) (equal? num_7 1)); vqneg_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 32) (equal? prec_i_o 32) (equal? num_6 1) (equal? num_7 1)); vqnegs_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 8) (equal? prec_i_o 8) (equal? num_6 1) (equal? num_7 1)); vqnegb_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 8) (equal? num_6 1) (equal? num_7 1)); vqnegq_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 16) (equal? num_2 16) (equal? num_3 0) (equal? num_4 16) (equal? prec_i_o 16) (equal? num_6 1) (equal? num_7 1)); vqnegh_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 32) (equal? num_6 1) (equal? num_7 1)); vqnegq_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 64) (equal? num_6 1) (equal? num_7 1)); vqnegq_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 16) (equal? num_6 1) (equal? num_7 1)); vqnegq_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 1) (equal? num_7 1)); vqneg_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 16) (equal? num_6 1) (equal? num_7 1)); vqneg_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 8) (equal? num_6 1) (equal? num_7 1)); vqneg_s8
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 1) (equal? num_7 1)); vqnegd_s64
  
-  (remove-duplicates (append (list  'bvssat 'bvneg 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'bvneg 'bvssat 'sign-extend) (arm:get-bv-ops v0)))]
 		[else (error "Unable to get ops  for vqneg_s32")]
 )
 
@@ -2702,10 +2702,10 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)); vrshl_u8
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)); vrshlq_u8
  
-  (remove-duplicates (append (list  'bvneg 'bvsub 'zero-extend 'bvadd 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvneg 'bvsub 'bvadd 'sign-extend 'zero-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vrshl_s8
  
   (remove-duplicates (append (list  'bvadd 'bvsub 'bvneg 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
@@ -2744,7 +2744,7 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 16) (equal? num_8 0) (equal? prec_o 32) (equal? num_10 -1) (equal? num_11 2) (equal? num_12 0) (equal? num_13 0)); vmlal_n_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 16) (equal? num_8 1) (equal? prec_o 32) (equal? num_10 -1) (equal? num_11 2) (equal? num_12 0) (equal? num_13 1)); vmlal_n_s16
  
   (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
@@ -2756,7 +2756,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 32) (equal? num_16 1) (equal? num_17 16) (equal? num_18 2)); vqdmlsl_high_n_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlsl_high_n_s16")]
 )
 
@@ -2792,19 +2792,19 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? num_6 16) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 2)); vaddw_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? num_6 16) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 2)); vaddw_s16
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? num_6 8) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 2)); vaddw_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? num_6 8) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 2)); vaddw_s8
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? num_6 32) (equal? prec_i_o 64) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 2)); vaddw_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vaddw_s32")]
 )
 
@@ -2855,10 +2855,10 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 0) (equal? num_9 2) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vaddl_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 2) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vaddl_u16
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 2) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1)); vaddl_s16
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -2867,7 +2867,7 @@
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0)); vaddl_u8
  
-  (remove-duplicates (append (list  'zero-extend 'bvadd) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvadd 'zero-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 0) (equal? num_9 2) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1)); vaddl_s32
  
   (remove-duplicates (append (list  'bvadd 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -2879,31 +2879,31 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vcgez_s8
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcgezq_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vcgezq_s32
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vcgez_s16
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcgez_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vcgez_s32
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcgezd_s64
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vcgezq_s16
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vcgezq_s8
  
-  (remove-duplicates (append (list  'bvsge 'if 'sign-extend) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'if 'bvsge 'sign-extend) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vcgez_s8")]
 )
 
@@ -2984,16 +2984,16 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmls_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlsq_n_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmls_n_s32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0)); vmlsq_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for vmls_n_u32")]
 )
 
@@ -3005,13 +3005,13 @@
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_o 8) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 8) (equal? num_11 8) (equal? num_12 1) (equal? num_13 4) (equal? num_14 1) (equal? prec_i 8) (equal? num_16 2)); vpmax_s8
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 32) (equal? num_12 1) (equal? num_13 16) (equal? num_14 1) (equal? prec_i 32) (equal? num_16 2)); vpmax_s32
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 8) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 8) (equal? num_11 8) (equal? num_12 1) (equal? num_13 4) (equal? num_14 1) (equal? prec_i 8) (equal? num_16 2)); vpmaxq_s8
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 0) (equal? num_9 0) (equal? num_10 32) (equal? num_11 32) (equal? num_12 1) (equal? num_13 16) (equal? num_14 0) (equal? prec_i 32) (equal? num_16 2)); vpmax_u32
  
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -3020,7 +3020,7 @@
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 32) (equal? num_12 1) (equal? num_13 16) (equal? num_14 1) (equal? prec_i 32) (equal? num_16 2)); vpmaxq_s32
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_o 8) (equal? num_7 0) (equal? num_8 0) (equal? num_9 0) (equal? num_10 8) (equal? num_11 8) (equal? num_12 1) (equal? num_13 4) (equal? num_14 0) (equal? prec_i 8) (equal? num_16 2)); vpmax_u8
  
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -3029,10 +3029,10 @@
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 16) (equal? num_11 16) (equal? num_12 1) (equal? num_13 8) (equal? num_14 1) (equal? prec_i 16) (equal? num_16 2)); vpmax_s16
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 16) (equal? num_11 16) (equal? num_12 1) (equal? num_13 8) (equal? num_14 1) (equal? prec_i 16) (equal? num_16 2)); vpmaxq_s16
  
-  (remove-duplicates (append (list  'bvsmax 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvsmax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 0) (equal? num_9 0) (equal? num_10 32) (equal? num_11 32) (equal? num_12 1) (equal? num_13 16) (equal? num_14 0) (equal? prec_i 32) (equal? num_16 2)); vpmaxq_u32
  
   (remove-duplicates (append (list  'zero-extend 'bvumax) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
@@ -3044,58 +3044,58 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8)); vceq_u8
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64)); vceqd_s64
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64)); vceqq_s64
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32)); vceq_s32
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32)); vceq_u32
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16)); vceqq_s16
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8)); vceqq_u8
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16)); vceq_s16
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64)); vceqq_u64
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8)); vceqq_s8
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64)); vceq_s64
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16)); vceq_u16
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16)); vceqq_u16
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8)); vceq_s8
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32)); vceqq_s32
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32)); vceqq_u32
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64)); vceq_u64
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64)); vceqd_u64
  
-  (remove-duplicates (append (list  'if 'bveq) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bveq 'if) (arm:get-bv-ops v0) (arm:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for vceq_u8")]
 )
 
@@ -3104,31 +3104,31 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vcgtz_s8
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1)); vcgtzq_s8
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vcgtzq_s32
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vcgtz_s16
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1)); vcgtzq_s16
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcgtzd_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcgtz_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1)); vcgtzq_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1)); vcgtz_s32
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vcgtz_s8")]
 )
 
@@ -3161,7 +3161,7 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 16) (equal? num_9 1) (equal? prec_o 32) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 2) (equal? num_16 1) (equal? num_17 32) (equal? num_18 1)); vqdmlal_n_s16
  
-  (remove-duplicates (append (list  'bvssat 'bvadd 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvadd 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlal_n_s16")]
 )
 
@@ -3170,7 +3170,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 32) (equal? num_18 2)); vqdmlsl_high_n_s32
  
-  (remove-duplicates (append (list  'bvssat 'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsub 'bvssat 'bvmul 'sign-extend) (arm:get-bv-ops v1) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vqdmlsl_high_n_s32")]
 )
 
@@ -3179,31 +3179,31 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 1)); vabsq_s8
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 1)); vabsq_s32
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 1)); vabs_s8
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 1)); vabsq_s16
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 1)); vabs_s16
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 1)); vabs_s64
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 128) (equal? num_2 128) (equal? num_3 0) (equal? num_4 128) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 1)); vabsq_s64
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 1)); vabs_s32
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 1)); vabsd_s64
  
-  (remove-duplicates (append (list  'abs 'sign-extend) (arm:get-bv-ops v0)))]
+  (remove-duplicates (append (list  'sign-extend 'abs) (arm:get-bv-ops v0)))]
 		[else (error "Unable to get ops  for vabsq_s8")]
 )
 
@@ -3212,7 +3212,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgtq_s32
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgtq_u16
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
@@ -3224,25 +3224,25 @@
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgtq_s16
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgt_s8
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgtd_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgt_u32
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgt_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgt_u8
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgtq_s64
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgtq_u8
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
@@ -3254,16 +3254,16 @@
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgt_s32
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 1) (equal? num_10 0) (equal? num_11 0)); vcgtq_u64
  
   (remove-duplicates (append (list  'zero-extend 'bvsgt 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgtq_s8
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1)); vcgt_s16
  
-  (remove-duplicates (append (list  'bvsgt 'sign-extend 'if) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvsgt 'if 'sign-extend) (arm:get-bv-ops v2) (arm:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for vcgtq_s32")]
 )
 
@@ -3272,7 +3272,7 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 32) (equal? num_13 2)); vmlsl_high_n_u32
  
-  (remove-duplicates (append (list  'zero-extend 'bvmul 'bvsub) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'zero-extend 'bvsub 'bvmul) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 64) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1) (equal? num_12 32) (equal? num_13 2)); vmlsl_high_n_s32
  
   (remove-duplicates (append (list  'bvsub 'bvmul 'sign-extend) (arm:get-bv-ops v0) (arm:get-bv-ops v1) (arm:get-bv-ops v2)))]

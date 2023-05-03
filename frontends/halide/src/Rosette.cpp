@@ -1679,7 +1679,8 @@ public:
             return IRMutator::mutate(spec_expr);
         }
 
-        if (arch == IROptimizer::HVX) {
+        // Both HVX and ARM have no vector division intrinsics
+        if (arch == IROptimizer::HVX || arch == IROptimizer::ARM) {
 
             Expr previous_expr = spec_expr;
 
@@ -1886,11 +1887,9 @@ private:
                         lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 } else if (_arch == Architecture::ARM) {
-                    if (element_bits < 64) {
-                        // lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
-                        //     op->args[0].type().min(), op->args[0].type().max()));
-                    } else {
-                        lower_using_halide = true;
+
+                    if (element_bits <= 64) {  //?
+                        lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 }
 
@@ -1913,6 +1912,13 @@ private:
                     }
                     // Map Saturating sub to saturating sub in Rosette.
                 } else if (_arch == Architecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits >= 32 && element_bits < 64) {
+                        lowered = lower_saturating_sub(op->args[0], op->args[1]);
+                        lower_using_halide = false;
+                    } else if (element_bits >= 64) {
+                        lower_using_halide = true;
+                    }
                 }
 
             } else if (op->is_intrinsic(Call::halving_add)) {
@@ -1974,6 +1980,13 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == Architecture::ARM) {
+
+                    if (element_bits < 64) {  //?
+                        lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
 
             } else if (op->is_intrinsic(Call::rounding_halving_add)) {
@@ -2005,7 +2018,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits < 64) {
+                    if (element_bits < 64) {  //?
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2060,11 +2073,7 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::ARM) {
-                    if (element_bits < 64) {
-                        lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
-                    } else {
-                        lower_using_halide = true;
-                    }
+                    lower_using_halide = true;
                 }
 
             } else if (op->is_intrinsic(Call::absd)) {
@@ -2075,8 +2084,11 @@ private:
                     if (SIMPLIFY_ABSD) {
                         lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                     }
-                } else if (_arch == Architecture::X86) {
-                    lower_using_halide = false;
+                } else if (_arch == Architecture::ARM) {
+                    if (SIMPLIFY_ABSD) {
+                        lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
+                    } else
+                        lower_using_halide = true;
                 }
             } else if (op->is_intrinsic(Call::rounding_shift_right)) {
                 Expr Zero, One, Two;
@@ -2115,6 +2127,13 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == Architecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {  //?
+                        lowered = (widen(op->args[0]) * widen(op->args[1]));
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
             } else if (op->is_intrinsic(Call::widening_add)) {
                 if (_arch == Architecture::HVX) {
@@ -2132,6 +2151,13 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == Architecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                        lowered = (widen(op->args[0]) + widen(op->args[1]));
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
             } else if (op->is_intrinsic(Call::widening_sub)) {
                 if (_arch == Architecture::HVX) {
@@ -2143,6 +2169,14 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::X86) {
+
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                        lowered = (widen(op->args[0]) - widen(op->args[1]));
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == Architecture::ARM) {
 
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
@@ -2168,6 +2202,13 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == Architecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                        lowered = widen(op->args[0]) << op->args[1];
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
             } else if (op->is_intrinsic(Call::widening_shift_right)) {
 
@@ -2187,6 +2228,14 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == Architecture::ARM) {
+
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                        lowered = widen(op->args[0]) >> op->args[1];
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
 
             } else if (op->is_intrinsic(Call::rounding_mul_shift_right)) {
@@ -2199,6 +2248,13 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::X86) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                        lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
                         lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
@@ -2225,6 +2281,13 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == Architecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                        lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
             }
 
@@ -2238,6 +2301,8 @@ private:
                 if (_arch == Architecture::HVX) {
                     return mutate(lower_intrinsic(op));
                 } else if (_arch == Architecture::X86) {
+                    return mutate(lower_intrinsic(op));
+                } else if (_arch == Architecture::ARM) {
                     return mutate(lower_intrinsic(op));
                 }
             }
@@ -3357,7 +3422,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
         debug(0) << "Printing Pruned Stmt:\n";
         debug(0) << pruned << "\n";
 
-        std::vector<unsigned> arm_vector_sizes = {64, 128};
+        std::vector<unsigned> arm_vector_sizes = {128, 64};
 
         bool model_sat_support = false;
 
@@ -3377,7 +3442,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
     const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
     std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
-    auto Result = Hydride::IROptimizer(std::move(fvb), Hydride::IROptimizer::ARM, mutated_exprs, random_seed, name).mutate(distributed);
+    auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::ARM, mutated_exprs, random_seed, name).mutate(distributed);
 
     if (!mutated_exprs.empty()) {
         hydride_generate_llvm_bitcode(Target::ARM, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
