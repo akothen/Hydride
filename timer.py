@@ -3,8 +3,8 @@ import re
 
 template="/Users/yscore/Sync/This/CS526/Hydride/benchmarks/{0}/halide/{1}/bin/{1}_run.out 3840 2160 /Users/yscore/Sync/This/CS526/Hydride/benchmarks/{0}/test_vectors/football3840x2160.bin /Users/yscore/Sync/This/CS526/Hydride/benchmarks/{0}/halide/{1}/out/out.bin"
 folder=["arm","arm-disable-hydride"]
-benchmarks=["average_pool", "gaussian5x5", "gaussian3x3", "max_pool", "median3x3", "dilate5x5", "dilate3x3","sobel3x3"]
-# benchmarks=["median3x3", "dilate5x5", "dilate3x3","sobel3x3"]
+benchmarks=["average_pool", "gaussian5x5", "gaussian3x3", "max_pool", "median3x3", "dilate5x5", "dilate3x3","sobel3x3","matmul_256_32bit","blur3x3"]
+benchmarks=["blur3x3","sobel3x3"]
 for b in benchmarks[:]:
     for f in folder:
         cmd=template.format(f,b)
@@ -18,6 +18,7 @@ for b in benchmarks[:]:
             for d in k.split(b"\n"):
                 if b"Execution took" in d:
                     time.append(float(d[15:-1]))
+                    break
         time.sort()
         print(sum(time[1:-1])/(n-2))
         
