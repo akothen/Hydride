@@ -1,7 +1,4 @@
 {
-  "cSpell.enableFiletypes": [
-    "!python"
-  ],
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.extraPaths": [
     "codegen-generator/targets/x86/",
@@ -23,29 +20,6 @@
     "codegen-generator/tools/llvmlite",
     "code-synthesizer/dsl-ir"
   ],
-  "pylint.path": [
-    "codegen-generator/targets/x86/",
-    "codegen-generator/targets/arm/",
-    "codegen-generator/targets/hexagon/",
-    "codegen-generator/codegen/rosette/",
-    "codegen-generator/codegen/llvm/",
-    "codegen-generator/rosette-ir/",
-    "codegen-generator/tools/",
-    "codegen-generator/tools/code-generator/",
-    "codegen-generator/tools/fuzzer",
-    "codegen-generator/tools/rosette-lifter/",
-    "codegen-generator/tools/low-level-codegen/",
-    "codegen-generator/tools/similarity-checker",
-    "codegen-generator/tools/validity-checker",
-    "codegen-generator/transform",
-    "codegen-generator/analysis",
-    "codegen-generator/tools/transformations-verifier",
-    "codegen-generator/tools/llvmlite",
-    "code-synthesizer/dsl-ir"
-  ],
-  "pylint.args": [
-    "--indent-string=\"  \""
-  ],
   "files.associations": {
     "*.inc": "cpp"
   },
@@ -60,5 +34,8 @@
     "-I${workspaceFolder}/codegen-generator/tools/low-level-codegen/InstSelectors/common",
     "-I${workspaceFolder}/frontends/halide/distrib/include",
     "-I${workspaceFolder}/frontends/halide/include",
+    "-I/usr/include/x86_64-linux-gnu/c++/11/",
+    "-I/usr/include/c++/11/",
+    "-DLLVM_VERSION=120"
   ]
 }

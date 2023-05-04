@@ -56,10 +56,10 @@ Now you are ready to use Hydride!
         - dilate5x5
         - dilate3x3
         - matmul_256_32bit
+        - blur3x3: repeat_edge or /3
     - failed:
         - mul: shl
         - l2norm: ?
-        - blur3x3: repeat_edge or /3
         - add: shl, sat, rsr
 
 
@@ -103,3 +103,6 @@ arm matmul_256_32bit
 1.6552666666666667
 arm-disable-hydride matmul_256_32bit
 1.8769
+
+
+hydride_optimize_arm

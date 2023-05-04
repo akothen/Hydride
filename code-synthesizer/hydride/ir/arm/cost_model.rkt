@@ -28,7 +28,9 @@
 ;; ================================================================================
 ;;                                DSL Cost Model
 ;; ================================================================================
-(define cost_vqdmulhs_s32_dsl 1)
+(define cost_vabdl_high_s32_dsl 1)
+(define cost_vabdl_s8_dsl 1)
+(define cost_vabd_s16_dsl 1)
 (define cost_vhsub_u16_dsl 1)
 (define cost_vqdmull_high_n_s32_dsl 1)
 (define cost_vmvn_u32_dsl 1)
@@ -158,9 +160,23 @@
 		(+ 5 (arm:cost  v0)  (arm:cost  v1)  
 		 (arm:cost  v4) )
 	]
-	[ (vqdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
-		(+ cost_vqdmulhs_s32_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
-		 (arm:cost  v3)  (arm:cost  v4)  
+	[ (vabdl_high_s32_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14)
+		(+ cost_vabdl_high_s32_dsl (arm:cost  vc_0)  (arm:cost  v1)  (arm:cost  v2)  
+		 
+		 
+		 
+		)
+	]
+	[ (vabdl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14)
+		(+ cost_vabdl_s8_dsl (arm:cost  vc_0)  (arm:cost  v1)  (arm:cost  v2)  
+		 
+		 
+		 
+		)
+	]
+	[ (vabd_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12)
+		(+ cost_vabd_s16_dsl (arm:cost  vc_0)  (arm:cost  v1)  (arm:cost  v2)  
+		 
 		 
 		 
 		)

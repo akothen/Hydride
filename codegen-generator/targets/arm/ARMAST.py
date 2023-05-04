@@ -30,7 +30,7 @@ class Number(ASTNode):
     self.val = val
 
   def __repr__(self):
-    return f"Number({self.val})"
+    return f"Number({self.val.__repr__()})"
 
 
 class BitVec(ASTNode):
@@ -40,7 +40,7 @@ class BitVec(ASTNode):
     self.bv = bv
 
   def __repr__(self):
-    return f"BitVec({self.bv})"
+    return f"BitVec({self.bv.__repr__()})"
 
 
 class SliceRange(ASTNode):
@@ -53,7 +53,7 @@ class SliceRange(ASTNode):
     self.lo, self.hi, self.id = lo, hi, id
 
   def __repr__(self):
-    return f"SliceRange({self.lo}, {self.hi}, {self.id})"
+    return f"SliceRange({self.hi.__repr__()}, {self.lo.__repr__()}, {self.id.__repr__()})"
 
 
 class ArrayIndex(ASTNode):
@@ -65,7 +65,7 @@ class ArrayIndex(ASTNode):
     self.obj, self.slices, self.id = obj, slices, id
 
   def __repr__(self):
-    return f"ArrayIndex({self.obj}, {self.slices}, {self.id})"
+    return f"ArrayIndex({self.obj.__repr__()}, {self.slices.__repr__()}, {self.id.__repr__()})"
 
 
 class Var(ASTNode):
@@ -76,7 +76,7 @@ class Var(ASTNode):
     self.name, self.id = name, id
 
   def __repr__(self):
-    return f"Var({self.name}, {self.id})"
+    return f"Var({self.name.__repr__()}, {self.id.__repr__()})"
 
 
 class Update(ASTNode):
@@ -87,7 +87,7 @@ class Update(ASTNode):
     self.lhs, self.rhs = lhs, rhs
 
   def __repr__(self):
-    return f"Update({self.lhs}, {self.rhs})"
+    return f"Update({self.lhs.__repr__()}, {self.rhs.__repr__()})"
 
 
 class For(ASTNode):
@@ -102,7 +102,7 @@ class For(ASTNode):
     self.iterator, self.begin, self.end, self.stmts, self.inc, self.id = iterator, begin, end, stmts, inc, id
 
   def __repr__(self):
-    return f"For({self.iterator}, {self.begin}, {self.end}, {self.stmts}, {self.inc}, {self.id})"
+    return f"For({self.iterator.__repr__()}, {self.begin.__repr__()}, {self.end.__repr__()}, {self.stmts.__repr__()}, {self.inc.__repr__()}, {self.id.__repr__()})"
 
 
 class While(ASTNode):
@@ -114,7 +114,7 @@ class While(ASTNode):
     self.cond, self.body, self.id = cond, body, id
 
   def __repr__(self):
-    return f"While({self.cond}, {self.body}, {self.id})"
+    return f"While({self.cond.__repr__()}, {self.body.__repr__()}, {self.id.__repr__()})"
 
 
 class IfElse(ASTNode):
@@ -127,7 +127,7 @@ class IfElse(ASTNode):
     self.cond, self.then, self.otherwise, self.id = cond, then, otherwise, id
 
   def __repr__(self):
-    return f"IfElse({self.cond}, {self.then}, {self.otherwise}, {self.id})"
+    return f"IfElse({self.cond.__repr__()}, {self.then.__repr__()}, {self.otherwise.__repr__()}, {self.id.__repr__()})"
 
 
 class If(ASTNode):
@@ -139,7 +139,7 @@ class If(ASTNode):
     self.cond, self.then, self.id = cond, then, id
 
   def __repr__(self):
-    return f"If({self.cond}, {self.then}, {self.id})"
+    return f"If({self.cond.__repr__()}, {self.then.__repr__()}, {self.id.__repr__()})"
 
 
 class Call(ASTNode):
@@ -151,7 +151,7 @@ class Call(ASTNode):
     self.funcname, self.args, self.id = funcname, args, id
 
   def __repr__(self):
-    return f"Call({self.funcname}, {self.args}, {self.id})"
+    return f"Call({self.funcname.__repr__()}, {self.args.__repr__()}, {self.id.__repr__()})"
 
 
 class BinaryExpr(ASTNode):
@@ -164,7 +164,7 @@ class BinaryExpr(ASTNode):
     self.op, self.a, self.b, self.id = op, a, b, id
 
   def __repr__(self):
-    return f"BinaryExpr({self.op}, {self.a}, {self.b}, {self.id})"
+    return f"BinaryExpr({self.op.__repr__()}, {self.a.__repr__()}, {self.b.__repr__()}, {self.id.__repr__()})"
 
 
 class UnaryExpr(ASTNode):
@@ -176,7 +176,7 @@ class UnaryExpr(ASTNode):
     self.op, self.a, self.id = op, a, id
 
   def __repr__(self):
-    return f"UnaryExpr({self.op}, {self.a}, {self.id})"
+    return f"UnaryExpr({self.op.__repr__()}, {self.a.__repr__()}, {self.id.__repr__()})"
 
 
 # class Select(ASTNode):
@@ -191,7 +191,7 @@ class CaseBase(ASTNode):
     self.body, self.id = body, id
 
   def __repr__(self):
-    return f"CaseBase({self.body}, {self.id})"
+    return f"CaseBase({self.body.__repr__()}, {self.id.__repr__()})"
 
 
 class Case(CaseBase):
@@ -201,7 +201,7 @@ class Case(CaseBase):
     self.val, self.body, self.id = val, body, id
 
   def __repr__(self):
-    return f"Case({self.val}, {self.body}, {self.id})"
+    return f"Case({self.val.__repr__()}, {self.body.__repr__()}, {self.id.__repr__()})"
 
 
 class Match(ASTNode):
@@ -213,7 +213,7 @@ class Match(ASTNode):
     self.val, self.cases, self.id = val, cases, id
 
   def __repr__(self):
-    return f"Match({self.val}, {self.cases}, {self.id})"
+    return f"Match({self.val.__repr__()}, {self.cases.__repr__()}, {self.id.__repr__()})"
 
 
 class VarsDecl(ASTNode):
@@ -225,7 +225,7 @@ class VarsDecl(ASTNode):
     self.ids, self.basetype, self.id = ids, basetype, id
 
   def __repr__(self):
-    return f"VarsDecl({self.ids}, {self.basetype}, {self.id})"
+    return f"VarsDecl({self.ids.__repr__()}, {self.basetype.__repr__()}, {self.id.__repr__()})"
 
 
 class VarDeclInit(ASTNode):
@@ -237,7 +237,7 @@ class VarDeclInit(ASTNode):
     self.decl, self.expr, self.id = decl, expr, id
 
   def __repr__(self):
-    return f"VarDeclInit({self.decl}, {self.expr}, {self.id})"
+    return f"VarDeclInit({self.decl.__repr__()}, {self.expr.__repr__()}, {self.id.__repr__()})"
 
 
 class Undefiend(ASTNode):
@@ -306,7 +306,7 @@ def ASTShrink_(AST):
     assert type(AST.slices) == list, f"{AST}"
     return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())
   elif isinstance(AST, asl.SliceRange):
-    return SliceRange(ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), GenUniqueID)
+    return SliceRange(ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), GenUniqueID())
   elif isinstance(AST, asl.SliceSingle):
     return ASTShrink_(AST.expr)
   elif isinstance(AST, asl.StmtFor):

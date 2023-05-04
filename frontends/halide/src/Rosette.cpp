@@ -2085,10 +2085,7 @@ private:
                         lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                     }
                 } else if (_arch == Architecture::ARM) {
-                    if (SIMPLIFY_ABSD) {
-                        lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
-                    } else
-                        lower_using_halide = true;
+                    lower_using_halide = false;
                 }
             } else if (op->is_intrinsic(Call::rounding_shift_right)) {
                 Expr Zero, One, Two;
