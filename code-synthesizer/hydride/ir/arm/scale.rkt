@@ -79,6 +79,13325 @@
 		num_5
 		)
 	]
+<<<<<<< HEAD
+=======
+	[ (vabdl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1))
+(displayln "Scaling case for vabdl_s8")
+(vabdl_s8_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i
+prec_o
+num_9
+num_10
+num_11
+num_12
+num_13
+num_14
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 16) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0) (equal? num_14 0))
+(displayln "Scaling case for vabdl_u16")
+(vabdl_s8_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i
+prec_o
+num_9
+num_10
+num_11
+num_12
+num_13
+num_14
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 16) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1))
+(displayln "Scaling case for vabdl_s16")
+(vabdl_s8_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i
+prec_o
+num_9
+num_10
+num_11
+num_12
+num_13
+num_14
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0) (equal? num_14 0))
+(displayln "Scaling case for vabdl_u8")
+(vabdl_s8_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i
+prec_o
+num_9
+num_10
+num_11
+num_12
+num_13
+num_14
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 32) (equal? prec_o 64) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1))
+(displayln "Scaling case for vabdl_s32")
+(vabdl_s8_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i
+prec_o
+num_9
+num_10
+num_11
+num_12
+num_13
+num_14
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 32) (equal? prec_o 64) (equal? num_9 -1) (equal? num_10 2) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0) (equal? num_14 0))
+(displayln "Scaling case for vabdl_u32")
+(vabdl_s8_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i
+prec_o
+num_9
+num_10
+num_11
+num_12
+num_13
+num_14
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vabd_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1))
+(displayln "Scaling case for vabd_s16")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0))
+(displayln "Scaling case for vabd_u8")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0))
+(displayln "Scaling case for vabdq_u8")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0))
+(displayln "Scaling case for vabdq_u32")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1))
+(displayln "Scaling case for vabdq_s16")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1))
+(displayln "Scaling case for vabd_s32")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0))
+(displayln "Scaling case for vabdq_u16")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1))
+(displayln "Scaling case for vabdq_s32")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0))
+(displayln "Scaling case for vabd_u32")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 0))
+(displayln "Scaling case for vabd_u16")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1))
+(displayln "Scaling case for vabdq_s8")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1))
+(displayln "Scaling case for vabd_s8")
+(vabd_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vshrn_n_u64__n_29_dsl vc_0 vc_1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_29")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_6")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_5")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_13")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_8")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_32")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_4")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_12")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_2")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_1")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_16")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_27")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_13")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_7")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_19")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_31")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_25")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_26")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_26")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_15")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_5")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_1")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_23")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_1")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_12")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_22")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_7")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_30")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_1")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_7")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_6")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_14")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_5")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_6")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_3")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_14")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_10")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_11")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_5")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_29")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_4")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_8")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_7")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_22")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_8")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_2")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_23")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_24")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_7")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_7")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_10")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_18")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_20")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_16")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_11")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_15")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_11")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_14")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_9")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_2")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_6")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_16")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_21")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_1")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_4")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_21")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_32")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_10")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_1")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_18")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_30")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_3")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_11")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_2")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_25")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_4")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_13")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_2")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_9")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_5")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_15")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_6")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_28")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_12")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_28")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_9")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_3")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_17")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_14")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_3")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_12")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_19")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_20")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_17")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_24")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_16")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_10")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_8")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_4")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_4")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_2")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_13")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_8")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u16__n_3")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s32__n_9")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_31")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_3")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u64__n_27")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 32) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_u32__n_6")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_5")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 64) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s64__n_15")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? prec_i 16) (equal? num_12 2))
+(displayln "Scaling case for vshrn_n_s16__n_8")
+(vshrn_n_u64__n_29_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_o
+num_8
+num_9
+num_10
+prec_i
+num_12
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vshrq_n_s32__n_6_dsl vc_0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_45")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_61")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_37")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_36")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000029 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_41")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_47")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_60")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_43")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000039 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_57")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_53")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_46")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_44")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000029 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_41")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_50")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_44")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000027 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_39")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_52")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_45")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_56")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_36")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_46")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_35")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000039 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_57")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_63")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_54")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_44")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_46")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_58")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_45")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_48")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_61")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_48")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_34")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_47")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_40")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_36")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_53")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_58")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000039 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_57")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_49")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_60")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_37")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_34")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000027 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_39")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_59")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_38")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_36")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_56")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_38")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_51")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_56")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_61")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_64")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_33")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_64")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_59")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_55")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_33")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_56")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_60")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_56")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_49")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000039 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_57")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_50")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_45")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000039 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_57")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_36")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_44")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_36")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000029 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_41")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_62")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_51")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000027 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_39")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_49")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_51")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_43")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_35")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_33")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_43")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_40")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_34")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000027 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_39")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_44")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_48")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_52")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_64")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_63")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000029 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_41")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_52")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_46")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_58")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_55")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_60")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_62")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_47")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_54")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_38")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_35")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_63")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_49")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_55")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_50")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_63")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_40")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_60")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_34")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_33")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_62")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_40")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_52")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_37")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_40")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_52")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_43")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000029 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_41")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000039 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_57")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_53")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_45")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_50")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_13")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_64")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_34")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_58")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_37")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_64")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_55")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_37")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_33")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_47")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_50")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_43")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_35")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_50")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_53")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_59")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_35")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_52")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000027 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_39")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_63")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_58")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_42")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_46")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_33")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_61")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_42")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_46")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_62")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_61")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_48")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_34")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_51")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s8__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_63")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_54")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_53")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_35")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_42")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_64")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_54")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s8__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_49")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_51")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_60")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_55")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_55")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_37")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_48")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_56")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u8__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_42")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_6")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_53")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_49")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_14")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_38")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_40")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000027 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_39")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_48")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_47")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_47")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_62")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_24")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_38")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_31")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_58")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_22")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_43")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_54")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_51")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_44")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_59")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_15")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_7")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_1")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_4")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_42")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_61")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_38")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u16__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u32__n_17")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_2")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_45")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_26")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_29")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s16__n_10")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_20")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_16")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_59")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_28")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_23")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_11")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_62")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_30")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_42")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_27")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s32__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000 (bitvector 8)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u8__n_8")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u64__n_19")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s32__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_32")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000029 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_41")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrd_n_u64__n_54")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u16__n_5")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s64__n_18")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015 (bitvector 192)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000000 (bitvector 32)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshr_n_u32__n_21")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0))
+(displayln "Scaling case for vshrq_n_u64__n_59")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshr_n_s64__n_12")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000 (bitvector 16)))) (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrq_n_s16__n_9")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_3")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019 (bitvector 192)))) (equal? vc_2 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000 (bitvector 64)))) (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 64) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1))
+(displayln "Scaling case for vshrd_n_s64__n_25")
+(vshrq_n_s32__n_6_dsl
+vc_0
+vc_1
+vc_2
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+>>>>>>> da01a5317 (absd)
 	[ (vqdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(cond 
 		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002 (bitvector 192)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 192)))) (equal? vc_2 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020 (bitvector 192)))) (equal? size_i_o 8) (equal? num_6 8) (equal? num_7 0) (equal? num_8 8) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1))

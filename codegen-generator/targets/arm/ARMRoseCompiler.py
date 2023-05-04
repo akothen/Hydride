@@ -496,7 +496,7 @@ def Slicing(Stmt: ArrayIndex, Context: ARMRoseContext):
       assert High.getValue() >= 0 and High.getValue(
       ) < BitVector.getType().getBitwidth(), Stmt
     if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
-      assert High.getValue() >= Low.getValue(), Stmt
+      assert High.getValue() >= Low.getValue(), breakpoint()
 
     # Compute the bitwidth that is extracted in this slice
     if hasattr(SR, 'wid'):

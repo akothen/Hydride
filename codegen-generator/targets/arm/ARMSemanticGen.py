@@ -4,6 +4,7 @@ from asl.ARMAST import Instruction
 from ARMTypes import *
 from ARMAST import *
 from typing import Dict
+from ARMManualCorrectAST import ManualAST
 import json
 
 
@@ -317,6 +318,7 @@ class SemaGenerator():
     field = Intrinsics2Fields[expandedName]
     enc = Intrinsics2Encodings[intrin.name]
     ASTs = self.map2AST[enc]
+
     D = DecodeContext(field)
 
     # print(expandedName, field)
@@ -337,7 +339,7 @@ class SemaGenerator():
     return ARMSema(expandedName,
                    inst,
                    Params,
-                   ASTShrink(ASTs[0]),
+                   ManualAST[enc] if enc in ManualAST else ASTShrink(ASTs[0]),
                    intrin.return_type["value"],
                    signedness,
                    f"{inst} {intrin.operands}",
@@ -420,6 +422,8 @@ if __name__ == "__main__":
   # print([i for i in S.SemaGenerator() if i is not None])
   S = SemaGenerator()
   # print(S.getSemaByName("vqshrun_n_s64__n_1"))
+  print(S.getSemaByName("vabd_s32").spec.__repr__())
+  print(S.getSemaByName("vabdl_s32").spec.__repr__())
   # S = SemaGenerator(deserialize=True)
   # print(S.getSemaByName("vsubq_s16"))
   S.serialize()

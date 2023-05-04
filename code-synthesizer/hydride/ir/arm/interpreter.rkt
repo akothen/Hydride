@@ -55,6 +55,44 @@
 		(llvm_shuffle_vectors (arm:interpret v0 env) (arm:interpret v1 env) num_2 
 		 prec_i_o (arm:interpret v4 env) num_5)
 	]
+<<<<<<< HEAD
+=======
+	[ (vabdl_high_s32_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14)
+		(vabdl_high_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
+		 size_o num_4 num_5 
+		 num_6 prec_o num_8 
+		 num_9 num_10 num_11 
+		 num_12 num_13 num_14)
+	]
+	[ (vabdl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14)
+		(vabdl_s8 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
+		 size_i_o num_4 num_5 
+		 num_6 prec_i prec_o 
+		 num_9 num_10 num_11 
+		 num_12 num_13 num_14)
+	]
+	[ (vabd_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12)
+		(vabd_s16 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
+		 size_i_o num_4 num_5 
+		 num_6 prec_i_o num_8 
+		 num_9 num_10 num_11 
+		 num_12)
+	]
+	[ (vshrn_n_u64__n_29_dsl vc_0 vc_1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
+		(vshrn_n_u64__n_29 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret v2 env) 
+		 size_i_o num_4 num_5 
+		 num_6 prec_o num_8 
+		 num_9 num_10 prec_i 
+		 num_12)
+	]
+	[ (vshrq_n_s32__n_6_dsl vc_0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12)
+		(vshrq_n_s32__n_6 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
+		 (arm:interpret v3 env) size_i_o num_5 
+		 num_6 num_7 prec_i_o 
+		 num_9 num_10 num_11 
+		 num_12)
+	]
+>>>>>>> da01a5317 (absd)
 	[ (vqdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(vqdmulhs_s32 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
 		 (arm:interpret v3 env) (arm:interpret v4 env) size_i_o 

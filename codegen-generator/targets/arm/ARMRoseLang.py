@@ -24,18 +24,20 @@ import sys
 from RosetteGen import GenerateRosetteForFunction
 
 skip = ['addlv', 'maxv', 'minv', 'rbit',
-        'dot', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'vcopy']
+        'dot', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'vcopy']
 
 
 def Compile(InstName: str = None):
   from RoseFunctionInfo import RoseFunctionInfo
 
   if InstName == None:
+    whitelist = []
+    # whitelist = ["vshr"]
     interested = []
     # interested = ["vshr_n_u8"]
     # interested = ["max", "min"]
     # interested = ["vmovl_s8","vdupq_n_s16"]
-    # interested = ["vceqq_u32","vceqq_s32"]
+    # interested = ["abd"]
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
       AllSema = {k: v for k, v in AllSema.items(
@@ -48,6 +50,8 @@ def Compile(InstName: str = None):
       k, assignment = extract_assignment_from_name(k)
       if len(assignment) > 0:
         continue  # skip the immediates
+      # if len(assignment) != 1 and (k in whitelist or any(kk in k for kk in whitelist)):
+      #   continue  #shr stuffs
       SemaList.append(func)
     # print(SemaList)
     print("SemaList length:")

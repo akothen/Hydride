@@ -60,6 +60,40 @@
 		(define v4-visited (arm:visitor v4 fn))
 		(fn ( llvm_shuffle_vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
 	]
+<<<<<<< HEAD
+=======
+	[ (vabdl_high_s32_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(define v2-visited (arm:visitor v2 fn))
+		(fn ( vabdl_high_s32_dsl vc_0-visited v1-visited v2-visited size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 ))
+	]
+	[ (vabdl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(define v2-visited (arm:visitor v2 fn))
+		(fn ( vabdl_s8_dsl vc_0-visited v1-visited v2-visited size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14 ))
+	]
+	[ (vabd_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(define v2-visited (arm:visitor v2 fn))
+		(fn ( vabd_s16_dsl vc_0-visited v1-visited v2-visited size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 ))
+	]
+	[ (vshrn_n_u64__n_29_dsl vc_0 vc_1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define vc_1-visited (arm:visitor vc_1 fn))
+		(define v2-visited (arm:visitor v2 fn))
+		(fn ( vshrn_n_u64__n_29_dsl vc_0-visited vc_1-visited v2-visited size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12 ))
+	]
+	[ (vshrq_n_s32__n_6_dsl vc_0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define vc_1-visited (arm:visitor vc_1 fn))
+		(define vc_2-visited (arm:visitor vc_2 fn))
+		(define v3-visited (arm:visitor v3 fn))
+		(fn ( vshrq_n_s32__n_6_dsl vc_0-visited vc_1-visited vc_2-visited v3-visited size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 ))
+	]
+>>>>>>> da01a5317 (absd)
 	[ (vqdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(define vc_0-visited (arm:visitor vc_0 fn))
 		(define vc_1-visited (arm:visitor vc_1 fn))

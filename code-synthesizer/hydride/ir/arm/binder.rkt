@@ -60,6 +60,44 @@
 		(llvm_shuffle_vectors_dsl (arm:bind-expr v0 env) (arm:bind-expr v1 env) (arm:bind-expr num_2 env) 
 		 (arm:bind-expr prec_i_o env) (arm:bind-expr v4 env) (arm:bind-expr num_5 env))
 	]
+<<<<<<< HEAD
+=======
+	[ (vabdl_high_s32_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14)
+		(vabdl_high_s32_dsl (arm:bind-expr vc_0 env) (arm:bind-expr v1 env) (arm:bind-expr v2 env) 
+		 (arm:bind-expr size_o env) (arm:bind-expr num_4 env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr num_6 env) (arm:bind-expr prec_o env) (arm:bind-expr num_8 env) 
+		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr num_11 env) 
+		 (arm:bind-expr num_12 env) (arm:bind-expr num_13 env) (arm:bind-expr num_14 env))
+	]
+	[ (vabdl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14)
+		(vabdl_s8_dsl (arm:bind-expr vc_0 env) (arm:bind-expr v1 env) (arm:bind-expr v2 env) 
+		 (arm:bind-expr size_i_o env) (arm:bind-expr num_4 env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr num_6 env) (arm:bind-expr prec_i env) (arm:bind-expr prec_o env) 
+		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr num_11 env) 
+		 (arm:bind-expr num_12 env) (arm:bind-expr num_13 env) (arm:bind-expr num_14 env))
+	]
+	[ (vabd_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12)
+		(vabd_s16_dsl (arm:bind-expr vc_0 env) (arm:bind-expr v1 env) (arm:bind-expr v2 env) 
+		 (arm:bind-expr size_i_o env) (arm:bind-expr num_4 env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr num_6 env) (arm:bind-expr prec_i_o env) (arm:bind-expr num_8 env) 
+		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr num_11 env) 
+		 (arm:bind-expr num_12 env))
+	]
+	[ (vshrn_n_u64__n_29_dsl vc_0 vc_1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
+		(vshrn_n_u64__n_29_dsl (arm:bind-expr vc_0 env) (arm:bind-expr vc_1 env) (arm:bind-expr v2 env) 
+		 (arm:bind-expr size_i_o env) (arm:bind-expr num_4 env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr num_6 env) (arm:bind-expr prec_o env) (arm:bind-expr num_8 env) 
+		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr prec_i env) 
+		 (arm:bind-expr num_12 env))
+	]
+	[ (vshrq_n_s32__n_6_dsl vc_0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12)
+		(vshrq_n_s32__n_6_dsl (arm:bind-expr vc_0 env) (arm:bind-expr vc_1 env) (arm:bind-expr vc_2 env) 
+		 (arm:bind-expr v3 env) (arm:bind-expr size_i_o env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr num_6 env) (arm:bind-expr num_7 env) (arm:bind-expr prec_i_o env) 
+		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr num_11 env) 
+		 (arm:bind-expr num_12 env))
+	]
+>>>>>>> da01a5317 (absd)
 	[ (vqdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(vqdmulhs_s32_dsl (arm:bind-expr vc_0 env) (arm:bind-expr vc_1 env) (arm:bind-expr vc_2 env) 
 		 (arm:bind-expr v3 env) (arm:bind-expr v4 env) (arm:bind-expr size_i_o env) 
