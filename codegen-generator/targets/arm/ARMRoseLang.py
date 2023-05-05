@@ -124,8 +124,8 @@ def qwq():
 
 
 if __name__ == "__main__":
-  Compile()
-  # qwq()
+  # Compile()
+  qwq()
 
   # print(RosetteCode)
 

@@ -306,7 +306,7 @@ def ASTShrink_(AST):
     assert type(AST.slices) == list, f"{AST}"
     return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())
   elif isinstance(AST, asl.SliceRange):
-    return SliceRange(ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), GenUniqueID)
+    return SliceRange(ASTShrink_(AST.expr0), ASTShrink_(AST.expr1), GenUniqueID())
   elif isinstance(AST, asl.SliceSingle):
     return ASTShrink_(AST.expr)
   elif isinstance(AST, asl.StmtFor):
