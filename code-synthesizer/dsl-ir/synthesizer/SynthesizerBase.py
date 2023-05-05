@@ -611,6 +611,12 @@ class SynthesizerBase:
       to_insert = True
       for op in dsl_ops:
         if op in disallowed_ops:
+          # if (op == "bvaddnsw" or op == "bvaddnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
+          #   continue
+          # if (op == "bvsubnsw" or op == "bvsubnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
+          #   continue
+          # Attempt for ARM
+
           to_insert = False
           break
       if to_insert:

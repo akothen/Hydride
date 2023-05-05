@@ -33,7 +33,7 @@ armmul: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f $(MAKEFILE)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
 $(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
-	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT)
+	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
 x86median: $(LIB_HALIDE)
 	make -C $(HYDRIDE_ROOT)/benchmarks/x86-deprecated/halide median3x3
 x86mul: $(LIB_HALIDE)

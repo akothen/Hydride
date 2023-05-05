@@ -23,8 +23,8 @@ from ARMAST import *
 import sys
 from RosetteGen import GenerateRosetteForFunction
 
-skip = ['addlv', 'maxv', 'minv', 'abd', 'rbit',
-        'dot', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'vcopy']
+skip = ['addlv', 'maxv', 'minv', 'rbit',
+        'dot', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'vcopy']
 
 
 def Compile(InstName: str = None):
@@ -32,6 +32,7 @@ def Compile(InstName: str = None):
 
   if InstName == None:
     interested = []
+    # interested = ["vshr_n_u8"]
     # interested = ["max", "min"]
     # interested = ["vmovl_s8","vdupq_n_s16"]
     # interested = ["vceqq_u32","vceqq_s32"]

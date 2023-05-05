@@ -1888,7 +1888,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits <= 64) {  //?
+                    if (element_bits > 64) {
                         lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 }
@@ -1898,12 +1898,12 @@ private:
 
             else if (op->is_intrinsic(Call::saturating_sub)) {
 
+                size_t element_bits = op->args[0].type().bits();
                 if (_arch == Architecture::HVX) {
                     // lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
                     //        op->args[0].type().min(), op->args[0].type().max()));
                 } else if (_arch == Architecture::X86) {
 
-                    size_t element_bits = op->args[0].type().bits();
                     if (element_bits >= 32 && element_bits < 64) {
                         lowered = lower_saturating_sub(op->args[0], op->args[1]);
                         lower_using_halide = false;
@@ -1912,12 +1912,9 @@ private:
                     }
                     // Map Saturating sub to saturating sub in Rosette.
                 } else if (_arch == Architecture::ARM) {
-                    size_t element_bits = op->args[0].type().bits();
-                    if (element_bits >= 32 && element_bits < 64) {
-                        lowered = lower_saturating_sub(op->args[0], op->args[1]);
-                        lower_using_halide = false;
-                    } else if (element_bits >= 64) {
-                        lower_using_halide = true;
+
+                    if (element_bits > 64) {
+                        lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 }
 
@@ -1947,7 +1944,7 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::ARM) {
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {  // All following condition might be discussed
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
@@ -1982,7 +1979,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits < 64) {  //?
+                    if (element_bits <= 64) {
                         lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2018,7 +2015,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits < 64) {  //?
+                    if (element_bits <= 64) {
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2073,7 +2070,7 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::ARM) {
-                    lower_using_halide = true;
+                    lower_using_halide = true;  // Not found sorted_avg in NEON
                 }
 
             } else if (op->is_intrinsic(Call::absd)) {
@@ -2085,10 +2082,7 @@ private:
                         lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                     }
                 } else if (_arch == Architecture::ARM) {
-                    if (SIMPLIFY_ABSD) {
-                        lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
-                    } else
-                        lower_using_halide = true;
+                    lower_using_halide = false;  // vabd does this
                 }
             } else if (op->is_intrinsic(Call::rounding_shift_right)) {
                 Expr Zero, One, Two;
@@ -2129,7 +2123,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {  //?
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) * widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2153,7 +2147,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) + widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2179,7 +2173,7 @@ private:
                 } else if (_arch == Architecture::ARM) {
 
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) - widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2204,7 +2198,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = widen(op->args[0]) << op->args[1];
                     } else {
                         lower_using_halide = true;
@@ -2231,7 +2225,7 @@ private:
                 } else if (_arch == Architecture::ARM) {
 
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = widen(op->args[0]) >> op->args[1];
                     } else {
                         lower_using_halide = true;
@@ -2256,7 +2250,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     } else {
                         lower_using_halide = true;
@@ -2283,7 +2277,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                     } else {
                         lower_using_halide = true;
@@ -2905,10 +2899,11 @@ private:
 
             if (!op->type.is_float() && op->type.is_vector()) {
 
-                if (bits == 16 && op->value.type().lanes() != 2) {
+                if (bits == 16 && op->value.type().lanes() > 2) {  // Just my guess, to pass assertion at IR.cpp:269 for ARM @ "add" benchmark
 
                     debug(0) << "======"
                              << "\n";
+                    debug(0) << "Orignal broadcast value: " << op->value << "\n";
                     debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
                     Expr Broadcast2 = Broadcast::make(op->value, 2);
                     Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
@@ -3422,7 +3417,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
         debug(0) << "Printing Pruned Stmt:\n";
         debug(0) << pruned << "\n";
 
-        std::vector<unsigned> arm_vector_sizes = {128, 64};
+        std::vector<unsigned> arm_vector_sizes = {64, 128};
 
         bool model_sat_support = false;
 
@@ -3442,7 +3437,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
     const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
     std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
-    auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::ARM, mutated_exprs, random_seed, name).mutate(distributed);
+    auto Result = Hydride::IROptimizer(std::move(fvb), Hydride::IROptimizer::ARM, mutated_exprs, random_seed, name).mutate(distributed);
 
     if (!mutated_exprs.empty()) {
         hydride_generate_llvm_bitcode(Target::ARM, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);

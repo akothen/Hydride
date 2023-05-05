@@ -611,7 +611,7 @@ def CompileNumberRv(Stmt: Number, Context: ARMRoseContext):
   # else:
   ConstantVal = RoseConstant.create(Stmt.val, Context.NumberType)
   Context.addSignednessInfoForValue(
-      ConstantVal, IsSigned=(ConstantVal.getValue() < 0))
+      ConstantVal, IsSigned=(Stmt.val < 0))
   return ConstantVal
 
 
@@ -1330,6 +1330,18 @@ def HandleToLshr():
   return LamdaImplFunc
 
 
+def HandleToShr():
+  def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+                    Context: ARMRoseContext):
+    if Context.isValueSigned(Operand1):
+      return HandleToAshr()(Name, Operand1, Operand2, Context)
+    else:
+      return HandleToLshr()(Name, Operand1, Operand2, Context)
+    
+
+  return LamdaImplFunc
+
+
 def HandleToShl():
   def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                     Context: ARMRoseContext):
@@ -1376,7 +1388,7 @@ BinaryOps = {
     '>=': HandleToGreaterThanEqual,
     '==': HandleToEqual,
     '!=': HandleToNotEqual,
-    '>>': HandleToAshr,
+    '>>': HandleToShr,
     '<<': HandleToShl,
     '&': HandleToAnd,
     '|': HandleToOr,
