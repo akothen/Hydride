@@ -159,19 +159,18 @@
 
 (define (bvaddnsw a b bitwidth)
   (define c (bvadd a b))
+  (define zero (bv 0 (bitvector bitwidth)))
   (define result
-    (cond
-      [(and (> (bitvector->integer a) 0) (> (bitvector->integer b) 0)
-            (< (bitvector->integer c) 0))
-       (bvsmaxval bitwidth)]
-      [(and (< (bitvector->integer a) 0) (< (bitvector->integer b) 0)
-            (> (bitvector->integer c) 0))
-       (bvsminval bitwidth)]
-      [else (bvadd a b)]
-      )
-    )
-  result
+  (cond
+    [(and  (bvsgt a zero)  (bvsgt b zero) (bvsle c zero) )
+          (bvsmaxval bitwidth) ]
+    [(and (bvslt a zero) (bvslt b zero) (bvsge c zero))
+          (bvsminval bitwidth)]
+    [else (bvadd a b)]
   )
+  )
+  result
+)
 
 
 (define (bvaddnuw a b bitwidth)
@@ -180,19 +179,21 @@
 
 
 (define (bvsubnsw a b bitwidth)
+  (define zero (bv 0 (bitvector bitwidth)))
   (define result
-    (cond
-      [(and (> (bitvector->integer b) 0)
-            (< (bitvector->integer a) (bitvector->integer (bvadd (bvsminval bitwidth) b))))
-       (bvsminval bitwidth)]
-      [(and (< (bitvector->integer b) 0)
-            (> (bitvector->integer a) (bitvector->integer (bvadd (bvsmaxval bitwidth) b))))
-       (bvsmaxval bitwidth)]
+  (cond
+     [(and (bvsgt b zero)
+           (bvslt a  (bvadd (bvsminval bitwidth) b)))
+            (bvsminval bitwidth)]
+     [(and (bvslt b zero)
+           (bvsgt a (bvadd (bvsmaxval bitwidth) b))
+           )
+            (bvsmaxval bitwidth)]
       [else (bvsub a b)]
-      )
-    )
-  result
   )
+  )
+  result
+)
 
 
 (define (bvsubnuw a b bitwidth)

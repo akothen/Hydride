@@ -15,7 +15,7 @@ import ast
 import time
 
 def debug(*args):
-    PRINT_DEBUG = False
+    PRINT_DEBUG = True
     if PRINT_DEBUG:
         print("\t".join([str(arg) for arg in args]))
 
@@ -877,6 +877,8 @@ class StepWiseSynthesizer(SynthesizerBase):
                 BOUND = 16
         if self.target == "x86":
             BOUND = 25
+        if self.target == "arm":
+            BOUND = 25
 
         if self.spec.contains_conditional():
             BOUND = 25
@@ -892,7 +894,6 @@ class StepWiseSynthesizer(SynthesizerBase):
             (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
         else:
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_masked_operations(operation_dsl_insts, operation_dsl_args_list)
-
 
 
 

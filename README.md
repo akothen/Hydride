@@ -48,7 +48,6 @@ Now you are ready to use Hydride!
 - Hexagon (HVX)
 - ARM A64
     - succeed
-        - average_pool
         - gaussian5x5
         - gaussian3x3
         - max_pool
@@ -56,12 +55,19 @@ Now you are ready to use Hydride!
         - dilate5x5
         - dilate3x3
         - matmul_256_32bit
-        - blur3x3: repeat_edge or /3
+        - blur3x3
+        - sobel3x3 (1)
     - failed:
+        - average_pool
         - mul: shl
         - l2norm: ?
         - add: shl, sat, rsr
 
+vshl_s32
+vqshl_s32
+vrshl_s32
+vqrshl_s32
+input size is still broken
 
 arm average_pool
 7.812633333333333

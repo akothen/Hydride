@@ -68,6 +68,10 @@
        (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n" expr-depth (max 1 (- expr-depth 1))))
        (max 1 (- expr-depth 1))
        ]
+      [(halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth)
+       (debug-log (format "Contains shr in arm, hence increase depth from ~a to ~a\n" expr-depth (+ expr-depth 1)))
+       (+ expr-depth 1)
+       ]
       [else
         expr-depth
         ]

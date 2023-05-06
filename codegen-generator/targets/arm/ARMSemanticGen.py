@@ -208,11 +208,15 @@ class DecodeContext:
 def parse_instr_attr(instr: InstrDesc, assign):
   from ARMTypes import ReservedVecTypes, ReservedImmTypes, PointerType
 
-  def isSigned(t: str):
+  def isSigned(t: str, var: str = ""):
     if "uint" in t:
       return False
     if "unsigned" in t:
       return False
+    if var in instr.Arguments_Preparation:
+      if "minimum" in instr.Arguments_Preparation[var]:
+        lo, hi = get_arg_lo_hi(instr.Arguments_Preparation[var])
+        return lo < 0
     return True
 
   # - Parse Arguments_Preparation like:
@@ -225,7 +229,7 @@ def parse_instr_attr(instr: InstrDesc, assign):
     nm = arg.split()[-1]
     # print(tp)
     assert tp in (ReservedVecTypes | ReservedImmTypes | PointerType)
-    Params.append(Parameter(nm, tp, isSigned(tp),
+    Params.append(Parameter(nm, tp, isSigned(tp, nm),
                   tp in ReservedImmTypes, False))
 
   # - Parse return type:
@@ -379,7 +383,8 @@ class SemaGenerator():
             hirarch[ii] = hirarch.get(ii, []) + [(i, z)]
 
     for k, v in hirarch.items():
-      if not v: continue
+      if not v:
+        continue
       for ei, (i, z) in enumerate(v):
         if 'shift' not in z.resolving:
           break
@@ -401,7 +406,7 @@ class SemaGenerator():
           assert store_z.resolving == z.resolving
       else:
         z.preparation['shift'] = 'n'
-        z = z._replace(intrin = k)
+        z = z._replace(intrin=k)
         self.result[k] = z
     # for k in self.result.keys():
     #   print(k)

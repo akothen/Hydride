@@ -7,18 +7,18 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 armec.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	rm $(HYDRIDE_ROOT)/benchmarks/arm/halide/halide_expr_$**.rkt
-arme.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+	- rm $(HYDRIDE_ROOT)/benchmarks/arm/halide/halide_expr_$**.rkt
+arme.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
-arme1.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+arme1.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=1 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
-arme2.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+arme2.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=2 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
-arme3.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+arme3.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=3 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
-arme4.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+arme4.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=4 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
-arme9.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
+arme9.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=9 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 armd.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	ENABLE_HYDRIDE=0 make -C $(HYDRIDE_ROOT)/benchmarks/arm-disable-hydride/halide $* -f $(MAKEFILE)
@@ -44,7 +44,7 @@ LEGALIZER_CPP=$(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSele
 SIMILARITY_SUMMARY_SEMA=$(SIMILARITY_ENV)/semantics.py
 HYDRIDE_SEMA=$(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm/semantics.rkt
 $(SIMILARITY_SUMMARY_SEMA): $(ALL_ARM_SEMA)
-	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	
 	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)
@@ -61,11 +61,13 @@ $(ALL_ARM_SEMA):
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
 halide: $(LIB_HALIDE)
 similaritytest:
-	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
+	
 	
 	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 similarity:
-	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
+	
 	
 	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)

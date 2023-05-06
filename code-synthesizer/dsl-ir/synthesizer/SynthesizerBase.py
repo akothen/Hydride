@@ -20,7 +20,15 @@ DEBUG_LIST = [
     # "_mm512_mulhi_epu16",
     # "vpmin_s8",
     # "vmin_s8",
-    "vqadd_s64",
+    # "vqadd_s64",
+    # "vshr_n_s8",
+    # "vshr_n_s16",
+    # "vshr_n_s32",
+    # "vshr_n_s64",
+    # "vneg_s8",
+    # "vneg_s16",
+    # "vneg_s32",
+    # "vneg_s64",
 ]
 
 
@@ -616,6 +624,11 @@ class SynthesizerBase:
           # if (op == "bvsubnsw" or op == "bvsubnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
           #   continue
           # Attempt for ARM
+          if "shr" in ctxs[idx].name:
+            if "_s" in ctxs[idx].name and op == "zero-extend":
+              continue
+            if "_u" in ctxs[idx].name and op == "sign-extend":
+              continue
 
           to_insert = False
           break
@@ -623,7 +636,7 @@ class SynthesizerBase:
         pruned_ops.append(ops[idx])
         pruned_ctxs.append(ctxs[idx])
       else:
-        print("Pruning ", ctxs[idx], "due to bv op variants")
+        print("Pruning ", ctxs[idx].name, "due to bv op variants")
 
     return (pruned_ops, pruned_ctxs)
 
@@ -652,7 +665,7 @@ class SynthesizerBase:
 
       min_ctx_bvs = min(ctx_i.get_output_size(), ctx_i.get_min_arg_size())
 
-      if min_ctx_bvs < smallest_bv_size:
+      if min_ctx_bvs < smallest_bv_size and "_n_" not in ctx_i.name:
         if DEBUG:
           print("Smallest output", ctx_i.get_output_size(),
                 "Smallest input:", ctx_i.get_min_arg_size())
@@ -911,6 +924,12 @@ class SynthesizerBase:
           # If ctx is using an operation of opposite signedness
           # which is not being used in the spec, skip
           if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
+            # if Target is ARM
+            if "shr" in ctx.name:
+              if "_s" in ctx.name and v == "zero-extend":
+                continue
+              if "_u" in ctx.name and v == "sign-extend":
+                continue
             print("Skipping ", ctx.name, "as it is using a variant op:",
                   v, "of the original op", c_op)
             skip = True

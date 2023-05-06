@@ -2070,7 +2070,7 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::ARM) {
-                    lower_using_halide = true;  // Not found sorted_avg in NEON
+                    lower_using_halide = true;
                 }
 
             } else if (op->is_intrinsic(Call::absd)) {
