@@ -63,10 +63,6 @@ Now you are ready to use Hydride!
         - add: shl, sat, rsr
 
 
-arm average_pool
-7.812633333333333
-arm-disable-hydride average_pool
-3.509733333333333
 arm gaussian5x5
 2.9326666666666665
 arm-disable-hydride gaussian5x5
@@ -80,9 +76,9 @@ arm max_pool
 arm-disable-hydride max_pool
 1.9570333333333334
 arm median3x3
-3.4317333333333333
+3.3465333333333334
 arm-disable-hydride median3x3
-3.4486666666666665
+3.5119333333333334
 arm dilate5x5
 1.2073333333333334
 arm-disable-hydride dilate5x5

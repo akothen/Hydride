@@ -36,7 +36,7 @@ def Compile(InstName: str = None):
     interested = []
     # interested = ["max", "min"]
     # interested = ["vmovl_s8","vdupq_n_s16"]
-    interested = ["abd"]
+    # interested = ["abd"]
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
       AllSema = {k: v for k, v in AllSema.items(
@@ -93,7 +93,7 @@ def Compile(InstName: str = None):
       continue
   print("FunctionInfoList length:", len(FunctionInfoList))
   print(compiled)
-  print(FunctionInfoList[0].getInVectorLength())
+  # print(FunctionInfoList[0].getInVectorLength())
   return FunctionInfoList
 
 

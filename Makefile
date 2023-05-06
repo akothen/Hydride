@@ -84,4 +84,4 @@ syncsema:
 	cp $(SIMILARITY_SUMMARY)/semantics.py $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 
 .PHONY: similarity hydride_sema arm_sema halide legalizer
-compileall: armd.average_pool armd.gaussian5x5 armd.gaussian3x3 armd.max_pool armd.median3x3 armd.dilate5x5 armd.dilate3x3 arme3.average_pool arme1.gaussian5x5 arme1.gaussian3x3 arme.max_pool arme.median3x3 arme.dilate5x5 arme.dilate3x3 arme10.sobel3x3 armd.sobel3x3
+compileall: arme1.sobel3x3 arme.matmul_256_32bit arme.blur3x3 arme.median3x3 arme1.gaussian3x3 arme1.gaussian5x5 arme.max_pool arme.dilate3x3 arme.dilate5x5
