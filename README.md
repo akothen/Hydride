@@ -7,6 +7,7 @@ This module is under `/codegen-generator/targets/arm`
 
 Notable files:
 
+- asl/arm_instrs.sexpr: Parser input
 - asl/ARMAST.py: AST structure for parser
 - asl/ARMParser.py: Parser for sexpr
 - ARMEncodingFields.py: Opcode and filed value for a certain encoding.
