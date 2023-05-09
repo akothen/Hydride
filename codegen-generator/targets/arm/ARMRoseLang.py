@@ -97,7 +97,7 @@ def Compile(InstName: str = None):
   return FunctionInfoList
 
 
-def qwq():
+def TestcaseGen():
   AllSema = SemaGenerator(deserialize=True).getResult()
   # AllSema = {k: AllSema[k] for k in ["vget_lane_u64__lane_0"]}
   compiled = []
@@ -129,7 +129,7 @@ def qwq():
 
 if __name__ == "__main__":
   Compile()
-  # qwq()
+  # TestcaseGen()
 
   # print(RosetteCode)
 

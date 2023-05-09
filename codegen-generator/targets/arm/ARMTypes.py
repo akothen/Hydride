@@ -276,12 +276,12 @@ def expand_instr(instr: InstrDesc):
 
 
 def extract_assignment_from_name(instrName: str):
-    qwq = instrName.split("__")
+    intrinsicname_assignment_list = instrName.split("__")
     assignment = {}
-    for a in qwq[1:]:
+    for a in intrinsicname_assignment_list[1:]:
         i = a.split("_")
         assignment[i[0]] = int(i[1])
-    return qwq[0], assignment
+    return intrinsicname_assignment_list[0], assignment
 
 
 PUT0_LANE_N_ELEM_DIFF = ["SMLAL", "UMLAL", "SMLSL", "UMLSL", "SQDMLAL",

@@ -293,17 +293,17 @@ class SemaGenerator():
       Instrs: List[Instruction] = parser.parse(data)
       print("parse done...")
 
-      zzzz = set(Intrinsics2Encodings.values())
+      encodingNames = set(Intrinsics2Encodings.values())
       map2AST = {}
       for i in Instrs:
         for j in i.instEncodings:
-          if j.encName in zzzz:
+          if j.encName in encodingNames:
             wholeCode = j.encDecode
             if type(j.encDecode) != asl.Nothing:
               wholeCode += i.instPostDecode
             map2AST[j.encName] = (
                 i.instExecute, wholeCode)
-      assert len(map2AST) == len(zzzz)
+      assert len(map2AST) == len(encodingNames)
       self.map2AST = map2AST
       print("map2AST done...")
 

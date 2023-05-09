@@ -68,8 +68,8 @@ def find_basename(names: Set[Tuple[str, str]]):
       return base[1: -1]
     return None
 
-  for k, iiiii in namelist:
-    Intrin = toI[iiiii]
+  for k, intrin_name in namelist:
+    Intrin = toI[intrin_name]
     baseinstruction = Intrin.base_instruction[0]
     suffix_to_check = check_suffix(baseinstruction, k)
 
@@ -125,7 +125,6 @@ def find_basename(names: Set[Tuple[str, str]]):
     f["base"] = i
     result[k] = f
     firmnames.add(i)
-    # assert iiiii != 'vqaddb_s8', f"{suffix_to_check} {i}"
     # print(k, i)
     # count[i] = count.get(i, 0) + 1
   # for k, v in sorted(result.items(), key=lambda x: x[0]):
@@ -138,9 +137,8 @@ def find_basename(names: Set[Tuple[str, str]]):
 
 
 def parse_flag(names: List[str]):
-  qwq = set((i.split("_")[0], i) for i in names)
-  # print(qwq)
-  bases = find_basename(qwq)
+  candidate_flags = set((i.split("_")[0], i) for i in names)
+  bases = find_basename(candidate_flags)
 
   # x:bhsd
   result = {}
@@ -189,7 +187,7 @@ def parse_flag(names: List[str]):
 def wedo(instr):
   if not instr["name"].startswith("v"):
     return False
-  if any(instr["name"].startswith(i) for i in ["vget", "vset"]):  # TODO: buxiangzuole
+  if any(instr["name"].startswith(i) for i in ["vget", "vset"]):  # TODO: too lazy to do
     return False
   if instr["name"] in ["vmaxv_s32", "vmaxv_u32", "vminv_s32", "vminv_u32", "vmov_n_s64", "vmov_n_u64"]:  # TODO: intrinsic mismatch
     return False
@@ -366,7 +364,7 @@ def findMatchingEncoding():
 
 
 def genPossibleOpcode(fields):
-  qwq = [fields]
+  candidates = [fields]
   for i, v in fields.items():
     if i.startswith('R'):
       continue
@@ -374,7 +372,7 @@ def genPossibleOpcode(fields):
       # print(fields[i])
       # assert fields[i] == 'x'*len(fields[i])
       ln = fields[i].count('x')
-      nqwq = []
+      next_candidates = []
       zz = fields[i]
       for z in range(2**ln):
         z = bin(z)[2:]
@@ -382,11 +380,11 @@ def genPossibleOpcode(fields):
         zz = fields[i]
         for j in z:
           zz = zz.replace('x', j, 1)
-        nqwq = nqwq + [dict(q, **{i: zz})for q in qwq]
-      qwq = nqwq
+        next_candidates = next_candidates + [dict(q, **{i: zz})for q in candidates]
+      candidates = next_candidates
   for m, v in fields['constraint_ne']:
-    qwq = [q for q in qwq if q[m] != v]
-  return qwq
+    candidates = [q for q in candidates if q[m] != v]
+  return candidates
 
 
 def Intrin2Field():

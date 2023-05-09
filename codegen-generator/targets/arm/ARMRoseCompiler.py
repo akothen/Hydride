@@ -974,10 +974,10 @@ CompileAbstractionsLV = {
 }
 
 
-def QWQ(sss):
-  def qwq(*args, **kwargs):
+def NotImplemented(sss):
+  def ni(*args, **kwargs):
     raise NotImplementedError(sss)
-  return qwq
+  return ni
 
 
 def HandleToNot():
@@ -1755,15 +1755,15 @@ Builtins = {
     'Min': HandleToMin(None),
     'Max': HandleToMax(None),
     'Abs': HandleToAbs(None),
-    'BitCount': QWQ('BitCount'),
-    'CountLeadingSignBits': QWQ('CountLeadingSignBits'),
-    'CountLeadingZeroBits': QWQ('CountLeadingZeroBits'),
-    'UnsignedRecipEstimate': QWQ('UnsignedRecipEstimate'),
-    'UnsignedRSqrtEstimate': QWQ('UnsignedRSqrtEstimate'),
+    'BitCount': NotImplemented('BitCount'),
+    'CountLeadingSignBits': NotImplemented('CountLeadingSignBits'),
+    'CountLeadingZeroBits': NotImplemented('CountLeadingZeroBits'),
+    'UnsignedRecipEstimate': NotImplemented('UnsignedRecipEstimate'),
+    'UnsignedRSqrtEstimate': NotImplemented('UnsignedRSqrtEstimate'),
     'NOT': HandleToNotFunc(None),
-    'Reduce': QWQ('Reduce'),
+    'Reduce': NotImplemented('Reduce'),
     'ROL': HandleToROL(None),
     'ROR': HandleToROL(None),
-    'LSL': QWQ('LSL'),
-    'LSR': QWQ('LSR'),
+    'LSL': NotImplemented('LSL'),
+    'LSR': NotImplemented('LSR'),
 }
