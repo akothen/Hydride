@@ -17,6 +17,8 @@
   hydride/synthesis/symbolic_synthesis
   )
 
+(require hydride/ir/hydride/definition)
+
 (require racket/match)
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -293,9 +295,11 @@
 
     [(vec-rounding_halving_add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvsdiv) (list  zero-extend  bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] 
 
+    [(vec-halving_add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvsdiv) (list  zero-extend  bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] 
+
     ;; TODO: Since we now have context specific bitvector ops, this should be safe to do?
     ;[(vec-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
-    [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr ) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmin) (list  bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-max v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmax ) (list  bvumax ))  (get-bv-ops v1)  (get-bv-ops v2))]
@@ -1217,6 +1221,19 @@
         )
         )
      ]
+    [(vec-halving_add v1 v2) 
+       (if is-leaf-depth
+        (values (vec-halving_add (arg 0) (arg 1)) 2)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+          (define remaining-values (- (vector-length args) args-used1))
+          (define remaining-args (vector-take-right args remaining-values))
+          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
+          (values (vec-halving_add leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+        )
+        )
+     ]
     [(vec-rounding_mul_shift_right v1 v2 v3) 
        (if is-leaf-depth
         ;(values (vec-rounding_mul_shift_right (arg 0) (arg 1) (arg 2)) 3)
@@ -1800,6 +1817,7 @@
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-size v1)]
     [(vec-rounding_shift_right v1 v2) (vec-size v1)]
     [(vec-rounding_halving_add v1 v2) (vec-size v1)]
+    [(vec-halving_add v1 v2) (vec-size v1)]
     [(vec-widen-mul v1 v2) (* 2 (vec-size v1))]
     [(vec-div v1 v2) (vec-size v1)]
     [(vec-mod v1 v2) (vec-size v1)]
@@ -1863,7 +1881,6 @@
                       (set! scaled? #f)
                       ;(error "Unsupported scaling for " e)
                       (* prec len)
-                      
                       ]
                     )
                   )
@@ -2072,6 +2089,10 @@
               [(vec-if vi v1 v2)
                (set! flag #t)
                ]
+
+              [(vec-rounding_mul_shift_right v1 v2 v3)
+               (set! flag #t)
+               ]
               [_ e]
               )
     )
@@ -2140,6 +2161,9 @@
   (define depth 1)
   (destruct e
             [(buffer data elemT buffsize)
+             (set! depth 0)
+             ]
+            [(reg id)
              (set! depth 0)
              ]
             [_
@@ -2224,6 +2248,29 @@
                (set! imms-vals (append imms-vals (list one two)))
                e
 
+               ]
+
+               [(vec-halving_add v1 v2) 
+                (define prec (* 2 (vec-precision v1)))
+                (define two (bv 2 (bitvector prec)))
+               (set! imms-vals (append imms-vals (list two)))
+               e
+
+               ]
+
+               [(vec-saturate v1 olane  oprec signed?) 
+                (define prec (vec-precision e))
+                (define-values (max-val min-val)
+                               (cond
+                                 [signed?
+                                   (values (bvsmaxval prec) (bvsminval prec) )
+                                   ]
+                                 [else
+                                   (values (bvumaxval prec) (bvuminval prec) )
+                                   ]
+                                 )
+                               )
+               e
                ]
               ;; When target doesn't support saturating operations
               ;; of a given size then we can decompose the operation
@@ -2417,6 +2464,7 @@
     [(vec-rounding_mul_shift_right v1 v2 v3) (get-elemT v1)]
     [(vec-rounding_shift_right v1 v2) (get-elemT v1)]
     [(vec-rounding_halving_add v1 v2) (get-elemT v1)]
+    [(vec-halving_add v1 v2) (get-elemT v1)]
     [(vec-widen-mul v1 v2) (get-widened-elemT (get-elemT v1))] 
     [(vec-div v1 v2) (get-elemT v1)]
     [(vec-mod v1 v2) (get-elemT v1)]
@@ -2580,6 +2628,7 @@
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-precision v1)]
     [(vec-rounding_shift_right v1 v2) (vec-precision v1)]
     [(vec-rounding_halving_add v1 v2) (vec-precision v1)]
+    [(vec-halving_add v1 v2) (vec-precision v1)]
     [(vec-widen-mul v1 v2) (* 2 (vec-precision v1))]
     [(vec-div v1 v2) (vec-precision v1)]
     [(vec-mod v1 v2) (vec-precision v1)]
@@ -3192,3 +3241,176 @@
   (halide:visit expr visitor-fn)
 
   )
+
+
+
+
+(define (cvt-hashed-expr-to-actual-expr hashed-expr)
+
+  (define (raise-fn ele)
+
+    (define-values (is-buf? type size) (is-buffer-hash ele))
+
+    (cond
+      [is-buf? 
+        (halide:create-buffer (bv 0 size) type)
+        ]
+      [else
+        ele
+        ]
+      )
+    )
+
+  (define raised-expression (halide:visit hashed-expr raise-fn))
+  raised-expression
+
+  )
+
+
+;; Input-expr-ls is a list of hashed expressions
+(define (extract-common-hash-entries  input-expr-ls hashed-log)
+
+  (define scale-factor 32)
+
+  (define scaled-down-expr-ls (list ))
+  (for/list ([expr input-expr-ls])
+
+            (define raised-expression (cvt-hashed-expr-to-actual-expr expr))
+            ;; Scaled down version of expression may be in hash
+            (define-values (scalable? scaled-expr) (scale-down-expr raised-expression scale-factor))
+
+            (cond
+              [scalable? 
+                (set! scaled-down-expr-ls (append scaled-down-expr-ls (list (hash-expr scaled-expr))))
+                ]
+              )
+            
+            )
+
+  (set! input-expr-ls (append input-expr-ls scaled-down-expr-ls))
+
+
+
+  ;; If an input expression was unable to be synthesized all at once
+  ;;, it is synthesized by splitting it into smaller sub-expressions.
+  ;; This list accumulates the sub-expressions which are split.
+  (define split-expressions (list))
+
+
+
+
+
+  (define immediate-expressions (list))
+
+  (for/list ([expr input-expr-ls])
+
+            (cond
+              [(hash-has-key? hashed-log expr)
+
+               (define hashed-entry (hash-ref hashed-log expr))
+
+
+               (define synthesizable?
+                 (vector-ref hashed-entry 0)
+                 )
+
+
+              (set! immediate-expressions (append immediate-expressions (list expr)))
+               (cond
+                 [synthesizable?
+                   ;; Do nothing
+                   '()
+                   ]
+                 [else
+                   ;; Break down current expressions and add to split-expressions
+
+                   (define raised-expression (cvt-hashed-expr-to-actual-expr expr))
+
+                   ;; Raise expression back from hash to halide-ir expression tree
+
+                   (define depth (get-expr-depth raised-expression))
+
+                   (define decremented-depth (- depth 1))
+
+                   (define sub-expressions (extract-sub-expressions raised-expression decremented-depth))
+
+
+                   (for/list ([sub-expr sub-expressions])
+                             (set! split-expressions (append split-expressions (list  sub-expr)))
+                             )
+                   ]
+                 )
+               ]
+              )
+            )
+
+  (define split-result 
+    (if (equal? (length split-expressions) 0)
+      (list )
+    (extract-common-hash-entries split-expressions hashed-log)
+      )
+    )
+
+
+
+  (remove-duplicates (append split-result immediate-expressions))
+
+
+  )
+
+
+;; Alternative wrapper for invoking halide:interpret
+;; which creates a new halide-expr with the buffers replaced
+;; with vectors in env
+(define (interpret-with-env prog env)
+  (define expr-depth-max (get-expr-depth prog))
+  (define leaves (get-sub-exprs prog (+ 1 expr-depth-max)))
+
+  (define (replace-arg e)
+    (define index -1)
+    (for/list ([i (range (length leaves))])
+              (define leaf-i (list-ref leaves i))
+              (cond 
+                [(equal? leaf-i e)
+                 (set! index i)
+                 ]
+                )
+              )
+
+    (cond
+      [(not (equal? index -1))
+       (define buf-elemT (get-elemT e))
+       (define new-buf (halide:create-buffer (vector-ref env index) buf-elemT))
+       new-buf
+       ]
+      [else
+        e
+        ]
+      )
+    )
+
+  
+  (define bound-expr (halide:visit prog replace-arg))
+  (halide:assemble-bitvector (halide:interpret bound-expr) (halide:vec-len bound-expr))
+  )
+
+
+(define (replace-reg-with-bufs prog signedness sizes precs)
+  (define expr-depth-max (get-expr-depth prog))
+  (define leaves (get-sub-exprs prog (+ 1 expr-depth-max)))
+
+  (define (replace-arg e)
+    (destruct e
+              [(reg id)
+               (define index (bitvector->natural id))
+               (halide:create-buffer (bv 0 (list-ref sizes index)) (size-to-elemT-signed (list-ref precs index) (list-ref signedness index)))
+               ]
+              [_
+                e
+                ]
+              
+              )
+    )
+  (halide:visit prog replace-arg)
+  )
+

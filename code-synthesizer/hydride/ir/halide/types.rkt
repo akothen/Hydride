@@ -5,6 +5,8 @@
   (only-in racket/base error)
   rosette/lib/destruct)
 
+(require hydride/ir/hydride/definition)
+
 (provide (all-defined-out))
          
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,7 +44,8 @@
 
 (struct int-imm (data signed?) #:transparent #:mutable)
 
-(struct buffer (data  elemT buffSize) #:transparent #:mutable)
+(struct buffer (data  elemT buffSize) #:transparent )
+(struct buffer-index (index  elemT buffSize) #:transparent  )
 (struct load (buf idxs alignment) #:transparent)
 (struct ramp (base stride len) #:transparent)
 (struct aligned (mod rem) #:transparent)
@@ -170,12 +173,12 @@
 (struct sca-bwand (v1 v2) #:transparent)
 
 (struct vec-add (v1 v2 ) #:transparent)
-(struct vec-sat-add (v1 v2 ) #:transparent)
-(struct vec-sub (v1 v2) #:transparent)
+(struct vec-sat-add (v1 v2 ) #:transparent )
+(struct vec-sub (v1 v2) #:transparent )
 (struct vec-sat-sub (v1 v2 ) #:transparent)
-(struct vec-mul (v1 v2) #:transparent)
+(struct vec-mul (v1 v2) #:transparent )
 (struct vec-widen-mul (v1 v2) #:transparent)
-(struct vec-div (v1 v2) #:transparent #:mutable)
+(struct vec-div (v1 v2) #:transparent )
 (struct vec-mod (v1 v2) #:transparent)
 (struct vec-max (v1 v2) #:transparent)
 (struct vec-min (v1 v2) #:transparent)
@@ -196,6 +199,7 @@
 (struct vec-rounding_mul_shift_right (v1 v2 v3) #:transparent)
 (struct vec-rounding_shift_right (v1 v2) #:transparent)
 (struct vec-rounding_halving_add (v1 v2) #:transparent)
+(struct vec-halving_add (v1 v2) #:transparent)
 
 (struct vector_reduce (op width vec) #:transparent)
 
