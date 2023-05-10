@@ -22,6 +22,11 @@
   )
 
 
+(define (set-target-halide)
+  (set! target 'halide)
+  )
+
+
 (define (set-input-halide)
   (set! input-lang 'halide)
   )

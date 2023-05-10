@@ -107,11 +107,11 @@
       (begin 
 
         (define synth-sol-lane (invoke_sol_lane lane-idx symbols))
-        (displayln "Verify across lanes hydride:")
-        (displayln synth-sol-lane)
-        (displayln "Verify across lanes spec:")
-        (displayln (invoke_ref_lane lane-idx symbols))
-        (displayln "Is this printed?")
+        (debug-log "Verify across lanes hydride:")
+        (debug-log synth-sol-lane)
+        (debug-log "Verify across lanes spec:")
+        (debug-log (invoke_ref_lane lane-idx symbols))
+        (debug-log "Is this printed?")
 
         (define verification-timeout? #f)
         (define cex 
@@ -337,7 +337,7 @@
 
 
 (define (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-  (displayln "get-concrete-asserts")
+  (debug-log "get-concrete-asserts")
 
 
   (define (helper i)
@@ -375,7 +375,7 @@
 
 (define (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin 
-    (displayln "*** regular-concrete-synthesis ***")
+    (debug-log "*** regular-concrete-synthesis ***")
     (synthesize 
       #:forall (list cex-ls)
       #:guarantee 
@@ -435,8 +435,8 @@
     (if (sat? sol?)
       (begin
         (define mat (evaluate grammar sol?))
-        (displayln "Z3 Synthesized Solution")
-        (println mat)
+        (debug-log "Z3 Synthesized Solution")
+        (debug-log mat)
       )
       '()
       )
@@ -569,13 +569,13 @@
     ([cex cex-ls])
     (define hydride-result (interpreter mat cex))
     (define halide-result (invoke_ref cex))
-    (displayln "Counter Example:")
-    (println cex)
-    (displayln "Hydride Result:")
-    (println hydride-result)
+    (debug-log "Counter Example:")
+    (debug-log cex)
+    (debug-log "Hydride Result:")
+    (debug-log hydride-result)
 
-    (displayln "Halide Result:")
-    (println halide-result)
+    (debug-log "Halide Result:")
+    (debug-log halide-result)
     cex
     )
   )
@@ -605,8 +605,8 @@
                     )
    )
 
-  (displayln "Difference  Predicate")
-  (println difference-predicate)
+  (debug-log "Difference  Predicate")
+  (debug-log difference-predicate)
   
   (define differing-lanes
       (for/list ([diff-list difference-predicate])
@@ -618,8 +618,8 @@
       
   )
 
-  (displayln "differing-lanes")
-  (println differing-lanes)
+  (debug-log "differing-lanes")
+  (debug-log differing-lanes)
   differing-lanes
 )
 
@@ -633,12 +633,12 @@
   (define (fn e)
     (cond
       [(union? e)
-       (displayln "Union term in expr")
-       (displayln e)
+       (debug-log "Union term in expr")
+       (debug-log e)
        (for/list ([i (union-contents e)])
-                 (displayln "===================")
-                 (displayln i)
-                 (displayln (cdr i))
+                 (debug-log "===================")
+                 (debug-log i)
+                 (debug-log (cdr i))
                  )
        ;e
        (define extracted (cdr (list-ref (union-contents e) 0)))
@@ -682,6 +682,8 @@
   ;(gc-terms!)
 
 
+
+  (collect-garbage)
   (debug-log "Garbage collected")
   ;; If the cexs is empty 
   ;; create a random set of concrete inputs
@@ -725,8 +727,8 @@
 
 
     (define full-interpret-res (interpreter-fn grammar env))
-    (displayln "Lane Index")
-    (println random-idx)
+    (debug-log "Lane Index")
+    (debug-log random-idx)
 
     (define low (* word-size random-idx))
     (define high (+ low  (- word-size 1)))
@@ -738,8 +740,8 @@
         (invoke_ref_lane (+ random-idx 0) env)
       )
 
-    (displayln "Spec Produced:")
-    (println halide-res)
+    (debug-log "Spec Produced:")
+    (debug-log halide-res)
 
     (if synthesize-by-lane
       (debug-log "Synthesize by lane...")
@@ -1062,9 +1064,9 @@
       (debug-log "Unchecked solution:")
       (debug-log materialize)
       (print-forms sol?)
-      (displayln "Testing materialized!")
-      (println (invoke_f2 (generate-params-f2 (list-ref cex-ls 0))))
-      (println (evaluate (materialize (generate-params-f1 (list-ref cex-ls 0))) sol?))
+      (debug-log "Testing materialized!")
+      (debug-log (invoke_f2 (generate-params-f2 (list-ref cex-ls 0))))
+      (debug-log (evaluate (materialize (generate-params-f1 (list-ref cex-ls 0))) sol?))
 
 
       (define (exec-synth-sol env)

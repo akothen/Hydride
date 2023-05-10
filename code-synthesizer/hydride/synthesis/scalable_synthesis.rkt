@@ -124,8 +124,8 @@
   (define effective-scale-factor scale-factor)
   (debug-log "Pre scale factor: ")
   (debug-log effective-scale-factor)
-  (displayln "Check leaves")
-  (println leaves)
+  (debug-log "Check leaves")
+  (debug-log leaves)
   (define (set-effective-scale-factor ele)
     ;(define-values (can-scale? _ ) (halide:scale-down-expr ele scale-factor))
     (define ele-lanes (get-len ele))
@@ -170,7 +170,7 @@
   (define (verify-upscaled-equal? hydride-expr)
       (debug-log "Verifying upscaled expression")
       (clear-vc!)
-      (pretty-print hydride-expr)
+      (debug-log hydride-expr)
       (define leave-sizes (get-expr-bv-sizes leaves))
 
       ;; First test if the expressions are equivalent on a concrete value
@@ -315,9 +315,9 @@
 
 
                   (define (invoke-spec env-full)
-                    (printf "invoke-spec with env: ~a\n" env-full)
+                    (debug-log (format "invoke-spec with env: ~a\n" env-full))
                     (define synth-buffers-full (create-buffers scaled-leaves env-full))
-                    ;(println scaled-leaves)
+                    ;(debug-log scaled-leaves)
 
 
                     (cond 
@@ -330,21 +330,21 @@
 
                     (define-values (_ scaled-down-expr-full ) (scale-down-expr halide-expr effective-scale-factor))
                     (define-values (_expr-extract-full _num-used) (bind-expr-args scaled-down-expr-full  synth-buffers-full actual-expr-depth))
-                    (displayln "Scaled expression:")
-                    (println _expr-extract-full)
+                    (debug-log "Scaled expression:")
+                    (debug-log _expr-extract-full)
 
 
                     ;(define _result_full (halide:assemble-bitvector (halide:interpret _expr-extract-full) expr-VF))
                     (define _result_full (assemble-result _expr-extract-full))
-                    (displayln "Spec result")
-                    (println _result_full)
+                    (debug-log "Spec result")
+                    (debug-log _result_full)
                     _result_full
                     )
 
 
                   ;; Calculate result for last most lane
                   (define (invoke-spec-lane lane-idx env-lane)
-                    (printf "invoke-spec-lane with env: ~a\n" env-lane)
+                    (debug-log (format  "invoke-spec-lane with env: ~a\n" env-lane))
                     (define synth-buffers-lane (create-buffers scaled-leaves env-lane))
 
 
@@ -388,13 +388,13 @@
                   (define optimize? opt?)
                   (define symbolic? sym?)
 
-                  (displayln (format "Synthesizing sub-expression using expression-depth ~a \n" actual-expr-depth))
-                  (pretty-print expr-extract)
+                  (debug-log (format "Synthesizing sub-expression using expression-depth ~a \n" actual-expr-depth))
+                  (debug-log expr-extract)
 
                   (define hashed-expr (hash-expr-fn expr-extract))
 
-                  (displayln "Hashed expression")
-                  (println hashed-expr)
+                  (debug-log "Hashed expression")
+                  (debug-log hashed-expr)
                   (debug-log "Leaves are bitvectors of sizes:")
                   (debug-log leaves-sizes)
 
@@ -404,8 +404,8 @@
                   (define-values (unscaled-expr-extract unscaled-num-used) (bind-expr-args halide-expr  halide-expr-args actual-expr-depth))
                   (define unscaled-hashed-expr (hash-expr-fn unscaled-expr-extract))
 
-                  (displayln "Unscaled Hashed expression")
-                  (println unscaled-hashed-expr)
+                  (debug-log "Unscaled Hashed expression")
+                  (debug-log unscaled-hashed-expr)
 
                   (define hashed-sol? #f)
 
@@ -445,8 +445,8 @@
                             )
 
 
-                          (displayln "Hashed expression")
-                          (println hashed-expr)
+                          (debug-log "Hashed expression")
+                          (debug-log hashed-expr)
 
 
                           (define-values (sat? mat el)
@@ -498,8 +498,8 @@
 
                   (if satisfiable? 
                     (begin
-                      (displayln "Solution")
-                      (pretty-print materialize)
+                      (debug-log "Solution")
+                      (debug-log materialize)
                       )
                     (begin
                       (debug-log "Unsatisfiable, try smaller window within given sub-expression")
@@ -528,9 +528,9 @@
                       )
                     )
 
-                  (println materialize)
+                  (debug-log materialize)
 
-                  (displayln "Cost")
+                  (debug-log "Cost")
 
 
                   (define cost-functor
@@ -543,7 +543,7 @@
                        ]
                       )
                     )
-                  (println (cost-functor materialize))
+                  (debug-log (cost-functor materialize))
 
                   ;; Now that we've synthesized the sub-expression
                   ;; we can clear the symbolic heap
@@ -595,8 +595,8 @@
                   (cond
                     [(equal? effective-scale-factor 1)
                      (define bound-expr (bind-functor upscaled-mat (list->vector synthesized-leaves)))
-                     (displayln "Bound expr")
-                     (println bound-expr)
+                     (debug-log "Bound expr")
+                     (debug-log bound-expr)
                      bound-expr
                      ]
                     [else
@@ -641,8 +641,8 @@
                         
 
                         (define bound-expr (bind-functor use-expr (list->vector synthesized-leaves)))
-                        (displayln "Bound expr")
-                        (println bound-expr)
+                        (debug-log "Bound expr")
+                        (debug-log bound-expr)
                         bound-expr
                         )
 
@@ -661,6 +661,7 @@
   (debug-log  "Sub-expression Synthesis completed:")
   (debug-log synthesized-sol)
   (debug-log "========================================")
+  (displayln "Synthesis query completed ...")
   synthesized-sol
   )
 
@@ -671,7 +672,7 @@
 ;; Perform iterative synthesis by partitioning relavent operations
 ;; into buckets and sampling operations from buckets in the grammar. 
 (define (step-wise-synthesis spec-expr leaves  starting-depth depth-limit invoke-spec invoke-spec-lane optimize? symbolic? solver scale-factor)
-  (debug-log (format "Invoked step-wise-synthesis!\n"))
+  (println (format "Invoked step-wise-synthesis!\n"))
 
   (define step-limit 5)
 
@@ -867,6 +868,7 @@
   ;; Reset context for next synthesis
   (set-optimize-bound-found #f)
   (set-global-timeout #f)
+  (collect-garbage)
 
   (debug-log "Stepwise synthesis completed!")
 

@@ -371,10 +371,28 @@
   )
 
 
+(define (get-expr-signedness-str input-signedness)
+  (define val-strs 
+    (for/list ([i (range (length input-signedness))])
+              (define val (list-ref input-signedness i))
+              (define val-str (if val "1" "0"))
+              (define sep
+                (if (equal? i (- (length input-signedness) 1)) 
+                  ""
+                  ", "
+                  )
+                )
+              (string-append val-str sep)
+              )
+    )
+  (string-append "[" (apply string-append val-strs) "]")
+  
+  )
+
 ;; Generates a specification for a Hydride IR Expression
 (define (gen-synthesis-spec-hydride expr get-ops-functor visitor-functor 
                                     get-length-functor get-prec-functor
-                                    input-precs input-sizes  base_name)
+                                    input-precs input-sizes input-signedness base_name)
   (define name (string-append "\"" base_name "\""))
   (define spec-name (get-spec-name base_name))
   (define sema (string-append "[ " (get-hydride-expr-sema expr get-ops-functor) "]"))
@@ -384,6 +402,7 @@
   (define output_precision (~s (get-prec-functor expr (vector))))
   (define args (get-args-str-hydride input-sizes))
   (define spec_invoke "\"\"")
+  (define spec_input_signedness (get-expr-signedness-str input-signedness))
   (define imm-ls (get-expr-imms-hydride expr visitor-functor))
   (string-append 
     "{ \n"
@@ -395,7 +414,10 @@
     "\"output_precision\": " output_precision ", \n"
     "\"args\": " args ", \n"
     "\"spec_invokation\": " spec_invoke ",\n" 
-    "\"imms\": " imm-ls " \n"
+    "\"imms\": " imm-ls " ,\n"
+    "\"input_signedness\": " spec_input_signedness " \n"
+
+
     "}\n"
     )
   )

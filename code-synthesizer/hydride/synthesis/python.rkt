@@ -36,6 +36,12 @@
       [(equal? target 'hvx)
        "hvx"
        ]
+      [(equal? target 'halide)
+       "halide"
+       ]
+      [else
+        (error "Unsupported target string for grammar generation" target)
+        ]
       )
     )
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
@@ -118,8 +124,6 @@
   (hash-map hmap hash-helper)
 
   (string-append "(hash " str ")")
-
-
   )
 
 
@@ -179,9 +183,9 @@
 
 (define (get-expr-grammar-step-hydride expr  base_name get-ops-functor visitor-functor 
                                        get-length-functor get-prec-functor
-                                       input-precs input-sizes VF step-idx depth scale-factor)
+                                       input-precs input-sizes input-signedness VF step-idx depth scale-factor)
   (debug-log (format "get-expr-grammar-hydride (step-wise synthesis) with base_name: ~a\n" base_name))
-  (define spec-contents (gen-synthesis-spec-hydride expr get-ops-functor visitor-functor get-length-functor get-prec-functor input-precs input-sizes  base_name))
+  (define spec-contents (gen-synthesis-spec-hydride expr get-ops-functor visitor-functor get-length-functor get-prec-functor input-precs input-sizes input-signedness  base_name))
   (define grammar-file-name (string-append base_name "_grammar.rkt"))
   (debug-log grammar-file-name)
   (define mod-path (build-path gen (string->path grammar-file-name)))
