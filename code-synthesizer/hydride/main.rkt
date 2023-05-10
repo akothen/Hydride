@@ -66,6 +66,7 @@
 (require hydride/ir/hvx/sub_expr)
 (require hydride/ir/hvx/extract)
 (require hydride/ir/hvx/instcombine_fast)
+(require hydride/ir/hvx/get_variants)
 
 
 ;; CPP IR
@@ -135,6 +136,7 @@
   (all-from-out hydride/ir/hvx/sub_expr)
   (all-from-out hydride/ir/hvx/extract)
   (all-from-out hydride/ir/hvx/instcombine_fast)
+  (all-from-out hydride/ir/hvx/get_variants)
 
 
   (all-from-out hydride/cpp)

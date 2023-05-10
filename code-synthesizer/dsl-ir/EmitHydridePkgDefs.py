@@ -18,6 +18,7 @@ from utils.ScaleDef import ScaleDef
 from utils.GetTargetSpecificNames import GetTargetNames
 from utils.GetSubExpressions import GetSubExpressions
 from utils.ExtractExprDepth import ExtractExprDepth
+from utils.GetVariants import GetVariants
 
 
 from hexsemantics_new import semantics as hvx_semantics
@@ -30,6 +31,7 @@ from utils.ConstFold import ConstFold
 dsl_list = []
 
 TARGET = 'hvx'
+
 scd = None
 cost_name = ""
 interpret_name = ""
@@ -44,6 +46,7 @@ bind_name = ""
 get_target_op_name = ""
 subexpr_name = ""
 extract_names = ""
+variant_names = ""
 
 
 if TARGET == 'x86':
@@ -62,9 +65,11 @@ if TARGET == 'x86':
     get_target_op_name = "hydride:get-target-name"
     subexpr_name = "hydride:get-sub-exprs"
     extract_names = "hydride:extract-expr"
+    variant_names = "hydride:get-variants"
 else:
     dsl_list = parse_dict(hvx_semantics, keep_duplicate = True)
     scd = ScaleDef(base_vect_size = 1024)
+    cost_name = "hvx:cost"
     cost_name = "hvx:cost"
     interpret_name = "hvx:interpret"
     scale_name = "hvx:scale-expr"
@@ -78,6 +83,7 @@ else:
     get_target_op_name = "hvx:get-target-name"
     subexpr_name = "hvx:get-sub-exprs"
     extract_names = "hvx:extract-expr"
+    variant_names = "hvx:get-variants"
 
 
 
@@ -98,6 +104,7 @@ gbo = GetBVOps(get_ops_name = get_ops_name)
 gtn = GetTargetNames(get_target_name = get_target_op_name)
 gse = GetSubExpressions(get_sub_name = subexpr_name)
 eo = ExtractExprDepth(extract_name = extract_names)
+gv = GetVariants(get_variant_name = variant_names)
 
 
 cf = ConstFold()
@@ -170,4 +177,5 @@ with open("gen.rkt","w+") as RacketFile:
 
 
 
+    write_to_file(gv.emit_get_names(dsl_list, sd))
 
