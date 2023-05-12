@@ -164,6 +164,8 @@ class GetVariants:
                 elif isinstance(arg, BoundedBitVector):
                     definition += ["(reg (bv {} 8))".format(reg_idx)]
                     reg_idx += 1
+                elif isinstance(arg, ConstBitVector):
+                    definition += [arg.get_dsl_value()]
                 else:
                     definition.append(str(arg.value))
 
