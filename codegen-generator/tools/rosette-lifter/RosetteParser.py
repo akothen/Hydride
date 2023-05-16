@@ -7,7 +7,7 @@
 
 import re
 
-TokenDenotingFunctionStart = "hydride.node"
+TokensDenotingFunctionStart = ["hydride.node", "variant"]
 
 
 class RosetteParser:
@@ -118,7 +118,11 @@ class RosetteParser:
     FunctionCode = []
     FunctionName = ""
     for CodeLine in CodeLines:
-      if TokenDenotingFunctionStart in CodeLine:
+      FuncStartFound = False
+      for FuncStartToken in TokensDenotingFunctionStart:
+        if FuncStartToken in CodeLine:
+          FuncStartFound = True
+      if FuncStartFound:
         if len(FunctionCode) != 0:
           print("\n\n\nFUNCTION:")
           print(FunctionName)
@@ -150,4 +154,3 @@ class RosetteParser:
       print(ParsedExpr)
       FunctionToAST[FunctionName] = ParsedExpr
     return FunctionToAST
-
