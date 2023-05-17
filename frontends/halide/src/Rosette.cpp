@@ -231,11 +231,26 @@ namespace Halide {
                         }
 
 
+                        for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
+                            const Variable* vop = bi->first;
+
+                            if(vop->name == op->name){
+                                std::string reg_name = "reg_"+std::to_string(VariableToRegMap[vop]);
+                                return tabs() + reg_name ;
+                            }
+                        }
+
+
+
                         if(VariableToRegMap.find(op) != VariableToRegMap.end()){
                             std::string reg_name = "reg_"+std::to_string(VariableToRegMap[op]);
                             return tabs() + reg_name ;
 
                         }
+
+                        // Traverse variable map to update as well
+                        
+
 
                             std::string bits = std::to_string(op->type.bits() * op->type.lanes());
                             unsigned reg_counter = (RegToLoadMap.size()+ RegToVariableMap.size());
@@ -339,7 +354,6 @@ namespace Halide {
 
                     std::string visit(const Min *op) {
 
-                        debug(0) << "Emitting min to rosette\n";
 
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             SkipNodes.insert(op->a.get());
@@ -347,7 +361,6 @@ namespace Halide {
                             return "";
                         }
                         std::string min_emit =  print_binary_op("min", "min", op->a, op->b, op->type.is_vector());
-                        debug(0) << min_emit << "\n";
 
                         return min_emit;                    
                     }
@@ -527,6 +540,9 @@ namespace Halide {
                             return "";
                         }
 
+
+                        defined.insert(op->name);
+
                         // Set the correct encoding mode
                         mode.push(encoding[op->name]);
                         std::string rkt_val = dispatch(op->value);
@@ -536,7 +552,6 @@ namespace Halide {
                         std::string rkt_bdy = dispatch(op->body);
                         indent.pop();
 
-                        defined.insert(op->name);
 
                         return tabs() + "(let ([" + op->name + " " + rkt_val + "])\n" + rkt_bdy + ")";
                     }
@@ -649,6 +664,12 @@ namespace Halide {
                         if(LoadToRegMap.find(op) != LoadToRegMap.end()){
                             return "reg_" + std::to_string(LoadToRegMap[op]);
                         }
+
+                        // Traverse loads and check if equal?
+                        if(LoadToRegMap.find(op) != LoadToRegMap.end()){
+                            return "reg_" + std::to_string(LoadToRegMap[op]);
+                        }
+
 
                         if (op->type.is_scalar() && mode.top() == VarEncoding::Integer)
                             return tabs() + "(" + op->name + " " + rkt_idx + ")";
@@ -1638,7 +1659,7 @@ namespace Halide {
                             const Call *c = expr.as<Call>();
                             if (c && c->is_intrinsic(Call::dynamic_shuffle)){
                                 debug(1) << "Call to dynamic shuffle" << "\n";
-                                return expr;
+                                return IRMutator::mutate(expr);
                             }
 
                             /* Ignore some qualifying but trivial expressions to reduce noise in the results */
@@ -1779,6 +1800,7 @@ namespace Halide {
                             spec_expr = AbstractUnsupportedNodes(arch, abstractions).mutate(spec_expr);
 
 
+                            std::cout << "Expression after abstraction: "<< spec_expr <<"\n";
 
 
 
@@ -2423,6 +2445,11 @@ namespace Halide {
                         }
                         else
                             return IRMutator::visit(op);
+                    }
+
+
+                    Expr visit(const Load* op) override {
+                        return op;
                     }
 
                     Expr visit(const LT *op) override {

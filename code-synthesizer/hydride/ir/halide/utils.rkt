@@ -3235,6 +3235,60 @@
            ]
          )
        ]
+      [
+       (vec-mul
+         (cast-int
+           reg_0 lanes prec)
+         (xBroadcast (int-imm lit sign) lanes))
+
+       (displayln "widen mul case")
+
+       (cond
+         [(and 
+               (equal? sign #t)
+               (equal? (bvlength lit) (* 1 prec))   
+               (< (bitvector->integer lit) (bitvector->integer (bvsmaxval prec))) 
+               (> (bitvector->integer lit) (bitvector->integer (bvsminval prec)))   
+               (equal? (* 2 (vec-size reg_0)) (* lanes prec))
+               )
+          
+          (vec-widen-mul 
+            reg_0 
+            (xBroadcast (int-imm (bv (bitvector->integer lit) (bitvector (/ prec 2))) #t)  (* lanes 1))
+            )
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+[
+       (vec-mul
+         (cast-uint
+           reg_0 lanes prec)
+         (xBroadcast (int-imm lit sign) lanes))
+
+
+       (cond
+         [(and 
+               (equal? sign #f)
+               (equal? (bvlength lit) (* 1 prec))   
+               (< (bitvector->natural lit) (bitvector->natural (bvumaxval prec))) 
+               (> (bitvector->natural lit) (bitvector->natural (bvuminval prec)))   
+               (equal? (* 2 (vec-size reg_0)) (* lanes prec))
+               )
+          
+          (vec-widen-mul 
+            reg_0 
+            (xBroadcast (int-imm (bv (bitvector->natural lit) (bitvector (/ prec 2))) #f)  (* lanes 1))
+            )
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+     
       [_ ele]
       )
     )
