@@ -2324,18 +2324,23 @@
     [else (error "halide/utils.rkt: Unexpected buffer type in size-to-elemT-signed" size )])
 )
 
-(define (get-widened-elemT elemT)
+(define (get-widened-elemT elemT1 elemT2)
   (cond
-    [(equal? elemT 'int8) 'int16]
-    [(equal? elemT 'int16) 'int32]
-    [(equal? elemT 'int32) 'int64]
-    [(equal? elemT 'int64) 'int128]
-    [(equal? elemT 'uint8) 'uint16]
-    [(equal? elemT 'uint16) 'uint32]
-    [(equal? elemT 'uint32) 'uint64]
-    [(equal? elemT 'uint64) 'uint128]
+    [(and (equal? elemT1 'uint8) (equal? elemT2 'int8))  'int16]
+    [(and (equal? elemT1 'uint16) (equal? elemT2 'int16))  'int32]
+    [(and (equal? elemT1 'uint32) (equal? elemT2 'int32))  'int64]
+    [(and (equal? elemT1 'uint64) (equal? elemT2 'int64))  'int128]
+
+    [(equal? elemT1 'int8) 'int16]
+    [(equal? elemT1 'int16) 'int32]
+    [(equal? elemT1 'int32) 'int64]
+    [(equal? elemT1 'int64) 'int128]
+    [(equal? elemT1 'uint8) 'uint16]
+    [(equal? elemT1 'uint16) 'uint32]
+    [(equal? elemT1 'uint32) 'uint64]
+    [(equal? elemT1 'uint64) 'uint128]
     [else
-      (error "unsupported type for widening in halide" elemT)
+      (error "unsupported type for widening in halide" elemT1 elemT2)
       ]
    )
   )
@@ -2465,7 +2470,7 @@
     [(vec-rounding_shift_right v1 v2) (get-elemT v1)]
     [(vec-rounding_halving_add v1 v2) (get-elemT v1)]
     [(vec-halving_add v1 v2) (get-elemT v1)]
-    [(vec-widen-mul v1 v2) (get-widened-elemT (get-elemT v1))] 
+    [(vec-widen-mul v1 v2) (get-widened-elemT (get-elemT v1) (get-elemT v2) )] 
     [(vec-div v1 v2) (get-elemT v1)]
     [(vec-mod v1 v2) (get-elemT v1)]
     [(vec-min v1 v2) (get-elemT v1)]
