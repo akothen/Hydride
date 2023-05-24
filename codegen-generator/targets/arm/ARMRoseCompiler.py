@@ -1095,6 +1095,12 @@ def ComputeConstant(op: str, Operand1: RoseValue, Operand2: RoseValue,
       if val.bit_length() > 32:
         return RoseConstant.create(val, Context.Number64Type)
       return RoseConstant.create(val, Context.NumberType)
+    if op == "<<<":  # ARMShl, intentionally contrary to keys of BinaryOps
+      val = Operand1.getValue() << Operand2.getValue() if Operand2.getValue(
+      ) >= 0 else Operand1.getValue() >> -Operand2.getValue()
+      if val.bit_length() > 32:
+        return RoseConstant.create(val, Context.Number64Type)
+      return RoseConstant.create(val, Context.NumberType)
     if op == "//":
       assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
           Operand2.getType(), RoseIntegerType)
@@ -1398,8 +1404,47 @@ def HandleToShl():
     [Operand1, Operand2] = Operands
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    Op = RoseARMShlOp.create(Name, Operand1, Operand2)
+    Op = RoseBVShlOp.create(Name, Operand1, Operand2)
+
     Context.addSignednessInfoForValue(Op, Context.isValueSigned(Operand1))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToARMShl():
+  def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+                    Context: ARMRoseContext):
+    if (z := ComputeConstant('<<<', Operand1, Operand2, Context)) != None:
+      return z
+    Operands = TypePromotion(Operand1, Operand2, Context)
+    [Operand1, Operand2] = Operands
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType), breakpoint()
+    # Op = RoseARMShlOp.create(Name, Operand1, Operand2)
+    # assert Context.isValueSigned(Operand2)
+    
+    Cond = RoseBVSGTOp.create(
+        Context.genName(), Operand2, RoseConstant(0,Operand2.getType()))
+    Context.addSignednessInfoForValue(Cond, IsSigned=False)
+    Then = RoseBVShlOp.create(Context.genName(), Operand1, Operand2)
+    Context.addSignednessInfoForValue(Then, IsSigned=Context.isValueSigned(Operand1))
+    NegOp2 = RoseBVSubOp.create(
+        Context.genName(), [RoseConstant(0,Operand2.getType()), Operand2])
+    Context.addSignednessInfoForValue(NegOp2, IsSigned=True)
+    if Context.isValueSigned(Operand1):
+      Otherwise = RoseBVAshrOp.create(Context.genName(), Operand1, NegOp2)
+      Context.addSignednessInfoForValue(Otherwise, IsSigned=True)
+    else:
+      Otherwise = RoseBVLshrOp.create(Context.genName(), Operand1, NegOp2)
+      Context.addSignednessInfoForValue(Otherwise, IsSigned=False)
+    Op = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
+    Context.addSignednessInfoForValue(Op, Context.isValueSigned(Then))
+    
+    Context.addAbstractionToIR(Cond)
+    Context.addAbstractionToIR(Then)
+    Context.addAbstractionToIR(NegOp2)
+    Context.addAbstractionToIR(Otherwise)
     return Op
 
   return LamdaImplFunc
@@ -1436,7 +1481,8 @@ BinaryOps = {
     '==': HandleToEqual,
     '!=': HandleToNotEqual,
     '>>': HandleToShr,
-    '<<': HandleToShl,
+    '<<': HandleToARMShl,
+    '<<<': HandleToShl,  # real shift left
     '&': HandleToAnd,
     '|': HandleToOr,
     'AND': HandleToAnd,

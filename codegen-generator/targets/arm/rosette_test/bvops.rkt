@@ -429,10 +429,3 @@
   (define result (bitvector->integer a))
   (eq? result 0)
   )
-
-(define (armshl a b)
-  (if (bvzero? (msb b))
-      (bvshl a b)
-      (bvashr a (bvneg b))
-      )
-  )

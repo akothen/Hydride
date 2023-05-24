@@ -108,15 +108,17 @@
 		[else ( vmla_n_s32_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 )]
 		)
 	]
-	[ (vshl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define v1-folded (arm:const-fold v1))
-		(define v2-folded (arm:const-fold v2))
+	[ (vshl_s8_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
+		(define v0-folded (arm:const-fold v0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define v4-folded (arm:const-fold v4))
 		(cond
-		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
-(lit (arm:interpret ( vshl_s8_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? v4-folded))
+(lit (arm:interpret ( vshl_s8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 ) (vector)))
 ]
-		[else ( vshl_s8_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 )]
+		[else ( vshl_s8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 )]
 		)
 	]
 	[ (vsubw_high_u8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
@@ -224,16 +226,21 @@
 		[else ( vcgtzq_s64_dsl vc_0-folded vc_1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 )]
 		)
 	]
-	[ (vrshlq_s8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
-		(define vc_0-folded (arm:const-fold vc_0))
+	[ (vrshl_u8_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22)
+		(define v0-folded (arm:const-fold v0))
 		(define vc_1-folded (arm:const-fold vc_1))
-		(define v2-folded (arm:const-fold v2))
-		(define v3-folded (arm:const-fold v3))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
+		(define vc_6-folded (arm:const-fold vc_6))
+		(define vc_7-folded (arm:const-fold vc_7))
+		(define v8-folded (arm:const-fold v8))
 		(cond
-		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
-(lit (arm:interpret ( vrshlq_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded) (lit? vc_6-folded) (lit? vc_7-folded) (lit? v8-folded))
+(lit (arm:interpret ( vrshl_u8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 ) (vector)))
 ]
-		[else ( vrshlq_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 )]
+		[else ( vrshl_u8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 )]
 		)
 	]
 	[ (vqdmulhq_n_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
@@ -310,14 +317,16 @@
 		[else ( vsubl_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 )]
 		)
 	]
-	[ (vshll_high_n_u8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10)
+	[ (vshll_n_s32_dsl v0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i num_9 prec_o num_11 num_12 num_13 num_14 num_15)
 		(define v0-folded (arm:const-fold v0))
-		(define v1-folded (arm:const-fold v1))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define v3-folded (arm:const-fold v3))
 		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vshll_high_n_u8_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? v3-folded))
+(lit (arm:interpret ( vshll_n_s32_dsl v0-folded vc_1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i num_9 prec_o num_11 num_12 num_13 num_14 num_15 ) (vector)))
 ]
-		[else ( vshll_high_n_u8_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 )]
+		[else ( vshll_n_s32_dsl v0-folded vc_1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i num_9 prec_o num_11 num_12 num_13 num_14 num_15 )]
 		)
 	]
 	[ (vmvnq_s8_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o)
@@ -384,15 +393,17 @@
 		[else ( vqmovn_s32_dsl v0-folded size_i_o num_2 num_3 num_4 prec_o num_6 num_7 prec_i num_9 )]
 		)
 	]
-	[ (vqshlq_s64_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define v1-folded (arm:const-fold v1))
-		(define v2-folded (arm:const-fold v2))
+	[ (vqshl_u8_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
+		(define v0-folded (arm:const-fold v0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define v4-folded (arm:const-fold v4))
 		(cond
-		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
-(lit (arm:interpret ( vqshlq_s64_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? v4-folded))
+(lit (arm:interpret ( vqshl_u8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 ) (vector)))
 ]
-		[else ( vqshlq_s64_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 )]
+		[else ( vqshl_u8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 )]
 		)
 	]
 	[ (vceqzq_s64_dsl v0 vc_1 vc_2 vc_3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
@@ -473,14 +484,18 @@
 		[else ( vtst_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o )]
 		)
 	]
-	[ (vmovl_high_u16_dsl vc_0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define v1-folded (arm:const-fold v1))
+	[ (vmovl_high_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 num_14 num_15 num_16)
+		(define v0-folded (arm:const-fold v0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
 		(cond
-		[(and (lit? vc_0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vmovl_high_u16_dsl vc_0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded))
+(lit (arm:interpret ( vmovl_high_s16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded size_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 num_14 num_15 num_16 ) (vector)))
 ]
-		[else ( vmovl_high_u16_dsl vc_0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 )]
+		[else ( vmovl_high_s16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded size_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 num_14 num_15 num_16 )]
 		)
 	]
 	[ (vqdmlal_high_n_s32_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
@@ -595,17 +610,20 @@
 		[else ( vmlsl_high_u32_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13 )]
 		)
 	]
-	[ (vrsra_n_s8_dsl vc_0 vc_1 v2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14)
+	[ (vrsra_n_u8_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 v7 size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
 		(define vc_0-folded (arm:const-fold vc_0))
 		(define vc_1-folded (arm:const-fold vc_1))
-		(define v2-folded (arm:const-fold v2))
-		(define v3-folded (arm:const-fold v3))
-		(define v4-folded (arm:const-fold v4))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define v5-folded (arm:const-fold v5))
+		(define v6-folded (arm:const-fold v6))
+		(define v7-folded (arm:const-fold v7))
 		(cond
-		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded) (lit? v4-folded))
-(lit (arm:interpret ( vrsra_n_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 ) (vector)))
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? v5-folded) (lit? v6-folded) (lit? v7-folded))
+(lit (arm:interpret ( vrsra_n_u8_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded v7-folded size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 ) (vector)))
 ]
-		[else ( vrsra_n_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 )]
+		[else ( vrsra_n_u8_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded v7-folded size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 )]
 		)
 	]
 	[ (vadd_u64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
@@ -658,16 +676,21 @@
 		[else ( vtrn1_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 )]
 		)
 	]
-	[ (vrshl_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15)
-		(define vc_0-folded (arm:const-fold vc_0))
+	[ (vrshld_s64_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i)
+		(define v0-folded (arm:const-fold v0))
 		(define vc_1-folded (arm:const-fold vc_1))
-		(define v2-folded (arm:const-fold v2))
-		(define v3-folded (arm:const-fold v3))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
+		(define vc_6-folded (arm:const-fold vc_6))
+		(define vc_7-folded (arm:const-fold vc_7))
+		(define v8-folded (arm:const-fold v8))
 		(cond
-		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
-(lit (arm:interpret ( vrshl_s32_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded) (lit? vc_6-folded) (lit? vc_7-folded) (lit? v8-folded))
+(lit (arm:interpret ( vrshld_s64_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i ) (vector)))
 ]
-		[else ( vrshl_s32_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15 )]
+		[else ( vrshld_s64_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i )]
 		)
 	]
 	[ (vmull_u32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11)
@@ -711,16 +734,6 @@
 (lit (arm:interpret ( vmaxq_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) (vector)))
 ]
 		[else ( vmaxq_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 )]
-		)
-	]
-	[ (vshll_n_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10)
-		(define v0-folded (arm:const-fold v0))
-		(define v1-folded (arm:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vshll_n_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 ) (vector)))
-]
-		[else ( vshll_n_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 )]
 		)
 	]
 	[ (vzip1_s32_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
@@ -879,16 +892,21 @@
 		[else ( vmull_high_n_s16_dsl v0-folded v1-folded size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 )]
 		)
 	]
-	[ (vqrshlq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15)
-		(define vc_0-folded (arm:const-fold vc_0))
+	[ (vqrshl_s8_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22)
+		(define v0-folded (arm:const-fold v0))
 		(define vc_1-folded (arm:const-fold vc_1))
-		(define v2-folded (arm:const-fold v2))
-		(define v3-folded (arm:const-fold v3))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
+		(define vc_6-folded (arm:const-fold vc_6))
+		(define vc_7-folded (arm:const-fold vc_7))
+		(define v8-folded (arm:const-fold v8))
 		(cond
-		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
-(lit (arm:interpret ( vqrshlq_s16_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded) (lit? vc_6-folded) (lit? vc_7-folded) (lit? v8-folded))
+(lit (arm:interpret ( vqrshl_s8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 ) (vector)))
 ]
-		[else ( vqrshlq_s16_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15 )]
+		[else ( vqrshl_s8_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 )]
 		)
 	]
 	[ (vmlal_n_u32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i num_8 prec_o num_10 num_11 num_12 num_13)
@@ -913,17 +931,6 @@
 		[else ( vmlsq_u16_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 )]
 		)
 	]
-	[ (vqshl_u8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define v1-folded (arm:const-fold v1))
-		(define v2-folded (arm:const-fold v2))
-		(cond
-		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
-(lit (arm:interpret ( vqshl_u8_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) (vector)))
-]
-		[else ( vqshl_u8_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 )]
-		)
-	]
 	[ (vuzp2_s16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(define v0-folded (arm:const-fold v0))
 		(define v1-folded (arm:const-fold v1))
@@ -946,16 +953,21 @@
 		[else ( vclezq_s8_dsl vc_0-folded vc_1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 )]
 		)
 	]
-	[ (vqrshl_u8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
-		(define vc_0-folded (arm:const-fold vc_0))
+	[ (vqrshlq_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i)
+		(define v0-folded (arm:const-fold v0))
 		(define vc_1-folded (arm:const-fold vc_1))
-		(define v2-folded (arm:const-fold v2))
-		(define v3-folded (arm:const-fold v3))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
+		(define vc_6-folded (arm:const-fold vc_6))
+		(define vc_7-folded (arm:const-fold vc_7))
+		(define v8-folded (arm:const-fold v8))
 		(cond
-		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
-(lit (arm:interpret ( vqrshl_u8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded) (lit? vc_6-folded) (lit? vc_7-folded) (lit? v8-folded))
+(lit (arm:interpret ( vqrshlq_s16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i ) (vector)))
 ]
-		[else ( vqrshl_u8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 )]
+		[else ( vqrshlq_s16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded vc_6-folded vc_7-folded v8-folded size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i )]
 		)
 	]
 	[ (vhsubq_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
@@ -1002,15 +1014,17 @@
 		[else ( vqdmulhq_n_s16_dsl vc_0-folded vc_1-folded vc_2-folded v3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 )]
 		)
 	]
-	[ (vshl_u16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define v1-folded (arm:const-fold v1))
-		(define v2-folded (arm:const-fold v2))
+	[ (vshl_u16_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_o num_10 num_11 num_12 num_13 num_14 num_15 prec_i)
+		(define v0-folded (arm:const-fold v0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define v4-folded (arm:const-fold v4))
 		(cond
-		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
-(lit (arm:interpret ( vshl_u16_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? v4-folded))
+(lit (arm:interpret ( vshl_u16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded size_i_o num_6 num_7 num_8 prec_o num_10 num_11 num_12 num_13 num_14 num_15 prec_i ) (vector)))
 ]
-		[else ( vshl_u16_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 )]
+		[else ( vshl_u16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded size_i_o num_6 num_7 num_8 prec_o num_10 num_11 num_12 num_13 num_14 num_15 prec_i )]
 		)
 	]
 	[ (vabs_s32_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
@@ -1103,19 +1117,6 @@
 (lit (arm:interpret ( vsubw_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 ) (vector)))
 ]
 		[else ( vsubw_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 )]
-		)
-	]
-	[ (vrsra_n_u8_dsl vc_0 vc_1 v2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define vc_1-folded (arm:const-fold vc_1))
-		(define v2-folded (arm:const-fold v2))
-		(define v3-folded (arm:const-fold v3))
-		(define v4-folded (arm:const-fold v4))
-		(cond
-		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded) (lit? v4-folded))
-(lit (arm:interpret ( vrsra_n_u8_dsl vc_0-folded vc_1-folded v2-folded v3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 ) (vector)))
-]
-		[else ( vrsra_n_u8_dsl vc_0-folded vc_1-folded v2-folded v3-folded v4-folded size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 )]
 		)
 	]
 	[ (vcle_s64_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
@@ -1305,14 +1306,18 @@
 		[else ( vmlal_high_n_u32_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13 )]
 		)
 	]
-	[ (vmovl_u16_dsl vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10)
-		(define vc_0-folded (arm:const-fold vc_0))
-		(define v1-folded (arm:const-fold v1))
+	[ (vmovl_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_i_o num_7 num_8 num_9 prec_i prec_o num_12 num_13 num_14 num_15 num_16)
+		(define v0-folded (arm:const-fold v0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
 		(cond
-		[(and (lit? vc_0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vmovl_u16_dsl vc_0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded))
+(lit (arm:interpret ( vmovl_s16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded size_i_o num_7 num_8 num_9 prec_i prec_o num_12 num_13 num_14 num_15 num_16 ) (vector)))
 ]
-		[else ( vmovl_u16_dsl vc_0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 )]
+		[else ( vmovl_s16_dsl v0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded size_i_o num_7 num_8 num_9 prec_i prec_o num_12 num_13 num_14 num_15 num_16 )]
 		)
 	]
 	[ (vzip2_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19)
@@ -1325,14 +1330,16 @@
 		[else ( vzip2_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 )]
 		)
 	]
-	[ (vqshlb_n_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+	[ (vqshluh_n_s16_dsl v0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
 		(define v0-folded (arm:const-fold v0))
-		(define v1-folded (arm:const-fold v1))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define v3-folded (arm:const-fold v3))
 		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (arm:interpret ( vqshlb_n_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? v3-folded))
+(lit (arm:interpret ( vqshluh_n_s16_dsl v0-folded vc_1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
 ]
-		[else ( vqshlb_n_s8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		[else ( vqshluh_n_s16_dsl v0-folded vc_1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 )]
 		)
 	]
 	[ (vmlal_high_n_s16_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
@@ -1344,6 +1351,124 @@
 (lit (arm:interpret ( vmlal_high_n_s16_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13 ) (vector)))
 ]
 		[else ( vmlal_high_n_s16_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13 )]
+		)
+	]
+	[ (vshr_n_s8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define v2-folded (arm:const-fold v2))
+		(define v3-folded (arm:const-fold v3))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
+(lit (arm:interpret ( vshr_n_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
+]
+		[else ( vshr_n_s8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 )]
+		)
+	]
+	[ (vqrshrnd_n_s64_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define v5-folded (arm:const-fold v5))
+		(define v6-folded (arm:const-fold v6))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? v5-folded) (lit? v6-folded))
+(lit (arm:interpret ( vqrshrnd_n_s64_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20 ) (vector)))
+]
+		[else ( vqrshrnd_n_s64_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20 )]
+		)
+	]
+	[ (vqshrunh_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define v1-folded (arm:const-fold v1))
+		(define v2-folded (arm:const-fold v2))
+		(cond
+		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (arm:interpret ( vqshrunh_n_s16_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 ) (vector)))
+]
+		[else ( vqshrunh_n_s16_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 )]
+		)
+	]
+	[ (vshr_n_u32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define v2-folded (arm:const-fold v2))
+		(define v3-folded (arm:const-fold v3))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
+(lit (arm:interpret ( vshr_n_u32_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) (vector)))
+]
+		[else ( vshr_n_u32_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 )]
+		)
+	]
+	[ (vrshr_n_s64_dsl vc_0 vc_1 vc_2 vc_3 vc_4 vc_5 v6 v7 size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define vc_5-folded (arm:const-fold vc_5))
+		(define v6-folded (arm:const-fold v6))
+		(define v7-folded (arm:const-fold v7))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? vc_5-folded) (lit? v6-folded) (lit? v7-folded))
+(lit (arm:interpret ( vrshr_n_s64_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded v6-folded v7-folded size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 ) (vector)))
+]
+		[else ( vrshr_n_s64_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded vc_5-folded v6-folded v7-folded size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 )]
+		)
+	]
+	[ (vrshrn_n_s64_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define v5-folded (arm:const-fold v5))
+		(define v6-folded (arm:const-fold v6))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? v5-folded) (lit? v6-folded))
+(lit (arm:interpret ( vrshrn_n_s64_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20 ) (vector)))
+]
+		[else ( vrshrn_n_s64_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20 )]
+		)
+	]
+	[ (vshrn_n_u32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define v1-folded (arm:const-fold v1))
+		(define v2-folded (arm:const-fold v2))
+		(cond
+		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (arm:interpret ( vshrn_n_u32_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 ) (vector)))
+]
+		[else ( vshrn_n_u32_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 )]
+		)
+	]
+	[ (vqshrn_n_u32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define v1-folded (arm:const-fold v1))
+		(define v2-folded (arm:const-fold v2))
+		(cond
+		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (arm:interpret ( vqshrn_n_u32_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 ) (vector)))
+]
+		[else ( vqshrn_n_u32_dsl vc_0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 )]
+		)
+	]
+	[ (vqrshrns_n_u32_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define vc_1-folded (arm:const-fold vc_1))
+		(define vc_2-folded (arm:const-fold vc_2))
+		(define vc_3-folded (arm:const-fold vc_3))
+		(define vc_4-folded (arm:const-fold vc_4))
+		(define v5-folded (arm:const-fold v5))
+		(define v6-folded (arm:const-fold v6))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? vc_4-folded) (lit? v5-folded) (lit? v6-folded))
+(lit (arm:interpret ( vqrshrns_n_u32_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20 ) (vector)))
+]
+		[else ( vqrshrns_n_u32_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded vc_4-folded v5-folded v6-folded size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20 )]
 		)
 	]
 	[v (error "Unrecognized expression" v)]

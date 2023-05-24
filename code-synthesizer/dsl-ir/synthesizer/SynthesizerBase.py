@@ -624,7 +624,7 @@ class SynthesizerBase:
           # if (op == "bvsubnsw" or op == "bvsubnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
           #   continue
           # Attempt for ARM
-          if "shr" in ctxs[idx].name:
+          if "shr" in ctxs[idx].name or "shl" in ctxs[idx].name:
             if "_s" in ctxs[idx].name and op == "zero-extend":
               continue
             if "_u" in ctxs[idx].name and op == "sign-extend":
@@ -925,7 +925,7 @@ class SynthesizerBase:
           # which is not being used in the spec, skip
           if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
             # if Target is ARM
-            if "shr" in ctx.name:
+            if "shr" in ctx.name or "shl" in ctx.name:
               if "_s" in ctx.name and v == "zero-extend":
                 continue
               if "_u" in ctx.name and v == "sign-extend":

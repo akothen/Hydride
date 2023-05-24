@@ -90,16 +90,16 @@
 )
 
 	]
-	[(vshl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+	[(vshl_s8_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
 		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)) 
-   (append (list  "vshl_s8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)) 
-   (append (list  "vshlq_s8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)) 
-   (append (list  "vshl_u8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)) 
-   (append (list  "vshlq_u8") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1)) 
+   (append (list  "vshl_s8") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1)) 
+   (append (list  "vshl_u8") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1)) 
+   (append (list  "vshlq_s8") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1)) 
+   (append (list  "vshlq_u8") (arm:get-target-name v0) (arm:get-target-name v4))]
 		[else (error "Unable to get name  for vshl_s8")]
 )
 
@@ -344,17 +344,17 @@
 )
 
 	]
-	[(vrshlq_s8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+	[(vrshl_u8_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22)
 		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vrshlq_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vrshl_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vrshlq_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vrshl_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[else (error "Unable to get name  for vrshlq_s8")]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_i_o 8) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vrshl_u8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_i_o 8) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vrshlq_u8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_i_o 8) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vrshlq_s8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_i_o 8) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vrshl_s8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[else (error "Unable to get name  for vrshl_u8")]
 )
 
 	]
@@ -496,21 +496,21 @@
 )
 
 	]
-	[(vshll_high_n_u8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10)
+	[(vshll_n_s32_dsl v0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i num_9 prec_o num_11 num_12 num_13 num_14 num_15)
 		(cond 
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 0) (equal? num_9 8) (equal? num_10 2)) 
-   (append (list  "vshll_high_n_u8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 0) (equal? num_9 16) (equal? num_10 2)) 
-   (append (list  "vshll_high_n_u16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 64) (equal? num_7 0) (equal? num_8 0) (equal? num_9 32) (equal? num_10 2)) 
-   (append (list  "vshll_high_n_u32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 1) (equal? num_9 8) (equal? num_10 2)) 
-   (append (list  "vshll_high_n_s8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 16) (equal? num_10 2)) 
-   (append (list  "vshll_high_n_s16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 64) (equal? num_7 0) (equal? num_8 1) (equal? num_9 32) (equal? num_10 2)) 
-   (append (list  "vshll_high_n_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[else (error "Unable to get name  for vshll_high_n_u8")]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 32) (equal? num_9 0) (equal? prec_o 64) (equal? num_11 0) (equal? num_12 2) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1)) 
+   (append (list  "vshll_n_s32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? num_9 0) (equal? prec_o 16) (equal? num_11 0) (equal? num_12 2) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1)) 
+   (append (list  "vshll_n_s8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? num_9 0) (equal? prec_o 16) (equal? num_11 0) (equal? num_12 2) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 0)) 
+   (append (list  "vshll_n_u8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 16) (equal? num_9 0) (equal? prec_o 32) (equal? num_11 0) (equal? num_12 2) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1)) 
+   (append (list  "vshll_n_s16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 16) (equal? num_9 0) (equal? prec_o 32) (equal? num_11 0) (equal? num_12 2) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 0)) 
+   (append (list  "vshll_n_u16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 32) (equal? num_9 0) (equal? prec_o 64) (equal? num_11 0) (equal? num_12 2) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 0)) 
+   (append (list  "vshll_n_u32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[else (error "Unable to get name  for vshll_n_s32")]
 )
 
 	]
@@ -690,45 +690,15 @@
 )
 
 	]
-	[(vqshlq_s64_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13)
+	[(vqshl_u8_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
 		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vqshlq_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vqshl_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vqshlq_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vqshlq_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vqshl_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vqshl_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vqshlh_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vqshlq_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vqshlq_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vqshls_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vqshld_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vqshl_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vqshlq_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vqshl_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vqshlh_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vqshld_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vqshl_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vqshls_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[else (error "Unable to get name  for vqshlq_s64")]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1)) 
+   (append (list  "vqshl_u8") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 8) (equal? num_6 8) (equal? num_7 0) (equal? num_8 8) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1)) 
+   (append (list  "vqshlb_u8") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 8) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1)) 
+   (append (list  "vqshlq_u8") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[else (error "Unable to get name  for vqshl_u8")]
 )
 
 	]
@@ -952,21 +922,21 @@
 )
 
 	]
-	[(vmovl_high_u16_dsl vc_0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10)
+	[(vmovl_high_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 num_14 num_15 num_16)
 		(cond 
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 0) (equal? num_9 16) (equal? num_10 2)) 
-   (append (list  "vmovl_high_u16") (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 64) (equal? num_7 0) (equal? num_8 0) (equal? num_9 32) (equal? num_10 2)) 
-   (append (list  "vmovl_high_u32") (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 64) (equal? num_7 0) (equal? num_8 1) (equal? num_9 32) (equal? num_10 2)) 
-   (append (list  "vmovl_high_s32") (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 1) (equal? num_9 8) (equal? num_10 2)) 
-   (append (list  "vmovl_high_s8") (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 16) (equal? num_10 2)) 
-   (append (list  "vmovl_high_s16") (arm:get-target-name v1))]
-		[(and  (equal? size_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_o 16) (equal? num_7 0) (equal? num_8 0) (equal? num_9 8) (equal? num_10 2)) 
-   (append (list  "vmovl_high_u8") (arm:get-target-name v1))]
-		[else (error "Unable to get name  for vmovl_high_u16")]
+		[(and  (equal? size_o 128) (equal? num_7 128) (equal? num_8 0) (equal? num_9 128) (equal? prec_o 32) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 16) (equal? num_16 2)) 
+   (append (list  "vmovl_high_s16") (arm:get-target-name v0))]
+		[(and  (equal? size_o 128) (equal? num_7 128) (equal? num_8 0) (equal? num_9 128) (equal? prec_o 64) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 32) (equal? num_16 2)) 
+   (append (list  "vmovl_high_s32") (arm:get-target-name v0))]
+		[(and  (equal? size_o 128) (equal? num_7 128) (equal? num_8 0) (equal? num_9 128) (equal? prec_o 64) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 0) (equal? num_15 32) (equal? num_16 2)) 
+   (append (list  "vmovl_high_u32") (arm:get-target-name v0))]
+		[(and  (equal? size_o 128) (equal? num_7 128) (equal? num_8 0) (equal? num_9 128) (equal? prec_o 16) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 8) (equal? num_16 2)) 
+   (append (list  "vmovl_high_s8") (arm:get-target-name v0))]
+		[(and  (equal? size_o 128) (equal? num_7 128) (equal? num_8 0) (equal? num_9 128) (equal? prec_o 32) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 0) (equal? num_15 16) (equal? num_16 2)) 
+   (append (list  "vmovl_high_u16") (arm:get-target-name v0))]
+		[(and  (equal? size_o 128) (equal? num_7 128) (equal? num_8 0) (equal? num_9 128) (equal? prec_o 16) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 0) (equal? num_15 8) (equal? num_16 2)) 
+   (append (list  "vmovl_high_u8") (arm:get-target-name v0))]
+		[else (error "Unable to get name  for vmovl_high_s16")]
 )
 
 	]
@@ -1204,27 +1174,27 @@
 )
 
 	]
-	[(vrsra_n_s8_dsl vc_0 vc_1 v2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14)
+	[(vrsra_n_u8_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 v7 size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
 		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 8) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsra_n_s8") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 64) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsra_n_s64") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 32) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsraq_n_s32") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsraq_n_s16") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 64) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsraq_n_s64") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 64) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsrad_n_s64") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 16) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsra_n_s16") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 8) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsraq_n_s8") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1)) 
-   (append (list  "vrsra_n_s32") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[else (error "Unable to get name  for vrsra_n_s8")]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 8) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsra_n_u8") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsrad_n_u64") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsraq_n_u64") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsraq_n_u32") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsra_n_u64") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 16) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsraq_n_u16") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 16) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsra_n_u16") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 8) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsraq_n_u8") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 0)) 
+   (append (list  "vrsra_n_u32") (arm:get-target-name v5) (arm:get-target-name v6) (arm:get-target-name v7))]
+		[else (error "Unable to get name  for vrsra_n_u8")]
 )
 
 	]
@@ -1362,37 +1332,37 @@
 )
 
 	]
-	[(vrshl_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15)
+	[(vrshld_s64_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i)
 		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vrshl_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vrshlq_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vrshl_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vrshld_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vrshlq_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vrshl_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vrshlq_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vrshl_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vrshl_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vrshld_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vrshlq_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vrshlq_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vrshlq_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vrshl_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[else (error "Unable to get name  for vrshl_s32")]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 64) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshld_s64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 64) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshl_u64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 16) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshl_s16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 16) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshlq_s16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 32) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshl_s32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 16) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshl_u16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 64) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshl_s64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 64) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshlq_s64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 16) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshlq_u16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 32) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshlq_s32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 32) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshl_u32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 64) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshlq_u64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 32) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshlq_u32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 64) (equal? num_14 0) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vrshld_u64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[else (error "Unable to get name  for vrshld_s64")]
 )
 
 	]
@@ -1479,24 +1449,6 @@
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1)) 
    (append (list  "vmaxq_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
 		[else (error "Unable to get name  for vmaxq_u16")]
-)
-
-	]
-	[(vshll_n_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10)
-		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 2) (equal? num_10 0)) 
-   (append (list  "vshll_n_u16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1)) 
-   (append (list  "vshll_n_s8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 0)) 
-   (append (list  "vshll_n_u8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1)) 
-   (append (list  "vshll_n_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 0) (equal? num_9 2) (equal? num_10 0)) 
-   (append (list  "vshll_n_u32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1)) 
-   (append (list  "vshll_n_s16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[else (error "Unable to get name  for vshll_n_u16")]
 )
 
 	]
@@ -1812,45 +1764,15 @@
 )
 
 	]
-	[(vqrshlq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i prec_o num_10 num_11 num_12 num_13 num_14 num_15)
+	[(vqrshl_s8_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22)
 		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vqrshlq_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vqrshld_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vqrshlq_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vqrshl_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vqrshlh_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vqrshlq_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vqrshlh_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vqrshl_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vqrshl_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vqrshl_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vqrshld_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vqrshls_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vqrshlq_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vqrshls_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 2)) 
-   (append (list  "vqrshlq_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vqrshlq_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 4)) 
-   (append (list  "vqrshl_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 8)) 
-   (append (list  "vqrshl_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[else (error "Unable to get name  for vqrshlq_s16")]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_i_o 8) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vqrshl_s8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 8) (equal? num_10 8) (equal? num_11 0) (equal? num_12 8) (equal? prec_i_o 8) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vqrshlb_s8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_i_o 8) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1)) 
+   (append (list  "vqrshlq_s8") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[else (error "Unable to get name  for vqrshl_s8")]
 )
 
 	]
@@ -1891,24 +1813,6 @@
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)) 
    (append (list  "vmlsq_s8") (arm:get-target-name v0) (arm:get-target-name v1) (arm:get-target-name v2))]
 		[else (error "Unable to get name  for vmlsq_u16")]
-)
-
-	]
-	[(vqshl_u8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)) 
-   (append (list  "vqshl_u8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)) 
-   (append (list  "vqshlb_s8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)) 
-   (append (list  "vqshlq_s8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)) 
-   (append (list  "vqshlb_u8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 1)) 
-   (append (list  "vqshl_s8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 1)) 
-   (append (list  "vqshlq_u8") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[else (error "Unable to get name  for vqshl_u8")]
 )
 
 	]
@@ -1970,21 +1874,27 @@
 )
 
 	]
-	[(vqrshl_u8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+	[(vqrshlq_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 vc_6 vc_7 v8 size_i_o num_10 num_11 num_12 prec_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 prec_i)
 		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vqrshl_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vqrshlb_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vqrshlq_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vqrshlb_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vqrshlq_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)) 
-   (append (list  "vqrshl_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
-		[else (error "Unable to get name  for vqrshl_u8")]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 16) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshlq_s16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 32) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshlq_s32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 16) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshl_s16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 32) (equal? num_10 32) (equal? num_11 0) (equal? num_12 32) (equal? prec_o 32) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshls_s32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 32) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshl_s32") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 64) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshld_s64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 16) (equal? num_10 16) (equal? num_11 0) (equal? num_12 16) (equal? prec_o 16) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshlh_s16") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 64) (equal? num_10 64) (equal? num_11 0) (equal? num_12 64) (equal? prec_o 64) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshl_s64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[(and  (equal? size_i_o 128) (equal? num_10 128) (equal? num_11 0) (equal? num_12 128) (equal? prec_o 64) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? num_19 -1) (equal? num_20 1) (equal? num_21 -1) (equal? num_22 1) (equal? prec_i 8)) 
+   (append (list  "vqrshlq_s64") (arm:get-target-name v0) (arm:get-target-name v8))]
+		[else (error "Unable to get name  for vqrshlq_s16")]
 )
 
 	]
@@ -2076,36 +1986,36 @@
 )
 
 	]
-	[(vshl_u16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13)
+	[(vshl_u16_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_o num_10 num_11 num_12 num_13 num_14 num_15 prec_i)
 		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vshl_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vshlq_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vshlq_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vshlq_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vshld_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vshlq_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vshl_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vshl_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vshld_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vshlq_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 1) (equal? num_13 4)) 
-   (append (list  "vshl_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vshlq_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 2)) 
-   (append (list  "vshl_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 8)) 
-   (append (list  "vshl_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshl_u16") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshlq_s32") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshlq_u16") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshlq_u32") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshl_s64") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshl_u64") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshlq_u64") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshld_u64") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshl_s16") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshld_s64") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_o 64) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshlq_s64") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshl_u32") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_o 16) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshlq_s16") (arm:get-target-name v0) (arm:get-target-name v4))]
+		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_o 32) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? prec_i 8)) 
+   (append (list  "vshl_s32") (arm:get-target-name v0) (arm:get-target-name v4))]
 		[else (error "Unable to get name  for vshl_u16")]
 )
 
@@ -2261,30 +2171,6 @@
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? num_6 32) (equal? prec_i_o 64) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 2)) 
    (append (list  "vsubw_u32") (arm:get-target-name v0) (arm:get-target-name v1))]
 		[else (error "Unable to get name  for vsubw_s8")]
-)
-
-	]
-	[(vrsra_n_u8_dsl vc_0 vc_1 v2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14)
-		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 8) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsra_n_u8") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 16) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsra_n_u16") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsraq_n_u16") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 8) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsraq_n_u8") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsra_n_u32") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 32) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsraq_n_u32") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 64) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsra_n_u64") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 128) (equal? num_6 128) (equal? num_7 0) (equal? num_8 128) (equal? prec_i_o 64) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsraq_n_u64") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 64) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0)) 
-   (append (list  "vrsrad_n_u64") (arm:get-target-name v2) (arm:get-target-name v3) (arm:get-target-name v4))]
-		[else (error "Unable to get name  for vrsra_n_u8")]
 )
 
 	]
@@ -2610,21 +2496,21 @@
 )
 
 	]
-	[(vmovl_u16_dsl vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10)
+	[(vmovl_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_i_o num_7 num_8 num_9 prec_i prec_o num_12 num_13 num_14 num_15 num_16)
 		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 2) (equal? num_10 0)) 
-   (append (list  "vmovl_u16") (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 0) (equal? num_9 2) (equal? num_10 0)) 
-   (append (list  "vmovl_u32") (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1)) 
-   (append (list  "vmovl_s16") (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 0)) 
-   (append (list  "vmovl_u8") (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1)) 
-   (append (list  "vmovl_s32") (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1)) 
-   (append (list  "vmovl_s8") (arm:get-target-name v1))]
-		[else (error "Unable to get name  for vmovl_u16")]
+		[(and  (equal? size_i_o 64) (equal? num_7 64) (equal? num_8 0) (equal? num_9 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_12 0) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1) (equal? num_16 1)) 
+   (append (list  "vmovl_s16") (arm:get-target-name v0))]
+		[(and  (equal? size_i_o 64) (equal? num_7 64) (equal? num_8 0) (equal? num_9 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_12 0) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1) (equal? num_16 1)) 
+   (append (list  "vmovl_s8") (arm:get-target-name v0))]
+		[(and  (equal? size_i_o 64) (equal? num_7 64) (equal? num_8 0) (equal? num_9 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_12 0) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1) (equal? num_16 0)) 
+   (append (list  "vmovl_u32") (arm:get-target-name v0))]
+		[(and  (equal? size_i_o 64) (equal? num_7 64) (equal? num_8 0) (equal? num_9 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_12 0) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1) (equal? num_16 0)) 
+   (append (list  "vmovl_u16") (arm:get-target-name v0))]
+		[(and  (equal? size_i_o 64) (equal? num_7 64) (equal? num_8 0) (equal? num_9 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_12 0) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1) (equal? num_16 0)) 
+   (append (list  "vmovl_u8") (arm:get-target-name v0))]
+		[(and  (equal? size_i_o 64) (equal? num_7 64) (equal? num_8 0) (equal? num_9 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_12 0) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1) (equal? num_16 1)) 
+   (append (list  "vmovl_s32") (arm:get-target-name v0))]
+		[else (error "Unable to get name  for vmovl_s16")]
 )
 
 	]
@@ -2662,45 +2548,45 @@
 )
 
 	]
-	[(vqshlb_n_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+	[(vqshluh_n_s16_dsl v0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
 		(cond 
-		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1)) 
-   (append (list  "vqshlb_n_s8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 0)) 
-   (append (list  "vqshlh_n_u16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshluq_n_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlu_n_s64") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlu_n_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlus_n_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlub_n_s8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 0)) 
-   (append (list  "vqshls_n_u32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshluh_n_s16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshluq_n_s8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1)) 
-   (append (list  "vqshlh_n_s16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlu_n_s16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlu_n_s8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshluq_n_s16") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1)) 
-   (append (list  "vqshls_n_s32") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshlud_n_s64") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 8) (equal? num_7 0) (equal? num_8 0)) 
-   (append (list  "vqshlb_n_u8") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 64) (equal? num_7 0) (equal? num_8 1)) 
-   (append (list  "vqshluq_n_s64") (arm:get-target-name v0) (arm:get-target-name v1))]
-		[else (error "Unable to get name  for vqshlb_n_s8")]
+		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshluh_n_s16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlh_n_s16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlub_n_s8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlud_n_s64") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshluq_n_s32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlus_n_s32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshluq_n_s8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlu_n_s8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 0)) 
+   (append (list  "vqshlh_n_u16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshluq_n_s16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlu_n_s64") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 0)) 
+   (append (list  "vqshls_n_u32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlu_n_s16") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshls_n_s32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 0)) 
+   (append (list  "vqshlb_n_u8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshluq_n_s64") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 0) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlu_n_s32") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)) 
+   (append (list  "vqshlb_n_s8") (arm:get-target-name v0) (arm:get-target-name v3))]
+		[else (error "Unable to get name  for vqshluh_n_s16")]
 )
 
 	]
@@ -2711,6 +2597,210 @@
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 0) (equal? num_12 16) (equal? num_13 2)) 
    (append (list  "vmlal_high_n_u16") (arm:get-target-name v0) (arm:get-target-name v1) (arm:get-target-name v2))]
 		[else (error "Unable to get name  for vmlal_high_n_s16")]
+)
+
+	]
+	[(vshr_n_s8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshr_n_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshr_n_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshrq_n_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshrq_n_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshr_n_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshrq_n_s8") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshrq_n_s16") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshrd_n_s64") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 1)) 
+   (append (list  "vshr_n_s32") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[else (error "Unable to get name  for vshr_n_s8")]
+)
+
+	]
+	[(vqrshrnd_n_s64_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20)
+		(cond 
+		[(and  (equal? size_i_o 32) (equal? num_8 32) (equal? num_9 0) (equal? num_10 32) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vqrshrnd_n_s64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vqrshrn_n_s32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 8) (equal? num_8 8) (equal? num_9 0) (equal? num_10 8) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vqrshrunh_n_s16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vqrshrun_n_s64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vqrshrn_n_s16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vqrshrn_n_s64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 8) (equal? num_8 8) (equal? num_9 0) (equal? num_10 8) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vqrshrnh_n_s16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vqrshrun_n_s32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 32) (equal? num_8 32) (equal? num_9 0) (equal? num_10 32) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vqrshrund_n_s64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 16) (equal? num_8 16) (equal? num_9 0) (equal? num_10 16) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 1) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vqrshrns_n_s32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 16) (equal? num_8 16) (equal? num_9 0) (equal? num_10 16) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vqrshruns_n_s32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 1) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vqrshrun_n_s16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[else (error "Unable to get name  for vqrshrnd_n_s64")]
+)
+
+	]
+	[(vqshrunh_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13)
+		(cond 
+		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vqshrunh_n_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vqshrun_n_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vqshrund_n_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vqshrn_n_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vqshrns_n_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vqshrnd_n_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vqshruns_n_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vqshrn_n_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vqshrun_n_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vqshrun_n_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vqshrn_n_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vqshrnh_n_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[else (error "Unable to get name  for vqshrunh_n_s16")]
+)
+
+	]
+	[(vshr_n_u32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshr_n_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshrq_n_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshr_n_u16") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshrq_n_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshr_n_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshrq_n_u8") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshrd_n_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshrq_n_u32") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 64) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 -1) (equal? num_13 0)) 
+   (append (list  "vshr_n_u64") (arm:get-target-name v2) (arm:get-target-name v3))]
+		[else (error "Unable to get name  for vshr_n_u32")]
+)
+
+	]
+	[(vrshr_n_s64_dsl vc_0 vc_1 vc_2 vc_3 vc_4 vc_5 v6 v7 size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshr_n_s64") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshrd_n_s64") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 8) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshrq_n_s8") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshr_n_s32") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshrq_n_s32") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshrq_n_s64") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 16) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshr_n_s16") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 8) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshr_n_s8") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 16) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 -1) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? num_19 -1) (equal? num_20 1)) 
+   (append (list  "vrshrq_n_s16") (arm:get-target-name v6) (arm:get-target-name v7))]
+		[else (error "Unable to get name  for vrshr_n_s64")]
+)
+
+	]
+	[(vrshrn_n_s64_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vrshrn_n_s64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vrshrn_n_s16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vrshrn_n_u16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vrshrn_n_u64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vrshrn_n_u32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vrshrn_n_s32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[else (error "Unable to get name  for vrshrn_n_s64")]
+)
+
+	]
+	[(vshrn_n_u32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vshrn_n_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vshrn_n_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vshrn_n_s16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vshrn_n_s32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vshrn_n_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vshrn_n_s64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[else (error "Unable to get name  for vshrn_n_u32")]
+)
+
+	]
+	[(vqshrn_n_u32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vqshrn_n_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 32) (equal? num_13 2)) 
+   (append (list  "vqshrns_n_u32") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vqshrn_n_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 16) (equal? num_13 2)) 
+   (append (list  "vqshrnh_n_u16") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vqshrn_n_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_o 32) (equal? num_8 0) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? prec_i 64) (equal? num_13 2)) 
+   (append (list  "vqshrnd_n_u64") (arm:get-target-name v1) (arm:get-target-name v2))]
+		[else (error "Unable to get name  for vqshrn_n_u32")]
+)
+
+	]
+	[(vqrshrns_n_u32_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 size_i_o num_8 num_9 num_10 prec_o num_12 num_13 num_14 num_15 num_16 num_17 num_18 prec_i num_20)
+		(cond 
+		[(and  (equal? size_i_o 16) (equal? num_8 16) (equal? num_9 0) (equal? num_10 16) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vqrshrns_n_u32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vqrshrn_n_u64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vqrshrn_n_u16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 32) (equal? num_8 32) (equal? num_9 0) (equal? num_10 32) (equal? prec_o 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 64) (equal? num_20 2)) 
+   (append (list  "vqrshrnd_n_u64") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 8) (equal? num_8 8) (equal? num_9 0) (equal? num_10 8) (equal? prec_o 8) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 16) (equal? num_20 2)) 
+   (append (list  "vqrshrnh_n_u16") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[(and  (equal? size_i_o 64) (equal? num_8 64) (equal? num_9 0) (equal? num_10 64) (equal? prec_o 16) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 -1) (equal? num_15 0) (equal? num_16 0) (equal? num_17 -1) (equal? num_18 0) (equal? prec_i 32) (equal? num_20 2)) 
+   (append (list  "vqrshrn_n_u32") (arm:get-target-name v5) (arm:get-target-name v6))]
+		[else (error "Unable to get name  for vqrshrns_n_u32")]
 )
 
 	]
