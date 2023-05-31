@@ -208,11 +208,15 @@ class DecodeContext:
 def parse_instr_attr(instr: InstrDesc, assign):
   from ARMTypes import ReservedVecTypes, ReservedImmTypes, PointerType
 
-  def isSigned(t: str):
+  def isSigned(t: str, var: str = ""):
     if "uint" in t:
       return False
     if "unsigned" in t:
       return False
+    if var in instr.Arguments_Preparation:
+      if "minimum" in instr.Arguments_Preparation[var]:
+        lo, hi = get_arg_lo_hi(instr.Arguments_Preparation[var])
+        return lo < 0
     return True
 
   # - Parse Arguments_Preparation like:
@@ -225,7 +229,7 @@ def parse_instr_attr(instr: InstrDesc, assign):
     nm = arg.split()[-1]
     # print(tp)
     assert tp in (ReservedVecTypes | ReservedImmTypes | PointerType)
-    Params.append(Parameter(nm, tp, isSigned(tp),
+    Params.append(Parameter(nm, tp, isSigned(tp, nm),
                   tp in ReservedImmTypes, False))
 
   # - Parse return type:
@@ -365,14 +369,47 @@ class SemaGenerator():
       yield self.getSemaByInstrDesc(self.toI[ii], i)
 
   def getResult(self) -> (Dict[str, ARMSema]):
+    hirarch = {}
     if self.result:
       return self.result
     else:
-      from ARMIntrinsicClassify import Intrinsics2Fields
+      from ARMIntrinsicClassify import Intrinsics2Fields, ExpandName2Encoding
       for i in Intrinsics2Fields:
         ii, assign = extract_assignment_from_name(i)
         if (z := self.getSemaByInstrDesc(self.toI[ii], i)) is not None:
-          self.result[i] = z
+          if i == ii:
+            self.result[i] = z
+          else:
+            hirarch[ii] = hirarch.get(ii, []) + [(i, z)]
+
+    for k, v in hirarch.items():
+      if not v:
+        continue
+      for ei, (i, z) in enumerate(v):
+        if 'shift' not in z.resolving:
+          break
+        shift = z.resolving['shift']
+        del z.resolving['shift']
+        if ei == 0:
+          store_z, store_i = z, i
+        if i != store_i:
+          assert store_z.inst == z.inst
+          assert store_z.params == z.params
+          assert str(store_z.spec) == str(z.spec), f"{store_z.spec} {z.spec}"
+          assert store_z.rettype == z.rettype
+          assert store_z.ret_is_signed == z.ret_is_signed
+          assert store_z.inst_form == z.inst_form
+          assert store_z.extensions == z.extensions
+          assert store_z.imm_width == z.imm_width
+          assert store_z.xed == z.xed
+          assert store_z.elem_type == z.elem_type
+          assert store_z.resolving == z.resolving
+      else:
+        z.preparation['shift'] = 'n'
+        z = z._replace(intrin=k)
+        self.result[k] = z
+    # for k in self.result.keys():
+    #   print(k)
     return self.result
 
   def serialize(self):
@@ -389,6 +426,7 @@ if __name__ == "__main__":
   # S.serialize()
   # print([i for i in S.SemaGenerator() if i is not None])
   S = SemaGenerator()
+  # print(S.getSemaByName("vqshrun_n_s64__n_1"))
   print(S.getSemaByName("vabd_s32").spec.__repr__())
   print(S.getSemaByName("vabdl_s32").spec.__repr__())
   # S = SemaGenerator(deserialize=True)

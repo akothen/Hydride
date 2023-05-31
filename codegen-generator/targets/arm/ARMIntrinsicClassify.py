@@ -423,6 +423,7 @@ def Intrin2Field():
     assert False
   skip = []
   skipintrin = []
+  name2encoding = {}
   for encodings, intrins in inv_map.items():
     # print(encodings, intrins)
     # if encodings in skip:
@@ -438,6 +439,7 @@ def Intrin2Field():
     # print(len(intrins), len(opcd), intrins)
 
     for cc2 in intrins:
+      name2encoding[cc2] = encodings
       cc, assignments = extract_assignment_from_name(cc2)
       Flag = IntrinsicsFlags[cc]
       # print(cc2, encodings, field)
@@ -622,7 +624,7 @@ def Intrin2Field():
   print("Skipped intrinsics:", skipintrin)
   print(f"Solved {len(result)} out of {len(I)} instrisics")
   print("==============           End           ==============")
-  return result
+  return result, name2encoding
 
 
 def genThree():
@@ -636,8 +638,8 @@ def genThree():
 
 # For lane intrinsics, we need to expand them by lane in Intrinsics2Fields
 # For these expansion, there keys in Intrinsics2Fields are different from the original ones
-IntrinsicsFlags, Intrinsics2Encodings, Intrinsics2Fields = genThree()
-
+IntrinsicsFlags, Intrinsics2Encodings, (Intrinsics2Fields, ExpandName2Encoding) = genThree()
+# print(ExpandName2Encoding)
 
 if __name__ == "__main__":
   # check = ["vqdmulh_s16", "vaddhn_s64", "vqaddb_s8",

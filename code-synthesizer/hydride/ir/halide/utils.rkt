@@ -1932,6 +1932,43 @@
   )
 
 
+(define (contains-complex-op-in-subexpr-arm expr expr-depth)
+
+  (define leaves (get-sub-exprs expr (+ expr-depth 1)))
+  (define leaves-sizes (get-expr-bv-sizes leaves))
+
+  (define leaves-elemT (get-expr-elemT leaves))
+  (define sym-bvs (create-concrete-bvs leaves-sizes))
+
+  (define dummy-args (create-buffers leaves sym-bvs))
+
+  (define-values (expr-extract num-used) (bind-expr-args expr dummy-args expr-depth))
+
+
+  (contains-complex-op-arm expr-extract)
+  )
+
+
+;; Checks if the expression contains a shr
+;; Because currently shr needs 2 depth to synthesize
+
+(define (contains-complex-op-arm expr)
+
+  (define flag #f)
+  (define (visitor-fn e)
+    (destruct e
+              [(vec-shr v1 v2) 
+               (set! flag #t)
+               ]
+               
+              [_ e]
+              )
+    )
+  (halide:visit expr visitor-fn)
+
+  flag
+  )
+
 (define (contains-complex-op-in-subexpr expr expr-depth)
 
   (define leaves (get-sub-exprs expr (+ expr-depth 1)))
@@ -1967,6 +2004,7 @@
               [(vec-div v1 v2) 
                (set! flag #t)
                ]
+
               [(vec-if vi v1 v2)
                (set! flag #t)
                ]

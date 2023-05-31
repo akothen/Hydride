@@ -386,7 +386,7 @@ class Context:
     def get_scalable_args_idx(self, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
 
-        sample_scale_factor = 4#32
+        sample_scale_factor = 2#32
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):

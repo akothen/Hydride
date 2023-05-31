@@ -1888,7 +1888,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits <= 64) {  //?
+                    if (element_bits > 64) {
                         lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 }
@@ -1898,12 +1898,12 @@ private:
 
             else if (op->is_intrinsic(Call::saturating_sub)) {
 
+                size_t element_bits = op->args[0].type().bits();
                 if (_arch == Architecture::HVX) {
                     // lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
                     //        op->args[0].type().min(), op->args[0].type().max()));
                 } else if (_arch == Architecture::X86) {
 
-                    size_t element_bits = op->args[0].type().bits();
                     if (element_bits >= 32 && element_bits < 64) {
                         lowered = lower_saturating_sub(op->args[0], op->args[1]);
                         lower_using_halide = false;
@@ -1912,12 +1912,9 @@ private:
                     }
                     // Map Saturating sub to saturating sub in Rosette.
                 } else if (_arch == Architecture::ARM) {
-                    size_t element_bits = op->args[0].type().bits();
-                    if (element_bits >= 32 && element_bits < 64) {
-                        lowered = lower_saturating_sub(op->args[0], op->args[1]);
-                        lower_using_halide = false;
-                    } else if (element_bits >= 64) {
-                        lower_using_halide = true;
+
+                    if (element_bits > 64) {
+                        lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 }
 
@@ -1947,7 +1944,7 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::ARM) {
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {  // All following condition might be discussed
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
@@ -1982,7 +1979,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits < 64) {  //?
+                    if (element_bits <= 64) {
                         lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2018,7 +2015,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits < 64) {  //?
+                    if (element_bits <= 64) {
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2085,7 +2082,7 @@ private:
                         lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                     }
                 } else if (_arch == Architecture::ARM) {
-                    lower_using_halide = false;
+                    lower_using_halide = false;  // vabd does this
                 }
             } else if (op->is_intrinsic(Call::rounding_shift_right)) {
                 Expr Zero, One, Two;
@@ -2126,7 +2123,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {  //?
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) * widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2150,7 +2147,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) + widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2176,7 +2173,7 @@ private:
                 } else if (_arch == Architecture::ARM) {
 
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) - widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2201,7 +2198,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = widen(op->args[0]) << op->args[1];
                     } else {
                         lower_using_halide = true;
@@ -2228,7 +2225,7 @@ private:
                 } else if (_arch == Architecture::ARM) {
 
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = widen(op->args[0]) >> op->args[1];
                     } else {
                         lower_using_halide = true;
@@ -2253,7 +2250,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     } else {
                         lower_using_halide = true;
@@ -2280,7 +2277,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
+                    if (element_bits <= 64) {
                         lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                     } else {
                         lower_using_halide = true;
@@ -2858,67 +2855,85 @@ private:
             return IRMutator::visit(op);
         }
 
-        Expr visit(const Mul *op) override {
+        Expr visit(const Call *op) override {
 
-            size_t bits = op->type.bits();
-            size_t lanes = op->type.lanes();
-
-            if (!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)) {
-                debug(0) << "Found multiplication to slice!"
-                         << "\n";
-                Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1, 32));
-                Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1, 32));
-
-                Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1, 32));
-                Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1, 32));
-
-                Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
-                Expr right_mul = (Mul::make(left_op_second_half, right_op_second_half));
-
-                Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
-                debug(0) << "Halide Lowered Mul to: " << lowered_mul << "\n";
-                return mutate(lowered_mul);
-            }
-
-            return IRMutator::visit(op);
-        }
-
-        // For certain targets, even when broadcasting elements of
-        // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
-        // Without loss of generality, depending on the target, we modify our broadcasts
-        // to accomodate such behavior when needed.
-        Expr visit(const Broadcast *op) override {
-
-            size_t bits = op->type.bits();
-            size_t lanes = op->type.lanes();
-
-            if (lanes == 1) {
-                return op->value;
-            }
-
-            if (is_const(op->value)) {
-                return op;
-            }
-
-            if (!op->type.is_float() && op->type.is_vector()) {
-
-                if (bits == 16 && op->value.type().lanes() != 2) {
-
-                    debug(0) << "======"
-                             << "\n";
-                    debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
-                    Expr Broadcast2 = Broadcast::make(op->value, 2);
-                    Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
-                    debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
-                    debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
-                    return ModifiedBroadcast;
-                } else {
-                    return op;
+            if (op->is_intrinsic(Call::shift_right)) {
+                debug(0) << "Found shr\n";
+                // if (!op->type.is_float() && op->type.is_vector()) {
+                //     debug(0) << "Lowering armshr to armshl\n";
+                //     return mutate(op->args[0] << (-op->args[1]));
+                // }
+                if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
+                    debug(0) << "Lowering armshr to armshl\n";
+                    return op->args[0] << (-op->args[1]);
                 }
             }
 
             return IRMutator::visit(op);
         }
+
+        // Expr visit(const Mul *op) override {
+
+        //     size_t bits = op->type.bits();
+        //     size_t lanes = op->type.lanes();
+
+        //     if (!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)) {
+        //         debug(0) << "Found multiplication to slice!"
+        //                  << "\n";
+        //         Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1, 32));
+        //         Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1, 32));
+
+        //         Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1, 32));
+        //         Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1, 32));
+
+        //         Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
+        //         Expr right_mul = (Mul::make(left_op_second_half, right_op_second_half));
+
+        //         Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
+        //         debug(0) << "Halide Lowered Mul to: " << lowered_mul << "\n";
+        //         return mutate(lowered_mul);
+        //     }
+
+        //     return IRMutator::visit(op);
+        // }
+
+        // For certain targets, even when broadcasting elements of
+        // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
+        // Without loss of generality, depending on the target, we modify our broadcasts
+        // to accomodate such behavior when needed.
+        // Expr visit(const Broadcast *op) override {
+
+        //     size_t bits = op->type.bits();
+        //     size_t lanes = op->type.lanes();
+
+        //     if (lanes == 1) {
+        //         return op->value;
+        //     }
+
+        //     if (is_const(op->value)) {
+        //         return op;
+        //     }
+
+        //     if (!op->type.is_float() && op->type.is_vector()) {
+
+        //         if (bits == 16 && op->value.type().lanes() != 2) {  // Just my guess, to pass assertion at IR.cpp:269 for ARM @ "add" benchmark
+
+        //             debug(0) << "======"
+        //                      << "\n";
+        //             debug(0) << "Orignal broadcast value: " << op->value << "\n";
+        //             debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
+        //             Expr Broadcast2 = Broadcast::make(op->value, 2);
+        //             Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
+        //             debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
+        //             debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
+        //             return ModifiedBroadcast;
+        //         } else {
+        //             return op;
+        //         }
+        //     }
+
+        //     return IRMutator::visit(op);
+        // }
 
     public:
         ReplaceDiv() {
@@ -3419,7 +3434,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
         debug(0) << "Printing Pruned Stmt:\n";
         debug(0) << pruned << "\n";
 
-        std::vector<unsigned> arm_vector_sizes = {128, 64};
+        std::vector<unsigned> arm_vector_sizes = {64, 128};
 
         bool model_sat_support = false;
 
@@ -3439,7 +3454,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
     const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
     std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
-    auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::ARM, mutated_exprs, random_seed, name).mutate(distributed);
+    auto Result = Hydride::IROptimizer(std::move(fvb), Hydride::IROptimizer::ARM, mutated_exprs, random_seed, name).mutate(distributed);
 
     if (!mutated_exprs.empty()) {
         hydride_generate_llvm_bitcode(Target::ARM, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);

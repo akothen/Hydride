@@ -1,3 +1,5 @@
 .vscode
 *.rkt
 */bin
+*.txt
+!*/src/*.cpp

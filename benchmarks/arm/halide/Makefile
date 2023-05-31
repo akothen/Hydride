@@ -24,7 +24,8 @@ benchmarks = gaussian3x3 \
 			 fully_connected \
 			 camera_pipe \
 			 fft \
-			 softmax
+			 softmax\
+			 simple
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 

@@ -7,7 +7,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 armec.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	rm $(HYDRIDE_ROOT)/benchmarks/arm/halide/halide_expr_$**.rkt
+	- rm $(HYDRIDE_ROOT)/benchmarks/arm/halide/halide_expr_$**.rkt
 arme.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 arme1.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
@@ -33,7 +33,7 @@ armmul: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f $(MAKEFILE)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
 $(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
-	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT)
+	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
 x86median: $(LIB_HALIDE)
 	make -C $(HYDRIDE_ROOT)/benchmarks/x86-deprecated/halide median3x3
 x86mul: $(LIB_HALIDE)
@@ -44,7 +44,7 @@ LEGALIZER_CPP=$(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSele
 SIMILARITY_SUMMARY_SEMA=$(SIMILARITY_ENV)/semantics.py
 HYDRIDE_SEMA=$(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm/semantics.rkt
 $(SIMILARITY_SUMMARY_SEMA): $(ALL_ARM_SEMA)
-	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	
 	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)
@@ -61,11 +61,13 @@ $(ALL_ARM_SEMA):
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
 halide: $(LIB_HALIDE)
 similaritytest:
-	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
+	
 	
 	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 similarity:
-	cp $(SIMILARITY_SUMMARY)/RosetteOpsImpl.rkt $(SIMILARITY_ENV)
+	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
+	
 	
 	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)

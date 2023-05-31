@@ -40,5 +40,6 @@ export PYTHONPATH=$CUR_DIR/code-synthesizer/dsl-ir:$PYTHONPATH
 export PATH=$LLVM_ROOT/bin/:$PATH
 export PATH=$CUR_DIR/rosette/bin/:$PATH
 export PATH=$CUR_DIR/bin/:$PATH
+export DYLD_LIBRARY_PATH=$HYDRIDE_ROOT/frontends/halide/distrib/lib:$HYDRIDE_ROOT/codegen-generator/tools/low-level-codegen/build:$DYLD_LIBRARY_PATH
 
 export LD_LIBRARY_PATH=$HYDRIDE_ROOT/frontends/halide/distrib/lib:$HYDRIDE_ROOT/codegen-generator/tools/low-level-codegen/build:$LD_LIBRARY_PATH
