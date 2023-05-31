@@ -50,7 +50,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
 
     // Simplify slice  contigous vectors of input into
     // loading the specific slice indices 
-    if (const Load *first_load = new_vectors[0].as<Load>()) {
+    //if (const Load *first_load = new_vectors[0].as<Load>()) {
 
         // TODO: Add condition when target is HVX and the load is on 1024
 
@@ -88,8 +88,8 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
         }*/
 
 
-
-        if(/*simplify_load &&*/  op->is_slice() && op->slice_stride() == 1){
+        /*
+        if( op->is_slice() && op->slice_stride() == 1){
             debug(1) << "Load Index: " << first_load->index << "\n";
             debug(1) << "Index lanes: " << first_load->index.type().lanes() << "\n";
             debug(1) << "Load Predicate: " << first_load->predicate << "\n";
@@ -105,12 +105,12 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
 
             debug(0) << "Simplified sliced load to: " << sliced_load << "\n";
             return mutate(sliced_load, nullptr);
-        }
+        }*/
 
         /*if(!simplify_load){
             return op;
         }*/
-    }
+    //}
 
     // Try to convert a load with shuffled indices into a
     // shuffle of a dense load.
@@ -152,6 +152,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
                 }
                 t = first_load->type;
                 t = t.with_lanes(op->indices.size());
+                debug(0) << "Converting load with shuffled indices into shuffle of a dense load" <<"\n";
                 return Load::make(t, first_load->name, shuffled_index, first_load->image,
                                   first_load->param, shuffled_predicate, alignment);
             }
@@ -160,6 +161,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
 
 
 
+    /*
     if (const Ramp *first_ramp = new_vectors[0].as<Ramp>()) {
 
         if(op->is_slice() && op->slice_stride() == 1){
@@ -172,7 +174,7 @@ Expr Simplify::visit(const Shuffle *op, ExprInfo *bounds) {
             debug(1) << "New Ramp: "<< new_ramp << "\n";
             return mutate(new_ramp, nullptr);
         }
-    }
+    }*/
 
 
     // Try to collapse a shuffle of broadcasts into a single

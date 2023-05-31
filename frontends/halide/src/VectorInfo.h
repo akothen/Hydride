@@ -71,6 +71,7 @@ namespace Halide {
         void visit(const OP_NAME* op) override {\
         unsigned bitwidth = op->type.bits() * op->type.lanes();\
         max_width = std::max(bitwidth, max_width);\
+        debug(0) << "INFO_OP " <<#OP_NAME << ":"<< bitwidth << "\n";\
         IRVisitor::visit(op); \
         }
 
@@ -104,6 +105,7 @@ namespace Halide {
 #define INFO_CALL_CLAUSE(OP_NAME) \
             if(op->is_intrinsic(Call::OP_NAME)){ \
                 unsigned bitwidth = op->type.bits() * op->type.lanes() * 1;\
+                debug(0) << "INFO_CALL_CLAUSE width : "<< op->name << ": "<<bitwidth << "\n";\
                 max_width = std::max(bitwidth, max_width);\
                 }
 
@@ -149,11 +151,17 @@ namespace Halide {
             }
 
 
+
+
             unsigned bitwidth = op->type.bits() * op->type.lanes() ;
             max_width = std::max(bitwidth, max_width);
 
             IRVisitor::visit(op);
 
+        }
+
+        void visit(const IfThenElse *op) override{
+            contains_dynamic_shuffle = true;
         }
 
 

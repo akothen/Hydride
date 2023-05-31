@@ -64,6 +64,107 @@ namespace Halide {
             std::map<const Variable*, unsigned> VariableToRegMap; // Map racket register expressions to Halide Load Instructions
 
 
+                // Targets such as HVX do not have division
+                // operations, so we must replace operations
+                // using division to instead use shifts
+                class ReplaceDiv : public IRMutator {
+                    using IRMutator::visit;
+
+
+
+                    Expr visit(const Div *op) override{
+
+
+                        if(!op->type.is_float() && op->type.is_vector()  && !is_const(op->b, 2)){
+                            auto lowered_div =  lower_int_uint_div(op->a, op->b);
+                            debug(0) << "Halide Lowered Div to: "<<lowered_div <<"\n";
+                            return mutate(lowered_div);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const Mul *op) override{
+
+                        /*
+                        size_t bits = op->type.bits();
+                        size_t lanes = op->type.lanes();
+
+                        if(!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)){
+                            debug(0) << "Found multiplication to slice!" << "\n";
+                            Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1 , 32));
+                            Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1 , 32));
+
+                            Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1 , 32));
+                            Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1 , 32));
+
+
+
+
+                            Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
+                            Expr right_mul =  (Mul::make(left_op_second_half, right_op_second_half));
+
+                            Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
+                            debug(0) << "Halide Lowered Mul to: "<<lowered_mul <<"\n";
+                            return mutate(lowered_mul);
+                        }
+                        */
+
+                        return IRMutator::visit(op);
+
+                    }
+                    
+                    // For certain targets, even when broadcasting elements of
+                    // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
+                    // Without loss of generality, depending on the target, we modify our broadcasts
+                    // to accomodate such behavior when needed.
+                    Expr visit(const Broadcast *op) override{
+
+                        size_t bits = op->type.bits();
+                        size_t lanes = op->type.lanes();
+
+                        if(lanes == 1){
+                            return op->value;
+                        }
+
+                        if(is_const(op->value)){
+                            return op;
+                        }
+
+                        if(!op->type.is_float() && op->type.is_vector() ){
+
+                            if(bits == 16 && op->value.type().lanes() != 2){
+
+
+
+                                debug(0) << "======"<<"\n";
+                                debug(0) << "Orignal bits: "<<bits << ", Original lanes: "<<lanes <<"\n";
+                                Expr Broadcast2 = Broadcast::make(op->value, 2);
+                                Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
+                                debug(0) << "Modified broadcast to "<< ModifiedBroadcast <<"\n";
+                                debug(0) << "Modified broadcast bits  "<< ModifiedBroadcast.type().bits() << " and lanes "<<ModifiedBroadcast.type().lanes() <<"\n";
+                                return ModifiedBroadcast;
+                            }
+
+                            else {
+                                return op;
+                            }
+
+
+                        }
+
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    public:
+                    ReplaceDiv(){}
+                };
+
+
             // Takes the input Halide IR and converts it to Rosette syntax
             class ExprPrinter : public VariadicVisitor<ExprPrinter, std::string, std::string> {
 
@@ -474,6 +575,7 @@ namespace Halide {
                         }
                     }
 
+
                     std::string visit(const Broadcast *op) {
 
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
@@ -608,6 +710,9 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::bitwise_not)) {
                             return print_intrinsic("bwnot", op->args, op->type.is_scalar());
+                        } 
+                        else if (op->is_intrinsic(Call::abs)) {
+                            return print_intrinsic("abs", op->args, op->type.is_scalar());
                         } 
                         else if (op->is_intrinsic(Call::bitwise_xor)) {
                             return print_intrinsic("bwxor", op->args, op->type.is_scalar());
@@ -1736,10 +1841,10 @@ namespace Halide {
 
                             std::cout << "Expression after lower intrinsic: "<< spec_expr <<"\n";
 
-                            // Simplify constants
-                            //if(arch != IROptimizer::HVX){
+                             // Simplify constants
+                            if(arch != IROptimizer::HVX){
                             spec_expr = simplify(spec_expr);
-                            //}
+                            }
 
 
 
@@ -1782,17 +1887,34 @@ namespace Halide {
                             std::cout << "Expression after legalizing division operations to target: "<< spec_expr <<"\n";
 
                             std::cout << "Expression before InlineLets: "<< spec_expr <<"\n";
-
-                            spec_expr = InlineLets().mutate(spec_expr);
-
-
-
+                             spec_expr = InlineLets().mutate(spec_expr);
                             std::cout << "Expression after InlineLets: "<< spec_expr <<"\n";
 
 
+                            /*
                             // Lift cse for more readable specs
-                            //spec_expr = common_subexpression_elimination(spec_expr);
-                            //std::cout << "Expression after CSE: "<< spec_expr <<"\n";
+                            spec_expr = common_subexpression_elimination(spec_expr);
+                            std::cout << "Expression after CSE: "<< spec_expr <<"\n";
+
+
+                            // For cleaner specs synthesize let seperately from
+                            // body
+                            if(spec_expr.node_type() == IRNodeType::Let){
+                               debug(0) << "Let Case: Synthesize value and body seperately"<<"\n";
+                               Expr LetVal =   spec_expr.as<Let>()->value;
+                               Expr LetBody =   spec_expr.as<Let>()->body;
+                                
+                               
+                               Expr OptVal = IRMutator::mutate(LetVal);
+                               Expr OptBody = IRMutator::mutate(LetBody);
+
+                               return Let::make(spec_expr.as<Let>()->name, OptVal, OptBody);
+
+
+                            }
+
+                            */
+
 
                             std::cout << "Expression before abstraction: "<< spec_expr <<"\n";
 
@@ -1904,7 +2026,7 @@ namespace Halide {
 
                     Expr visit(const Ramp *op) override {
                         Expr lowered;
-                        if(true  || SIMPLIFY_RAMP){
+                        if( true || SIMPLIFY_RAMP){
 
                             // If either the stride or the base are constant
                             // we can simplify the operations and hence keep
@@ -1943,6 +2065,7 @@ namespace Halide {
                     // for vector selection.
                     Expr visit(const Select *op) override{
 
+                        /*
                         if(op->type.is_vector() && op->condition.type().is_scalar()) {
                             std::cout << "Potentially new select lowering" <<"\n";
                             Expr cond = (op->condition.type().is_scalar() ?
@@ -1954,7 +2077,7 @@ namespace Halide {
                             debug(0) << "New select instruction: "<< Sel << "\n";
 
                             return mutate(Sel);
-                        }
+                        }*/
 
                         return IRMutator::visit(op);
 
@@ -2365,6 +2488,7 @@ namespace Halide {
                         Call::shift_right,
                         Call::shift_left,
                         Call::absd,
+                        Call::abs,
                         Call::bitwise_and,
                         Call::bitwise_not,
                         Call::bitwise_xor,
@@ -2447,6 +2571,12 @@ namespace Halide {
                             return IRMutator::visit(op);
                     }
 
+
+                    Expr visit(const Ramp* op) override {
+                        std::string uname = unique_name('h');
+                        abstractions[uname] = IRMutator::visit(op);
+                        return Variable::make(op->type, uname);
+                    }
 
                     Expr visit(const Load* op) override {
                         return op;
@@ -2543,9 +2673,10 @@ namespace Halide {
                         // Abstract scalar arithmetic 
                         // operations.
                         if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
-                            std::string uname = unique_name('h');
-                            abstractions[uname] = IRMutator::visit(op);
-                            return Variable::make(op->type, uname);
+                            //std::string uname = unique_name('h');
+                            //abstractions[uname] = IRMutator::visit(op);
+                            //return Variable::make(op->type, uname);
+                            
                         }
 
                         return IRMutator::visit(op);
@@ -3002,103 +3133,6 @@ namespace Halide {
                 };
 
 
-                // Targets such as HVX do not have division
-                // operations, so we must replace operations
-                // using division to instead use shifts
-                class ReplaceDiv : public IRMutator {
-                    using IRMutator::visit;
-
-
-
-                    Expr visit(const Div *op) override{
-
-
-                        if(!op->type.is_float() && op->type.is_vector()  && !is_const(op->b, 2)){
-                            auto lowered_div =  lower_int_uint_div(op->a, op->b);
-                            debug(0) << "Halide Lowered Div to: "<<lowered_div <<"\n";
-                            return mutate(lowered_div);
-                        }
-
-                        return IRMutator::visit(op);
-
-                    }
-
-                    Expr visit(const Mul *op) override{
-
-                        /*
-                        size_t bits = op->type.bits();
-                        size_t lanes = op->type.lanes();
-
-                        if(!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)){
-                            debug(0) << "Found multiplication to slice!" << "\n";
-                            Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1 , 32));
-                            Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1 , 32));
-
-                            Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1 , 32));
-                            Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1 , 32));
-
-
-
-
-                            Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
-                            Expr right_mul =  (Mul::make(left_op_second_half, right_op_second_half));
-
-                            Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
-                            debug(0) << "Halide Lowered Mul to: "<<lowered_mul <<"\n";
-                            return mutate(lowered_mul);
-                        }*/
-
-                        return IRMutator::visit(op);
-
-                    }
-                    
-                    // For certain targets, even when broadcasting elements of
-                    // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
-                    // Without loss of generality, depending on the target, we modify our broadcasts
-                    // to accomodate such behavior when needed.
-                    Expr visit(const Broadcast *op) override{
-
-                        size_t bits = op->type.bits();
-                        size_t lanes = op->type.lanes();
-
-                        if(lanes == 1){
-                            return op->value;
-                        }
-
-                        if(is_const(op->value)){
-                            return op;
-                        }
-
-                        if(!op->type.is_float() && op->type.is_vector() ){
-
-                            if(bits == 16 && op->value.type().lanes() != 2){
-
-
-
-                                debug(0) << "======"<<"\n";
-                                debug(0) << "Orignal bits: "<<bits << ", Original lanes: "<<lanes <<"\n";
-                                Expr Broadcast2 = Broadcast::make(op->value, 2);
-                                Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
-                                debug(0) << "Modified broadcast to "<< ModifiedBroadcast <<"\n";
-                                debug(0) << "Modified broadcast bits  "<< ModifiedBroadcast.type().bits() << " and lanes "<<ModifiedBroadcast.type().lanes() <<"\n";
-                                return ModifiedBroadcast;
-                            }
-                            else {
-                                return op;
-                            }
-
-
-                        }
-
-
-                        return IRMutator::visit(op);
-
-                    }
-
-
-                    public:
-                    ReplaceDiv(){}
-                };
 
                 bool containsFloat(const Expr &e) {
                     FloatFinder ff;
@@ -3549,6 +3583,43 @@ namespace Halide {
         } // namespace Hydride
 
 
+
+        Stmt hydride_preprocess_hvx(Stmt s){
+
+            Stmt distributed;
+
+            std::set<const IRNode*> DeadStmts;
+
+            auto FLS = Hydride::FoldLoadStores(DeadStmts);
+
+            auto folded = FLS.mutate(s);
+            debug(0) << "Printing Folded Stmt:\n";
+            debug(0) << folded <<"\n";
+
+            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+
+            auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+            debug(0) << "Printing Pruned Stmt:\n";
+            debug(0) << pruned <<"\n";
+
+            std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
+
+
+            //bool model_sat_support = false;
+            bool model_sat_support = false;
+
+            const char* enable_hydride = getenv("HL_BENCH_MATMUL");
+            if(enable_hydride){
+                debug(0) << "Setting model saturating support true" << "\n";
+                model_sat_support = true;
+            }
+            distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
+
+            //distributed = distribute_vector_exprs(s , hvx_vector_sizes, model_sat_support);
+
+            return distributed;
+        }
+
         Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
 
             debug(0) << "Hydride Optimize HVX" <<"\n";
@@ -3560,6 +3631,7 @@ namespace Halide {
                 debug(0) << "Disabling pre-processing pass\n";
                 distributed = s;
             } else {
+
 
                 std::set<const IRNode*> DeadStmts;
                 auto FLS = Hydride::FoldLoadStores(DeadStmts);
@@ -3576,7 +3648,8 @@ namespace Halide {
                 std::vector<unsigned> hvx_vector_sizes = { 2048, 1024 };
 
 
-                bool model_sat_support = false;
+                //bool model_sat_support = false;
+                bool model_sat_support = true;
 
                 const char* enable_hydride = getenv("HL_BENCH_MATMUL");
                 if(enable_hydride){
@@ -3584,6 +3657,7 @@ namespace Halide {
                     model_sat_support = true;
                 }
                 distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
+                //distributed = distribute_vector_exprs(s, hvx_vector_sizes, model_sat_support);
                 debug(0) << "Distributed Stmt:\n";
                 debug(0) << distributed <<"\n";
 
@@ -3662,11 +3736,21 @@ namespace Halide {
 Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
 
 
+    //s = ReplaceDiv().mutate(s);
+    //debug(0) << "Module  (firrst replace div):" << s << "\n";
+
     std::set<const BaseExprNode *> mutated_exprs;
     debug(0) << "Input Statement to Compile through HVX:\n"<<s<<"\n";
     s = hydride_optimize_hvx(fvb, s, mutated_exprs);
 
-    return s;
+    debug(0) << "Module with hydride calls:" <<"\n";
+    debug(0) << s <<"\n";
+
+
+    //s = ReplaceDiv().mutate(s);
+    //debug(0) << "Module with hydride calls (final replace div):" <<s << "\n";
+
+    return common_subexpression_elimination(s);
 
 }
 

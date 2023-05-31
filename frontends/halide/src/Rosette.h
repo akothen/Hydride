@@ -22,6 +22,8 @@ Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 std::string type_to_rake_type(Type type, bool include_space, bool c_plus_plus);
 std::string type_to_rake_elem_type(Type type, bool include_space, bool c_plus_plus);
 
+Stmt hydride_preprocess_hvx(Stmt s);
+
 
 Stmt optimize_x86_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) ;
 
