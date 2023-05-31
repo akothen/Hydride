@@ -25,7 +25,8 @@ benchmarks = gaussian3x3 \
 			 fully_connected \
 			 camera_pipe \
 			 fft \
-			 softmax
+			 softmax \
+			 simple
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 
@@ -38,7 +39,7 @@ SYNTH_BITWIDTH ?= 16
 BENCHMARK ?=1
 
 CC=/usr/bin/clang
-TARGET=host-arm-64 #host-noos-no_bounds_query-no_asserts
+TARGET=arm-64-osx #host-noos-no_bounds_query-no_asserts
 STARTING_HASH_FLAG=#HYDRIDE_INITIAL_HASH=starting_hash
 
 
@@ -48,16 +49,17 @@ all: $(benchmarks)
 
 $(benchmarks): %: %/bin
 # 	Compile the generator
-	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
+	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7    \
 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
 		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
 		$(hannk) \
 		-o $@/bin/$@_generator \
-		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
+		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static) \
+		-rpath $(HALIDE_DISTRIB)/lib
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@ HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_TARGET=arm ./$@/bin/$@_generator \
+	HYDRIDE_DISTRIBUTE_LOOK_AHEAD=1 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@ HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_TARGET=arm ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \

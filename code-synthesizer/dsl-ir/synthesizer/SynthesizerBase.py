@@ -20,7 +20,8 @@ DEBUG_LIST = [
     # "_mm512_mulhi_epu16",
     # "vpmin_s8",
     # "vmin_s8",
-    # "vqadd_s64",
+    # "vqadd_s16",
+    # "vmovl_s16",
     # "vshr_n_s8",
     # "vshr_n_s16",
     # "vshr_n_s32",
@@ -29,6 +30,7 @@ DEBUG_LIST = [
     # "vneg_s16",
     # "vneg_s32",
     # "vneg_s64",
+    # "vmulq_u8",
 ]
 
 
@@ -624,12 +626,15 @@ class SynthesizerBase:
           # if (op == "bvsubnsw" or op == "bvsubnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
           #   continue
           # Attempt for ARM
-          if "shr" in ctxs[idx].name or "shl" in ctxs[idx].name:
-            if "_s" in ctxs[idx].name and op == "zero-extend":
-              continue
-            if "_u" in ctxs[idx].name and op == "sign-extend":
-              continue
-
+          if self.target=="arm":
+            if "shr" in ctxs[idx].name or "shl" in ctxs[idx].name:
+              if "_s" in ctxs[idx].name and op == "zero-extend":
+                continue
+              if "_u" in ctxs[idx].name and op == "sign-extend":
+                continue
+            # if "rshr" in ctxs[idx].name: #rshr
+            #   if op == "bvlshr":
+            #     continue
           to_insert = False
           break
       if to_insert:
@@ -925,11 +930,15 @@ class SynthesizerBase:
           # which is not being used in the spec, skip
           if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
             # if Target is ARM
-            if "shr" in ctx.name or "shl" in ctx.name:
-              if "_s" in ctx.name and v == "zero-extend":
-                continue
-              if "_u" in ctx.name and v == "sign-extend":
-                continue
+            if self.target=="arm":
+              if "shr" in ctx.name or "shl" in ctx.name:
+                if "_s" in ctx.name and v == "zero-extend":
+                  continue
+                if "_u" in ctx.name and v == "sign-extend":
+                  continue
+              # if "rshr" in ctx.name: #rshr
+              #   if v == "bvlshr":
+              #     continue
             print("Skipping ", ctx.name, "as it is using a variant op:",
                   v, "of the original op", c_op)
             skip = True
@@ -1170,6 +1179,9 @@ class SynthesizerBase:
       overlap = False
 
       def is_cast_expr(ops_list):
+        if self.target=="arm": #HOTFIX
+          if "vmovl" in dsl_inst.name:
+            return True
         in_cast_set = True
         for op in ops_list:
           in_cast_set = in_cast_set and op in [

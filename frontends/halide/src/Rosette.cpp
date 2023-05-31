@@ -2859,6 +2859,10 @@ private:
 
             if (op->is_intrinsic(Call::shift_right)) {
                 debug(0) << "Found shr\n";
+                // if (!op->type.is_float() && op->type.is_vector()) {
+                //     debug(0) << "Lowering armshr to armshl\n";
+                //     return mutate(op->args[0] << (-op->args[1]));
+                // }
                 if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
                     debug(0) << "Lowering armshr to armshl\n";
                     return op->args[0] << (-op->args[1]);

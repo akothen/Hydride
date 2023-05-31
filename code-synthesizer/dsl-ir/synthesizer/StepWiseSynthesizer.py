@@ -203,8 +203,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 if key not in ops_bucket:
                     ops_bucket[key] = {"count": 0, "ops": ctx_ops}
                 ops_bucket[key]['count'] += 1
-                print("Adding ", ctx.name, "to op bucket with key", key)
-
+                # print("Adding ", ctx.name, "to op bucket with key", key)
 
         if partition_by_size:
             for idx in range(len(ctxs)):
@@ -251,6 +250,23 @@ class StepWiseSynthesizer(SynthesizerBase):
             ctx = ctxs[idx]
             dsl_ops = dsl_inst.get_semantics_ops_list()
             ctx_ops = ctx.get_bv_ops()#self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned(), non_signed = ctx.is_nonsigned())
+            
+            if self.target=="arm": # TODO: temporary patch, should be fixed on the parser side
+                    arm_sema = {
+                        "qadd[q]?_s":"bvaddnsw",
+                        "qadd[q]?_u":"bvaddnuw",
+                        "qsub[q]?_s":"bvsubnsw",
+                        "qsub[q]?_u":"bvsubnuw",
+                        "qmul[q]?_s":"bvmulnsw",
+                        "qmul[q]?_u":"bvmulnuw",
+                    }
+                    for k,v in arm_sema.items():
+                        import re
+                        if re.search(k,ctx.name):
+                        # if k in ctx.name:
+                            # breakpoint()
+                            ctx_ops.append(v)
+
 
             ctx_ops = sorted(ctx_ops, key = lambda x : BV_OPS.index(x))
 
@@ -261,6 +277,8 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             buckets[key]['ops'].append(dsl_inst)
             buckets[key]['ctxs'].append(ctx)
+            
+            print("Adding ", ctx.name, "to op bucket with key", key)
 
 
         # Sort the contexts in the buckets in decending order of score
@@ -543,7 +561,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             sample_key_sizes =  max(min(len(sorted_keys) -1,4 ), 0)
 
 
-        #print("Sample key sizes:", sample_key_sizes)
+        # print("Sample key sizes:", sample_key_sizes)
 
 
         # For higher depths, to maintain tractability during synthesis, we only include
@@ -832,6 +850,8 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
                 continue
+            else:
+                print(f"Skipping  {dsl_inst.name} as it is not considered")
 
 
 
@@ -899,11 +919,11 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
 
-
-        operation_dsl_insts += memory_shuffle_insts
-        operation_dsl_args_list += memory_shuffle_args_list
-        memory_shuffle_insts = []
-        memory_shuffle_args_list = []
+        if self.target!="arm": #HOTFIX: interleave-vectors takes vmovl's place
+            operation_dsl_insts += memory_shuffle_insts
+            operation_dsl_args_list += memory_shuffle_args_list
+            memory_shuffle_insts = []
+            memory_shuffle_args_list = []
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):
             print("Pool Of operations: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )

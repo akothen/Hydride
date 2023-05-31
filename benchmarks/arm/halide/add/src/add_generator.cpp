@@ -37,9 +37,10 @@ public:
         output_(x, y) = clamp(output, output_min_, output_max_);
 
         // Schedules for x86
+        int vector_size = natural_vector_size<uint8_t>();
         output_
             .compute_root()
-            .vectorize(x, 64);
+            .vectorize(x, vector_size);
 
         input2_.dim(0).set_stride(Expr());
         output_.specialize(input2_.dim(0).stride() == 1);
@@ -48,6 +49,12 @@ public:
         
         output_.print_loop_nest();
     }
+
+    // void schedule() {
+    //     input1_.set_estimates({{0, 3840}, {0, 2160}});
+    //     input2_.set_estimates({{0, 3840}, {0, 2160}});
+    //     output_.set_estimates({{0, 3840}, {0, 2160}});
+    // }
 
 private:
     Var x{ "x" }, y{ "y" };
