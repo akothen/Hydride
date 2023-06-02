@@ -14,26 +14,26 @@ public:
         //blur_x(x, y) = (input(x, y) + input(x+1, y) + input(x+2, y))/3;
         blur_y(x, y) = (blur_x(x, y) + blur_x(x, y + 1) + blur_x(x, y + 2)) / 3;
 
-        // Schedules for x86
-        int vector_size = natural_vector_size<uint8_t>();
+    }
+
+    void schedule() {
+        input.dim(0).set_min(0);
+        input.dim(1).set_min(0);
+
+        blur_y.dim(0).set_min(0);
+        blur_y.dim(1).set_min(0);
+
+        const int vector_size = natural_vector_size<uint8_t>();
+
         blur_y
             .split(y, y, yi, 32)
+            .parallel(y)
             .vectorize(x, vector_size);
         blur_x
-            .store_in(MemoryType::Stack)
             .store_at(blur_y, y)
             .compute_at(blur_y, x)
             .vectorize(x, vector_size);
-        read_input
-            .store_in(MemoryType::Stack)
-            .store_at(blur_y, y)
-            .compute_at(blur_y, y)
-            .vectorize(x, vector_size);
-
-        blur_y.print_loop_nest();
     }
-
-    void schedule() {}
 
 private:
     Func blur_x{"blur_x"}, read_input{"read_input"};

@@ -21,21 +21,27 @@ public:
         // This sobel implementation is non-standard in that it doesn't take the square root
         // of the gradient.
         output(x, y) = cast<uint8_t>(clamp(sobel_x(x, y) + sobel_y(x, y), 0, 255));
-
-        // Schedules for x86
-        output
-            .tile(x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
-            .vectorize(xi, 32)
-            .unroll(yi, 4);
-        bounded_input
-            .compute_at(output, y)
-            .align_storage(x, 32)
-            .vectorize(x, 32, TailStrategy::RoundUp);
-            
-        output.print_loop_nest();
     }
 
-    void schedule() {}
+    void schedule() {
+        Var xi{"xi"}, yi{"yi"};
+
+        input.dim(0).set_min(0);
+        input.dim(1).set_min(0);
+
+        output.dim(0).set_min(0);
+        output.dim(1).set_min(0);
+
+        const int vector_size = natural_vector_size<uint8_t>();
+        bounded_input
+            .compute_at(Func(output), y)
+            .align_storage(x, 128)
+            .vectorize(x, vector_size, TailStrategy::RoundUp);
+        output
+            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
+            .vectorize(xi)
+            .unroll(yi);
+    }
 
 private:
     Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};

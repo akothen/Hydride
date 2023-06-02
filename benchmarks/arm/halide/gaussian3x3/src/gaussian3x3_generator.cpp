@@ -15,27 +15,23 @@ public:
         cols(x,y) =  rows(x-1, y) + 2 * rows(x, y) + rows(x+1, y);
 
         output(x, y)  = cast<uint8_t> ((cols(x, y) + 8) >> 4);
-
-        // Schedules for x86
-        output
-            .tile(x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
-            .vectorize(xi, 32)
-            .unroll(yi);
-        rows
-            .compute_at(output, y)
-            .tile(x, y, x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
-            .vectorize(xi, 32)
-            .unroll(yi)
-            .align_storage(x, 32);
-        bounded_input
-            .compute_at(output, y)
-            .align_storage(x, 32)
-            .vectorize(x, 32, TailStrategy::RoundUp);
-
-        output.print_loop_nest();
     }
 
-    void schedule() {}
+    void schedule() {
+        Var xi{"xi"}, yi{"yi"};
+
+        input.dim(0).set_min(0);
+        input.dim(1).set_min(0);
+
+        output.dim(0).set_min(0);
+        output.dim(1).set_min(0);
+
+        const int vector_size = natural_vector_size<uint8_t>();
+        output
+            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
+            .vectorize(xi)
+            .unroll(yi);
+    }
 
 private:
     Var x{"x"}, y{"y"}, xi{"xi"}, xii{"xii"}, yi{"yi"}, yii{"yii"};

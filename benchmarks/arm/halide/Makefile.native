@@ -1,5 +1,6 @@
 HALIDE_DISTRIB = $(HYDRIDE_ROOT)/frontends/halide/distrib
 LLVM_ROOT ?= $(LLVM_DIS_ROOT)
+LLVM_SYMBOLIZER_PATH ?= $(LLVM_ROOT)/bin
 
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \

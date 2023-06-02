@@ -36,12 +36,14 @@ public:
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
 
-        // Schedules for x86
-        int vector_size = natural_vector_size<uint8_t>();
+        // Schedule for ARM
+        const int vector_size = natural_vector_size<uint8_t>();
+
         output_
             .compute_root()
-            .vectorize(x, vector_size);
+            .vectorize(x, vector_size, TailStrategy::Predicate);
 
+        // Support broadcasting in the c dimension for input2.
         input2_.dim(0).set_stride(Expr());
         output_.specialize(input2_.dim(0).stride() == 1);
         output_.specialize(input2_.dim(0).stride() == 0);

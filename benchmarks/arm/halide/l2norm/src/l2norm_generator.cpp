@@ -34,19 +34,18 @@ public:
         output = i16_sat(rounding_shift_right(output, q - 7));
         output_(x, y) = u8_sat(saturating_add(output, i16(128)));
 
-        // Schedules for x86
-        output_
-            .compute_root()
-            .vectorize(x, 64, TailStrategy::Predicate);
-        inv_sqrt
-            .compute_at(output_, y);
-        sum_input_sq
-            .compute_at(output_, y)
+        // Schedule.
+        const int vector_size = natural_vector_size<uint8_t>();
+
+        output_.compute_root()
+            .vectorize(x, vector_size, TailStrategy::Predicate);
+
+        inv_sqrt.compute_at(output_, y);
+
+        sum_input_sq.compute_at(output_, y)
             .update()
             .atomic()
-            .vectorize(rx, 64);
-
-        output_.print_loop_nest();
+            .vectorize(rx, vector_size);
     }
 
     void schedule() {}

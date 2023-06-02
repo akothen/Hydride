@@ -52,11 +52,23 @@ public:
     }
 
     void schedule() {
-        if (auto_schedule) {
-            // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L898
-            input.set_estimates({{0, stef_width}, {0, stef_height}});
-            output.set_estimates({{0, stef_width}, {0, stef_height}});
-        }
+        Var xi{"xi"}, yi{"yi"};
+
+        input.dim(0).set_min(0);
+        input.dim(1).set_min(0);
+
+        output.dim(0).set_min(0);
+        output.dim(1).set_min(0);
+
+        const int vector_size = natural_vector_size<uint8_t>();
+        bounded_input
+            .compute_at(Func(output), y)
+            .align_storage(x, 128)
+            .vectorize(x, vector_size, TailStrategy::RoundUp);
+        output
+            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
+            .vectorize(xi)
+            .unroll(yi);
     }
 private:
     Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};

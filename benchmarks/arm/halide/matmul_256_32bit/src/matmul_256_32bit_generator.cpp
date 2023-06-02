@@ -22,6 +22,7 @@ public:
         res(x, y) = matrix_mul(x, y);
 
         RVar r8_x(matrix_mul.update(0).get_schedule().dims()[0].var);
+        // TODO: shedule for ARM
 
         res
             .compute_root()

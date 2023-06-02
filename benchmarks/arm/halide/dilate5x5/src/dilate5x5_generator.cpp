@@ -25,7 +25,7 @@ public:
                             bounded_input(x + 2, y)
                         );
 
-        // Schedules for x86
+        // TODO: shedule for ARM
         output
             .compute_root()
             .split(y, y, yi, 120, TailStrategy::ShiftInwards)

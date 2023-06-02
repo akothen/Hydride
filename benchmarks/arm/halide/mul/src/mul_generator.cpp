@@ -32,17 +32,17 @@ public:
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
 
-        // Schedules for x86
-        output_
-            .compute_root()
-            .vectorize(x, 64);
+        // Schedule.
+        const int vector_size = natural_vector_size<uint8_t>();
 
+        output_.compute_root()
+            .vectorize(x, vector_size, TailStrategy::Predicate);
+
+        // Support broadcasting in the c dimension for input2.
         input2_.dim(0).set_stride(Expr());
         output_.specialize(input2_.dim(0).stride() == 1);
         output_.specialize(input2_.dim(0).stride() == 0);
         output_.specialize_fail("input2 dimension 0 must have a stride of 0 or 1.");
-
-        output_.print_loop_nest();
     }
 
     void schedule() {}
