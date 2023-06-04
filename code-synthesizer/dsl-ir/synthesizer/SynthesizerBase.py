@@ -839,7 +839,7 @@ class SynthesizerBase:
         globally_sorted_operation_insts.append(ops[idx])
         globally_sorted_operation_contexts.append(ctxs[idx])
 
-   # print("get top N:")
+      # print("get top N:")
       for i, o in enumerate(globally_sorted_operation_contexts):
         # print(o.name, "score: ", self.score_context(globally_sorted_operation_insts[i], o))
         pass

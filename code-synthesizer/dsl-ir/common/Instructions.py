@@ -247,7 +247,24 @@ class Context:
                 elif bvop in line and bvop not in ["concat", "extract"]:
                     operations.append(bvop)
 
-
+        # if self.target=="arm": # TODO: temporary patch, should be fixed on the parser side
+        if True:
+            arm_sema = {
+                r"qadd[q]?_s":"bvaddnsw",
+                r"qadd[q]?_u":"bvaddnuw",
+                r"qsub[q]?_s":"bvsubnsw",
+                r"qsub[q]?_u":"bvsubnuw",
+                # r"qsub[q]?_s":"bvmulnsw",
+                # r"qsub[q]?_u":"bvmulnuw",
+                r"q\w*(mul|mla|mls)([^_\s]*_){1,3}s":"bvmulnsw",
+                r"q\w*(mul|mla|mls)([^_\s]*_){1,3}u":"bvmulnuw",
+            }
+            for k,v in arm_sema.items():
+                import re
+                if re.search(k, self.name):
+                # if k in ctx.name:
+                    # breakpoint()
+                    operations.append(v)
 
         return list(set(operations))
 
@@ -386,7 +403,7 @@ class Context:
     def get_scalable_args_idx(self, base_vector_size = None):
         assert self.can_scale_context(), "Context must be scalable to perform the operation scaling " + self.name
 
-        sample_scale_factor = 2#32
+        sample_scale_factor = 1#32
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):

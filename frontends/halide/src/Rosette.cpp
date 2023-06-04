@@ -2250,10 +2250,10 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits <= 64) {
+                    if (element_bits < 64) {
                         lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     } else {
-                        lower_using_halide = true;
+                        lower_using_halide = false;
                     }
                 }
 
@@ -2861,11 +2861,12 @@ private:
                 debug(0) << "Found shr\n";
                 // if (!op->type.is_float() && op->type.is_vector()) {
                 //     debug(0) << "Lowering armshr to armshl\n";
-                //     return mutate(op->args[0] << (-op->args[1]));
+                //     return (op->args[0] << simplify(-op->args[1]));
                 // }
+                // Current legalizer doesn't support immediate argument
                 if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
                     debug(0) << "Lowering armshr to armshl\n";
-                    return op->args[0] << (-op->args[1]);
+                    return op->args[0] << simplify(-op->args[1]);
                 }
             }
 
@@ -3434,7 +3435,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
         debug(0) << "Printing Pruned Stmt:\n";
         debug(0) << pruned << "\n";
 
-        std::vector<unsigned> arm_vector_sizes = {64, 128};
+        std::vector<unsigned> arm_vector_sizes = {128, 64};
 
         bool model_sat_support = false;
 

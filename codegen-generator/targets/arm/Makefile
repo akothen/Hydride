@@ -14,4 +14,6 @@ rat: rosette_test/compiled.rkt
 	racket rosette_test/alltests.rkt
 rdbg: test.rkt
 	racket test.rkt
+wrapper: RoseARMCIntrinsicsWrappersEmitter.py
+	python3 -m RoseARMCIntrinsicsWrappersEmitter
 .PHONY: rat rdbg cdbg compile gdbg gendbg

@@ -250,6 +250,7 @@ def parse_instr_attr(instr: InstrDesc, assign):
   # - {"a": {"register": "Vn.4H"}, "v": {"register": "Vm.4H"}, "lane": {"minimum": "0", "maximum": "3"}}
   # - results=[{'Vd.8B': 'result'}]
   # print(instr.name, instr.Arguments_Preparation.items())
+  imm_width = None
   for k, v in instr.Arguments_Preparation.items():
     if v:
       if "register" in v:
@@ -258,6 +259,7 @@ def parse_instr_attr(instr: InstrDesc, assign):
           preparation[reg.idx] = k
       else:
         lo, hi = get_arg_lo_hi(v)
+        imm_width = (lo, hi)
         assert lo <= assign[k] <= hi, f"{lo} <= {assign[k]} <= {hi}"
 
     else:  # EOR3 gives empty b and c. LOL
@@ -270,7 +272,7 @@ def parse_instr_attr(instr: InstrDesc, assign):
   if any(i in instr.name for i in ["vclt", "vcle"]):  # LOL
     if "vcltz" not in instr.name and "vclez" not in instr.name:
       preparation["m"], preparation["n"] = preparation["n"], preparation["m"]
-  return Params, retSign, preparation
+  return Params, retSign, preparation, imm_width
 
 
 class SemaGenerator():
@@ -333,7 +335,7 @@ class SemaGenerator():
       print(enc, field)
       assert False
 
-    Params, signedness, preparation = parse_instr_attr(
+    Params, signedness, preparation, imm_width = parse_instr_attr(
         intrin, assign)
     for k in preparation:
       del resolving[k]
@@ -347,7 +349,7 @@ class SemaGenerator():
                    intrin.return_type["value"],
                    signedness,
                    f"{inst} {intrin.operands}",
-                   None, None, None, None,
+                   None, imm_width, None, None,
                    preparation,
                    resolving,
                    )
@@ -427,8 +429,8 @@ if __name__ == "__main__":
   # print([i for i in S.SemaGenerator() if i is not None])
   S = SemaGenerator()
   # print(S.getSemaByName("vqshrun_n_s64__n_1"))
-  print(S.getSemaByName("vabd_s32").spec.__repr__())
-  print(S.getSemaByName("vabdl_s32").spec.__repr__())
+  print(S.getSemaByName("vshl_s32").spec.__repr__())
+  # print(S.getSemaByName("vabdl_s32").spec.__repr__())
   # S = SemaGenerator(deserialize=True)
   # print(S.getSemaByName("vsubq_s16"))
   S.serialize()

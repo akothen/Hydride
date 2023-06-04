@@ -108,7 +108,8 @@ class x86CIntrinsicsWrappersEmitter():
       return "\n".join(Content)
     # Now we will have to generate many versions of wrappers for this function.
     Content = list()
-    for Idx in range(2**ImmWidth):
+    lo, hi = ImmWidth
+    for Idx in range(lo, hi+1):
       FuncSig = "{} {}_wrapper_{}({})".format(RoseARMCCodeEmitter.ARMToC(Sema.rettype), \
                           Function.getName(), Idx, ", ".join(TypedParams))
       FuncSig += " {"

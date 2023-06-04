@@ -37,7 +37,7 @@ def Compile(InstName: str = None):
     # interested = ["vshr_n_u8"]
     # interested = ["max", "min"]
     # interested = ["vmovl_s8","vdupq_n_s16"]
-    # interested = ["abd"]
+    interested = ["vshl","vqshl","vrshl","vqrshl"]
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
       AllSema = {k: v for k, v in AllSema.items(
@@ -129,8 +129,8 @@ def TestcaseGen():
 
 
 if __name__ == "__main__":
-  Compile()
-  # TestcaseGen()
+  # Compile()
+  TestcaseGen()
 
   # print(RosetteCode)
 

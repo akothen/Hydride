@@ -110,4 +110,14 @@ Simply `make arme.{benchmarkname}` at root folder, like `make arme.median3x3` by
         - l2norm: shr
         - add: shr
 
+Problems:
 
+- Overall Problem:
+    - shl semantics discrepancy: mul
+        - Make list, keep note
+- Using Shl only:
+    - "Signed integer overflow occurred during constant-folding.": add,l2norm;average_pool(problem_sio)
+- Using Shr:
+    - immediate number in legalizer: average_pool(problem_imm)
+        - Akash
+    <!-- - non stop: add,l2norm -->

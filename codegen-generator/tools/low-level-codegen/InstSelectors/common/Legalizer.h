@@ -181,6 +181,7 @@ public:
         errs() << "IDX:" << Idx << "\n";
         int PermIdx = Permutation[Idx];
         errs() << "PERM IDX:" << PermIdx << "\n";
+        if (PermIdx >= RequiredTypes.size()) continue; // Immediate Number
         auto *Bitvector = getBitvectorOfRequiredType(BitvectorList[Idx], 
                                       RequiredTypes[PermIdx], InsertBefore);
         if (Bitvector == nullptr)

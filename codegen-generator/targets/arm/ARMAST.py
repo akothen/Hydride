@@ -301,7 +301,11 @@ def ASTShrink_(AST):
     return ArrayIndex(ASTShrink_(AST.expr), ASTShrink_(AST.slices), GenUniqueID())
   elif isinstance(AST, asl.ExprSlice):
     assert type(AST.slices) == list, f"{AST}"
-    return ArrayIndex(ASTShrink_(AST.expr), ASTShrink_(AST.slices), GenUniqueID())
+    # Patch for striping <7:0> on `vshl`s
+    slice=ASTShrink_(AST.slices)
+    if len(slice)==1 and isinstance(slice[0],SliceRange) and isinstance(slice[0].hi,Number) and isinstance(slice[0].lo,Number) and slice[0].hi.val==7 and slice[0].lo.val==0:
+      return ASTShrink_(AST.expr)
+    return ArrayIndex(ASTShrink_(AST.expr), slice, GenUniqueID())
   elif isinstance(AST, asl.LValSliceOf):
     assert type(AST.slices) == list, f"{AST}"
     return ArrayIndex(ASTShrink_(AST.lvalexpr), ASTShrink_(AST.slices), GenUniqueID())

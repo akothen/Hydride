@@ -313,7 +313,7 @@ class CCodeEmitter(RoseCodeEmitter):
 
 
 if __name__ == '__main__':
-    CodeGenerator = RoseCodeGenerator(Target="x86")
+    CodeGenerator = RoseCodeGenerator(Target="ARM")
     FunctionInfoList = CodeGenerator.codeGen()
     CEmitter = CCodeEmitter(FunctionInfoList[0])
-    CEmitter.test("test")
+    CEmitter.test("vsra_n_s8")
