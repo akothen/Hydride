@@ -19,32 +19,28 @@ public:
                     + 4 * rows(x + 1, y) + rows(x + 2, y);
 
         output(x, y) = cast<uint8_t>(cols(x, y) >> 8);
-    }
 
-    void schedule() {
-        Var xi{"xi"}, yi{"yi"};
-
-        input.dim(0).set_min(0);
-        input.dim(1).set_min(0);
-
-        output.dim(0).set_min(0);
-        output.dim(1).set_min(0);
-
+        // Schedules for x86
         const int vector_size = natural_vector_size<uint8_t>();
-        bounded_input
-            .compute_at(Func(output), y)
-            .align_storage(x, 128)
-            .vectorize(x, vector_size, TailStrategy::RoundUp);
         output
-            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
-            .vectorize(xi)
+            .tile(x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
             .unroll(yi);
-        rows.compute_at(Func(output), y)
-            .tile(x, y, x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
-            .vectorize(xi)
+        rows
+            .compute_at(output, y)
+            .tile(x, y, x, y, xi, yi, 32, 4, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
             .unroll(yi)
-            .align_storage(x, 128);
+            .align_storage(x, 32);
+        bounded_input
+            .compute_at(output, y)
+            .align_storage(x, 32)
+            .vectorize(x, 32, TailStrategy::RoundUp);
+
+        output.print_loop_nest();
     }
+
+    void schedule() {}
 
 private:
     Var x{"x"}, y{"y"}, xi{"xi"}, xii{"xii"}, yi{"yi"}, yii{"yii"};

@@ -32,15 +32,19 @@ public:
         output.dim(0).set_min(0);
         output.dim(1).set_min(0);
 
-        const int vector_size = natural_vector_size<uint8_t>();
-        bounded_input
-            .compute_at(Func(output), y)
-            .align_storage(x, 128)
-            .vectorize(x, vector_size, TailStrategy::RoundUp);
+        const int vector_size = 32, unroll_factor = 8;
+        // Schedules for x86
         output
-            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
-            .vectorize(xi)
-            .unroll(yi);
+            .tile(x, y, xi, yi, 32, unroll_factor, TailStrategy::RoundUp)
+            .vectorize(xi, vector_size)
+            .unroll(yi, unroll_factor);
+        bounded_input
+            .compute_at(output, y)
+            .align_storage(x, 32)
+            .vectorize(x, vector_size, TailStrategy::RoundUp);
+            
+        output.print_loop_nest();
+
     }
 
 private:

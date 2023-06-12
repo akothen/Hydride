@@ -1,8 +1,8 @@
 UNAME_S = $(shell uname -s)
 EXT = so
-MAKEFILE=Makefile
+MAKEFILE=Makefile.qemu
 ifeq ($(UNAME_S),Darwin)
-	MAKEFILE=Makefile.native
+	MAKEFILE=Makefile
     EXT = dylib
 endif
 
@@ -21,16 +21,11 @@ arme4.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 arme9.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=9 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 armd.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	ENABLE_HYDRIDE=0 make -C $(HYDRIDE_ROOT)/benchmarks/arm-disable-hydride/halide $* -f $(MAKEFILE)
+	ENABLE_HYDRIDE=0 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 armr.%:
-	echo "Hydride Disable"
-	(cd $(HYDRIDE_ROOT)/benchmarks/arm-disable-hydride/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
-	echo "Hydride Enable"
 	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
-armadd: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide add -f $(MAKEFILE)
-armmul: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide mul -f $(MAKEFILE)
+armrd.%:
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
 $(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
 	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
@@ -86,4 +81,27 @@ syncsema:
 	cp $(SIMILARITY_SUMMARY)/semantics.py $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 
 .PHONY: similarity hydride_sema arm_sema halide legalizer
-compileall: arme1.sobel3x3 arme.matmul_256_32bit arme.blur3x3 arme.median3x3 arme1.gaussian3x3 arme1.gaussian5x5 arme.max_pool arme.dilate3x3 arme.dilate5x5
+compileall: arme1.add \
+			arme1.average_pool \
+			arme.blur3x3 \
+			arme.dilate3x3 \
+			arme.dilate5x5 \
+			arme1.gaussian3x3 \
+			arme1.gaussian5x5 \
+			arme1.l2norm \
+			arme.matmul_256_32bit \
+			arme.max_pool \
+			arme.median3x3 \
+			arme1.sobel3x3
+disableall: armd.add \
+			armd.average_pool \
+			armd.blur3x3 \
+			armd.dilate3x3 \
+			armd.dilate5x5 \
+			armd.gaussian3x3 \
+			armd.gaussian5x5 \
+			armd.l2norm \
+			armd.matmul_256_32bit \
+			armd.max_pool \
+			armd.median3x3 \
+			armd.sobel3x3

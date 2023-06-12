@@ -23,24 +23,27 @@ public:
 
         RVar r8_x(matrix_mul.update(0).get_schedule().dims()[0].var);
         // TODO: shedule for ARM
-
+        const int vector_size = 16;
         res
             .compute_root()
             .split(y, y, yi, 4, TailStrategy::ShiftInwards)
             .split(x, x, xi, 64, TailStrategy::ShiftInwards)
             .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
-            .vectorize(xii, 16)
-            .reorder({xii, xi, yi, x, y});
+            .vectorize(xii, vector_size)
+            .reorder({xii, xi, yi, x, y})
+            ;
             //.parallel(y);
         matrix_mul.update(0)
             .split(x, x, xi, 16, TailStrategy::GuardWithIf)
-            .vectorize(xi, 16)
-            .reorder({xi, x, y, r8_x});
+            .vectorize(xi, vector_size)
+            .reorder({xi, x, y, r8_x})
+            ;
         matrix_mul
             .store_in(MemoryType::Stack)
             .compute_at(res, x)
             .split(x, x, xi, 16, TailStrategy::RoundUp)
-            .vectorize(xi, 16);
+            .vectorize(xi, vector_size)
+            ;
             //.reorder({xi, x, y});
 
         res.print_loop_nest();

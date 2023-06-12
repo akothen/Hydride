@@ -17,22 +17,23 @@ public:
     }
 
     void schedule() {
-        input.dim(0).set_min(0);
-        input.dim(1).set_min(0);
-
-        blur_y.dim(0).set_min(0);
-        blur_y.dim(1).set_min(0);
-
-        const int vector_size = natural_vector_size<uint8_t>();
-
+        int vector_size = natural_vector_size<uint8_t>();
         blur_y
-            .split(y, y, yi, 32)
-            .parallel(y)
+            .split(y, y, yi, 64)
             .vectorize(x, vector_size);
         blur_x
+            .store_in(MemoryType::Stack)
             .store_at(blur_y, y)
             .compute_at(blur_y, x)
             .vectorize(x, vector_size);
+        read_input
+            .store_in(MemoryType::Stack)
+            .store_at(blur_y, y)
+            .compute_at(blur_y, y)
+            .vectorize(x, vector_size);
+
+        blur_y.print_loop_nest();
+
     }
 
 private:

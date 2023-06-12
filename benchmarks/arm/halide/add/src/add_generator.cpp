@@ -26,6 +26,8 @@ public:
     Output<Buffer<uint8_t>> output_{"output", 2};
 
     void generate() {
+        Var x("x"), y("y");
+
         Expr input1 = (i16(input1_(x, y)) - i16(input1_zero_)) << add_input_shift;
         Expr input2 = (i16(input2_(x, y)) - i16(input2_zero_)) << add_input_shift;
 
@@ -36,7 +38,7 @@ public:
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
 
-        // Schedule for ARM
+        // Schedule.
         const int vector_size = natural_vector_size<uint8_t>();
 
         output_
@@ -48,15 +50,7 @@ public:
         output_.specialize(input2_.dim(0).stride() == 1);
         output_.specialize(input2_.dim(0).stride() == 0);
         output_.specialize_fail("input2 dimension 0 must have a stride of 0 or 1.");
-        
-        output_.print_loop_nest();
     }
-
-    // void schedule() {
-    //     input1_.set_estimates({{0, 3840}, {0, 2160}});
-    //     input2_.set_estimates({{0, 3840}, {0, 2160}});
-    //     output_.set_estimates({{0, 3840}, {0, 2160}});
-    // }
 
 private:
     Var x{ "x" }, y{ "y" };

@@ -1,9 +1,11 @@
 HALIDE_DISTRIB = $(HYDRIDE_ROOT)/frontends/halide/distrib
 LLVM_ROOT ?= $(LLVM_DIS_ROOT)
+LLVM_SYMBOLIZER_PATH ?= $(LLVM_ROOT)/bin
 
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
 			 dilate3x3 \
+			 dilate5x5 \
 			 median3x3 \
 			 sobel3x3 \
 			 blur3x3 \
@@ -24,21 +26,27 @@ benchmarks = gaussian3x3 \
 			 fully_connected \
 			 camera_pipe \
 			 fft \
-			 softmax\
+			 softmax \
 			 simple
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
+bin_ref_dirs = $(addsuffix /bin_ref,$(benchmarks))
 
 hannk = hannk/common_halide.cpp
 
 ENABLE_HYDRIDE ?= 1
+ifeq ($(ENABLE_HYDRIDE), 1)
+	BIN=bin
+else
+	BIN=bin_ref
+endif
 EXPR_DEPTH ?=2
 SYNTH_BITWIDTH ?= 16 
 
 BENCHMARK ?=1
 
-CC=aarch64-linux-gnu-g++
-TARGET=host-arm-64 #host-noos-no_bounds_query-no_asserts
+CC=/usr/bin/clang
+TARGET=arm-64-osx-no_bounds_query-no_asserts
 STARTING_HASH_FLAG=#HYDRIDE_INITIAL_HASH=starting_hash
 
 
@@ -46,43 +54,45 @@ STARTING_HASH_FLAG=#HYDRIDE_INITIAL_HASH=starting_hash
 
 all: $(benchmarks)
 
-$(benchmarks): %: %/bin
+$(benchmarks): %: %/$(BIN)
 # 	Compile the generator
-	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
+	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7    \
 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
 		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
 		$(hannk) \
-		-o $@/bin/$@_generator \
-		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
+		-o $@/$(BIN)/$@_generator \
+		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static) \
+		-rpath $(HALIDE_DISTRIB)/lib
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@ HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_TARGET=arm ./$@/bin/$@_generator \
+	HYDRIDE_DISTRIBUTE_LOOK_AHEAD=1 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@ HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_TARGET=arm ./$@/$(BIN)/$@_generator \
 		-t 0 \
-		-o $@/bin \
+		-o $@/$(BIN) \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
 		-f $@ target=$(TARGET)
-	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
+	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/$(BIN)/$@_generator \
 		-r halide_runtime_x86 \
-		-o $@/bin \
+		-o $@/$(BIN) \
 		-e object,c_header \
 		target=$(TARGET)
-
+	
 	$(CC) -Dbenchmark_$@ --std=c++17 \
-		-O0 \
-		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
+		-O0\
+		-I $(HALIDE_DISTRIB)/include -I ./$@/$(BIN) \
 		-lstdc++ -ldl -pthread \
 		test/run.cpp \
 		test/stubs.cpp \
-		$@/bin/$@.a \
-		$@/bin/halide_runtime_x86.o \
-		-o $@/bin/$@_run.out
+		$@/$(BIN)/$@.a \
+		$@/$(BIN)/halide_runtime_x86.o \
+		-o $@/$(BIN)/$@_run.out
+
 	
 ifeq ($(BENCHMARK),1) 
 
-# Benchmark the generated binary
-	qemu-aarch64 -L /usr/aarch64-linux-gnu $@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+# Benchmark the generated $(BIN)ary
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
 
 endif
 
@@ -92,6 +102,9 @@ endif
 
 # Make the bin dirs if needed
 $(bin_dirs): %:
+	mkdir $@
+
+$(bin_ref_dirs): %:
 	mkdir $@
 
 clean:

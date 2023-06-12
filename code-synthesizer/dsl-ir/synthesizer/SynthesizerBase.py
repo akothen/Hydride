@@ -1192,7 +1192,8 @@ class SynthesizerBase:
       # Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
       # which contain them should only be included if necessary
 
-      EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"]]
+      # EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"]] 
+      EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["bvmul"]] # TODO: How to consider abs in ARM? 
 
       # Including dot-products type operations is only required
       # when there is some form of accumulation with multiplication

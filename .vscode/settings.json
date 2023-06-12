@@ -37,7 +37,8 @@
     "-I/usr/include/x86_64-linux-gnu/c++/11/",
     "-I/usr/include/c++/11/",
     "-DLLVM_VERSION=120",
-    "-DWITH_ARM"
+    "-DWITH_ARM",
+    "-Dbenchmark_add",
   ],
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8"

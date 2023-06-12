@@ -70,14 +70,16 @@ public:
 
         output_(c, x, y, b) = clamp(u8_sat(average), output_min_, output_max_);
 
-        // Schedules for x86
-        int vector_size = natural_vector_size<uint8_t>();
-        output_
-            .compute_root()
-            .reorder(c, b, x, y)
-            .vectorize(c, vector_size);
 
-        output_.print_loop_nest();
+        // TODO: Figure out how to vectorize this efficiently without this
+        // code duplication. We should be able to just vectorize and predicate
+        // somehow.
+        const int vector_size = natural_vector_size<uint8_t>();
+        Expr output_channels = output_.dim(0).extent();
+        for (int i : {4, 2, 1}) {
+            output_.specialize(output_channels >= vector_size * i)
+                .vectorize(c, vector_size * i, TailStrategy::ShiftInwards);
+        }
     }
 
 private:

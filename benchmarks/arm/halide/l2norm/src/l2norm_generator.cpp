@@ -34,7 +34,7 @@ public:
         output = i16_sat(rounding_shift_right(output, q - 7));
         output_(x, y) = u8_sat(saturating_add(output, i16(128)));
 
-        // Schedule.
+        // Schedules for x86
         const int vector_size = natural_vector_size<uint8_t>();
 
         output_.compute_root()
@@ -47,6 +47,7 @@ public:
             .atomic()
             .vectorize(rx, vector_size);
     }
+
 
     void schedule() {}
 

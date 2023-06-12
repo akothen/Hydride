@@ -23,15 +23,27 @@ public:
         output.dim(0).set_min(0);
         output.dim(1).set_min(0);
 
-        const int vector_size = natural_vector_size<uint8_t>();
+        const int vector_size = 64;
+        // bounded_input
+        //     .compute_at(Func(output), y)
+        //     .align_storage(x, 128)
+        //     .vectorize(x, vector_size, TailStrategy::RoundUp);
+        // output
+        //     .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
+        //     .vectorize(xi)
+        //     .unroll(yi);
+
+        // Schedules for x86
+        output
+            .tile(x, y, xi, yi, 64, 8, TailStrategy::RoundUp)
+            .vectorize(xi, vector_size)
+            .unroll(yi);
         bounded_input
-            .compute_at(Func(output), y)
+            .compute_at(output, y)
             .align_storage(x, 128)
             .vectorize(x, vector_size, TailStrategy::RoundUp);
-        output
-            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
-            .vectorize(xi)
-            .unroll(yi);
+
+        output.print_loop_nest();
     }
 
 private:
