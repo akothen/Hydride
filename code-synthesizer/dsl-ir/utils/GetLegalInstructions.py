@@ -13,8 +13,8 @@ Checker = RoseISAValidityChecker()
 legality_map = {}
 
 
-
 items = range(len(dsl_list))
+
 
 def task(i):
     dsl_inst = dsl_list[i]
@@ -26,17 +26,10 @@ def task(i):
             else:
                 legality_map[ctx.name] = 0
 
-
-
         except:
             legality_map[ctx.name] = 0
         finally:
             print(ctx.name, "valid?", legality_map[ctx.name])
-
-
-
-
-
 
 
 for i in items:
@@ -48,4 +41,3 @@ print("Completed all tasks!")
 with open("legal_insts.py", "w+") as WriteFile:
     WriteFile.write("legal_map=")
     WriteFile.write(json.dumps(legality_map, indent=4))
-

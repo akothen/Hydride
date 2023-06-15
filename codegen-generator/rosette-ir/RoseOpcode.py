@@ -1,13 +1,13 @@
 ##############################################################
 #
-# This file contains all the opcodes of all operations 
+# This file contains all the opcodes of all operations
 # supported in the  Rosette IR.
 #
 ##############################################################
 
 
 from RoseTypes import *
-from  RoseValue import RoseValue
+from RoseValue import RoseValue
 import RoseAbstractions
 import RoseValues
 
@@ -61,7 +61,7 @@ class RoseOpcode(Enum):
     bvsignextend = auto()
     bvzeroextend = auto()
     bvsizeextend = auto()
-    
+
     # Some primitive ops
     add = auto()
     sub = auto()
@@ -93,7 +93,7 @@ class RoseOpcode(Enum):
     call = auto()
     ret = auto()
 
-    # And IR opcode for casting between 
+    # And IR opcode for casting between
     # Integers, bitvectors and booleans.
     cast = auto()
 
@@ -101,17 +101,17 @@ class RoseOpcode(Enum):
     bvssat = auto()
     bvusat = auto()
     bvsaturate = auto()
-    
+
     # Some general saturable operations
     bvgeneraladd = auto()
     bvgeneralsub = auto()
-    
+
     # Some general sign-agnostic operations
     bvgeneraldiv = auto()
     bvgeneralrem = auto()
     bvgeneralmax = auto()
     bvgeneralmin = auto()
-    
+
     # Some general comparison operations
     bvgenerallt = auto()
     bvgeneralle = auto()
@@ -139,10 +139,9 @@ class RoseOpcode(Enum):
     # using Rose IR.
     bvpadhighbits = auto()
 
-
     def __str__(self):
         return self.name
-    
+
     def __eq__(self, Other):
         assert isinstance(Other, RoseOpcode)
         return self.value == Other.value
@@ -150,11 +149,11 @@ class RoseOpcode(Enum):
     def __ne__(self, Other):
         assert isinstance(Other, RoseOpcode)
         return self.value != Other.value
-    
+
     def __hash__(self):
         return hash(self.value)
 
-    def getBVOpInputs(self, Inputs : list):
+    def getBVOpInputs(self, Inputs: list):
         BVInputs = []
         for Input in Inputs:
             assert isinstance(Input, RoseValue)
@@ -162,7 +161,7 @@ class RoseOpcode(Enum):
                 BVInputs.append(Input)
         return BVInputs
 
-    def getOutputType(self, Inputs : list, OpInfoBundle = None): 
+    def getOutputType(self, Inputs: list, OpInfoBundle=None):
         # Deal with some special cases first.
         if self.value == self.call.value:
             # OpInfoBundle in this case is a callee
@@ -178,7 +177,7 @@ class RoseOpcode(Enum):
             assert isinstance(OutputType, RoseType)
             return OutputType
         if self.value == self.cast.value:
-            assert(len(Inputs) == 1)
+            assert (len(Inputs) == 1)
             assert isinstance(Inputs[0], RoseValue)
             # Output type must be explicitly mentioned
             OutputType = OpInfoBundle
@@ -187,93 +186,94 @@ class RoseOpcode(Enum):
             assert isinstance(OutputType, RoseType)
             assert not isinstance(OutputType, RoseUndefinedType)
             assert Inputs[0].getType() != OutputType
-            assert Inputs[0].getType().getBitwidth() == OutputType.getBitwidth()
-            assert (isinstance(OutputType, RoseBooleanType) \
-                    or isinstance(OutputType, RoseBitVectorType) \
+            assert Inputs[0].getType().getBitwidth(
+            ) == OutputType.getBitwidth()
+            assert (isinstance(OutputType, RoseBooleanType)
+                    or isinstance(OutputType, RoseBitVectorType)
                     or isinstance(OutputType, RoseIntegerType))
             return OutputType
         # Output type for all ops can be determined with the help
         # of the types of the inputs. No other OpInfoBundle needed.
         assert OpInfoBundle == None
         # All ops have at least one operand
-        assert(len(Inputs) >= 1)
+        assert (len(Inputs) >= 1)
         if self.value == self.bit.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value:
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             return RoseBitVectorType.create(1)
         if self.value == self.bvzero.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             return RoseBooleanType.create()
         if self.value == self.bvneg.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
-        or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value:
+                or self.value == self.bvnot.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value \
+                or self.value == self.rotateleft.value \
+                or self.value == self.rotateright.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth())
         if self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value \
-        or self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value:
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvgeneraladd.value \
+                or self.value == self.bvgeneralsub.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value \
+                or self.value == self.bvgeneralmax.value \
+                or self.value == self.bvgeneralmin.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) > 1)
+            assert (len(BVInputs) > 1)
             return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth())
         if self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value:
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvgeneraldiv.value \
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 2)
+            assert (len(BVInputs) == 2)
             return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth())
         if self.value == self.bveq.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value:
+                or self.value == self.bvneq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 2)
+            assert (len(BVInputs) == 2)
             return RoseBooleanType.create()
         if self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 2)
+            assert (len(BVInputs) == 2)
             # The bitwidth inserted by is a constant value
             assert isinstance(Inputs[4], RoseValues.RoseConstant)
             return RoseVoidType.create()
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             # The number of high bits that should be padded must be constant
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             return RoseVoidType.create()
@@ -285,116 +285,117 @@ class RoseOpcode(Enum):
             return RoseVoidType.create()
         if self.value == self.bvextract.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert Inputs[1].getType() == Inputs[2].getType()
             # TODO: This is temporary. This needs to be fixed.
-            #assert isinstance(Inputs[1], RoseConstant)
-            #assert isinstance(Inputs[2], RoseConstant)
-            #Bitwidth = (Inputs[2].getValue() - Inputs[1].getValue() + 1)
+            # assert isinstance(Inputs[1], RoseConstant)
+            # assert isinstance(Inputs[2], RoseConstant)
+            # Bitwidth = (Inputs[2].getValue() - Inputs[1].getValue() + 1)
             assert isinstance(Inputs[3], RoseValues.RoseConstant)
             return RoseBitVectorType.create(Inputs[3].getValue())
         if self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value:
+                or self.value == self.bvzeroextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() > BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvsizeextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert isinstance(Inputs[2], RoseValues.RoseConstant)
             assert Inputs[1].getValue() > BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvssat.value \
-        or self.value == self.bvusat.value:
+                or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvsaturate.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert isinstance(Inputs[2], RoseValues.RoseConstant)
             assert Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvtrunclow.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() < BVInputs[0].getType().getBitwidth()
-            return RoseBitVectorType.create(Inputs[1].getValue()) 
+            return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvtrunchigh.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            assert(len(BVInputs) == 1)
+            assert (len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() < BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.add.value \
-        or self.value == self.sub.value \
-        or self.value == self.mul.value \
-        or self.value == self.min.value \
-        or self.value == self.max.value:
-            assert(len(Inputs) > 1)
+                or self.value == self.sub.value \
+                or self.value == self.mul.value \
+                or self.value == self.min.value \
+                or self.value == self.max.value:
+            assert (len(Inputs) > 1)
             if isinstance(Inputs[0].getType(), RoseIntegerType):
                 return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
             assert Inputs[0].getType().isFloatTy()
             return RoseFloatType.create(Inputs[0].getType().getBitwidth())
         if self.value == self.div.value \
-        or self.value == self.rem.value \
-        or self.value == self.mod.value:
-            assert(len(Inputs) == 2)
+                or self.value == self.rem.value \
+                or self.value == self.mod.value:
+            assert (len(Inputs) == 2)
             if isinstance(Inputs[0].getType(), RoseIntegerType) \
-            and isinstance(Inputs[1].getType(), RoseIntegerType):
+                    and isinstance(Inputs[1].getType(), RoseIntegerType):
                 return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
-            assert Inputs[0].getType().isFloatTy() or Inputs[1].getType().isFloatTy()
+            assert Inputs[0].getType().isFloatTy(
+            ) or Inputs[1].getType().isFloatTy()
             return RoseFloatType.create(Inputs[0].getType().getBitwidth())
         if self.value == self.abs.value:
-            assert(len(Inputs) == 1)
+            assert (len(Inputs) == 1)
             assert isinstance(Inputs[0].getType(), RoseIntegerType)
             return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
         if self.value == self.equal.value \
-        or self.value == self.notequal.value \
-        or self.value == self.lessthan.value \
-        or self.value == self.lessthanequal.value \
-        or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value:
-            assert(len(Inputs) == 2)
+                or self.value == self.notequal.value \
+                or self.value == self.lessthan.value \
+                or self.value == self.lessthanequal.value \
+                or self.value == self.greaterthan.value \
+                or self.value == self.greaterthanequal.value:
+            assert (len(Inputs) == 2)
             return RoseBooleanType.create()
         if self.value == self.not_.value:
-            assert(len(Inputs) == 1)
+            assert (len(Inputs) == 1)
             if isinstance(Inputs[0].getType(), RoseIntegerType):
                 return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
             assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
         if self.value == self.and_.value \
-        or self.value == self.nand.value \
-        or self.value == self.or_.value \
-        or self.value == self.nor.value:
-            assert(len(Inputs) > 1)
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value:
+            assert (len(Inputs) > 1)
             InputType = Inputs[0].getType()
             for Input in Inputs[1:]:
-                assert Input.getType() == InputType 
+                assert Input.getType() == InputType
             if isinstance(Inputs[0].getType(), RoseIntegerType):
                 return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
             assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
         if self.value == self.xor.value:
-            assert(len(Inputs) == 2)
+            assert (len(Inputs) == 2)
             if isinstance(Inputs[0].getType(), RoseIntegerType):
                 return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
             assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
         if self.value == self.bvabs.value:
-            assert(len(Inputs) == 1)
+            assert (len(Inputs) == 1)
             assert isinstance(Inputs[0].getType(), RoseBitVectorType)
             return RoseBitVectorType.create(Inputs[0].getType().getBitwidth())
         return None
 
-    def inputsAreValid(self, Inputs : list, OutputType : RoseType, OpInfoBundle = None):
+    def inputsAreValid(self, Inputs: list, OutputType: RoseType, OpInfoBundle=None):
         if self.isValidNumInputs(len(Inputs)) == False:
             return False
         # First deal with some special cases
@@ -407,13 +408,13 @@ class RoseOpcode(Enum):
             if Inputs[0].getType() == OutputType:
                 return False
             # Valid input types are integers, bitvectors and booleans
-            if not (isinstance(Inputs[0].getType(), RoseBooleanType) \
-                or isinstance(Inputs[0].getType(), RoseBitVectorType) \
-                or isinstance(Inputs[0].getType(), RoseIntegerType)):
+            if not (isinstance(Inputs[0].getType(), RoseBooleanType)
+                    or isinstance(Inputs[0].getType(), RoseBitVectorType)
+                    or isinstance(Inputs[0].getType(), RoseIntegerType)):
                 return False
-            if not (isinstance(OutputType, RoseBooleanType) \
-                or isinstance(OutputType, RoseBitVectorType) \
-                or isinstance(OutputType, RoseIntegerType)):
+            if not (isinstance(OutputType, RoseBooleanType)
+                    or isinstance(OutputType, RoseBitVectorType)
+                    or isinstance(OutputType, RoseIntegerType)):
                 return False
             if Inputs[0].getType().getBitwidth() != OutputType.getBitwidth():
                 return False
@@ -421,7 +422,7 @@ class RoseOpcode(Enum):
                 return False
             return True
         if self.value == self.call.value:
-            Callee = OpInfoBundle[0]    
+            Callee = OpInfoBundle[0]
             if not isinstance(Callee, RoseAbstractions.RoseFunction):
                 return False
             if len(Inputs) != Callee.getNumArgs():
@@ -446,22 +447,22 @@ class RoseOpcode(Enum):
         # OpInfoBundle is not useful for other operations
         assert OpInfoBundle == None
         if self.value == self.bvzero.value \
-        or self.value == self.bit.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
-        or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value:
+                or self.value == self.bit.value \
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value \
+                or self.value == self.bvneg.value \
+                or self.value == self.bvnot.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value \
+                or self.value == self.rotateleft.value \
+                or self.value == self.rotateright.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if self.getOutputType(Inputs) != OutputType:
                 return False
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvextract.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -472,7 +473,7 @@ class RoseOpcode(Enum):
             if BVInputs[0].getType().getBitwidth() < Inputs[3].getValue():
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -485,10 +486,10 @@ class RoseOpcode(Enum):
             if BVInputs[1].getType().getBitwidth() < Inputs[4].getValue():
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value:
+                or self.value == self.bvzeroextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
@@ -497,7 +498,7 @@ class RoseOpcode(Enum):
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvsizeextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -510,10 +511,10 @@ class RoseOpcode(Enum):
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvssat.value \
-        or self.value == self.bvusat.value:
+                or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
@@ -522,7 +523,7 @@ class RoseOpcode(Enum):
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvsaturate.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -535,7 +536,7 @@ class RoseOpcode(Enum):
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvtrunclow.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -546,7 +547,7 @@ class RoseOpcode(Enum):
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvtrunchigh.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -557,29 +558,29 @@ class RoseOpcode(Enum):
             if len(BVInputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value:
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) <= 0:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value:
+                or self.value == self.bvgeneralmin.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) < 2:
                 return False
@@ -588,10 +589,10 @@ class RoseOpcode(Enum):
             if not isinstance(Inputs[-1].getType(), RoseBooleanType):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value:
+                or self.value == self.bvgeneralsub.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) < 2:
                 return False
@@ -602,37 +603,37 @@ class RoseOpcode(Enum):
             if Inputs[-1].getType().getBitwidth() != 2:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value \
-        or self.value == self.bveq.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value:
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value \
+                or self.value == self.bveq.value \
+                or self.value == self.bvneq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) != 2:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value:
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) != 2:
                 return False
@@ -641,7 +642,7 @@ class RoseOpcode(Enum):
             if not isinstance(Inputs[-1].getType(), RoseBooleanType):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -650,20 +651,20 @@ class RoseOpcode(Enum):
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.ret.value:
             assert isinstance(Inputs[0], RoseValue)
             if len(Inputs) != 1:
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.add.value \
-        or self.value == self.sub.value \
-        or self.value == self.mul.value \
-        or self.value == self.min.value \
-        or self.value == self.max.value:
+                or self.value == self.sub.value \
+                or self.value == self.mul.value \
+                or self.value == self.min.value \
+                or self.value == self.max.value:
             if not (len(Inputs) > 1):
                 return False
             Type = Inputs[0].getType()
@@ -671,29 +672,29 @@ class RoseOpcode(Enum):
                 if Type != Input.getType():
                     return False
                 if not isinstance(Input.getType(), RoseIntegerType) \
-                and not isinstance(Input.getType(), RoseFloatType):
+                        and not isinstance(Input.getType(), RoseFloatType):
                     return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.div.value \
-        or self.value == self.rem.value \
-        or self.value == self.mod.value \
-        or self.value == self.equal.value \
-        or self.value == self.notequal.value \
-        or self.value == self.lessthan.value \
-        or self.value == self.lessthanequal.value \
-        or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value:
+                or self.value == self.rem.value \
+                or self.value == self.mod.value \
+                or self.value == self.equal.value \
+                or self.value == self.notequal.value \
+                or self.value == self.lessthan.value \
+                or self.value == self.lessthanequal.value \
+                or self.value == self.greaterthan.value \
+                or self.value == self.greaterthanequal.value:
             if len(Inputs) != 2:
                 return False
             if Inputs[0].getType() != Inputs[1].getType():
                 return False
             if not isinstance(Inputs[0].getType(), RoseIntegerType) \
-            and not Inputs[0].getType().isFloatTy():
+                    and not Inputs[0].getType().isFloatTy():
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.abs.value:
             if len(Inputs) != 1:
@@ -701,41 +702,41 @@ class RoseOpcode(Enum):
             if not isinstance(Inputs[0].getType(), RoseIntegerType):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.not_.value:
             if len(Inputs) != 1:
                 return False
             if not isinstance(Inputs[0].getType(), RoseBooleanType) \
-            and not isinstance(Inputs[0].getType(), RoseIntegerType):
+                    and not isinstance(Inputs[0].getType(), RoseIntegerType):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.and_.value \
-        or self.value == self.nand.value \
-        or self.value == self.or_.value \
-        or self.value == self.nor.value:
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value:
             if not (len(Inputs) > 1):
                 return False
             for Input in Inputs:
                 if not isinstance(Input.getType(), RoseBooleanType) \
-                and not isinstance(Input.getType(), RoseIntegerType):
+                        and not isinstance(Input.getType(), RoseIntegerType):
                     return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.xor.value:
             if len(Inputs) != 2:
                 return False
             if not isinstance(Inputs[0].getType(), RoseBooleanType) \
-                and not isinstance(Inputs[0].getType(), RoseIntegerType):
+                    and not isinstance(Inputs[0].getType(), RoseIntegerType):
                 return False
             if not isinstance(Inputs[1].getType(), RoseBooleanType) \
-                and not isinstance(Inputs[1].getType(), RoseIntegerType):
+                    and not isinstance(Inputs[1].getType(), RoseIntegerType):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.bvabs.value:
             if len(Inputs) != 1:
@@ -743,7 +744,7 @@ class RoseOpcode(Enum):
             if not isinstance(Inputs[0].getType(), RoseBitVectorType):
                 return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         if self.value == self.select.value:
             if len(Inputs) != 3:
@@ -754,434 +755,434 @@ class RoseOpcode(Enum):
             if Then.getType() != Else.getType():
                 return False
             if isinstance(Then.getType(), RoseVoidType) \
-            or isinstance(Then.getType(), RoseUndefinedType):
+                    or isinstance(Then.getType(), RoseUndefinedType):
                 return False
             if not isinstance(Cond.getType(), RoseBitVectorType) \
-            and not isinstance(Cond.getType(), RoseBooleanType):
+                    and not isinstance(Cond.getType(), RoseBooleanType):
                 return False
             if isinstance(Cond.getType(), RoseBitVectorType):
                 if Cond.getType().getBitwidth() != 1:
                     return False
             if self.getOutputType(Inputs) != OutputType:
-                return False 
+                return False
             return True
         return None
 
     def typesOfInputsAndOutputEqual(self):
         if self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
-        or self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value \
-        or self.value == self.not_.value \
-        or self.value == self.and_.value \
-        or self.value == self.nand.value \
-        or self.value == self.or_.value \
-        or self.value == self.nor.value \
-        or self.value == self.xor.value \
-        or self.value == self.add.value \
-        or self.value == self.sub.value \
-        or self.value == self.mul.value \
-        or self.value == self.min.value \
-        or self.value == self.max.value \
-        or self.value == self.div.value \
-        or self.value == self.rem.value \
-        or self.value == self.mod.value \
-        or self.value == self.abs.value \
-        or self.value == self.bvabs.value:
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value \
+                or self.value == self.bvnot.value \
+                or self.value == self.bvneg.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value \
+                or self.value == self.bvsdiv.value \
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value \
+                or self.value == self.not_.value \
+                or self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value \
+                or self.value == self.xor.value \
+                or self.value == self.add.value \
+                or self.value == self.sub.value \
+                or self.value == self.mul.value \
+                or self.value == self.min.value \
+                or self.value == self.max.value \
+                or self.value == self.div.value \
+                or self.value == self.rem.value \
+                or self.value == self.mod.value \
+                or self.value == self.abs.value \
+                or self.value == self.bvabs.value:
             return True
         if self.value == self.bvzero.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
-        or self.value == self.bit.value \
-        or self.value == self.bveq.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value \
-        or self.value == self.bvextract.value \
-        or self.value == self.bvinsert.value \
-        or self.value == self.call.value \
-        or self.value == self.opaquecall.value \
-        or self.value == self.bvpadhighbits.value \
-        or self.value == self.select.value \
-        or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value \
-        or self.value == self.equal.value \
-        or self.value == self.notequal.value \
-        or self.value == self.lessthan.value \
-        or self.value == self.lessthanequal.value \
-        or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value\
-        or self.value == self.cast.value \
-        or self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvsaturate.value \
-        or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value \
-        or self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsizeextend.value \
-        or self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value \
-        or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value \
-        or self.value == self.ret.value:
-            return False
-        return None
-    
-    def typesOfOperandsAreEqual(self):
-        if self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value \
-        or self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value \
-        or self.value == self.bveq.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value \
-        or self.value == self.bit.value \
-        or self.value == self.and_.value \
-        or self.value == self.nand.value \
-        or self.value == self.or_.value \
-        or self.value == self.nor.value \
-        or self.value == self.xor.value \
-        or self.value == self.add.value \
-        or self.value == self.sub.value \
-        or self.value == self.mul.value \
-        or self.value == self.min.value \
-        or self.value == self.max.value \
-        or self.value == self.div.value \
-        or self.value == self.rem.value \
-        or self.value == self.mod.value \
-        or self.value == self.equal.value \
-        or self.value == self.notequal.value \
-        or self.value == self.lessthan.value \
-        or self.value == self.lessthanequal.value \
-        or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value:
-            return True
-        if self.value == self.bvextract.value \
-        or self.value == self.bvinsert.value \
-        or self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsizeextend.value \
-        or self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value \
-        or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value \
-        or self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvsaturate.value \
-        or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value \
-        or self.value == self.call.value \
-        or self.value == self.opaquecall.value \
-        or self.value == self.bvpadhighbits.value \
-        or self.value == self.select.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.ret.value \
-        or self.value == self.abs.value \
-        or self.value == self.bvabs.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
-        or self.value == self.bvzero.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
-        or self.value == self.not_.value \
-        or self.value == self.cast.value \
-        or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value:
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value \
+                or self.value == self.bit.value \
+                or self.value == self.bveq.value \
+                or self.value == self.bvneq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value \
+                or self.value == self.bvextract.value \
+                or self.value == self.bvinsert.value \
+                or self.value == self.call.value \
+                or self.value == self.opaquecall.value \
+                or self.value == self.bvpadhighbits.value \
+                or self.value == self.select.value \
+                or self.value == self.rotateleft.value \
+                or self.value == self.rotateright.value \
+                or self.value == self.equal.value \
+                or self.value == self.notequal.value \
+                or self.value == self.lessthan.value \
+                or self.value == self.lessthanequal.value \
+                or self.value == self.greaterthan.value \
+                or self.value == self.greaterthanequal.value\
+                or self.value == self.cast.value \
+                or self.value == self.bvssat.value \
+                or self.value == self.bvusat.value \
+                or self.value == self.bvsaturate.value \
+                or self.value == self.bvtrunclow.value \
+                or self.value == self.bvtrunchigh.value \
+                or self.value == self.bvsignextend.value \
+                or self.value == self.bvzeroextend.value \
+                or self.value == self.bvsizeextend.value \
+                or self.value == self.bvgeneraladd.value \
+                or self.value == self.bvgeneralsub.value \
+                or self.value == self.bvgeneraldiv.value \
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvgeneralmax.value \
+                or self.value == self.bvgeneralmin.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value \
+                or self.value == self.ret.value:
             return False
         return None
 
-    def isValidNumInputs(self, NumInputs : int):
+    def typesOfOperandsAreEqual(self):
+        if self.value == self.bvadd.value \
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value \
+                or self.value == self.bvsdiv.value \
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value \
+                or self.value == self.bveq.value \
+                or self.value == self.bvneq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value \
+                or self.value == self.bit.value \
+                or self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value \
+                or self.value == self.xor.value \
+                or self.value == self.add.value \
+                or self.value == self.sub.value \
+                or self.value == self.mul.value \
+                or self.value == self.min.value \
+                or self.value == self.max.value \
+                or self.value == self.div.value \
+                or self.value == self.rem.value \
+                or self.value == self.mod.value \
+                or self.value == self.equal.value \
+                or self.value == self.notequal.value \
+                or self.value == self.lessthan.value \
+                or self.value == self.lessthanequal.value \
+                or self.value == self.greaterthan.value \
+                or self.value == self.greaterthanequal.value:
+            return True
+        if self.value == self.bvextract.value \
+                or self.value == self.bvinsert.value \
+                or self.value == self.bvsignextend.value \
+                or self.value == self.bvzeroextend.value \
+                or self.value == self.bvsizeextend.value \
+                or self.value == self.bvgeneraladd.value \
+                or self.value == self.bvgeneralsub.value \
+                or self.value == self.bvgeneraldiv.value \
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvgeneralmax.value \
+                or self.value == self.bvgeneralmin.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value \
+                or self.value == self.bvssat.value \
+                or self.value == self.bvusat.value \
+                or self.value == self.bvsaturate.value \
+                or self.value == self.bvtrunclow.value \
+                or self.value == self.bvtrunchigh.value \
+                or self.value == self.call.value \
+                or self.value == self.opaquecall.value \
+                or self.value == self.bvpadhighbits.value \
+                or self.value == self.select.value \
+                or self.value == self.bvnot.value \
+                or self.value == self.bvneg.value \
+                or self.value == self.ret.value \
+                or self.value == self.abs.value \
+                or self.value == self.bvabs.value \
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value \
+                or self.value == self.bvzero.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value \
+                or self.value == self.not_.value \
+                or self.value == self.cast.value \
+                or self.value == self.rotateleft.value \
+                or self.value == self.rotateright.value:
+            return False
+        return None
+
+    def isValidNumInputs(self, NumInputs: int):
         if self.value == self.bvzero.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value:
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value \
+                or self.value == self.bvneg.value \
+                or self.value == self.bvnot.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value:
             return (NumInputs == 1)
         if self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value:
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value:
             return (NumInputs > 1)
         if self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value \
-        or self.value == self.bit.value \
-        or self.value == self.bveq.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value \
-        or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value:
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value \
+                or self.value == self.bit.value \
+                or self.value == self.bveq.value \
+                or self.value == self.bvneq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value \
+                or self.value == self.rotateleft.value \
+                or self.value == self.rotateright.value:
             return (NumInputs == 2)
         if self.value == self.bvextract.value:
             return (NumInputs == 4)
         if self.value == self.bvinsert.value:
             return (NumInputs == 5)
         if self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value \
-        or self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value:
+                or self.value == self.bvzeroextend.value \
+                or self.value == self.bvssat.value \
+                or self.value == self.bvusat.value \
+                or self.value == self.bvtrunclow.value \
+                or self.value == self.bvtrunchigh.value:
             return (NumInputs == 2)
         if self.value == self.select.value \
-        or self.value == self.bvsizeextend.value \
-        or self.value == self.bvsaturate.value \
-        or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value:
+                or self.value == self.bvsizeextend.value \
+                or self.value == self.bvsaturate.value \
+                or self.value == self.bvgeneraldiv.value \
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value:
             return (NumInputs == 3)
         if self.value == self.call.value \
-        or self.value == self.opaquecall.value:
+                or self.value == self.opaquecall.value:
             return (NumInputs >= 0)
         if self.value == self.bvpadhighbits.value:
             return (NumInputs == 2)
         if self.value == self.ret.value \
-        or self.value == self.abs.value:
+                or self.value == self.abs.value:
             return (NumInputs == 1)
         if self.value == self.add.value \
-        or self.value == self.sub.value \
-        or self.value == self.mul.value \
-        or self.value == self.min.value \
-        or self.value == self.max.value:
+                or self.value == self.sub.value \
+                or self.value == self.mul.value \
+                or self.value == self.min.value \
+                or self.value == self.max.value:
             return (NumInputs > 1)
         if self.value == self.div.value \
-        or self.value == self.rem.value \
-        or self.value == self.mod.value \
-        or self.value == self.equal.value \
-        or self.value == self.notequal.value \
-        or self.value == self.lessthan.value \
-        or self.value == self.lessthanequal.value \
-        or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value:
+                or self.value == self.rem.value \
+                or self.value == self.mod.value \
+                or self.value == self.equal.value \
+                or self.value == self.notequal.value \
+                or self.value == self.lessthan.value \
+                or self.value == self.lessthanequal.value \
+                or self.value == self.greaterthan.value \
+                or self.value == self.greaterthanequal.value:
             return (NumInputs == 2)
         if self.value == self.not_.value:
             return (NumInputs == 1)
         if self.value == self.and_.value \
-        or self.value == self.nand.value \
-        or self.value == self.or_.value \
-        or self.value == self.nor.value:
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value:
             return (NumInputs > 1)
         if self.value == self.xor.value:
-           return (NumInputs == 2)
+            return (NumInputs == 2)
         if self.value == self.cast.value:
-           return (NumInputs == 1)   
+            return (NumInputs == 1)
         if self.value == self.bvabs.value:
             return (NumInputs == 1)
         if self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value \
-        or self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value:
+                or self.value == self.bvgeneralsub.value \
+                or self.value == self.bvgeneralmax.value \
+                or self.value == self.bvgeneralmin.value:
             return (NumInputs >= 3)
         return None
-    
+
     def isBitVectorOpcode(self):
         if self.value == self.bvzero.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
-        or self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value \
-        or self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value \
-        or self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value \
-        or self.value == self.bit.value \
-        or self.value == self.bveq.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value \
-        or self.value == self.bvabs.value \
-        or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value \
-        or self.value == self.bvextract.value \
-        or self.value == self.bvinsert.value \
-        or self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsizeextend.value \
-        or self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvsaturate.value \
-        or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value \
-        or self.value == self.bvpadhighbits.value:
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value \
+                or self.value == self.bvneg.value \
+                or self.value == self.bvnot.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value \
+                or self.value == self.bvadd.value \
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvgeneraladd.value \
+                or self.value == self.bvgeneralsub.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value \
+                or self.value == self.bvgeneralmax.value \
+                or self.value == self.bvgeneralmin.value \
+                or self.value == self.bvsdiv.value \
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvgeneraldiv.value \
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value \
+                or self.value == self.bit.value \
+                or self.value == self.bveq.value \
+                or self.value == self.bvneq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value \
+                or self.value == self.bvabs.value \
+                or self.value == self.rotateleft.value \
+                or self.value == self.rotateright.value \
+                or self.value == self.bvextract.value \
+                or self.value == self.bvinsert.value \
+                or self.value == self.bvsignextend.value \
+                or self.value == self.bvzeroextend.value \
+                or self.value == self.bvsizeextend.value \
+                or self.value == self.bvssat.value \
+                or self.value == self.bvusat.value \
+                or self.value == self.bvsaturate.value \
+                or self.value == self.bvtrunclow.value \
+                or self.value == self.bvtrunchigh.value \
+                or self.value == self.bvpadhighbits.value:
             return True
         return False
 
     def isSizeChangingOp(self):
         if self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsizeextend.value \
-        or self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvsaturate.value \
-        or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value:
+                or self.value == self.bvzeroextend.value \
+                or self.value == self.bvsizeextend.value \
+                or self.value == self.bvssat.value \
+                or self.value == self.bvusat.value \
+                or self.value == self.bvsaturate.value \
+                or self.value == self.bvtrunclow.value \
+                or self.value == self.bvtrunchigh.value:
             return True
         return False
 
     def getRosetteOp(self):
         # Some opcodes have the same name as Rosette ops
         if self.value == self.bvadd.value \
-        or self.value == self.bvsub.value \
-        or self.value == self.bvmul.value \
-        or self.value == self.bvor.value \
-        or self.value == self.bvxor.value \
-        or self.value == self.bvand.value \
-        or self.value == self.bvshl.value \
-        or self.value == self.bvlshr.value \
-        or self.value == self.bvashr.value \
-        or self.value == self.bvsmin.value \
-        or self.value == self.bvumin.value \
-        or self.value == self.bvsmax.value \
-        or self.value == self.bvumax.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
-        or self.value == self.bvsdiv.value \
-        or self.value == self.bvudiv.value \
-        or self.value == self.bvsrem.value \
-        or self.value == self.bvurem.value \
-        or self.value == self.bvsmod.value \
-        or self.value == self.bvrol.value \
-        or self.value == self.bvror.value \
-        or self.value == self.bvzero.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
-        or self.value == self.bit.value \
-        or self.value == self.bveq.value \
-        or self.value == self.bvslt.value \
-        or self.value == self.bvult.value \
-        or self.value == self.bvsle.value \
-        or self.value == self.bvule.value \
-        or self.value == self.bvsgt.value \
-        or self.value == self.bvugt.value \
-        or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value \
-        or self.value == self.abs.value \
-        or self.value == self.min.value \
-        or self.value == self.max.value:
+                or self.value == self.bvsub.value \
+                or self.value == self.bvmul.value \
+                or self.value == self.bvor.value \
+                or self.value == self.bvxor.value \
+                or self.value == self.bvand.value \
+                or self.value == self.bvshl.value \
+                or self.value == self.bvlshr.value \
+                or self.value == self.bvashr.value \
+                or self.value == self.bvsmin.value \
+                or self.value == self.bvumin.value \
+                or self.value == self.bvsmax.value \
+                or self.value == self.bvumax.value \
+                or self.value == self.bvnot.value \
+                or self.value == self.bvneg.value \
+                or self.value == self.bvadd1.value \
+                or self.value == self.bvsub1.value \
+                or self.value == self.bvsdiv.value \
+                or self.value == self.bvudiv.value \
+                or self.value == self.bvsrem.value \
+                or self.value == self.bvurem.value \
+                or self.value == self.bvsmod.value \
+                or self.value == self.bvrol.value \
+                or self.value == self.bvror.value \
+                or self.value == self.bvzero.value \
+                or self.value == self.lsb.value \
+                or self.value == self.msb.value \
+                or self.value == self.bit.value \
+                or self.value == self.bveq.value \
+                or self.value == self.bvslt.value \
+                or self.value == self.bvult.value \
+                or self.value == self.bvsle.value \
+                or self.value == self.bvule.value \
+                or self.value == self.bvsgt.value \
+                or self.value == self.bvugt.value \
+                or self.value == self.bvsge.value \
+                or self.value == self.bvuge.value \
+                or self.value == self.abs.value \
+                or self.value == self.min.value \
+                or self.value == self.max.value:
             return self.name
         # Hand code some of the names of rosette ops
         if self.value == self.not_.value:
@@ -1230,31 +1231,31 @@ class RoseOpcode(Enum):
             return ">="
         # These ops exist in Rose IR but not in Rosette
         if self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvsaturate.value \
-        or self.value == self.bvsizeextend.value \
-        or self.value == self.bvgeneraladd.value \
-        or self.value == self.bvgeneralsub.value \
-        or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value \
-        or self.value == self.bvgeneralmax.value \
-        or self.value == self.bvgeneralmin.value \
-        or self.value == self.bvgenerallt.value \
-        or self.value == self.bvgeneralle.value \
-        or self.value == self.bvgeneralgt.value \
-        or self.value == self.bvgeneralge.value \
-        or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value \
-        or self.value == self.bvinsert.value \
-        or self.value == self.call.value \
-        or self.value == self.opaquecall.value \
-        or self.value == self.bvpadhighbits.value \
-        or self.value == self.select.value \
-        or self.value == self.ret.value \
-        or self.value == self.cast.value \
-        or self.value == self.bvneq.value \
-        or self.value == self.notequal.value \
-        or self.value == self.bvabs.value:
+                or self.value == self.bvusat.value \
+                or self.value == self.bvsaturate.value \
+                or self.value == self.bvsizeextend.value \
+                or self.value == self.bvgeneraladd.value \
+                or self.value == self.bvgeneralsub.value \
+                or self.value == self.bvgeneraldiv.value \
+                or self.value == self.bvgeneralrem.value \
+                or self.value == self.bvgeneralmax.value \
+                or self.value == self.bvgeneralmin.value \
+                or self.value == self.bvgenerallt.value \
+                or self.value == self.bvgeneralle.value \
+                or self.value == self.bvgeneralgt.value \
+                or self.value == self.bvgeneralge.value \
+                or self.value == self.bvtrunclow.value \
+                or self.value == self.bvtrunchigh.value \
+                or self.value == self.bvinsert.value \
+                or self.value == self.call.value \
+                or self.value == self.opaquecall.value \
+                or self.value == self.bvpadhighbits.value \
+                or self.value == self.select.value \
+                or self.value == self.ret.value \
+                or self.value == self.cast.value \
+                or self.value == self.bvneq.value \
+                or self.value == self.notequal.value \
+                or self.value == self.bvabs.value:
             assert False, "No direct conversion to Rosette Ops"
         return None
 
@@ -1267,4 +1268,3 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
-

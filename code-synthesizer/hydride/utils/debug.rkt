@@ -6,7 +6,6 @@
 (require rosette/lib/destruct)
 (require hydride/utils/bvops)
 
-
 (provide (all-defined-out))
 
 ;; DEBUG-MODEs:
@@ -15,26 +14,13 @@
 (define DEBUG-MODE 0)
 
 (define (enable-debug)
-  (set! DEBUG-MODE 1)
-  )
-
+  (set! DEBUG-MODE 1))
 
 (define (disable-debug)
-  (set! DEBUG-MODE 0)
-  )
+  (set! DEBUG-MODE 0))
 
 (define (print-to-console v)
-  (if (struct? v)
-    (pretty-print v)
-    (displayln v)
-    )
-  )
+  (if (struct? v) (pretty-print v) (displayln v)))
 
 (define (debug-log msg)
-  (if (equal? DEBUG-MODE 1)
-    (print-to-console msg)
-    '()
-    )
-  )
-
-
+  (if (equal? DEBUG-MODE 1) (print-to-console msg) '()))

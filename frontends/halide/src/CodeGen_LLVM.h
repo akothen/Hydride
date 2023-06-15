@@ -148,8 +148,7 @@ protected:
     llvm::MDNode *strict_fp_math_md;
     std::vector<LoweredArgument> current_function_args;
 
-    std::vector<llvm::CallInst*> hydride_nodes;
-
+    std::vector<llvm::CallInst *> hydride_nodes;
 
     FuncValueBounds func_value_bounds;
     //@}
@@ -167,13 +166,11 @@ protected:
     /** Add external_code entries to llvm module. */
     void add_external_code(const Module &halide_module);
 
-
     /** Add hydride_code entries to llvm module. */
     void add_hydride_code();
 
     /** Run all of llvm's optimization passes on the module. */
     void optimize_module();
-
 
     /** Run the passes on the module after hydride has been linked in */
     void optimize_hydride_module();

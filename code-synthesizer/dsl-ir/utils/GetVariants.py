@@ -2,34 +2,29 @@ from common.Instructions import DSLInstruction
 from common.Types import *
 from common.PredefinedDSL import *
 
+
 class GetVariants:
 
-    def __init__(self, get_variant_name = "get-variants"):
+    def __init__(self, get_variant_name="get-variants"):
         self.get_variant_name = get_variant_name
 
-    def emit_default_def(self, struct_definer ):
+    def emit_default_def(self, struct_definer):
         defaults = []
 
-        #defaults.append("[(reg id) (reg id)]")
-        #defaults.append("[(lit v) (lit v)]")
-
+        # defaults.append("[(reg id) (reg id)]")
+        # defaults.append("[(lit v) (lit v)]")
 
         for structs in default_structs:
-            defaults.append(self.get_variant_names_def(structs, struct_definer, use_conditional = False))
+            defaults.append(self.get_variant_names_def(
+                structs, struct_definer, use_conditional=False))
 
         return ["\t{}".format(d) for d in defaults]
-
 
     def emit_fallback_def(self):
         return "\t[_ '()]"
 
-
-
-
-
-    def emit_ctx_target_names_clause(self, ctx, sample_ctx, use_conditional = True):
+    def emit_ctx_target_names_clause(self, ctx, sample_ctx, use_conditional=True):
         predicate = ""
-
 
         def get_arg(i):
             return sample_ctx.context_args[i]
@@ -47,30 +42,23 @@ class GetVariants:
                 predicate += " (equal? {} {})".format(get_arg(idx).name, arg.value)
 
             if isinstance(arg, BitVector):
-                recursive_calls.append("({} {})".format(self.get_variant_name, get_arg(idx).name))
+                recursive_calls.append("({} {})".format(
+                    self.get_variant_name, get_arg(idx).name))
 
-        predicate = "(and " + predicate +  ")"
+        predicate = "(and " + predicate + ")"
 
-
-
-        ctx_ops = "(list  \""+ ctx.name + "\")"
+        ctx_ops = "(list  \"" + ctx.name + "\")"
 
         ops_expr = " (append {} {})".format(ctx_ops, " ".join(recursive_calls))
-
 
         if use_conditional:
             return "[{} \n  {}]".format(predicate, ops_expr)
         else:
             return ops_expr
 
-
-
-
-    def get_variant_names_def(self, dsl_inst, struct_definer, use_conditional = True):
+    def get_variant_names_def(self, dsl_inst, struct_definer, use_conditional=True):
 
         clause = ["(equal? prog {})".format(dsl_inst.name + "_dsl")]
-
-
 
         input_precs_str = self.get_dsl_input_precs(dsl_inst)
         input_sizes_str = self.get_dsl_input_sizes(dsl_inst)
@@ -80,15 +68,12 @@ class GetVariants:
 
         filter_fn = self.get_filter_fn()
 
-        relavent_indices = "(define relavent-indices (filter filter-fn (range 0 {})))".format(len(dsl_inst.contexts))
+        relavent_indices = "(define relavent-indices (filter filter-fn (range 0 {})))".format(
+            len(dsl_inst.contexts))
 
         relavent_variants = "(for/list ([i relavent-indices]) (list-ref variants i))"
 
-        clause += [filter_fn , relavent_indices, relavent_variants]
-
-
-
-
+        clause += [filter_fn, relavent_indices, relavent_variants]
 
         return "\t[{}\n\t]".format("\n\t\t".join(clause))
 
@@ -112,7 +97,6 @@ class GetVariants:
               )
         """
 
-
     def get_dsl_input_precs(self, dsl_inst):
         definition = ["(define input-precs-dsl (list "]
 
@@ -122,8 +106,7 @@ class GetVariants:
             else:
                 definition.append("-1")
 
-
-        definition  += [" ))"]
+        definition += [" ))"]
 
         return " ".join(definition)
 
@@ -141,8 +124,7 @@ class GetVariants:
 
             definition += [sizes]
 
-
-        definition  += [") )"]
+        definition += [") )"]
 
         return " ".join(definition)
 
@@ -152,10 +134,9 @@ class GetVariants:
 
         for ctx in dsl_inst.contexts:
 
-            definition = ["(" +dsl_inst.name +"_dsl"]
+            definition = ["(" + dsl_inst.name + "_dsl"]
 
             reg_idx = 0
-
 
             for arg in ctx.context_args:
                 if isinstance(arg, BitVector):
@@ -172,28 +153,22 @@ class GetVariants:
             definition += [")"]
             variants += " ".join(definition) + " \n"
 
-
-
         variants += ")"
 
         return "(define variants {})".format(variants)
 
-
-
     def emit_get_names(self, dsl_inst_list, struct_definer):
         ops_clauses = self.emit_default_def(struct_definer)
 
-        ops_clauses += [self.get_variant_names_def(dsl_inst, struct_definer) for dsl_inst in dsl_inst_list]
-
+        ops_clauses += [self.get_variant_names_def(dsl_inst, struct_definer)
+                        for dsl_inst in dsl_inst_list]
 
         prefix = ";; "+"="*80 + "\n"
-        prefix += ";; "+" "*30 +" DSL Get Variants"+'\n'
+        prefix += ";; "+" "*30 + " DSL Get Variants"+'\n'
         prefix += ";; "+"="*80 + "\n"
 
         sufix = "\n;; "+"="*80 + "\n"
 
-
-
-        get_bv_ops = "(define ({} prog input-sizes input-precs)\n (cond \n{}\n )\n)".format( self.get_variant_name , "\n".join(ops_clauses))
+        get_bv_ops = "(define ({} prog input-sizes input-precs)\n (cond \n{}\n )\n)".format(
+            self.get_variant_name, "\n".join(ops_clauses))
         return prefix + get_bv_ops + sufix
-

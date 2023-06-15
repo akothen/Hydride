@@ -8,6 +8,8 @@ from RoseBitVectorOperation import RoseBitVectorOp
 # `mtxextractrow <tile> <idx>`
 # originally: `class RoseMatrixInsertRowOp(RoseBitVectorOp):`
 # however:    `assert len(Opcode.getBVOpInputs(Operands)) > 0`
+
+
 class RoseMatrixExtractRowOp(RoseOperation):
     def __init__(self, name: str, tile: RoseValue, idx: RoseValue, parentblock):
         inputs = [tile, idx]

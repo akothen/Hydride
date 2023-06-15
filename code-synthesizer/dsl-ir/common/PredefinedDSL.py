@@ -2,7 +2,7 @@ from common.Types import *
 from common.Instructions import *
 
 
-vector_load_sem =  [
+vector_load_sem = [
 
     "(define (scalar-load mem mem_size index type_size)",
     "(define total_num_elems (/ mem_size type_size))",
@@ -67,57 +67,58 @@ two_input_swizzle_sem = [
     ")",
 ]
 
-def create_vector_load_dsl(input_vector_sizes = [],
-                           offsets = [],
-                           num_elem_sizes = [],
-                           precisions = []):
-    vec_load_dsl = DSLInstruction(name = "vector-load", simd = False,
-                                  operation = False, semantics = vector_load_sem)
 
+def create_vector_load_dsl(input_vector_sizes=[],
+                           offsets=[],
+                           num_elem_sizes=[],
+                           precisions=[]):
+    vec_load_dsl = DSLInstruction(name="vector-load", simd=False,
+                                  operation=False, semantics=vector_load_sem)
 
-    assert len(input_vector_sizes) == len(offsets), "Invalid vector load creation"
+    assert len(input_vector_sizes) == len(
+        offsets), "Invalid vector load creation"
     assert len(num_elem_sizes) == len(offsets), "Invalid vector load creation"
-    assert len(num_elem_sizes) == len(precisions), "Invalid vector load creation"
+    assert len(num_elem_sizes) == len(
+        precisions), "Invalid vector load creation"
 
     for i in range(0, len(input_vector_sizes)):
         vec_load_dsl.add_context(
-            name = "vector_load_S{}_N{}_T{}".format(input_vector_sizes[i], num_elem_sizes[i], precisions[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = num_elem_sizes[i] * precisions[i],
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]),
-                    offsets[i], str(num_elem_sizes[i]), str(precisions[i])],
-            in_vectsize_index = 1,
-            out_vectsize_index = 1,
-            in_lanesize_index = 1,
-            out_lanesize_index = 1,
-            in_precision_index = 4,
-            out_precision_index = 4,
-            cost = "2",
+            name="vector_load_S{}_N{}_T{}".format(
+                input_vector_sizes[i], num_elem_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=num_elem_sizes[i] * precisions[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]),
+                  offsets[i], str(num_elem_sizes[i]), str(precisions[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=1,
+            in_lanesize_index=1,
+            out_lanesize_index=1,
+            in_precision_index=4,
+            out_precision_index=4,
+            cost="2",
         )
 
     return vec_load_dsl
 
 
-def create_two_input_swizzle(input_vector_sizes = [],
-                             num_elem_sizes = [],
-                             group_sizes = [],
-                             lane_offsets = [],
-                             lane_sizes = [],
-                             dis_sizes = [],
-                             rotate_sizes = [],
-                             precisions = []):
-    swizzle_dsl = DSLInstruction(name = "vector-two-input-swizzle", simd = False,
-                                 operation = False, shuffle = True ,  semantics = two_input_swizzle_sem)
-
-
+def create_two_input_swizzle(input_vector_sizes=[],
+                             num_elem_sizes=[],
+                             group_sizes=[],
+                             lane_offsets=[],
+                             lane_sizes=[],
+                             dis_sizes=[],
+                             rotate_sizes=[],
+                             precisions=[]):
+    swizzle_dsl = DSLInstruction(name="vector-two-input-swizzle", simd=False,
+                                 operation=False, shuffle=True,  semantics=two_input_swizzle_sem)
 
     for i in range(0, len(input_vector_sizes)):
         swizzle_dsl.add_context(
-            name = "two_input_swizzle_N{}_T{}_LO{}_L{}_G{}_D{}_R{}".format(
+            name="two_input_swizzle_N{}_T{}_LO{}_L{}_G{}_D{}_R{}".format(
                 num_elem_sizes[i],
                 precisions[i],
                 lane_offsets[i],
@@ -126,24 +127,25 @@ def create_two_input_swizzle(input_vector_sizes = [],
                 dis_sizes[i],
                 rotate_sizes[i]
             ),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = precisions[i] * max(1, num_elem_sizes[i] // lane_sizes[i]) * ((2 * group_sizes[i]) + lane_offsets[i]),
-            lane_size = lane_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , "SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(num_elem_sizes[i]), str(precisions[i]), str(lane_offsets[i]), str(lane_sizes[i]), str(group_sizes[i]), str(dis_sizes[i]), str(rotate_sizes[i]) ],
-            in_vectsize_index = 1,
-            out_vectsize_index = 1,
-            in_lanesize_index = 5,
-            out_lanesize_index = 5,
-            in_precision_index = 3,
-            out_precision_index = 3,
-            cost = "4",
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=precisions[i] * max(1, num_elem_sizes[i] // lane_sizes[i]) * (
+                (2 * group_sizes[i]) + lane_offsets[i]),
+            lane_size=lane_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), "SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(num_elem_sizes[i]), str(
+                precisions[i]), str(lane_offsets[i]), str(lane_sizes[i]), str(group_sizes[i]), str(dis_sizes[i]), str(rotate_sizes[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=1,
+            in_lanesize_index=5,
+            out_lanesize_index=5,
+            in_precision_index=3,
+            out_precision_index=3,
+            cost="4",
         )
 
     return swizzle_dsl
-
 
 
 interleave_two_vectors_sema = [
@@ -162,30 +164,30 @@ interleave_two_vectors_sema = [
 ]
 
 
-def create_interleave_two_dsl(input_vector_sizes = [],
-                              precisions = []):
-    vec_interleave_two_dsl = DSLInstruction(name = "interleave-vectors", simd = False,
-                                            operation = False, semantics = interleave_two_vectors_sema)
-
+def create_interleave_two_dsl(input_vector_sizes=[],
+                              precisions=[]):
+    vec_interleave_two_dsl = DSLInstruction(name="interleave-vectors", simd=False,
+                                            operation=False, semantics=interleave_two_vectors_sema)
 
     for i in range(0, len(input_vector_sizes)):
         vec_interleave_two_dsl.add_context(
-            name = "interleave-vectors-{}-{}".format(input_vector_sizes[i], precisions[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = input_vector_sizes[i] * 2,
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),"SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(input_vector_sizes[i]),
-                    str(precisions[i])],
-            in_vectsize_index = 2,
-            out_vectsize_index = 2,
-            in_lanesize_index = 2,
-            out_lanesize_index = 2,
-            in_precision_index = 3,
-            out_precision_index = 3,
-            cost = "4", # switching with one from 4
+            name="interleave-vectors-{}-{}".format(
+                input_vector_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=input_vector_sizes[i] * 2,
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), "SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]),
+                  str(precisions[i])],
+            in_vectsize_index=2,
+            out_vectsize_index=2,
+            in_lanesize_index=2,
+            out_lanesize_index=2,
+            in_precision_index=3,
+            out_precision_index=3,
+            cost="4",  # switching with one from 4
         )
 
     return vec_interleave_two_dsl
@@ -213,30 +215,30 @@ interleave_vector_sema = [
 ]
 
 
-def create_interleave_dsl(input_vector_sizes = [],
-                          precisions = []):
-    vec_interleave_dsl = DSLInstruction(name = "interleave-vector", simd = False,
-                                        operation = False, semantics = interleave_vector_sema)
-
+def create_interleave_dsl(input_vector_sizes=[],
+                          precisions=[]):
+    vec_interleave_dsl = DSLInstruction(name="interleave-vector", simd=False,
+                                        operation=False, semantics=interleave_vector_sema)
 
     for i in range(0, len(input_vector_sizes)):
         vec_interleave_dsl.add_context(
-            name = "interleave-vector-{}-{}".format(input_vector_sizes[i], precisions[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = input_vector_sizes[i],
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(input_vector_sizes[i]),
-                    str(precisions[i])],
-            in_vectsize_index = 1,
-            out_vectsize_index = 1,
-            in_lanesize_index = 1,
-            out_lanesize_index = 1,
-            in_precision_index = 2,
-            out_precision_index = 2,
-            cost = "3",
+            name="interleave-vector-{}-{}".format(
+                input_vector_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=input_vector_sizes[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]),
+                  str(precisions[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=1,
+            in_lanesize_index=1,
+            out_lanesize_index=1,
+            in_precision_index=2,
+            out_precision_index=2,
+            cost="3",
         )
 
     return vec_interleave_dsl
@@ -265,34 +267,34 @@ deinterleave_vector_sema = [
 ]
 
 
-
-def create_deinterleave_dsl(input_vector_sizes = [],
-                            precisions = []):
-    vec_deinterleave_dsl = DSLInstruction(name = "deinterleave-vector", simd = False,
-                                          operation = False, semantics = deinterleave_vector_sema)
-
+def create_deinterleave_dsl(input_vector_sizes=[],
+                            precisions=[]):
+    vec_deinterleave_dsl = DSLInstruction(name="deinterleave-vector", simd=False,
+                                          operation=False, semantics=deinterleave_vector_sema)
 
     for i in range(0, len(input_vector_sizes)):
         vec_deinterleave_dsl.add_context(
-            name = "deinterleave-vector-{}-{}".format(input_vector_sizes[i], precisions[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = input_vector_sizes[i],
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(input_vector_sizes[i]),
-                    str(precisions[i])],
-            in_vectsize_index = 1,
-            out_vectsize_index = 1,
-            in_lanesize_index = 1,
-            out_lanesize_index = 1,
-            in_precision_index = 2,
-            out_precision_index = 2,
-            cost = "3",
+            name="deinterleave-vector-{}-{}".format(
+                input_vector_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=input_vector_sizes[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]),
+                  str(precisions[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=1,
+            in_lanesize_index=1,
+            out_lanesize_index=1,
+            in_precision_index=2,
+            out_precision_index=2,
+            cost="3",
         )
 
     return vec_deinterleave_dsl
+
 
 llvm_shufflevector_sema = [
     " (define (llvm:shuffle-vectors  v1 v2 len prec  permute-mask mask-len) ",
@@ -334,102 +336,104 @@ llvm_shufflevector_sema = [
 ]
 
 
-def create_llvm_shufflevector_dsl(input_vector_sizes = [],
-                                  precisions = [],
-                                  mask_sizes = []
+def create_llvm_shufflevector_dsl(input_vector_sizes=[],
+                                  precisions=[],
+                                  mask_sizes=[]
                                   ):
-    vec_llvm_shuffle_dsl = DSLInstruction(name = "llvm_shuffle_vectors", simd = False,
-                                          operation = False, semantics = llvm_shufflevector_sema)
-
+    vec_llvm_shuffle_dsl = DSLInstruction(name="llvm_shuffle_vectors", simd=False,
+                                          operation=False, semantics=llvm_shufflevector_sema)
 
     for i in range(0, len(input_vector_sizes)):
         vec_llvm_shuffle_dsl.add_context(
-            name = "shuffle-vector-{}-{}-{}".format(input_vector_sizes[i], precisions[i], mask_sizes[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = (mask_sizes[i]/32) * precisions[i],
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),  "SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]// precisions[i]),
-                    str(precisions[i]), "SYMBOLIC_BV_{}".format(mask_sizes[i]), str(mask_sizes[i] // 32 )],
-            in_vectsize_index = 1,
-            out_vectsize_index = 1,
-            in_lanesize_index = 1,
-            out_lanesize_index = 1,
-            in_precision_index = 3,
-            out_precision_index = 3,
-            cost = "5",
+            name="shuffle-vector-{}-{}-{}".format(
+                input_vector_sizes[i], precisions[i], mask_sizes[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=(mask_sizes[i]/32) * precisions[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),  "SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i] // precisions[i]),
+                  str(precisions[i]), "SYMBOLIC_BV_{}".format(mask_sizes[i]), str(mask_sizes[i] // 32)],
+            in_vectsize_index=1,
+            out_vectsize_index=1,
+            in_lanesize_index=1,
+            out_lanesize_index=1,
+            in_precision_index=3,
+            out_precision_index=3,
+            cost="5",
         )
 
     return vec_llvm_shuffle_dsl
 
+
 # Placeholder instruction definition to faciliate other classes
 # emitting racket code for interpreter
 dummy_vector_load_dsl = create_vector_load_dsl(
-    input_vector_sizes = [64],
-    offsets = [0],
-    num_elem_sizes = [4],
-    precisions = [8]
+    input_vector_sizes=[64],
+    offsets=[0],
+    num_elem_sizes=[4],
+    precisions=[8]
 )
 
 rotate_vector_sema = [
 
-"(define (rotate-vector v1 num-rotate size prec)",
-  "(define rotate-bits (* num-rotate prec))",
-  "(bvrol v1 (integer->bitvector rotate-bits (bitvector (* size prec))))",
-  ")",
+    "(define (rotate-vector v1 num-rotate size prec)",
+    "(define rotate-bits (* num-rotate prec))",
+    "(bvrol v1 (integer->bitvector rotate-bits (bitvector (* size prec))))",
+    ")",
 ]
 
 
-def create_rotate_dsl(input_vector_sizes = [],
-                            precisions = [],
-                            rotate_num = []
+def create_rotate_dsl(input_vector_sizes=[],
+                      precisions=[],
+                      rotate_num=[]
                       ):
-    rotate_dsl = DSLInstruction(name = "rotate-vector", simd = False,
-                                          operation = False, semantics = rotate_vector_sema)
-
+    rotate_dsl = DSLInstruction(name="rotate-vector", simd=False,
+                                operation=False, semantics=rotate_vector_sema)
 
     for i in range(0, len(input_vector_sizes)):
         rotate_dsl.add_context(
-            name = "rotate-vector-{}-{}-{}".format(rotate_num[i],input_vector_sizes[i], precisions[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize = input_vector_sizes[i],
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "False",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(roate_num[i]) , str(input_vector_sizes[i]),
-                    str(precisions[i])],
-            in_vectsize_index = 1,
-            out_vectsize_index = 1,
-            in_lanesize_index = 1,
-            out_lanesize_index = 1,
-            in_precision_index = 2,
-            out_precision_index = 2,
-            cost = "2",
+            name="rotate-vector-{}-{}-{}".format(
+                rotate_num[i], input_vector_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=input_vector_sizes[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="False",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(roate_num[i]), str(input_vector_sizes[i]),
+                  str(precisions[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=1,
+            in_lanesize_index=1,
+            out_lanesize_index=1,
+            in_precision_index=2,
+            out_precision_index=2,
+            cost="2",
         )
 
     return vec_deinterleave_dsl
 
 
 llvm_vect_simd_template_sema = [
-"(define (llvm-vect-{} a b num_elems precision)",
-"  (define dst ",
-"    (apply",
-"      concat",
-"      (for/list ([%it (reverse (range 0 num_elems 1))])",
-"        (define %low (* precision %it))",
-"        (define %high (%low (- precision 1)))",
-"        (define %exta (extract  %high %low a))",
-"        (define %extb (extract  %high %low b))",
-"        ({} %exta %extb)",
-"      )",
-"    )",
-"  )",
-"  dst",
-")"
+    "(define (llvm-vect-{} a b num_elems precision)",
+    "  (define dst ",
+    "    (apply",
+    "      concat",
+    "      (for/list ([%it (reverse (range 0 num_elems 1))])",
+    "        (define %low (* precision %it))",
+    "        (define %high (%low (- precision 1)))",
+    "        (define %exta (extract  %high %low a))",
+    "        (define %extb (extract  %high %low b))",
+    "        ({} %exta %extb)",
+    "      )",
+    "    )",
+    "  )",
+    "  dst",
+    ")"
 ]
+
 
 def bind_llvm_simd_template(op_name, bv_op):
     template = llvm_vect_simd_template_sema.copy()
@@ -439,121 +443,116 @@ def bind_llvm_simd_template(op_name, bv_op):
     return template
 
 
+def create_llvm_vect_simd_dsl(op_name, bv_op, input_vector_sizes=[],
+                              precisions=[]
+                              ):
 
-
-def create_llvm_vect_simd_dsl(op_name , bv_op , input_vector_sizes = [],
-                                  precisions = []
-                                  ):
-
-    vec_llvm_simd_dsl = DSLInstruction(name = "llvm-vect-{}".format(op_name), simd = True,
-                                          operation = True, semantics = bind_llvm_simd_template(op_name, bv_op))
-
+    vec_llvm_simd_dsl = DSLInstruction(name="llvm-vect-{}".format(op_name), simd=True,
+                                       operation=True, semantics=bind_llvm_simd_template(op_name, bv_op))
 
     for i in range(0, len(input_vector_sizes)):
         vec_llvm_simd_dsl.add_context(
-            name = "llvm-vect-{}-{}-{}".format(op_name,input_vector_sizes[i], precisions[i]),
-            in_vectsize = input_vector_sizes[i],
-            out_vectsize =  input_vector_sizes[i],
-            lane_size = input_vector_sizes[i],
-            in_precision = precisions[i],
-            out_precision = precisions[i],
-            SIMD = "True",
-            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),  "SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i] // precisions[i]), str(precisions[i]) ],
-            in_vectsize_index = None,
-            out_vectsize_index = None,
-            in_lanesize_index = None,
-            out_lanesize_index = None,
-            in_precision_index = 3,
-            out_precision_index = 3,
-            cost = "2",
+            name="llvm-vect-{}-{}-{}".format(op_name,
+                                             input_vector_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=input_vector_sizes[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="True",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),  "SYMBOLIC_BV_{}".format(
+                input_vector_sizes[i]), str(input_vector_sizes[i] // precisions[i]), str(precisions[i])],
+            in_vectsize_index=None,
+            out_vectsize_index=None,
+            in_lanesize_index=None,
+            out_lanesize_index=None,
+            in_precision_index=3,
+            out_precision_index=3,
+            cost="2",
         )
 
     return vec_llvm_simd_dsl
 
 
-
-
-
-
 # Place holder DSL object definitions to enable generating
 # the Hydride symbolic interpreter
 dummy_vector_swizzle_dsl = create_two_input_swizzle(
-    input_vector_sizes = [64],
-    num_elem_sizes = [6],
-    group_sizes = [3],
-    lane_offsets = [0],
-    lane_sizes = [3],
-    dis_sizes = [1],
-    rotate_sizes = [0],
-    precisions = [8]
+    input_vector_sizes=[64],
+    num_elem_sizes=[6],
+    group_sizes=[3],
+    lane_offsets=[0],
+    lane_sizes=[3],
+    dis_sizes=[1],
+    rotate_sizes=[0],
+    precisions=[8]
 )
 
 
 dummy_vector_two_interleave_dsl = create_interleave_two_dsl(
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 
 dummy_vector_interleave_dsl = create_interleave_dsl(
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 
 dummy_vector_deinterleave_dsl = create_deinterleave_dsl(
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 dummy_llvm_shuffle_dsl = create_llvm_shufflevector_dsl(
-    input_vector_sizes = [128],
-    precisions = [16],
-    mask_sizes = [32*4]
+    input_vector_sizes=[128],
+    precisions=[16],
+    mask_sizes=[32*4]
 )
 
 
 dummy_vector_add_dsl = create_llvm_vect_simd_dsl(
     "add",
     "bvadd",
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 
 dummy_vector_sub_dsl = create_llvm_vect_simd_dsl(
     "sub",
     "bvsub",
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 
 dummy_vector_mul_dsl = create_llvm_vect_simd_dsl(
     "mul",
     "bvmul",
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 
 dummy_vector_sdiv_dsl = create_llvm_vect_simd_dsl(
     "sdiv",
     "bvsdiv",
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 
 dummy_vector_udiv_dsl = create_llvm_vect_simd_dsl(
     "udiv",
     "bvudiv",
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes=[128],
+    precisions=[16]
 )
 
 default_structs = [
-    #dummy_vector_load_dsl,
+    # dummy_vector_load_dsl,
     dummy_vector_swizzle_dsl,
     dummy_vector_two_interleave_dsl,
     dummy_vector_interleave_dsl,
@@ -566,7 +565,7 @@ default_structs = [
     dummy_vector_udiv_dsl
 ]
 
-llvm_simd_structs =[
+llvm_simd_structs = [
     dummy_vector_add_dsl,
     dummy_vector_sub_dsl,
     dummy_vector_mul_dsl,

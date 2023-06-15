@@ -7,14 +7,14 @@ from ShuffleList import ShuffleList
 DEBUG = True
 DEBUG_LIST = [
     # "hexagon_V6_vrmpyubv_acc_128B",
-    #"hexagon_V6_vdmpyhb_acc_128B",
-    #"hexagon_V6_vdmpyhvsat_128B",
-    #"hexagon_V6_vshufoh_128B",
-    #"hexagon_V6_vdealh_128B"
+    # "hexagon_V6_vdmpyhb_acc_128B",
+    # "hexagon_V6_vdmpyhvsat_128B",
+    # "hexagon_V6_vshufoh_128B",
+    # "hexagon_V6_vdealh_128B"
     "hexagon_V6_vmpyiewh_acc_128B",
-    #"hexagon_V6_vassign_128B",
-    #"hexagon_V6_lo_128B",
-    #"hexagon_V6_pred_and_128B",
+    # "hexagon_V6_vassign_128B",
+    # "hexagon_V6_lo_128B",
+    # "hexagon_V6_pred_and_128B",
     "hexagon_V6_vmpyih_acc_128B",
     "_mm512_mulhi_epu16"
 
@@ -25,22 +25,21 @@ DEBUG_LIST = [
 
 SKIP_LIST = []
 
-MUST_INCLUDE = [ ]
+MUST_INCLUDE = []
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 PRUNE_BVOP_VARIANTS = True
 
-ENABLE_PRUNING = False # True
-FLEXIBLE_CASTING =  True
-
+ENABLE_PRUNING = False  # True
+FLEXIBLE_CASTING = True
 
 
 # Any shuffle operation producing bitvectors more than
 # this size can be pruned earlier without the solver
 # having to worry about it
-MAX_BW_SIZE =  2048
+MAX_BW_SIZE = 2048
 
 
 BASE_VECT_SIZE = 1024
@@ -49,16 +48,17 @@ BASE_VECT_SIZE = 1024
 # grammar
 SWIZZLE_BOUND = 5
 
+
 class SynthesizerBase:
 
-    def __init__(self, spec = None, dsl_operators = [],
-                 struct_definer = None, grammar_generator = None,
-                 vectorization_factor = 8,
-                 depth = 6,
-                 contexts_per_dsl_inst = None,
-                 is_shuffle = False,
-                 target = "x86",
-                 legal_map = {}
+    def __init__(self, spec=None, dsl_operators=[],
+                 struct_definer=None, grammar_generator=None,
+                 vectorization_factor=8,
+                 depth=6,
+                 contexts_per_dsl_inst=None,
+                 is_shuffle=False,
+                 target="x86",
+                 legal_map={}
                  ):
 
         print("Creating Synthesizer with target:", target)
@@ -69,13 +69,14 @@ class SynthesizerBase:
         self.grammar_generator = grammar_generator
         self.VF = vectorization_factor
         self.depth = depth
-        self.output_slice_length = self.spec.output_shape[0] * self.spec.output_shape[1] * self.spec.output_precision #self.VF * self.spec.output_precision
+        # self.VF * self.spec.output_precision
+        self.output_slice_length = self.spec.output_shape[0] * \
+            self.spec.output_shape[1] * self.spec.output_precision
         self.contexts_per_dsl_inst = contexts_per_dsl_inst
         if self.spec.contains_conditional():
             self.contexts_per_dsl_inst = max(contexts_per_dsl_inst, 3)
         self.is_shuffle = is_shuffle
         self.input_sizes = []
-
 
         for idx, shape in enumerate(self.spec.input_shapes):
             self.input_sizes.append(
@@ -103,21 +104,20 @@ class SynthesizerBase:
             self.BASE_VECT_SIZE = 1024
             self.SWIZZLE_BOUND = 5
 
-
-
     # Prints the number number of target agnostic
     # classes and the total number of contexts
     # associated with each target agnostic class
+
     def print_dsl_stats(self):
         num_operations = len(self.dsl_operators)
 
-        num_ctxs = sum([len(dsl_inst.contexts) for dsl_inst in self.dsl_operators])
+        num_ctxs = sum([len(dsl_inst.contexts)
+                       for dsl_inst in self.dsl_operators])
 
         print("="*20, "DSL Stats", "="*20)
         print("Number of Target Agnostic Classes:", num_operations)
         print("Number of Concrete contexts:", num_ctxs)
         print("="*40)
-
 
     def is_instruction_legal(self, name):
         if self.target == 'hvx':
@@ -136,23 +136,26 @@ class SynthesizerBase:
     def get_memory_loads(self):
 
         def create_scalar_mul(scale, rhs):
-            scale_factor = Integer("scale", value = scale)
+            scale_factor = Integer("scale", value=scale)
 
             if rhs == "dim-y":
-                rhs = ShapeVariable(name = "dim-y")
+                rhs = ShapeVariable(name="dim-y")
             elif rhs == "dim-x":
-                rhs = ShapeVariable(name = "dim-x")
+                rhs = ShapeVariable(name="dim-x")
             elif isinstance(rhs, OperandType):
                 pass
             else:
-                rhs = Integer("rhs_scalar", value = rhs)
+                rhs = Integer("rhs_scalar", value=rhs)
 
-            return IndexExpr(scale_factor, rhs, expr_type = IndexExprTypeEnum.Mul)
+            return IndexExpr(scale_factor, rhs, expr_type=IndexExprTypeEnum.Mul)
 
-        load_factors = []#[1.0, 1.5]
-        offset_exprs = [ create_affine_index_expr("dim-y", 1, None ), # (i * dim-y) + j
-                        create_affine_index_expr("dim-y", 1, create_scalar_mul(1, "dim-y") ), # ((i+1) * dim-y) + j = (i * dim-y) + j + dim-y
-                        create_affine_index_expr("dim-y", 1, create_scalar_mul(2, "dim-y"))
+        load_factors = []  # [1.0, 1.5]
+        offset_exprs = [create_affine_index_expr("dim-y", 1, None),  # (i * dim-y) + j
+                        # ((i+1) * dim-y) + j = (i * dim-y) + j + dim-y
+                        create_affine_index_expr(
+                            "dim-y", 1, create_scalar_mul(1, "dim-y")),
+                        create_affine_index_expr(
+                            "dim-y", 1, create_scalar_mul(2, "dim-y"))
                         ]
 
         input_vector_sizes = []
@@ -160,14 +163,11 @@ class SynthesizerBase:
         num_elem_sizes = []
         precisions = []
 
-
-
-
         for lf in load_factors:
             for input_size in self.input_sizes:
                 for of in offset_exprs:
                     num_elem = int(lf * self.VF)
-                    offset =  of
+                    offset = of
                     precision = self.spec.input_precision[0]
 
                     input_vector_sizes.append(input_size)
@@ -175,13 +175,10 @@ class SynthesizerBase:
                     num_elem_sizes.append(num_elem)
                     precisions.append(precision)
 
-
-        return create_vector_load_dsl(input_vector_sizes = input_vector_sizes,
-                                      offsets = offsets,
-                                      num_elem_sizes = num_elem_sizes,
-                                      precisions = precisions)
-
-
+        return create_vector_load_dsl(input_vector_sizes=input_vector_sizes,
+                                      offsets=offsets,
+                                      num_elem_sizes=num_elem_sizes,
+                                      precisions=precisions)
 
     def get_single_interleave_shuffles(self):
         memo = []
@@ -193,9 +190,8 @@ class SynthesizerBase:
             if not ENABLE_SHUFFLE:
                 continue
 
-            #if input_size <= 32:
+            # if input_size <= 32:
             #    continue
-
 
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
@@ -204,8 +200,7 @@ class SynthesizerBase:
             if number_elems == 1:
                 continue
 
-
-            datum = (input_size,precision)
+            datum = (input_size, precision)
 
             if datum in memo:
                 continue
@@ -219,12 +214,10 @@ class SynthesizerBase:
             input_vector_sizes.append(self.output_slice_length)
             precisions.append(self.spec.output_precision)
 
-
         return create_interleave_dsl(
-            input_vector_sizes = input_vector_sizes,
-            precisions = precisions
+            input_vector_sizes=input_vector_sizes,
+            precisions=precisions
         )
-
 
     def get_single_deinterleave_shuffles(self):
         memo = []
@@ -236,7 +229,7 @@ class SynthesizerBase:
             if not ENABLE_SHUFFLE:
                 continue
 
-            #if input_size <= 32:
+            # if input_size <= 32:
             #    continue
 
             precision = self.spec.input_precision[idx]
@@ -246,8 +239,7 @@ class SynthesizerBase:
             if number_elems == 1:
                 continue
 
-
-            datum = (input_size,precision)
+            datum = (input_size, precision)
 
             if datum in memo:
                 continue
@@ -257,17 +249,14 @@ class SynthesizerBase:
             input_vector_sizes.append(input_size)
             precisions.append(precision)
 
-
-        if (self.output_slice_length, self.spec.output_precision) not in memo and self.depth <= 2 :
+        if (self.output_slice_length, self.spec.output_precision) not in memo and self.depth <= 2:
             input_vector_sizes.append(self.output_slice_length)
             precisions.append(self.spec.output_precision)
 
-
         return create_deinterleave_dsl(
-            input_vector_sizes = input_vector_sizes,
-            precisions = precisions
+            input_vector_sizes=input_vector_sizes,
+            precisions=precisions
         )
-
 
     def get_two_interleave_shuffles(self):
         memo = []
@@ -279,7 +268,7 @@ class SynthesizerBase:
             if not ENABLE_SHUFFLE:
                 continue
 
-            #if input_size <= 32:
+            # if input_size <= 32:
             #    continue
 
             precision = self.spec.input_precision[idx]
@@ -292,7 +281,7 @@ class SynthesizerBase:
             if input_size * 2 > self.MAX_BW_SIZE:
                 continue
 
-            datum = (input_size,precision)
+            datum = (input_size, precision)
 
             if datum in memo:
                 continue
@@ -303,21 +292,18 @@ class SynthesizerBase:
             precisions.append(precision)
 
         return create_interleave_two_dsl(
-            input_vector_sizes = input_vector_sizes,
-            precisions = precisions
+            input_vector_sizes=input_vector_sizes,
+            precisions=precisions
         )
-
-
 
     def get_memory_two_input_shuffles(self):
         load_factors = [1.0]
-        group_factors = [0.25, 0.5]#, 1.0]
-        lane_offsets_factors = [0] #[0, "IDX_J"]
+        group_factors = [0.25, 0.5]  # , 1.0]
+        lane_offsets_factors = [0]  # [0, "IDX_J"]
         dis_factors = [1]
         rotate_factors = [0]
         num_elems_factors = [self.VF, int(0.5 * self.VF)]
         lane_size_factors = [self.VF, int(0.5 * self. VF)]
-
 
         input_vector_sizes = []
         num_elem_sizes = []
@@ -329,6 +315,7 @@ class SynthesizerBase:
         lane_sizes = []
 
         first_half_memo = []
+
         def first_half_concat_pattern(num_elems, type_size, input_size):
             datum = (input_size, type_size)
 
@@ -337,8 +324,8 @@ class SynthesizerBase:
             else:
                 first_half_memo.append(datum)
 
-            input_vector_sizes.append(input_size) #256
-            num_elem_sizes.append(num_elems) # 256 / 16 = 16
+            input_vector_sizes.append(input_size)  # 256
+            num_elem_sizes.append(num_elems)  # 256 / 16 = 16
             precisions.append(type_size)
             lane_offsets.append(0)
             lane_sizes.append(num_elems)
@@ -346,8 +333,8 @@ class SynthesizerBase:
             dis_sizes.append(1)
             rotate_sizes.append(0)
 
-
         second_half_memo = []
+
         def second_half_concat_pattern(num_elems, type_size, input_size):
             datum = (input_size, type_size)
 
@@ -365,8 +352,8 @@ class SynthesizerBase:
             dis_sizes.append(1)
             rotate_sizes.append(0)
 
-
         first_half_interleave_memo = []
+
         def first_half_interleave_pattern(num_elems, type_size, input_size):
             datum = (input_size, type_size)
 
@@ -384,8 +371,8 @@ class SynthesizerBase:
             dis_sizes.append(int(num_elems * 0.5))
             rotate_sizes.append(0)
 
-
         second_half_interleave_memo = []
+
         def second_half_interleave_pattern(num_elems, type_size, input_size):
             datum = (input_size, type_size)
 
@@ -407,10 +394,8 @@ class SynthesizerBase:
             if not ENABLE_SHUFFLE:
                 continue
 
-
-            #if input_size <= 32:
+            # if input_size <= 32:
             #    continue
-
 
             # 16, 16
             precision = self.spec.input_precision[idx]
@@ -422,18 +407,16 @@ class SynthesizerBase:
             if number_elems == 1:
                 continue
 
-            first_half_concat_pattern(number_elems , precision, input_size)
+            first_half_concat_pattern(number_elems, precision, input_size)
             second_half_concat_pattern(number_elems, precision, input_size)
 
             first_half_interleave_pattern(number_elems, precision, input_size)
             second_half_interleave_pattern(number_elems, precision, input_size)
 
-
-
         skip_sizes = []
 
         for lf in load_factors:
-            for idx ,input_size in enumerate(self.input_sizes):
+            for idx, input_size in enumerate(self.input_sizes):
                 datum = (input_size, self.spec.input_precision[idx])
 
                 if datum in skip_sizes:
@@ -450,31 +433,30 @@ class SynthesizerBase:
 
                                 input_vector_sizes.append(int(input_size * lf))
                                 num_elem_sizes.append(self.VF)
-                                precisions.append(self.spec.input_precision[idx])
+                                precisions.append(
+                                    self.spec.input_precision[idx])
                                 lane_offsets.append(lo)
                                 lane_sizes.append(self.VF)
                                 group_sizes.append(int(gf * self.VF))
                                 dis_sizes.append(d)
                                 rotate_sizes.append(r)
 
-        return create_two_input_swizzle(input_vector_sizes = input_vector_sizes,
-                                        num_elem_sizes = num_elem_sizes,
-                                        group_sizes = group_sizes,
-                                        lane_offsets = lane_offsets,
-                                        lane_sizes = lane_sizes,
-                                        dis_sizes = dis_sizes,
-                                        rotate_sizes = rotate_sizes,
-                                        precisions = precisions)
-
+        return create_two_input_swizzle(input_vector_sizes=input_vector_sizes,
+                                        num_elem_sizes=num_elem_sizes,
+                                        group_sizes=group_sizes,
+                                        lane_offsets=lane_offsets,
+                                        lane_sizes=lane_sizes,
+                                        dis_sizes=dis_sizes,
+                                        rotate_sizes=rotate_sizes,
+                                        precisions=precisions)
 
     def get_top_level_grammar_args(self):
         registers = 0
         for arg in self.spec.args:
             if isinstance(arg, BitVector):
-                registers +=1
+                registers += 1
 
         return ["(reg {})".format(i) for i in range(0, registers)]
-
 
     def get_lit_holes(self, use_lit_holes, bitvector_sizes):
 
@@ -486,13 +468,12 @@ class SynthesizerBase:
             # remove duplicates
             holes = list(set(holes))
 
-        if len(holes) == 0  :
+        if len(holes) == 0:
             return []
 
+        max_prec = max(self.spec.input_precision, default=32)
 
-        max_prec = max(self.spec.input_precision, default = 32)
-
-        min_prec = min(self.spec.input_precision, default = 32)
+        min_prec = min(self.spec.input_precision, default=32)
 
         pairs = []
 
@@ -510,19 +491,18 @@ class SynthesizerBase:
             else:
                 pairs.append((hole, min_prec))
 
-
-
         return pairs
 
-    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = USE_LIT_HOLES):
+    def emit_synthesis_grammar(self, main_grammar_name="synth_grammar", use_lit_holes=USE_LIT_HOLES):
         pass
-
 
     # Sort the operations and contexts together such that
     # higher scoring contexts have a lower index
+
     def sort_operations(self, ops, ctxs):
-        indices = range(0,len(ops))
-        sorted_indices = sorted(indices, key = lambda i : self.score_context(ops[i] , ctxs[i]) )
+        indices = range(0, len(ops))
+        sorted_indices = sorted(
+            indices, key=lambda i: self.score_context(ops[i], ctxs[i]))
 
         sorted_ops = []
         sorted_ctxs = []
@@ -531,36 +511,34 @@ class SynthesizerBase:
             sorted_ops.append(ops[idx])
             sorted_ctxs.append(ctxs[idx])
 
+        return (sorted_ops, sorted_ctxs)
 
-        return (sorted_ops,sorted_ctxs)
-
-
-    def prune_low_score_ops(self, ops, ctxs, score = 2):
-        indices = [i for i in range(len(ops)) if self.score_context(ops[i], ctxs[i]) > score ]
+    def prune_low_score_ops(self, ops, ctxs, score=2):
+        indices = [i for i in range(len(ops)) if self.score_context(
+            ops[i], ctxs[i]) > score]
         pruned_ops = [ops[i] for i in indices]
         pruned_ctxs = [ctxs[i] for i in indices]
 
         return (pruned_ops, pruned_ctxs)
 
-
     # HVX includes versions of operations which opertionally accumulate
-    #, we only need to include the version with the accumulation since that
+    # , we only need to include the version with the accumulation since that
     # should capture both operations
+
     def prune_using_hvx_acc_ops(self, ops, ctxs):
         if self.target != 'hvx':
-            return (ops , ctxs)
+            return (ops, ctxs)
 
         acc_ops = [ctx.name for ctx in ctxs if '_acc' in ctx.name]
-        non_acc_names = [name.replace("_acc","") for name in acc_ops]
+        non_acc_names = [name.replace("_acc", "") for name in acc_ops]
 
         print("Acc ops:", acc_ops)
         print("non acc ops:", non_acc_names)
 
-
         pruned_ops = []
         pruned_ctxs = []
 
-        for i in range(0,len(ops)):
+        for i in range(0, len(ops)):
 
             op_i = ops[i]
             ctx_i = ctxs[i]
@@ -570,19 +548,17 @@ class SynthesizerBase:
                 pruned_ctxs.append(ctx_i)
                 continue
 
-            discard = any([acc_name.replace("_acc","") == ctx_i.name for acc_name in acc_ops])
+            discard = any([acc_name.replace("_acc", "") ==
+                          ctx_i.name for acc_name in acc_ops])
             discard = discard or ctx_i.name in non_acc_names
 
             if not discard:
                 pruned_ops.append(op_i)
                 pruned_ctxs.append(ctx_i)
 
-
-
-        print("Pruned {} ops using hvx acc heuristic ...".format(len(ops) - len(pruned_ops)))
+        print("Pruned {} ops using hvx acc heuristic ...".format(
+            len(ops) - len(pruned_ops)))
         return (pruned_ops, pruned_ctxs)
-
-
 
     # If enabled, aggressively prunes those instructions
     # which contain a different variant of a bvop
@@ -590,6 +566,7 @@ class SynthesizerBase:
     # if the spec contains 'bvaddnsw' but not 'bvadd',
     # and `bvnuw`, we will prune those operations using
     # using `bvadd` and `bvnuw`
+
     def prune_variant_bvops(self, ops, ctxs):
 
         if not PRUNE_BVOP_VARIANTS:
@@ -608,8 +585,6 @@ class SynthesizerBase:
         for op in spec_ops:
             op_variant = op_has_variant(op)
 
-
-
             for var in op_variant:
                 # Only variants which are in the spec are allowed
                 if var not in spec_ops:
@@ -624,7 +599,7 @@ class SynthesizerBase:
         pruned_ctxs = []
 
         for idx in range(len(ops)):
-            #dsl_ops = ops[idx].get_semantics_ops_list()
+            # dsl_ops = ops[idx].get_semantics_ops_list()
             dsl_ops = ctxs[idx].get_bv_ops()
 
             to_insert = True
@@ -636,21 +611,20 @@ class SynthesizerBase:
                 pruned_ops.append(ops[idx])
                 pruned_ctxs.append(ctxs[idx])
             else:
-                print("Pruning ",ctxs[idx], "due to bv op variants")
-
-
+                print("Pruning ", ctxs[idx], "due to bv op variants")
 
         return (pruned_ops, pruned_ctxs)
-
 
     def prune_ops_relying_on_imm(self, ops, ctxs):
         # Imms used in specification, conservatively keep
         # all operations
-        #if self.spec.imms != []:
+        # if self.spec.imms != []:
         #    return (ops, ctxs)
 
-        smallest_imm = min([imm[1] for imm in self.spec.imms], default = self.output_slice_length)
-        smallest_input = min(self.input_sizes, default = self.output_slice_length)
+        smallest_imm = min([imm[1] for imm in self.spec.imms],
+                           default=self.output_slice_length)
+        smallest_input = min(
+            self.input_sizes, default=self.output_slice_length)
         smallest_output = self.output_slice_length
 
         smallest_bv_size = min(smallest_input, smallest_output, smallest_imm)
@@ -665,30 +639,32 @@ class SynthesizerBase:
             op_i = ops[i]
             ctx_i = ctxs[i]
 
-            min_ctx_bvs = min(ctx_i.get_output_size(), ctx_i.get_min_arg_size())
+            min_ctx_bvs = min(ctx_i.get_output_size(),
+                              ctx_i.get_min_arg_size())
 
             if min_ctx_bvs < smallest_bv_size:
                 if DEBUG:
-                    print("Smallest output", ctx_i.get_output_size(), "Smallest input:", ctx_i.get_min_arg_size())
-                    print("Pruning", ctx_i.name, "as it has an argument of size",min_ctx_bvs, "which is smaller than", smallest_bv_size)
+                    print("Smallest output", ctx_i.get_output_size(),
+                          "Smallest input:", ctx_i.get_min_arg_size())
+                    print("Pruning", ctx_i.name, "as it has an argument of size",
+                          min_ctx_bvs, "which is smaller than", smallest_bv_size)
                 continue
             else:
                 pruned_ops.append(op_i)
                 pruned_ctxs.append(ctx_i)
 
-        print("Prunning Based of non-immediate usage pruned", len(ops) - len(pruned_ops), "instructions ... ")
+        print("Prunning Based of non-immediate usage pruned",
+              len(ops) - len(pruned_ops), "instructions ... ")
         return (pruned_ops, pruned_ctxs)
-
-
 
     # Certain ops may take the elements to smaller element types
     # i.e. precisions, than what may be available in the spec.
-    #, we can trivially prune these ops (when there is no bvssat
+    # , we can trivially prune these ops (when there is no bvssat
     # bvusat involved)
+
     def prune_ops_relying_on_precision(self, ops, ctxs):
 
         spec_ops = self.spec.get_semantics_ops_list()
-
 
         """
         if "bvssat" in spec_ops:
@@ -697,10 +673,10 @@ class SynthesizerBase:
             return (ops,ctxs)
         """
 
-
-
-        smallest_imm = min([imm[1] for imm in self.spec.imms], default = self.spec.output_precision)
-        smallest_input = min(self.spec.input_precision, default = self.spec.output_precision)
+        smallest_imm = min([imm[1] for imm in self.spec.imms],
+                           default=self.spec.output_precision)
+        smallest_input = min(self.spec.input_precision,
+                             default=self.spec.output_precision)
         smallest_output = self.spec.output_precision
 
         smallest_bv_prec = min(smallest_input, smallest_output, smallest_imm)
@@ -713,7 +689,6 @@ class SynthesizerBase:
         for i in range(len(ops)):
             op_i = ops[i]
             ctx_i = ctxs[i]
-
 
             dsl_ops = op_i.get_semantics_ops_list()
 
@@ -729,24 +704,22 @@ class SynthesizerBase:
                 pruned_ctxs.append(ctx_i)
                 continue
 
-
-
             min_ctx_bvs = min(ctx_i.out_precision, ctx_i.in_precision)
 
             if min_ctx_bvs < smallest_bv_prec:
                 if DEBUG:
-                    print("Pruning", ctx_i.name, "as it has an argument of precision ",min_ctx_bvs, "which is smaller than", smallest_bv_prec)
+                    print("Pruning", ctx_i.name, "as it has an argument of precision ",
+                          min_ctx_bvs, "which is smaller than", smallest_bv_prec)
                 continue
             else:
                 pruned_ops.append(op_i)
                 pruned_ctxs.append(ctx_i)
 
-        print("Prunning Based of precisions", len(ops) - len(pruned_ops), "instructions ... ")
+        print("Prunning Based of precisions", len(
+            ops) - len(pruned_ops), "instructions ... ")
         return (pruned_ops, pruned_ctxs)
 
-
-
-    def reduce_operations(self, operation_insts, operation_contexts, bound = None):
+    def reduce_operations(self, operation_insts, operation_contexts, bound=None):
 
         if bound == None or bound > len(operation_insts):
             print("EARLY RETURN FROM REDUCE")
@@ -756,11 +729,8 @@ class SynthesizerBase:
         # Hence we limit the % of broadcast like operationsto be 25% and 75% of the operations
         # will be compute/shuffle
 
-
-
         upcast_ops = []
         upcast_ctxs = []
-
 
         downcast_ops = []
         downcast_ctxs = []
@@ -783,21 +753,19 @@ class SynthesizerBase:
 
             names.append(op.name)
 
-            if self.is_downcast_like_operation(op,ctx):
+            if self.is_downcast_like_operation(op, ctx):
                 downcast_ops.append(op)
                 downcast_ctxs.append(ctx)
             elif self.is_upcast_like_operation(op, ctx):
                 upcast_ops.append(op)
                 upcast_ctxs.append(ctx)
-            else :
+            else:
                 compute_ops.append(op)
                 compute_ctxs.append(ctx)
-
 
         num_broadcasts_actual = len(upcast_ops) + len(downcast_ops)
         print("Actual Broadcast ops", num_broadcasts_actual)
         print("Actual Compute ops", len(compute_ops))
-
 
         num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
@@ -809,8 +777,6 @@ class SynthesizerBase:
             num_broadcasts = bound - len(compute_ops)
             num_computes = len(compute_ops)
 
-
-
         print("Num Broadcasts:", num_broadcasts)
         print("Num Computes:", num_computes)
 
@@ -818,13 +784,12 @@ class SynthesizerBase:
 
         def get_top_N_ops(ops, ctxs, N):
 
-            indices = range(0,len(ops))
-            sorted_indices = sorted(indices, key = lambda i : self.score_context(ops[i] , ctxs[i]) )
-
+            indices = range(0, len(ops))
+            sorted_indices = sorted(
+                indices, key=lambda i: self.score_context(ops[i], ctxs[i]))
 
             globally_sorted_operation_insts = []
             globally_sorted_operation_contexts = []
-
 
             for idx in sorted_indices:
                 # TEMP: Dictionary created by merging old and missing ops
@@ -836,7 +801,6 @@ class SynthesizerBase:
 
                 inserted_names.append(ctxs[idx].name)
 
-
                 # Operations with score less than 2 are more likely to
                 # add complexity to the synthesis without really
                 # improving the types of expressions which can be
@@ -844,26 +808,21 @@ class SynthesizerBase:
                 if not self.FLEXIBLE_CASTING and self.score_context(ops[idx], ctxs[idx]) <= 2:
                     continue
 
-
                 globally_sorted_operation_insts.append(ops[idx])
                 globally_sorted_operation_contexts.append(ctxs[idx])
 
-
            # print("get top N:")
             for i, o in enumerate(globally_sorted_operation_contexts):
-                #print(o.name, "score: ", self.score_context(globally_sorted_operation_insts[i], o))
+                # print(o.name, "score: ", self.score_context(globally_sorted_operation_insts[i], o))
                 pass
 
-
             if N < len(ops):
-                print(N , "<",  len(ops))
+                print(N, "<",  len(ops))
                 return (globally_sorted_operation_insts[-N:], globally_sorted_operation_contexts[-N:])
             else:
                 return (globally_sorted_operation_insts, globally_sorted_operation_contexts)
 
-
-
-        computes = get_top_N_ops(compute_ops,compute_ctxs, num_computes)
+        computes = get_top_N_ops(compute_ops, compute_ctxs, num_computes)
 
         # Divide upcasts and downcasts evenly when both exceed 50% of
         # the allocated number of rules for broadcast instructions
@@ -880,25 +839,17 @@ class SynthesizerBase:
         print("Num Upcasts actual:", len(upcast_ops))
         print("Num Downcasts actual:", len(downcast_ops))
 
-
-        upcasts = get_top_N_ops(upcast_ops,upcast_ctxs, num_upcasts)
-        downcasts = get_top_N_ops(downcast_ops,downcast_ctxs, num_downcasts)
-
+        upcasts = get_top_N_ops(upcast_ops, upcast_ctxs, num_upcasts)
+        downcasts = get_top_N_ops(downcast_ops, downcast_ctxs, num_downcasts)
 
         grammar_ops = computes[0] + upcasts[0] + downcasts[0]
         grammar_ctxs = computes[1] + upcasts[1] + downcasts[1]
 
-
-
         return (grammar_ops, grammar_ctxs)
 
-
-
-
-
-    def get_supported_context_for_dsl(self, dsl_inst, limit = None):
-        assert self.consider_dsl_inst(dsl_inst), "Can not get supported contexts for dsl inst"
-
+    def get_supported_context_for_dsl(self, dsl_inst, limit=None):
+        assert self.consider_dsl_inst(
+            dsl_inst), "Can not get supported contexts for dsl inst"
 
         if dsl_inst.name in MUST_INCLUDE:
             return dsl_inst.contexts
@@ -913,8 +864,6 @@ class SynthesizerBase:
                     return variant_list
             return []
 
-
-
         contexts = []
 
         if dsl_inst.has_bounded_behavior:
@@ -922,13 +871,12 @@ class SynthesizerBase:
                 if ctx.is_bounded:
                     ctx.specialize_context_bounded(self.spec.output_precision)
 
-
-
         check = dsl_inst.name in DEBUG_LIST and DEBUG
         if check:
             print("============================================")
             print("Getting support contexts for ", dsl_inst.name)
-            print("Total available contexts: ", [ctx.name for ctx in dsl_inst.contexts])
+            print("Total available contexts: ", [
+                  ctx.name for ctx in dsl_inst.contexts])
 
             print("============================================")
 
@@ -938,7 +886,8 @@ class SynthesizerBase:
 
         for ctx in dsl_inst.contexts:
 
-            ctx_ops = ctx.get_bv_ops() #self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+            # self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+            ctx_ops = ctx.get_bv_ops()
 
             skip = False
 
@@ -949,8 +898,8 @@ class SynthesizerBase:
                 # of variants
                 spec_variant_ops = [op for op in spec_ops if op in variants]
 
-                #print("Spec Variant ops", spec_variant_ops)
-                #print("Variant ops", variants)
+                # print("Spec Variant ops", spec_variant_ops)
+                # print("Variant ops", variants)
 
                 if len(spec_variant_ops) == 0:
                     continue
@@ -958,20 +907,17 @@ class SynthesizerBase:
                 for v in variants:
 
                     # Flexible accumulation for dot product like operations
-                    if  v in ctx_ops and v not in spec_ops and "bvmul" in spec_ops and v == "bvadd":
-                        #print("Continuing here for", ctx.name)
+                    if v in ctx_ops and v not in spec_ops and "bvmul" in spec_ops and v == "bvadd":
+                        # print("Continuing here for", ctx.name)
                         continue
 
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
 
-                    if v in ctx_ops and v not in spec_ops and not skip :#and v != "bvadd":
-                        print("Skipping ", ctx.name, "as it is using a variant op:", v, "of the original op", c_op)
+                    if v in ctx_ops and v not in spec_ops and not skip:  # and v != "bvadd":
+                        print("Skipping ", ctx.name, "as it is using a variant op:",
+                              v, "of the original op", c_op)
                         skip = True
-
-
-
-
 
             if skip:
                 continue
@@ -983,20 +929,19 @@ class SynthesizerBase:
                 print(ctx.name, "is not supported on the current target", self.target)
                 continue
 
-
-
-
             if not ctx.has_output_size():
                 continue
 
             if not ctx.has_input_size():
                 continue
 
-            supports_inputs_prec = any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
+            supports_inputs_prec = any([ctx.supports_input_precision(
+                input_precision) for input_precision in self.spec.input_precision])
             lane_size_cond = False
 
             if self.BASE_VECT_SIZE != None:
-                lane_size_cond = (ctx.lane_size == self.BASE_VECT_SIZE) or (ctx.lane_size == self.MAX_BW_SIZE) or any([ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
+                lane_size_cond = (ctx.lane_size == self.BASE_VECT_SIZE) or (ctx.lane_size == self.MAX_BW_SIZE) or any(
+                    [ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
                 if check:
                     print(ctx.name)
                     print("Contexts lane size: ", ctx.lane_size)
@@ -1004,83 +949,88 @@ class SynthesizerBase:
                     print("Base vector size:", self.BASE_VECT_SIZE)
                     print("Supported Input precision:", supports_inputs_prec)
 
-                #if not self.is_shuffle:
+                # if not self.is_shuffle:
                 supports_inputs_prec = supports_inputs_prec and lane_size_cond
-                #else:
+                # else:
                 #    lane_size_cond = True
 
+            supports_outputs_prec = ctx.supports_output_precision(
+                self.spec.output_precision)
+            supports_output_length = ctx.supports_output_size(
+                self.output_slice_length)
 
-
-            supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
-            supports_output_length = ctx.supports_output_size(self.output_slice_length)
-
-            #if self.FLEXIBLE_CASTING  :
+            # if self.FLEXIBLE_CASTING  :
             #    supports_output_length = supports_output_length or any([ctx.supports_output_size(input_size) for input_size in self.input_sizes])
 
-
-            supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
+            supports_input_length = any([ctx.supports_input_size(
+                input_size) for input_size in self.input_sizes])
 
             supports_input_basevect = False
             supports_output_basevect = False
 
             if self.BASE_VECT_SIZE != None:
-                supports_input_basevect = ctx.supports_input_size(self.BASE_VECT_SIZE)
-                supports_output_basevect = ctx.supports_output_size(self.BASE_VECT_SIZE)
-
+                supports_input_basevect = ctx.supports_input_size(
+                    self.BASE_VECT_SIZE)
+                supports_output_basevect = ctx.supports_output_size(
+                    self.BASE_VECT_SIZE)
 
             if check:
                 print("-"*50)
-                print(ctx.name, "Supports Input Prec:", supports_inputs_prec, " with input Prec: ",ctx.in_precision)
-                print(ctx.name, "Supports Input Length:",supports_input_length)
-                print(ctx.name,"Supports Output prec", supports_outputs_prec)
-                print(ctx.name, "Supports Output Length:", supports_output_length)
+                print(ctx.name, "Supports Input Prec:", supports_inputs_prec,
+                      " with input Prec: ", ctx.in_precision)
+                print(ctx.name, "Supports Input Length:", supports_input_length)
+                print(ctx.name, "Supports Output prec", supports_outputs_prec)
+                print(ctx.name, "Supports Output Length:",
+                      supports_output_length)
                 print(ctx.name, "LaneSize Cond:", lane_size_cond)
                 print("-"*50)
 
-
-            old_condition =  (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
+            old_condition = (supports_inputs_prec and supports_input_length) and (
+                supports_outputs_prec or supports_output_length)
 
             # If broadcast like, we also want to include operations where inputs of different sizes can be casted to each other
             unique_input_sizes = list(set(self.input_sizes))
-            casts_inter_inputs = is_broadcast_like and supports_input_length and any([ctx.supports_output_size(isize) for isize in unique_input_sizes])
+            casts_inter_inputs = is_broadcast_like and supports_input_length and any(
+                [ctx.supports_output_size(isize) for isize in unique_input_sizes])
 
             # Either can process the input or can produce output shape
-            new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) # and (not is_broadcast_like)
-
+            new_condition = (supports_inputs_prec and supports_input_length) or (
+                supports_outputs_prec and supports_output_length)  # and (not is_broadcast_like)
 
             # Hexagon condition for distribution:
-            #hexagon_cond = ((supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length) ) and lane_size_cond
+            # hexagon_cond = ((supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length) ) and lane_size_cond
             # TEMP:
-            hexagon_precision_cond_op =  (supports_inputs_prec or supports_outputs_prec)  and (not is_broadcast_like  or self.is_shuffle)
-            hexagon_precision_cond_br =  (supports_input_length or supports_output_length) and  is_broadcast_like
+            hexagon_precision_cond_op = (supports_inputs_prec or supports_outputs_prec) and (
+                not is_broadcast_like or self.is_shuffle)
+            hexagon_precision_cond_br = (
+                supports_input_length or supports_output_length) and is_broadcast_like
             hexagon_precision_cond = hexagon_precision_cond_op or hexagon_precision_cond_br
-            hexagon_cond = (hexagon_precision_cond and (supports_input_length or supports_output_length or supports_input_basevect or supports_output_basevect ) ) and lane_size_cond
+            hexagon_cond = (hexagon_precision_cond and (
+                supports_input_length or supports_output_length or supports_input_basevect or supports_output_basevect)) and lane_size_cond
             hexagon_cond = hexagon_cond and (self.target == "hvx")
-
 
             if check:
                 print("Context ops:", ctx_ops)
-                print("Hexagon cond for",ctx.name,hexagon_cond)
-                print("Hexagon cond op for",ctx.name,hexagon_precision_cond_op)
-                print("Hexagon cond op br",ctx.name,hexagon_precision_cond_br)
+                print("Hexagon cond for", ctx.name, hexagon_cond)
+                print("Hexagon cond op for", ctx.name,
+                      hexagon_precision_cond_op)
+                print("Hexagon cond op br", ctx.name,
+                      hexagon_precision_cond_br)
                 print("Cast inter input?:", casts_inter_inputs)
 
-
-            if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length or supports_input_basevect)) or casts_inter_inputs:
+            if dsl_inst.name in MUST_INCLUDE or hexagon_cond or new_condition or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length or supports_input_basevect)) or casts_inter_inputs:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
 
-
-
-        contexts = sorted(contexts, key = lambda x : self.score_context(dsl_inst ,x))
+        contexts = sorted(
+            contexts, key=lambda x: self.score_context(dsl_inst, x))
 
         if check:
             print("Contexts in ascending order of score")
             for ctx in contexts:
-                print(ctx.name, "with score ", self.score_context(dsl_inst, ctx), "with ops", ctx.get_bv_ops())
-
-
+                print(ctx.name, "with score ", self.score_context(
+                    dsl_inst, ctx), "with ops", ctx.get_bv_ops())
 
         # Over riding limit to means including those contexts
         # which have the top 'limit' scores. In cases of ties
@@ -1106,83 +1056,71 @@ class SynthesizerBase:
                 # be in the beginning
                 limited_context.append(ctx)
 
-
-
-
             if check:
-                print("Returning contexts: ", [ctx.name for ctx in limited_context])
+                print("Returning contexts: ", [
+                      ctx.name for ctx in limited_context])
 
             return limited_context
 
-
         return contexts
-
-
-
-
 
     # When limiting contexts, we extract only the first :limit values
     # hence sorting accordingly to 'relavance' is important to keep
     # most useful contexts
-    def score_context(self, dsl_inst ,  ctx):
+
+    def score_context(self, dsl_inst,  ctx):
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
         score = 0
-        score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
+        score += int(([ctx.supports_input_precision(input_precision)
+                     for input_precision in self.spec.input_precision]).count(True) != 0)
         score += int(ctx.supports_output_precision(self.spec.output_precision))
         score += int(ctx.supports_output_size(self.output_slice_length))
-        score +=  max(int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes]).count(True)), 2)
-
-
+        score += max(int(([ctx.supports_input_size(input_size)
+                     for input_size in self.input_sizes]).count(True)), 2)
 
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
-        #dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+        # dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
         dsl_ops = ctx.get_bv_ops()
 
-        score += min(len(list (set(spec_ops) & set(dsl_ops))), 2)
-
-
-
-
+        score += min(len(list(set(spec_ops) & set(dsl_ops))), 2)
 
         if is_broadcast_like:
             score = 0
-            score +=  int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes].count(True)))
+            score += int(([ctx.supports_input_size(input_size)
+                         for input_size in self.input_sizes].count(True)))
             score += int(ctx.supports_output_size(self.output_slice_length))
             score += int(ctx.supports_output_precision(self.spec.output_precision))
-            score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
-            #score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
-            #score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
+            score += int(([ctx.supports_input_precision(input_precision)
+                         for input_precision in self.spec.input_precision]).count(True) != 0)
+            # score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
+            # score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
 
             # For targets which prefer distributing computation
             # over a base vector size
             if self.BASE_VECT_SIZE != None:
                 score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 2
-                score +=  int(([ctx.supports_input_size(input_size) for input_size in [self.MAX_BW_SIZE]].count(True)))
+                score += int(([ctx.supports_input_size(input_size)
+                             for input_size in [self.MAX_BW_SIZE]].count(True)))
 
-
-            if not self.is_shuffle :
+            if not self.is_shuffle:
                 # In the case where we have inputs of varying sizes, we want also want
                 unique_input_sizes = self.input_sizes
-                score +=  min(int([ctx.supports_output_size(isize) for isize in unique_input_sizes].count(True)), 3) #* 2
-
-
+                score += min(int([ctx.supports_output_size(isize)
+                             for isize in unique_input_sizes].count(True)), 3)  # * 2
 
         # Does specification contain conditional code:
         spec_ops = self.spec.get_semantics_ops_list()
 
-        need_masked = ("if" in spec_ops) or ("cond" in spec_ops) or ("bveq" in spec_ops)
+        need_masked = ("if" in spec_ops) or (
+            "cond" in spec_ops) or ("bveq" in spec_ops)
 
         if "mask" in ctx.name and not need_masked:
             score = int(0)
 
-
-
-
-
         return score
 
-    def convert_ops_to_signedness(self, ops, get_signed = False, get_unsigned = False, non_signed = False):
+    def convert_ops_to_signedness(self, ops, get_signed=False, get_unsigned=False, non_signed=False):
         ops_list = []
 
         for op in ops:
@@ -1198,25 +1136,23 @@ class SynthesizerBase:
 
         abstract_sign_ops = [op for op in SIGN_VARIANTS]
 
-
         return [op for op in linear if op not in abstract_sign_ops]
-
-
 
     # Checks whether the operations performed
     # by a DSL instruction form a contigous
     # slice of operations within the
     # specification
-    def does_dsl_ops_overlap(self, dsl_inst, match_exact_order = False):
+
+    def does_dsl_ops_overlap(self, dsl_inst, match_exact_order=False):
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
         # When checking if ops overlap, check for both signedness
         # , when sorting based on score check for signedness explicitly
-        dsl_ops = self.convert_ops_to_signedness(dsl_ops, get_signed = True, get_unsigned = True, non_signed = True)
+        dsl_ops = self.convert_ops_to_signedness(
+            dsl_ops, get_signed=True, get_unsigned=True, non_signed=True)
 
-
-        if dsl_inst.name in DEBUG_LIST and DEBUG :
+        if dsl_inst.name in DEBUG_LIST and DEBUG:
             print("Spec Ops", spec_ops)
             print("DSL Ops", dsl_ops)
 
@@ -1232,21 +1168,22 @@ class SynthesizerBase:
             def is_cast_expr(ops_list):
                 in_cast_set = True
                 for op in ops_list:
-                    in_cast_set = in_cast_set and  op in ["sign-extend", "extract", "zero-extend"]
+                    in_cast_set = in_cast_set and op in [
+                        "sign-extend", "extract", "zero-extend"]
                 return in_cast_set
 
+            # Multiplication and division operations can make the
+            # Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
+            # which contain them should only be included if necessary
 
-
-            ## Multiplication and division operations can make the
-            ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
-            ## which contain them should only be included if necessary
-
-            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"] , ["sign-extend", "zero-extend"] ]
+            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
+                             ["bvmul"], ["sign-extend", "zero-extend"]]
 
             if self.target == "hvx":
-                EXPENSIVE_OPS.append(["bvaddnuw", "bvaddnsw", "bvadd", "bvmul"])
+                EXPENSIVE_OPS.append(
+                    ["bvaddnuw", "bvaddnsw", "bvadd", "bvmul"])
                 EXPENSIVE_OPS.append(["bvsubnuw", "bvsubnsw", "bvsub"])
-                #EXPENSIVE_OPS.append(["bvssat", "bvusat"])
+                # EXPENSIVE_OPS.append(["bvssat", "bvusat"])
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
@@ -1256,42 +1193,38 @@ class SynthesizerBase:
 
             for expensive_op in EXPENSIVE_OPS:
 
-                expensive_cond = all([(op not in spec_ops) and (op in dsl_ops) for op in expensive_op])
-                if  expensive_cond : #expensive_op in dsl_ops and expensive_op not in spec_ops:
-                    if dsl_inst.name in DEBUG_LIST and DEBUG :
-                        print("Ops overlap failed due to expensive op in DSL for ", expensive_op)
+                expensive_cond = all([(op not in spec_ops) and (
+                    op in dsl_ops) for op in expensive_op])
+                if expensive_cond:  # expensive_op in dsl_ops and expensive_op not in spec_ops:
+                    if dsl_inst.name in DEBUG_LIST and DEBUG:
+                        print(
+                            "Ops overlap failed due to expensive op in DSL for ", expensive_op)
 
                     return False
 
-
-
-
             # Match in any order
             for bv_op in dsl_ops:
-                #if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]:
+                # if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]:
                 #    return False
 
-                cond = bv_op in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]
+                cond = bv_op in spec_ops and bv_op not in [
+                    "sign-extend", "extract", "zero-extend"]
 
                 overlap = overlap or cond
 
-            return overlap or (is_cast_expr(spec_ops) and is_cast_expr(dsl_ops))   or is_cast_expr(dsl_ops)
-
-
-
-
+            return overlap or (is_cast_expr(spec_ops) and is_cast_expr(dsl_ops)) or is_cast_expr(dsl_ops)
 
     # Check if the precisions of the specifications
     # and the DSL instruction overlap
-    def does_dsl_configs_overlap(self, dsl_inst, match_all = False):
 
+    def does_dsl_configs_overlap(self, dsl_inst, match_all=False):
 
         if match_all:
             def supports_ip(ip):
-                return dsl_inst.supports_config(input_precision = ip,
-                                             output_precision = self.spec.output_precision,
-                                             output_size = self.output_slice_length
-                                             )
+                return dsl_inst.supports_config(input_precision=ip,
+                                                output_precision=self.spec.output_precision,
+                                                output_size=self.output_slice_length
+                                                )
 
             return any([support_ip(ip) for ip in self.spec.input_precision])
         else:
@@ -1305,13 +1238,17 @@ class SynthesizerBase:
             if dsl_inst.name in DEBUG_LIST and DEBUG:
                 print("Has inputs and outputs defined")
 
-            supports_inputs_prec = any([dsl_inst.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]) or self.is_elementwise_logical_like_operation(dsl_inst)
+            supports_inputs_prec = any([dsl_inst.supports_input_precision(
+                input_precision) for input_precision in self.spec.input_precision]) or self.is_elementwise_logical_like_operation(dsl_inst)
 
-            supports_outputs_prec = dsl_inst.supports_output_precision(self.spec.output_precision) or self.is_elementwise_logical_like_operation(dsl_inst)
+            supports_outputs_prec = dsl_inst.supports_output_precision(
+                self.spec.output_precision) or self.is_elementwise_logical_like_operation(dsl_inst)
 
-            supports_output_length = dsl_inst.supports_output_size(self.output_slice_length)
+            supports_output_length = dsl_inst.supports_output_size(
+                self.output_slice_length)
 
-            supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
+            supports_input_length = any([dsl_inst.supports_input_size(
+                input_size) for input_size in self.input_sizes])
 
             if dsl_inst.name in DEBUG_LIST and DEBUG:
                 print("Supports input prec:", supports_inputs_prec)
@@ -1319,30 +1256,27 @@ class SynthesizerBase:
                 print("supports input length:", supports_input_length)
                 print("supports output length:", supports_output_length)
 
-
-
-            old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
-            new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
-
+            old_condition = (supports_inputs_prec and supports_input_length) and (
+                supports_outputs_prec or supports_output_length)
+            new_condition = (supports_inputs_prec and supports_input_length) or (
+                supports_outputs_prec and supports_output_length)
 
             # for element wise operations, we really only need the sizes of the vectors to overlap
-            is_elem_logical = self.is_elementwise_logical_like_operation(dsl_inst) and (supports_input_length or supports_output_length)
-            is_elem_logical = is_elem_logical and (self.BASE_VECT_SIZE == None or dsl_inst.supports_input_size(self.BASE_VECT_SIZE))
+            is_elem_logical = self.is_elementwise_logical_like_operation(
+                dsl_inst) and (supports_input_length or supports_output_length)
+            is_elem_logical = is_elem_logical and (
+                self.BASE_VECT_SIZE == None or dsl_inst.supports_input_size(self.BASE_VECT_SIZE))
 
-
-            is_broadcast_like = self.is_broadcast_like_operation(dsl_inst) and supports_input_length and supports_output_length
-
+            is_broadcast_like = self.is_broadcast_like_operation(
+                dsl_inst) and supports_input_length and supports_output_length
 
             # Hexagon condition for distribution:
-            hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length)
-            #hexagon_cond = (supports_outputs_prec) or (supports_input_length or supports_output_length)
+            hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (
+                supports_input_length or supports_output_length)
+            # hexagon_cond = (supports_outputs_prec) or (supports_input_length or supports_output_length)
             hexagon_cond = hexagon_cond and (self.target == "hvx")
 
-
-
-
-            return hexagon_cond or new_condition or is_elem_logical or is_broadcast_like #new_condition
-
+            return hexagon_cond or new_condition or is_elem_logical or is_broadcast_like  # new_condition
 
     def is_elementwise_logical_like_operation(self, dsl_inst):
 
@@ -1351,20 +1285,20 @@ class SynthesizerBase:
 
         ops = dsl_inst.get_semantics_ops_list()
 
-        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg", "extract", "concat"]
+        bitwise_logical_ops = ["bvor", "bvxor", "bvand",
+                               "bvnot", "bvneg", "extract", "concat"]
 
-        return all([ (op in bitwise_logical_ops) for op in ops ])
-
+        return all([(op in bitwise_logical_ops) for op in ops])
 
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
 
-        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq" ,"if" ,"cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
-
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq", "if", "cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
 
     # Is the operation either a broadcast operation or an
     # operation which sign/zero extends from a smallar
     # type to a larger type
+
     def is_upcast_like_operation(self, dsl_inst, ctx):
         if ctx.in_vectsize == None:
             return False
@@ -1379,7 +1313,7 @@ class SynthesizerBase:
         bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg"]
 
         # Ignore masked operations
-        exclude_ops  = ["if"]
+        exclude_ops = ["if"]
 
         for op in dsl_ops:
             if op in exclude_ops:
@@ -1391,13 +1325,11 @@ class SynthesizerBase:
 
         return False
 
-
-    def get_supported_bitwise_context_for_dsl(self, dsl_inst, limit = None):
-        assert self.consider_bitwise_heuristic(dsl_inst), "Can not get supported contexts for dsl inst"
+    def get_supported_bitwise_context_for_dsl(self, dsl_inst, limit=None):
+        assert self.consider_bitwise_heuristic(
+            dsl_inst), "Can not get supported contexts for dsl inst"
 
         contexts = []
-
-
 
         for ctx in dsl_inst.contexts:
             if not ctx.has_output_size():
@@ -1410,28 +1342,21 @@ class SynthesizerBase:
                 [ctx.supports_input_size(input_size) and ctx.supports_output_size(input_size)
                  for input_size in self.input_sizes])
 
-
-
-
-            if  supports_element_wise:
+            if supports_element_wise:
                 contexts.append(ctx)
 
         if limit != None and len(contexts) > limit:
             return contexts[:limit]
 
-
         return contexts
 
-
-
-
-
     # Simple place holder
+
     def consider_dsl_inst(self, dsl_inst):
 
         for SKIP in SKIP_LIST:
             if SKIP in dsl_inst.name:
-                #print("checking if ",SKIP," in ",dsl_inst.name)
+                # print("checking if ",SKIP," in ",dsl_inst.name)
                 return False
 
         if dsl_inst.name in DEBUG_LIST and DEBUG:
@@ -1440,8 +1365,3 @@ class SynthesizerBase:
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))
 
         return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
-
-
-
-
-
