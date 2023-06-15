@@ -65,8 +65,8 @@ class RoseBVPadHighBitsOp(RoseBitVectorOp):
 class RoseBVSignExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
     def __init__(self, Name: str, Bitvector: RoseValue, TargetBitwidth: RoseValue, ParentBlock):
         assert isinstance(Bitvector.getType(), RoseBitVectorType)
-        #TrueVal = RoseConstant.create(1, RoseBooleanType.create())
-        #super().__init__(Name, Bitvector, TargetBitwidth, TrueVal, ParentBlock)
+        # TrueVal = RoseConstant.create(1, RoseBooleanType.create())
+        # super().__init__(Name, Bitvector, TargetBitwidth, TrueVal, ParentBlock)
         OperandList = [Bitvector, TargetBitwidth]
         super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
 
@@ -90,7 +90,7 @@ class RoseBVSignExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
                     and isinstance(args[2], RoseValue):
                 return RoseBVSignExtendOp(args[0], args[1], args[2], RoseUndefRegion())
-        assert(False)
+        assert (False)
 
     def getExtensionSize(self):
         return self.getOperand(1)
@@ -124,8 +124,8 @@ class RoseBVSignExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
 class RoseBVZeroExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
     def __init__(self, Name: str, Bitvector: RoseValue, TargetBitwidth: RoseValue, ParentBlock):
         assert isinstance(Bitvector.getType(), RoseBitVectorType)
-        #FalseVal = RoseConstant.create(0, RoseBooleanType.create())
-        #super().__init__(Name, Bitvector, TargetBitwidth, FalseVal, ParentBlock)
+        # FalseVal = RoseConstant.create(0, RoseBooleanType.create())
+        # super().__init__(Name, Bitvector, TargetBitwidth, FalseVal, ParentBlock)
         OperandList = [Bitvector, TargetBitwidth]
         super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
@@ -149,7 +149,7 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
                     and isinstance(args[2], RoseValue):
                 return RoseBVZeroExtendOp(args[0], args[1], args[2], RoseUndefRegion())
-        assert(False)
+        assert (False)
 
     def getExtensionSize(self):
         return self.getOperand(1)
@@ -259,7 +259,7 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
                     and isinstance(args[2], RoseValue):
                 return RoseBVSSaturateOp(args[0], args[1], args[2], RoseUndefRegion())
-        assert(False)
+        assert (False)
 
     def getInputBitVector(self):
         return self.getOperand(0)
@@ -306,7 +306,7 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
                     and isinstance(args[2], RoseValue):
                 return RoseBVUSaturateOp(args[0], args[1], args[2], RoseUndefRegion())
-        assert(False)
+        assert (False)
 
     def getInputBitVector(self):
         return self.getOperand(0)
@@ -353,7 +353,7 @@ class RoseBVTruncateLowOp(RoseBitVectorOp):
             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
                     and isinstance(args[2], RoseValue):
                 return RoseBVTruncateLowOp(args[0], args[1], args[2], RoseUndefRegion())
-        assert(False)
+        assert (False)
 
     def getInputBitVector(self):
         return self.getOperand(0)
@@ -476,7 +476,7 @@ class RoseBVTruncateHighOp(RoseBitVectorOp):
             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
                     and isinstance(args[2], RoseValue):
                 return RoseBVTruncateHighOp(args[0], args[1], args[2], RoseUndefRegion())
-        assert(False)
+        assert (False)
 
     def getInputBitVector(self):
         return self.getOperand(0)
@@ -605,7 +605,7 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
 
     def getOutputBitwidth(self):
         BitwidthVal = self.getOperand(self.getBitwidthPos())
-        #assert isinstance(BitwidthVal, RoseConstant)
+        # assert isinstance(BitwidthVal, RoseConstant)
         if isinstance(BitwidthVal, RoseConstant):
             return BitwidthVal.getValue()
         else:
@@ -697,7 +697,7 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
 
     def getOutputBitwidth(self):
         BitwidthVal = self.getOperand(self.getBitwidthPos())
-        #assert isinstance(BitwidthVal, RoseConstant)
+        # assert isinstance(BitwidthVal, RoseConstant)
         if isinstance(BitwidthVal, RoseConstant):
             return BitwidthVal.getValue()
         else:

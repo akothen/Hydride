@@ -11,15 +11,10 @@
 (define target 'hvx)
 
 (define (set-target-hvx)
-  (set! target 'hvx)
-  )
-
+  (set! target 'hvx))
 
 (define (set-target-arm)
-  (set! target 'arm)
-  )
-
+  (set! target 'arm))
 
 (define (set-target-x86)
-  (set! target 'x86)
-  )
+  (set! target 'x86))

@@ -15,7 +15,7 @@
 (custodian-limit-memory (current-custodian) (* 22000 1024 1024))
 
 
-;; Some uility functions
+;; Some uility functionsf
 (define (ext-bv x i type-size)
   (define var (extract (+ (* i type-size) (- type-size 1)) (* i type-size) x))
   var)

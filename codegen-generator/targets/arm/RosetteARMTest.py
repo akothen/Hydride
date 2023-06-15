@@ -7,19 +7,24 @@ from ARMIntrinsicClassify import toI
 def GenerateCTest(AllSema):
     CannotVerify = []
     para_set = set()
-    notSSA = ['addv', 'addlv', 'maxv', 'minv', 'abd', 'rbit', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
-    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte', 'sli','sli_n','sliq_n','slid_n','shl_n','shlq_n','shld_n','sri_n','sriq_n','srid_n'] # unimplemented
+    notSSA = ['addv', 'addlv', 'maxv', 'minv', 'abd', 'rbit', 'aba',
+              'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
+    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte', 'sli', 'sli_n', 'sliq_n', 'slid_n',
+           'shl_n', 'shlq_n', 'shld_n', 'sri_n', 'sriq_n', 'srid_n']  # unimplemented
     op_mismatch = ['qrdmlah', 'qrdmlsh']
     not_compiled_in_gcc = ['dot', 'eor3q', 'rax1q', 'bcaxq', 'xarq']
     for i, v in AllSema.items():
         try:
-            assert not any(j in i for j in notSSA + UIP + op_mismatch + not_compiled_in_gcc)
+            assert not any(j in i for j in notSSA + UIP +
+                           op_mismatch + not_compiled_in_gcc)
             for expand_name in expand_instr(toI[i]):
-                basename, assignment = extract_assignment_from_name(expand_name)
+                basename, assignment = extract_assignment_from_name(
+                    expand_name)
                 tps = [vv.type for vv in v.params]
                 if any(t in PointerType for t in tps):
                     assert False
-                para_key = tuple('V' if t in ReservedVecTypes else 'I' for t in tps)
+                para_key = tuple(
+                    'V' if t in ReservedVecTypes else 'I' for t in tps)
                 para_set.add(para_key)
                 const_vals = []
                 if len(assignment) == 1:
@@ -36,7 +41,8 @@ def GenerateCTest(AllSema):
                     else:
                         parastr.append(str(const_vals[val_index]))
                         val_index += 1
-                print(f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype}, {i})')
+                print(
+                    f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype}, {i})')
         except AssertionError:
             CannotVerify.append(i)
     # print("Cannot verify", CannotVerify, file=sys.stderr)

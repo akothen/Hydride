@@ -287,7 +287,7 @@ class RoseSelectOp(RoseOperation):
         String = Spaces + "(define " + Name + " (if " \
             + ConditionString + " " + ThenString + " " + ElseString + "))\n"
         return String
-        #assert "No direction convertion of Select Op to Rosette!"
+        # assert "No direction convertion of Select Op to Rosette!"
         # NotImplemented
 
     def to_llvm_ir(self, Context: RoseLLVMContext):
@@ -313,9 +313,10 @@ class RoseSelectOp(RoseOperation):
             assert Condition.getValue() == 0
             return self.getOperand(2)
         return RoseUndefValue()
-    
+
     def getOutputBitwidth(self):
-        assert(self.getThenValue().getType().getBitwidth() == self.getElseValue().getType().getBitwidth())
+        assert (self.getThenValue().getType().getBitwidth() ==
+                self.getElseValue().getType().getBitwidth())
         return self.getThenValue().getType().getBitwidth()
 
 

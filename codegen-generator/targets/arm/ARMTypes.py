@@ -100,7 +100,7 @@ def parse_type(typename):
     # elif typename == "const int":
     #     return SimpleType("const int")
     else:
-        assert(False)
+        assert (False)
 
 
 def get_total_bits(typed_reg):

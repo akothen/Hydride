@@ -153,7 +153,7 @@ class CCodeEmitter(RoseCodeEmitter):
             for j in range(ParamBytes):
                 v = ConcArgs[Index][j] & 0xff
                 if Sema.params[Index].is_imm:
-                    #v = int(v % imm8_max(Function.getName()))
+                    # v = int(v % imm8_max(Function.getName()))
                     v = int(v & (2**(Sema.imm_width) - 1))
                 HexVal = hex(v)
                 print("HexVal:")

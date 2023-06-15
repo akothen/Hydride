@@ -12,53 +12,80 @@
 (require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
 
-
 (provide (all-defined-out))
 
-(define (synthesize-sol-with-depth depth depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? interpreter-fn cost-fn symbolic? cost-bound solver)
+(define (synthesize-sol-with-depth depth
+                                   depth-limit
+                                   invoke_ref
+                                   invoke_ref_lane
+                                   grammar-fn
+                                   bitwidth-list
+                                   optimize?
+                                   interpreter-fn
+                                   cost-fn
+                                   symbolic?
+                                   cost-bound
+                                   solver)
 
-  (if (equal? solver 'boolector)
-    (current-solver (boolector))
-    (current-solver (z3))
-    )
+  (if (equal? solver 'boolector) (current-solver (boolector)) (current-solver (z3)))
 
-  (debug-log (format "Synthesizing solution with depth ~a, depth-limit ~a, and cost-bound ~a ...\n" depth depth-limit cost-bound))
+  (debug-log (format "Synthesizing solution with depth ~a, depth-limit ~a, and cost-bound ~a ...\n"
+                     depth
+                     depth-limit
+                     cost-bound))
 
-  (if
-    (<= depth depth-limit)
+  (if (<= depth depth-limit)
 
-    (begin
+      (begin
 
-      (define grammar
-        (grammar-fn depth)
-        )
+        (define grammar (grammar-fn depth))
 
+        (define-values (satisfiable? materialize elapsed_time)
+          (if symbolic?
+              (synthesize-sol invoke_ref
+                              invoke_ref_lane
+                              grammar
+                              bitwidth-list
+                              optimize?
+                              interpreter-fn
+                              cost-fn
+                              cost-bound
+                              solver)
+              (synthesize-sol-iterative invoke_ref
+                                        invoke_ref_lane
+                                        grammar
+                                        bitwidth-list
+                                        optimize?
+                                        interpreter-fn
+                                        cost-fn
+                                        '()
+                                        '()
+                                        cost-bound
+                                        solver
+                                        '())))
 
-      (define-values 
-        (satisfiable? materialize elapsed_time)
-        (if symbolic?
-            (synthesize-sol invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn cost-bound solver)
-            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn '() '() cost-bound solver '())
-          )
-        )
+        (if satisfiable?
+            (values satisfiable? materialize elapsed_time)
 
+            (begin
+              (define-values (_satisfiable? _materialize _elapsed_time)
+                (synthesize-sol-with-depth (+ 1 depth)
+                                           depth-limit
+                                           invoke_ref
+                                           invoke_ref_lane
+                                           grammar-fn
+                                           bitwidth-list
+                                           optimize?
+                                           interpreter-fn
+                                           cost-fn
+                                           symbolic?
+                                           cost-bound
+                                           solver))
+              (values _satisfiable?
+                      _materialize
+                      (+ elapsed_time _elapsed_time)) ;; Accumulate synthesis time
+              )))
 
-      (if satisfiable? 
-        (values satisfiable? materialize elapsed_time)
-
-        (begin
-          (define-values 
-            (_satisfiable? _materialize _elapsed_time)
-            (synthesize-sol-with-depth (+ 1 depth) depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? interpreter-fn cost-fn symbolic? cost-bound solver)
-            )
-          (values _satisfiable? _materialize (+ elapsed_time _elapsed_time)) ;; Accumulate synthesis time 
-          )
-        )
-      )
-
-    (begin
-      (debug-log "Depth Quota exceed, unsynthesizable")
-      (values #f '() 0)
-      )
-    )
-  )
+      (begin
+        (debug-log "Depth Quota exceed, unsynthesizable")
+        (values #f '() 0))))

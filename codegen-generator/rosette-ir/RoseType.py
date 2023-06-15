@@ -5,7 +5,6 @@
 #############################################################
 
 
-
 from enum import Enum, auto
 
 from copy import deepcopy
@@ -29,14 +28,14 @@ class RoseType:
 
     # SubClassData is data necessary for different types
     # Its used by different derived types differently.
-    def __init__(self, Enum, SubClassData = None):
+    def __init__(self, Enum, SubClassData=None):
         self.TypeEnum = Enum
         self.SubClassData = SubClassData
-    
+
     def __eq__(self, Other):
         assert isinstance(Other, RoseType)
         return self.TypeEnum == Other.TypeEnum and self.SubClassData == Other.SubClassData
-    
+
     def __ne__(self, Other):
         assert isinstance(Other, RoseType)
         return self.TypeEnum != Other.TypeEnum or self.SubClassData != Other.SubClassData
@@ -49,6 +48,3 @@ class RoseType:
 
     def clone(self):
         return deepcopy(self)
-
-
-
