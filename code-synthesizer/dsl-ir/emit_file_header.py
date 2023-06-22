@@ -220,3 +220,43 @@ visitor_header = """#lang rosette
 
 
 (provide (all-defined-out))"""
+
+extract_header = """#lang rosette
+(require rosette/lib/synthax)
+(require rosette/lib/angelic)
+(require rosette/lib/destruct)
+
+
+
+(require hydride/ir/hydride/definition)
+(require hydride/ir/{target}/definition)
+
+(provide (all-defined-out))"""
+
+variant_header = """#lang rosette
+(require rosette/lib/synthax)
+(require rosette/lib/angelic)
+(require racket/pretty)
+(require rosette/lib/destruct)
+
+(require hydride/utils/bvops)
+(require hydride/utils/misc)
+
+
+(require hydride/ir/hydride/definition)
+(require hydride/ir/{target}/definition)
+(require hydride/ir/{target}/printer)
+
+(provide (all-defined-out))"""
+
+subexpr_header = """#lang rosette
+(require rosette/lib/synthax)
+(require rosette/lib/angelic)
+(require rosette/lib/destruct)
+
+
+
+(require hydride/ir/hydride/definition)
+(require hydride/ir/{target}/definition)
+
+(provide (all-defined-out))"""

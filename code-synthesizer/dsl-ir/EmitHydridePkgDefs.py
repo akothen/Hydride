@@ -18,6 +18,9 @@ from Specification import Specification, parse_spec
 from utils.VisitorDef import VisitorDef
 from utils.ScaleDef import ScaleDef
 from utils.GetTargetSpecificNames import GetTargetNames
+from utils.GetSubExpressions import GetSubExpressions
+from utils.ExtractExprDepth import ExtractExprDepth
+from utils.GetVariants import GetVariants
 
 
 from hexsemantics_new import semantics as hvx_semantics
@@ -42,6 +45,9 @@ printer_name = ""
 get_ops_name = ""
 bind_name = ""
 get_target_op_name = ""
+subexpr_name = ""
+extract_names = ""
+variant_names = ""
 
 
 if TARGET == 'x86':
@@ -58,9 +64,13 @@ if TARGET == 'x86':
     get_ops_name = "hydride:get-bv-ops"
     bind_name = "bind-expr"
     get_target_op_name = "hydride:get-target-name"
+    subexpr_name = "hydride:get-sub-exprs"
+    extract_names = "hydride:extract-expr"
+    variant_names = "hydride:get-variants"
 elif TARGET == 'hvx':
     dsl_list = parse_dict(hvx_semantics, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=1024)
+    cost_name = "hvx:cost"
     cost_name = "hvx:cost"
     interpret_name = "hvx:interpret"
     scale_name = "hvx:scale-expr"
@@ -72,9 +82,13 @@ elif TARGET == 'hvx':
     get_ops_name = "hvx:get-bv-ops"
     bind_name = "hvx:bind-expr"
     get_target_op_name = "hvx:get-target-name"
+    subexpr_name = "hvx:get-sub-exprs"
+    extract_names = "hvx:extract-expr"
+    variant_names = "hvx:get-variants"
 elif TARGET == 'arm':
     dsl_list = parse_dict(arm_semantics, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=None)
+    cost_name = "arm:cost"
     cost_name = "arm:cost"
     interpret_name = "arm:interpret"
     scale_name = "arm:scale-expr"
@@ -86,6 +100,9 @@ elif TARGET == 'arm':
     get_ops_name = "arm:get-bv-ops"
     bind_name = "arm:bind-expr"
     get_target_op_name = "arm:get-target-name"
+    subexpr_name = "arm:get-sub-exprs"
+    extract_names = "arm:extract-expr"
+    variant_names = "arm:get-variants"
 
 
 print("Number of Target Agnostic DSL Instructions:\t", len(dsl_list))
@@ -104,6 +121,9 @@ bd = BindDef(bind_name=bind_name)
 vd = VisitorDef()
 gbo = GetBVOps(get_ops_name=get_ops_name)
 gtn = GetTargetNames(get_target_name=get_target_op_name)
+gse = GetSubExpressions(get_sub_name=subexpr_name)
+eo = ExtractExprDepth(extract_name=extract_names)
+gv = GetVariants(get_variant_name=variant_names)
 
 
 cf = ConstFold()
@@ -153,10 +173,26 @@ def genGenRkt():
         write_to_file(gbo.emit_get_bv_ops(dsl_list, sd))
 
         write_to_file(gtn.emit_get_names(dsl_list, sd))
+        write_to_file(gse.emit_get_subexpr(dsl_list, sd))
+        write_to_file(eo.emit_extract(dsl_list, sd))
+
+        write_to_file(gv.emit_get_names(dsl_list, sd))
+
+
+hydride_header = """;#============================== Hydride File =================================
+;#
+;# Part of the Hydride Compiler Infrastructure.
+;# <Placeholder for license information>
+;#
+;#=============================================================================
+;#
+;# Do NOT modify this file. It is automatically generated.
+;#
+;#=============================================================================
+"""
 
 
 if __name__ == "__main__":
-
     with open("binder.rkt", "w+")as RacketFile:
         def write_to_file(line):
             RacketFile.write(line + "\n")
@@ -183,7 +219,7 @@ if __name__ == "__main__":
         write_to_file(definition_header.format(target=TARGET))
         QUQ = sd.emit_struct_defs(dsl_list).split("\n")
         if TARGET != "x86":
-            QUQ = QUQ[:3]+QUQ[17:]
+            QUQ = QUQ[:3]+QUQ[22:]
         write_to_file("\n".join(QUQ))
     with open("get_name.rkt", "w+") as RacketFile:
         def write_to_file(line):
@@ -251,3 +287,22 @@ if __name__ == "__main__":
         write_to_file(hydride_header)
         write_to_file(visitor_header.format(target=TARGET))
         write_to_file(vd.emit_visitor(dsl_list, sd, visitor_name=visitor_name))
+    with open("extract.rkt", "w+") as RacketFile:
+        def write_to_file(line):
+            RacketFile.write(line + "\n")
+        write_to_file(hydride_header)
+        write_to_file(extract_header.format(target=TARGET))
+        write_to_file(eo.emit_extract(dsl_list, sd))
+    with open("sub_expr.rkt", "w+") as RacketFile:
+        def write_to_file(line):
+            RacketFile.write(line + "\n")
+        write_to_file(hydride_header)
+        write_to_file(subexpr_header.format(target=TARGET))
+        write_to_file(gse.emit_get_subexpr(dsl_list, sd))
+    with open("get_variants.rkt", "w+") as RacketFile:
+        def write_to_file(line):
+            RacketFile.write(line + "\n")
+        write_to_file(hydride_header)
+        write_to_file(variant_header.format(target=TARGET))
+        write_to_file(gv.emit_get_names(dsl_list, sd))
+    # TODO

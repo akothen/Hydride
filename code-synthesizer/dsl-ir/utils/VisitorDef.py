@@ -30,7 +30,7 @@ class VisitorDef:
         return ["\t{}".format(d) for d in defaults]
 
     def emit_fallback_def(self):
-        return "\t[_ (error \"Unrecognized expression\")]"
+        return "\t[_ (error \"Unrecognized expression in visitor\")]"
 
     def emit_visit_expr(self, expr, visitor_name="hydride:visitor"):
         folded_name = expr + "-visited"

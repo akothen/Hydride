@@ -37,10 +37,12 @@ public:
         // Schedules for x86
         output_
             .compute_root()
-            .vectorize(x, 64, TailStrategy::Predicate);
+            .vectorize(x, 64);
         inv_sqrt
+            .store_in(MemoryType::Stack)
             .compute_at(output_, y);
         sum_input_sq
+            .store_in(MemoryType::Stack)
             .compute_at(output_, y)
             .update()
             .atomic()
@@ -52,7 +54,7 @@ public:
     void schedule() {}
 
 private:
-    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
+    Var x{ "x" }, y{ "y" };
 };
 
 }  // namespace hannk

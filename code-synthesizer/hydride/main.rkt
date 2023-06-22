@@ -30,6 +30,7 @@
 (require hydride/utils/debug)
 (require hydride/utils/llvm_impl)
 (require hydride/utils/target)
+(require hydride/utils/extract_sub_exprs)
 
 
 ;; Hydride IR
@@ -62,6 +63,10 @@
 (require hydride/ir/hvx/scale)
 (require hydride/ir/hvx/get_ops)
 (require hydride/ir/hvx/get_name)
+(require hydride/ir/hvx/sub_expr)
+(require hydride/ir/hvx/extract)
+(require hydride/ir/hvx/instcombine_fast)
+(require hydride/ir/hvx/get_variants)
 
 
 
@@ -91,8 +96,8 @@
 ;; ARITH Dialect IR
 (require hydride/ir/arith/types)
 (require hydride/ir/arith/interpreter)
-;(require hydride/ir/arith/utils)
-;(require hydride/ir/arith/visitor)
+(require hydride/ir/arith/utils)
+(require hydride/ir/arith/visitor)
 
 
 ;; Synthesis 
@@ -116,6 +121,7 @@
   (all-from-out hydride/utils/debug)
   (all-from-out hydride/utils/llvm_impl)
   (all-from-out hydride/utils/target)
+  (all-from-out hydride/utils/extract_sub_exprs)
 
   (all-from-out hydride/ir/hydride/semantics)
   (all-from-out hydride/ir/hydride/definition)
@@ -144,6 +150,10 @@
   (all-from-out hydride/ir/hvx/scale)
   (all-from-out hydride/ir/hvx/get_ops)
   (all-from-out hydride/ir/hvx/get_name)
+  (all-from-out hydride/ir/hvx/sub_expr)
+  (all-from-out hydride/ir/hvx/extract)
+  (all-from-out hydride/ir/hvx/instcombine_fast)
+  (all-from-out hydride/ir/hvx/get_variants)
 
 
   (all-from-out hydride/ir/arm/semantics)
@@ -168,8 +178,8 @@
 
   (all-from-out hydride/ir/arith/types)
   (all-from-out hydride/ir/arith/interpreter)
-  ;(all-from-out hydride/ir/arith/utils)
-  ;(all-from-out hydride/ir/arith/visitor)
+  (all-from-out hydride/ir/arith/utils)
+  (all-from-out hydride/ir/arith/visitor)
 
 
 

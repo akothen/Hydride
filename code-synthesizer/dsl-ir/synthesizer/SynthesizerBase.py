@@ -21,7 +21,8 @@ DEBUG_LIST = [
     # "vpmin_s8",
     # "vmin_s8",
     # "vqadd_s16",
-    # "vmovl_s16",
+    "vmovl_s16",
+    "vqmovn_s32",
     # "vshr_n_s8",
     # "vshr_n_s16",
     # "vshr_n_s32",
@@ -31,6 +32,14 @@ DEBUG_LIST = [
     # "vneg_s32",
     # "vneg_s64",
     # "vmulq_u8",
+    # "hexagon_V6_vmpyiewh_acc_128B",
+    # "hexagon_V6_vassign_128B",
+    # "hexagon_V6_lo_128B",
+    # "hexagon_V6_pred_and_128B",
+    "hexagon_V6_vmpyih_acc_128B",
+    "_mm512_mulhi_epu16",
+    # "hexagon_V6_vmpyih_acc_128B",
+    # "_mm512_mulhi_epu16"
 ]
 
 
@@ -171,10 +180,10 @@ class SynthesizerBase:
         offset_exprs = [create_affine_index_expr("dim-y", 1, None),  # (i * dim-y) + j
                         # ((i+1) * dim-y) + j = (i * dim-y) + j + dim-y
                         create_affine_index_expr(
-            "dim-y", 1, create_scalar_mul(1, "dim-y")),
-            create_affine_index_expr(
-            "dim-y", 1, create_scalar_mul(2, "dim-y"))
-        ]
+                            "dim-y", 1, create_scalar_mul(1, "dim-y")),
+                        create_affine_index_expr(
+                            "dim-y", 1, create_scalar_mul(2, "dim-y"))
+                        ]
 
         input_vector_sizes = []
         offsets = []
@@ -228,9 +237,9 @@ class SynthesizerBase:
             input_vector_sizes.append(input_size)
             precisions.append(precision)
 
-        # if (self.output_slice_length, self.spec.output_precision) not in memo:
-        #    input_vector_sizes.append(self.output_slice_length)
-        #    precisions.append(self.spec.output_precision)
+        if (self.output_slice_length, self.spec.output_precision) not in memo and self.depth <= 2:
+            input_vector_sizes.append(self.output_slice_length)
+            precisions.append(self.spec.output_precision)
 
         return create_interleave_dsl(
             input_vector_sizes=input_vector_sizes,
@@ -267,9 +276,9 @@ class SynthesizerBase:
             input_vector_sizes.append(input_size)
             precisions.append(precision)
 
-        # if (self.output_slice_length, self.spec.output_precision) not in memo:
-        #    input_vector_sizes.append(self.output_slice_length)
-        #    precisions.append(self.spec.output_precision)
+        if (self.output_slice_length, self.spec.output_precision) not in memo and self.depth <= 2:
+            input_vector_sizes.append(self.output_slice_length)
+            precisions.append(self.spec.output_precision)
 
         return create_deinterleave_dsl(
             input_vector_sizes=input_vector_sizes,
@@ -532,8 +541,8 @@ class SynthesizerBase:
         return (sorted_ops, sorted_ctxs)
 
     def prune_low_score_ops(self, ops, ctxs, score=2):
-        indices = [i for i in range(
-            len(ops)) if self.score_context(ops[i], ctxs[i]) > score]
+        indices = [i for i in range(len(ops)) if self.score_context(
+            ops[i], ctxs[i]) > score]
         pruned_ops = [ops[i] for i in indices]
         pruned_ctxs = [ctxs[i] for i in indices]
 
@@ -629,7 +638,7 @@ class SynthesizerBase:
                     #   continue
                     # Attempt for ARM
                     if self.target == "arm":
-                        if "shr" in ctxs[idx].name or "shl" in ctxs[idx].name:
+                        if any(i in ctxs[idx].name for i in ["shr", "shl", "mul"]):
                             if "_s" in ctxs[idx].name and op == "zero-extend":
                                 continue
                             if "_u" in ctxs[idx].name and op == "sign-extend":
@@ -898,6 +907,11 @@ class SynthesizerBase:
 
         contexts = []
 
+        if dsl_inst.has_bounded_behavior:
+            for ctx in dsl_inst.contexts:
+                if ctx.is_bounded:
+                    ctx.specialize_context_bounded(self.spec.output_precision)
+
         check = dsl_inst.name in DEBUG_LIST and DEBUG
         if check:
             print("============================================")
@@ -925,17 +939,25 @@ class SynthesizerBase:
                 # of variants
                 spec_variant_ops = [op for op in spec_ops if op in variants]
 
+                # print("Spec Variant ops", spec_variant_ops)
+                # print("Variant ops", variants)
+
                 if len(spec_variant_ops) == 0:
                     continue
 
                 for v in variants:
+
+                    # Flexible accumulation for dot product like operations
+                    if v in ctx_ops and v not in spec_ops and "bvmul" in spec_ops and v == "bvadd":
+                        # print("Continuing here for", ctx.name)
+                        continue
 
                     # If ctx is using an operation of opposite signedness
                     # which is not being used in the spec, skip
                     if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
                         # if Target is ARM
                         if self.target == "arm":
-                            if "shr" in ctx.name or "shl" in ctx.name:
+                            if any(i in ctx.name for i in ["shr", "shl", "mul"]):
                                 if "_s" in ctx.name and v == "zero-extend":
                                     continue
                                 if "_u" in ctx.name and v == "sign-extend":
@@ -986,6 +1008,10 @@ class SynthesizerBase:
                 self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(
                 self.output_slice_length)
+
+            # if self.FLEXIBLE_CASTING  :
+            #    supports_output_length = supports_output_length or any([ctx.supports_output_size(input_size) for input_size in self.input_sizes])
+
             supports_input_length = any([ctx.supports_input_size(
                 input_size) for input_size in self.input_sizes])
 
@@ -1040,6 +1066,7 @@ class SynthesizerBase:
                       hexagon_precision_cond_op)
                 print("Hexagon cond op br", ctx.name,
                       hexagon_precision_cond_br)
+                print("Cast inter input?:", casts_inter_inputs)
 
             if dsl_inst.name in MUST_INCLUDE or hexagon_cond or new_condition or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length or supports_input_basevect)) or casts_inter_inputs:
                 if check:
@@ -1202,9 +1229,17 @@ class SynthesizerBase:
             # Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             # which contain them should only be included if necessary
 
-            # EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"], ["bvmul"]]
-            # TODO: How to consider abs in ARM?
-            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["bvmul"]]
+            EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
+                             ["bvmul"], ["sign-extend", "zero-extend"]]
+            if self.target == "arm":
+                EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
+                                 ["bvmul"], ["sign-extend", "zero-extend"]]
+
+            if self.target == "hvx":
+                EXPENSIVE_OPS.append(
+                    ["bvaddnuw", "bvaddnsw", "bvadd", "bvmul"])
+                EXPENSIVE_OPS.append(["bvsubnuw", "bvsubnsw", "bvsub"])
+                # EXPENSIVE_OPS.append(["bvssat", "bvusat"])
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
@@ -1214,11 +1249,13 @@ class SynthesizerBase:
 
             for expensive_op in EXPENSIVE_OPS:
 
-                expensive_cond = all(
-                    [(op not in spec_ops) and (op in dsl_ops) for op in expensive_op])
+                expensive_cond = all([(op not in spec_ops) and (
+                    op in dsl_ops) for op in expensive_op])
                 if expensive_cond:  # expensive_op in dsl_ops and expensive_op not in spec_ops:
                     if dsl_inst.name in DEBUG_LIST and DEBUG:
-                        print("Ops overlap failed due to expensive op in DSL")
+                        print(
+                            "Ops overlap failed due to expensive op in DSL for ", expensive_op)
+
                     return False
 
             # Match in any order

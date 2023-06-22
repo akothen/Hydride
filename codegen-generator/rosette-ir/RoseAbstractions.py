@@ -7,8 +7,6 @@
 ###################################################################
 
 
-from RoseOperations import RoseReturnOp
-from RoseValues import RoseUndefValue, RoseOperation, RoseArgument, RoseConstant
 from RoseTypes import *
 from RoseValue import RoseValue
 from RoseRegion import RoseRegion
@@ -27,18 +25,26 @@ class RoseUndefRegion(RoseRegion):
         print("undef_region")
 
 
+# autopep8: off
+from RoseValues import RoseUndefValue, RoseOperation, RoseArgument, RoseConstant
+from RoseOperations import RoseReturnOp
+# autopep8: on
+
+
 ####################################### ROSE FUNCTION ############################################
 
 # This is need to track the lower-level regions,
 # blocks, operations, etc. This does not inherit
 # any other class for now.
 # A function is a region and a value
+
+
 class RoseFunction(RoseValue, RoseRegion):
     def __init__(self, Name: str, ArgsList: list, RetType: RoseType,
                  RegionList: list, ParentRegion: RoseRegion):
         # Sanity checks
         for ArgIndex, Arg in enumerate(ArgsList):
-            assert isinstance(Arg, RoseArgument), Arg
+            assert isinstance(Arg, RoseArgument)
         ArgTyList = [Arg.getType() for Arg in ArgsList]
         FunctionType = RoseFunctionType.create(ArgTyList, RetType)
         self.ArgList = ArgsList
@@ -236,6 +242,52 @@ class RoseFunction(RoseValue, RoseRegion):
         assert ArgIndex < len(self.ArgsList)
         self.ArgsList[ArgIndex].setName(Name)
 
+    def update(self, Function, ValueToValueMap: dict = dict(), ChangeID: bool = False):
+        assert isinstance(Function, RoseFunction)
+        print("UPDATING FUNCTION")
+        # The type of the given function and this function
+        # must be the same.
+        assert Function.getType() == self.getType()
+        # Update arguments
+        self.ArgList = list()
+        for Arg in Function.getArgs():
+            ClonedArg = Arg.clone(ChangeID=ChangeID)
+            ClonedArg.setFunction(self)
+            print("ClonedArg:")
+            ClonedArg.print()
+            self.ArgList.append(ClonedArg)
+            ValueToValueMap[Arg] = ClonedArg
+        # Update the return value
+        ReturnValue = Function.getReturnValue()
+        if not isinstance(ReturnValue, RoseOperation) \
+                and not isinstance(ReturnValue, RoseArgument):
+            ClonedReturnVal = ReturnValue.clone(ChangeID=ChangeID)
+            self.setRetVal(ClonedReturnVal)
+            ValueToValueMap[ReturnValue] = ClonedReturnVal
+        # Collect regions in this function to be erased
+        RegionsToBeRemoved = list()
+        RegionsToBeRemoved.extend(self.getChildren())
+        for Abstraction in RegionsToBeRemoved:
+            self.eraseChild(Abstraction)
+        # Add new regions and remove the old regions
+        for Abstraction in Function:
+            ClonedAbstraction = Abstraction.clone(
+                "", ValueToValueMap, ChangeID)
+            self.addRegion(ClonedAbstraction)
+        if self.getReturnValue().getType() == RoseUndefinedType() \
+                and self.getReturnValue() == RoseUndefValue():
+            BlockList = self.getRegionsOfType(RoseBlock)
+            for Block in BlockList:
+                for Op in Block:
+                    if isinstance(Op, RoseReturnOp):
+                        self.setRetVal(Op.getReturnedValue())
+                        break
+                if self.getReturnValue() != RoseUndefValue():
+                    break
+        print("UPDATING FUNCTION")
+        self.print()
+        return
+
     def verify(self):
         # Verify the basic abstractions in the function
         if RoseRegion.verify() == False:
@@ -347,6 +399,20 @@ class RoseBlock(RoseRegion):
                 Suffix, ValueToValueMap, ChangeID)
             ClonedBlock.addRegion(ClonedOperation)
         return ClonedBlock
+
+    def update(self, Block, ValueToValueMap: dict = dict(), ChangeID: bool = False):
+        assert isinstance(Block, RoseBlock)
+        # Erase all operations in this block
+        RemoveOps = list()
+        RemoveOps.extend(self.getOperations())
+        for Op in RemoveOps:
+            self.eraseOperation(Op)
+        # Add ops from the given block to this block
+        for Operation in Block.getOperations():
+            ClonedOperation = Operation.cloneOperation(
+                "", ValueToValueMap, ChangeID)
+            Block.addRegion(ClonedOperation)
+        return
 
     def getOperations(self):
         return self.getChildren()
@@ -570,6 +636,36 @@ class RoseForLoop(RoseRegion):
             ClonedLoop.addRegion(ClonedAbstraction)
         return ClonedLoop
 
+    def update(self, Loop, ValueToValueMap: dict = dict(),  ChangeID: bool = False):
+        assert isinstance(Loop, RoseForLoop)
+        # Update the loop start, end and step
+        LoopStart = Loop.getStartIndex()
+        if not isinstance(LoopStart, RoseConstant):
+            LoopStart = ValueToValueMap[LoopStart]
+        self.setStartIndexVal(LoopStart)
+        LoopEnd = Loop.getEndIndex()
+        if not isinstance(LoopEnd, RoseConstant):
+            LoopEnd = ValueToValueMap[LoopEnd]
+        self.setEndIndexVal(LoopEnd)
+        LoopStep = Loop.getStep()
+        if not isinstance(LoopStep, RoseConstant):
+            LoopStep = ValueToValueMap[LoopStep]
+        self.setStepVal(LoopStep)
+        # Set the iterator
+        self.setIteratorName(Loop.getIterator().getName())
+        ValueToValueMap[Loop.getIterator()] = self.getIterator()
+        # Erase all regions in this loop
+        RegionsToBeRemoved = list()
+        RegionsToBeRemoved.extend(self.getChildren())
+        for Abstraction in RegionsToBeRemoved:
+            self.eraseChild(Abstraction)
+        # Add new regions and remove the old regions
+        for Abstraction in Loop:
+            ClonedAbstraction = Abstraction.clone(
+                "", ValueToValueMap, ChangeID)
+            self.addRegion(ClonedAbstraction)
+        return
+
     def getIterator(self):
         return self.Iterator
 
@@ -778,6 +874,26 @@ class RoseCond(RoseRegion):
             Key = self.getKeyForChild(Abstraction)
             ClonedCondRegion.addRegion(ClonedAbstraction, Key)
         return ClonedCondRegion
+
+    def update(self, CondRegion, ValueToValueMap: dict = dict(), ChangeID: bool = False):
+        assert isinstance(CondRegion, RoseCond)
+        # Add the new conditions
+        self.Conditions = list()
+        for Condition in CondRegion.getConditions():
+            self.Conditions.append(ValueToValueMap[Condition])
+        # Remove all regions in this cond region
+        RegionsToBeRemoved = list()
+        for Abstraction in self:
+            RegionsToBeRemoved.append(Abstraction)
+        for Abstraction in RegionsToBeRemoved:
+            self.eraseChild(Abstraction)
+        # Add new regions and remove the old regions
+        for Abstraction in CondRegion:
+            ClonedAbstraction = Abstraction.clone(
+                "", ValueToValueMap, ChangeID)
+            Key = self.getKeyForChild(Abstraction)
+            self.addRegion(ClonedAbstraction, Key)
+        return
 
     def getCondition(self, Index: int = 0):
         return self.Conditions[Index]

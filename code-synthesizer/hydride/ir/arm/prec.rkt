@@ -44,6 +44,11 @@
 	[(interleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
 	[(deinterleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
 	[(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5) prec_i_o]
+	[(llvm-vect-add_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
+	[(llvm-vect-sub_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
+	[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
+	[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
+	[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
 	[(vraddhn_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_o 16) (equal? num_8 16) (equal? num_9 -1) (equal? num_10 -1) (equal? prec_i 32) (equal? num_12 2)) 16]

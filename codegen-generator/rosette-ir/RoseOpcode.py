@@ -77,14 +77,12 @@ class RoseOpcode(Enum):
     lessthanequal = auto()
     greaterthan = auto()
     greaterthanequal = auto()
-
-    # Boolean ops
-    boolnot = auto()
-    booland = auto()
-    boolnand = auto()
-    boolor = auto()
-    boolnor = auto()
-    boolxor = auto()
+    not_ = auto()
+    and_ = auto()
+    nand = auto()
+    or_ = auto()
+    nor = auto()
+    xor = auto()
 
     # This op has no direct convertion to Rosette
     # but important for SSA representation in IR.
@@ -164,7 +162,41 @@ class RoseOpcode(Enum):
                 BVInputs.append(Input)
         return BVInputs
 
-    def getOutputType(self, Inputs: list):
+    def getOutputType(self, Inputs: list, OpInfoBundle=None):
+        # Deal with some special cases first.
+        if self.value == self.call.value:
+            # OpInfoBundle in this case is a callee
+            Callee = OpInfoBundle
+            assert isinstance(Callee, RoseAbstractions.RoseFunction)
+            return Callee.getType().getReturnType()
+        if self.value == self.opaquecall.value:
+            # OpInfoBundle contains output type and callee name
+            assert isinstance(OpInfoBundle, tuple)
+            OutputType = OpInfoBundle[0]
+            CalleeName = OpInfoBundle[1]
+            assert isinstance(CalleeName, RoseValues.RoseConstant)
+            assert isinstance(OutputType, RoseType)
+            return OutputType
+        if self.value == self.cast.value:
+            assert (len(Inputs) == 1)
+            assert isinstance(Inputs[0], RoseValue)
+            # Output type must be explicitly mentioned
+            OutputType = OpInfoBundle
+            print("OutputType:")
+            print(OutputType)
+            assert isinstance(OutputType, RoseType)
+            assert not isinstance(OutputType, RoseUndefinedType)
+            assert Inputs[0].getType() != OutputType
+            assert Inputs[0].getType().getBitwidth(
+            ) == OutputType.getBitwidth()
+            assert (isinstance(OutputType, RoseBooleanType)
+                    or isinstance(OutputType, RoseBitVectorType)
+                    or isinstance(OutputType, RoseIntegerType))
+            return OutputType
+        # Output type for all ops can be determined with the help
+        # of the types of the inputs. No other OpInfoBundle needed.
+        assert OpInfoBundle == None
+        # All ops have at least one operand
         assert (len(Inputs) >= 1)
         if self.value == self.bit.value \
                 or self.value == self.lsb.value \
@@ -205,9 +237,6 @@ class RoseOpcode(Enum):
             BVInputs = self.getBVOpInputs(Inputs)
             assert (len(BVInputs) > 1)
             return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth())
-        if self.value == self.bvconcat.value:
-            BVInputs = self.getBVOpInputs(Inputs)
-            return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth()+BVInputs[1].getType().getBitwidth())
         if self.value == self.bvsdiv.value \
                 or self.value == self.bvudiv.value \
                 or self.value == self.bvsrem.value \
@@ -243,19 +272,10 @@ class RoseOpcode(Enum):
             # The bitwidth inserted by is a constant value
             assert isinstance(Inputs[4], RoseValues.RoseConstant)
             return RoseVoidType.create()
-        if self.value == self.call.value:
-            Callee = Inputs[0]
-            assert isinstance(Callee, RoseAbstractions.RoseFunction)
-            return Callee.getType().getReturnType()
-        if self.value == self.opaquecall.value:
-            Callee = Inputs[1]
-            assert isinstance(Callee, RoseValues.RoseConstant)
-            assert isinstance(Inputs[0], RoseType)
-            return Inputs[0]
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert (len(BVInputs) == 1)
-            # The number of high bits that should be
+            # The number of high bits that should be padded must be constant
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             return RoseVoidType.create()
         if self.value == self.select.value:
@@ -346,34 +366,87 @@ class RoseOpcode(Enum):
                 or self.value == self.greaterthanequal.value:
             assert (len(Inputs) == 2)
             return RoseBooleanType.create()
-        if self.value == self.boolnot.value:
+        if self.value == self.not_.value:
             assert (len(Inputs) == 1)
+            if isinstance(Inputs[0].getType(), RoseIntegerType):
+                return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
+            assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
-        if self.value == self.booland.value \
-                or self.value == self.boolnand.value \
-                or self.value == self.boolor.value \
-                or self.value == self.boolnor.value:
+        if self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value:
             assert (len(Inputs) > 1)
+            InputType = Inputs[0].getType()
+            for Input in Inputs[1:]:
+                assert Input.getType() == InputType
+            if isinstance(Inputs[0].getType(), RoseIntegerType):
+                return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
+            assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
-        if self.value == self.boolxor.value:
+        if self.value == self.xor.value:
             assert (len(Inputs) == 2)
+            if isinstance(Inputs[0].getType(), RoseIntegerType):
+                return RoseIntegerType.create(Inputs[0].getType().getBitwidth())
+            assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
-        if self.value == self.cast.value:
-            assert (len(Inputs) == 2)
-            assert isinstance(Inputs[0], RoseValue)
-            assert isinstance(Inputs[1], RoseType)
-            assert Inputs[0].getType() != Inputs[1]
-            return Inputs[1]
         if self.value == self.bvabs.value:
             assert (len(Inputs) == 1)
             assert isinstance(Inputs[0].getType(), RoseBitVectorType)
             return RoseBitVectorType.create(Inputs[0].getType().getBitwidth())
         return None
 
-    def inputsAreValid(self, Inputs: list):
+    def inputsAreValid(self, Inputs: list, OutputType: RoseType, OpInfoBundle=None):
         if self.isValidNumInputs(len(Inputs)) == False:
-            print("false")
             return False
+        # First deal with some special cases
+        if self.value == self.cast.value:
+            if len(Inputs) != 1:
+                return False
+            if not isinstance(Inputs[0], RoseValue):
+                return False
+            # If the types of inputs are equal, then this operation is not valid
+            if Inputs[0].getType() == OutputType:
+                return False
+            # Valid input types are integers, bitvectors and booleans
+            if not (isinstance(Inputs[0].getType(), RoseBooleanType)
+                    or isinstance(Inputs[0].getType(), RoseBitVectorType)
+                    or isinstance(Inputs[0].getType(), RoseIntegerType)):
+                return False
+            if not (isinstance(OutputType, RoseBooleanType)
+                    or isinstance(OutputType, RoseBitVectorType)
+                    or isinstance(OutputType, RoseIntegerType)):
+                return False
+            if Inputs[0].getType().getBitwidth() != OutputType.getBitwidth():
+                return False
+            if self.getOutputType(Inputs, OpInfoBundle) != OutputType:
+                return False
+            return True
+        if self.value == self.call.value:
+            Callee = OpInfoBundle[0]
+            if not isinstance(Callee, RoseAbstractions.RoseFunction):
+                return False
+            if len(Inputs) != Callee.getNumArgs():
+                return False
+            for Index in range(Callee.getNumArgs()):
+                Arg = Callee.getArg(Index)
+                if Arg.getType() != Inputs[Index].getType():
+                    return False
+            if self.getOutputType(Inputs, OpInfoBundle) != OutputType:
+                return False
+            return True
+        if self.value == self.opaquecall.value:
+            assert isinstance(OpInfoBundle, tuple)
+            CalleeName = OpInfoBundle[1]
+            if not isinstance(CalleeName, RoseValues.RoseConstant):
+                return False
+            if not isinstance(CalleeName.getType(), RoseStringType):
+                return False
+            if self.getOutputType(Inputs, OpInfoBundle) != OutputType:
+                return False
+            return True
+        # OpInfoBundle is not useful for other operations
+        assert OpInfoBundle == None
         if self.value == self.bvzero.value \
                 or self.value == self.bit.value \
                 or self.value == self.lsb.value \
@@ -385,36 +458,35 @@ class RoseOpcode(Enum):
                 or self.value == self.rotateleft.value \
                 or self.value == self.rotateright.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            print("BVInputs:")
-            print(BVInputs)
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if self.getOutputType(Inputs) != OutputType:
                 return False
+            if len(BVInputs) != 1:
+                return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvextract.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            print("BVInputs:")
-            print(BVInputs)
             if not isinstance(Inputs[3], RoseValues.RoseConstant):
                 return False
             if len(BVInputs) != 1:
                 return False
             if BVInputs[0].getType().getBitwidth() < Inputs[3].getValue():
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
             return True
         if self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[4], RoseValues.RoseConstant):
-                print("false1")
                 return False
             if len(BVInputs) != 2:
-                print("false2")
                 return False
             if BVInputs[0].getType().getBitwidth() != Inputs[4].getValue():
-                print("false3")
                 return False
             if BVInputs[1].getType().getBitwidth() < Inputs[4].getValue():
-                print("false4")
+                return False
+            if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
         if self.value == self.bvsignextend.value \
@@ -424,10 +496,11 @@ class RoseOpcode(Enum):
                 return False
             if Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth():
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvsizeextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
@@ -436,10 +509,11 @@ class RoseOpcode(Enum):
                 return False
             if Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth():
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvssat.value \
                 or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -447,10 +521,11 @@ class RoseOpcode(Enum):
                 return False
             if Inputs[1].getValue() > BVInputs[0].getType().getBitwidth():
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvsaturate.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
@@ -459,30 +534,33 @@ class RoseOpcode(Enum):
                 return False
             if Inputs[1].getValue() > BVInputs[0].getType().getBitwidth():
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvtrunclow.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
             if Inputs[1].getValue() >= BVInputs[0].getType().getBitwidth():
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvtrunchigh.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
             if Inputs[1].getValue() >= BVInputs[0].getType().getBitwidth():
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvadd.value \
                 or self.value == self.bvsub.value \
                 or self.value == self.bvmul.value \
@@ -495,28 +573,13 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsmin.value \
                 or self.value == self.bvumin.value \
                 or self.value == self.bvsmax.value \
-                or self.value == self.bvumax.value \
-                or self.value == self.bvconcat.value:
+                or self.value == self.bvumax.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            if len(BVInputs) > 1:
-                if self.value == self.bvadd.value \
-                        or self.value == self.bvsub.value \
-                        or self.value == self.bvmul.value \
-                        or self.value == self.bvor.value \
-                        or self.value == self.bvxor.value \
-                        or self.value == self.bvand.value \
-                        or self.value == self.bvshl.value \
-                        or self.value == self.bvlshr.value \
-                        or self.value == self.bvashr.value \
-                        or self.value == self.bvconcat.value:
-                    Type = BVInputs[0].getType()
-                    for Input in BVInputs:
-                        assert Type.getBitwidth() == Input.getType().getBitwidth(), (self,
-                                                                                     Type.getBitwidth(), Input.getType().getBitwidth())
-                return True
-            else:
+            if len(BVInputs) <= 0:
                 return False
-
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvgeneralmax.value \
                 or self.value == self.bvgeneralmin.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -524,9 +587,11 @@ class RoseOpcode(Enum):
                 return False
             if not isinstance(Inputs[-1], RoseValues.RoseConstant):
                 return False
-            if isinstance(Inputs[-1].getType(), RoseBooleanType):
-                return True
-            return False
+            if not isinstance(Inputs[-1].getType(), RoseBooleanType):
+                return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvgeneraladd.value \
                 or self.value == self.bvgeneralsub.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -536,9 +601,11 @@ class RoseOpcode(Enum):
                 return False
             if not isinstance(Inputs[-1].getType(), RoseIntegerType):
                 return False
-            if Inputs[-1].getType().getBitwidth() == 2:
-                return True
-            return False
+            if Inputs[-1].getType().getBitwidth() != 2:
+                return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvsdiv.value \
                 or self.value == self.bvudiv.value \
                 or self.value == self.bvsrem.value \
@@ -557,10 +624,11 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsge.value \
                 or self.value == self.bvuge.value:
             BVInputs = self.getBVOpInputs(Inputs)
-            if len(BVInputs) == 2:
-                return True
-            else:
+            if len(BVInputs) != 2:
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.bvgeneraldiv.value \
                 or self.value == self.bvgeneralrem.value \
                 or self.value == self.bvgenerallt.value \
@@ -572,21 +640,9 @@ class RoseOpcode(Enum):
                 return False
             if not isinstance(Inputs[-1], RoseValues.RoseConstant):
                 return False
-            if isinstance(Inputs[-1].getType(), RoseBooleanType):
-                return True
-            return False
-        if self.value == self.call.value:
-            Callee = Inputs[0]
-            if len(Inputs) > 1:
-                return self.callInputsAreValid(Callee, Inputs[1:])
-            return self.callInputsAreValid(Callee, [])
-        if self.value == self.opaquecall.value:
-            Callee = Inputs[1]
-            if not isinstance(Callee, RoseValues.RoseConstant):
+            if not isinstance(Inputs[-1].getType(), RoseBooleanType):
                 return False
-            if not isinstance(Callee.getType(), RoseStringType):
-                return False
-            if not isinstance(Inputs[0], RoseType):
+            if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
         if self.value == self.bvpadhighbits.value:
@@ -595,15 +651,18 @@ class RoseOpcode(Enum):
                 return False
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
             return True
-        if self.value == self.select.value:
-            return self.selectInputsAreValid(Inputs)
         if self.value == self.ret.value:
             assert isinstance(Inputs[0], RoseValue)
-            return (len(Inputs) == 1)
+            if len(Inputs) != 1:
+                return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.add.value \
                 or self.value == self.sub.value \
-                or self.value == self.mul.value \
                 or self.value == self.mul.value \
                 or self.value == self.min.value \
                 or self.value == self.max.value:
@@ -616,6 +675,8 @@ class RoseOpcode(Enum):
                 if not isinstance(Input.getType(), RoseIntegerType) \
                         and not isinstance(Input.getType(), RoseFloatType):
                     return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
             return True
         if self.value == self.div.value \
                 or self.value == self.rem.value \
@@ -633,43 +694,77 @@ class RoseOpcode(Enum):
             if not isinstance(Inputs[0].getType(), RoseIntegerType) \
                     and not Inputs[0].getType().isFloatTy():
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
             return True
         if self.value == self.abs.value:
             if len(Inputs) != 1:
                 return False
             if not isinstance(Inputs[0].getType(), RoseIntegerType):
                 return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
             return True
-        if self.value == self.boolnot.value:
+        if self.value == self.not_.value:
             if len(Inputs) != 1:
                 return False
-            if not isinstance(Inputs[0].getType(), RoseBooleanType):
+            if not isinstance(Inputs[0].getType(), RoseBooleanType) \
+                    and not isinstance(Inputs[0].getType(), RoseIntegerType):
+                return False
+            if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
-        if self.value == self.booland.value \
-                or self.value == self.boolnand.value \
-                or self.value == self.boolor.value \
-                or self.value == self.boolnor.value:
+        if self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value:
             if not (len(Inputs) > 1):
                 return False
             for Input in Inputs:
-                if not isinstance(Input.getType(), RoseBooleanType):
+                if not isinstance(Input.getType(), RoseBooleanType) \
+                        and not isinstance(Input.getType(), RoseIntegerType):
                     return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
             return True
-        if self.value == self.boolxor.value:
+        if self.value == self.xor.value:
             if len(Inputs) != 2:
                 return False
-            if not isinstance(Inputs[0].getType(), RoseBooleanType):
+            if not isinstance(Inputs[0].getType(), RoseBooleanType) \
+                    and not isinstance(Inputs[0].getType(), RoseIntegerType):
                 return False
-            if not isinstance(Inputs[1].getType(), RoseBooleanType):
+            if not isinstance(Inputs[1].getType(), RoseBooleanType) \
+                    and not isinstance(Inputs[1].getType(), RoseIntegerType):
+                return False
+            if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
-        if self.value == self.cast.value:
-            return self.castInputsAreValid(Inputs)
         if self.value == self.bvabs.value:
             if len(Inputs) != 1:
                 return False
             if not isinstance(Inputs[0].getType(), RoseBitVectorType):
+                return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
+        if self.value == self.select.value:
+            if len(Inputs) != 3:
+                return False
+            Cond = Inputs[0]
+            Then = Inputs[1]
+            Else = Inputs[2]
+            if Then.getType() != Else.getType():
+                return False
+            if isinstance(Then.getType(), RoseVoidType) \
+                    or isinstance(Then.getType(), RoseUndefinedType):
+                return False
+            if not isinstance(Cond.getType(), RoseBitVectorType) \
+                    and not isinstance(Cond.getType(), RoseBooleanType):
+                return False
+            if isinstance(Cond.getType(), RoseBitVectorType):
+                if Cond.getType().getBitwidth() != 1:
+                    return False
+            if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
         return None
@@ -699,12 +794,12 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsmod.value \
                 or self.value == self.bvrol.value \
                 or self.value == self.bvror.value \
-                or self.value == self.boolnot.value \
-                or self.value == self.booland.value \
-                or self.value == self.boolnand.value \
-                or self.value == self.boolor.value \
-                or self.value == self.boolnor.value \
-                or self.value == self.boolxor.value \
+                or self.value == self.not_.value \
+                or self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value \
+                or self.value == self.xor.value \
                 or self.value == self.add.value \
                 or self.value == self.sub.value \
                 or self.value == self.mul.value \
@@ -799,11 +894,11 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsge.value \
                 or self.value == self.bvuge.value \
                 or self.value == self.bit.value \
-                or self.value == self.booland.value \
-                or self.value == self.boolnand.value \
-                or self.value == self.boolor.value \
-                or self.value == self.boolnor.value \
-                or self.value == self.boolxor.value \
+                or self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value \
+                or self.value == self.xor.value \
                 or self.value == self.add.value \
                 or self.value == self.sub.value \
                 or self.value == self.mul.value \
@@ -817,8 +912,7 @@ class RoseOpcode(Enum):
                 or self.value == self.lessthan.value \
                 or self.value == self.lessthanequal.value \
                 or self.value == self.greaterthan.value \
-                or self.value == self.greaterthanequal.value\
-                or self.value == self.cast.value:
+                or self.value == self.greaterthanequal.value:
             return True
         if self.value == self.bvextract.value \
                 or self.value == self.bvinsert.value \
@@ -854,8 +948,9 @@ class RoseOpcode(Enum):
                 or self.value == self.bvzero.value \
                 or self.value == self.bvadd1.value \
                 or self.value == self.bvsub1.value \
+                or self.value == self.not_.value \
+                or self.value == self.cast.value \
                 or self.value == self.rotateleft.value \
-                or self.value == self.boolnot.value \
                 or self.value == self.rotateright.value:
             return False
         return None
@@ -927,7 +1022,7 @@ class RoseOpcode(Enum):
             return (NumInputs == 3)
         if self.value == self.call.value \
                 or self.value == self.opaquecall.value:
-            return (NumInputs >= 2)
+            return (NumInputs >= 0)
         if self.value == self.bvpadhighbits.value:
             return (NumInputs == 2)
         if self.value == self.ret.value \
@@ -949,17 +1044,17 @@ class RoseOpcode(Enum):
                 or self.value == self.greaterthan.value \
                 or self.value == self.greaterthanequal.value:
             return (NumInputs == 2)
-        if self.value == self.boolnot.value:
+        if self.value == self.not_.value:
             return (NumInputs == 1)
-        if self.value == self.booland.value \
-                or self.value == self.boolnand.value \
-                or self.value == self.boolor.value \
-                or self.value == self.boolnor.value:
+        if self.value == self.and_.value \
+                or self.value == self.nand.value \
+                or self.value == self.or_.value \
+                or self.value == self.nor.value:
             return (NumInputs > 1)
-        if self.value == self.boolxor.value:
+        if self.value == self.xor.value:
             return (NumInputs == 2)
         if self.value == self.cast.value:
-            return (NumInputs == 2)
+            return (NumInputs == 1)
         if self.value == self.bvabs.value:
             return (NumInputs == 1)
         if self.value == self.bvgeneraladd.value \
@@ -1092,17 +1187,17 @@ class RoseOpcode(Enum):
                 or self.value == self.max.value:
             return self.name
         # Hand code some of the names of rosette ops
-        if self.value == self.boolnot.value:
+        if self.value == self.not_.value:
             return "not"
-        if self.value == self.booland.value:
+        if self.value == self.and_.value:
             return "and"
-        if self.value == self.boolnand.value:
+        if self.value == self.nand.value:
             return "nand"
-        if self.value == self.boolor.value:
+        if self.value == self.or_.value:
             return "or"
-        if self.value == self.boolnor.value:
+        if self.value == self.nor.value:
             return "nor"
-        if self.value == self.boolxor.value:
+        if self.value == self.xor.value:
             return "xor"
         if self.value == self.add.value:
             return "+"
@@ -1165,73 +1260,6 @@ class RoseOpcode(Enum):
                 or self.value == self.bvabs.value:
             assert False, "No direct conversion to Rosette Ops"
         return None
-
-    def callInputsAreValid(self, Callee, Inputs: list):
-        assert self.value == self.call.value
-        print("callInputsAreValid")
-        if not isinstance(Callee, RoseAbstractions.RoseFunction):
-            return False
-        print("OPCODE IS VALID")
-        if len(Inputs) != Callee.getNumArgs():
-            print("INPUT LENGHTS ARE NOT EQUAL")
-            return False
-        print("INPUT LENGHTS ARE EQUAL")
-        for Index in range(Callee.getNumArgs()):
-            Arg = Callee.getArg(Index)
-            print(Arg.getType())
-            print(Inputs[Index].getType())
-            Arg.getType().print()
-            Inputs[Index].getType().print()
-            if Arg.getType() != Inputs[Index].getType():
-                print(Index)
-                return False
-        return True
-
-    def selectInputsAreValid(self, Inputs: list):
-        assert self.value == self.select.value
-        if len(Inputs) != 3:
-            return False
-        Cond = Inputs[0]
-        Then = Inputs[1]
-        Else = Inputs[2]
-        if Then.getType() != Else.getType():
-            return False
-        if isinstance(Then.getType(), RoseVoidType) \
-                or isinstance(Then.getType(), RoseUndefinedType):
-            return False
-        if not isinstance(Cond.getType(), RoseBitVectorType) \
-                and not isinstance(Cond.getType(), RoseBooleanType):
-            return False
-        if isinstance(Cond.getType(), RoseBitVectorType):
-            if Cond.getType().getBitwidth() != 1:
-                return False
-        return True
-
-    def castInputsAreValid(self, Inputs: list):
-        assert self.value == self.cast.value
-        if len(Inputs) != 2:
-            return False
-        if not isinstance(Inputs[0], RoseValue):
-            return False
-        if not isinstance(Inputs[1], RoseType):
-            return False
-        # If the types of inputs are equal, then this operation is not valid
-        print(Inputs[0].getType())
-        print(Inputs[1])
-        if Inputs[0].getType() == Inputs[1]:
-            return False
-        # Valid input types are integers, bitvectors and booleans
-        if not (isinstance(Inputs[0].getType(), RoseBooleanType)
-                or isinstance(Inputs[0].getType(), RoseBitVectorType)
-                or isinstance(Inputs[0].getType(), RoseIntegerType)):
-            return False
-        if not (isinstance(Inputs[1], RoseBooleanType)
-                or isinstance(Inputs[1], RoseBitVectorType)
-                or isinstance(Inputs[1], RoseIntegerType)):
-            return False
-        if Inputs[0].getType().getBitwidth() != Inputs[1].getBitwidth():
-            return False
-        return True
 
 
 # Let's see how this could be useful

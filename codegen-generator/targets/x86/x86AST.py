@@ -37,7 +37,8 @@ Case = namedtuple('Case', ['val', 'stmts', 'id'])
 
 TypeLookup = namedtuple('TypeLookup', ['obj', 'key'])
 
-DimLookup = namedtuple('DimLookup', ['obj', 'key'])
+MatrixDimLookup = namedtuple('MatrixDimLookup', ['obj', 'key'])
+MatrixRowLookup = namedtuple('MatrixRowLookup', ['obj', 'idx', 'id'])
 
 
 Break = namedtuple('Break', [])

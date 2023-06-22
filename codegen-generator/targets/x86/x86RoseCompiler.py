@@ -12,11 +12,11 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseMatrixOperations import *
 from RoseContext import *
 
 from x86AST import *
 from x86Types import x86Types
-from x86Dims import x86Dims
 
 import math
 
@@ -277,6 +277,8 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
   if isinstance(Low, RoseConstant):
     assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
   if isinstance(High, RoseConstant):
+    # todo: KUNAL — This breaks on _mm256_alignr_epi8 because of `((a[i+127:i] << 128)[255:0]`
+    #  `[255:0]` is really used as a type specifier for `a[i+127:i]`... not a bit slice
     assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
   if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
     assert High.getValue() >= Low.getValue()
@@ -305,7 +307,7 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(IndexExpr.id):
     return Context.getCompiledAbstractionForID(IndexExpr.id)
-  
+
   if type(IndexExpr.obj) == TypeLookup:
     # Compile the low index first
     ElemType =x86Types[IndexExpr.obj.key]
@@ -321,8 +323,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     Vector = CompileExpression(IndexExpr.obj, Context)
     # Get the high index
     assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
-    ElemType = Context.getElemTypeOfVariable(Vector.getName())
-    assert isinstance(ElemType, RoseBitVectorType)
+    # ElemType = Context.getElemTypeOfVariable(Vector.getName())  # todo: Kunal — No??  this makes tile.rows return bv8192 which is WRONG
+    assert isinstance(Context.getElemTypeOfVariable(Vector.getName()), RoseBitVectorType)
     IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
     HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
     Context.addAbstractionToIR(HighIndex)
@@ -764,6 +766,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   Context.addAbstractionToIR(LHSOp)
   
   # Add the operation to the context
+  Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
   Context.addCompiledAbstraction(Update.lhs.id, LHSOp)
 
   return LHSOp
@@ -858,11 +861,12 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
    and BinaryExpr.b.funcname in ZeroExtendsSize:
       # Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
-      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
-                          Operand1, OperandBitwidth)
-      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
-                          Operand2, OperandBitwidth)      
+      # todo: KUNAL — this breaks my first-draft amx implementation because AMX does 32-bit X 32-bit => 32-bit multiplications, not ... => 64-bit
+      # OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      # Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+      #                     Operand1, OperandBitwidth)
+      # Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+      #                     Operand2, OperandBitwidth)
       # Add signedness info
       Context.addSignednessInfoForValue(Operand1, IsSigned=False)
       Context.addSignednessInfoForValue(Operand2, IsSigned=False)
@@ -877,6 +881,10 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # There are cases where bitvectors are multiplied to larger numbers
   # TODO: Make this more general if need be. Right now, we deal with this
   # as a special case.
+  # todo: KUNAL — don't use type(BinaryExpr.a) ??  Should instead use OperandX.getType()
+    #  Otherwise we break e.g. _mm256_mpsadbw_epu8 and a bunch of other instructions where
+    #  an integer (e.g. RoseMulOp) is multiplied by a bitvector (e.g. RoseBVZeroExtendOp)
+    #  but in the AST they are both Vars
   if type(BinaryExpr.a) == Number \
   and (type(BinaryExpr.b) == BitSlice or type(BinaryExpr.b) == BitIndex):
     NumIntBits = BinaryExpr.a.val.bit_length()
@@ -1122,11 +1130,14 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   # Check if this is a call to a builtin function
   Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList, Context)
 
-  # Add the operation to the IR
-  Context.addAbstractionToIR(Operation)
-  # Add the operation to the context
-  Context.addCompiledAbstraction(CallStmt.id, Operation)
-  return Operation
+  if not isinstance(Operation, list): Operation = [Operation]
+  for op in Operation:
+    # Add the operation to the IR
+    Context.addAbstractionToIR(op)
+    # Add the operation to the context
+    Context.addCompiledAbstraction(CallStmt.id, op)
+
+  return Operation[-1] if Operation else None
 
 
 def CompileCall(CallStmt, Context : x86RoseContext):
@@ -1175,6 +1186,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       assert ArgType.getBitwidth() == ParamWidth
       ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue())
       ChildContext.addVariable(ParamName, Param.id)
+      ChildContext.addElemTypeOfVariable(ParamName, ArgType)
       FuncArgList.append(ArgVal)
     
     # Compile the function and its arguments
@@ -1298,7 +1310,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     # Add this op to the IR
     Context.addAbstractionToIR(End)
     # Add this updated value to the context
-    Context.updateCompiledAbstraction(ForStmt.end, End)
+    Context.addCompiledAbstraction(ForStmt.end, End)
 
   # Generate the loop
   Loop = RoseForLoop.create(Context.genName(ForStmt.iterator.name), Begin, End, Step)
@@ -1492,7 +1504,7 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
     # Add the variable info to the context
     Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
   else:
-    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice
+    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice or type(LookupExpr.obj) == MatrixRowLookup
     # Compile the bit slice
     CompiledValue = CompileExpression(LookupExpr.obj, Context)
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
@@ -1503,30 +1515,74 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
   return CompiledValue
 
 
-def CompileDimLookup(LookupExpr, Context : x86RoseContext):
-  # LookupExpr tracks types of variables
-  assert type(LookupExpr.obj) == Var
+
+def CompileMatrixDimLookup(expr, Context: x86RoseContext):
+  assert type(expr.obj) == Var
+  obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
+  # Check if the tile object is already defined and cached. If yes, just use that.
+  if not Context.isVariableDefined(obj.getName()):
+    Context.addVariable(obj.getName(), expr.obj.id)
+    Context.addCompiledAbstraction(expr.obj.id, obj)
+  abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+  if not Context.isElemTypeOfVariableKnown(obj.getName()):
+    Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+    Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
+
+  param_name = f'{expr.obj.name}_{expr.key}'
   # Check if the variable is already defined and cached. If yes, just return that.
-  if Context.isVariableDefined(LookupExpr.obj.name):
-    ID = Context.getVariableID(LookupExpr.obj.name)
-    FoundValue = Context.getCompiledAbstractionForID(ID)
-    # See if the element type of this variable is known, if not add it.
-    if Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False:
-      Context.addElemTypeOfVariable(FoundValue.getName(), x86Dims[LookupExpr.key])
-    return FoundValue
-  # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  CompiledValue = RoseValue.create(LookupExpr.obj.name, Context.getMaxVectorLength())
-  # Add the element type info to the context
-  assert Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False
-  Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
-  # Add the variable info to the context
-  Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
-  # Add the typelookup to context
-  Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
-  return CompiledValue
+  if Context.isVariableDefined(param_name):
+    ID = Context.getVariableID(param_name)
+    return Context.getCompiledAbstractionForID(ID)
+
+  assert not Context.isElemTypeOfVariableKnown(param_name)
+
+  RootContext, root_function = Context.getFirsRootAbstractionsOfType(RoseFunction)
+
+  # From old x86Dims.py:
+  #   'rows': RoseConstant.create(10, RoseIntegerType.create(8)),  # for testing...
+  #   'colsb': RoseConstant.create(10, RoseIntegerType.create(16)),  # for testing...
+  # param_type = RoseIntegerType.create({'rows': 8, 'colsb': 16}[expr.key])
+  param_type = RoseIntegerType.create(32)  # todo: Kunal — yeah.. not to spec but whatever, makes everything easier..
+  param_value = RoseArgument.create(param_name, param_type, root_function)
+
+  # Add the variable to the parent function definition
+  assert isinstance(root_function.Type, RoseFunctionType)
+  root_function.ArgList.append(param_value)  # todo: Kunal — should the order of rows and colsb params be deterministic?
+  root_function.Type.SubClassData['arglist'].append(param_type)
+
+  # Add the variables to all the parent contexts as if its been there the whole time
+  ctx = Context
+  while ctx is not None:
+    ctx.addSignednessInfoForValue(param_value, False)
+    ctx.addVariable(param_name, param_value.ID)
+    ctx.addElemTypeOfVariable(param_name, param_type)
+    ctx.addCompiledAbstraction(param_value.ID, param_value)
+    ctx = None if ctx == RootContext else ctx.ParentContext
+
+  return param_value
 
 
-def CompileMatch(MatchExpr, Context : x86RoseContext):
+def CompileMatrixRowLookup(expr, Context: x86RoseContext):
+  assert type(expr.obj) == Var
+  obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
+  # Check if the tile object is already defined and cached. If yes, just use that.
+  if not Context.isVariableDefined(obj.getName()):
+    Context.addVariable(obj.getName(), expr.obj.id)
+    Context.addCompiledAbstraction(expr.obj.id, obj)
+  abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+  if not Context.isElemTypeOfVariableKnown(obj.getName()):
+    Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+    Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
+
+  idx = CompileIndex(expr.idx, Context)
+  op = RoseMatrixExtractRowOp.create(Context.genName(), obj, idx)
+  Context.addElemTypeOfVariable(op.getName(), RoseBitVectorType.create(op.getOutputBitwidth()))
+  Context.addSignednessInfoForValue(op, False)
+  Context.addAbstractionToIR(op)
+  Context.addCompiledAbstraction(expr.id, op)
+  return op
+
+def CompileMatch(MatchExpr, Context: x86RoseContext):
   assert type(MatchExpr.val) == BitIndex or type(MatchExpr.val) == BitSlice
   # Compile the bit slice
   CompiledValue = CompileExpression(MatchExpr.val, Context)
@@ -1681,7 +1737,7 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
     CompileStatement(Stmt, RootContext)
   
   # Add padding handling call if not already added
-  if PaddingHandled == False:
+  if PaddingHandled == False and not isinstance(RetType, RoseVoidType):
     NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
     Operation = RoseBVPadHighBitsOp.create(RootFunction.getReturnValue(), NumPadBits)
     RootContext.addAbstractionToIR(Operation)
@@ -1729,7 +1785,8 @@ CompileAbstractions = {
   BinaryExpr: CompileBinaryExpr,
   BitIndex: CompileBitIndex,
   TypeLookup: CompileTypeLookup,
-  DimLookup: CompileDimLookup,
+  MatrixDimLookup: CompileMatrixDimLookup,
+  MatrixRowLookup: CompileMatrixRowLookup,
   Match: CompileMatch,
 }
 
@@ -1883,6 +1940,75 @@ def HandleToRemainder(_):
   return LamdaImplFunc
 
 
+def HandleAmxWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
+  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
+  #   DEFINE write_row_and_zero(treg, r, data, nbytes) {
+  #       FOR j := 0 TO nbytes - 1
+  #           treg.row[r].byte[j] := data.byte[j]
+  #       ENDFOR
+  #       FOR j := nbytes TO treg.colsb - 1
+  #           treg.row[r].byte[j] := 0
+  #       ENDFOR
+  #   }
+  [treg, r, data, nbytes] = Args
+
+  assert isinstance(treg.getType(), RoseMatrixType)
+  assert isinstance(data.getType(), RoseBitVectorType)
+  assert isinstance(nbytes, RoseArgument)
+
+  _name = Context.genName
+
+  _type = RoseIntegerType.create(32)
+  assert nbytes.getType() == _type
+  assert r.getType() == _type
+
+  mtx_insert_row = RoseMatrixInsertRowOp.create(data, treg, r)
+  mtx_insert_zeros = RoseMatrixInsertElementOp.create(
+    RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
+    treg,
+    r, nbytes,
+    r, RoseConstant.create(treg.getType().getMaxCols() - 1, _type)
+  )
+
+  return [mtx_insert_row, mtx_insert_zeros]
+
+
+def HandleAmxZeroUpperRows(Name: str, Args: list, Context: x86RoseContext):
+  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
+  #   DEFINE zero_upper_rows(treg, r) {
+  #       FOR i := r TO treg.max_rows - 1
+  #           FOR j := 0 TO treg.colsb - 1
+  #               treg.row[i].byte[j] := 0
+  #           ENDFOR
+  #       ENDFOR
+  #   }
+  [treg, r] = Args
+
+  assert isinstance(treg.getType(), RoseMatrixType)
+  assert isinstance(r, RoseArgument)
+
+  _name = Context.genName
+
+  _type = RoseIntegerType.create(32)
+  assert r.getType() == _type
+
+  mtx_insert_zeros = RoseMatrixInsertElementOp.create(
+    RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
+    treg,
+    r, RoseConstant.create(0, _type),
+    RoseConstant.create(treg.getType().getMaxRows()-1, _type), RoseConstant.create(treg.getType().getMaxCols()-1, _type)
+  )
+
+  return [mtx_insert_zeros]
+
+
+def HandleAmxZeroTileConfigStart(Name : str, Args : list, Context : x86RoseContext):
+  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
+  #   DEFINE zero_tileconfig_start() {
+  #   // no-op
+  #   }
+  return []  # return void
+
 # Builtin functions
 Builtins = {
   'Saturate32': HandleToSSaturate(32),
@@ -1915,7 +2041,11 @@ Builtins = {
 
   'Int' : None,
 
-  'REMAINDER' : None,
+  'REMAINDER': None,
+
+  'write_row_and_zero': HandleAmxWriteRowAndZero,
+  'zero_upper_rows': HandleAmxZeroUpperRows,
+  'zero_tileconfig_start': HandleAmxZeroTileConfigStart
 }
 
 # Extends size

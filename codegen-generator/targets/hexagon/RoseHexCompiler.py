@@ -1512,8 +1512,31 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   Operand2.print()
   print(Operand2.getType())
 
+  # Cast the operations to appropriate types if needed
+  if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and not isinstance(Operand2.getType(), RoseBitVectorType):
+    Operand2 = RoseCastOp.create(Context.genName(), Operand2, \
+                  RoseBitVectorType.create(Operand1.getType().getBitwidth()))
+    # Add signedness info
+    Context.addSignednessInfoForValue(Operand2, IsSigned=False)
+    # Add the operations to the IR
+    Context.addAbstractionToIR(Operand2)
+    # Add operations to the context
+    Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+  elif isinstance(Operand2.getType(), RoseBitVectorType) \
+    and not isinstance(Operand1.getType(), RoseBitVectorType):
+    Operand1 = RoseCastOp.create(Context.genName(), Operand1, \
+                  RoseBitVectorType.create(Operand2.getType().getBitwidth()))
+    # Add signedness info
+    Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+    # Add the operations to the IR
+    Context.addAbstractionToIR(Operand1)
+    # Add operations to the context
+    Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+
   # Compile the binary operation
   print("GENERATING BINARY OP")
+
   Operation = BinaryOps[BinaryExpr.op]()(Context.genName(), Operand1, Operand2, Context)
   print("BINARY OP GENERATED")
 
@@ -2094,8 +2117,10 @@ ZeroExtendsSize = [ 'ZeroExtend16', 'ZeroExtend32', 'ZeroExtend64' ]
 
 def HandleToNot():
   def LamdaImplFunc(Name : str, Value : RoseValue, Context : HexRoseContext):
-    assert isinstance(Value.getType(), RoseBitVectorType) == True
-    Op = RoseBVNotOp.create(Name, Value)
+    if isinstance(Value.getType(), RoseBitVectorType):
+      Op = RoseBVNotOp.create(Name, Value)
+    else:
+      Op = RoseNotOp.create(Name, Value)
     Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
     return Op
   
@@ -2245,6 +2270,13 @@ def HandleToXor():
 def HandleToAnd():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
                       Context : HexRoseContext):
+    print("HANDLE TO AND")
+    print("OPERAND1:")
+    Operand1.print()
+    Operand1.getType().print()
+    print("OPERAND2:")
+    Operand2.print()
+    Operand2.getType().print()
     Operands = [Operand1, Operand2]
     if isinstance(Operand1.getType(), RoseBitVectorType) \
     and isinstance(Operand2.getType(), RoseBitVectorType):

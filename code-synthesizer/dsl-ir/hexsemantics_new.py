@@ -4421,7 +4421,10 @@ semantics = {
                   "Extensions" : "['hvx']",
       },
         },
-            "semantics" : ['"(define (hexagon_V6_vmpyowh_rnd_sacc_128B  %arg5 %arg3 %arg2 Vx Vu Vv %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %alpha.arg0 %arg1 %arg4 %arg6 %arg7 %arg8 %arg9 %arg10 %arg11 %arg12 %arg13 )"', '"(define %dst0"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i.new0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %factor0 (/  %arg0  %elemsize0))"', '"  (define %factor1 (*  %alpha.arg0  %factor0))"', '"  (define i.new0.new.mul (*  i.new0.new  %factor1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  i.new0.new.mul  %lastidx0))"', '"  (define %2 (extract  %1 i.new0.new.mul Vx))"', '"  (define %5 (extract  %1 i.new0.new.mul Vu))"', '"  (define %8 (+  %arg12  i.new0.new.mul))"', '"  (define %lastidx1 (-  %elemsize0  1))"', '"  (define %9 (+  %8  %lastidx1))"', '"  (define %10 (extract  %9 %8 Vv))"', '"  (define %12.ab0 (bvsizeext  %5 %arg10 %arg11))"', '"  (define %13.ab0 (bvsizeext  %10 %arg10 %arg9))"', '"  (define %14 (bvmul  %12.ab0  %13.ab0))"', '"  (define %15.ab0 (bvsizeext  %2 %arg8 %arg7))"', '"  (define %16.ab0 (bvaddnw %15.ab0 %14 %arg8 %arg6 ))"', '"  (define %17 (bvlshr  %16.ab0  %arg5))"', '"  (define %18.ab0 (bvaddnw %17 %arg3 64 %arg4 ))"', '"  (define %19 (bvlshr  %18.ab0  %arg2))"', '"  (define %20.ab0 (bvsaturate  %19 64 %arg0 %arg1))"', '"  %20.ab0"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  %dst0 %arg13)"', '")"', '""'],
+            #"semantics" : ['"(define (hexagon_V6_vmpyowh_rnd_sacc_128B  %arg5 %arg3 %arg2 Vx Vu Vv %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %alpha.arg0 %arg1 %arg4 %arg6 %arg7 %arg8 %arg9 %arg10 %arg11 %arg12 %arg13 )"', '"(define %dst0"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i.new0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %factor0 (/  %arg0  %elemsize0))"', '"  (define %factor1 (*  %alpha.arg0  %factor0))"', '"  (define i.new0.new.mul (*  i.new0.new  %factor1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  i.new0.new.mul  %lastidx0))"', '"  (define %2 (extract  %1 i.new0.new.mul Vx))"', '"  (define %5 (extract  %1 i.new0.new.mul Vu))"', '"  (define %8 (+  %arg12  i.new0.new.mul))"', '"  (define %lastidx1 (-  %elemsize0  1))"', '"  (define %9 (+  %8  %lastidx1))"', '"  (define %10 (extract  %9 %8 Vv))"', '"  (define %12.ab0 (bvsizeext  %5 %arg10 %arg11))"', '"  (define %13.ab0 (bvsizeext  %10 %arg10 %arg9))"', '"  (define %14 (bvmul  %12.ab0  %13.ab0))"', '"  (define %15.ab0 (bvsizeext  %2 %arg8 %arg7))"', '"  (define %16.ab0 (bvaddnw %15.ab0 %14 %arg8 %arg6 ))"', '"  (define %17 (bvlshr  %16.ab0  %arg5))"', '"  (define %18.ab0 (bvaddnw %17 %arg3 64 %arg4 ))"', '"  (define %19 (bvlshr  %18.ab0  %arg2))"', '"  (define %20.ab0 (bvsaturate  %19 64 %arg0 %arg1))"', '"  %20.ab0"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  %dst0 %arg13)"', '")"', '""'],
+              # Changed logical shift right to arithmetic shit right
+
+            "semantics" : ['"(define (hexagon_V6_vmpyowh_rnd_sacc_128B  %arg5 %arg3 %arg2 Vx Vu Vv %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %alpha.arg0 %arg1 %arg4 %arg6 %arg7 %arg8 %arg9 %arg10 %arg11 %arg12 %arg13 )"', '"(define %dst0"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i.new0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %factor0 (/  %arg0  %elemsize0))"', '"  (define %factor1 (*  %alpha.arg0  %factor0))"', '"  (define i.new0.new.mul (*  i.new0.new  %factor1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  i.new0.new.mul  %lastidx0))"', '"  (define %2 (extract  %1 i.new0.new.mul Vx))"', '"  (define %5 (extract  %1 i.new0.new.mul Vu))"', '"  (define %8 (+  %arg12  i.new0.new.mul))"', '"  (define %lastidx1 (-  %elemsize0  1))"', '"  (define %9 (+  %8  %lastidx1))"', '"  (define %10 (extract  %9 %8 Vv))"', '"  (define %12.ab0 (bvsizeext  %5 %arg10 %arg11))"', '"  (define %13.ab0 (bvsizeext  %10 %arg10 %arg9))"', '"  (define %14 (bvmul  %12.ab0  %13.ab0))"', '"  (define %15.ab0 (bvsizeext  %2 %arg8 %arg7))"', '"  (define %16.ab0 (bvaddnw %15.ab0 %14 %arg8 %arg6 ))"', '"  (define %17 (bvashr  %16.ab0  %arg5))"', '"  (define %18.ab0 (bvaddnw %17 %arg3 64 %arg4 ))"', '"  (define %19 (bvashr  %18.ab0  %arg2))"', '"  (define %20.ab0 (bvsaturate  %19 64 %arg0 %arg1))"', '"  %20.ab0"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  %dst0 %arg13)"', '")"', '""'],
       },
 
           "hexagon_V6_vaddubh_acc_128B" : {
@@ -4551,7 +4554,7 @@ semantics = {
                   "Extensions" : "['hvx']",
       },
         },
-            "semantics" : ['"(define (hexagon_V6_vroundwuh_128B  %arg8 %arg7 %arg3 %arg2 Vu Vv %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg4 %arg5 %alpha.arg0 %arg6 %arg9 %arg10 )"', '"(define Vd"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i.new0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %factor0 (/  %arg5  %elemsize0))"', '"  (define %factor1 (*  %alpha.arg0  %factor0))"', '"  (define i.new0.new.mul (*  i.new0.new  %factor1))"', '"  (define %lastidx1 (-  %arg5  1))"', '"  (define %1 (+  i.new0.new.mul  %lastidx1))"', '"  (define %2 (extract  %1 i.new0.new.mul Vv))"', '"  (define %3.ab0 (bvaddnw %2 %arg8 %arg5 %arg9 ))"', '"  (define %4 (bvlshr  %3.ab0  %arg7))"', '"  (define %5.ab0 (bvsaturate  %4 32 %elemsize0 %arg6))"', '"  (define %12 (extract  %1 i.new0.new.mul Vu))"', '"  (define %13.ab0 (bvaddnw %12 %arg3 %arg5 %arg4 ))"', '"  (define %14 (bvlshr  %13.ab0  %arg2))"', '"  (define %15.ab0 (bvsaturate  %14 32 %elemsize0 %arg1))"', '"(concat %15.ab0 %5.ab0)"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  Vd %arg10)"', '")"', '""'],
+            "semantics" : ['"(define (hexagon_V6_vroundwuh_128B  %arg8 %arg7 %arg3 %arg2 Vu Vv %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg4 %arg5 %alpha.arg0 %arg6 %arg9 %arg10 )"', '"(define Vd"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i.new0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %factor0 (/  %arg5  %elemsize0))"', '"  (define %factor1 (*  %alpha.arg0  %factor0))"', '"  (define i.new0.new.mul (*  i.new0.new  %factor1))"', '"  (define %lastidx1 (-  %arg5  1))"', '"  (define %1 (+  i.new0.new.mul  %lastidx1))"', '"  (define %2 (extract  %1 i.new0.new.mul Vv))"', '"  (define %3.ab0 (bvaddnw %2 %arg8 %arg5 %arg9 ))"', '"  (define %4 (bvashr  %3.ab0  %arg7))"', '"  (define %5.ab0 (bvsaturate  %4 32 %elemsize0 %arg6))"', '"  (define %12 (extract  %1 i.new0.new.mul Vu))"', '"  (define %13.ab0 (bvaddnw %12 %arg3 %arg5 %arg4 ))"', '"  (define %14 (bvashr  %13.ab0  %arg2))"', '"  (define %15.ab0 (bvsaturate  %14 32 %elemsize0 %arg1))"', '"(concat %15.ab0 %5.ab0)"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  Vd %arg10)"', '")"', '""'],
       },
 
           "hexagon_V6_vmpyihb_128B" : {
@@ -6658,4 +6661,56 @@ semantics = {
         },
             "semantics" : ['"(define (hexagon_V6_vmpyewuh_64_128B  %arg7 %arg1 Vu Vv %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %alpha.arg0 %arg2 %arg3 %arg4 %arg5 %arg6 %arg8 %arg9 %arg10 %alpha.arg1 %arg11 %arg12 )"', '"(define Vdd"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (concat "', '"  (apply"', '"  concat"', '"  (for/list ([%iterator1.new0.new (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])"', '"   (define %factor2 (/  %elemsize1  %elemsize1))"', '"   (define %factor3 (*  %alpha.arg1  %factor2))"', '"   (define %iterator1.new0.new.mul (*  %iterator1.new0.new  %factor3))"', '"   (define %lastidx4 (-  %arg11  1))"', '"   (define %19 (+  %iterator1.new0.new.mul  %lastidx4))"', '"   (define %20 (extract  %19 %iterator1.new0.new.mul Vu))"', '"   (define %lastidx3 (-  %elemsize1  1))"', '"   (define %24 (+  %iterator1.new0.new.mul  %lastidx3))"', '"   (define %25 (extract  %24 %iterator1.new0.new.mul Vv))"', '"   (define %27.ab0 (bvsizeext  %20 %arg9 %arg10))"', '"   (define %28.ab0 (bvsizeext  %25 %arg9 %arg8))"', '"   (define %29 (bvmul  %27.ab0  %28.ab0))"', '"   (define %30 (bvlshr  %29  %arg7))"', '"   (define %35.high.idx (- %arg5 1))"', '"   (define %35.low.idx 0)"', '"   (define %35 (extract  %35.high.idx %35.low.idx %30))"', '"   %35"', '"  )"', '"  )"', '"  (apply"', '"  concat"', '"  (for/list ([%iterator0.new0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"   (define %factor0 (/  %arg0  %elemsize0))"', '"   (define %factor1 (*  %alpha.arg0  %factor0))"', '"   (define %iterator0.new0.new.mul (*  %iterator0.new0.new  %factor1))"', '"   (define %lastidx0 (-  %arg0  1))"', '"   (define %1 (+  %iterator0.new0.new.mul  %lastidx0))"', '"   (define %2 (extract  %1 %iterator0.new0.new.mul Vu))"', '"   (define %lastidx1 (-  %elemsize0  1))"', '"   (define %6 (+  %iterator0.new0.new.mul  %lastidx1))"', '"   (define %7 (extract  %6 %iterator0.new0.new.mul Vv))"', '"   (define %9.ab0 (bvsizeext  %2 %arg3 %arg4))"', '"   (define %10.ab0 (bvsizeext  %7 %arg3 %arg2))"', '"   (define %11 (bvmul  %9.ab0  %10.ab0))"', '"   (define %12 (bvshl  %11  %arg1))"', '"   (define %17.high.idx (- %arg0 1))"', '"   (define %17.low.idx 0)"', '"   (define %17 (extract  %17.high.idx %17.low.idx %12))"', '"   %17"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  Vdd %arg12)"', '")"', '""'],
       },
+
+"hexagon_V6_vshuffvdd_128B" : {
+  "target_instructions" : {
+    "hexagon_V6_vshuffvdd_128B" : {
+        "args" : ["SYMBOLIC_BV_1024", "SYMBOLIC_BV_1024","BOUNDED_SYMBOLIC_BV_32","2048","2048","0","1024","8","0"],
+        "in_vectsize" : 1024,
+        "out_vectsize" : 2048,
+        "lanesize" :8 ,
+        "in_precision" : 8,
+        "out_precision" : 8,
+        "in_vectsize_index" : 6,
+        "out_vectsize_index" : 3,
+        "in_lanesize_index" : 6,
+        "out_lanesize_index" : 4,
+        "in_precision_index" : [("variable_idx", 2), ("precision8", -1), ("precision16", -2), ("precision32", -4)],
+        "out_precision_index" : [("variable_idx", 2), ("precision8", -1), ("precision16", -2), ("precision32", -4)],
+        "arg_permute_map" : [0, 1, 2, -1, -1, -1, -1, -1, -1],
+        "Signedness" : None,
+        "Cost" : "None",
+        "SIMD" : "False",
+        "Extensions" : "['hvx']",
+  },
+  },
+"semantics" : ['"(define (hexagon_V6_vshuffvdd_128B  Vu Vv Rt %vectsize %outerlanesize %laneoffset %innerlanesize %arg0 %arg1)"','"(define Rt_int (bitvector->integer Rt))"','"(define %elem_size (* (- 0 Rt_int) %arg0))"','"(define Vdd"','"(apply"','"concat"','"(for/list ([%outer.it (reverse (range 0 %vectsize %outerlanesize))])"','"(apply"','"concat"','"(for/list ([%inner.it (reverse (range %laneoffset %innerlanesize %elem_size))])"','"(define %low %inner.it)"','"(define %high (+ %inner.it (- %elem_size 1)))"','"(define %a (extract  %high %low Vu))"','"(define %b (extract  %high %low Vv))"','"(concat %b %a)"','")"','")"','")"','")"','")"','"(bvpadhighbits  Vdd %arg1)"','")"']
+},
+
+"hexagon_V6_vdealvdd_128B" : {
+  "target_instructions" : {
+    "hexagon_V6_vdealvdd_128B" : {
+        "args" : ["SYMBOLIC_BV_1024", "SYMBOLIC_BV_1024","BOUNDED_SYMBOLIC_BV_32","2048","2048","0","512", "0","512", "0","512", "0","512", "8", "2", "2", "2", "1", "2", "1", "0"],
+        "in_vectsize" : 1024,
+        "out_vectsize" : 2048,
+        "lanesize" : 1024,
+        "in_precision" : None,
+        "out_precision" : None,
+        "in_vectsize_index" : None,
+        "out_vectsize_index" : 3,
+        "in_lanesize_index" : 6,
+        "out_lanesize_index" : 4,
+        "in_precision_index" : [("variable_idx", 2), ("precision8", -1), ("precision16", -2), ("precision32", -4)],
+        "out_precision_index" : [("variable_idx", 2), ("precision8", -1), ("precision16", -2), ("precision32", -4)],
+        "arg_permute_map" : [0, 1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        "Signedness" : None,
+        "Cost" : "None",
+        "SIMD" : "False",
+        "Extensions" : "['hvx']",
+  },
+  },
+"semantics" : ['"(define (hexagon_V6_vdealvdd_128B  Vu Vv Rt %vectsize %outerlanesize %laneoffset0 %innerlanesize0 %laneoffset1 %innerlanesize1 %laneoffset2 %innerlanesize2 %laneoffset3 %innerlanesize3 %arg0 %arg1 %arg2 %arg3 %arg4 %arg5 %arg6 %arg7)"','"(define Rt_int (bitvector->integer Rt))"','"(define %elem_size (* (- 0 Rt_int) %arg0))"','"(define Vdd"','"(apply"','"concat"','"(for/list ([%outer.it (reverse (range 0 %vectsize %outerlanesize))])"','"(concat"','"(apply"','"concat"','"(for/list ([%inner.it.0 (reverse (range %laneoffset0 %innerlanesize0 %elem_size))])"','"(define %low.0 (* %arg1 %inner.it.0))"','"(define %high.0 (+ %low.0 (- %elem_size 1)))"','"(define %ext.Vv.0 (extract  %high.0 %low.0 Vv))"','"%ext.Vv.0"','")"','")"','"(apply"','"concat"','"(for/list ([%inner.it.1 (reverse (range %laneoffset1 %innerlanesize1 %elem_size))])"','"(define %low.1 (* %arg2 %inner.it.1))"','"(define %high.1 (+ %low.1 (- %elem_size 1)))"','"(define %ext.Vu.0 (extract  %high.1 %low.1 Vu))"','"%ext.Vu.0"','")"','")"','"(apply"','"concat"','"(for/list ([%inner.it.2 (reverse (range %laneoffset2 %innerlanesize2 %elem_size))])"','"(define %low.2 (+ %arg4 (* %arg3 %inner.it.2)))"','"(define %high.2 (+ %low.2 (- %elem_size 1)))"','"(define %ext.Vv.1 (extract  %high.2 %low.2 Vv))"','"%ext.Vv.1"','")"','")"','"(apply"','"concat"','"(for/list ([%inner.it.3 (reverse (range %laneoffset3 %innerlanesize3 %elem_size))])"','"(define %low.3 (+ %arg6 (* %arg5 %inner.it.3)))"','"(define %high.3 (+ %low.3 (- %elem_size 1)))"','"(define %ext.Vu.1 (extract  %high.3 %low.3 Vu))"','"%ext.Vu.1"','")"','")"','")"','")"','")"','")"','"(bvpadhighbits  Vdd %arg7)"','")"']
+},
+
+
         }

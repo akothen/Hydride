@@ -15,10 +15,18 @@
 (require hydride/ir/hydride/length)
 (require hydride/ir/hydride/prec)
 
+(require hydride/ir/arith/utils)
+
+(require hydride/utils/target)
+
 (provide (all-defined-out))
 
 (define (get-expr-sema expr)
-  (define ops (remove-duplicates (halide:get-bv-ops expr)))
+  (define ops
+    (remove-duplicates (cond
+                         [(equal? input-lang 'halide) (halide:get-bv-ops expr)]
+
+                         [(equal? input-lang 'mlir) (arith:get-bv-ops expr)])))
   (string-append "\"" (~s ops) "\""))
 
 (define (get-input-shapes input-list)
@@ -28,14 +36,24 @@
            (for/list ([i (range num-inputs)])
              (define expr (list-ref input-list i))
              (define rows 1)
-             (define cols (halide:vec-len expr))
+             (define cols
+               (cond
+                 [(equal? input-lang 'halide) (halide:vec-len expr)]
+
+                 [(equal? input-lang 'mlir) (arith:vec-len expr)]))
              (define sep (if (equal? i (- num-inputs 1)) "" ", "))
 
              (string-append "[" (~s rows) "," (~s cols) "]" sep))))
   (string-append "[" shapes "]"))
 
 (define (get-output-shape expr)
-  (define shape (string-append "[1 , " (~s (halide:vec-len expr)) "]"))
+  (define shape
+    (string-append "[1 , "
+                   (~s (cond
+                         [(equal? input-lang 'halide) (halide:vec-len expr)]
+
+                         [(equal? input-lang 'mlir) (arith:vec-len expr)]))
+                   "]"))
   shape)
 
 (define (get-args-str input-list)
@@ -44,7 +62,12 @@
     (apply string-append
            (for/list ([i (range num-inputs)])
              (define expr (list-ref input-list i))
-             (define bv-str (string-append "SYMBOLIC_BV_" (~s (halide:vec-size expr))))
+             (define bv-str
+               (string-append "SYMBOLIC_BV_"
+                              (~s (cond
+                                    [(equal? input-lang 'halide) (halide:vec-size expr)]
+
+                                    [(equal? input-lang 'mlir) (arith:vec-size expr)]))))
              (define sep (if (equal? i (- num-inputs 1)) "" ", "))
 
              (string-append "\"" bv-str "\"" sep))))
@@ -56,7 +79,12 @@
 (define (get-input-precisions sub-expr-ls)
   (define input-precisions
     (for/list ([i (range (length sub-expr-ls))])
-      (halide:vec-precision (list-ref sub-expr-ls i))))
+
+      (define expr (list-ref sub-expr-ls i))
+      (cond
+        [(equal? input-lang 'halide) (halide:vec-precision expr)]
+
+        [(equal? input-lang 'mlir) (arith:vec-precision expr)])))
 
   (define args
     (apply string-append
@@ -69,7 +97,11 @@
   (string-append "[" args "]"))
 
 (define (get-expr-imms expr)
-  (define imms (halide:get-imm-values expr))
+  (define imms
+    (cond
+      [(equal? input-lang 'halide) (halide:get-imm-values expr)]
+
+      [(equal? input-lang 'mlir) (list)]))
   (define imm-ints
     (for/list ([v imms])
       (bitvector->integer v)))
@@ -93,7 +125,11 @@
   (define input_shapes (get-input-shapes sub-expr-ls))
   (define output_shape (get-output-shape expr))
   (define input_precision (get-input-precisions sub-expr-ls))
-  (define output_precision (~s (halide:vec-precision expr)))
+  (define output_precision
+    (~s (cond
+          [(equal? input-lang 'halide) (halide:vec-precision expr)]
+
+          [(equal? input-lang 'mlir) (arith:vec-precision expr)])))
   (define args (get-args-str sub-expr-ls))
   (define spec_invoke "\"\"")
   (define imm-ls (get-expr-imms expr))
@@ -184,7 +220,16 @@
 
   (define imms (list))
   (define (visitor-fn e)
-    (destruct e [(lit v) (set! imms (append imms (list v))) e] [v v]))
+    (destruct e
+              [(lit v)
+               (set! imms (append imms (list v)))
+               ;; Split imms into 32/16 bit words and include those as well
+               (for/list ([prec (list 16 32)])
+                 (cond
+                   [(equal? (remainder (bvlength v) prec) 0)
+                    (set! imms (append imms (list (extract (- prec 1) 0 v))))]))
+               e]
+              [v v]))
 
   (visitor-functor expr visitor-fn)
 
@@ -203,6 +248,15 @@
       (string-append val-str sep)))
   (string-append "[" (apply string-append val-strs) "]"))
 
+(define (get-expr-signedness-str input-signedness)
+  (define val-strs
+    (for/list ([i (range (length input-signedness))])
+      (define val (list-ref input-signedness i))
+      (define val-str (if val "1" "0"))
+      (define sep (if (equal? i (- (length input-signedness) 1)) "" ", "))
+      (string-append val-str sep)))
+  (string-append "[" (apply string-append val-strs) "]"))
+
 ;; Generates a specification for a Hydride IR Expression
 (define (gen-synthesis-spec-hydride expr
                                     get-ops-functor
@@ -211,16 +265,18 @@
                                     get-prec-functor
                                     input-precs
                                     input-sizes
+                                    input-signedness
                                     base_name)
   (define name (string-append "\"" base_name "\""))
   (define spec-name (get-spec-name base_name))
-  (define sema (string-append "[ " (get-hydride-expr-sema expr) "]"))
+  (define sema (string-append "[ " (get-hydride-expr-sema expr get-ops-functor) "]"))
   (define input_shapes (get-input-shapes-hydride input-sizes input-precs))
   (define output_shape (get-output-shape-hydride expr get-length-functor get-prec-functor))
   (define input_precision (get-input-precisions-hydride input-precs))
   (define output_precision (~s (get-prec-functor expr (vector))))
   (define args (get-args-str-hydride input-sizes))
   (define spec_invoke "\"\"")
+  (define spec_input_signedness (get-expr-signedness-str input-signedness))
   (define imm-ls (get-expr-imms-hydride expr visitor-functor))
   (string-append "{ \n"
                  "\"name\": "
@@ -249,6 +305,9 @@
                  ",\n"
                  "\"imms\": "
                  imm-ls
+                 " ,\n"
+                 "\"input_signedness\": "
+                 spec_input_signedness
                  " \n"
                  "}\n"))
 

@@ -14,7 +14,12 @@
   hydride/utils/debug
   hydride/utils/misc
   hydride/utils/bvops
+  hydride/synthesis/symbolic_synthesis
   )
+
+(require hydride/ir/hydride/definition)
+
+(require racket/match)
 
 (provide (prefix-out halide: (all-defined-out)))
 
@@ -39,6 +44,18 @@
    )
 )
 
+(define (is-constant-expr expr)
+  (destruct expr
+            [(xBroadcast sca factor) (is-constant-expr sca)]
+            [(int-imm data signed?) #t]
+            [_ #f]
+            )
+  )
+
+
+(define (is-non-const-expr expr)
+  (not (is-constant-expr expr))
+  )
 
 ;; Add buffer signed assumptions
 (define (assume-buffer-signedness buf)
@@ -147,6 +164,16 @@
          ] 
        )
 
+     ]
+    [(vec-saturate vec olane oprec signed?)
+     (cond
+       [signed?
+         (append (list bvssat  sign-extend extract) (get-bv-ops vec))
+         ]
+       [else
+        (append (list bvusat zero-extend extract) (get-bv-ops vec))
+         ]
+       )
      ]
     [(uint8x1 sca) (list extract  zero-extend)]
     [(uint16x1 sca) (list  extract  zero-extend)]    
@@ -267,11 +294,24 @@
                                        ) (if (halide:is-signed-expr? v1 v2) (list  bvaddnsw ) (list  bvaddnuw  )) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend zero-extend ) (list  zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+    ;[(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend zero-extend ) (list  zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+
+    [(vec-widen-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
+
+
+    [(vec-rounding_mul_shift_right v1 v2 v3) (append (list extract bvmul sign-extend zero-extend) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat ) (list  zero-extend bvlshr bvusat)) (get-bv-ops v1)  (get-bv-ops v2) (get-bv-ops v3))] 
+
+    [(vec-rounding_shift_right v1 v2) (append (list extract bvshl) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat bvsdiv) (list  zero-extend bvlshr bvusat bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] ;; FIXME: add bvshl
+
+    [(vec-rounding_halving_add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvsdiv) (list  zero-extend  bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] 
+
+    [(vec-halving_add v1 v2) (append (list extract bvadd) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvsdiv) (list  zero-extend  bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] 
 
     ;; TODO: Since we now have context specific bitvector ops, this should be safe to do?
     ;[(vec-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
-    [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-div v1 v2) (append (list  extract)  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr ) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-min v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmin) (list  bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-max v1 v2) (append (list extract) (if (halide:is-signed-expr? v1 v2) (list  bvsmax ) (list  bvumax ))  (get-bv-ops v1)  (get-bv-ops v2))]
@@ -282,8 +322,8 @@
     [(vec-le v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)    (get-bv-ops v2))]
+    [(vec-shl v1 v2) (append (list bvshl )  (get-bv-ops v1) (if (buffer? v2) (list) (get-bv-ops v2))  )]
+    [(vec-shr v1 v2) (append  (if (halide:is-signed-expr? v1 v2) (list bvashr  ) (list bvlshr  )) (get-bv-ops v1)    (if (buffer? v2) (list) (get-bv-ops v2)))]
     ;[(vec-absd v1 v2) (append (list  bvsub ) (if (halide:is-signed-expr? v1 v2) (list   bvsmax bvsmin ) (list   bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-absd v1 v2) (append (list  bvsub )  (get-bv-ops (vec-max v1 v2))  (get-bv-ops (vec-min v1 v2)) )]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
@@ -317,1117 +357,1087 @@
   (define is-leaf-depth (eq? depth 1))
   (define (broadcast-helper broad-ty val)
     (if (int-imm? val)
-       (values (broad-ty val) 0)
-       (if is-leaf-depth
-            (begin
-              (values (broad-ty (arg 0)) 1)
-            )
-            (begin
-              (define-values (leaf-sol args-used) (bind-expr-args val args (- depth 1)))
-              (values (broad-ty leaf-sol) args-used)
-            )
+      (values (broad-ty val) 0)
+      (if is-leaf-depth
+        (begin
+          (values (broad-ty (arg 0)) 1)
+          )
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args val args (- depth 1)))
+          (values (broad-ty leaf-sol) args-used)
+          )
         )
-     )
+      )
     )
-  (destruct expr
-    ;; Constructors
-    [(x8 sca) 
-     (broadcast-helper x8 sca)
-     ]
-    [(x16 sca) 
-     (broadcast-helper x16 sca)
-     ]
-    [(x32 sca) 
-     (broadcast-helper x32 sca)
-     ]
-    [(x64 sca) 
-      (broadcast-helper x64 sca)
-     ]
-    [(x128 sca) 
-      (broadcast-helper x128 sca)
-     ]
-    [(x256 sca) 
-      (broadcast-helper x256 sca)
-     ]
-    [(x512 sca) 
-      (broadcast-helper x512 sca)
-     ]
-    [(xBroadcast sca factor) 
-     (if (int-imm? sca)
-       (values (xBroadcast sca factor) 0)
-       (if is-leaf-depth
-         (begin
-           (values (xBroadcast (arg 0) factor) 1)
-           )
-         (begin
-           (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-           (values (xBroadcast leaf-sol factor) args-used)
-           )
-         )
-       )
-     ]
 
-    [(ramp base stride len) 
-     (if is-leaf-depth
-        (values (ramp (arg 0) (arg 1) len) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args base args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-
-          (define-values (leaf2-sol args-used2) (bind-expr-args stride remaining-args (- depth 1)))
-
-
-          (values (ramp leaf1-sol leaf2-sol len) (+ args-used1 args-used2))
-        )
-        )
-     
-     ]
-    [(load buf idxs alignment) 
-       (if is-leaf-depth
-        (values (load (arg 0) idxs alignment) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args buf args (- depth 1)))
-          (values (load leaf-sol idxs alignment) args-used)
-        )
-        )
-     ]
-    [(load-sca buf idx) 
-       (if is-leaf-depth
-        (values (load-sca (arg 0) idx) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args buf args (- depth 1)))
-          (values (load-sca leaf-sol idx) args-used)
-        )
-        )
-     ]
-
-
-     [(int-imm data signed?)  
-      (debug-log args)
-      (values (int-imm data signed?) 0)
-      ]
-
-     [(buffer data elemT buffsize)  
-        (values (arg 0) 1)
-      ]
-
-    ;; Type Casts
-    [(cast-int vec olane oprec) 
-       (if is-leaf-depth
-        (values (cast-int (arg 0) olane oprec) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (cast-int leaf-sol olane oprec) args-used)
-        )
-        )
-     ]
-    [(cast-uint vec olane oprec) 
-       (if is-leaf-depth
-        (values (cast-uint (arg 0) olane oprec) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (cast-uint leaf-sol olane oprec) args-used)
-        )
-        )
-     ]
-    [(uint8x1 sca) 
-       (if is-leaf-depth
-        (values (uint8x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (uint8x1 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x1 sca) 
-       (if is-leaf-depth
-        (values (uint16x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (uint16x1 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    [(uint32x1 sca) 
-       (if is-leaf-depth
-        (values (uint32x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (uint32x1 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x1 sca) 
-       (if is-leaf-depth
-        (values (uint64x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (uint64x1 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(int8x1 sca) 
-       (if is-leaf-depth
-        (values (int8x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (int8x1 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x1 sca) 
-       (if is-leaf-depth
-        (values (int16x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (int16x1 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x1 sca)
-       (if is-leaf-depth
-        (values (int32x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (int32x1 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x1 sca)
-       (if is-leaf-depth
-        (values (int64x1 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
-          (values (int64x1 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    [(uint1x32 vec) 
-       (if is-leaf-depth
-        (values (uint1x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint1x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint1x64 vec) 
-       (if is-leaf-depth
-        (values (uint1x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint1x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint1x128 vec)
-       (if is-leaf-depth
-        (values (uint1x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint1x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint1x256 vec)
-       (if is-leaf-depth
-        (values (uint1x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint1x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint1x512 vec)
-       (if is-leaf-depth
-        (values (uint1x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint1x512 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    [(uint8x8 vec) 
-       (if is-leaf-depth
-        (values (uint8x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x8 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x8 vec) 
-       (if is-leaf-depth
-        (values (uint16x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x8 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x8 vec) 
-       (if is-leaf-depth
-        (values (uint32x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x8 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x8 vec) 
-       (if is-leaf-depth
-        (values (uint64x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x8 leaf-sol) args-used)
-        )
-        )
-     ]
-
-
-    [(int8x8 vec) 
-       (if is-leaf-depth
-        (values (int8x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x8 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x8 vec) 
-       (if is-leaf-depth
-        (values (int16x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x8 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x8 vec) 
-       (if is-leaf-depth
-        (values (int32x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x8 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x8 vec) 
-       (if is-leaf-depth
-        (values (int64x8 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x8 leaf-sol) args-used)
-        )
-        )
-     ]
-   
-    [(uint8x16 vec) 
-       (if is-leaf-depth
-        (values (uint8x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x16 vec) 
-       (if is-leaf-depth
-        (values (uint16x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x16 vec) 
-       (if is-leaf-depth
-        (values (uint32x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x16 vec) 
-       (if is-leaf-depth
-        (values (uint64x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x16 leaf-sol) args-used)
-        )
-        )
-     ]
-
-
-    [(int8x16 vec) 
-       (if is-leaf-depth
-        (values (int8x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x16 vec) 
-       (if is-leaf-depth
-        (values (int16x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x16 vec) 
-       (if is-leaf-depth
-        (values (int32x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x16 vec) 
-       (if is-leaf-depth
-        (values (int64x16 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x16 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint8x32 vec) 
-       (if is-leaf-depth
-        (values (uint8x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x32 vec) 
-       (if is-leaf-depth
-        (values (uint16x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x32 vec) 
-       (if is-leaf-depth
-        (values (uint32x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x32 vec) 
-       (if is-leaf-depth
-        (values (uint64x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(int8x32 vec) 
-       (if is-leaf-depth
-        (values (int8x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x32 vec)
-       (if is-leaf-depth
-        (values (int16x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x32 vec) 
-       (if is-leaf-depth
-        (values (int32x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x32 vec) 
-       (if is-leaf-depth
-        (values (int64x32 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x32 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(uint8x64 vec) 
-       (if is-leaf-depth
-        (values (uint8x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x64 vec) 
-       (if is-leaf-depth
-        (values (uint16x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x64 vec) 
-       (if is-leaf-depth
-        (values (uint32x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x64 vec) 
-       (if is-leaf-depth
-        (values (uint64x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(int8x64 vec) 
-       (if is-leaf-depth
-        (values (int8x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x64 vec) 
-       (if is-leaf-depth
-        (values (int16x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x64 vec) 
-       (if is-leaf-depth
-        (values (int32x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x64 vec) 
-       (if is-leaf-depth
-        (values (int64x64 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x64 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(uint8x128 vec) 
-       (if is-leaf-depth
-        (values (uint8x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x128 vec) 
-       (if is-leaf-depth
-        (values (uint16x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x128 vec) 
-       (if is-leaf-depth
-        (values (uint32x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x128 vec) 
-       (if is-leaf-depth
-        (values (uint64x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(int8x128 vec)
-       (if is-leaf-depth
-        (values (int8x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x128 vec) 
-       (if is-leaf-depth
-        (values (int16x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x128 vec) 
-       (if is-leaf-depth
-        (values (int32x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x128 vec) 
-       (if is-leaf-depth
-        (values (int64x128 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x128 leaf-sol) args-used)
-        )
-        )
-     ]
-    
-    [(uint8x256 vec) 
-       (if is-leaf-depth
-        (values (uint8x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x256 vec)
-       (if is-leaf-depth
-        (values (uint16x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x256 vec) 
-       (if is-leaf-depth
-        (values (uint32x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x256 vec) 
-       (if is-leaf-depth
-        (values (uint64x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x256 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    [(int8x256 vec) 
-       (if is-leaf-depth
-        (values (int8x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x256 vec) 
-       (if is-leaf-depth
-        (values (int16x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x256 vec) 
-       (if is-leaf-depth
-        (values (int32x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x256 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x256 vec)
-       (if is-leaf-depth
-        (values (int64x256 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x256 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    [(uint8x512 vec) 
-       (if is-leaf-depth
-        (values (uint8x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint8x512 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint16x512 vec) 
-       (if is-leaf-depth
-        (values (uint16x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint16x512 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint32x512 vec) 
-       (if is-leaf-depth
-        (values (uint32x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint32x512 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(uint64x512 vec) 
-       (if is-leaf-depth
-        (values (uint64x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x512 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    [(int8x512 vec) 
-       (if is-leaf-depth
-        (values (int8x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int8x512 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int16x512 vec) 
-       (if is-leaf-depth
-        (values (int16x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int16x512 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int32x512 vec)
-       (if is-leaf-depth
-        (values (int32x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int32x512 leaf-sol) args-used)
-        )
-        )
-     ]
-    [(int64x512 vec)
-       (if is-leaf-depth
-        (values (int64x512 (arg 0)) 1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (int64x512 leaf-sol) args-used)
-        )
-        )
-     ]
-
-    ;; Operations
-    [(vec-add v1 v2) 
-       (if is-leaf-depth
-        (values (vec-add (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-
-          (values (vec-add leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    ;; Operations
-    [(vec-sat-add v1 v2) 
-       (if is-leaf-depth
-        (values (vec-sat-add (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-
-          (values (vec-sat-add leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-sub v1 v2) 
-       (if is-leaf-depth
-        (values (vec-sub (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-sub leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-sat-sub v1 v2) 
-       (if is-leaf-depth
-        (values (vec-sat-sub (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-sat-sub leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-mul v1 v2) 
-       (if is-leaf-depth
-        (values (vec-mul (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-mul leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-div v1 v2)
-       (if is-leaf-depth
-        (values (vec-div (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-div leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-mod v1 v2)
-       (if is-leaf-depth
-        (values (vec-mod (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-mod leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-min v1 v2) 
-       (if is-leaf-depth
-        (values (vec-min (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-min leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-max v1 v2) 
-       (if is-leaf-depth
-        (values (vec-max (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-max leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-if v1 v2 v3)
-       (if is-leaf-depth
-        (values (vec-if (arg 0) (arg 1) (arg 2)) 3)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values1 (- (vector-length args) args-used1))
-          (define remaining-args1 (vector-take-right args remaining-values1))
-
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args1 (- depth 1)))
-          (define remaining-values2 (- (vector-length remaining-args1) args-used2))
-          (define remaining-args2 (vector-take-right remaining-args1 remaining-values2))
-
-
-          (define-values (leaf3-sol args-used3) (bind-expr-args v3 remaining-args2 (- depth 1)))
-
-          (values (vec-if leaf1-sol leaf2-sol leaf3-sol) (+ args-used1 args-used2 args-used3))
-        )
-        )
-     ]
-    [(vec-eq v1 v2)
-       (if is-leaf-depth
-        (values (vec-eq (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-eq leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-lt v1 v2) 
-       (if is-leaf-depth
-        (values (vec-lt (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-lt leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-le v1 v2) 
-       (if is-leaf-depth
-        (values (vec-le (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-le leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-
-    [(vec-abs v1)
-       (if is-leaf-depth
-        (values (vec-abs (arg 0)) 1)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (values (vec-abs leaf1-sol) args-used1)
-        )
-        )
-     ]
-    [(vec-clz v1) 
-       (if is-leaf-depth
-        (values (vec-clz (arg 0)) 1)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (values (vec-clz leaf1-sol) args-used1)
-        )
-        )
-     ]
-    
-    [(vec-absd v1 v2) 
-       (if is-leaf-depth
-        (values (vec-absd (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-absd leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-shl v1 v2) 
-       (if is-leaf-depth
-        (values (vec-shl (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-
-          (values (vec-shl leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-    [(vec-shr v1 v2)
-       (if is-leaf-depth
-        (values (vec-shr (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-          (values (vec-shr leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-
-    [(vec-bwand v1 v2)
-       (if is-leaf-depth
-        (values (vec-bwand (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-          (values (vec-bwand leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-     ]
-
-    [(vec-bwnot v1 )
-       (if is-leaf-depth
-        (values (vec-bwnot (arg 0)) 1)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (values (vec-bwnot leaf1-sol) args-used1)
-        )
-        )
-     ]
-
-    [(vector_reduce op width vec) 
-       (if is-leaf-depth
-        (values (vector_reduce op width (arg 0)) 1)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
-          (values (vector_reduce op width leaf1-sol) args-used1)
-        )
-        )
-     ]
-
-    ;; Shuffles
-    [(vec-broadcast n vec) 
-       (if is-leaf-depth
-        (values (vec-broadcast n (arg 0)) 1)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
-          (values (vec-broadcast n leaf1-sol) args-used1)
-        )
-        )
-     ]
-    [(slice_vectors vec base stride len)
-       (if is-leaf-depth
-        (values (slice_vectors (arg 0) base stride len) 1)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
-          (values (slice_vectors leaf1-sol base stride len) args-used1)
-        )
-        )
-    ]
-    [(concat_vectors v1 v2) 
-       (if is-leaf-depth
-        (values (concat_vectors (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-          (values (concat_vectors leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-    ]
-    [(interleave v1 v2) 
-       (if is-leaf-depth
-        (values (interleave (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
-          (values (interleave leaf1-sol leaf2-sol) (+ args-used1 args-used2))
-        )
-        )
-    ]
-    [(interleave4 v1 v2 v3 v4) (list v1 v2 v3 v4)
-       (if is-leaf-depth
-        (values (interleave4 (arg 0) (arg 1) (arg 2) (arg 3)) 4)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
-          (define remaining-values1 (- (vector-length args) args-used1))
-          (define remaining-args1 (vector-take-right args remaining-values1))
-
-          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args1 (- depth 1)))
-          (define remaining-values2 (- (vector-length remaining-args1) args-used2))
-          (define remaining-args2 (vector-take-right remaining-args1 remaining-values2))
-
-
-          (define-values (leaf3-sol args-used3) (bind-expr-args v3 remaining-args2 (- depth 1)))
-          (define remaining-values3 (- (vector-length remaining-args2) args-used3))
-          (define remaining-args3 (vector-take-right remaining-args2 remaining-values3))
-
-
-          (define-values (leaf4-sol args-used4) (bind-expr-args v4 remaining-args3 (- depth 1)))
-
-          (values (interleave4 leaf1-sol leaf2-sol leaf3-sol leaf4-sol) (+ args-used1 args-used2 args-used3 args-used4))
-        )
-        )
+  (define latest-arg 0)
+  (define (get-latest-arg val) 
+    (cond 
+      [(and (is-non-const-expr val) (not (xBroadcast? val)))
+       (set! latest-arg (+ 1 latest-arg))
+       (arg (- latest-arg 1))
        ]
-    [(dynamic_shuffle vec idxs st end) 
-       (if is-leaf-depth
-        (values (dynamic_shuffle (arg 0) (arg 1)) 2)
-        (begin
-          (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
-          (define remaining-values (- (vector-length args) args-used1))
-          (define remaining-args (vector-take-right args remaining-values))
-          (define-values (leaf2-sol args-used2) (bind-expr-args idxs remaining-args (- depth 1)))
-          (values (dynamic_shuffle leaf1-sol leaf2-sol st end) (+ args-used1 args-used2))
-        )
-        )
-    ]
-    
-    ;; Base case
-    [v (values v 0)])
-  
+      ;; If it's a broadcast of a variable
+      [(and (is-non-const-expr val) (xBroadcast? val))
+       (set! latest-arg (+ 1 latest-arg))
+
+       (destruct val
+                 [(xBroadcast bval factor)
+                  (xBroadcast (arg (- latest-arg 1)) factor)
+                  ]
+                 )
+       ]
+      [else
+        val
+        ]
+      )
+    )
+
+  (define (binary-op-helper opcode v1 v2)
+    (cond
+      [is-leaf-depth
+        (define leaf-expr (opcode (get-latest-arg v1) (get-latest-arg v2)))
+        (values leaf-expr latest-arg)
+        ]
+      [else
+        (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+        (define remaining-values (- (vector-length args) args-used1))
+        (define remaining-args (vector-take-right args remaining-values))
+        (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+        (values (opcode leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+        ]
+      )
+    )
+
+  (cond 
+    [(is-non-const-expr expr)
+     (destruct expr
+               ;; Constructors
+               [(x8 sca) 
+                (broadcast-helper x8 sca)
+                ]
+               [(x16 sca) 
+                (broadcast-helper x16 sca)
+                ]
+               [(x32 sca) 
+                (broadcast-helper x32 sca)
+                ]
+               [(x64 sca) 
+                (broadcast-helper x64 sca)
+                ]
+               [(x128 sca) 
+                (broadcast-helper x128 sca)
+                ]
+               [(x256 sca) 
+                (broadcast-helper x256 sca)
+                ]
+               [(x512 sca) 
+                (broadcast-helper x512 sca)
+                ]
+               [(xBroadcast sca factor) 
+                (if (int-imm? sca)
+                  (values (xBroadcast sca factor) 0)
+                  (if is-leaf-depth
+                    (begin
+                      (values (xBroadcast (arg 0) factor) 1)
+                      )
+                    (begin
+                      (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                      (values (xBroadcast leaf-sol factor) args-used)
+                      )
+                    )
+                  )
+                ]
+
+               [(ramp base stride len) 
+                (if is-leaf-depth
+                  (values (ramp (arg 0) (arg 1) len) 2)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args base args (- depth 1)))
+                    (define remaining-values (- (vector-length args) args-used1))
+                    (define remaining-args (vector-take-right args remaining-values))
+
+                    (define-values (leaf2-sol args-used2) (bind-expr-args stride remaining-args (- depth 1)))
+
+
+                    (values (ramp leaf1-sol leaf2-sol len) (+ args-used1 args-used2))
+                    )
+                  )
+
+                ]
+               [(load buf idxs alignment) 
+                (if is-leaf-depth
+                  (values (load (arg 0) idxs alignment) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args buf args (- depth 1)))
+                    (values (load leaf-sol idxs alignment) args-used)
+                    )
+                  )
+                ]
+               [(load-sca buf idx) 
+                (if is-leaf-depth
+                  (values (load-sca (arg 0) idx) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args buf args (- depth 1)))
+                    (values (load-sca leaf-sol idx) args-used)
+                    )
+                  )
+                ]
+
+
+               [(int-imm data signed?)  
+                (debug-log args)
+                (values (int-imm data signed?) 0)
+                ]
+
+               [(buffer data elemT buffsize)  
+                (values (arg 0) 1)
+                ]
+
+               ;; Type Casts
+               [(cast-int vec olane oprec) 
+                (cond
+                  [is-leaf-depth
+                    (define leaf-expr (cast-int (get-latest-arg vec) olane oprec))
+                    (values leaf-expr latest-arg)
+                    ]
+                  [else
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (cast-int leaf-sol olane oprec)  args-used )
+                    ]
+                  )
+                ]
+               [(cast-uint vec olane oprec) 
+                (cond
+                  [is-leaf-depth
+                    (define leaf-expr (cast-uint (get-latest-arg vec) olane oprec))
+                    (values leaf-expr latest-arg)
+                    ]
+                  [else
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (cast-uint leaf-sol olane oprec)  args-used )
+                    ]
+                  )
+
+
+                ]
+               [(vec-saturate vec olane oprec signed?) 
+                (cond
+                  [is-leaf-depth
+                    (define leaf-expr (vec-saturate (get-latest-arg vec) olane oprec signed?))
+                    (values leaf-expr latest-arg)
+                    ]
+                  [else
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (vec-saturate leaf-sol olane oprec signed?)  args-used )
+                    ]
+                  )
+
+                ]
+
+               [(uint8x1 sca) 
+                (if is-leaf-depth
+                  (values (uint8x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (uint8x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x1 sca) 
+                (if is-leaf-depth
+                  (values (uint16x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (uint16x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint32x1 sca) 
+                (if is-leaf-depth
+                  (values (uint32x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (uint32x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x1 sca) 
+                (if is-leaf-depth
+                  (values (uint64x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (uint64x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(int8x1 sca) 
+                (if is-leaf-depth
+                  (values (int8x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (int8x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x1 sca) 
+                (if is-leaf-depth
+                  (values (int16x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (int16x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x1 sca)
+                (if is-leaf-depth
+                  (values (int32x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (int32x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x1 sca)
+                (if is-leaf-depth
+                  (values (int64x1 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args sca args (- depth 1)))
+                    (values (int64x1 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint1x32 vec) 
+                (if is-leaf-depth
+                  (values (uint1x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint1x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint1x64 vec) 
+                (if is-leaf-depth
+                  (values (uint1x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint1x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint1x128 vec)
+                (if is-leaf-depth
+                  (values (uint1x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint1x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint1x256 vec)
+                (if is-leaf-depth
+                  (values (uint1x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint1x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint1x512 vec)
+                (if is-leaf-depth
+                  (values (uint1x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint1x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint8x8 vec) 
+                (if is-leaf-depth
+                  (values (uint8x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x8 vec) 
+                (if is-leaf-depth
+                  (values (uint16x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x8 vec) 
+                (if is-leaf-depth
+                  (values (uint32x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x8 vec) 
+                (if is-leaf-depth
+                  (values (uint64x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+
+               [(int8x8 vec) 
+                (if is-leaf-depth
+                  (values (int8x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x8 vec) 
+                (if is-leaf-depth
+                  (values (int16x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x8 vec) 
+                (if is-leaf-depth
+                  (values (int32x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x8 vec) 
+                (if is-leaf-depth
+                  (values (int64x8 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x8 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint8x16 vec) 
+                (if is-leaf-depth
+                  (values (uint8x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x16 vec) 
+                (if is-leaf-depth
+                  (values (uint16x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x16 vec) 
+                (if is-leaf-depth
+                  (values (uint32x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x16 vec) 
+                (if is-leaf-depth
+                  (values (uint64x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+
+               [(int8x16 vec) 
+                (if is-leaf-depth
+                  (values (int8x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x16 vec) 
+                (if is-leaf-depth
+                  (values (int16x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x16 vec) 
+                (if is-leaf-depth
+                  (values (int32x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x16 vec) 
+                (if is-leaf-depth
+                  (values (int64x16 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x16 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint8x32 vec) 
+                (if is-leaf-depth
+                  (values (uint8x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x32 vec) 
+                (if is-leaf-depth
+                  (values (uint16x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x32 vec) 
+                (if is-leaf-depth
+                  (values (uint32x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x32 vec) 
+                (if is-leaf-depth
+                  (values (uint64x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(int8x32 vec) 
+                (if is-leaf-depth
+                  (values (int8x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x32 vec)
+                (if is-leaf-depth
+                  (values (int16x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x32 vec) 
+                (if is-leaf-depth
+                  (values (int32x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x32 vec) 
+                (if is-leaf-depth
+                  (values (int64x32 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x32 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint8x64 vec) 
+                (if is-leaf-depth
+                  (values (uint8x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x64 vec) 
+                (if is-leaf-depth
+                  (values (uint16x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x64 vec) 
+                (if is-leaf-depth
+                  (values (uint32x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x64 vec) 
+                (if is-leaf-depth
+                  (values (uint64x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(int8x64 vec) 
+                (if is-leaf-depth
+                  (values (int8x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x64 vec) 
+                (if is-leaf-depth
+                  (values (int16x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x64 vec) 
+                (if is-leaf-depth
+                  (values (int32x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x64 vec) 
+                (if is-leaf-depth
+                  (values (int64x64 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x64 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint8x128 vec) 
+                (if is-leaf-depth
+                  (values (uint8x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x128 vec) 
+                (if is-leaf-depth
+                  (values (uint16x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x128 vec) 
+                (if is-leaf-depth
+                  (values (uint32x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x128 vec) 
+                (if is-leaf-depth
+                  (values (uint64x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(int8x128 vec)
+                (if is-leaf-depth
+                  (values (int8x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x128 vec) 
+                (if is-leaf-depth
+                  (values (int16x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x128 vec) 
+                (if is-leaf-depth
+                  (values (int32x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x128 vec) 
+                (if is-leaf-depth
+                  (values (int64x128 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x128 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint8x256 vec) 
+                (if is-leaf-depth
+                  (values (uint8x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x256 vec)
+                (if is-leaf-depth
+                  (values (uint16x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x256 vec) 
+                (if is-leaf-depth
+                  (values (uint32x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x256 vec) 
+                (if is-leaf-depth
+                  (values (uint64x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(int8x256 vec) 
+                (if is-leaf-depth
+                  (values (int8x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x256 vec) 
+                (if is-leaf-depth
+                  (values (int16x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x256 vec) 
+                (if is-leaf-depth
+                  (values (int32x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x256 vec)
+                (if is-leaf-depth
+                  (values (int64x256 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x256 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(uint8x512 vec) 
+                (if is-leaf-depth
+                  (values (uint8x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint8x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint16x512 vec) 
+                (if is-leaf-depth
+                  (values (uint16x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint16x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint32x512 vec) 
+                (if is-leaf-depth
+                  (values (uint32x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint32x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(uint64x512 vec) 
+                (if is-leaf-depth
+                  (values (uint64x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (uint64x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               [(int8x512 vec) 
+                (if is-leaf-depth
+                  (values (int8x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int8x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int16x512 vec) 
+                (if is-leaf-depth
+                  (values (int16x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int16x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int32x512 vec)
+                (if is-leaf-depth
+                  (values (int32x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int32x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+               [(int64x512 vec)
+                (if is-leaf-depth
+                  (values (int64x512 (arg 0)) 1)
+                  (begin
+                    (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+                    (values (int64x512 leaf-sol) args-used)
+                    )
+                  )
+                ]
+
+               ;; Operations
+               [(vec-add v1 v2) 
+                (binary-op-helper vec-add v1 v2)
+                ]
+               [(vec-sat-add v1 v2) 
+                (binary-op-helper vec-sat-add v1 v2)
+                ]
+               [(vec-sub v1 v2) 
+                (binary-op-helper vec-sub v1 v2)
+                ]
+               [(vec-sat-sub v1 v2) 
+                (binary-op-helper vec-sat-sub v1 v2)
+                ]
+               [(vec-mul v1 v2) 
+                (binary-op-helper vec-mul v1 v2)
+                ]
+               [(vec-widen-mul v1 v2) 
+                (binary-op-helper vec-widen-mul v1 v2)
+                ]
+               ;[(vec-rounding_shift_right v1 v2) 
+                ;(if is-leaf-depth
+                  ;(values (vec-rounding_shift_right (arg 0) (arg 1)) 2)
+                  ;(begin
+                    ;(define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    ;(define remaining-values (- (vector-length args) args-used1))
+                    ;(define remaining-args (vector-take-right args remaining-values))
+                    ;(define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
+                ;    (values (vec-rounding_shift_right leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+                ;    )
+                ;  )
+                ;]
+
+               [(vec-rounding_shift_right v1 v2) 
+                (binary-op-helper vec-rounding_shift_right v1 v2)
+                ]
+
+               [(vec-rounding_halving_add v1 v2) 
+                (binary-op-helper vec-rounding_halving_add v1 v2)
+                ]
+               [(vec-halving_add v1 v2) 
+                (binary-op-helper vec-halving_add v1 v2)
+                ]
+               ;[(vec-rounding_mul_shift_right v1 v2 v3) 
+                ;(if is-leaf-depth
+                  ;(values (vec-rounding_mul_shift_right (arg 0) (arg 1) (arg 2)) 3)
+                  ;(values (vec-rounding_mul_shift_right (arg 0) (arg 1) v3) 2)
+                  ;(begin
+                    ;(define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    ;(define remaining-values (- (vector-length args) args-used1))
+                    ;(define remaining-args (vector-take-right args remaining-values))
+ ;                   (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+;
+               ;     (values (vec-rounding_mul_shift_right leaf1-sol leaf2-sol v3) (+ args-used1 args-used2))
+               ;     )
+               ;   )
+               ; ]
+
+               [(vec-rounding_mul_shift_right v1 v2 v3) 
+                (cond
+                  [is-leaf-depth
+                    (define leaf-expr (vec-rounding_mul_shift_right (get-latest-arg v1) (get-latest-arg v2) v3))
+                    (values leaf-expr latest-arg)
+                    ]
+                  [else
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (define remaining-values (- (vector-length args) args-used1))
+                    (define remaining-args (vector-take-right args remaining-values))
+                    (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+                    (values (vec-rounding_mul_shift_right leaf1-sol leaf2-sol v3) (+ args-used1 args-used2))
+                    ]
+                  )
+                ]
+               [(vec-div v1 v2)
+                (binary-op-helper vec-div v1 v2)
+                ]
+               [(vec-mod v1 v2)
+                (binary-op-helper vec-mod v1 v2)
+                ]
+               [(vec-min v1 v2) 
+                (binary-op-helper vec-min v1 v2)
+                ]
+               [(vec-max v1 v2) 
+                (binary-op-helper vec-max v1 v2)
+                ]
+               [(vec-if v1 v2 v3)
+                (if is-leaf-depth
+                  (values (vec-if (arg 0) (arg 1) (arg 2)) 3)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (define remaining-values1 (- (vector-length args) args-used1))
+                    (define remaining-args1 (vector-take-right args remaining-values1))
+
+                    (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args1 (- depth 1)))
+                    (define remaining-values2 (- (vector-length remaining-args1) args-used2))
+                    (define remaining-args2 (vector-take-right remaining-args1 remaining-values2))
+
+
+                    (define-values (leaf3-sol args-used3) (bind-expr-args v3 remaining-args2 (- depth 1)))
+
+                    (values (vec-if leaf1-sol leaf2-sol leaf3-sol) (+ args-used1 args-used2 args-used3))
+                    )
+                  )
+                ]
+               [(vec-eq v1 v2)
+                (binary-op-helper vec-eq v1 v2)
+                
+                ]
+               [(vec-lt v1 v2) 
+                (binary-op-helper vec-lt v1 v2)
+                ]
+               [(vec-le v1 v2) 
+                (binary-op-helper vec-le v1 v2)
+                ]
+
+               [(vec-abs v1)
+                (if is-leaf-depth
+                  (values (vec-abs (arg 0)) 1)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (values (vec-abs leaf1-sol) args-used1)
+                    )
+                  )
+                ]
+               [(vec-clz v1) 
+                (if is-leaf-depth
+                  (values (vec-clz (arg 0)) 1)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (values (vec-clz leaf1-sol) args-used1)
+                    )
+                  )
+                ]
+
+               [(vec-absd v1 v2) 
+                (binary-op-helper vec-absd v1 v2)
+                
+                ]
+               [(vec-shl v1 v2) 
+                (binary-op-helper vec-shl v1 v2)
+                ]
+
+               [(vec-shr v1 v2)
+                (binary-op-helper vec-shr v1 v2)
+                ]
+
+               [(vec-bwand v1 v2)
+                (binary-op-helper vec-bwand v1 v2)
+                ]
+
+               [(vec-bwnot v1 )
+                (if is-leaf-depth
+                  (values (vec-bwnot (arg 0)) 1)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (values (vec-bwnot leaf1-sol) args-used1)
+                    )
+                  )
+                ]
+
+               [(vector_reduce op width vec) 
+                (if is-leaf-depth
+                  (values (vector_reduce op width (arg 0)) 1)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
+                    (values (vector_reduce op width leaf1-sol) args-used1)
+                    )
+                  )
+                ]
+
+               ;; Shuffles
+               [(vec-broadcast n vec) 
+                (if is-leaf-depth
+                  (values (vec-broadcast n (arg 0)) 1)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
+                    (values (vec-broadcast n leaf1-sol) args-used1)
+                    )
+                  )
+                ]
+               [(slice_vectors vec base stride len)
+                (if is-leaf-depth
+                  (values (slice_vectors (arg 0) base stride len) 1)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
+                    (values (slice_vectors leaf1-sol base stride len) args-used1)
+                    )
+                  )
+                ]
+               [(concat_vectors v1 v2) 
+                (if is-leaf-depth
+                  (values (concat_vectors (arg 0) (arg 1)) 2)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (define remaining-values (- (vector-length args) args-used1))
+                    (define remaining-args (vector-take-right args remaining-values))
+                    (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+                    (values (concat_vectors leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+                    )
+                  )
+                ]
+               [(interleave v1 v2) 
+                (if is-leaf-depth
+                  (values (interleave (arg 0) (arg 1)) 2)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (define remaining-values (- (vector-length args) args-used1))
+                    (define remaining-args (vector-take-right args remaining-values))
+                    (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+                    (values (interleave leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+                    )
+                  )
+                ]
+               [(interleave4 v1 v2 v3 v4) (list v1 v2 v3 v4)
+                                          (if is-leaf-depth
+                                            (values (interleave4 (arg 0) (arg 1) (arg 2) (arg 3)) 4)
+                                            (begin
+                                              (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                                              (define remaining-values1 (- (vector-length args) args-used1))
+                                              (define remaining-args1 (vector-take-right args remaining-values1))
+
+                                              (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args1 (- depth 1)))
+                                              (define remaining-values2 (- (vector-length remaining-args1) args-used2))
+                                              (define remaining-args2 (vector-take-right remaining-args1 remaining-values2))
+
+
+                                              (define-values (leaf3-sol args-used3) (bind-expr-args v3 remaining-args2 (- depth 1)))
+                                              (define remaining-values3 (- (vector-length remaining-args2) args-used3))
+                                              (define remaining-args3 (vector-take-right remaining-args2 remaining-values3))
+
+
+                                              (define-values (leaf4-sol args-used4) (bind-expr-args v4 remaining-args3 (- depth 1)))
+
+                                              (values (interleave4 leaf1-sol leaf2-sol leaf3-sol leaf4-sol) (+ args-used1 args-used2 args-used3 args-used4))
+                                              )
+                                            )
+                                          ]
+               [(dynamic_shuffle vec idxs st end) 
+                (if is-leaf-depth
+                  (values (dynamic_shuffle (arg 0) (arg 1)) 2)
+                  (begin
+                    (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
+                    (define remaining-values (- (vector-length args) args-used1))
+                    (define remaining-args (vector-take-right args remaining-values))
+                    (define-values (leaf2-sol args-used2) (bind-expr-args idxs remaining-args (- depth 1)))
+                    (values (dynamic_shuffle leaf1-sol leaf2-sol st end) (+ args-used1 args-used2))
+                    )
+                  )
+                ]
+
+               ;; Base case
+               [v (values v 0)])
+
+     ]
+    [else
+      (values expr 0)
+      ]
+    )
+
+
   )
+
+
 
 ;; Returns the sub-expressions at depth away from
 ;; the root of expr. In the case where a leaf is reached
@@ -1438,9 +1448,17 @@
     [(equal? expr '())
      expr
      ]
+    [(is-constant-expr expr)
+     '()
+     ]
+    [(and (xBroadcast? expr) (equal? depth 1))
+     (get-sub-exprs expr 2)
+     ]
     [(<= depth 0)
      (list )
      ]
+
+    ;; If it's a broadcast we should include it for more simplification
     [(equal? depth 1)
         (list expr)
      ]
@@ -1606,6 +1624,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) (* olane oprec)]
     [(cast-uint vec olane oprec) (* olane oprec)]
+    [(vec-saturate vec olane oprec signed?) (* olane oprec)]
     [(uint8x1 sca) 8]
     [(uint16x1 sca) 16]
     [(uint32x1 sca) 32]
@@ -1702,6 +1721,11 @@
     [(vec-sub v1 v2) (vec-size v1)]
     [(vec-sat-sub v1 v2) (vec-size v1)]
     [(vec-mul v1 v2) (vec-size v1)]
+    [(vec-rounding_mul_shift_right v1 v2 v3) (vec-size v1)]
+    [(vec-rounding_shift_right v1 v2) (vec-size v1)]
+    [(vec-rounding_halving_add v1 v2) (vec-size v1)]
+    [(vec-halving_add v1 v2) (vec-size v1)]
+    [(vec-widen-mul v1 v2) (* 2 (vec-size v1))]
     [(vec-div v1 v2) (vec-size v1)]
     [(vec-mod v1 v2) (vec-size v1)]
     [(vec-min v1 v2) (vec-size v1)]
@@ -1764,7 +1788,6 @@
                       (set! scaled? #f)
                       ;(error "Unsupported scaling for " e)
                       (* prec len)
-                      
                       ]
                     )
                   )
@@ -1775,6 +1798,9 @@
                ]
               [(cast-uint vec olane oprec)
                (cast-uint vec (/ olane scale-factor) oprec)
+               ]
+              [(vec-saturate vec olane oprec signed?)
+               (vec-saturate vec (/ olane scale-factor) oprec signed?)
                ]
               [(xBroadcast sca factor) 
                (xBroadcast sca (/ factor scale-factor))
@@ -2008,6 +2034,50 @@
               [(vec-if vi v1 v2)
                (set! flag #t)
                ]
+
+              [(vec-rounding_mul_shift_right v1 v2 v3)
+               (set! flag #t)
+               ]
+              [_ e]
+              )
+    )
+  (halide:visit expr visitor-fn)
+
+  flag
+  )
+
+
+(define (contains-mul-op-in-subexpr expr expr-depth)
+
+  (define leaves (get-sub-exprs expr (+ expr-depth 1)))
+  (define leaves-sizes (get-expr-bv-sizes leaves))
+
+  (define leaves-elemT (get-expr-elemT leaves))
+  (define sym-bvs (create-concrete-bvs leaves-sizes))
+
+  (define dummy-args (create-buffers leaves sym-bvs))
+
+  (define-values (expr-extract num-used) (bind-expr-args expr dummy-args expr-depth))
+
+
+  (contains-mul-op expr-extract)
+  )
+
+
+
+(define (contains-mul-op expr)
+
+  (define flag #f)
+  (define (visitor-fn e)
+    (destruct e
+              [(vec-mul v1 v2) 
+               (set! flag #t)
+               e
+               ]
+              [(vec-widen-mul v1 v2) 
+               (set! flag #t)
+               e
+               ]
               [_ e]
               )
     )
@@ -2034,17 +2104,17 @@
 
 (define (get-expr-depth e)
   (define depth 1)
-
   (destruct e
             [(buffer data elemT buffsize)
              (set! depth 0)
              ]
+            [(reg id)
+             (set! depth 0)
+             ]
             [_
-
   (define sub-exp (halide:sub-exprs e))
-
   (for/list ([se sub-exp])
-            (println se)
+            ;(println se)
             (define sub-depth (get-expr-depth se))
             (define edge-depth (+ 1 sub-depth))
             (set! depth (max depth edge-depth))
@@ -2056,6 +2126,35 @@
 
   depth
   
+  )
+
+
+(define (extract-sub-expressions expr depth)
+  (define is-buffer? (buffer? expr))
+  (cond
+    [is-buffer?
+      (list (hash-expr expr))
+      ]
+    [else
+      (define leaves (get-sub-exprs expr (+ 1 depth)))
+      (define leaves-sizes (get-expr-bv-sizes leaves))
+      (define sym-bvs (create-concrete-bvs leaves-sizes)) 
+
+      (define halide-expr-args (create-buffers leaves sym-bvs))
+
+
+      (define-values (expr-extract num-used) (bind-expr-args expr  halide-expr-args depth))
+
+      (define current-hash (hash-expr expr-extract))
+
+      (define sub-results (for/list ([leaf leaves]) (extract-sub-expressions leaf depth)))
+
+      (define combine-children (apply append sub-results))
+      (define final (append (list current-hash)   combine-children))
+      final
+
+      ]
+    )
   )
 
 (define (get-imm-values expr)
@@ -2077,6 +2176,46 @@
                (set! imms-vals (append imms-vals adjusted))
                e
 
+               ]
+               [(vec-rounding_shift_right v1 v2) 
+                (define prec (vec-precision v1))
+                (define one (bv 1 (bitvector prec)))
+                (define two (bv 2 (bitvector prec)))
+               (set! imms-vals (append imms-vals (list one two)))
+               e
+
+               ]
+
+               [(vec-rounding_halving_add v1 v2) 
+                (define prec (* 2 (vec-precision v1)))
+                (define one (bv 1 (bitvector prec)))
+                (define two (bv 2 (bitvector prec)))
+               (set! imms-vals (append imms-vals (list one two)))
+               e
+
+               ]
+
+               [(vec-halving_add v1 v2) 
+                (define prec (* 2 (vec-precision v1)))
+                (define two (bv 2 (bitvector prec)))
+               (set! imms-vals (append imms-vals (list two)))
+               e
+
+               ]
+
+               [(vec-saturate v1 olane  oprec signed?) 
+                (define prec (vec-precision e))
+                (define-values (max-val min-val)
+                               (cond
+                                 [signed?
+                                   (values (bvsmaxval prec) (bvsminval prec) )
+                                   ]
+                                 [else
+                                   (values (bvumaxval prec) (bvuminval prec) )
+                                   ]
+                                 )
+                               )
+               e
                ]
               ;; When target doesn't support saturating operations
               ;; of a given size then we can decompose the operation
@@ -2130,6 +2269,27 @@
     [else (error "halide/utils.rkt: Unexpected buffer type in size-to-elemT-signed" size )])
 )
 
+(define (get-widened-elemT elemT1 elemT2)
+  (cond
+    [(and (equal? elemT1 'uint8) (equal? elemT2 'int8))  'int16]
+    [(and (equal? elemT1 'uint16) (equal? elemT2 'int16))  'int32]
+    [(and (equal? elemT1 'uint32) (equal? elemT2 'int32))  'int64]
+    [(and (equal? elemT1 'uint64) (equal? elemT2 'int64))  'int128]
+
+    [(equal? elemT1 'int8) 'int16]
+    [(equal? elemT1 'int16) 'int32]
+    [(equal? elemT1 'int32) 'int64]
+    [(equal? elemT1 'int64) 'int128]
+    [(equal? elemT1 'uint8) 'uint16]
+    [(equal? elemT1 'uint16) 'uint32]
+    [(equal? elemT1 'uint32) 'uint64]
+    [(equal? elemT1 'uint64) 'uint128]
+    [else
+      (error "unsupported type for widening in halide" elemT1 elemT2)
+      ]
+   )
+  )
+
 
 ;; Infer the length of vector generated by the expression
 (define (get-elemT expr)
@@ -2156,6 +2316,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) (size-to-elemT-signed oprec #t)]
     [(cast-uint vec olane oprec) (size-to-elemT-signed oprec #f)]
+    [(vec-saturate vec olane oprec signed?) (size-to-elemT-signed oprec signed?) ]
     [(uint8x1 sca) 'uint8]
     [(uint16x1 sca) 'uint16]
     [(uint32x1 sca) 'uint32]
@@ -2250,6 +2411,11 @@
     [(vec-sub v1 v2) (get-elemT v1)]
     [(vec-sat-sub v1 v2) (get-elemT v1)]
     [(vec-mul v1 v2) (get-elemT v1)]
+    [(vec-rounding_mul_shift_right v1 v2 v3) (get-elemT v1)]
+    [(vec-rounding_shift_right v1 v2) (get-elemT v1)]
+    [(vec-rounding_halving_add v1 v2) (get-elemT v1)]
+    [(vec-halving_add v1 v2) (get-elemT v1)]
+    [(vec-widen-mul v1 v2) (get-widened-elemT (get-elemT v1) (get-elemT v2) )] 
     [(vec-div v1 v2) (get-elemT v1)]
     [(vec-mod v1 v2) (get-elemT v1)]
     [(vec-min v1 v2) (get-elemT v1)]
@@ -2312,6 +2478,7 @@
     ;; Type Casts
     [(cast-int vec olane oprec) oprec]
     [(cast-uint vec olane oprec) oprec]
+    [(vec-saturate vec olane oprec signed?) oprec]
     [(uint8x1 sca) 8]
     [(uint16x1 sca) 16]
     [(uint32x1 sca) 32]
@@ -2408,6 +2575,11 @@
     [(vec-sub v1 v2) (vec-precision v1)]
     [(vec-sat-sub v1 v2) (vec-precision v1)]
     [(vec-mul v1 v2) (vec-precision v1)]
+    [(vec-rounding_mul_shift_right v1 v2 v3) (vec-precision v1)]
+    [(vec-rounding_shift_right v1 v2) (vec-precision v1)]
+    [(vec-rounding_halving_add v1 v2) (vec-precision v1)]
+    [(vec-halving_add v1 v2) (vec-precision v1)]
+    [(vec-widen-mul v1 v2) (* 2 (vec-precision v1))]
     [(vec-div v1 v2) (vec-precision v1)]
     [(vec-mod v1 v2) (vec-precision v1)]
     [(vec-min v1 v2) (vec-precision v1)]
@@ -2443,3 +2615,806 @@
     [_ (error "halide\\utils.rkt: Don't know how to infer vector precision for Halide expression:" expr)]))
 
 ;; 
+
+
+
+
+;; Utilities to check if halide expressions are equivalent
+
+(define (is-buffer-hash e)
+  (cond 
+    [(equal? e '(buf uint8 32))
+     (values #t 'uint8 32)
+     ]
+    [(equal? e '(buf uint8 64))
+     (values #t 'uint8 64)
+     ]
+    [(equal? e '(buf uint8 128))
+     (values #t 'uint8 128)
+     ]
+    [(equal? e '(buf uint8 256))
+     (values #t 'uint8 256)
+     ]
+    [(equal? e '(buf uint8 512))
+     (values #t 'uint8 512)
+     ]
+    [(equal? e '(buf uint8 1024))
+     (values #t 'uint8 1024)
+     ]
+    [(equal? e '(buf uint8 2048))
+     (values #t 'uint8 2048)
+     ]
+    [(equal? e '(buf int8 32))
+     (values #t 'int8 32)
+     ]
+    [(equal? e '(buf int8 64))
+     (values #t 'int8 64)
+     ]
+    [(equal? e '(buf int8 128))
+     (values #t 'int8 128)
+     ]
+    [(equal? e '(buf int8 256))
+     (values #t 'int8 256)
+     ]
+    [(equal? e '(buf int8 512))
+     (values #t 'int8 512)
+     ]
+    [(equal? e '(buf int8 1024))
+     (values #t 'int8 1024)
+     ]
+    [(equal? e '(buf int8 2048))
+     (values #t 'int8 2048)
+     ]
+    [(equal? e '(buf uint16 32))
+     (values #t 'uint16 32)
+     ]
+    [(equal? e '(buf uint16 64))
+     (values #t 'uint16 64)
+     ]
+    [(equal? e '(buf uint16 128))
+     (values #t 'uint16 128)
+     ]
+    [(equal? e '(buf uint16 256))
+     (values #t 'uint16 256)
+     ]
+    [(equal? e '(buf uint16 512))
+     (values #t 'uint16 512)
+     ]
+    [(equal? e '(buf uint16 1024))
+     (values #t 'uint16 1024)
+     ]
+    [(equal? e '(buf uint16 2048))
+     (values #t 'uint16 2048)
+     ]
+    [(equal? e '(buf int16 32))
+     (values #t 'int16 32)
+     ]
+    [(equal? e '(buf int16 64))
+     (values #t 'int16 64)
+     ]
+    [(equal? e '(buf int16 128))
+     (values #t 'int16 128)
+     ]
+    [(equal? e '(buf int16 256))
+     (values #t 'int16 256)
+     ]
+    [(equal? e '(buf int16 512))
+     (values #t 'int16 512)
+     ]
+    [(equal? e '(buf int16 1024))
+     (values #t 'int16 1024)
+     ]
+    [(equal? e '(buf int16 2048))
+     (values #t 'int16 2048)
+     ]
+    [(equal? e '(buf uint32 32))
+     (values #t 'uint32 32)
+     ]
+    [(equal? e '(buf uint32 64))
+     (values #t 'uint32 64)
+     ]
+    [(equal? e '(buf uint32 1024))
+     (values #t 'uint32 1024)
+     ]
+    [(equal? e '(buf uint32 2048))
+     (values #t 'uint32 2048)
+     ]
+    [(equal? e '(buf int32 32))
+     (values #t 'int32 32)
+     ]
+    [(equal? e '(buf int32 64))
+     (values #t 'int32 64)
+     ]
+    [(equal? e '(buf int32 1024))
+     (values #t 'int32 1024)
+     ]
+    [(equal? e '(buf int32 2048))
+     (values #t 'int32 2048)
+     ]
+    [else
+      (values #f 0 0)
+      ]
+    
+    )
+  
+  )
+
+
+
+(define (get-halide-expr-regs expr)
+  (define-values (is-buf? type size) (is-buffer-hash expr))
+  (cond
+    [is-buf?
+     (list (halide:create-buffer (bv 0 size) type))
+     ]
+
+    [(buffer? expr)
+     (list expr)
+     ]
+    [else
+      (define sub-exprs (halide:sub-exprs expr))
+      (define nested-regs (for/list ([sub-exp sub-exprs])  (get-halide-expr-regs sub-exp)))
+      (apply append nested-regs)
+      ]
+    )
+  )
+
+
+(define (halide-expr-equiv? e1 e2)
+  (define regs-1 (get-halide-expr-regs e1))
+  (define regs-2 (get-halide-expr-regs e2))
+
+
+
+  (cond
+    [(equal? e1 e2)
+     ;; Hashs are equivalent, they match exactly
+     #t
+     ]
+    [(equal? (length regs-1) (length regs-2))
+     ;; proceed with next steps
+
+     (define (get-types b)
+       (destruct b
+                 [(buffer data elemT buffsize)
+                  elemT
+                  ]
+                 [_
+                   (error "Must be buffers to get types")
+                   ]
+                 )
+       )
+
+     (define types-e1 (for/list ([b regs-1]) (get-types b)))
+     (define types-e2 (for/list ([b regs-2]) (get-types b)))
+
+     (define intersect-types (set-intersect types-e1 types-e2))
+
+     (cond 
+       [(not (equal? (length intersect-types) 0))
+        ;; Check further if the list of the sizes (sorted) are the same
+
+        (define (get-sizes b)
+          (destruct b
+                    [(buffer data elemT buffsize)
+                     buffsize
+                     ]
+                    [_
+                      (error "Must be buffers to get types")
+                      ]
+                    )
+          )
+        (define sizes-e1 (sort (for/list ([b regs-1]) (get-sizes b)) <))
+        (define sizes-e2 (sort (for/list ([b regs-2]) (get-sizes b)) <))
+
+        (cond
+          [(and (equal? sizes-e1 sizes-e2) ) 
+           ;; Same number of arguments with same sizes, 
+           ;; we can check if they are equivalent through verification
+           (verify-equivalent-halide-exprs e1 e2)
+           ]
+          [else
+            ;; Operating on different sizes of vectors, hence can't be equivlant
+            #f
+            ]
+          )
+        ]
+       [else
+         ;; Has no common types, hence we can discard equivalence
+         #f
+         ]
+
+       )
+
+
+     ]
+    [else
+      ;; Different number of registers, hence expressions
+      ;; are not equal
+      #f
+      ]
+    
+    )
+  
+  
+  
+  )
+
+
+(define (verify-equivalent-halide-exprs e1 e2)
+  ;(displayln "Verify-Equivalent-halide-exprs")
+  (define regs-1 (get-halide-expr-regs e1))
+  (define regs-2 (get-halide-expr-regs e2))
+
+  (define (replace-hashed-buf expr)
+    (define-values (is-buff? type size) (is-buffer-hash expr))
+    (if 
+      is-buff?
+      (halide:create-buffer (bv 0 size) type)
+      expr
+      )
+    )
+
+
+  (define dummy-e1 (halide:visit e1 replace-hashed-buf ))
+  (define dummy-e2 (halide:visit e2 replace-hashed-buf ))
+
+
+
+  ;; We know that regs-1 and regs-2 have the same number
+  ;; of arguments, have some common types, and have the
+  ;; same number of arguments of a given sizes. To check
+  ;; if they're equivalent, what we will do is
+  ;; create symbolic holes according to e1, and 
+  ;; define a grammar for e2 which can choose between
+  ;; any of the bitvectors of the same size from e1.
+  ;; This way, we let the synthesizer find any isomorphism
+  ;; and ordering for the arguments
+
+
+  (define (get-sizes b)
+    (destruct b
+              [(buffer data elemT buffsize)
+               buffsize
+               ]
+              [_
+                (error "Must be buffers to get types")
+                ]
+              )
+    )
+
+  (define (get-type b)
+    (destruct b
+              [(buffer data elemT buffsize)
+               elemT
+               ]
+              [_
+                (error "Must be buffers to get types")
+                ]
+              )
+    )
+
+  (define bv-sizes (for/list ([b regs-1])  (get-sizes b)))
+  (define unique-sizes (remove-duplicates bv-sizes))
+
+  (define sym-bvs (create-symbolic-bvs bv-sizes))
+  ;(println bv-sizes)
+
+
+  (define depth-e1 (get-expr-depth dummy-e1))
+
+  (define bound-regs-1
+    (for/list ([i (range (length bv-sizes))])
+              (define hole (vector-ref sym-bvs i))
+              (define reg-i (list-ref regs-1 i))
+              (define type-i (get-type reg-i))
+              ;(println type-i)
+              ;(println hole)
+              (halide:create-buffer hole type-i)
+              )
+    )
+
+
+  (define-values (symbolic-e1 num-used-1) (bind-expr-args dummy-e1 (list->vector bound-regs-1) (+ depth-e1 1)))
+
+
+  ;; For each unique size in e1, we define a map
+  ;; which maps from a given bitvector size
+  ;; to a grammar which selects bitvectors of those sizes
+
+  (define bv-size-to-grammar-hash (make-hash))
+
+
+
+  (define (grammar-visitor expr)
+    (destruct expr
+              [(buffer data elemT buffsize)
+
+               (define (matches-size? s)
+                 (equal? (bvlength s) buffsize)
+                 )
+
+               (define holes-of-size (filter matches-size? (vector->list sym-bvs)))
+               ;(displayln "holes of sizes")
+               ;(println holes-of-size)
+
+               (define-grammar (choose-regs)
+                               [expr
+                                 (choose 
+                                   ;(list-ref holes-of-size (?? integer?))
+                                   (?? integer?)
+                                  )
+                                 ]
+                               )
+
+               (define-symbolic* index integer?)
+               (assume (>= index 0))
+               (assume (< index (length holes-of-size)))
+
+               ;(halide:create-buffer (choose-regs) elemT)
+
+               (halide:create-buffer (vector-ref (list->vector holes-of-size) index) elemT)
+               ]
+              [v v]
+              )
+    )
+  (define symbolic-e2 (halide:visit dummy-e2 grammar-visitor))
+
+  ;(displayln "Symbolic e1")
+  ;(pretty-print symbolic-e1)
+
+  ;(displayln "Symbolic e2")
+  ;(pretty-print symbolic-e2)
+
+  ;(println (halide:vec-len symbolic-e1))
+
+
+  (define (equiv-at-index i)
+    (define e1-result-i (cpp:eval ((halide:interpret symbolic-e1) i)))
+    (define e2-result-i (cpp:eval ((halide:interpret symbolic-e2) i)))
+    (clear-vc!)
+    (define sol
+      (synthesize
+        #:forall (list sym-bvs)
+        #:guarantee
+        (assert (equal? e1-result-i e2-result-i ))
+        )
+      )
+
+    (sat? sol)
+    )
+
+
+  ;; First test equivalence on just one index
+  (define equiv (equiv-at-index 0))
+
+  (cond
+    [equiv
+    (define e1-result (halide:assemble-bitvector (halide:interpret symbolic-e1) (halide:vec-len symbolic-e1) ))
+    (define e2-result (halide:assemble-bitvector (halide:interpret symbolic-e2) (halide:vec-len symbolic-e2) ))
+
+    (clear-vc!)
+    (define sol
+      (synthesize
+        #:forall (list sym-bvs)
+        #:guarantee
+        (assert (equal? e1-result e2-result ))
+        )
+      )
+
+    (sat? sol)
+      ]
+    [else
+      ;(displayln "Not equal at index 0")
+      #f
+      ]
+    )
+  )
+
+
+
+;; Given a list of expression hashes,
+;; create a hash-map which maps each expression
+;; to how many times it appears in the list.
+;; This is useful for any analysis on the frequency
+;; of expressions.
+(define (bucketize-hash expr-ls)
+  (define buckets (make-hash))
+
+  (for/list ([expr expr-ls])
+            (define-values  (is-buf? type size) (is-buffer-hash expr))
+            (cond
+              [is-buf?
+                ;; Skip expressions which are just buffers
+                '()
+                ]
+              [(hash-has-key? buckets expr)
+               (define prev-count (hash-ref buckets expr))
+               (hash-set! buckets expr (+ 1 prev-count))
+               ]
+              [else
+                (hash-set! buckets expr 1)
+                ]
+              )
+            )
+  buckets
+  
+  )
+
+(define (get-common-expressions expr-ls-1 expr-ls-2)
+  
+  (define hash1 (bucketize-hash expr-ls-1))
+  (define hash2 (bucketize-hash expr-ls-2))
+
+  ;(pretty-print hash1)
+  ;(pretty-print hash2)
+
+  (define exprs-1 (hash-keys hash1))
+  (define exprs-2 (hash-keys hash2))
+
+  (define common-expressions (list))
+
+  (for/list ([e1 exprs-1])
+            (for/list ([e2 exprs-2])
+
+                      (define equivalent? (halide-expr-equiv? e1 e2))
+
+                      (cond 
+                        [equivalent? 
+                          (set! common-expressions (append common-expressions (list (list e1 e2))))
+                          ]
+                        )
+
+                      )
+            )
+  common-expressions
+  )
+
+
+
+
+(define (is-int-min? bits broadcast-expr signed?)
+  (define int-min-value 
+    (cond
+      [signed? 
+        (bvsminval bits)
+        ]
+      [else
+        (bvuminval bits)
+        ]
+      )
+    )
+
+  (define cvt-to-integer 
+    (cond
+      [signed?
+        bitvector->integer
+        ]
+      [else
+        bitvector->natural
+        ]
+      
+      )
+    )
+
+
+
+  (define expr-value (cpp:eval ((halide:interpret broadcast-expr) 0)))
+
+
+  (equal? (cvt-to-integer expr-value) (cvt-to-integer int-min-value) )
+  )
+
+(define (is-int-max? bits broadcast-expr signed?)
+  (define int-max-value 
+    (cond
+      [signed? 
+        (bvsmaxval bits)
+        ]
+      [else
+        (bvumaxval bits)
+        ]
+      )
+    )
+
+  (define cvt-to-integer 
+    (cond
+      [signed?
+        bitvector->integer
+        ]
+      [else
+        bitvector->natural
+        ]
+      
+      )
+    )
+
+
+
+  (define expr-value (cpp:eval ((halide:interpret broadcast-expr) 0)))
+
+
+  (equal? (cvt-to-integer expr-value) (cvt-to-integer int-max-value) )
+  )
+
+(define (match-saturating-cast expr)
+  (define (visitor-fn ele)
+    (match
+      ele
+      [
+       (cast-int
+         (vec-max
+           (vec-min 
+             min1
+             min2
+             )
+           max2
+           )
+         olanes prec
+         )
+
+       (cond
+         [(and  (is-int-min? prec max2 #t) (is-int-max? prec min2 #t))
+          (vec-saturate min1 olanes prec #t)
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+      [
+       (cast-uint
+         (vec-max
+           (vec-min 
+             min1
+             min2
+             )
+           max2
+           )
+         olanes prec
+         )
+
+       (displayln "HERE!")
+
+       (cond
+         [(and  (is-int-min? prec max2 #f) (is-int-max? prec min2 #f))
+          (vec-saturate min1 olanes prec #f)
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+      [
+       (vec-mul
+         (cast-int
+           reg_0 lanes prec)
+         (xBroadcast (int-imm lit sign) lanes))
+
+       (displayln "widen mul case")
+
+       (cond
+         [(and 
+               (equal? sign #t)
+               (equal? (bvlength lit) (* 1 prec))   
+               (< (bitvector->integer lit) (bitvector->integer (bvsmaxval prec))) 
+               (> (bitvector->integer lit) (bitvector->integer (bvsminval prec)))   
+               (equal? (* 2 (vec-size reg_0)) (* lanes prec))
+               )
+          
+          (vec-widen-mul 
+            reg_0 
+            (xBroadcast (int-imm (bv (bitvector->integer lit) (bitvector (/ prec 2))) #t)  (* lanes 1))
+            )
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+[
+       (vec-mul
+         (cast-uint
+           reg_0 lanes prec)
+         (xBroadcast (int-imm lit sign) lanes))
+
+
+       (cond
+         [(and 
+               (equal? sign #f)
+               (equal? (bvlength lit) (* 1 prec))   
+               (< (bitvector->natural lit) (bitvector->natural (bvumaxval prec))) 
+               (> (bitvector->natural lit) (bitvector->natural (bvuminval prec)))   
+               (equal? (* 2 (vec-size reg_0)) (* lanes prec))
+               )
+          
+          (vec-widen-mul 
+            reg_0 
+            (xBroadcast (int-imm (bv (bitvector->natural lit) (bitvector (/ prec 2))) #f)  (* lanes 1))
+            )
+          ]
+         [else
+           ele
+           ]
+         )
+       ]
+     
+      [_ ele]
+      )
+    )
+  (halide:visit expr visitor-fn)
+
+  )
+
+
+
+
+(define (cvt-hashed-expr-to-actual-expr hashed-expr)
+
+  (define (raise-fn ele)
+
+    (define-values (is-buf? type size) (is-buffer-hash ele))
+
+    (cond
+      [is-buf? 
+        (halide:create-buffer (bv 0 size) type)
+        ]
+      [else
+        ele
+        ]
+      )
+    )
+
+  (define raised-expression (halide:visit hashed-expr raise-fn))
+  raised-expression
+
+  )
+
+
+;; Input-expr-ls is a list of hashed expressions
+(define (extract-common-hash-entries  input-expr-ls hashed-log)
+
+  (define scale-factor 32)
+
+  (define scaled-down-expr-ls (list ))
+  (for/list ([expr input-expr-ls])
+
+            (define raised-expression (cvt-hashed-expr-to-actual-expr expr))
+            ;; Scaled down version of expression may be in hash
+            (define-values (scalable? scaled-expr) (scale-down-expr raised-expression scale-factor))
+
+            (cond
+              [scalable? 
+                (set! scaled-down-expr-ls (append scaled-down-expr-ls (list (hash-expr scaled-expr))))
+                ]
+              )
+            
+            )
+
+  (set! input-expr-ls (append input-expr-ls scaled-down-expr-ls))
+
+
+
+  ;; If an input expression was unable to be synthesized all at once
+  ;;, it is synthesized by splitting it into smaller sub-expressions.
+  ;; This list accumulates the sub-expressions which are split.
+  (define split-expressions (list))
+
+
+
+
+
+  (define immediate-expressions (list))
+
+  (for/list ([expr input-expr-ls])
+
+            (cond
+              [(hash-has-key? hashed-log expr)
+
+               (define hashed-entry (hash-ref hashed-log expr))
+
+
+               (define synthesizable?
+                 (vector-ref hashed-entry 0)
+                 )
+
+
+              (set! immediate-expressions (append immediate-expressions (list expr)))
+               (cond
+                 [synthesizable?
+                   ;; Do nothing
+                   '()
+                   ]
+                 [else
+                   ;; Break down current expressions and add to split-expressions
+
+                   (define raised-expression (cvt-hashed-expr-to-actual-expr expr))
+
+                   ;; Raise expression back from hash to halide-ir expression tree
+
+                   (define depth (get-expr-depth raised-expression))
+
+                   (define decremented-depth (- depth 1))
+
+                   (define sub-expressions (extract-sub-expressions raised-expression decremented-depth))
+
+
+                   (for/list ([sub-expr sub-expressions])
+                             (set! split-expressions (append split-expressions (list  sub-expr)))
+                             )
+                   ]
+                 )
+               ]
+              )
+            )
+
+  (define split-result 
+    (if (equal? (length split-expressions) 0)
+      (list )
+    (extract-common-hash-entries split-expressions hashed-log)
+      )
+    )
+
+
+
+  (remove-duplicates (append split-result immediate-expressions))
+
+
+  )
+
+
+;; Alternative wrapper for invoking halide:interpret
+;; which creates a new halide-expr with the buffers replaced
+;; with vectors in env
+(define (interpret-with-env prog env)
+  (define expr-depth-max (get-expr-depth prog))
+  (define leaves (get-sub-exprs prog (+ 1 expr-depth-max)))
+
+  (define (replace-arg e)
+    (define index -1)
+    (for/list ([i (range (length leaves))])
+              (define leaf-i (list-ref leaves i))
+              (cond 
+                [(equal? leaf-i e)
+                 (set! index i)
+                 ]
+                )
+              )
+
+    (cond
+      [(not (equal? index -1))
+       (define buf-elemT (get-elemT e))
+       (define new-buf (halide:create-buffer (vector-ref env index) buf-elemT))
+       new-buf
+       ]
+      [else
+        e
+        ]
+      )
+    )
+
+  
+  (define bound-expr (halide:visit prog replace-arg))
+  (halide:assemble-bitvector (halide:interpret bound-expr) (halide:vec-len bound-expr))
+  )
+
+
+(define (replace-reg-with-bufs prog signedness sizes precs)
+  (define expr-depth-max (get-expr-depth prog))
+  (define leaves (get-sub-exprs prog (+ 1 expr-depth-max)))
+
+  (define (replace-arg e)
+    (destruct e
+              [(reg id)
+               (define index (bitvector->natural id))
+               (halide:create-buffer (bv 0 (list-ref sizes index)) (size-to-elemT-signed (list-ref precs index) (list-ref signedness index)))
+               ]
+              [_
+                e
+                ]
+              
+              )
+    )
+  (halide:visit prog replace-arg)
+  )
+

@@ -17,7 +17,8 @@ public:
         // Schedules for x86
         blur_y
             .split(y, y, yi, 32)
-            .vectorize(x, 32);
+            .vectorize(x, 32)
+            .unroll(yi);
         blur_x
             .store_in(MemoryType::Stack)
             .store_at(blur_y, y)

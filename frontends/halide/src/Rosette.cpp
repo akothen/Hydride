@@ -6,6 +6,7 @@
 #include "CodeGen_Internal.h"
 #include "ExprUsesVar.h"
 #include "FindIntrinsics.h"
+#include "HydrideCodeGen.h"
 #include "IREquality.h"
 #include "IRMutator.h"
 #include "IROperator.h"
@@ -35,6 +36,7 @@ bool SIMPLIFY_ABSD = true;
 
 bool SIMPLIFY_RAMP = true;
 bool HVX_TARGET = true;
+bool SIMPLIFY_WIDEN_MUL = false;
 
 std::string target_str = "";
 
@@ -55,6 +57,109 @@ std::map<const Load *, unsigned> LoadToRegMap;  // Map racket register expressio
 
 std::map<unsigned, const Variable *> RegToVariableMap;  // Map racket register expressions to Halide Load Instructions
 std::map<const Variable *, unsigned> VariableToRegMap;  // Map racket register expressions to Halide Load Instructions
+
+// Targets such as HVX do not have division
+// operations, so we must replace operations
+// using division to instead use shifts
+class ReplaceDiv : public IRMutator {
+    using IRMutator::visit;
+
+    Expr visit(const Div *op) override {
+
+        if (!op->type.is_float() && op->type.is_vector() && !is_const(op->b, 2)) {
+            auto lowered_div = lower_int_uint_div(op->a, op->b);
+            debug(0) << "Halide Lowered Div to: " << lowered_div << "\n";
+            return mutate(lowered_div);
+        }
+
+        return IRMutator::visit(op);
+    }
+
+    Expr visit(const Call *op) override {
+
+        if (op->is_intrinsic(Call::shift_right)) {
+            debug(0) << "Found shr\n";
+            // if (!op->type.is_float() && op->type.is_vector()) {
+            //     debug(0) << "Lowering armshr to armshl\n";
+            //     return (op->args[0] << simplify(-op->args[1]));
+            // }
+            // Current legalizer doesn't support immediate argument
+            if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
+                debug(0) << "Lowering armshr to armshl\n";
+                return op->args[0] << simplify(-op->args[1]);
+            }
+        }
+
+        return IRMutator::visit(op);
+    }
+
+    Expr visit(const Mul *op) override {
+
+        // size_t bits = op->type.bits();
+        // size_t lanes = op->type.lanes();
+
+        // if (!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)) {
+        //     debug(0) << "Found multiplication to slice!"
+        //              << "\n";
+        //     Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1, 32));
+        //     Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1, 32));
+
+        //     Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1, 32));
+        //     Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1, 32));
+
+        //     Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
+        //     Expr right_mul = (Mul::make(left_op_second_half, right_op_second_half));
+
+        //     Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
+        //     debug(0) << "Halide Lowered Mul to: " << lowered_mul << "\n";
+        //     return mutate(lowered_mul);
+        // }
+
+        return IRMutator::visit(op);
+    }
+
+    // For certain targets, even when broadcasting elements of
+    // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
+    // Without loss of generality, depending on the target, we modify our broadcasts
+    // to accomodate such behavior when needed.
+    // Expr visit(const Broadcast *op) override {
+
+    //     size_t bits = op->type.bits();
+    //     size_t lanes = op->type.lanes();
+
+    //     if (lanes == 1) {
+    //         return op->value;
+    //     }
+
+    //     if (is_const(op->value)) {
+    //         return op;
+    //     }
+
+    //     if (!op->type.is_float() && op->type.is_vector()) {
+
+    //         if (bits == 16 && op->value.type().lanes() != 2) {  // Just my guess, to pass assertion at IR.cpp:269 for ARM @ "add" benchmark
+
+    //             debug(0) << "======"
+    //                      << "\n";
+    //             debug(0) << "Orignal broadcast value: " << op->value << "\n";
+    //             debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
+    //             Expr Broadcast2 = Broadcast::make(op->value, 2);
+    //             Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
+    //             debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
+    //             debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
+    //             return ModifiedBroadcast;
+    //         } else {
+    //             return op;
+    //         }
+    //     }
+
+    //     return IRMutator::visit(op);
+    // }
+
+public:
+    ReplaceDiv() {
+    }
+};
 
 // Takes the input Halide IR and converts it to Rosette syntax
 class ExprPrinter : public VariadicVisitor<ExprPrinter, std::string, std::string> {
@@ -221,6 +326,15 @@ public:
             return tabs() + op->name;
         }
 
+        for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++) {
+            const Variable *vop = bi->first;
+
+            if (vop->name == op->name) {
+                std::string reg_name = "reg_" + std::to_string(VariableToRegMap[vop]);
+                return tabs() + reg_name;
+            }
+        }
+
         if (VariableToRegMap.find(op) != VariableToRegMap.end()) {
             std::string reg_name = "reg_" + std::to_string(VariableToRegMap[op]);
             return tabs() + reg_name;
@@ -324,15 +438,12 @@ public:
 
     std::string visit(const Min *op) {
 
-        debug(0) << "Emitting min to rosette\n";
-
         if (SkipNodes.find((const IRNode *)op) != SkipNodes.end()) {
             SkipNodes.insert(op->a.get());
             SkipNodes.insert(op->b.get());
             return "";
         }
         std::string min_emit = print_binary_op("min", "min", op->a, op->b, op->type.is_vector());
-        debug(0) << min_emit << "\n";
 
         return min_emit;
     }
@@ -510,6 +621,8 @@ public:
             return "";
         }
 
+        defined.insert(op->name);
+
         // Set the correct encoding mode
         mode.push(encoding[op->name]);
         std::string rkt_val = dispatch(op->value);
@@ -518,8 +631,6 @@ public:
         indent.push(indent.top() + 1);
         std::string rkt_bdy = dispatch(op->body);
         indent.pop();
-
-        defined.insert(op->name);
 
         return tabs() + "(let ([" + op->name + " " + rkt_val + "])\n" + rkt_bdy + ")";
     }
@@ -555,6 +666,8 @@ public:
             return print_intrinsic("sat-add", op->args, op->type.is_scalar());
         } else if (op->is_intrinsic(Call::saturating_sub)) {
             return print_intrinsic("sat-sub", op->args, op->type.is_scalar());
+        } else if (op->is_intrinsic(Call::widening_mul)) {
+            return print_intrinsic("widen-mul", op->args, op->type.is_scalar());
         } else if (op->is_intrinsic(Call::shift_right)) {
             return print_intrinsic("shr", op->args, op->type.is_scalar());
         } else if (op->is_intrinsic(Call::shift_left)) {
@@ -565,6 +678,8 @@ public:
             return print_intrinsic("bwand", op->args, op->type.is_scalar());
         } else if (op->is_intrinsic(Call::bitwise_not)) {
             return print_intrinsic("bwnot", op->args, op->type.is_scalar());
+        } else if (op->is_intrinsic(Call::abs)) {
+            return print_intrinsic("abs", op->args, op->type.is_scalar());
         } else if (op->is_intrinsic(Call::bitwise_xor)) {
             return print_intrinsic("bwxor", op->args, op->type.is_scalar());
         } else if (op->is_intrinsic(Call::count_leading_zeros)) {
@@ -604,6 +719,11 @@ public:
         mode.pop();
         indent.pop();
 
+        if (LoadToRegMap.find(op) != LoadToRegMap.end()) {
+            return "reg_" + std::to_string(LoadToRegMap[op]);
+        }
+
+        // Traverse loads and check if equal?
         if (LoadToRegMap.find(op) != LoadToRegMap.end()) {
             return "reg_" + std::to_string(LoadToRegMap[op]);
         }
@@ -1578,7 +1698,7 @@ public:
         if (c && c->is_intrinsic(Call::dynamic_shuffle)) {
             debug(1) << "Call to dynamic shuffle"
                      << "\n";
-            return expr;
+            return IRMutator::mutate(expr);
         }
 
         /* Ignore some qualifying but trivial expressions to reduce noise in the results */
@@ -1659,9 +1779,9 @@ public:
         std::cout << "Expression after lower intrinsic: " << spec_expr << "\n";
 
         // Simplify constants
-        // if(arch != IROptimizer::HVX){
-        spec_expr = simplify(spec_expr);
-        //}
+        if (arch != IROptimizer::HVX) {
+            spec_expr = simplify(spec_expr);
+        }
 
         std::cout << "Expression after simplification: " << spec_expr << "\n";
 
@@ -1704,17 +1824,32 @@ public:
         std::cout << "Expression before InlineLets: " << spec_expr << "\n";
 
         spec_expr = InlineLets().mutate(spec_expr);
-
         std::cout << "Expression after InlineLets: " << spec_expr << "\n";
 
+        /*
         // Lift cse for more readable specs
-        // spec_expr = common_subexpression_elimination(spec_expr);
-        // std::cout << "Expression after CSE: "<< spec_expr <<"\n";
+        spec_expr = common_subexpression_elimination(spec_expr);
+        std::cout << "Expression after CSE: "<< spec_expr <<"\n";
+        // For cleaner specs synthesize let seperately from
+        // body
+        if(spec_expr.node_type() == IRNodeType::Let){
+           debug(0) << "Let Case: Synthesize value and body seperately"<<"\n";
+           Expr LetVal =   spec_expr.as<Let>()->value;
+           Expr LetBody =   spec_expr.as<Let>()->body;
+
+
+           Expr OptVal = IRMutator::mutate(LetVal);
+           Expr OptBody = IRMutator::mutate(LetBody);
+           return Let::make(spec_expr.as<Let>()->name, OptVal, OptBody);
+        }
+        */
 
         std::cout << "Expression before abstraction: " << spec_expr << "\n";
 
         // Abstract out unsupported nodes if they appear as sub-expressions
         spec_expr = AbstractUnsupportedNodes(arch, abstractions).mutate(spec_expr);
+
+        std::cout << "Expression after abstraction: " << spec_expr << "\n";
 
         Expr optimized_expr;
 
@@ -1791,6 +1926,11 @@ private:
             return Cast::make(result_type, std::move(a));
         }
 
+        Expr saturating_narrow(const Expr &a) {
+            Type narrow = a.type().narrow();
+            return saturating_cast(narrow, a);
+        }
+
         Expr visit(const Ramp *op) override {
             Expr lowered;
             if (true || SIMPLIFY_RAMP) {
@@ -1828,19 +1968,19 @@ private:
         // for vector selection.
         Expr visit(const Select *op) override {
 
-            if (op->type.is_vector() && op->condition.type().is_scalar()) {
-                std::cout << "Potentially new select lowering"
-                          << "\n";
-                Expr cond = (op->condition.type().is_scalar() ?
-                                 Broadcast::make(op->condition, op->true_value.type().lanes()) :
-                                 op->condition);
+            // if (op->type.is_vector() && op->condition.type().is_scalar()) {
+            //     std::cout << "Potentially new select lowering"
+            //               << "\n";
+            //     Expr cond = (op->condition.type().is_scalar() ?
+            //                      Broadcast::make(op->condition, op->true_value.type().lanes()) :
+            //                      op->condition);
 
-                Expr Sel = Select::make(cond, op->true_value, op->false_value);
+            //     Expr Sel = Select::make(cond, op->true_value, op->false_value);
 
-                debug(0) << "New select instruction: " << Sel << "\n";
+            //     debug(0) << "New select instruction: " << Sel << "\n";
 
-                return mutate(Sel);
-            }
+            //     return mutate(Sel);
+            // }
 
             return IRMutator::visit(op);
         }
@@ -1850,15 +1990,6 @@ private:
         // HVX. Use Halides existing lower div
         // method to rewrite division in terms of other intrinsics
         Expr visit(const Div *op) override {
-
-            /*
-            if(!op->type.is_float() && op->type.is_vector() && _arch == Architecture::HVX){
-
-                auto lowered_div =  lower_int_uint_div(op->a, op->b);
-                Expr DivExpr = Div::make(op->a, op->b);
-                debug(0) << "Halide Lowered Div "<< DivExpr <<" to: "<<lowered_div <<"\n";
-                return mutate(lowered_div);
-            }*/
 
             return IRMutator::visit(op);
         }
@@ -1986,41 +2117,41 @@ private:
                     }
                 }
 
-            } else if (op->is_intrinsic(Call::rounding_halving_add)) {
+                // } else if (op->is_intrinsic(Call::rounding_halving_add)) {
 
-                Expr Two, One;
-                if (op->args[1].type().is_uint()) {
-                    Two = make_const(UInt(op->args[1].type().bits()), 2);
-                    One = make_const(UInt(op->args[1].type().bits()), 1);
-                } else {
-                    Two = make_const(Int(op->args[1].type().bits()), 2);
-                    One = make_const(Int(op->args[1].type().bits()), 1);
-                }
+                //     Expr Two, One;
+                //     if (op->args[1].type().is_uint()) {
+                //         Two = make_const(UInt(op->args[1].type().bits()), 2);
+                //         One = make_const(UInt(op->args[1].type().bits()), 1);
+                //     } else {
+                //         Two = make_const(Int(op->args[1].type().bits()), 2);
+                //         One = make_const(Int(op->args[1].type().bits()), 1);
+                //     }
 
-                size_t element_bits = op->args[0].type().bits();
+                //     size_t element_bits = op->args[0].type().bits();
 
-                if (_arch == Architecture::HVX) {
+                //     if (_arch == Architecture::HVX) {
 
-                    if (element_bits < 32) {
-                        lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
-                    } else {
-                        lower_using_halide = true;
-                    }
-                } else if (_arch == Architecture::X86) {
+                //         // if (element_bits < 32) {
+                //         //     lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
+                //         // } else {
+                //         //     lower_using_halide = true;
+                //         // }
+                //     } else if (_arch == Architecture::X86) {
 
-                    if (element_bits < 64) {
-                        lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
-                    } else {
-                        lower_using_halide = true;
-                    }
-                } else if (_arch == Architecture::ARM) {
+                //         if (element_bits < 64) {
+                //             lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
+                //         } else {
+                //             lower_using_halide = true;
+                //         }
+                //     } else if (_arch == Architecture::ARM) {
 
-                    if (element_bits <= 64) {
-                        lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
-                    } else {
-                        lower_using_halide = true;
-                    }
-                }
+                //         if (element_bits <= 64) {
+                //             lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
+                //         } else {
+                //             lower_using_halide = true;
+                //         }
+                //     }
 
             } else if (op->is_intrinsic(Call::rounding_halving_sub)) {
 
@@ -2100,7 +2231,8 @@ private:
                     One = make_const(Int(op->args[0].type().bits()), 1);
                 }
                 if (_arch == Architecture::HVX) {
-                    lowered = saturating_add(op->args[0], (One << max(Zero, op->args[1])) / Two) >> op->args[1];
+                    // lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1];
+                    lower_using_halide = true;
                 } else if (_arch == Architecture::X86) {
                     lowered = saturating_add(op->args[0], (One << max(Zero, op->args[1])) / Two) >> op->args[1];
                 } else if (_arch == Architecture::ARM) {
@@ -2109,15 +2241,20 @@ private:
             } else if (op->is_intrinsic(Call::widening_mul)) {
                 if (_arch == Architecture::HVX) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 32) {
+                    if (element_bits < 32 && SIMPLIFY_WIDEN_MUL) {
                         lowered = (widen(op->args[0]) * widen(op->args[1]));
+                    } else if (element_bits < 32 && !SIMPLIFY_WIDEN_MUL) {
+                        // Let it pass through
+                    } else if (!SIMPLIFY_WIDEN_MUL && element_bits >= 32) {
+                        debug(0) << "Lowering widening mul to halide as widening beyond type supported on target: " << element_bits << "\n";
+                        lower_using_halide = true;
                     } else {
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
-                        lowered = (widen(op->args[0]) * widen(op->args[1]));
+                        // lowered = (widen(op->args[0]) * widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
                     }
@@ -2234,17 +2371,27 @@ private:
 
             } else if (op->is_intrinsic(Call::rounding_mul_shift_right)) {
                 if (_arch == Architecture::HVX) {
-                    // lower_using_halide = true;
-                    size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 32) {
-                        lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                    int value = -1;
+
+                    if (as_const_uint(op->args[2])) {
+                        value = *as_const_uint(op->args[2]);
+                    }
+
+                    if (as_const_int(op->args[2])) {
+                        value = *as_const_int(op->args[2]);
+                    }
+
+                    if (value == 31) {
+                        debug(0) << "Found constant rounding_mul_shift_right with value 31: " << op->args[2] << "\n";
                     } else {
+                        debug(0) << "Lowering rounding_mul_shift_right using halide"
+                                 << "\n";
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
-                        lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                        lowered = saturating_narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     } else {
                         lower_using_halide = true;
                     }
@@ -2266,12 +2413,12 @@ private:
                     if (element_bits < 32) {
                         lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                     } else {
-                        lower_using_halide = true;
+                        // lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
-                        lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
+                        lowered = saturating_narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                     } else {
                         lower_using_halide = true;
                     }
@@ -2342,10 +2489,15 @@ private:
             Call::shift_right,
             Call::shift_left,
             Call::absd,
+            Call::abs,
             Call::bitwise_and,
             Call::bitwise_not,
             Call::bitwise_xor,
-            Call::if_then_else};
+            Call::if_then_else,
+            Call::widening_mul,
+            Call::rounding_shift_right,
+            Call::rounding_mul_shift_right,
+            Call::rounding_halving_add};
 
         Expr visit(const Call *op) override {
 
@@ -2360,6 +2512,17 @@ private:
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
+            }
+
+            if (op->is_intrinsic(Call::widening_mul)) {
+                size_t length = (op->type.bits() * op->type.lanes()) / 2;  // Divide by 2 to get input lengths
+                bool supported = is_length_supported_on_target(length);
+
+                if (!supported) {
+                    std::string uname = unique_name('h');
+                    abstractions[uname] = IRMutator::visit(op);
+                    return Variable::make(op->type, uname);
+                }
             }
 
             if (op->is_intrinsic(Call::dynamic_shuffle)) {
@@ -2400,11 +2563,32 @@ private:
                 return IRMutator::visit(op);
         }
 
+        Expr visit(const Ramp *op) override {
+            std::string uname = unique_name('h');
+            abstractions[uname] = IRMutator::visit(op);
+            return Variable::make(op->type, uname);
+        }
+
+        Expr visit(const Load *op) override {
+            return op;
+        }
+
         Expr visit(const LT *op) override {
 
             // Abstract scalar arithmetic
             // operations.
             if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+                std::string uname = unique_name('h');
+                abstractions[uname] = IRMutator::visit(op);
+                return Variable::make(op->type, uname);
+            }
+
+            return IRMutator::visit(op);
+        }
+
+        Expr visit(const Mod *op) override {
+
+            if ((_arch == Architecture::HVX)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2470,9 +2654,9 @@ private:
             // Abstract scalar arithmetic
             // operations.
             if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
-                std::string uname = unique_name('h');
-                abstractions[uname] = IRMutator::visit(op);
-                return Variable::make(op->type, uname);
+                // std::string uname = unique_name('h');
+                // abstractions[uname] = IRMutator::visit(op);
+                // return Variable::make(op->type, uname);
             }
 
             return IRMutator::visit(op);
@@ -2618,6 +2802,20 @@ private:
                 return Variable::make(op->type, uname);
             }
 
+            if (op->is_concat() && !is_length_supported_on_target(op->vectors[0].type().lanes() * op->vectors[0].type().bits())) {
+                debug(0) << "Abstracting concat vector with unsupported length\n";
+                std::string uname = unique_name('h');
+                abstractions[uname] = IRMutator::visit(op);
+                return Variable::make(op->type, uname);
+            }
+
+            if (op->is_slice() && !is_length_supported_on_target(op->vectors[0].type().lanes() * op->vectors[0].type().bits())) {
+                debug(0) << "Abstracting slice vector with unsupported length\n";
+                std::string uname = unique_name('h');
+                abstractions[uname] = IRMutator::visit(op);
+                return Variable::make(op->type, uname);
+            }
+
             if (op->is_slice() && (disable_shuffles || op->vectors[0].type().lanes() * op->vectors[0].type().bits() > 2048)) {
                 debug(0) << "Abstracting slice vector!\n";
                 std::string uname = unique_name('h');
@@ -2693,6 +2891,38 @@ private:
             }
         }
 
+        bool is_length_supported_on_target(size_t length) {
+
+            std::vector<size_t> vec_lens;
+            switch (_arch) {
+            case Architecture::ARM:
+                vec_lens.push_back(64);
+                break;
+            case Architecture::HVX:
+                vec_lens.push_back(2048);
+                vec_lens.push_back(1024);
+                break;
+            case Architecture::X86:
+                debug(1) << "Abstraction vector sizes for X86 "
+                         << "\n";
+                // Push in vector register sizes in descending order
+                vec_lens.push_back(512);
+                vec_lens.push_back(256);
+                vec_lens.push_back(128);
+                vec_lens.push_back(32);
+            };
+
+            bool supported = false;
+            for (auto vec_len : vec_lens) {
+                if ((length % vec_len != 0)) {
+                } else if (length == vec_len) {
+                    supported = true;
+                }
+            }
+
+            return supported;
+        }
+
         Expr visit(const Cast *op) override {
             Expr v = op->value;
 
@@ -2700,6 +2930,7 @@ private:
 
             switch (_arch) {
             case Architecture::ARM:
+                vec_lens.push_back(128);
                 vec_lens.push_back(64);
                 break;
             case Architecture::HVX:
@@ -2838,109 +3069,6 @@ private:
         }
     };
 
-    // Targets such as HVX do not have division
-    // operations, so we must replace operations
-    // using division to instead use shifts
-    class ReplaceDiv : public IRMutator {
-        using IRMutator::visit;
-
-        Expr visit(const Div *op) override {
-
-            if (!op->type.is_float() && op->type.is_vector() && !is_const(op->b, 2)) {
-                auto lowered_div = lower_int_uint_div(op->a, op->b);
-                debug(0) << "Halide Lowered Div to: " << lowered_div << "\n";
-                return mutate(lowered_div);
-            }
-
-            return IRMutator::visit(op);
-        }
-
-        Expr visit(const Call *op) override {
-
-            if (op->is_intrinsic(Call::shift_right)) {
-                debug(0) << "Found shr\n";
-                // if (!op->type.is_float() && op->type.is_vector()) {
-                //     debug(0) << "Lowering armshr to armshl\n";
-                //     return (op->args[0] << simplify(-op->args[1]));
-                // }
-                // Current legalizer doesn't support immediate argument
-                if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
-                    debug(0) << "Lowering armshr to armshl\n";
-                    return op->args[0] << simplify(-op->args[1]);
-                }
-            }
-
-            return IRMutator::visit(op);
-        }
-
-        // Expr visit(const Mul *op) override {
-
-        //     size_t bits = op->type.bits();
-        //     size_t lanes = op->type.lanes();
-
-        //     if (!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)) {
-        //         debug(0) << "Found multiplication to slice!"
-        //                  << "\n";
-        //         Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1, 32));
-        //         Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1, 32));
-
-        //         Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1, 32));
-        //         Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1, 32));
-
-        //         Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
-        //         Expr right_mul = (Mul::make(left_op_second_half, right_op_second_half));
-
-        //         Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
-        //         debug(0) << "Halide Lowered Mul to: " << lowered_mul << "\n";
-        //         return mutate(lowered_mul);
-        //     }
-
-        //     return IRMutator::visit(op);
-        // }
-
-        // For certain targets, even when broadcasting elements of
-        // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
-        // Without loss of generality, depending on the target, we modify our broadcasts
-        // to accomodate such behavior when needed.
-        // Expr visit(const Broadcast *op) override {
-
-        //     size_t bits = op->type.bits();
-        //     size_t lanes = op->type.lanes();
-
-        //     if (lanes == 1) {
-        //         return op->value;
-        //     }
-
-        //     if (is_const(op->value)) {
-        //         return op;
-        //     }
-
-        //     if (!op->type.is_float() && op->type.is_vector()) {
-
-        //         if (bits == 16 && op->value.type().lanes() != 2) {  // Just my guess, to pass assertion at IR.cpp:269 for ARM @ "add" benchmark
-
-        //             debug(0) << "======"
-        //                      << "\n";
-        //             debug(0) << "Orignal broadcast value: " << op->value << "\n";
-        //             debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
-        //             Expr Broadcast2 = Broadcast::make(op->value, 2);
-        //             Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
-        //             debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
-        //             debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
-        //             return ModifiedBroadcast;
-        //         } else {
-        //             return op;
-        //         }
-        //     }
-
-        //     return IRMutator::visit(op);
-        // }
-
-    public:
-        ReplaceDiv() {
-        }
-    };
-
     bool containsFloat(const Expr &e) {
         FloatFinder ff;
         e.accept(&ff);
@@ -3003,9 +3131,15 @@ class HydrideSynthEmitter {
 public:
     HydrideSynthEmitter(std::string benchmark_name)
         : benchmark_name(benchmark_name) {
+        const char *extract_ops = getenv("HYDRIDE_EXTRACT_OPS");
+        if (extract_ops) {
+            extract_ops_only = true;
+        }
     }
 
     std::string benchmark_name;
+
+    bool extract_ops_only = false;
 
     std::string get_synthlog_hash_filepath(int id) {
 
@@ -3034,6 +3168,24 @@ public:
             }
         } else {
             return "synth_hash_" + benchmark_name + "_" + std::to_string(id);
+        }
+    }
+
+    std::string get_expr_extract_filepath(int id) {
+
+        if (id < 0) {
+            return "";
+        } else {
+            return "expr_hash_" + benchmark_name + "_" + std::to_string(id) + ".rkt";
+        }
+    }
+
+    std::string get_expr_extract_hash_name(int id) {
+
+        if (id < 0) {
+            return "";
+        } else {
+            return "expr_hash_" + benchmark_name + "_" + std::to_string(id);
         }
     }
 
@@ -3243,9 +3395,6 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
     rkt << "(clear-vc!)"
         << "\n";
 
-    std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
-    std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
-
     const char *expr_depth_var = getenv("HL_EXPR_DEPTH");
 
     int expr_depth = 2;
@@ -3254,24 +3403,41 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
         expr_depth = (*expr_depth_var) - '0';
     }
 
-    rkt << HSE.emit_iterative_optimize(/* Enable iterative? */ false) << "\n";
+    // If we simply want to identify the expressions in this benchmark given a particular depth
+    if (HSE.extract_ops_only) {
 
-    rkt << "(define synth-res " + HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */ "id-map",
-                                                             /* Previous hash file path */ prev_hash_path,
-                                                             /* Previous hash  name */ prev_hash_name,
-                                                             /* target id */ target_str)
-        << ")"
-        << "\n";
-    rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"
-        << "\n";
+        std::string prev_hash_path = HSE.get_expr_extract_filepath(expr_id - 1);
+        std::string prev_hash_name = HSE.get_expr_extract_hash_name(expr_id - 1);
 
-    std::string fn_name = "hydride.node." + benchmark_name + "." + std::to_string(expr_id);
-    rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name, benchmark_name);
+        std::string cur_hash_path = HSE.get_expr_extract_filepath(expr_id);
+        std::string cur_hash_name = HSE.get_expr_extract_hash_name(expr_id);
 
-    std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
-    std::string cur_hash_name = HSE.get_synthlog_hash_name(expr_id);
+        rkt << "(write-expression-hashes halide-expr \"" << prev_hash_path << "\"  \"" << prev_hash_name << "\" \"/tmp/" << cur_hash_path << "\"  \"" << cur_hash_name << "\" " << expr_depth << ")\n";
 
-    rkt << HSE.emit_write_synth_log_to_file("/tmp/" + cur_hash_path, cur_hash_name);
+    } else {
+
+        std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
+        std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
+
+        rkt << HSE.emit_iterative_optimize(/* Enable iterative? */ false) << "\n";
+
+        rkt << "(define synth-res " + HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */ "id-map",
+                                                                 /* Previous hash file path */ prev_hash_path,
+                                                                 /* Previous hash  name */ prev_hash_name,
+                                                                 /* target id */ target_str)
+            << ")"
+            << "\n";
+        rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"
+            << "\n";
+
+        std::string fn_name = "hydride.node." + benchmark_name + "." + std::to_string(expr_id);
+        rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name, benchmark_name);
+
+        std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
+        std::string cur_hash_name = HSE.get_synthlog_hash_name(expr_id);
+
+        rkt << HSE.emit_write_synth_log_to_file("/tmp/" + cur_hash_path, cur_hash_name);
+    }
 
     rkt.close();
 
@@ -3296,62 +3462,40 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
 }  // namespace Hydride
 
-void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::string output_file, std::string benchmark_name) {
+Stmt hydride_preprocess_hvx(Stmt s) {
 
-    std::string target_flag = "";
+    Stmt distributed;
 
-    switch (t) {
-    case Target::X86:
-        target_flag = "-x86-hydride-legalize";
-        break;
-    case Target::Hexagon:
-        target_flag = "-hex-hydride-legalize";
-        break;
-    case Target::ARM:
-        target_flag = "-arm-hydride-legalize";
-        break;
-    default:
-        assert(false && "Unsupported target for hydride code-generation");
-        break;
-    };
+    std::set<const IRNode *> DeadStmts;
 
-    const char *hydride_src = getenv("HYDRIDE_ROOT");
-    assert(hydride_src && "HYDRIDE_ROOT environment variable needs to be defined for codegen");
+    auto FLS = Hydride::FoldLoadStores(DeadStmts);
 
-    const char *legalizer_so = getenv("LEGALIZER_PATH");
-    assert(legalizer_so && "LEGALIZER_PATH environment variable must be defined for hydride codegen");
+    auto folded = FLS.mutate(s);
+    debug(0) << "Printing Folded Stmt:\n";
+    debug(0) << folded << "\n";
 
-    const char *intrin_wrapper = getenv("INTRINSICS_LL");
-    assert(intrin_wrapper && "INTRINSICS_LL must be defined for hydride llvm code-gen");
+    debug(0) << "DEAD STMT SIZE: " << DeadStmts.size() << "\n";
 
-    std::string codegen_script_path = std::string(hydride_src) + "/codegen-generator/tools/low-level-codegen/RoseLowLevelCodeGen.py";
+    auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+    debug(0) << "Printing Pruned Stmt:\n";
+    debug(0) << pruned << "\n";
 
-    std::string cmd = "python3 " + codegen_script_path + " " + input_file + " " + std::string(legalizer_so) + " " + std::string(intrin_wrapper) + " " + target_flag + " " + output_file;
-    debug(0) << cmd << "\n";
+    std::vector<unsigned> hvx_vector_sizes = {2048, 1024};
 
-    auto start = std::chrono::system_clock::now();
+    // bool model_sat_support = false;
+    bool model_sat_support = false;
 
-    int ret_code = system(cmd.c_str());
+    const char *enable_hydride = getenv("HL_BENCH_MATMUL");
+    if (enable_hydride) {
+        debug(0) << "Setting model saturating support true"
+                 << "\n";
+        model_sat_support = true;
+    }
+    distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
 
-    internal_assert(ret_code == 0) << "Codegeneration crashed, exiting ..."
-                                   << "\n";
+    // distributed = distribute_vector_exprs(s , hvx_vector_sizes, model_sat_support);
 
-    auto end = std::chrono::system_clock::now();
-    std::cout << "Compilation completed with return code:\t" << ret_code << "\n";
-
-    std::chrono::duration<double> elapsed_seconds = end - start;
-
-    std::cout << "Compilation took " << elapsed_seconds.count() << "seconds ..."
-              << "\n";
-
-    // TEMP CMD
-    std::string temp_cmd = "cp /tmp/" + benchmark_name + ".ll.legalize.ll  " + output_file;
-    ret_code = system(temp_cmd.c_str());
-
-    debug(0) << "Returned with return code: " << ret_code << "\n";
-
-    internal_assert(ret_code == 0) << "Copying crashed, exiting ..."
-                                   << "\n";
+    return distributed;
 }
 
 Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
@@ -3381,7 +3525,8 @@ Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
         std::vector<unsigned> hvx_vector_sizes = {2048, 1024};
 
-        bool model_sat_support = false;
+        // bool model_sat_support = false;
+        bool model_sat_support = true;
 
         const char *enable_hydride = getenv("HL_BENCH_MATMUL");
         if (enable_hydride) {
@@ -3390,6 +3535,7 @@ Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
             model_sat_support = true;
         }
         distributed = distribute_vector_exprs(pruned, hvx_vector_sizes, model_sat_support);
+        // distributed = distribute_vector_exprs(s, hvx_vector_sizes, model_sat_support);
         debug(0) << "Distributed Stmt:\n";
         debug(0) << distributed << "\n";
     }
@@ -3512,22 +3658,39 @@ Stmt optimize_x86_instructions_synthesis(Stmt s, const Target &t, FuncValueBound
 
 Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
 
+    // s = ReplaceDiv().mutate(s);
+    // debug(0) << "Module  (firrst replace div):" << s << "\n";
+
     std::set<const BaseExprNode *> mutated_exprs;
     debug(0) << "Input Statement to Compile through HVX:\n"
              << s << "\n";
     s = hydride_optimize_hvx(fvb, s, mutated_exprs);
 
-    return s;
+    debug(0) << "Module with hydride calls:"
+             << "\n";
+    debug(0) << s << "\n";
+
+    // s = ReplaceDiv().mutate(s);
+    // debug(0) << "Module with hydride calls (final replace div):" <<s << "\n";
+
+    return common_subexpression_elimination(s);
 }
 
 Stmt optimize_arm_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
 
     std::set<const BaseExprNode *> mutated_exprs;
-    debug(0) << "Input Statement to Compile through HVX:\n"
+    debug(0) << "Input Statement to Compile through ARM:\n"
              << s << "\n";
     s = hydride_optimize_arm(fvb, s, mutated_exprs);
 
-    return s;
+    debug(0) << "Module with hydride calls:"
+             << "\n";
+    debug(0) << s << "\n";
+
+    // s = ReplaceDiv().mutate(s);
+    // debug(0) << "Module with hydride calls (final replace div):" <<s << "\n";
+
+    return common_subexpression_elimination(s);
 }
 
 }  // namespace Internal

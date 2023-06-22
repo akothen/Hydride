@@ -416,6 +416,64 @@ def create_rotate_dsl(input_vector_sizes=[],
     return vec_deinterleave_dsl
 
 
+llvm_vect_simd_template_sema = [
+    "(define (llvm-vect-{} a b num_elems precision)",
+    "  (define dst ",
+    "    (apply",
+    "      concat",
+    "      (for/list ([%it (reverse (range 0 num_elems 1))])",
+    "        (define %low (* precision %it))",
+    "        (define %high (%low (- precision 1)))",
+    "        (define %exta (extract  %high %low a))",
+    "        (define %extb (extract  %high %low b))",
+    "        ({} %exta %extb)",
+    "      )",
+    "    )",
+    "  )",
+    "  dst",
+    ")"
+]
+
+
+def bind_llvm_simd_template(op_name, bv_op):
+    template = llvm_vect_simd_template_sema.copy()
+    template[0] = template[0].format(op_name)
+    template[9] = template[9].format(bv_op)
+
+    return template
+
+
+def create_llvm_vect_simd_dsl(op_name, bv_op, input_vector_sizes=[],
+                              precisions=[]
+                              ):
+
+    vec_llvm_simd_dsl = DSLInstruction(name="llvm-vect-{}".format(op_name), simd=True,
+                                       operation=True, semantics=bind_llvm_simd_template(op_name, bv_op))
+
+    for i in range(0, len(input_vector_sizes)):
+        vec_llvm_simd_dsl.add_context(
+            name="llvm-vect-{}-{}-{}".format(op_name,
+                                             input_vector_sizes[i], precisions[i]),
+            in_vectsize=input_vector_sizes[i],
+            out_vectsize=input_vector_sizes[i],
+            lane_size=input_vector_sizes[i],
+            in_precision=precisions[i],
+            out_precision=precisions[i],
+            SIMD="True",
+            args=["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),  "SYMBOLIC_BV_{}".format(
+                input_vector_sizes[i]), str(input_vector_sizes[i] // precisions[i]), str(precisions[i])],
+            in_vectsize_index=None,
+            out_vectsize_index=None,
+            in_lanesize_index=None,
+            out_lanesize_index=None,
+            in_precision_index=3,
+            out_precision_index=3,
+            cost="2",
+        )
+
+    return vec_llvm_simd_dsl
+
+
 # Place holder DSL object definitions to enable generating
 # the Hydride symbolic interpreter
 dummy_vector_swizzle_dsl = create_two_input_swizzle(
@@ -454,11 +512,63 @@ dummy_llvm_shuffle_dsl = create_llvm_shufflevector_dsl(
 )
 
 
+dummy_vector_add_dsl = create_llvm_vect_simd_dsl(
+    "add",
+    "bvadd",
+    input_vector_sizes=[128],
+    precisions=[16]
+)
+
+
+dummy_vector_sub_dsl = create_llvm_vect_simd_dsl(
+    "sub",
+    "bvsub",
+    input_vector_sizes=[128],
+    precisions=[16]
+)
+
+
+dummy_vector_mul_dsl = create_llvm_vect_simd_dsl(
+    "mul",
+    "bvmul",
+    input_vector_sizes=[128],
+    precisions=[16]
+)
+
+
+dummy_vector_sdiv_dsl = create_llvm_vect_simd_dsl(
+    "sdiv",
+    "bvsdiv",
+    input_vector_sizes=[128],
+    precisions=[16]
+)
+
+
+dummy_vector_udiv_dsl = create_llvm_vect_simd_dsl(
+    "udiv",
+    "bvudiv",
+    input_vector_sizes=[128],
+    precisions=[16]
+)
+
 default_structs = [
     # dummy_vector_load_dsl,
     dummy_vector_swizzle_dsl,
     dummy_vector_two_interleave_dsl,
     dummy_vector_interleave_dsl,
     dummy_vector_deinterleave_dsl,
-    dummy_llvm_shuffle_dsl
+    dummy_llvm_shuffle_dsl,
+    dummy_vector_add_dsl,
+    dummy_vector_sub_dsl,
+    dummy_vector_mul_dsl,
+    dummy_vector_sdiv_dsl,
+    dummy_vector_udiv_dsl
+]
+
+llvm_simd_structs = [
+    dummy_vector_add_dsl,
+    dummy_vector_sub_dsl,
+    dummy_vector_mul_dsl,
+    dummy_vector_sdiv_dsl,
+    dummy_vector_udiv_dsl
 ]

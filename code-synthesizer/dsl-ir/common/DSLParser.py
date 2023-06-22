@@ -68,6 +68,9 @@ def populate_dsl_inst(dsl_inst, sub_inst_dict, keep_duplicate=False):
         if 'out_lanesize_index' not in sub_obj:
             sub_obj['out_lanesize_index'] = sub_obj['lanesize_index']
 
+        if "ctx_sema" not in sub_obj:
+            sub_obj['ctx_sema'] = None
+
         dsl_inst.add_context(name=subinst_name,
                              in_vectsize=sub_obj['in_vectsize'],
                              out_vectsize=sub_obj['out_vectsize'],
@@ -85,6 +88,7 @@ def populate_dsl_inst(dsl_inst, sub_inst_dict, keep_duplicate=False):
                              cost=parse_cost(sub_obj['Cost']),
                              in_lanesize_index=sub_obj['in_lanesize_index'],
                              out_lanesize_index=sub_obj['out_lanesize_index'],
+                             ctx_sema=sub_obj['ctx_sema'],
 
                              )
 

@@ -1826,5 +1826,28 @@ HVXInsts = {
                       'spec': 'for (i = 0; i < VELEM(16); i++) {'
                               'VdV.h[i] = (VvV.h[i] > 0) ? (VuV.h[i] >>> VvV.h[i]) : (VuV.h[i] << VvV.h[i]);}'
                     },
+ 'hexagon_V6_vdealvdd_128B': {
+                      'hvx_intrinsic': 'Vdd.ub=vdeal(Vu.ub,Vv.ub,Rt32)',
+                      'spec': 'for (k = 0; k < VELEM(8); k++) { '
+                                      'tmp1 = (((RtV & 64) & (!(k & 64))) != 0);'
+                                      'reg1 = tmp1 ? Vu.ub[k+64] : Vv.ub[k];'
+                                      'reg2 = tmp1 ? Vv.ub[k] : Vu.ub[k];'
+                                      'tmp2 = (((RtV & 32) & (!(k & 32))) != 0);'
+                                      'reg3 = tmp2 ? Vu.ub[k+32] : reg1;'
+                                      'reg4 = tmp2 ? Vv.ub[k] : reg2;'
+                                      'tmp3 = (((RtV & 16) & (!(k & 16))) != 0);'
+                                      'reg5 = tmp3 ? Vu.ub[k+16] : reg3;'
+                                      'reg6 = tmp3 ? Vv.ub[k] : reg4;'
+                                      'tmp4 = (((RtV & 8) & (!(k & 8))) != 0);'
+                                      'reg7 = tmp4 ? Vu.ub[k+8] : reg5;'
+                                      'reg8 = tmp4 ? Vv.ub[k] : reg6;'
+                                      'tmp5 = (((RtV & 4) & (!(k & 4))) != 0);'
+                                      'reg9 = tmp5 ? Vu.ub[k+4] : reg7;'
+                                      'reg10 = tmp5 ? Vv.ub[k] : reg8;'
+                                      'tmp6 = (((RtV & 2) & (!(k & 2))) != 0);'
+                                      'Vdd.v[0].ub[k] = tmp6 ? Vu.ub[k+2] : reg9;'
+                                      'Vdd.v[1].ub[k] = tmp6 ? Vv.ub[k] : reg10;'
+                                '}'
+                    },  
 }
 

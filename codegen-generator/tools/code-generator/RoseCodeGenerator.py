@@ -174,12 +174,9 @@ class RoseCodeGenerator:
             FunctionInfoList = self.TargetAPI[self.Target].Compile()
             if NumThreads == 1:
                 for FunctionInfoIt in FunctionInfoList:
-                    import sys
                     print("START CODEGEN")
                     print("-----Function NAEEM:")
                     print(FunctionInfoIt.getLatestFunction().getName())
-                    print(FunctionInfoIt.getLatestFunction().getName(),
-                          file=sys.stderr)
                     self.codeGenFunction(FunctionInfoIt)
                     print(type(self))
                     FunctionInfoIt.addCodeGenerator(self)

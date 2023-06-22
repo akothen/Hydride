@@ -41,7 +41,9 @@
     (cond
       [(equal? target 'x86) "x86"]
       [(equal? target 'hvx) "hvx"]
-      [(equal? target 'arm) "arm"]))
+      [(equal? target 'arm) "arm"]
+      [(equal? target 'halide) "halide"]
+      [else (error "Unsupported target string for grammar generation" target)]))
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)
   (define gen-grammar-cmd
@@ -71,8 +73,8 @@
   (define target-str
     (cond
       [(equal? target 'x86) "x86"]
-      [(equal? target 'hvx) "hvx"]
-      [(equal? target 'arm) "arm"]))
+      [(equal? target 'arm) "arm"]
+      [(equal? target 'hvx) "hvx"]))
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)
   (define gen-grammar-cmd
@@ -197,6 +199,7 @@
                                        get-prec-functor
                                        input-precs
                                        input-sizes
+                                       input-signedness
                                        VF
                                        step-idx
                                        depth
@@ -210,6 +213,7 @@
                                 get-prec-functor
                                 input-precs
                                 input-sizes
+                                input-signedness
                                 base_name))
   (define grammar-file-name (string-append base_name "_grammar.rkt"))
   (debug-log grammar-file-name)

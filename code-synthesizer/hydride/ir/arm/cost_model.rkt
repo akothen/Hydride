@@ -175,6 +175,26 @@
 		(+ 5 (arm:cost  v0)  (arm:cost  v1)  
 		 (arm:cost  v4) )
 	]
+		[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (arm:cost  v0)  (arm:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (arm:cost  v0)  (arm:cost  v1)  
+		)
+	]
+		[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (arm:cost  v0)  (arm:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (arm:cost  v0)  (arm:cost  v1)  
+		)
+	]
+		[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (arm:cost  v0)  (arm:cost  v1)  
+		)
+	]
 	[ (vraddhn_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
 		(+ cost_vraddhn_s32_dsl (arm:cost  vc_0)  (arm:cost  v1)  (arm:cost  v2)  
 		 

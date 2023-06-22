@@ -180,59 +180,6 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
         return IRBuilder.zext(Operand, self.getType().to_llvm_ir(), self.getName())
 
 
-# class RoseBVConditionalExtendOp(RoseBitVectorOp):  # RoseBVSizeExensionOp):
-#     def __init__(self, Name: str, Bitvector: RoseValue, Unsigned: RoseValue, ParentBlock):
-#         assert isinstance(Bitvector.getType(), RoseBitVectorType)
-#         #FalseVal = RoseConstant.create(0, RoseBooleanType.create())
-#         #super().__init__(Name, Bitvector, TargetBitwidth, FalseVal, ParentBlock)
-#         OperandList = [Bitvector, Unsigned]
-#         super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
-
-#     @staticmethod
-#     def create(*args):
-#         if len(args) == 4:
-#             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-#                     and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-#                 TargetBitwidthVal = RoseConstant.create(
-#                     args[2], RoseIntegerType.create(32))
-#                 return RoseBVZeroExtendOp(args[0], args[1], TargetBitwidthVal, args[3])
-#             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-#                     and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
-#                 return RoseBVZeroExtendOp(args[0], args[1], args[2], args[3])
-#         if len(args) == 3:
-#             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-#                     and isinstance(args[2], int):
-#                 TargetBitwidthVal = RoseConstant.create(
-#                     args[2], RoseIntegerType.create(32))
-#                 return RoseBVZeroExtendOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
-#             if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-#                     and isinstance(args[2], RoseValue):
-#                 return RoseBVZeroExtendOp(args[0], args[1], args[2], RoseUndefRegion())
-#         assert(False)
-
-#     def getExtensionSize(self):
-#         return self.getOperand(1)
-
-#     def getInputBitVector(self):
-#         return self.getOperand(0)
-
-#     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
-#         assert ReverseIndexing == False
-#         # if not isinstance(self.getExtensionKind(), RoseConstant):
-#         #  return super().to_rosette(NumSpace, ReverseIndexing)
-#         # Use existing Rosette function
-#         Spaces = ""
-#         for _ in range(NumSpace):
-#             Spaces += " "
-#         Name = super().getName()
-#         String = Spaces + "(define " + Name + " ("
-#         String += ("cond-extend ")
-#         String += " " + self.getInputBitVector().getName()
-#         String += " (bitvector " + str(self.getOutputBitwidth())
-#         String += ")))\n"
-#         return String
-
-
 class RoseBVSSaturateOp(RoseBitVectorOp):
     def __init__(self, Name: str, Bitvector: RoseValue, TargetBitwidth: RoseValue, ParentBlock):
         assert isinstance(Bitvector.getType(), RoseBitVectorType)
@@ -694,6 +641,9 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
 
     def getBitwidthPos(self):
         return 4
+
+    def getType(self):
+        return self.getInputBitVector().getType()
 
     def getOutputBitwidth(self):
         BitwidthVal = self.getOperand(self.getBitwidthPos())
@@ -1764,56 +1714,3 @@ class RoseBVAbsOp(RoseBitVectorOp):
         if SolvedResult != None:
             return RoseConstant(SolvedResult, self.getType())
         return RoseUndefValue()
-
-
-class RoseBVLshrOp(RoseBitVectorOp):
-    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
-        assert isinstance(Operand1.getType(), RoseBitVectorType)
-        assert isinstance(Operand2.getType(), RoseBitVectorType)
-        OperandList = [Operand1, Operand2]
-        super().__init__(RoseOpcode.bvlshr, Name, OperandList, ParentBlock)
-
-    @staticmethod
-    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
-               ParentBlock=RoseUndefRegion()):
-        return RoseBVLshrOp(Name, Operand1, Operand2, ParentBlock)
-
-    def getInputBitVector(self):
-        return self.getOperand(0)
-
-    def to_llvm_ir(self, Context: RoseLLVMContext):
-        assert len(self.getOperands()) == 2
-        Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-        assert Operand1 != LLVMUndefined
-        Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-        assert Operand2 != LLVMUndefined
-        IRBuilder = Context.getLLVMBuilder()
-        return IRBuilder.lshr(Operand1, Operand2, self.getName())
-
-
-class RoseBVConcatOp(RoseBitVectorOp):
-    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
-        assert isinstance(Operand1.getType(), RoseBitVectorType)
-        assert isinstance(Operand2.getType(), RoseBitVectorType)
-        OperandList = [Operand1, Operand2]
-        super().__init__(RoseOpcode.bvconcat, Name, OperandList, ParentBlock)
-
-    @staticmethod
-    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
-               ParentBlock=RoseUndefRegion()):
-        return RoseBVConcatOp(Name, Operand1, Operand2, ParentBlock)
-
-    def to_rosette(self, NumSpace=0):
-        # if not isinstance(self.getExtensionKind(), RoseConstant):
-        #  return super().to_rosette(NumSpace, ReverseIndexing)
-        # Use existing Rosette function
-        Spaces = ""
-        for _ in range(NumSpace):
-            Spaces += " "
-        Name = super().getName()
-        String = Spaces + "(define " + Name + " ("
-        String += "concat"
-        String += " " + self.getOperand(0).getName()
-        String += " " + self.getOperand(1).getName()
-        String += "))\n"
-        return String

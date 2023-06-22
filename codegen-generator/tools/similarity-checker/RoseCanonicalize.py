@@ -468,11 +468,9 @@ def AddTwoNestedLoopsInFunction(Function: RoseFunction, Context: RoseContext):
                 break
 
         # Now another sanity check to see if there are 2 blocks at level zero
-        if (isinstance(LastBVInsertOp, RoseUndefValue)):
-            return
-        # assert not isinstance(LastBVInsertOp, RoseUndefValue)
-        # NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
-        # assert NumBlocksAtLevel0 == 2
+        assert not isinstance(LastBVInsertOp, RoseUndefValue)
+        NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
+        assert NumBlocksAtLevel0 == 2
 
         # Now we add a loop around the first block
         Block = LastBVInsertOp.getParent()

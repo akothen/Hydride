@@ -8,9 +8,12 @@ class OperandType:
         LaneSize = auto()
         Precision = auto()
         Integer = auto()
+        Bool = auto()
         IndexVariable = auto()
         ShapeVariable = auto()
         IndexExpr = auto()
+        BoundedBitVector = auto()
+        Reg = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
@@ -62,6 +65,34 @@ class BitVector(OperandType):
 
     def print_operand(self, prefix=""):
         print("{} {}\t| Symbolic Bitvector {}".format(
+            prefix, self.name, self.size))
+
+
+# Bitvector type operand which essentially
+# controls the precision on which the operation will be performed
+class BoundedBitVector(OperandType):
+
+    def __init__(self, name, size):
+
+        self.size = size
+        self.name = name
+        super().__init__(OperandType.OperandTypeEnum.BoundedBitVector)
+        self.is_hole = True
+
+    def define_symbolic(self):
+        label = "sym_"+self.name
+        def_str = "(define-symbolic {} (bitvector {}))".format(label, self.size)
+
+        return (label, def_str)
+
+    def get_rkt_value(self):
+        return "BV_"+str(self.size)
+
+    def get_rkt_comment(self):
+        return ";; {}-bit Bitvector operand".format(self.size)
+
+    def print_operand(self, prefix=""):
+        print("{} {}\t| Bounded Bitvector {}".format(
             prefix, self.name, self.size))
 
 
@@ -172,6 +203,31 @@ class Integer(OperandType):
 
     def print_operand(self, prefix=""):
         print("{} {} {} \t| Integer {}".format(
+            prefix, self.name, self.value,  self.value))
+
+
+class Bool(OperandType):
+
+    def __init__(self, name, value=None):
+
+        self.name = name
+        self.value = value
+        super().__init__(OperandType.OperandTypeEnum.Bool)
+
+    def get_rkt_value(self):
+        if self.value != None:
+            return str(self.value)
+        else:
+            return str(self.name)
+
+    def get_rkt_comment(self):
+        return ";; Boolean Operand "
+
+    def get_dsl_value(self):
+        return self.get_rkt_value()
+
+    def print_operand(self, prefix=""):
+        print("{} {} {} \t| Boolean {}".format(
             prefix, self.name, self.value,  self.value))
 
 
@@ -329,6 +385,33 @@ def create_affine_index_expr(i_coef, j_coef, bias):
     return expr
 
 
+class Reg(OperandType):
+
+    def __init__(self, index, precision, size, signed=False):
+
+        self.index = index
+        self.precision = precision
+        self.size = size
+        self.signed = signed
+
+        assert self.precision != None, "precision for reg needs to be provied"
+        assert self.size != None, "size for reg needs to be provided"
+        super().__init__(OperandType.OperandTypeEnum.Reg)
+
+    def get_rkt_value(self):
+        return "(reg (bv "+str(self.index) + " (bitvector 8)))"
+
+    def get_dsl_value(self):
+        return "(reg (bv "+str(self.index) + " (bitvector 8))) ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
+
+    def get_rkt_comment(self):
+        return ";; {}-bit reg operand".format(self.size)
+
+    def print_operand(self, prefix=""):
+        print("{} Reg {} \t| <{} x i{}>".format(prefix, self.index,
+              self.size // self.precision, self.precision))
+
+
 class InstructionType:
 
     class InstructionTypeEnum(Enum):
@@ -352,4 +435,4 @@ class InstructionType:
 
 
 def isBitVectorType(arg):
-    return isinstance(arg, BitVector) or isinstance(arg, ConstBitVector)
+    return isinstance(arg, BitVector) or isinstance(arg, ConstBitVector) or isinstance(arg, BoundedBitVector)

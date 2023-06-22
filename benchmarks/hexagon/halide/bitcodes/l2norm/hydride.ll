@@ -6316,10 +6316,25 @@ entry:
 declare <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32>) #9
 
 ; Function Attrs: nounwind readnone
+declare <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32>) #9
+
+; Function Attrs: nounwind readnone
+declare <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32>) #9
+
+; Function Attrs: nounwind readnone
+declare <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32>, <32 x i32>) #9
+
+; Function Attrs: nounwind readnone
 declare <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32>, <32 x i32>) #9
+declare <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32>, <32 x i32>) #9
+
+; Function Attrs: nounwind readnone
+declare <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32>, <64 x i32>) #9
+
+; Function Attrs: nounwind readnone
+declare <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32>, <64 x i32>) #9
 
 ; Function Attrs: nounwind readnone
 declare <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32>, <32 x i32>) #9
@@ -6346,24 +6361,24 @@ entry:
   %1 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i, align 8, !tbaa !46
   %extent.i = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 0, i32 1
   %2 = load i32, i32* %extent.i, align 4, !tbaa !49
-  %min.i230 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 0
-  %3 = load i32, i32* %min.i230, align 4, !tbaa !47
-  %stride.i232 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 2
-  %4 = load i32, i32* %stride.i232, align 4, !tbaa !50
-  %host.i233 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %output.buffer, i32 0, i32 2
-  %5 = load i8*, i8** %host.i233, align 4, !tbaa !43
-  %dim.i234 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %output.buffer, i32 0, i32 6
-  %6 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i234, align 8, !tbaa !46
-  %min.i235 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 0, i32 0
-  %7 = load i32, i32* %min.i235, align 4, !tbaa !47
-  %extent.i237 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 0, i32 1
-  %8 = load i32, i32* %extent.i237, align 4, !tbaa !49
-  %min.i241 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 0
-  %9 = load i32, i32* %min.i241, align 4, !tbaa !47
-  %extent.i243 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 1
-  %10 = load i32, i32* %extent.i243, align 4, !tbaa !49
-  %stride.i245 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 2
-  %11 = load i32, i32* %stride.i245, align 4, !tbaa !50
+  %min.i41 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 0
+  %3 = load i32, i32* %min.i41, align 4, !tbaa !47
+  %stride.i43 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %1, i32 1, i32 2
+  %4 = load i32, i32* %stride.i43, align 4, !tbaa !50
+  %host.i44 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %output.buffer, i32 0, i32 2
+  %5 = load i8*, i8** %host.i44, align 4, !tbaa !43
+  %dim.i45 = getelementptr inbounds %struct.halide_buffer_t, %struct.halide_buffer_t* %output.buffer, i32 0, i32 6
+  %6 = load %struct.halide_dimension_t*, %struct.halide_dimension_t** %dim.i45, align 8, !tbaa !46
+  %min.i46 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 0, i32 0
+  %7 = load i32, i32* %min.i46, align 4, !tbaa !47
+  %extent.i48 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 0, i32 1
+  %8 = load i32, i32* %extent.i48, align 4, !tbaa !49
+  %min.i52 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 0
+  %9 = load i32, i32* %min.i52, align 4, !tbaa !47
+  %extent.i54 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 1
+  %10 = load i32, i32* %extent.i54, align 4, !tbaa !49
+  %stride.i56 = getelementptr inbounds %struct.halide_dimension_t, %struct.halide_dimension_t* %6, i32 1, i32 2
+  %11 = load i32, i32* %stride.i56, align 4, !tbaa !50
   %12 = add nsw i32 %2, 127
   %13 = ashr i32 %12, 7
   %a0 = ashr i32 %2, 7
@@ -6393,936 +6408,798 @@ entry:
   %29 = zext i8 %input_zero to i32
   %30 = sub i32 %t108.s, %22
   %31 = icmp sgt i32 %t110, 0
-  %32 = add nsw i32 %8, %7
-  %33 = insertelement <32 x i32> undef, i32 %32, i32 0
-  %34 = shufflevector <32 x i32> %33, <32 x i32> undef, <32 x i32> zeroinitializer
+  %32 = add i32 %7, 1
+  %33 = add nsw i32 %8, %7
+  %34 = insertelement <128 x i32> undef, i32 %33, i32 0
+  %35 = shufflevector <128 x i32> %34, <128 x i32> undef, <128 x i32> zeroinitializer
   %.neg = mul i32 %15, -128
-  %35 = add i32 %.neg, %2
+  %36 = add i32 %.neg, %2
   %xtraiter = and i32 %15, 1
-  %36 = icmp eq i32 %15, 1
+  %37 = icmp eq i32 %15, 1
   %unroll_iter = and i32 %15, -2
   %lcmp.mod.not = icmp eq i32 %xtraiter, 0
+  %xtraiter75 = and i32 %19, 1
+  %38 = icmp eq i32 %19, 1
+  %unroll_iter77 = and i32 %19, -2
+  %lcmp.mod76.not = icmp eq i32 %xtraiter75, 0
   br label %"for output.s0.y.rebased"
 
 "for output.s0.y.rebased":                        ; preds = %"for output.s0.y.rebased.preheader", %"end for output.s0.x.x.rebased"
-  %output.s0.y.rebased = phi i32 [ %330, %"end for output.s0.x.x.rebased" ], [ 0, %"for output.s0.y.rebased.preheader" ]
+  %output.s0.y.rebased = phi i32 [ %440, %"end for output.s0.x.x.rebased" ], [ 0, %"for output.s0.y.rebased.preheader" ]
   br i1 %14, label %"for sum_input_sq.s1.r8$x.r8$x.preheader", label %"end for sum_input_sq.s1.r8$x.r8$x", !prof !95
 
 "for sum_input_sq.s1.r8$x.r8$x.preheader":        ; preds = %"for output.s0.y.rebased"
-  %37 = add nsw i32 %output.s0.y.rebased, %9
-  %38 = sub i32 %37, %3
-  %39 = mul nsw i32 %38, %4
-  br i1 %36, label %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r8$x"
+  %39 = add nsw i32 %output.s0.y.rebased, %9
+  %40 = sub i32 %39, %3
+  %41 = mul nsw i32 %40, %4
+  br i1 %37, label %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r8$x"
 
 call_destructor.exit:                             ; preds = %"end for output.s0.x.x.rebased", %entry
   tail call void @halide_qurt_hvx_unlock_as_destructor(i8* null, i8* nonnull inttoptr (i32 1 to i8*)) #15
   ret i32 0
 
 "for sum_input_sq.s1.r8$x.r8$x":                  ; preds = %"for sum_input_sq.s1.r8$x.r8$x.preheader", %"for sum_input_sq.s1.r8$x.r8$x"
-  %sum_input_sq.0 = phi i32 [ %74, %"for sum_input_sq.s1.r8$x.r8$x" ], [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ]
-  %"sum_input_sq.s1.r8$x.r8$x" = phi i32 [ %75, %"for sum_input_sq.s1.r8$x.r8$x" ], [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ]
+  %sum_input_sq.0 = phi i32 [ %76, %"for sum_input_sq.s1.r8$x.r8$x" ], [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ]
+  %"sum_input_sq.s1.r8$x.r8$x" = phi i32 [ %77, %"for sum_input_sq.s1.r8$x.r8$x" ], [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ]
   %niter = phi i32 [ %niter.nsub.1, %"for sum_input_sq.s1.r8$x.r8$x" ], [ %unroll_iter, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ]
-  %40 = shl nsw i32 %"sum_input_sq.s1.r8$x.r8$x", 7
-  %41 = add nsw i32 %40, %39
-  %42 = getelementptr inbounds i8, i8* %0, i32 %41
-  %43 = bitcast i8* %42 to <32 x i32>*
-  %t124225 = load <32 x i32>, <32 x i32>* %43, align 1, !tbaa !96
-  %44 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %t124225) #11
-  %45 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %44, <64 x i32> %26) #11
-  %46 = bitcast <64 x i32> %45 to <128 x i16>
-  %47 = sext <128 x i16> %46 to <128 x i32>
-  %48 = shufflevector <128 x i32> %47, <128 x i32> undef, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %ab1.i = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %48, <32 x i32> %48) #11
-  %ab.i = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i, <32 x i32> %48, <32 x i32> %48) #11
-  %49 = shufflevector <128 x i32> %47, <128 x i32> undef, <32 x i32> <i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
-  %ab1.i246 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %49, <32 x i32> %49) #11
-  %ab.i247 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i246, <32 x i32> %49, <32 x i32> %49) #11
-  %50 = shufflevector <128 x i32> %47, <128 x i32> undef, <32 x i32> <i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95>
-  %ab1.i248 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %50, <32 x i32> %50) #11
-  %ab.i249 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i248, <32 x i32> %50, <32 x i32> %50) #11
-  %51 = shufflevector <128 x i32> %47, <128 x i32> undef, <32 x i32> <i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
-  %ab1.i250 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %51, <32 x i32> %51) #11
-  %ab.i251 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i250, <32 x i32> %51, <32 x i32> %51) #11
-  %52 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i247, <32 x i32> %ab.i)
-  %53 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i251, <32 x i32> %ab.i249)
-  %54 = shufflevector <64 x i32> %52, <64 x i32> %53, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
-  %55 = tail call i32 @llvm.vector.reduce.add.v128i32(<128 x i32> %54) #9
-  %56 = add nsw i32 %55, %sum_input_sq.0
-  %57 = shl i32 %"sum_input_sq.s1.r8$x.r8$x", 7
-  %58 = or i32 %57, 128
-  %59 = add nsw i32 %58, %39
-  %60 = getelementptr inbounds i8, i8* %0, i32 %59
-  %61 = bitcast i8* %60 to <32 x i32>*
-  %t124225.1 = load <32 x i32>, <32 x i32>* %61, align 1, !tbaa !96
-  %62 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %t124225.1) #11
-  %63 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %62, <64 x i32> %26) #11
-  %64 = bitcast <64 x i32> %63 to <128 x i16>
-  %65 = sext <128 x i16> %64 to <128 x i32>
-  %66 = shufflevector <128 x i32> %65, <128 x i32> undef, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %ab1.i.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %66, <32 x i32> %66) #11
-  %ab.i.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i.1, <32 x i32> %66, <32 x i32> %66) #11
-  %67 = shufflevector <128 x i32> %65, <128 x i32> undef, <32 x i32> <i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
-  %ab1.i246.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %67, <32 x i32> %67) #11
-  %ab.i247.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i246.1, <32 x i32> %67, <32 x i32> %67) #11
-  %68 = shufflevector <128 x i32> %65, <128 x i32> undef, <32 x i32> <i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95>
-  %ab1.i248.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %68, <32 x i32> %68) #11
-  %ab.i249.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i248.1, <32 x i32> %68, <32 x i32> %68) #11
-  %69 = shufflevector <128 x i32> %65, <128 x i32> undef, <32 x i32> <i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
-  %ab1.i250.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %69, <32 x i32> %69) #11
-  %ab.i251.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i250.1, <32 x i32> %69, <32 x i32> %69) #11
-  %70 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i247.1, <32 x i32> %ab.i.1)
-  %71 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i251.1, <32 x i32> %ab.i249.1)
-  %72 = shufflevector <64 x i32> %70, <64 x i32> %71, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
-  %73 = tail call i32 @llvm.vector.reduce.add.v128i32(<128 x i32> %72) #9
-  %74 = add nsw i32 %73, %56
-  %75 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r8$x", 2
+  %42 = shl nsw i32 %"sum_input_sq.s1.r8$x.r8$x", 7
+  %43 = add nsw i32 %42, %41
+  %44 = getelementptr inbounds i8, i8* %0, i32 %43
+  %45 = bitcast i8* %44 to <32 x i32>*
+  %t12436 = load <32 x i32>, <32 x i32>* %45, align 1, !tbaa !96
+  %46 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %t12436) #11
+  %47 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %46, <64 x i32> %26) #11
+  %48 = bitcast <64 x i32> %47 to <128 x i16>
+  %49 = sext <128 x i16> %48 to <128 x i32>
+  %50 = shufflevector <128 x i32> %49, <128 x i32> undef, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
+  %ab1.i = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %50, <32 x i32> %50) #11
+  %ab.i = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i, <32 x i32> %50, <32 x i32> %50) #11
+  %51 = shufflevector <128 x i32> %49, <128 x i32> undef, <32 x i32> <i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
+  %ab1.i57 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %51, <32 x i32> %51) #11
+  %ab.i58 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i57, <32 x i32> %51, <32 x i32> %51) #11
+  %52 = shufflevector <128 x i32> %49, <128 x i32> undef, <32 x i32> <i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95>
+  %ab1.i59 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %52, <32 x i32> %52) #11
+  %ab.i60 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i59, <32 x i32> %52, <32 x i32> %52) #11
+  %53 = shufflevector <128 x i32> %49, <128 x i32> undef, <32 x i32> <i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %ab1.i61 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %53, <32 x i32> %53) #11
+  %ab.i62 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i61, <32 x i32> %53, <32 x i32> %53) #11
+  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i58, <32 x i32> %ab.i)
+  %55 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i62, <32 x i32> %ab.i60)
+  %56 = shufflevector <64 x i32> %54, <64 x i32> %55, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %57 = tail call i32 @llvm.vector.reduce.add.v128i32(<128 x i32> %56) #9
+  %58 = add nsw i32 %57, %sum_input_sq.0
+  %59 = shl i32 %"sum_input_sq.s1.r8$x.r8$x", 7
+  %60 = or i32 %59, 128
+  %61 = add nsw i32 %60, %41
+  %62 = getelementptr inbounds i8, i8* %0, i32 %61
+  %63 = bitcast i8* %62 to <32 x i32>*
+  %t12436.1 = load <32 x i32>, <32 x i32>* %63, align 1, !tbaa !96
+  %64 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %t12436.1) #11
+  %65 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %64, <64 x i32> %26) #11
+  %66 = bitcast <64 x i32> %65 to <128 x i16>
+  %67 = sext <128 x i16> %66 to <128 x i32>
+  %68 = shufflevector <128 x i32> %67, <128 x i32> undef, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
+  %ab1.i.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %68, <32 x i32> %68) #11
+  %ab.i.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i.1, <32 x i32> %68, <32 x i32> %68) #11
+  %69 = shufflevector <128 x i32> %67, <128 x i32> undef, <32 x i32> <i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
+  %ab1.i57.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %69, <32 x i32> %69) #11
+  %ab.i58.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i57.1, <32 x i32> %69, <32 x i32> %69) #11
+  %70 = shufflevector <128 x i32> %67, <128 x i32> undef, <32 x i32> <i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95>
+  %ab1.i59.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %70, <32 x i32> %70) #11
+  %ab.i60.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i59.1, <32 x i32> %70, <32 x i32> %70) #11
+  %71 = shufflevector <128 x i32> %67, <128 x i32> undef, <32 x i32> <i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %ab1.i61.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %71, <32 x i32> %71) #11
+  %ab.i62.1 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i61.1, <32 x i32> %71, <32 x i32> %71) #11
+  %72 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i58.1, <32 x i32> %ab.i.1)
+  %73 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i62.1, <32 x i32> %ab.i60.1)
+  %74 = shufflevector <64 x i32> %72, <64 x i32> %73, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %75 = tail call i32 @llvm.vector.reduce.add.v128i32(<128 x i32> %74) #9
+  %76 = add nsw i32 %75, %58
+  %77 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r8$x", 2
   %niter.nsub.1 = add i32 %niter, -2
   %niter.ncmp.1 = icmp eq i32 %niter.nsub.1, 0
   br i1 %niter.ncmp.1, label %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r8$x"
 
 "end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa": ; preds = %"for sum_input_sq.s1.r8$x.r8$x", %"for sum_input_sq.s1.r8$x.r8$x.preheader"
-  %.lcssa.ph = phi i32 [ undef, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ], [ %74, %"for sum_input_sq.s1.r8$x.r8$x" ]
-  %sum_input_sq.0.unr = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ], [ %74, %"for sum_input_sq.s1.r8$x.r8$x" ]
-  %"sum_input_sq.s1.r8$x.r8$x.unr" = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ], [ %75, %"for sum_input_sq.s1.r8$x.r8$x" ]
+  %.lcssa.ph = phi i32 [ undef, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ], [ %76, %"for sum_input_sq.s1.r8$x.r8$x" ]
+  %sum_input_sq.0.unr = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ], [ %76, %"for sum_input_sq.s1.r8$x.r8$x" ]
+  %"sum_input_sq.s1.r8$x.r8$x.unr" = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r8$x.preheader" ], [ %77, %"for sum_input_sq.s1.r8$x.r8$x" ]
   br i1 %lcmp.mod.not, label %"end for sum_input_sq.s1.r8$x.r8$x", label %"for sum_input_sq.s1.r8$x.r8$x.epil"
 
 "for sum_input_sq.s1.r8$x.r8$x.epil":             ; preds = %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa"
-  %76 = shl nsw i32 %"sum_input_sq.s1.r8$x.r8$x.unr", 7
-  %77 = add nsw i32 %76, %39
-  %78 = getelementptr inbounds i8, i8* %0, i32 %77
-  %79 = bitcast i8* %78 to <32 x i32>*
-  %t124225.epil = load <32 x i32>, <32 x i32>* %79, align 1, !tbaa !96
-  %80 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %t124225.epil) #11
-  %81 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %80, <64 x i32> %26) #11
-  %82 = bitcast <64 x i32> %81 to <128 x i16>
-  %83 = sext <128 x i16> %82 to <128 x i32>
-  %84 = shufflevector <128 x i32> %83, <128 x i32> undef, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %85 = shufflevector <128 x i32> %83, <128 x i32> undef, <32 x i32> <i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
-  %86 = shufflevector <128 x i32> %83, <128 x i32> undef, <32 x i32> <i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95>
-  %87 = shufflevector <128 x i32> %83, <128 x i32> undef, <32 x i32> <i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
-  %ab1.i246.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %85, <32 x i32> %85) #11
-  %ab.i247.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i246.epil, <32 x i32> %85, <32 x i32> %85) #11
-  %ab1.i.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %84, <32 x i32> %84) #11
-  %ab.i.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i.epil, <32 x i32> %84, <32 x i32> %84) #11
-  %88 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i247.epil, <32 x i32> %ab.i.epil)
-  %ab1.i250.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %87, <32 x i32> %87) #11
-  %ab.i251.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i250.epil, <32 x i32> %87, <32 x i32> %87) #11
-  %ab1.i248.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %86, <32 x i32> %86) #11
-  %ab.i249.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i248.epil, <32 x i32> %86, <32 x i32> %86) #11
-  %89 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i251.epil, <32 x i32> %ab.i249.epil)
-  %90 = shufflevector <64 x i32> %88, <64 x i32> %89, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
-  %91 = tail call i32 @llvm.vector.reduce.add.v128i32(<128 x i32> %90) #9
-  %92 = add nsw i32 %91, %sum_input_sq.0.unr
+  %78 = shl nsw i32 %"sum_input_sq.s1.r8$x.r8$x.unr", 7
+  %79 = add nsw i32 %78, %41
+  %80 = getelementptr inbounds i8, i8* %0, i32 %79
+  %81 = bitcast i8* %80 to <32 x i32>*
+  %t12436.epil = load <32 x i32>, <32 x i32>* %81, align 1, !tbaa !96
+  %82 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %t12436.epil) #11
+  %83 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %82, <64 x i32> %26) #11
+  %84 = bitcast <64 x i32> %83 to <128 x i16>
+  %85 = sext <128 x i16> %84 to <128 x i32>
+  %86 = shufflevector <128 x i32> %85, <128 x i32> undef, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
+  %87 = shufflevector <128 x i32> %85, <128 x i32> undef, <32 x i32> <i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63>
+  %88 = shufflevector <128 x i32> %85, <128 x i32> undef, <32 x i32> <i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95>
+  %89 = shufflevector <128 x i32> %85, <128 x i32> undef, <32 x i32> <i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %ab1.i57.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %87, <32 x i32> %87) #11
+  %ab.i58.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i57.epil, <32 x i32> %87, <32 x i32> %87) #11
+  %ab1.i.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %86, <32 x i32> %86) #11
+  %ab.i.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i.epil, <32 x i32> %86, <32 x i32> %86) #11
+  %90 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i58.epil, <32 x i32> %ab.i.epil)
+  %ab1.i61.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %89, <32 x i32> %89) #11
+  %ab.i62.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i61.epil, <32 x i32> %89, <32 x i32> %89) #11
+  %ab1.i59.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %88, <32 x i32> %88) #11
+  %ab.i60.epil = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> %ab1.i59.epil, <32 x i32> %88, <32 x i32> %88) #11
+  %91 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %ab.i62.epil, <32 x i32> %ab.i60.epil)
+  %92 = shufflevector <64 x i32> %90, <64 x i32> %91, <128 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %93 = tail call i32 @llvm.vector.reduce.add.v128i32(<128 x i32> %92) #9
+  %94 = add nsw i32 %93, %sum_input_sq.0.unr
   br label %"end for sum_input_sq.s1.r8$x.r8$x"
 
 "end for sum_input_sq.s1.r8$x.r8$x":              ; preds = %"for sum_input_sq.s1.r8$x.r8$x.epil", %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa", %"for output.s0.y.rebased"
-  %sum_input_sq.1 = phi i32 [ 0, %"for output.s0.y.rebased" ], [ %.lcssa.ph, %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa" ], [ %92, %"for sum_input_sq.s1.r8$x.r8$x.epil" ]
+  %sum_input_sq.1 = phi i32 [ 0, %"for output.s0.y.rebased" ], [ %.lcssa.ph, %"end for sum_input_sq.s1.r8$x.r8$x.loopexit.unr-lcssa" ], [ %94, %"for sum_input_sq.s1.r8$x.r8$x.epil" ]
   br i1 %27, label %"for sum_input_sq.s1.r8$x.r8$x.rebased.preheader", label %"consume sum_input_sq", !prof !95
 
 "for sum_input_sq.s1.r8$x.r8$x.rebased.preheader": ; preds = %"end for sum_input_sq.s1.r8$x.r8$x"
-  %93 = add nsw i32 %output.s0.y.rebased, %9
-  %94 = sub i32 %93, %3
-  %95 = mul nsw i32 %94, %4
+  %95 = add nsw i32 %output.s0.y.rebased, %9
+  %96 = sub i32 %95, %3
+  %97 = mul nsw i32 %96, %4
   br label %"for sum_input_sq.s1.r8$x.r8$x.rebased"
 
 "for sum_input_sq.s1.r8$x.r8$x.rebased":          ; preds = %"for sum_input_sq.s1.r8$x.r8$x.rebased.preheader", %"end for sum_input_sq.s1.r8$x.r21"
   %sum_input_sq.2 = phi i32 [ %sum_input_sq.4, %"end for sum_input_sq.s1.r8$x.r21" ], [ %sum_input_sq.1, %"for sum_input_sq.s1.r8$x.r8$x.rebased.preheader" ]
-  %"sum_input_sq.s1.r8$x.r8$x.rebased" = phi i32 [ %158, %"end for sum_input_sq.s1.r8$x.r21" ], [ 0, %"for sum_input_sq.s1.r8$x.r8$x.rebased.preheader" ]
-  %96 = mul i32 %"sum_input_sq.s1.r8$x.r8$x.rebased", -128
-  %97 = add i32 %35, %96
-  %98 = icmp slt i32 %97, 128
-  %smin = select i1 %98, i32 %97, i32 128
-  %99 = add nsw i32 %"sum_input_sq.s1.r8$x.r8$x.rebased", %15
-  %100 = shl nsw i32 %99, 7
-  %t120 = add nsw i32 %100, %95
-  %101 = icmp sgt i32 %2, %100
-  br i1 %101, label %"for sum_input_sq.s1.r8$x.r21.preheader", label %"end for sum_input_sq.s1.r8$x.r21", !prof !95
+  %"sum_input_sq.s1.r8$x.r8$x.rebased" = phi i32 [ %160, %"end for sum_input_sq.s1.r8$x.r21" ], [ 0, %"for sum_input_sq.s1.r8$x.r8$x.rebased.preheader" ]
+  %98 = mul i32 %"sum_input_sq.s1.r8$x.r8$x.rebased", -128
+  %99 = add i32 %36, %98
+  %100 = icmp slt i32 %99, 128
+  %smin = select i1 %100, i32 %99, i32 128
+  %101 = add nsw i32 %"sum_input_sq.s1.r8$x.r8$x.rebased", %15
+  %102 = shl nsw i32 %101, 7
+  %t120 = add nsw i32 %102, %97
+  %103 = icmp sgt i32 %2, %102
+  br i1 %103, label %"for sum_input_sq.s1.r8$x.r21.preheader", label %"end for sum_input_sq.s1.r8$x.r21", !prof !95
 
 "for sum_input_sq.s1.r8$x.r21.preheader":         ; preds = %"for sum_input_sq.s1.r8$x.r8$x.rebased"
-  %102 = add i32 %smin, -1
-  %xtraiter296 = and i32 %smin, 7
-  %103 = icmp ult i32 %102, 7
-  br i1 %103, label %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r21.preheader.new"
+  %104 = add i32 %smin, -1
+  %xtraiter70 = and i32 %smin, 7
+  %105 = icmp ult i32 %104, 7
+  br i1 %105, label %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r21.preheader.new"
 
 "for sum_input_sq.s1.r8$x.r21.preheader.new":     ; preds = %"for sum_input_sq.s1.r8$x.r21.preheader"
-  %unroll_iter299 = and i32 %smin, -8
+  %unroll_iter73 = and i32 %smin, -8
   br label %"for sum_input_sq.s1.r8$x.r21"
 
 "for sum_input_sq.s1.r8$x.r21":                   ; preds = %"for sum_input_sq.s1.r8$x.r21", %"for sum_input_sq.s1.r8$x.r21.preheader.new"
-  %sum_input_sq.3 = phi i32 [ %sum_input_sq.2, %"for sum_input_sq.s1.r8$x.r21.preheader.new" ], [ %150, %"for sum_input_sq.s1.r8$x.r21" ]
-  %"sum_input_sq.s1.r8$x.r21" = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r21.preheader.new" ], [ %151, %"for sum_input_sq.s1.r8$x.r21" ]
-  %niter300 = phi i32 [ %unroll_iter299, %"for sum_input_sq.s1.r8$x.r21.preheader.new" ], [ %niter300.nsub.7, %"for sum_input_sq.s1.r8$x.r21" ]
-  %104 = add nsw i32 %t120, %"sum_input_sq.s1.r8$x.r21"
-  %105 = getelementptr inbounds i8, i8* %0, i32 %104
-  %106 = load i8, i8* %105, align 1, !tbaa !96
-  %107 = zext i8 %106 to i32
-  %t15.s = sub nsw i32 %107, %29
+  %sum_input_sq.3 = phi i32 [ %sum_input_sq.2, %"for sum_input_sq.s1.r8$x.r21.preheader.new" ], [ %152, %"for sum_input_sq.s1.r8$x.r21" ]
+  %"sum_input_sq.s1.r8$x.r21" = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r21.preheader.new" ], [ %153, %"for sum_input_sq.s1.r8$x.r21" ]
+  %niter74 = phi i32 [ %unroll_iter73, %"for sum_input_sq.s1.r8$x.r21.preheader.new" ], [ %niter74.nsub.7, %"for sum_input_sq.s1.r8$x.r21" ]
+  %106 = add nsw i32 %t120, %"sum_input_sq.s1.r8$x.r21"
+  %107 = getelementptr inbounds i8, i8* %0, i32 %106
+  %108 = load i8, i8* %107, align 1, !tbaa !96
+  %109 = zext i8 %108 to i32
+  %t15.s = sub nsw i32 %109, %29
   %t72 = mul nsw i32 %t15.s, %t15.s
-  %108 = add nsw i32 %t72, %sum_input_sq.3
-  %109 = or i32 %"sum_input_sq.s1.r8$x.r21", 1
-  %110 = add nsw i32 %t120, %109
-  %111 = getelementptr inbounds i8, i8* %0, i32 %110
-  %112 = load i8, i8* %111, align 1, !tbaa !96
-  %113 = zext i8 %112 to i32
-  %t15.s.1 = sub nsw i32 %113, %29
+  %110 = add nsw i32 %t72, %sum_input_sq.3
+  %111 = or i32 %"sum_input_sq.s1.r8$x.r21", 1
+  %112 = add nsw i32 %t120, %111
+  %113 = getelementptr inbounds i8, i8* %0, i32 %112
+  %114 = load i8, i8* %113, align 1, !tbaa !96
+  %115 = zext i8 %114 to i32
+  %t15.s.1 = sub nsw i32 %115, %29
   %t72.1 = mul nsw i32 %t15.s.1, %t15.s.1
-  %114 = add nsw i32 %t72.1, %108
-  %115 = or i32 %"sum_input_sq.s1.r8$x.r21", 2
-  %116 = add nsw i32 %t120, %115
-  %117 = getelementptr inbounds i8, i8* %0, i32 %116
-  %118 = load i8, i8* %117, align 1, !tbaa !96
-  %119 = zext i8 %118 to i32
-  %t15.s.2 = sub nsw i32 %119, %29
+  %116 = add nsw i32 %t72.1, %110
+  %117 = or i32 %"sum_input_sq.s1.r8$x.r21", 2
+  %118 = add nsw i32 %t120, %117
+  %119 = getelementptr inbounds i8, i8* %0, i32 %118
+  %120 = load i8, i8* %119, align 1, !tbaa !96
+  %121 = zext i8 %120 to i32
+  %t15.s.2 = sub nsw i32 %121, %29
   %t72.2 = mul nsw i32 %t15.s.2, %t15.s.2
-  %120 = add nsw i32 %t72.2, %114
-  %121 = or i32 %"sum_input_sq.s1.r8$x.r21", 3
-  %122 = add nsw i32 %t120, %121
-  %123 = getelementptr inbounds i8, i8* %0, i32 %122
-  %124 = load i8, i8* %123, align 1, !tbaa !96
-  %125 = zext i8 %124 to i32
-  %t15.s.3 = sub nsw i32 %125, %29
+  %122 = add nsw i32 %t72.2, %116
+  %123 = or i32 %"sum_input_sq.s1.r8$x.r21", 3
+  %124 = add nsw i32 %t120, %123
+  %125 = getelementptr inbounds i8, i8* %0, i32 %124
+  %126 = load i8, i8* %125, align 1, !tbaa !96
+  %127 = zext i8 %126 to i32
+  %t15.s.3 = sub nsw i32 %127, %29
   %t72.3 = mul nsw i32 %t15.s.3, %t15.s.3
-  %126 = add nsw i32 %t72.3, %120
-  %127 = or i32 %"sum_input_sq.s1.r8$x.r21", 4
-  %128 = add nsw i32 %t120, %127
-  %129 = getelementptr inbounds i8, i8* %0, i32 %128
-  %130 = load i8, i8* %129, align 1, !tbaa !96
-  %131 = zext i8 %130 to i32
-  %t15.s.4 = sub nsw i32 %131, %29
+  %128 = add nsw i32 %t72.3, %122
+  %129 = or i32 %"sum_input_sq.s1.r8$x.r21", 4
+  %130 = add nsw i32 %t120, %129
+  %131 = getelementptr inbounds i8, i8* %0, i32 %130
+  %132 = load i8, i8* %131, align 1, !tbaa !96
+  %133 = zext i8 %132 to i32
+  %t15.s.4 = sub nsw i32 %133, %29
   %t72.4 = mul nsw i32 %t15.s.4, %t15.s.4
-  %132 = add nsw i32 %t72.4, %126
-  %133 = or i32 %"sum_input_sq.s1.r8$x.r21", 5
-  %134 = add nsw i32 %t120, %133
-  %135 = getelementptr inbounds i8, i8* %0, i32 %134
-  %136 = load i8, i8* %135, align 1, !tbaa !96
-  %137 = zext i8 %136 to i32
-  %t15.s.5 = sub nsw i32 %137, %29
+  %134 = add nsw i32 %t72.4, %128
+  %135 = or i32 %"sum_input_sq.s1.r8$x.r21", 5
+  %136 = add nsw i32 %t120, %135
+  %137 = getelementptr inbounds i8, i8* %0, i32 %136
+  %138 = load i8, i8* %137, align 1, !tbaa !96
+  %139 = zext i8 %138 to i32
+  %t15.s.5 = sub nsw i32 %139, %29
   %t72.5 = mul nsw i32 %t15.s.5, %t15.s.5
-  %138 = add nsw i32 %t72.5, %132
-  %139 = or i32 %"sum_input_sq.s1.r8$x.r21", 6
-  %140 = add nsw i32 %t120, %139
-  %141 = getelementptr inbounds i8, i8* %0, i32 %140
-  %142 = load i8, i8* %141, align 1, !tbaa !96
-  %143 = zext i8 %142 to i32
-  %t15.s.6 = sub nsw i32 %143, %29
+  %140 = add nsw i32 %t72.5, %134
+  %141 = or i32 %"sum_input_sq.s1.r8$x.r21", 6
+  %142 = add nsw i32 %t120, %141
+  %143 = getelementptr inbounds i8, i8* %0, i32 %142
+  %144 = load i8, i8* %143, align 1, !tbaa !96
+  %145 = zext i8 %144 to i32
+  %t15.s.6 = sub nsw i32 %145, %29
   %t72.6 = mul nsw i32 %t15.s.6, %t15.s.6
-  %144 = add nsw i32 %t72.6, %138
-  %145 = or i32 %"sum_input_sq.s1.r8$x.r21", 7
-  %146 = add nsw i32 %t120, %145
-  %147 = getelementptr inbounds i8, i8* %0, i32 %146
-  %148 = load i8, i8* %147, align 1, !tbaa !96
-  %149 = zext i8 %148 to i32
-  %t15.s.7 = sub nsw i32 %149, %29
+  %146 = add nsw i32 %t72.6, %140
+  %147 = or i32 %"sum_input_sq.s1.r8$x.r21", 7
+  %148 = add nsw i32 %t120, %147
+  %149 = getelementptr inbounds i8, i8* %0, i32 %148
+  %150 = load i8, i8* %149, align 1, !tbaa !96
+  %151 = zext i8 %150 to i32
+  %t15.s.7 = sub nsw i32 %151, %29
   %t72.7 = mul nsw i32 %t15.s.7, %t15.s.7
-  %150 = add nsw i32 %t72.7, %144
-  %151 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r21", 8
-  %niter300.nsub.7 = add i32 %niter300, -8
-  %niter300.ncmp.7 = icmp eq i32 %niter300.nsub.7, 0
-  br i1 %niter300.ncmp.7, label %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r21"
+  %152 = add nsw i32 %t72.7, %146
+  %153 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r21", 8
+  %niter74.nsub.7 = add i32 %niter74, -8
+  %niter74.ncmp.7 = icmp eq i32 %niter74.nsub.7, 0
+  br i1 %niter74.ncmp.7, label %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa", label %"for sum_input_sq.s1.r8$x.r21"
 
 "end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa": ; preds = %"for sum_input_sq.s1.r8$x.r21", %"for sum_input_sq.s1.r8$x.r21.preheader"
-  %.lcssa295.ph = phi i32 [ undef, %"for sum_input_sq.s1.r8$x.r21.preheader" ], [ %150, %"for sum_input_sq.s1.r8$x.r21" ]
-  %sum_input_sq.3.unr = phi i32 [ %sum_input_sq.2, %"for sum_input_sq.s1.r8$x.r21.preheader" ], [ %150, %"for sum_input_sq.s1.r8$x.r21" ]
-  %"sum_input_sq.s1.r8$x.r21.unr" = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r21.preheader" ], [ %151, %"for sum_input_sq.s1.r8$x.r21" ]
-  %lcmp.mod297.not = icmp eq i32 %xtraiter296, 0
-  br i1 %lcmp.mod297.not, label %"end for sum_input_sq.s1.r8$x.r21", label %"for sum_input_sq.s1.r8$x.r21.epil"
+  %.lcssa69.ph = phi i32 [ undef, %"for sum_input_sq.s1.r8$x.r21.preheader" ], [ %152, %"for sum_input_sq.s1.r8$x.r21" ]
+  %sum_input_sq.3.unr = phi i32 [ %sum_input_sq.2, %"for sum_input_sq.s1.r8$x.r21.preheader" ], [ %152, %"for sum_input_sq.s1.r8$x.r21" ]
+  %"sum_input_sq.s1.r8$x.r21.unr" = phi i32 [ 0, %"for sum_input_sq.s1.r8$x.r21.preheader" ], [ %153, %"for sum_input_sq.s1.r8$x.r21" ]
+  %lcmp.mod71.not = icmp eq i32 %xtraiter70, 0
+  br i1 %lcmp.mod71.not, label %"end for sum_input_sq.s1.r8$x.r21", label %"for sum_input_sq.s1.r8$x.r21.epil"
 
 "for sum_input_sq.s1.r8$x.r21.epil":              ; preds = %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa", %"for sum_input_sq.s1.r8$x.r21.epil"
-  %sum_input_sq.3.epil = phi i32 [ %156, %"for sum_input_sq.s1.r8$x.r21.epil" ], [ %sum_input_sq.3.unr, %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ]
-  %"sum_input_sq.s1.r8$x.r21.epil" = phi i32 [ %157, %"for sum_input_sq.s1.r8$x.r21.epil" ], [ %"sum_input_sq.s1.r8$x.r21.unr", %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ]
-  %epil.iter = phi i32 [ %epil.iter.sub, %"for sum_input_sq.s1.r8$x.r21.epil" ], [ %xtraiter296, %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ]
-  %152 = add nsw i32 %t120, %"sum_input_sq.s1.r8$x.r21.epil"
-  %153 = getelementptr inbounds i8, i8* %0, i32 %152
-  %154 = load i8, i8* %153, align 1, !tbaa !96
-  %155 = zext i8 %154 to i32
-  %t15.s.epil = sub nsw i32 %155, %29
+  %sum_input_sq.3.epil = phi i32 [ %158, %"for sum_input_sq.s1.r8$x.r21.epil" ], [ %sum_input_sq.3.unr, %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ]
+  %"sum_input_sq.s1.r8$x.r21.epil" = phi i32 [ %159, %"for sum_input_sq.s1.r8$x.r21.epil" ], [ %"sum_input_sq.s1.r8$x.r21.unr", %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ]
+  %epil.iter = phi i32 [ %epil.iter.sub, %"for sum_input_sq.s1.r8$x.r21.epil" ], [ %xtraiter70, %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ]
+  %154 = add nsw i32 %t120, %"sum_input_sq.s1.r8$x.r21.epil"
+  %155 = getelementptr inbounds i8, i8* %0, i32 %154
+  %156 = load i8, i8* %155, align 1, !tbaa !96
+  %157 = zext i8 %156 to i32
+  %t15.s.epil = sub nsw i32 %157, %29
   %t72.epil = mul nsw i32 %t15.s.epil, %t15.s.epil
-  %156 = add nsw i32 %t72.epil, %sum_input_sq.3.epil
-  %157 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r21.epil", 1
+  %158 = add nsw i32 %t72.epil, %sum_input_sq.3.epil
+  %159 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r21.epil", 1
   %epil.iter.sub = add i32 %epil.iter, -1
   %epil.iter.cmp.not = icmp eq i32 %epil.iter.sub, 0
   br i1 %epil.iter.cmp.not, label %"end for sum_input_sq.s1.r8$x.r21", label %"for sum_input_sq.s1.r8$x.r21.epil", !llvm.loop !99
 
 "end for sum_input_sq.s1.r8$x.r21":               ; preds = %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa", %"for sum_input_sq.s1.r8$x.r21.epil", %"for sum_input_sq.s1.r8$x.r8$x.rebased"
-  %sum_input_sq.4 = phi i32 [ %sum_input_sq.2, %"for sum_input_sq.s1.r8$x.r8$x.rebased" ], [ %.lcssa295.ph, %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ], [ %156, %"for sum_input_sq.s1.r8$x.r21.epil" ]
-  %158 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r8$x.rebased", 1
-  %.not223 = icmp eq i32 %158, %28
-  br i1 %.not223, label %"consume sum_input_sq", label %"for sum_input_sq.s1.r8$x.r8$x.rebased"
+  %sum_input_sq.4 = phi i32 [ %sum_input_sq.2, %"for sum_input_sq.s1.r8$x.r8$x.rebased" ], [ %.lcssa69.ph, %"end for sum_input_sq.s1.r8$x.r21.loopexit.unr-lcssa" ], [ %158, %"for sum_input_sq.s1.r8$x.r21.epil" ]
+  %160 = add nuw nsw i32 %"sum_input_sq.s1.r8$x.r8$x.rebased", 1
+  %.not34 = icmp eq i32 %160, %28
+  br i1 %.not34, label %"consume sum_input_sq", label %"for sum_input_sq.s1.r8$x.r8$x.rebased"
 
 "consume sum_input_sq":                           ; preds = %"end for sum_input_sq.s1.r8$x.r21", %"end for sum_input_sq.s1.r8$x.r8$x"
   %sum_input_sq.5 = phi i32 [ %sum_input_sq.1, %"end for sum_input_sq.s1.r8$x.r8$x" ], [ %sum_input_sq.4, %"end for sum_input_sq.s1.r8$x.r21" ]
-  %159 = tail call i32 @llvm.ctlz.i32(i32 %sum_input_sq.5, i1 false), !range !100
-  %160 = add nsw i32 %159, -16
-  %161 = icmp ult i32 %sum_input_sq.5, 65536
-  %162 = sub nsw i32 16, %159
-  %163 = shl i32 %sum_input_sq.5, %160
-  %164 = ashr i32 %sum_input_sq.5, %162
-  %165 = select i1 %161, i32 %163, i32 %164
-  %t90 = and i32 %165, 32767
-  %166 = mul nuw nsw i32 %t90, %t90
-  %167 = lshr i32 %166, 1
-  %168 = add nuw nsw i32 %167, 8192
-  %169 = lshr i32 %168, 14
-  %.neg.neg = shl nuw nsw i32 %159, 14
-  %.neg218 = add nsw i32 %.neg.neg, -507904
-  %170 = mul nsw i32 %169, -9421
-  %171 = lshr i32 %170, 1
-  %172 = add nuw i32 %171, 8192
-  %173 = lshr i32 %172, 14
-  %174 = mul nuw nsw i32 %t90, 23249
-  %175 = lshr i32 %174, 1
-  %176 = add nuw nsw i32 %175, 8192
-  %177 = lshr i32 %176, 14
-  %178 = mul nuw nsw i32 %169, %t90
-  %179 = lshr i32 %178, 1
-  %180 = add nuw nsw i32 %179, 8192
-  %181 = lshr i32 %180, 14
-  %182 = mul nuw nsw i32 %181, 2555
-  %183 = lshr i32 %182, 1
-  %184 = add nuw nsw i32 %183, 8192
-  %185 = lshr i32 %184, 14
-  %186 = add nuw nsw i32 %173, %177
-  %187 = add nuw nsw i32 %186, %185
-  %188 = shl i32 %187, 16
-  %sext = add i32 %188, 327680
-  %189 = ashr exact i32 %sext, 16
-  %t92.neg = sub nsw i32 %.neg218, %189
-  %190 = ashr i32 %t92.neg, 15
-  %x1 = add nsw i32 %190, 15
-  %191 = icmp sgt i32 %t92.neg, -491521
-  %192 = sub nsw i32 -15, %190
-  %193 = shl nuw i32 1, %x1
-  %194 = lshr i32 1, %192
-  %t93 = select i1 %191, i32 %193, i32 %194
+  %161 = tail call i32 @llvm.ctlz.i32(i32 %sum_input_sq.5, i1 false), !range !100
+  %162 = add nsw i32 %161, -16
+  %163 = icmp ult i32 %sum_input_sq.5, 65536
+  %164 = sub nsw i32 16, %161
+  %165 = shl i32 %sum_input_sq.5, %162
+  %166 = ashr i32 %sum_input_sq.5, %164
+  %167 = select i1 %163, i32 %165, i32 %166
+  %t90 = and i32 %167, 32767
+  %168 = mul nuw nsw i32 %t90, %t90
+  %169 = lshr i32 %168, 1
+  %170 = add nuw nsw i32 %169, 8192
+  %171 = lshr i32 %170, 14
+  %.neg.neg = shl nuw nsw i32 %161, 14
+  %.neg29 = add nsw i32 %.neg.neg, -507904
+  %172 = mul nsw i32 %171, -9421
+  %173 = lshr i32 %172, 1
+  %174 = add nuw i32 %173, 8192
+  %175 = lshr i32 %174, 14
+  %176 = mul nuw nsw i32 %t90, 23249
+  %177 = lshr i32 %176, 1
+  %178 = add nuw nsw i32 %177, 8192
+  %179 = lshr i32 %178, 14
+  %180 = mul nuw nsw i32 %171, %t90
+  %181 = lshr i32 %180, 1
+  %182 = add nuw nsw i32 %181, 8192
+  %183 = lshr i32 %182, 14
+  %184 = mul nuw nsw i32 %183, 2555
+  %185 = lshr i32 %184, 1
+  %186 = add nuw nsw i32 %185, 8192
+  %187 = lshr i32 %186, 14
+  %188 = add nuw nsw i32 %175, %179
+  %189 = add nuw nsw i32 %188, %187
+  %190 = shl i32 %189, 16
+  %sext = add i32 %190, 327680
+  %191 = ashr exact i32 %sext, 16
+  %t92.neg = sub nsw i32 %.neg29, %191
+  %192 = ashr i32 %t92.neg, 15
+  %x1 = add nsw i32 %192, 15
+  %193 = icmp sgt i32 %t92.neg, -491521
+  %194 = sub nsw i32 -15, %192
+  %195 = shl nuw i32 1, %x1
+  %196 = lshr i32 1, %194
+  %t93 = select i1 %193, i32 %195, i32 %196
   %t94 = and i32 %t92.neg, 32767
-  %195 = mul nuw nsw i32 %t94, %t94
-  %196 = lshr i32 %195, 1
-  %197 = add nuw nsw i32 %196, 8192
-  %198 = lshr i32 %197, 14
-  %199 = sext i32 %t93 to i64
-  %200 = mul nuw nsw i32 %198, 7363
-  %201 = lshr i32 %200, 1
-  %202 = add nuw nsw i32 %201, 8192
-  %203 = lshr i32 %202, 14
-  %204 = mul nuw nsw i32 %t94, 22812
-  %205 = lshr exact i32 %204, 1
-  %206 = add nuw nsw i32 %205, 8192
-  %207 = lshr i32 %206, 14
-  %208 = mul nuw nsw i32 %198, %t94
-  %209 = lshr i32 %208, 1
-  %210 = add nuw nsw i32 %209, 8192
-  %211 = lshr i32 %210, 14
-  %212 = mul nuw nsw i32 %211, 2592
-  %213 = lshr exact i32 %212, 1
-  %214 = add nuw nsw i32 %213, 8192
-  %215 = lshr i32 %214, 14
-  %216 = add nuw nsw i32 %203, %207
-  %217 = add nuw nsw i32 %216, %215
-  %218 = shl nuw nsw i32 %217, 16
-  %219 = zext i32 %218 to i64
-  %220 = mul nsw i64 %219, %199
-  %221 = lshr exact i64 %220, 1
-  %222 = add nuw i64 %221, 536870912
-  %223 = lshr i64 %222, 30
-  %224 = trunc i64 %223 to i32
-  %225 = tail call i32 @llvm.sadd.sat.i32(i32 %t93, i32 %224)
+  %197 = mul nuw nsw i32 %t94, %t94
+  %198 = lshr i32 %197, 1
+  %199 = add nuw nsw i32 %198, 8192
+  %200 = lshr i32 %199, 14
+  %201 = sext i32 %t93 to i64
+  %202 = mul nuw nsw i32 %200, 7363
+  %203 = lshr i32 %202, 1
+  %204 = add nuw nsw i32 %203, 8192
+  %205 = lshr i32 %204, 14
+  %206 = mul nuw nsw i32 %t94, 22812
+  %207 = lshr exact i32 %206, 1
+  %208 = add nuw nsw i32 %207, 8192
+  %209 = lshr i32 %208, 14
+  %210 = mul nuw nsw i32 %200, %t94
+  %211 = lshr i32 %210, 1
+  %212 = add nuw nsw i32 %211, 8192
+  %213 = lshr i32 %212, 14
+  %214 = mul nuw nsw i32 %213, 2592
+  %215 = lshr exact i32 %214, 1
+  %216 = add nuw nsw i32 %215, 8192
+  %217 = lshr i32 %216, 14
+  %218 = add nuw nsw i32 %205, %209
+  %219 = add nuw nsw i32 %218, %217
+  %220 = shl nuw nsw i32 %219, 16
+  %221 = zext i32 %220 to i64
+  %222 = mul nsw i64 %221, %201
+  %223 = lshr exact i64 %222, 1
+  %224 = add nuw i64 %223, 536870912
+  %225 = lshr i64 %224, 30
+  %226 = trunc i64 %225 to i32
+  %227 = tail call i32 @llvm.sadd.sat.i32(i32 %t93, i32 %226)
   br i1 %18, label %"for output.s0.x.x.preheader", label %"end for output.s0.x.x", !prof !95
 
 "for output.s0.x.x.preheader":                    ; preds = %"consume sum_input_sq"
-  %226 = add nsw i32 %output.s0.y.rebased, %9
-  %227 = mul nsw i32 %226, %4
-  %228 = add nsw i32 %30, %227
-  %229 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> zeroinitializer) #11
-  %230 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %225) #11
-  %231 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %232 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> zeroinitializer) #11
-  %233 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %234 = mul nsw i32 %output.s0.y.rebased, %11
-  br label %"for output.s0.x.x"
+  %228 = add nsw i32 %output.s0.y.rebased, %9
+  %229 = mul nsw i32 %228, %4
+  %230 = add nsw i32 %30, %229
+  %231 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %227) #11
+  %232 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %231, <32 x i32> %231) #11
+  %233 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %232) #11
+  %234 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %232) #11
+  %235 = mul nsw i32 %output.s0.y.rebased, %11
+  br i1 %38, label %"end for output.s0.x.x.loopexit.unr-lcssa", label %"for output.s0.x.x"
 
 "for output.s0.x.x":                              ; preds = %"for output.s0.x.x.preheader", %"for output.s0.x.x"
-  %output.s0.x.x = phi i32 [ %322, %"for output.s0.x.x" ], [ 0, %"for output.s0.x.x.preheader" ]
-  %235 = shl nsw i32 %output.s0.x.x, 7
-  %236 = add nsw i32 %228, %235
-  %237 = getelementptr inbounds i8, i8* %0, i32 %236
-  %238 = bitcast i8* %237 to <32 x i32>*
-  %239 = load <32 x i32>, <32 x i32>* %238, align 1, !tbaa !96
-  %240 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %239) #11
-  %241 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %240, <64 x i32> %26) #11
-  %242 = bitcast <64 x i32> %241 to <32 x i64>
-  %243 = shufflevector <32 x i64> %242, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %244 = bitcast <8 x i64> %243 to <32 x i16>
-  %245 = zext <32 x i16> %244 to <32 x i32>
-  %246 = shufflevector <32 x i64> %242, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %247 = bitcast <8 x i64> %246 to <32 x i16>
-  %248 = zext <32 x i16> %247 to <32 x i32>
-  %249 = shufflevector <32 x i64> %242, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %250 = bitcast <8 x i64> %249 to <32 x i16>
-  %251 = zext <32 x i16> %250 to <32 x i32>
-  %252 = shufflevector <32 x i64> %242, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %253 = bitcast <8 x i64> %252 to <32 x i16>
-  %254 = zext <32 x i16> %253 to <32 x i32>
-  %255 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %245, <32 x i32> %230) #11
-  %256 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %245, <32 x i32> %230) #11
-  %257 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %255, <32 x i32> %256) #11
-  %258 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %257, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %259 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %258) #11
-  %260 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %248, <32 x i32> %230) #11
-  %261 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %248, <32 x i32> %230) #11
-  %262 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %260, <32 x i32> %261) #11
-  %263 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %262, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %264 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %263, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %265 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %259, <32 x i32> %264) #11
-  %266 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %265) #11
-  %267 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %266) #11
-  %268 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %265) #11
-  %269 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %268) #11
-  %270 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %267, <32 x i32> %269) #11
-  %271 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %270) #11
-  %272 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %270) #11
-  %273 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %271, <32 x i32> %272) #11
-  %274 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %273) #11
-  %275 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %274, <32 x i32> %231) #11
-  %276 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %229, <32 x i32> %275) #11
-  %277 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %251, <32 x i32> %230) #11
-  %278 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %251, <32 x i32> %230) #11
-  %279 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %277, <32 x i32> %278) #11
-  %280 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %279, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %281 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %280) #11
-  %282 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %254, <32 x i32> %230) #11
-  %283 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %254, <32 x i32> %230) #11
-  %284 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %282, <32 x i32> %283) #11
-  %285 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %284, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %286 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %285, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %287 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %281, <32 x i32> %286) #11
-  %288 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %287) #11
-  %289 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %288) #11
-  %290 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %287) #11
-  %291 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %290) #11
-  %292 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %289, <32 x i32> %291) #11
-  %293 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %292) #11
-  %294 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %292) #11
-  %295 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %293, <32 x i32> %294) #11
-  %296 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %295) #11
-  %297 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %233, <32 x i32> %296) #11
-  %298 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %232, <32 x i32> %297) #11
-  %299 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %276, <32 x i32> %298) #11
-  %300 = bitcast <64 x i32> %299 to <32 x i64>
-  %301 = shufflevector <32 x i64> %300, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %302 = bitcast <8 x i64> %301 to <32 x i16>
-  %303 = trunc <32 x i16> %302 to <32 x i8>
-  %304 = add nsw i32 %235, %234
-  %305 = getelementptr inbounds i8, i8* %5, i32 %304
-  %306 = bitcast i8* %305 to <32 x i8>*
-  store <32 x i8> %303, <32 x i8>* %306, align 1, !tbaa !101
-  %307 = shufflevector <32 x i64> %300, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %308 = bitcast <8 x i64> %307 to <32 x i16>
-  %309 = trunc <32 x i16> %308 to <32 x i8>
-  %310 = getelementptr inbounds i8, i8* %305, i32 32
-  %311 = bitcast i8* %310 to <32 x i8>*
-  store <32 x i8> %309, <32 x i8>* %311, align 1, !tbaa !101
-  %312 = shufflevector <32 x i64> %300, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %313 = bitcast <8 x i64> %312 to <32 x i16>
-  %314 = trunc <32 x i16> %313 to <32 x i8>
-  %315 = getelementptr inbounds i8, i8* %305, i32 64
-  %316 = bitcast i8* %315 to <32 x i8>*
-  store <32 x i8> %314, <32 x i8>* %316, align 1, !tbaa !101
-  %317 = shufflevector <32 x i64> %300, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %318 = bitcast <8 x i64> %317 to <32 x i16>
-  %319 = trunc <32 x i16> %318 to <32 x i8>
-  %320 = getelementptr inbounds i8, i8* %305, i32 96
-  %321 = bitcast i8* %320 to <32 x i8>*
-  store <32 x i8> %319, <32 x i8>* %321, align 1, !tbaa !101
-  %322 = add nuw nsw i32 %output.s0.x.x, 1
-  %.not222 = icmp eq i32 %322, %19
-  br i1 %.not222, label %"end for output.s0.x.x", label %"for output.s0.x.x"
+  %output.s0.x.x = phi i32 [ %367, %"for output.s0.x.x" ], [ 0, %"for output.s0.x.x.preheader" ]
+  %niter78 = phi i32 [ %niter78.nsub.1, %"for output.s0.x.x" ], [ %unroll_iter77, %"for output.s0.x.x.preheader" ]
+  %236 = shl nsw i32 %output.s0.x.x, 7
+  %237 = add nsw i32 %230, %236
+  %238 = getelementptr inbounds i8, i8* %0, i32 %237
+  %239 = bitcast i8* %238 to <32 x i32>*
+  %240 = load <32 x i32>, <32 x i32>* %239, align 1, !tbaa !96
+  %241 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %240) #11
+  %242 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %241, <64 x i32> %26) #11
+  %243 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %242) #11
+  %244 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %243) #11
+  %245 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %244) #11
+  %246 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %245, <32 x i32> %233) #11
+  %247 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %246, <32 x i32> %245, <32 x i32> %233) #11
+  %248 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %244) #11
+  %249 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %248, <32 x i32> %234) #11
+  %250 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %249, <32 x i32> %248, <32 x i32> %234) #11
+  %251 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %247, <32 x i32> %250) #11
+  %252 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %251) #11
+  %253 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %252, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %254 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %253, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %255 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %254) #11
+  %256 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %255, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %257 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %251) #11
+  %258 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %257) #11
+  %259 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %258, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %260 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %259, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %261 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %260, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %262 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %256, <32 x i32> %261) #11
+  %263 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %262) #11
+  %264 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %262) #11
+  %265 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %263, <32 x i32> %264) #11
+  %266 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %242) #11
+  %267 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %266) #11
+  %268 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %267) #11
+  %269 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %268, <32 x i32> %233) #11
+  %270 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %269, <32 x i32> %268, <32 x i32> %233) #11
+  %271 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %267) #11
+  %272 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %271, <32 x i32> %234) #11
+  %273 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %272, <32 x i32> %271, <32 x i32> %234) #11
+  %274 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %270, <32 x i32> %273) #11
+  %275 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %274) #11
+  %276 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %275, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %277 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %276, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %278 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %277) #11
+  %279 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %278, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %280 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %274) #11
+  %281 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %280) #11
+  %282 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %281, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %283 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %282, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %284 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %283, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %285 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %279, <32 x i32> %284) #11
+  %286 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %285) #11
+  %287 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %285) #11
+  %288 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %286, <32 x i32> %287) #11
+  %289 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %265, <32 x i32> %288) #11
+  %290 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %289) #11
+  %291 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %290) #11
+  %292 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %291) #11
+  %293 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %292, <32 x i32> zeroinitializer) #11
+  %294 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %290) #11
+  %295 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %294, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
+  %296 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %295, <32 x i32> zeroinitializer) #11
+  %297 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %293, <32 x i32> %296) #11
+  %298 = add nsw i32 %236, %235
+  %299 = getelementptr inbounds i8, i8* %5, i32 %298
+  %300 = bitcast i8* %299 to <32 x i32>*
+  store <32 x i32> %297, <32 x i32>* %300, align 1, !tbaa !101
+  %301 = shl i32 %output.s0.x.x, 7
+  %302 = or i32 %301, 128
+  %303 = add nsw i32 %230, %302
+  %304 = getelementptr inbounds i8, i8* %0, i32 %303
+  %305 = bitcast i8* %304 to <32 x i32>*
+  %306 = load <32 x i32>, <32 x i32>* %305, align 1, !tbaa !96
+  %307 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %306) #11
+  %308 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %307, <64 x i32> %26) #11
+  %309 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %308) #11
+  %310 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %309) #11
+  %311 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %310) #11
+  %312 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %311, <32 x i32> %233) #11
+  %313 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %312, <32 x i32> %311, <32 x i32> %233) #11
+  %314 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %310) #11
+  %315 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %314, <32 x i32> %234) #11
+  %316 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %315, <32 x i32> %314, <32 x i32> %234) #11
+  %317 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %313, <32 x i32> %316) #11
+  %318 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %317) #11
+  %319 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %318, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %320 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %319, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %321 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %320) #11
+  %322 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %321, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %323 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %317) #11
+  %324 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %323) #11
+  %325 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %324, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %326 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %325, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %327 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %326, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %328 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %322, <32 x i32> %327) #11
+  %329 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %328) #11
+  %330 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %328) #11
+  %331 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %329, <32 x i32> %330) #11
+  %332 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %308) #11
+  %333 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %332) #11
+  %334 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %333) #11
+  %335 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %334, <32 x i32> %233) #11
+  %336 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %335, <32 x i32> %334, <32 x i32> %233) #11
+  %337 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %333) #11
+  %338 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %337, <32 x i32> %234) #11
+  %339 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %338, <32 x i32> %337, <32 x i32> %234) #11
+  %340 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %336, <32 x i32> %339) #11
+  %341 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %340) #11
+  %342 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %341, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %343 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %342, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %344 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %343) #11
+  %345 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %344, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %346 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %340) #11
+  %347 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %346) #11
+  %348 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %347, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %349 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %348, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %350 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %349, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %351 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %345, <32 x i32> %350) #11
+  %352 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %351) #11
+  %353 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %351) #11
+  %354 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %352, <32 x i32> %353) #11
+  %355 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %331, <32 x i32> %354) #11
+  %356 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %355) #11
+  %357 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %356) #11
+  %358 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %357) #11
+  %359 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %358, <32 x i32> zeroinitializer) #11
+  %360 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %356) #11
+  %361 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %360, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
+  %362 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %361, <32 x i32> zeroinitializer) #11
+  %363 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %359, <32 x i32> %362) #11
+  %364 = add nsw i32 %302, %235
+  %365 = getelementptr inbounds i8, i8* %5, i32 %364
+  %366 = bitcast i8* %365 to <32 x i32>*
+  store <32 x i32> %363, <32 x i32>* %366, align 1, !tbaa !101
+  %367 = add nuw nsw i32 %output.s0.x.x, 2
+  %niter78.nsub.1 = add i32 %niter78, -2
+  %niter78.ncmp.1 = icmp eq i32 %niter78.nsub.1, 0
+  br i1 %niter78.ncmp.1, label %"end for output.s0.x.x.loopexit.unr-lcssa", label %"for output.s0.x.x"
 
-"end for output.s0.x.x":                          ; preds = %"for output.s0.x.x", %"consume sum_input_sq"
+"end for output.s0.x.x.loopexit.unr-lcssa":       ; preds = %"for output.s0.x.x", %"for output.s0.x.x.preheader"
+  %output.s0.x.x.unr = phi i32 [ 0, %"for output.s0.x.x.preheader" ], [ %367, %"for output.s0.x.x" ]
+  br i1 %lcmp.mod76.not, label %"end for output.s0.x.x", label %"for output.s0.x.x.epil"
+
+"for output.s0.x.x.epil":                         ; preds = %"end for output.s0.x.x.loopexit.unr-lcssa"
+  %368 = shl nsw i32 %output.s0.x.x.unr, 7
+  %369 = add nsw i32 %230, %368
+  %370 = getelementptr inbounds i8, i8* %0, i32 %369
+  %371 = bitcast i8* %370 to <32 x i32>*
+  %372 = load <32 x i32>, <32 x i32>* %371, align 1, !tbaa !96
+  %373 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %372) #11
+  %374 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %373, <64 x i32> %26) #11
+  %375 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %374) #11
+  %376 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %375) #11
+  %377 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %376) #11
+  %378 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %377, <32 x i32> %233) #11
+  %379 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %378, <32 x i32> %377, <32 x i32> %233) #11
+  %380 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %376) #11
+  %381 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %380, <32 x i32> %234) #11
+  %382 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %381, <32 x i32> %380, <32 x i32> %234) #11
+  %383 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %379, <32 x i32> %382) #11
+  %384 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %383) #11
+  %385 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %384, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %386 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %385, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %387 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %386) #11
+  %388 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %387, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %389 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %383) #11
+  %390 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %389) #11
+  %391 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %390, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %392 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %391, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %393 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %392, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %394 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %388, <32 x i32> %393) #11
+  %395 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %394) #11
+  %396 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %394) #11
+  %397 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %395, <32 x i32> %396) #11
+  %398 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %374) #11
+  %399 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %398) #11
+  %400 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %399) #11
+  %401 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %400, <32 x i32> %233) #11
+  %402 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %401, <32 x i32> %400, <32 x i32> %233) #11
+  %403 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %399) #11
+  %404 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %403, <32 x i32> %234) #11
+  %405 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %404, <32 x i32> %403, <32 x i32> %234) #11
+  %406 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %402, <32 x i32> %405) #11
+  %407 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %406) #11
+  %408 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %407, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %409 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %408, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %410 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %409) #11
+  %411 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %410, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %412 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %406) #11
+  %413 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %412) #11
+  %414 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %413, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %415 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %414, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %416 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %415, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %417 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %411, <32 x i32> %416) #11
+  %418 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %417) #11
+  %419 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %417) #11
+  %420 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %418, <32 x i32> %419) #11
+  %421 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %397, <32 x i32> %420) #11
+  %422 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %421) #11
+  %423 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %422) #11
+  %424 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %423) #11
+  %425 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %424, <32 x i32> zeroinitializer) #11
+  %426 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %422) #11
+  %427 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %426, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
+  %428 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %427, <32 x i32> zeroinitializer) #11
+  %429 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %425, <32 x i32> %428) #11
+  %430 = add nsw i32 %368, %235
+  %431 = getelementptr inbounds i8, i8* %5, i32 %430
+  %432 = bitcast i8* %431 to <32 x i32>*
+  store <32 x i32> %429, <32 x i32>* %432, align 1, !tbaa !101
+  br label %"end for output.s0.x.x"
+
+"end for output.s0.x.x":                          ; preds = %"for output.s0.x.x.epil", %"end for output.s0.x.x.loopexit.unr-lcssa", %"consume sum_input_sq"
   br i1 %31, label %"for output.s0.x.x.rebased.preheader", label %"end for output.s0.x.x.rebased", !prof !95
 
 "for output.s0.x.x.rebased.preheader":            ; preds = %"end for output.s0.x.x"
-  %323 = add nsw i32 %output.s0.y.rebased, %9
-  %324 = mul nsw i32 %323, %4
-  %325 = add nsw i32 %30, %324
-  %326 = mul nsw i32 %output.s0.y.rebased, %11
+  %433 = add nsw i32 %output.s0.y.rebased, %9
+  %434 = mul nsw i32 %433, %4
+  %435 = add nsw i32 %30, %434
+  %436 = mul nsw i32 %output.s0.y.rebased, %11
   br label %"for output.s0.x.x.rebased"
 
 "for output.s0.x.x.rebased":                      ; preds = %"for output.s0.x.x.rebased.preheader", %after_bb
-  %output.s0.x.x.rebased = phi i32 [ %331, %after_bb ], [ 0, %"for output.s0.x.x.rebased.preheader" ]
-  %327 = add nsw i32 %output.s0.x.x.rebased, %19
-  %328 = shl nsw i32 %327, 7
-  %329 = add nsw i32 %328, 128
-  %.not219 = icmp sgt i32 %329, %8
-  br i1 %.not219, label %next_bb, label %then_bb
+  %output.s0.x.x.rebased = phi i32 [ %441, %after_bb ], [ 0, %"for output.s0.x.x.rebased.preheader" ]
+  %437 = add nsw i32 %output.s0.x.x.rebased, %19
+  %438 = shl nsw i32 %437, 7
+  %439 = add nsw i32 %438, 128
+  %.not30 = icmp sgt i32 %439, %8
+  br i1 %.not30, label %next_bb, label %then_bb
 
 "end for output.s0.x.x.rebased":                  ; preds = %after_bb, %"end for output.s0.x.x"
-  %330 = add nuw nsw i32 %output.s0.y.rebased, 1
-  %.not = icmp eq i32 %330, %10
+  %440 = add nuw nsw i32 %output.s0.y.rebased, 1
+  %.not = icmp eq i32 %440, %10
   br i1 %.not, label %call_destructor.exit, label %"for output.s0.y.rebased"
 
-after_bb:                                         ; preds = %after_bb190, %then_bb
-  %331 = add nuw nsw i32 %output.s0.x.x.rebased, 1
-  %.not221 = icmp eq i32 %331, %t110
-  br i1 %.not221, label %"end for output.s0.x.x.rebased", label %"for output.s0.x.x.rebased"
+after_bb:                                         ; preds = %after_bb22, %then_bb
+  %441 = add nuw nsw i32 %output.s0.x.x.rebased, 1
+  %.not32 = icmp eq i32 %441, %t110
+  br i1 %.not32, label %"end for output.s0.x.x.rebased", label %"for output.s0.x.x.rebased"
 
 then_bb:                                          ; preds = %"for output.s0.x.x.rebased"
-  %332 = add nsw i32 %output.s0.x.x.rebased, %a1
-  %333 = shl nsw i32 %332, 7
-  %334 = add nsw i32 %325, %333
-  %335 = getelementptr inbounds i8, i8* %0, i32 %334
-  %336 = bitcast i8* %335 to <32 x i32>*
-  %337 = load <32 x i32>, <32 x i32>* %336, align 1, !tbaa !96
-  %338 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %337) #11
-  %339 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %338, <64 x i32> %26) #11
-  %340 = bitcast <64 x i32> %339 to <32 x i64>
-  %341 = shufflevector <32 x i64> %340, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %342 = bitcast <8 x i64> %341 to <32 x i16>
-  %343 = zext <32 x i16> %342 to <32 x i32>
-  %344 = shufflevector <32 x i64> %340, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %345 = bitcast <8 x i64> %344 to <32 x i16>
-  %346 = zext <32 x i16> %345 to <32 x i32>
-  %347 = shufflevector <32 x i64> %340, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %348 = bitcast <8 x i64> %347 to <32 x i16>
-  %349 = zext <32 x i16> %348 to <32 x i32>
-  %350 = shufflevector <32 x i64> %340, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %351 = bitcast <8 x i64> %350 to <32 x i16>
-  %352 = zext <32 x i16> %351 to <32 x i32>
-  %353 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> zeroinitializer) #11
-  %354 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %225) #11
-  %355 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %343, <32 x i32> %354) #11
-  %356 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %343, <32 x i32> %354) #11
-  %357 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %355, <32 x i32> %356) #11
-  %358 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %357, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %359 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %358) #11
-  %360 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %346, <32 x i32> %354) #11
-  %361 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %346, <32 x i32> %354) #11
-  %362 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %360, <32 x i32> %361) #11
-  %363 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %362, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %364 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %363, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %365 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %359, <32 x i32> %364) #11
-  %366 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %365) #11
-  %367 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %366) #11
-  %368 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %365) #11
-  %369 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %368) #11
-  %370 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %367, <32 x i32> %369) #11
-  %371 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %370) #11
-  %372 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %370) #11
-  %373 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %371, <32 x i32> %372) #11
-  %374 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %373) #11
-  %375 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %376 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %374, <32 x i32> %375) #11
-  %377 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %353, <32 x i32> %376) #11
-  %378 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> zeroinitializer) #11
-  %379 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %380 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %349, <32 x i32> %354) #11
-  %381 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %349, <32 x i32> %354) #11
-  %382 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %380, <32 x i32> %381) #11
-  %383 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %382, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %384 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %383) #11
-  %385 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %352, <32 x i32> %354) #11
-  %386 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %352, <32 x i32> %354) #11
-  %387 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %385, <32 x i32> %386) #11
-  %388 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %387, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %389 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %388, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %390 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %384, <32 x i32> %389) #11
-  %391 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %390) #11
-  %392 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %391) #11
-  %393 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %390) #11
-  %394 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %393) #11
-  %395 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %392, <32 x i32> %394) #11
-  %396 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %395) #11
-  %397 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %395) #11
-  %398 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %396, <32 x i32> %397) #11
-  %399 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %398) #11
-  %400 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %379, <32 x i32> %399) #11
-  %401 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %378, <32 x i32> %400) #11
-  %402 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %377, <32 x i32> %401) #11
-  %403 = bitcast <64 x i32> %402 to <32 x i64>
-  %404 = shufflevector <32 x i64> %403, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %405 = bitcast <8 x i64> %404 to <32 x i16>
-  %406 = trunc <32 x i16> %405 to <32 x i8>
-  %407 = add nsw i32 %333, %326
-  %408 = getelementptr inbounds i8, i8* %5, i32 %407
-  %409 = bitcast i8* %408 to <32 x i8>*
-  store <32 x i8> %406, <32 x i8>* %409, align 1, !tbaa !101
-  %410 = shufflevector <32 x i64> %403, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %411 = bitcast <8 x i64> %410 to <32 x i16>
-  %412 = trunc <32 x i16> %411 to <32 x i8>
-  %413 = getelementptr inbounds i8, i8* %408, i32 32
-  %414 = bitcast i8* %413 to <32 x i8>*
-  store <32 x i8> %412, <32 x i8>* %414, align 1, !tbaa !101
-  %415 = shufflevector <32 x i64> %403, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %416 = bitcast <8 x i64> %415 to <32 x i16>
-  %417 = trunc <32 x i16> %416 to <32 x i8>
-  %418 = getelementptr inbounds i8, i8* %408, i32 64
-  %419 = bitcast i8* %418 to <32 x i8>*
-  store <32 x i8> %417, <32 x i8>* %419, align 1, !tbaa !101
-  %420 = shufflevector <32 x i64> %403, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %421 = bitcast <8 x i64> %420 to <32 x i16>
-  %422 = trunc <32 x i16> %421 to <32 x i8>
-  %423 = getelementptr inbounds i8, i8* %408, i32 96
-  %424 = bitcast i8* %423 to <32 x i8>*
-  store <32 x i8> %422, <32 x i8>* %424, align 1, !tbaa !101
+  %442 = add nsw i32 %output.s0.x.x.rebased, %a1
+  %443 = shl nsw i32 %442, 7
+  %444 = add nsw i32 %435, %443
+  %445 = getelementptr inbounds i8, i8* %0, i32 %444
+  %446 = bitcast i8* %445 to <32 x i32>*
+  %447 = load <32 x i32>, <32 x i32>* %446, align 1, !tbaa !96
+  %448 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %447) #11
+  %449 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %448, <64 x i32> %26) #11
+  %450 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %449) #11
+  %451 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %450) #11
+  %452 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %451) #11
+  %453 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %227) #11
+  %454 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %453, <32 x i32> %453) #11
+  %455 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %454) #11
+  %456 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %452, <32 x i32> %455) #11
+  %457 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %456, <32 x i32> %452, <32 x i32> %455) #11
+  %458 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %451) #11
+  %459 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %454) #11
+  %460 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %458, <32 x i32> %459) #11
+  %461 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %460, <32 x i32> %458, <32 x i32> %459) #11
+  %462 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %457, <32 x i32> %461) #11
+  %463 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %462) #11
+  %464 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %463, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %465 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %464, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %466 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %465) #11
+  %467 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %466, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %468 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %462) #11
+  %469 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %468) #11
+  %470 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %469, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %471 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %470, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %472 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %471, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %473 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %467, <32 x i32> %472) #11
+  %474 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %473) #11
+  %475 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %473) #11
+  %476 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %474, <32 x i32> %475) #11
+  %477 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %449) #11
+  %478 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %477) #11
+  %479 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %478) #11
+  %480 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %479, <32 x i32> %455) #11
+  %481 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %480, <32 x i32> %479, <32 x i32> %455) #11
+  %482 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %478) #11
+  %483 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %482, <32 x i32> %459) #11
+  %484 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %483, <32 x i32> %482, <32 x i32> %459) #11
+  %485 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %481, <32 x i32> %484) #11
+  %486 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %485) #11
+  %487 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %486, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %488 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %487, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %489 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %488) #11
+  %490 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %489, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %491 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %485) #11
+  %492 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %491) #11
+  %493 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %492, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %494 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %493, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %495 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %494, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %496 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %490, <32 x i32> %495) #11
+  %497 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %496) #11
+  %498 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %496) #11
+  %499 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %497, <32 x i32> %498) #11
+  %500 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %476, <32 x i32> %499) #11
+  %501 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %500) #11
+  %502 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %501) #11
+  %503 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %502) #11
+  %504 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %503, <32 x i32> zeroinitializer) #11
+  %505 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %501) #11
+  %506 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %505, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
+  %507 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %506, <32 x i32> zeroinitializer) #11
+  %508 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %504, <32 x i32> %507) #11
+  %509 = add nsw i32 %443, %436
+  %510 = getelementptr inbounds i8, i8* %5, i32 %509
+  %511 = bitcast i8* %510 to <32 x i32>*
+  store <32 x i32> %508, <32 x i32>* %511, align 1, !tbaa !101
   br label %after_bb
 
 next_bb:                                          ; preds = %"for output.s0.x.x.rebased"
-  %425 = add nsw i32 %328, %7
-  %426 = add nsw i32 %425, 1
-  %427 = insertelement <32 x i32> undef, i32 %426, i32 0
-  %428 = shufflevector <32 x i32> %427, <32 x i32> undef, <32 x i32> zeroinitializer
-  %429 = add nsw <32 x i32> %428, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %430 = icmp sle <32 x i32> %429, %34
-  %431 = or i32 %328, 1
-  %.not220 = icmp sgt i32 %431, %8
-  br i1 %.not220, label %after_bb40.thread, label %true_bb44
+  %512 = add i32 %32, %438
+  %513 = insertelement <128 x i32> undef, i32 %512, i32 0
+  %514 = shufflevector <128 x i32> %513, <128 x i32> undef, <128 x i32> zeroinitializer
+  %515 = add nsw <128 x i32> %514, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31, i32 32, i32 33, i32 34, i32 35, i32 36, i32 37, i32 38, i32 39, i32 40, i32 41, i32 42, i32 43, i32 44, i32 45, i32 46, i32 47, i32 48, i32 49, i32 50, i32 51, i32 52, i32 53, i32 54, i32 55, i32 56, i32 57, i32 58, i32 59, i32 60, i32 61, i32 62, i32 63, i32 64, i32 65, i32 66, i32 67, i32 68, i32 69, i32 70, i32 71, i32 72, i32 73, i32 74, i32 75, i32 76, i32 77, i32 78, i32 79, i32 80, i32 81, i32 82, i32 83, i32 84, i32 85, i32 86, i32 87, i32 88, i32 89, i32 90, i32 91, i32 92, i32 93, i32 94, i32 95, i32 96, i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 103, i32 104, i32 105, i32 106, i32 107, i32 108, i32 109, i32 110, i32 111, i32 112, i32 113, i32 114, i32 115, i32 116, i32 117, i32 118, i32 119, i32 120, i32 121, i32 122, i32 123, i32 124, i32 125, i32 126, i32 127>
+  %516 = icmp sle <128 x i32> %515, %35
+  %517 = or i32 %438, 1
+  %.not31 = icmp sgt i32 %517, %8
+  br i1 %.not31, label %after_bb22, label %true_bb20
 
-after_bb40.thread:                                ; preds = %next_bb
-  %432 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> zeroinitializer) #11
-  br label %after_bb46
+true_bb20:                                        ; preds = %next_bb
+  %518 = add nsw i32 %435, %438
+  %519 = getelementptr inbounds i8, i8* %0, i32 %518
+  %520 = bitcast i8* %519 to <32 x i32>*
+  %521 = load <32 x i32>, <32 x i32>* %520, align 1, !tbaa !96
+  br label %after_bb22
 
-true_bb44:                                        ; preds = %next_bb
-  %433 = add nsw i32 %325, %328
-  %434 = getelementptr inbounds i8, i8* %0, i32 %433
-  %435 = bitcast i8* %434 to <32 x i32>*
-  %436 = load <32 x i32>, <32 x i32>* %435, align 1, !tbaa !96
-  %437 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %436) #11
-  br label %after_bb46
-
-after_bb46:                                       ; preds = %after_bb40.thread, %true_bb44
-  %.sink291 = phi <64 x i32> [ %432, %after_bb40.thread ], [ %437, %true_bb44 ]
-  %438 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %.sink291, <64 x i32> %26) #11
-  %439 = bitcast <64 x i32> %438 to <32 x i64>
-  %440 = shufflevector <32 x i64> %439, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %441 = shufflevector <32 x i64> %439, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %442 = shufflevector <32 x i64> %439, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %.in253 = bitcast <8 x i64> %441 to <32 x i16>
-  %443 = zext <32 x i16> %.in253 to <32 x i32>
-  %.in252 = bitcast <8 x i64> %440 to <32 x i16>
-  %444 = zext <32 x i16> %.in252 to <32 x i32>
-  %.in = bitcast <8 x i64> %442 to <32 x i16>
-  %445 = zext <32 x i16> %.in to <32 x i32>
-  %446 = shufflevector <32 x i64> %439, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %447 = bitcast <8 x i64> %446 to <32 x i16>
-  %448 = zext <32 x i16> %447 to <32 x i32>
-  %449 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> zeroinitializer) #11
-  %450 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %225) #11
-  %451 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %444, <32 x i32> %450) #11
-  %452 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %444, <32 x i32> %450) #11
-  %453 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %451, <32 x i32> %452) #11
-  %454 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %453, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %455 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %454) #11
-  %456 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %443, <32 x i32> %450) #11
-  %457 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %443, <32 x i32> %450) #11
-  %458 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %456, <32 x i32> %457) #11
-  %459 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %458, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %460 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %459, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %461 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %455, <32 x i32> %460) #11
-  %462 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %461) #11
-  %463 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %462) #11
-  %464 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %461) #11
-  %465 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %464) #11
-  %466 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %463, <32 x i32> %465) #11
-  %467 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %466) #11
-  %468 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %466) #11
-  %469 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %467, <32 x i32> %468) #11
-  %470 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %469) #11
-  %471 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %472 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %470, <32 x i32> %471) #11
-  %473 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %449, <32 x i32> %472) #11
-  %474 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> zeroinitializer) #11
-  %475 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
-  %476 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %445, <32 x i32> %450) #11
-  %477 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %445, <32 x i32> %450) #11
-  %478 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %476, <32 x i32> %477) #11
-  %479 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %478, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %480 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %479) #11
-  %481 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %448, <32 x i32> %450) #11
-  %482 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %448, <32 x i32> %450) #11
-  %483 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %481, <32 x i32> %482) #11
-  %484 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %483, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %485 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %484, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %486 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %480, <32 x i32> %485) #11
-  %487 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %486) #11
-  %488 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %487) #11
-  %489 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %486) #11
-  %490 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %489) #11
-  %491 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %488, <32 x i32> %490) #11
-  %492 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %491) #11
-  %493 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %491) #11
-  %494 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %492, <32 x i32> %493) #11
-  %495 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %494) #11
-  %496 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %475, <32 x i32> %495) #11
-  %497 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %474, <32 x i32> %496) #11
-  %498 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %473, <32 x i32> %497) #11
-  %499 = bitcast <64 x i32> %498 to <32 x i64>
-  %500 = shufflevector <32 x i64> %499, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %501 = bitcast <8 x i64> %500 to <32 x i16>
-  %502 = trunc <32 x i16> %501 to <32 x i8>
-  %503 = add nsw i32 %328, %326
-  %504 = getelementptr inbounds i8, i8* %5, i32 %503
-  %505 = bitcast i8* %504 to <32 x i8>*
-  tail call void @llvm.masked.store.v32i8.p0v32i8(<32 x i8> %502, <32 x i8>* %505, i32 1, <32 x i1> %430), !tbaa !101
-  %506 = add nsw i32 %425, 33
-  %507 = insertelement <32 x i32> undef, i32 %506, i32 0
-  %508 = shufflevector <32 x i32> %507, <32 x i32> undef, <32 x i32> zeroinitializer
-  %509 = add nsw <32 x i32> %508, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %510 = icmp sle <32 x i32> %509, %34
-  br i1 %.not220, label %after_bb88.thread, label %true_bb92
-
-after_bb88.thread:                                ; preds = %after_bb46
-  %511 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> zeroinitializer) #11
-  br label %after_bb94
-
-true_bb92:                                        ; preds = %after_bb46
-  %512 = add nsw i32 %325, %328
-  %513 = getelementptr inbounds i8, i8* %0, i32 %512
-  %514 = bitcast i8* %513 to <32 x i32>*
-  %515 = load <32 x i32>, <32 x i32>* %514, align 1, !tbaa !96
-  %516 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %515) #11
-  br label %after_bb94
-
-after_bb94:                                       ; preds = %after_bb88.thread, %true_bb92
-  %.sink292 = phi <64 x i32> [ %511, %after_bb88.thread ], [ %516, %true_bb92 ]
-  %517 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %.sink292, <64 x i32> %26) #11
-  %518 = bitcast <64 x i32> %517 to <32 x i64>
-  %519 = shufflevector <32 x i64> %518, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %520 = shufflevector <32 x i64> %518, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %521 = shufflevector <32 x i64> %518, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %.in256 = bitcast <8 x i64> %520 to <32 x i16>
-  %522 = zext <32 x i16> %.in256 to <32 x i32>
-  %.in255 = bitcast <8 x i64> %519 to <32 x i16>
-  %523 = zext <32 x i16> %.in255 to <32 x i32>
-  %.in254 = bitcast <8 x i64> %521 to <32 x i16>
-  %524 = zext <32 x i16> %.in254 to <32 x i32>
-  %525 = shufflevector <32 x i64> %518, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %526 = bitcast <8 x i64> %525 to <32 x i16>
-  %527 = zext <32 x i16> %526 to <32 x i32>
-  %528 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %523, <32 x i32> %450) #11
-  %529 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %523, <32 x i32> %450) #11
-  %530 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %528, <32 x i32> %529) #11
-  %531 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %530, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %532 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %531) #11
-  %533 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %522, <32 x i32> %450) #11
-  %534 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %522, <32 x i32> %450) #11
-  %535 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %533, <32 x i32> %534) #11
-  %536 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %535, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %537 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %536, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %538 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %532, <32 x i32> %537) #11
-  %539 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %538) #11
-  %540 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %539) #11
-  %541 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %538) #11
-  %542 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %541) #11
-  %543 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %540, <32 x i32> %542) #11
-  %544 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %543) #11
-  %545 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %543) #11
-  %546 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %544, <32 x i32> %545) #11
-  %547 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %546) #11
-  %548 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %547, <32 x i32> %471) #11
-  %549 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %449, <32 x i32> %548) #11
-  %550 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %524, <32 x i32> %450) #11
-  %551 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %524, <32 x i32> %450) #11
-  %552 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %550, <32 x i32> %551) #11
-  %553 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %552, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %554 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %553) #11
-  %555 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %527, <32 x i32> %450) #11
-  %556 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %527, <32 x i32> %450) #11
-  %557 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %555, <32 x i32> %556) #11
-  %558 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %557, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %559 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %558, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %560 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %554, <32 x i32> %559) #11
-  %561 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %560) #11
-  %562 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %561) #11
-  %563 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %560) #11
-  %564 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %563) #11
-  %565 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %562, <32 x i32> %564) #11
-  %566 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %565) #11
-  %567 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %565) #11
-  %568 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %566, <32 x i32> %567) #11
-  %569 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %568) #11
-  %570 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %475, <32 x i32> %569) #11
-  %571 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %474, <32 x i32> %570) #11
-  %572 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %549, <32 x i32> %571) #11
-  %573 = bitcast <64 x i32> %572 to <32 x i64>
-  %574 = shufflevector <32 x i64> %573, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %575 = bitcast <8 x i64> %574 to <32 x i16>
-  %576 = trunc <32 x i16> %575 to <32 x i8>
-  %577 = getelementptr inbounds i8, i8* %504, i32 32
-  %578 = bitcast i8* %577 to <32 x i8>*
-  tail call void @llvm.masked.store.v32i8.p0v32i8(<32 x i8> %576, <32 x i8>* nonnull %578, i32 1, <32 x i1> %510), !tbaa !101
-  %579 = add nsw i32 %425, 65
-  %580 = insertelement <32 x i32> undef, i32 %579, i32 0
-  %581 = shufflevector <32 x i32> %580, <32 x i32> undef, <32 x i32> zeroinitializer
-  %582 = add nsw <32 x i32> %581, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %583 = icmp sle <32 x i32> %582, %34
-  br i1 %.not220, label %after_bb136.thread, label %true_bb140
-
-after_bb136.thread:                               ; preds = %after_bb94
-  %584 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> zeroinitializer) #11
-  br label %after_bb142
-
-true_bb140:                                       ; preds = %after_bb94
-  %585 = add nsw i32 %325, %328
-  %586 = getelementptr inbounds i8, i8* %0, i32 %585
-  %587 = bitcast i8* %586 to <32 x i32>*
-  %588 = load <32 x i32>, <32 x i32>* %587, align 1, !tbaa !96
-  %589 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %588) #11
-  br label %after_bb142
-
-after_bb142:                                      ; preds = %after_bb136.thread, %true_bb140
-  %.sink293 = phi <64 x i32> [ %584, %after_bb136.thread ], [ %589, %true_bb140 ]
-  %590 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %.sink293, <64 x i32> %26) #11
-  %591 = bitcast <64 x i32> %590 to <32 x i64>
-  %592 = shufflevector <32 x i64> %591, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %593 = shufflevector <32 x i64> %591, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %594 = shufflevector <32 x i64> %591, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %.in259 = bitcast <8 x i64> %593 to <32 x i16>
-  %595 = zext <32 x i16> %.in259 to <32 x i32>
-  %.in258 = bitcast <8 x i64> %592 to <32 x i16>
-  %596 = zext <32 x i16> %.in258 to <32 x i32>
-  %.in257 = bitcast <8 x i64> %594 to <32 x i16>
-  %597 = zext <32 x i16> %.in257 to <32 x i32>
-  %598 = shufflevector <32 x i64> %591, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %599 = bitcast <8 x i64> %598 to <32 x i16>
-  %600 = zext <32 x i16> %599 to <32 x i32>
-  %601 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %596, <32 x i32> %450) #11
-  %602 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %596, <32 x i32> %450) #11
-  %603 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %601, <32 x i32> %602) #11
-  %604 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %603, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %605 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %604) #11
-  %606 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %595, <32 x i32> %450) #11
-  %607 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %595, <32 x i32> %450) #11
-  %608 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %606, <32 x i32> %607) #11
-  %609 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %608, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %610 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %609, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %611 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %605, <32 x i32> %610) #11
+after_bb22:                                       ; preds = %next_bb, %true_bb20
+  %522 = phi <32 x i32> [ %521, %true_bb20 ], [ zeroinitializer, %next_bb ]
+  %523 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %524 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %523, <64 x i32> %26) #11
+  %525 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %524) #11
+  %526 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %525) #11
+  %527 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %526) #11
+  %528 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %227) #11
+  %529 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %528, <32 x i32> %528) #11
+  %530 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %529) #11
+  %531 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %527, <32 x i32> %530) #11
+  %532 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %531, <32 x i32> %527, <32 x i32> %530) #11
+  %533 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %534 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %533, <64 x i32> %26) #11
+  %535 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %534) #11
+  %536 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %535) #11
+  %537 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %536) #11
+  %538 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %529) #11
+  %539 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %537, <32 x i32> %538) #11
+  %540 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %539, <32 x i32> %537, <32 x i32> %538) #11
+  %541 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %532, <32 x i32> %540) #11
+  %542 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %541) #11
+  %543 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %542, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %544 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %543, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %545 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %544) #11
+  %546 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %545, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %547 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %548 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %547, <64 x i32> %26) #11
+  %549 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %548) #11
+  %550 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %549) #11
+  %551 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %550) #11
+  %552 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %551, <32 x i32> %530) #11
+  %553 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %552, <32 x i32> %551, <32 x i32> %530) #11
+  %554 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %555 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %554, <64 x i32> %26) #11
+  %556 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %555) #11
+  %557 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %556) #11
+  %558 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %557) #11
+  %559 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %558, <32 x i32> %538) #11
+  %560 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %559, <32 x i32> %558, <32 x i32> %538) #11
+  %561 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %553, <32 x i32> %560) #11
+  %562 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %561) #11
+  %563 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %562) #11
+  %564 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %563, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %565 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %564, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %566 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %565, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %567 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %546, <32 x i32> %566) #11
+  %568 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %567) #11
+  %569 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %567) #11
+  %570 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %568, <32 x i32> %569) #11
+  %571 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %572 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %571, <64 x i32> %26) #11
+  %573 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %572) #11
+  %574 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %573) #11
+  %575 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %574) #11
+  %576 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %575, <32 x i32> %530) #11
+  %577 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %576, <32 x i32> %575, <32 x i32> %530) #11
+  %578 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %579 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %578, <64 x i32> %26) #11
+  %580 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %579) #11
+  %581 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %580) #11
+  %582 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %581) #11
+  %583 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %582, <32 x i32> %538) #11
+  %584 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %583, <32 x i32> %582, <32 x i32> %538) #11
+  %585 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %577, <32 x i32> %584) #11
+  %586 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %585) #11
+  %587 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %586, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>) #11
+  %588 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %587, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %589 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %588) #11
+  %590 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %589, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %591 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %592 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %591, <64 x i32> %26) #11
+  %593 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %592) #11
+  %594 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %593) #11
+  %595 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %594) #11
+  %596 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %595, <32 x i32> %530) #11
+  %597 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %596, <32 x i32> %595, <32 x i32> %530) #11
+  %598 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %522) #11
+  %599 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %598, <64 x i32> %26) #11
+  %600 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %599) #11
+  %601 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %600) #11
+  %602 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %601) #11
+  %603 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %602, <32 x i32> %538) #11
+  %604 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %603, <32 x i32> %602, <32 x i32> %538) #11
+  %605 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %597, <32 x i32> %604) #11
+  %606 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %605) #11
+  %607 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %606) #11
+  %608 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %607, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
+  %609 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %608, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
+  %610 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %609, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>) #11
+  %611 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %590, <32 x i32> %610) #11
   %612 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %611) #11
-  %613 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %612) #11
-  %614 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %611) #11
-  %615 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %614) #11
-  %616 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %613, <32 x i32> %615) #11
+  %613 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %611) #11
+  %614 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %612, <32 x i32> %613) #11
+  %615 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %570, <32 x i32> %614) #11
+  %616 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %615) #11
   %617 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %616) #11
-  %618 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %616) #11
-  %619 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %617, <32 x i32> %618) #11
-  %620 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %619) #11
-  %621 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %620, <32 x i32> %471) #11
-  %622 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %449, <32 x i32> %621) #11
-  %623 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %597, <32 x i32> %450) #11
-  %624 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %597, <32 x i32> %450) #11
-  %625 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %623, <32 x i32> %624) #11
-  %626 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %625, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %627 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %626) #11
-  %628 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %600, <32 x i32> %450) #11
-  %629 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %600, <32 x i32> %450) #11
-  %630 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %628, <32 x i32> %629) #11
-  %631 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %630, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %632 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %631, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %633 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %627, <32 x i32> %632) #11
-  %634 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %633) #11
-  %635 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %634) #11
-  %636 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %633) #11
-  %637 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %636) #11
-  %638 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %635, <32 x i32> %637) #11
-  %639 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %638) #11
-  %640 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %638) #11
-  %641 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %639, <32 x i32> %640) #11
-  %642 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %641) #11
-  %643 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %475, <32 x i32> %642) #11
-  %644 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %474, <32 x i32> %643) #11
-  %645 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %622, <32 x i32> %644) #11
-  %646 = bitcast <64 x i32> %645 to <32 x i64>
-  %647 = shufflevector <32 x i64> %646, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %648 = bitcast <8 x i64> %647 to <32 x i16>
-  %649 = trunc <32 x i16> %648 to <32 x i8>
-  %650 = getelementptr inbounds i8, i8* %504, i32 64
-  %651 = bitcast i8* %650 to <32 x i8>*
-  tail call void @llvm.masked.store.v32i8.p0v32i8(<32 x i8> %649, <32 x i8>* nonnull %651, i32 1, <32 x i1> %583), !tbaa !101
-  %652 = add nsw i32 %425, 97
-  %653 = insertelement <32 x i32> undef, i32 %652, i32 0
-  %654 = shufflevector <32 x i32> %653, <32 x i32> undef, <32 x i32> zeroinitializer
-  %655 = add nsw <32 x i32> %654, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %656 = icmp sle <32 x i32> %655, %34
-  br i1 %.not220, label %after_bb184.thread, label %true_bb188
-
-after_bb184.thread:                               ; preds = %after_bb142
-  %657 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> zeroinitializer) #11
-  br label %after_bb190
-
-true_bb188:                                       ; preds = %after_bb142
-  %658 = add nsw i32 %325, %328
-  %659 = getelementptr inbounds i8, i8* %0, i32 %658
-  %660 = bitcast i8* %659 to <32 x i32>*
-  %661 = load <32 x i32>, <32 x i32>* %660, align 1, !tbaa !96
-  %662 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %661) #11
-  br label %after_bb190
-
-after_bb190:                                      ; preds = %after_bb184.thread, %true_bb188
-  %.sink294 = phi <64 x i32> [ %657, %after_bb184.thread ], [ %662, %true_bb188 ]
-  %663 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %.sink294, <64 x i32> %26) #11
-  %664 = bitcast <64 x i32> %663 to <32 x i64>
-  %665 = shufflevector <32 x i64> %664, <32 x i64> undef, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
-  %666 = shufflevector <32 x i64> %664, <32 x i64> undef, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15>
-  %667 = shufflevector <32 x i64> %664, <32 x i64> undef, <8 x i32> <i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23>
-  %.in262 = bitcast <8 x i64> %666 to <32 x i16>
-  %668 = zext <32 x i16> %.in262 to <32 x i32>
-  %.in261 = bitcast <8 x i64> %665 to <32 x i16>
-  %669 = zext <32 x i16> %.in261 to <32 x i32>
-  %.in260 = bitcast <8 x i64> %667 to <32 x i16>
-  %670 = zext <32 x i16> %.in260 to <32 x i32>
-  %671 = shufflevector <32 x i64> %664, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %672 = bitcast <8 x i64> %671 to <32 x i16>
-  %673 = zext <32 x i16> %672 to <32 x i32>
-  %674 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %669, <32 x i32> %450) #11
-  %675 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %669, <32 x i32> %450) #11
-  %676 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %674, <32 x i32> %675) #11
-  %677 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %676, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %678 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %677) #11
-  %679 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %668, <32 x i32> %450) #11
-  %680 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %668, <32 x i32> %450) #11
-  %681 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %679, <32 x i32> %680) #11
-  %682 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %681, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %683 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %682, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %684 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %678, <32 x i32> %683) #11
-  %685 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %684) #11
-  %686 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %685) #11
-  %687 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %684) #11
-  %688 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %687) #11
-  %689 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %686, <32 x i32> %688) #11
-  %690 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %689) #11
-  %691 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %689) #11
-  %692 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %690, <32 x i32> %691) #11
-  %693 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %692) #11
-  %694 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %693, <32 x i32> %471) #11
-  %695 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %449, <32 x i32> %694) #11
-  %696 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %670, <32 x i32> %450) #11
-  %697 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %670, <32 x i32> %450) #11
-  %698 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %696, <32 x i32> %697) #11
-  %699 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %698, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %700 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %699) #11
-  %701 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %673, <32 x i32> %450) #11
-  %702 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %673, <32 x i32> %450) #11
-  %703 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %701, <32 x i32> %702) #11
-  %704 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %703, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>) #11
-  %705 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %704, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>) #11
-  %706 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %700, <32 x i32> %705) #11
-  %707 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %706) #11
-  %708 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %707) #11
-  %709 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %706) #11
-  %710 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %709) #11
-  %711 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %708, <32 x i32> %710) #11
-  %712 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %711) #11
-  %713 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %711) #11
-  %714 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %712, <32 x i32> %713) #11
-  %715 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <32 x i32> %714) #11
-  %716 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %475, <32 x i32> %715) #11
-  %717 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %474, <32 x i32> %716) #11
-  %718 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %695, <32 x i32> %717) #11
-  %719 = bitcast <64 x i32> %718 to <32 x i64>
-  %720 = shufflevector <32 x i64> %719, <32 x i64> undef, <8 x i32> <i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  %721 = bitcast <8 x i64> %720 to <32 x i16>
-  %722 = trunc <32 x i16> %721 to <32 x i8>
-  %723 = getelementptr inbounds i8, i8* %504, i32 96
-  %724 = bitcast i8* %723 to <32 x i8>*
-  tail call void @llvm.masked.store.v32i8.p0v32i8(<32 x i8> %722, <32 x i8>* nonnull %724, i32 1, <32 x i1> %656), !tbaa !101
+  %618 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %617) #11
+  %619 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %618, <32 x i32> zeroinitializer) #11
+  %620 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %616) #11
+  %621 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %620, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>) #11
+  %622 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %621, <32 x i32> zeroinitializer) #11
+  %623 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %619, <32 x i32> %622) #11
+  %624 = bitcast <32 x i32> %623 to <128 x i8>
+  %625 = add nsw i32 %438, %436
+  %626 = getelementptr inbounds i8, i8* %5, i32 %625
+  %627 = bitcast i8* %626 to <128 x i8>*
+  tail call void @llvm.masked.store.v128i8.p0v128i8(<128 x i8> %624, <128 x i8>* %627, i32 1, <128 x i1> %516), !tbaa !101
   br label %after_bb
 }
 
@@ -7354,7 +7231,7 @@ declare i32 @llvm.vector.reduce.add.v128i32(<128 x i32>) #13
 declare i32 @llvm.sadd.sat.i32(i32, i32) #8
 
 ; Function Attrs: argmemonly nofree nosync nounwind willreturn writeonly
-declare void @llvm.masked.store.v32i8.p0v32i8(<32 x i8>, <32 x i8>*, i32 immarg, <32 x i1>) #5
+declare void @llvm.masked.store.v128i8.p0v128i8(<128 x i8>, <128 x i8>*, i32 immarg, <128 x i1>) #5
 
 ; Function Attrs: nounwind readnone willreturn
 define <128 x i16> @hydride.node.l2norm_hvx_depth3.0(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
@@ -7371,1281 +7248,384 @@ entry:
 declare <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32>, <64 x i32>) #9
 
 ; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.1(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
+define <128 x i8> @hydride.node.l2norm_hvx_depth3.1(<128 x i8> %arg, <128 x i16> %arg.1, <1 x i32> %arg.2, <128 x i8> %arg.3, <128 x i16> %arg.4, <128 x i8> %arg.5, <128 x i16> %arg.6, <128 x i8> %arg.7, <128 x i16> %arg.8, <128 x i8> %arg.9, <128 x i16> %arg.10, <128 x i8> %arg.11, <128 x i16> %arg.12, <128 x i8> %arg.13, <128 x i16> %arg.14, <128 x i8> %arg.15, <128 x i16> %arg.16) local_unnamed_addr #14 {
 entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
+  %0 = bitcast <128 x i8> %arg to <32 x i32>
+  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
+  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
+  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %3)
+  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %4)
+  %6 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %5)
+  %7 = extractelement <1 x i32> %arg.2, i32 0
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %7)
+  %9 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %8)
+  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %6, <32 x i32> %10)
+  %12 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %11, <32 x i32> %6, <32 x i32> %10)
+  %13 = bitcast <128 x i8> %arg.3 to <32 x i32>
+  %14 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %13)
+  %15 = bitcast <128 x i16> %arg.4 to <64 x i32>
+  %16 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %14, <64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %16)
+  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %17)
+  %19 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %18)
+  %20 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
+  %21 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %19, <32 x i32> %20)
+  %22 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %21, <32 x i32> %19, <32 x i32> %20)
+  %23 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %12, <32 x i32> %22)
+  %24 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %23)
+  %25 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %24, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>)
+  %26 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %25, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %27 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %26)
+  %28 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %27, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %29 = bitcast <128 x i8> %arg.5 to <32 x i32>
+  %30 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %29)
+  %31 = bitcast <128 x i16> %arg.6 to <64 x i32>
+  %32 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %30, <64 x i32> %31)
+  %33 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %32)
+  %34 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %33)
+  %35 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %34)
+  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %35, <32 x i32> %10)
+  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %36, <32 x i32> %35, <32 x i32> %10)
+  %38 = bitcast <128 x i8> %arg.7 to <32 x i32>
+  %39 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %38)
+  %40 = bitcast <128 x i16> %arg.8 to <64 x i32>
+  %41 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %39, <64 x i32> %40)
   %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
+  %43 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %42)
+  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %43)
+  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %44, <32 x i32> %20)
+  %46 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %45, <32 x i32> %44, <32 x i32> %20)
+  %47 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %37, <32 x i32> %46)
+  %48 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %47)
+  %49 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %48)
+  %50 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %49, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %51 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %50, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %52 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %51, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>)
+  %53 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %52)
+  %54 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %53)
+  %55 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %53)
+  %56 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %54, <32 x i32> %55)
+  %57 = bitcast <128 x i8> %arg.9 to <32 x i32>
+  %58 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %57)
+  %59 = bitcast <128 x i16> %arg.10 to <64 x i32>
+  %60 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %58, <64 x i32> %59)
+  %61 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %60)
+  %62 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %61)
+  %63 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %62)
+  %64 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %63, <32 x i32> %10)
+  %65 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %64, <32 x i32> %63, <32 x i32> %10)
+  %66 = bitcast <128 x i8> %arg.11 to <32 x i32>
+  %67 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %66)
+  %68 = bitcast <128 x i16> %arg.12 to <64 x i32>
+  %69 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %67, <64 x i32> %68)
+  %70 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %69)
+  %71 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %70)
+  %72 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %71)
+  %73 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %72, <32 x i32> %20)
+  %74 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %73, <32 x i32> %72, <32 x i32> %20)
+  %75 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %65, <32 x i32> %74)
+  %76 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %75)
+  %77 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %76, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>)
+  %78 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %77, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %79 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %78)
+  %80 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %79, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %81 = bitcast <128 x i8> %arg.13 to <32 x i32>
+  %82 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %81)
+  %83 = bitcast <128 x i16> %arg.14 to <64 x i32>
+  %84 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %82, <64 x i32> %83)
+  %85 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %84)
+  %86 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %85)
+  %87 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %86)
+  %88 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %87, <32 x i32> %10)
+  %89 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %88, <32 x i32> %87, <32 x i32> %10)
+  %90 = bitcast <128 x i8> %arg.15 to <32 x i32>
+  %91 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %90)
+  %92 = bitcast <128 x i16> %arg.16 to <64 x i32>
+  %93 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %91, <64 x i32> %92)
+  %94 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %93)
+  %95 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %94)
+  %96 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %95)
+  %97 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %96, <32 x i32> %20)
+  %98 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %97, <32 x i32> %96, <32 x i32> %20)
+  %99 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %89, <32 x i32> %98)
+  %100 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %99)
+  %101 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %100)
+  %102 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %101, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %103 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %102, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %104 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %103, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>)
+  %105 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %80, <32 x i32> %104)
+  %106 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %105)
+  %107 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %105)
+  %108 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %106, <32 x i32> %107)
+  %109 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %56, <32 x i32> %108)
+  %110 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %109)
+  %111 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %110)
+  %112 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %111)
+  %113 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %112, <32 x i32> zeroinitializer)
+  %114 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %110)
+  %115 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %114, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>)
+  %116 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %115, <32 x i32> zeroinitializer)
+  %117 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %113, <32 x i32> %116)
+  %118 = bitcast <32 x i32> %117 to <128 x i8>
+  ret <128 x i8> %118
 }
 
 ; Function Attrs: nounwind readnone
 declare <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32) #9
 
 ; Function Attrs: nounwind readnone
-declare <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32>, <32 x i32>) #9
+declare <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32>, <32 x i32>, <32 x i32>) #9
 
 ; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.2(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
+define <128 x i8> @hydride.node.l2norm_hvx_depth3.2(<128 x i8> %arg, <128 x i16> %arg.1, <1 x i32> %arg.2, <128 x i8> %arg.3, <128 x i16> %arg.4, <128 x i8> %arg.5, <128 x i16> %arg.6, <128 x i8> %arg.7, <128 x i16> %arg.8, <128 x i8> %arg.9, <128 x i16> %arg.10, <128 x i8> %arg.11, <128 x i16> %arg.12, <128 x i8> %arg.13, <128 x i16> %arg.14, <128 x i8> %arg.15, <128 x i16> %arg.16) local_unnamed_addr #14 {
 entry:
   %0 = bitcast <128 x i8> %arg to <32 x i32>
   %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
   %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
   %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.3(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.4(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.5(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.6(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %3)
+  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %4)
+  %6 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %5)
+  %7 = extractelement <1 x i32> %arg.2, i32 0
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %7)
+  %9 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %8)
+  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %6, <32 x i32> %10)
+  %12 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %11, <32 x i32> %6, <32 x i32> %10)
+  %13 = bitcast <128 x i8> %arg.3 to <32 x i32>
+  %14 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %13)
+  %15 = bitcast <128 x i16> %arg.4 to <64 x i32>
+  %16 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %14, <64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %16)
+  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %17)
+  %19 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %18)
+  %20 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
+  %21 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %19, <32 x i32> %20)
+  %22 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %21, <32 x i32> %19, <32 x i32> %20)
+  %23 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %12, <32 x i32> %22)
+  %24 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %23)
+  %25 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %24, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>)
+  %26 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %25, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %27 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %26)
+  %28 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %27, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %29 = bitcast <128 x i8> %arg.5 to <32 x i32>
+  %30 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %29)
+  %31 = bitcast <128 x i16> %arg.6 to <64 x i32>
+  %32 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %30, <64 x i32> %31)
+  %33 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %32)
+  %34 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %33)
+  %35 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %34)
+  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %35, <32 x i32> %10)
+  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %36, <32 x i32> %35, <32 x i32> %10)
+  %38 = bitcast <128 x i8> %arg.7 to <32 x i32>
+  %39 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %38)
+  %40 = bitcast <128 x i16> %arg.8 to <64 x i32>
+  %41 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %39, <64 x i32> %40)
   %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
+  %43 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %42)
+  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %43)
+  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %44, <32 x i32> %20)
+  %46 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %45, <32 x i32> %44, <32 x i32> %20)
+  %47 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %37, <32 x i32> %46)
+  %48 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %47)
+  %49 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %48)
+  %50 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %49, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %51 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %50, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %52 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %51, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>)
+  %53 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %52)
+  %54 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %53)
+  %55 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %53)
+  %56 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %54, <32 x i32> %55)
+  %57 = bitcast <128 x i8> %arg.9 to <32 x i32>
+  %58 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %57)
+  %59 = bitcast <128 x i16> %arg.10 to <64 x i32>
+  %60 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %58, <64 x i32> %59)
+  %61 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %60)
+  %62 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %61)
+  %63 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %62)
+  %64 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %63, <32 x i32> %10)
+  %65 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %64, <32 x i32> %63, <32 x i32> %10)
+  %66 = bitcast <128 x i8> %arg.11 to <32 x i32>
+  %67 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %66)
+  %68 = bitcast <128 x i16> %arg.12 to <64 x i32>
+  %69 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %67, <64 x i32> %68)
+  %70 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %69)
+  %71 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %70)
+  %72 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %71)
+  %73 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %72, <32 x i32> %20)
+  %74 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %73, <32 x i32> %72, <32 x i32> %20)
+  %75 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %65, <32 x i32> %74)
+  %76 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %75)
+  %77 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %76, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>)
+  %78 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %77, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %79 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %78)
+  %80 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %79, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %81 = bitcast <128 x i8> %arg.13 to <32 x i32>
+  %82 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %81)
+  %83 = bitcast <128 x i16> %arg.14 to <64 x i32>
+  %84 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %82, <64 x i32> %83)
+  %85 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %84)
+  %86 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %85)
+  %87 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %86)
+  %88 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %87, <32 x i32> %10)
+  %89 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %88, <32 x i32> %87, <32 x i32> %10)
+  %90 = bitcast <128 x i8> %arg.15 to <32 x i32>
+  %91 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %90)
+  %92 = bitcast <128 x i16> %arg.16 to <64 x i32>
+  %93 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %91, <64 x i32> %92)
+  %94 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %93)
+  %95 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %94)
+  %96 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %95)
+  %97 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %96, <32 x i32> %20)
+  %98 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %97, <32 x i32> %96, <32 x i32> %20)
+  %99 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %89, <32 x i32> %98)
+  %100 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %99)
+  %101 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %100)
+  %102 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %101, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %103 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %102, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %104 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %103, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>)
+  %105 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %80, <32 x i32> %104)
+  %106 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %105)
+  %107 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %105)
+  %108 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %106, <32 x i32> %107)
+  %109 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %56, <32 x i32> %108)
+  %110 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %109)
+  %111 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %110)
+  %112 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %111)
+  %113 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %112, <32 x i32> zeroinitializer)
+  %114 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %110)
+  %115 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %114, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>)
+  %116 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %115, <32 x i32> zeroinitializer)
+  %117 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %113, <32 x i32> %116)
+  %118 = bitcast <32 x i32> %117 to <128 x i8>
+  ret <128 x i8> %118
 }
 
 ; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.7(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
+define <128 x i8> @hydride.node.l2norm_hvx_depth3.3(<128 x i8> %arg, <128 x i16> %arg.1, <1 x i32> %arg.2, <128 x i8> %arg.3, <128 x i16> %arg.4, <128 x i8> %arg.5, <128 x i16> %arg.6, <128 x i8> %arg.7, <128 x i16> %arg.8, <128 x i8> %arg.9, <128 x i16> %arg.10, <128 x i8> %arg.11, <128 x i16> %arg.12, <128 x i8> %arg.13, <128 x i16> %arg.14, <128 x i8> %arg.15, <128 x i16> %arg.16) local_unnamed_addr #14 {
 entry:
   %0 = bitcast <128 x i8> %arg to <32 x i32>
   %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
   %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
   %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.8(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.9(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.10(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.11(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
+  %4 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %3)
+  %5 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %4)
+  %6 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %5)
+  %7 = extractelement <1 x i32> %arg.2, i32 0
+  %8 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %7)
+  %9 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %8)
+  %10 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %9)
+  %11 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %6, <32 x i32> %10)
+  %12 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %11, <32 x i32> %6, <32 x i32> %10)
+  %13 = bitcast <128 x i8> %arg.3 to <32 x i32>
+  %14 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %13)
+  %15 = bitcast <128 x i16> %arg.4 to <64 x i32>
+  %16 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %14, <64 x i32> %15)
+  %17 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %16)
+  %18 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %17)
+  %19 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %18)
+  %20 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %9)
+  %21 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %19, <32 x i32> %20)
+  %22 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %21, <32 x i32> %19, <32 x i32> %20)
+  %23 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %12, <32 x i32> %22)
+  %24 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %23)
+  %25 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %24, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>)
+  %26 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %25, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %27 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %26)
+  %28 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %27, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %29 = bitcast <128 x i8> %arg.5 to <32 x i32>
+  %30 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %29)
+  %31 = bitcast <128 x i16> %arg.6 to <64 x i32>
+  %32 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %30, <64 x i32> %31)
+  %33 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %32)
+  %34 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %33)
+  %35 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %34)
+  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %35, <32 x i32> %10)
+  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %36, <32 x i32> %35, <32 x i32> %10)
+  %38 = bitcast <128 x i8> %arg.7 to <32 x i32>
+  %39 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %38)
+  %40 = bitcast <128 x i16> %arg.8 to <64 x i32>
+  %41 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %39, <64 x i32> %40)
   %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.12(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.13(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.14(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.15(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.16(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.17(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.18(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.19(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.20(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.21(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.22(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.23(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.24(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.25(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.26(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.27(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.28(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.29(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.30(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.31(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.32(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.33(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.34(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.35(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.36(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.37(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.38(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.39(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.40(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.41(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.42(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.43(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.44(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.45(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.46(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.47(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.48(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.49(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.50(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.51(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.52(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.53(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.54(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.55(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <256 x i8> @hydride.node.l2norm_hvx_depth3.56(<32 x i32> %arg, <1 x i32> %arg.1, <32 x i32> %arg.2, <64 x i16> %arg.3, <32 x i32> %arg.4, <32 x i32> %arg.5, <64 x i16> %arg.6, <128 x i16> %arg.7, <128 x i16> %arg.8) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i16> %arg.8 to <64 x i32>
-  %1 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %0)
-  %2 = extractelement <1 x i32> %arg.1, i32 0
-  %3 = tail call <32 x i32> @llvm.hexagon.V6.lvsplatw.128B(i32 %2)
-  %4 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg, <32 x i32> %3)
-  %5 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg, <32 x i32> %3)
-  %6 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %4, <32 x i32> %5)
-  %7 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %6, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %8 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %7)
-  %9 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.2, <32 x i32> %3)
-  %10 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.2, <32 x i32> %3)
-  %11 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %9, <32 x i32> %10)
-  %12 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %11, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %13 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %12, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %14 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %8, <32 x i32> %13)
-  %15 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %14)
-  %16 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %15)
-  %17 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %14)
-  %18 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %17)
-  %19 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %16, <32 x i32> %18)
-  %20 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %19)
-  %21 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %19)
-  %22 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %20, <32 x i32> %21)
-  %23 = bitcast <64 x i16> %arg.3 to <32 x i32>
-  %24 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %23, <32 x i32> %22)
-  %25 = bitcast <128 x i16> %arg.7 to <64 x i32>
-  %26 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %25)
-  %27 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %24, <32 x i32> %26)
-  %28 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %1, <32 x i32> %27)
-  %29 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %0)
-  %30 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %25)
-  %31 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.4, <32 x i32> %3)
-  %32 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.4, <32 x i32> %3)
-  %33 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %31, <32 x i32> %32)
-  %34 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %33, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %35 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>, <32 x i32> %34)
-  %36 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewuh.acc.128B(<32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <32 x i32> %arg.5, <32 x i32> %3)
-  %37 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %arg.5, <32 x i32> %3)
-  %38 = tail call <32 x i32> @llvm.hexagon.V6.vaddw.128B(<32 x i32> %36, <32 x i32> %37)
-  %39 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %38, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
-  %40 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %39, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
-  %41 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %35, <32 x i32> %40)
-  %42 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %41)
-  %43 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %42)
-  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %41)
-  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %44)
-  %46 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %43, <32 x i32> %45)
-  %47 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %46)
-  %48 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %46)
-  %49 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %47, <32 x i32> %48)
-  %50 = bitcast <64 x i16> %arg.6 to <32 x i32>
-  %51 = tail call <32 x i32> @llvm.hexagon.V6.vaddhsat.128B(<32 x i32> %50, <32 x i32> %49)
-  %52 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %30, <32 x i32> %51)
-  %53 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %29, <32 x i32> %52)
-  %54 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %53)
-  %55 = bitcast <64 x i32> %54 to <256 x i8>
-  ret <256 x i8> %55
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.57(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.58(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.59(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
-}
-
-; Function Attrs: nounwind readnone willreturn
-define <128 x i16> @hydride.node.l2norm_hvx_depth3.60(<128 x i8> %arg, <128 x i16> %arg.1) local_unnamed_addr #14 {
-entry:
-  %0 = bitcast <128 x i8> %arg to <32 x i32>
-  %1 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %0)
-  %2 = bitcast <128 x i16> %arg.1 to <64 x i32>
-  %3 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %1, <64 x i32> %2)
-  %4 = bitcast <64 x i32> %3 to <128 x i16>
-  ret <128 x i16> %4
+  %43 = tail call <64 x i32> @llvm.hexagon.V6.vunpackh.128B(<32 x i32> %42)
+  %44 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %43)
+  %45 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %44, <32 x i32> %20)
+  %46 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %45, <32 x i32> %44, <32 x i32> %20)
+  %47 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %37, <32 x i32> %46)
+  %48 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %47)
+  %49 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %48)
+  %50 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %49, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %51 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %50, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %52 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %51, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>)
+  %53 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %28, <32 x i32> %52)
+  %54 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %53)
+  %55 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %53)
+  %56 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %54, <32 x i32> %55)
+  %57 = bitcast <128 x i8> %arg.9 to <32 x i32>
+  %58 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %57)
+  %59 = bitcast <128 x i16> %arg.10 to <64 x i32>
+  %60 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %58, <64 x i32> %59)
+  %61 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %60)
+  %62 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %61)
+  %63 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %62)
+  %64 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %63, <32 x i32> %10)
+  %65 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %64, <32 x i32> %63, <32 x i32> %10)
+  %66 = bitcast <128 x i8> %arg.11 to <32 x i32>
+  %67 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %66)
+  %68 = bitcast <128 x i16> %arg.12 to <64 x i32>
+  %69 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %67, <64 x i32> %68)
+  %70 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %69)
+  %71 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %70)
+  %72 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %71)
+  %73 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %72, <32 x i32> %20)
+  %74 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %73, <32 x i32> %72, <32 x i32> %20)
+  %75 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %65, <32 x i32> %74)
+  %76 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %75)
+  %77 = tail call <32 x i32> @llvm.hexagon.V6.vaddwsat.128B(<32 x i32> %76, <32 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>)
+  %78 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %77, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %79 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>, <32 x i32> %78)
+  %80 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %79, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %81 = bitcast <128 x i8> %arg.13 to <32 x i32>
+  %82 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %81)
+  %83 = bitcast <128 x i16> %arg.14 to <64 x i32>
+  %84 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %82, <64 x i32> %83)
+  %85 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %84)
+  %86 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %85)
+  %87 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %86)
+  %88 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %87, <32 x i32> %10)
+  %89 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %88, <32 x i32> %87, <32 x i32> %10)
+  %90 = bitcast <128 x i8> %arg.15 to <32 x i32>
+  %91 = tail call <64 x i32> @llvm.hexagon.V6.vunpackub.128B(<32 x i32> %90)
+  %92 = bitcast <128 x i16> %arg.16 to <64 x i32>
+  %93 = tail call <64 x i32> @llvm.hexagon.V6.vsubh.dv.128B(<64 x i32> %91, <64 x i32> %92)
+  %94 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %93)
+  %95 = tail call <64 x i32> @llvm.hexagon.V6.vunpackuh.128B(<32 x i32> %94)
+  %96 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %95)
+  %97 = tail call <32 x i32> @llvm.hexagon.V6.vmpyieoh.128B(<32 x i32> %96, <32 x i32> %20)
+  %98 = tail call <32 x i32> @llvm.hexagon.V6.vmpyiewh.acc.128B(<32 x i32> %97, <32 x i32> %96, <32 x i32> %20)
+  %99 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %89, <32 x i32> %98)
+  %100 = tail call <64 x i32> @llvm.hexagon.V6.vaddwsat.dv.128B(<64 x i32> <i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128, i32 128>, <64 x i32> %99)
+  %101 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %100)
+  %102 = tail call <32 x i32> @llvm.hexagon.V6.vasrwv.128B(<32 x i32> %101, <32 x i32> <i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8, i32 8>)
+  %103 = tail call <32 x i32> @llvm.hexagon.V6.vminw.128B(<32 x i32> %102, <32 x i32> <i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767, i32 32767>)
+  %104 = tail call <32 x i32> @llvm.hexagon.V6.vmaxw.128B(<32 x i32> %103, <32 x i32> <i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768, i32 -32768>)
+  %105 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %80, <32 x i32> %104)
+  %106 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %105)
+  %107 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %105)
+  %108 = tail call <32 x i32> @llvm.hexagon.V6.vpackeh.128B(<32 x i32> %106, <32 x i32> %107)
+  %109 = tail call <64 x i32> @llvm.hexagon.V6.vcombine.128B(<32 x i32> %56, <32 x i32> %108)
+  %110 = tail call <64 x i32> @llvm.hexagon.V6.vaddhsat.dv.128B(<64 x i32> <i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736, i32 8388736>, <64 x i32> %109)
+  %111 = tail call <32 x i32> @llvm.hexagon.V6.lo.128B(<64 x i32> %110)
+  %112 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>, <32 x i32> %111)
+  %113 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %112, <32 x i32> zeroinitializer)
+  %114 = tail call <32 x i32> @llvm.hexagon.V6.hi.128B(<64 x i32> %110)
+  %115 = tail call <32 x i32> @llvm.hexagon.V6.vminh.128B(<32 x i32> %114, <32 x i32> <i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935, i32 16711935>)
+  %116 = tail call <32 x i32> @llvm.hexagon.V6.vmaxh.128B(<32 x i32> %115, <32 x i32> zeroinitializer)
+  %117 = tail call <32 x i32> @llvm.hexagon.V6.vpackeb.128B(<32 x i32> %113, <32 x i32> %116)
+  %118 = bitcast <32 x i32> %117 to <128 x i8>
+  ret <128 x i8> %118
 }
 
 attributes #0 = { nounwind mustprogress "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-builtins" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }

@@ -68,19 +68,21 @@ class RoseReturnOp(RoseOperation):
 class RoseCallOp(RoseOperation):
     def __init__(self, Name: str, Callee, OperandList: list, ParentBlock):
         assert isinstance(Callee.getType(), RoseFunctionType)
-        Operands = [Callee]
-        Operands.extend(OperandList)
-        super().__init__(RoseOpcode.call, Name, Operands, ParentBlock)
+        self.Callee = Callee
+        super().__init__(RoseOpcode.call, Name, (OperandList, self.Callee), ParentBlock)
 
     @staticmethod
     def create(Name: str, Callee, OperandList: list, ParentBlock=RoseUndefRegion()):
         return RoseCallOp(Name, Callee, OperandList, ParentBlock)
 
     def getCallee(self):
-        return self.getOperands()[0]
+        return self.Callee
 
     def getCallOperands(self):
-        return self.getOperands()[1:]
+        return self.getOperands()
+
+    def getOpInfoBundle(self):
+        return self.Callee
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         assert ReverseIndexing == False
@@ -144,31 +146,34 @@ class RoseCallOp(RoseOperation):
 
 
 class RoseOpaqueCallOp(RoseOperation):
-    def __init__(self, Name: str, Callee, OperandList: list,
+    def __init__(self, Name: str, CalleeName, OperandList: list,
                  ReturnType: RoseType, Macro: RoseMacro, ParentBlock):
-        assert isinstance(Callee.getType(), RoseStringType)
+        assert isinstance(CalleeName.getType(), RoseStringType)
         if Macro != None:
             assert isinstance(Macro, RoseMacro)
+        assert isinstance(ReturnType, RoseType)
         self.Macro = Macro
-        Operands = [ReturnType, Callee]
-        Operands.extend(OperandList)
-        super().__init__(RoseOpcode.opaquecall, Name, Operands, ParentBlock)
+        self.CalleeName = CalleeName
+        self.ReturnType = ReturnType
+        super().__init__(RoseOpcode.opaquecall, Name,
+                         (OperandList, (ReturnType, CalleeName)), ParentBlock)
 
     @staticmethod
-    def create(Name: str, Callee, OperandList: list, ReturnType: RoseType,
+    def create(Name: str, CalleeName, OperandList: list, ReturnType: RoseType,
                Macro: RoseMacro = None, ParentBlock=RoseUndefRegion()):
-        return RoseOpaqueCallOp(Name, Callee, OperandList, ReturnType, Macro, ParentBlock)
+        return RoseOpaqueCallOp(Name, CalleeName, OperandList, ReturnType, Macro, ParentBlock)
 
     def getCallee(self):
-        return self.getOperands()[1]
+        return self.CalleeName
 
     def getCallOperands(self):
-        if len(self.getOperands()) > 2:
-            return self.getOperands()[2:]
-        return []
+        return self.getOperands()
 
     def getMacro(self):
         return self.Macro
+
+    def getOpInfoBundle(self):
+        return (self.ReturnType, self.CalleeName)
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         assert ReverseIndexing == False
@@ -240,7 +245,7 @@ class RoseOpaqueCallOp(RoseOperation):
 class RoseSelectOp(RoseOperation):
     def __init__(self, Name: str, Cond: RoseValue, Then: RoseValue, Else: RoseValue, ParentBlock):
         assert isinstance(Cond.getType(), RoseBooleanType) \
-            or isinstance(Cond.getType(), RoseBitVectorType), f"Condition must be boolean or bitvector, not {Cond}"
+            or isinstance(Cond.getType(), RoseBitVectorType)
         OperandList = [Cond, Then, Else]
         super().__init__(RoseOpcode.select, Name, OperandList, ParentBlock)
 
@@ -260,6 +265,31 @@ class RoseSelectOp(RoseOperation):
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         assert ReverseIndexing == False
+        from RoseBitVectorOperations import RoseBVExtractSliceOp
+
+        def HandleExtractOp(ExtractOp: RoseBVExtractSliceOp):
+            assert isinstance(ExtractOp, RoseBVExtractSliceOp)
+            String = " ("
+            String += (ExtractOp.Opcode.getRosetteOp() + " ")
+            if ReverseIndexing == False:
+                String += " " + ExtractOp.getHighIndex().getName()
+                String += " " + ExtractOp.getLowIndex().getName()
+            else:
+                InputBVSize = ExtractOp.getInputBitVector().getType().getBitwidth()
+                if not isinstance(InputBVSize, RoseValue):
+                    ReverseIndexString = "(- " + str(InputBVSize - 1) + " "
+                else:
+                    ReverseIndexString = "(- (- " + str(InputBVSize) + " 1) "
+                # DO NOT CHANGE THIS ORDER
+                String += " " + ReverseIndexString + ExtractOp.getLowIndex().getName() + ")"
+                String += " " + ReverseIndexString + ExtractOp.getHighIndex().getName() + ")"
+            if not isinstance(ExtractOp.getInputBitVector(), RoseConstant):
+                String += " " + ExtractOp.getInputBitVector().getName()
+            else:
+                String += " " + ExtractOp.getInputBitVector().to_rosette()
+            String += ")"
+            return String
+
         Spaces = ""
         for _ in range(NumSpace):
             Spaces += " "
@@ -275,12 +305,19 @@ class RoseSelectOp(RoseOperation):
                 ThenString = "(bv " + self.getThenValue().getName() + " " \
                     + str(self.getThenValue().getType().getBitwidth()) + ")"
             else:
-                ThenString = self.getThenValue().getName()
+                # Handle extracts specially
+                if isinstance(self.getThenValue(), RoseBVExtractSliceOp):
+                    ThenString = HandleExtractOp(self.getThenValue())
+                else:
+                    ThenString = self.getThenValue().getName()
             if isinstance(self.getElseValue(), RoseConstant):
                 ElseString = "(bv " + self.getElseValue().getName() + " " \
                     + str(self.getElseValue().getType().getBitwidth()) + ")"
             else:
-                ElseString = self.getElseValue().getName()
+                if isinstance(self.getElseValue(), RoseBVExtractSliceOp):
+                    ElseString = HandleExtractOp(self.getElseValue())
+                else:
+                    ElseString = self.getElseValue().getName()
         else:
             ThenString = self.getThenValue().getName()
             ElseString = self.getElseValue().getName()
@@ -314,11 +351,6 @@ class RoseSelectOp(RoseOperation):
             return self.getOperand(2)
         return RoseUndefValue()
 
-    def getOutputBitwidth(self):
-        assert (self.getThenValue().getType().getBitwidth() ==
-                self.getElseValue().getType().getBitwidth())
-        return self.getThenValue().getType().getBitwidth()
-
 
 class RoseCastOp(RoseOperation):
     def __init__(self, Name: str, Operand: RoseValue, TargetType: RoseType, ParentBlock):
@@ -329,8 +361,9 @@ class RoseCastOp(RoseOperation):
             or isinstance(Operand.getType(), RoseBooleanType) \
             or isinstance(Operand.getType(), RoseIntegerType)
         assert Operand.getType() != TargetType
-        OperandList = [Operand, TargetType]
-        super().__init__(RoseOpcode.cast, Name, OperandList, ParentBlock)
+        OperandList = [Operand]
+        self.OpType = TargetType
+        super().__init__(RoseOpcode.cast, Name, (OperandList, self.OpType), ParentBlock)
 
     @staticmethod
     def create(Name: str, Operand: RoseValue, TargetType: RoseType,
@@ -346,6 +379,9 @@ class RoseCastOp(RoseOperation):
         # Cannot simplify
         return RoseUndefValue()
 
+    def getOpInfoBundle(self):
+        return self.OpType
+
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         assert ReverseIndexing == False
         Spaces = ""
@@ -360,7 +396,7 @@ class RoseCastOp(RoseOperation):
         elif isinstance(self.getOperand(0).getType(), RoseIntegerType) \
                 and isinstance(self.getType(), RoseBitVectorType):
             String += "integer->bitvector " + self.getOperand(0).getName() + " " \
-                "(bitvector " + self.getType().getBitwidth() + "))\n"
+                "(bitvector " + str(self.getType().getBitwidth()) + ")))\n"
         elif isinstance(self.getOperand(0).getType(), RoseBitVectorType) \
                 and isinstance(self.getType(), RoseBooleanType):
             String += "bitvector->bool " + \
@@ -368,7 +404,7 @@ class RoseCastOp(RoseOperation):
         elif isinstance(self.getOperand(0).getType(), RoseBooleanType) \
                 and isinstance(self.getType(), RoseBitVectorType):
             String += "bool->bitvector " + self.getOperand(0).getName() + " " \
-                "(bitvector " + self.getType().getBitwidth() + "))\n"
+                "(bitvector " + str(self.getType().getBitwidth()) + ")))\n"
         return String
 
     def print(self, NumSpace=0):
@@ -380,7 +416,7 @@ class RoseCastOp(RoseOperation):
         String += str(self.Opcode)
         Operand = self.getOperand(0)
         String += " " + str(Operand.getType()) + " " + Operand.getName() \
-                  + ", " + str(self.getOperand(1))
+                  + ", " + str(self.getType())
         print(String)
 
     def __str__(self, NumSpace=0):
@@ -392,7 +428,7 @@ class RoseCastOp(RoseOperation):
         String += str(self.Opcode)
         Operand = self.getOperand(0)
         String += " " + str(Operand.getType()) + " " + Operand.getName() \
-                  + ", " + str(self.getOperand(1))
+                  + ", " + str(self.getType())
         String += "\n"
         return String
 
@@ -438,8 +474,7 @@ class RoseAbsOp(RoseOperation):
 class RoseAddOp(RoseOperation):
     def __init__(self, Name: str, Operands: list, ParentBlock):
         for Operand in Operands:
-            assert not isinstance(Operand.getType(
-            ), RoseBitVectorType), f"Cannot add bitvector type {Operand.getType()}"
+            assert not isinstance(Operand.getType(), RoseBitVectorType)
         super().__init__(RoseOpcode.add, Name, Operands, ParentBlock)
 
     @staticmethod
@@ -1074,9 +1109,9 @@ class RoseMaxOp(RoseOperation):
 
 class RoseNotOp(RoseOperation):
     def __init__(self, Name: str, Value: RoseValue, ParentBlock):
-        assert isinstance(Value.getType(), RoseBooleanType)
+        assert not isinstance(Value.getType(), RoseBitVectorType)
         OperandList = [Value]
-        super().__init__(RoseOpcode.boolnot, Name, OperandList, ParentBlock)
+        super().__init__(RoseOpcode.not_, Name, OperandList, ParentBlock)
 
     @staticmethod
     def create(Name: str, Value: RoseValue, ParentBlock=RoseUndefRegion()):
@@ -1104,12 +1139,49 @@ class RoseNotOp(RoseOperation):
         IRBuilder = Context.getLLVMBuilder()
         return IRBuilder.not_(Operand, self.getName())
 
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        # If the operands are integers, we need to cast them
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ("bitvector->integer (bvnot ")
+        else:
+            String += (self.Opcode.getRosetteOp() + " ")
+        Operand = self.getInputValue()
+        if isinstance(Operand.getType(), RoseIntegerType):
+            if isinstance(Operand, RoseConstant):
+                if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                    String += " (bv " + Operand.getName() + " " \
+                        + Operand.getType().getBitwidth().getName() + ")"
+                else:
+                    String += " (bv " + Operand.getName() + " " \
+                        + str(Operand.getType().getBitwidth()) + ")"
+            else:
+                if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                    String += " (integer->bitvector " \
+                        + Operand.getName() + " (bitvector " \
+                        + Operand.getType().getBitwidth().getName() + "))"
+                else:
+                    String += " (integer->bitvector " \
+                        + Operand.getName() + " (bitvector " \
+                        + str(Operand.getType().getBitwidth()) + "))"
+        else:
+            String += " " + Operand.getName()
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ")"
+        String += "))\n"
+        return String
+
 
 class RoseAndOp(RoseOperation):
     def __init__(self, Name: str, Operands: list, ParentBlock):
         for Operand in Operands:
-            assert isinstance(Operand.getType(), RoseBooleanType)
-        super().__init__(RoseOpcode.booland, Name, Operands, ParentBlock)
+            assert not isinstance(Operand.getType(), RoseBitVectorType)
+        super().__init__(RoseOpcode.and_, Name, Operands, ParentBlock)
 
     @staticmethod
     def create(Name: str, Operands: list, ParentBlock=RoseUndefRegion()):
@@ -1156,12 +1228,51 @@ class RoseAndOp(RoseOperation):
         IRBuilder = Context.getLLVMBuilder()
         return IRBuilder.and_(Operand1, Operand2, self.getName())
 
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        # If the operands are integers, we need to cast them
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ("bitvector->integer (bvand ")
+        else:
+            String += (self.Opcode.getRosetteOp() + " ")
+        for Index, Operand in enumerate(self.getOperands()):
+            if isinstance(Operand.getType(), RoseIntegerType):
+                if isinstance(Operand, RoseConstant):
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (bv " + Operand.getName() + " " \
+                            + Operand.getType().getBitwidth().getName() + ")"
+                    else:
+                        String += " (bv " + Operand.getName() + " " \
+                            + str(Operand.getType().getBitwidth()) + ")"
+                else:
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + Operand.getType().getBitwidth().getName() + "))"
+                    else:
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + str(Operand.getType().getBitwidth()) + "))"
+            else:
+                String += " " + Operand.getName()
+            if Index != len(self.getOperands()) - 1:
+                String += " "
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ")"
+        String += "))\n"
+        return String
+
 
 class RoseNandOp(RoseOperation):
     def __init__(self, Name: str, Operands: list, ParentBlock):
         for Operand in Operands:
-            assert isinstance(Operand.getType(), RoseBooleanType)
-        super().__init__(RoseOpcode.boolnand, Name, Operands, ParentBlock)
+            assert not isinstance(Operand.getType(), RoseBitVectorType)
+        super().__init__(RoseOpcode.nand, Name, Operands, ParentBlock)
 
     @staticmethod
     def create(Name: str, Operands: list, ParentBlock=RoseUndefRegion()):
@@ -1212,12 +1323,51 @@ class RoseNandOp(RoseOperation):
         AndInst = IRBuilder.and_(Operand1, Operand2, self.getName())
         return IRBuilder.not_(AndInst, "not." + self.getName())
 
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        # If the operands are integers, we need to cast them
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ("bitvector->integer (bvnot (bvand ")
+        else:
+            String += (self.Opcode.getRosetteOp() + " ")
+        for Index, Operand in enumerate(self.getOperands()):
+            if isinstance(Operand.getType(), RoseIntegerType):
+                if isinstance(Operand, RoseConstant):
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (bv " + Operand.getName() + " " \
+                            + Operand.getType().getBitwidth().getName() + ")"
+                    else:
+                        String += " (bv " + Operand.getName() + " " \
+                            + str(Operand.getType().getBitwidth()) + ")"
+                else:
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + Operand.getType().getBitwidth().getName() + "))"
+                    else:
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + str(Operand.getType().getBitwidth()) + "))"
+            else:
+                String += " " + Operand.getName()
+            if Index != len(self.getOperands()) - 1:
+                String += " "
+        if isinstance(self.getType(), RoseIntegerType):
+            String += "))"
+        String += "))\n"
+        return String
+
 
 class RoseOrOp(RoseOperation):
     def __init__(self, Name: str, Operands: list, ParentBlock):
         for Operand in Operands:
-            assert isinstance(Operand.getType(), RoseBooleanType)
-        super().__init__(RoseOpcode.boolor, Name, Operands, ParentBlock)
+            assert not isinstance(Operand.getType(), RoseBitVectorType)
+        super().__init__(RoseOpcode.or_, Name, Operands, ParentBlock)
 
     @staticmethod
     def create(Name: str, Operands: list, ParentBlock=RoseUndefRegion()):
@@ -1264,12 +1414,51 @@ class RoseOrOp(RoseOperation):
         IRBuilder = Context.getLLVMBuilder()
         return IRBuilder.or_(Operand1, Operand2, self.getName())
 
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        # If the operands are integers, we need to cast them
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ("bitvector->integer (bvor ")
+        else:
+            String += (self.Opcode.getRosetteOp() + " ")
+        for Index, Operand in enumerate(self.getOperands()):
+            if isinstance(Operand.getType(), RoseIntegerType):
+                if isinstance(Operand, RoseConstant):
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (bv " + Operand.getName() + " " \
+                            + Operand.getType().getBitwidth().getName() + ")"
+                    else:
+                        String += " (bv " + Operand.getName() + " " \
+                            + str(Operand.getType().getBitwidth()) + ")"
+                else:
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + Operand.getType().getBitwidth().getName() + "))"
+                    else:
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + str(Operand.getType().getBitwidth()) + "))"
+            else:
+                String += " " + Operand.getName()
+            if Index != len(self.getOperands()) - 1:
+                String += " "
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ")"
+        String += "))\n"
+        return String
+
 
 class RoseNorOp(RoseOperation):
     def __init__(self, Name: str, Operands: list, ParentBlock):
         for Operand in Operands:
-            assert isinstance(Operand.getType(), RoseBooleanType)
-        super().__init__(RoseOpcode.boolnor, Name, Operands, ParentBlock)
+            assert not isinstance(Operand.getType(), RoseBitVectorType)
+        super().__init__(RoseOpcode.nor, Name, Operands, ParentBlock)
 
     @staticmethod
     def create(Name: str, Operands: list, ParentBlock=RoseUndefRegion()):
@@ -1320,13 +1509,52 @@ class RoseNorOp(RoseOperation):
         OrInst = IRBuilder.or_(Operand1, Operand2, self.getName())
         return IRBuilder.not_(OrInst, "not." + self.getName())
 
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        # If the operands are integers, we need to cast them
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ("bitvector->integer (bvnot (bvor ")
+        else:
+            String += (self.Opcode.getRosetteOp() + " ")
+        for Index, Operand in enumerate(self.getOperands()):
+            if isinstance(Operand.getType(), RoseIntegerType):
+                if isinstance(Operand, RoseConstant):
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (bv " + Operand.getName() + " " \
+                            + Operand.getType().getBitwidth().getName() + ")"
+                    else:
+                        String += " (bv " + Operand.getName() + " " \
+                            + str(Operand.getType().getBitwidth()) + ")"
+                else:
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + Operand.getType().getBitwidth().getName() + "))"
+                    else:
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + str(Operand.getType().getBitwidth()) + "))"
+            else:
+                String += " " + Operand.getName()
+            if Index != len(self.getOperands()) - 1:
+                String += " "
+        if isinstance(self.getType(), RoseIntegerType):
+            String += "))"
+        String += "))\n"
+        return String
+
 
 class RoseXorOp(RoseOperation):
     def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
-        assert isinstance(Operand1.getType(), RoseBooleanType)
-        assert isinstance(Operand2.getType(), RoseBooleanType)
+        assert not isinstance(Operand1.getType(), RoseBitVectorType)
+        assert not isinstance(Operand2.getType(), RoseBitVectorType)
         OperandList = [Operand1, Operand2]
-        super().__init__(RoseOpcode.boolxor, Name, OperandList, ParentBlock)
+        super().__init__(RoseOpcode.xor, Name, OperandList, ParentBlock)
 
     @staticmethod
     def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
@@ -1368,3 +1596,42 @@ class RoseXorOp(RoseOperation):
         assert Operand2 != LLVMUndefined
         IRBuilder = Context.getLLVMBuilder()
         return IRBuilder.xor(Operand1, Operand2, self.getName())
+
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        # If the operands are integers, we need to cast them
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ("bitvector->integer (bvxor ")
+        else:
+            String += (self.Opcode.getRosetteOp() + " ")
+        for Index, Operand in enumerate(self.getOperands()):
+            if isinstance(Operand.getType(), RoseIntegerType):
+                if isinstance(Operand, RoseConstant):
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (bv " + Operand.getName() + " " \
+                            + Operand.getType().getBitwidth().getName() + ")"
+                    else:
+                        String += " (bv " + Operand.getName() + " " \
+                            + str(Operand.getType().getBitwidth()) + ")"
+                else:
+                    if isinstance(Operand.getType().getBitwidth(), RoseValue):
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + Operand.getType().getBitwidth().getName() + "))"
+                    else:
+                        String += " (integer->bitvector " \
+                            + Operand.getName() + " (bitvector " \
+                            + str(Operand.getType().getBitwidth()) + "))"
+            else:
+                String += " " + Operand.getName()
+            if Index != len(self.getOperands()) - 1:
+                String += " "
+        if isinstance(self.getType(), RoseIntegerType):
+            String += ")"
+        String += "))\n"
+        return String

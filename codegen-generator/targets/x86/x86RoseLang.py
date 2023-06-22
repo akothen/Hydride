@@ -5200,13 +5200,7 @@ def Compile_Tests():
 
 
 if __name__ == '__main__':
-    #   Compile_Tests()
-    FunctionInfo = Compile("_mm_maddubs_pi16")[0]
-    # FunctionInfo = Compile("_mm256_adds_epi8 ")[0]
-    import RoseCodeGenerator
-    CodeGenerator = RoseCodeGenerator.RoseCodeGenerator(Target="x86")
-    CodeGenerator.codeGen(FunctionInfo, JustGenRosette=True)
-    import RosetteGen
-    Function = FunctionInfo.getLatestFunction()
-    RosetteCode = RosetteGen.CodeGen(Function)
-    # print(RosetteCode)
+  # Compile_Tests()
+    Compile()
+
+

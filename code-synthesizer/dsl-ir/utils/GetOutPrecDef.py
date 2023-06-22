@@ -78,10 +78,38 @@ class GetOutPrecDef:
         len_expr = "{}".format(args[3].name)
         defaults.append("[{} {}]".format(dsl_use, len_expr))
 
+        # Special case handling for llvm vector SIMD operations
+        for dsl_struct in llvm_simd_structs:
+            dsl_use = struct_definer.emit_dsl_struct_use(dsl_struct)
+            args = dsl_struct.get_sample_context().context_args
+            len_expr = "{} ".format(args[3].name)
+            defaults.append("[{} {}]".format(dsl_use, len_expr))
+
         return ["\t{}".format(d) for d in defaults]
 
     def emit_fallback_def(self, env_name="env"):
         return "\t[v 1]"
+
+    def emit_ctx_bounded_prec_clause(self, ctx, sample_ctx):
+
+        def get_arg(i):
+            return sample_ctx.context_args[i]
+
+        conditional = "(cond\n"
+
+        for out_prec, setting in ctx.out_bound_map.items():
+
+            arg_name = get_arg(setting[0]).name
+
+            condition = "(equal? {} (lit (bv {} (bitvector {}))) )".format(
+                arg_name, setting[1], ctx.get_bounded_bv_size())
+
+            clause = "[{} {}]".format(condition, out_prec)
+            conditional += clause + "\n"
+
+        conditional += ")\n"
+
+        return conditional
 
     # Sample context sample ctx is used to define
     # argument names
@@ -104,6 +132,12 @@ class GetOutPrecDef:
                 predicate += " (equal? {} {})".format(get_arg(idx).name, arg.value)
 
         predicate = "(and " + predicate + ")"
+
+        # If context contains a bounded variable, we can simply check the
+        # value of the bounded variable
+        if ctx.is_bounded:
+            size_expr = self.emit_ctx_bounded_prec_clause(ctx, sample_ctx)
+            return "[{} {}]".format(predicate, size_expr)
 
         if size_expr == "" and ctx.out_precision != None:
             size_expr = str(ctx.out_precision)

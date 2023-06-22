@@ -179,6 +179,27 @@
              (+ 5 (hydride:cost  v0)  (hydride:cost  v1)  
                 (hydride:cost  v4) )
              ]
+
+		[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hydride:cost  v0)  (hydride:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hydride:cost  v0)  (hydride:cost  v1)  
+		)
+	]
+		[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hydride:cost  v0)  (hydride:cost  v1)  
+		)
+	]
+		[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hydride:cost  v0)  (hydride:cost  v1)  
+		)
+	]
+		[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(+ 2 (hydride:cost  v0)  (hydride:cost  v1)  
+		)
+	]
             [ (_mm512_rem_epu32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
              (+ cost__mm512_rem_epu32_dsl (hydride:cost  v0)  (hydride:cost  v1)  
 

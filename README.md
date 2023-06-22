@@ -121,3 +121,6 @@ Problems:
     - immediate number in legalizer: average_pool(problem_imm)
         - Akash
     <!-- - non stop: add,l2norm -->
+
+- Why cast-uint involves bvusat: Spec Ops ['zero-extend', 'bvusat']
+- Assertion failed: (isValidElementType(ElementType) && "Element type of a VectorType must " "be an integer, floating point, or " "pointer type."), function get, file Type.cpp, line 647.

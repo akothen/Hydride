@@ -923,7 +923,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
     def score_context(self, dsl_inst,  ctx):
 
-        if self.target == 'hvx' and (self.spec.get_output_size() == self.MAX_BW_SIZE) and ctx.name == "hexagon_V6_vcombine_128B":
+        if self.target == 'hvx' and (any([input_size == self.MAX_BW_SIZE for input_size in self.input_sizes]) or (self.spec.get_output_size() == self.MAX_BW_SIZE)) and ctx.name == "hexagon_V6_vcombine_128B":
             return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_hi_128B":
             return 15

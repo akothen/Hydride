@@ -3,6 +3,7 @@ import sys
 
 
 SYM_BV_STR = "SYMBOLIC_BV_"
+BOUNDED_BV_STR = "BOUNDED_SYMBOLIC_BV_"
 CONST_BV_STR = "(bv"
 IDX_I_STR = "IDX_I"
 IDX_J_STR = "IDX_J"
@@ -136,15 +137,18 @@ def get_variant_by_sign(op, sign):
 
 
 class Context:
-    def __init__(self, name="", in_vectsize=None, out_vectsize=None,
+    def __init__(self, name="", dsl_name="", in_vectsize=None, out_vectsize=None,
                  lane_size=None, in_precision=None,
                  out_precision=None, SIMD=False, args=[],
                  in_vectsize_index=None, out_vectsize_index=None,
                  in_precision_index=None,
                  out_precision_index=None, cost=None,
                  signedness=None, in_lanesize_index=None,
-                 out_lanesize_index=None, semantics=None):
+                 out_lanesize_index=None, semantics=None,
+                 ctx_sema=None
+                 ):
         self.name = name
+        self.dsl_name = dsl_name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
         self.in_lanesize_index = in_lanesize_index
@@ -161,11 +165,20 @@ class Context:
         self.signedness = signedness
         self.semantics = semantics
         self.precision_scaled = False
+        self.enable_mixed_scaling = False
+        self.unscaled_sym_bvs_idx = []
+        self.is_bounded = False
+        self.ctx_sema = ctx_sema
 
         self.num_args = len(args)
         self.parse_args(args)
+        self.create_bounded_args_map()
 
     def get_bv_ops(self):
+
+        if self.ctx_sema != None:
+            return self.ctx_sema
+
         function_prototype = self.semantics[0].replace("(define", "").lstrip()
 
         # Map the formal parameter names to instructions
@@ -274,6 +287,10 @@ class Context:
     # in_vectsize index and out_vectsize_index
 
     def can_scale_context(self, scale_factor=None):
+
+        if self.is_bounded:
+            return False
+
         has_defined_io = self.has_output_size() and self.has_input_size()
         has_defined_lanesize = (self.in_lanesize_index != None) and (
             self.out_lanesize_index != None)
@@ -326,7 +343,13 @@ class Context:
                     scale_factor, arg.size)
                 scaled_bv_arg = BitVector(
                     arg.name, int(arg.size // scale_factor))
-                scaled_args.append(scaled_bv_arg)
+                if arg.size // scale_factor == 1 and self.enable_mixed_scaling:
+                    # For Scalar vector ops, try keeping the scalar args the same size
+                    # and hope verification fails any mis-scaling
+                    scaled_args.append(arg)
+                    self.unscaled_sym_bvs_idx.append(idx)
+                else:
+                    scaled_args.append(scaled_bv_arg)
             elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
                 assert arg.value % scale_factor == 0, "scale_factor must evenly divide the operand sizes"
                 scaled_vectsize_arg = Integer(
@@ -400,6 +423,8 @@ class Context:
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
+                if arg.size // sample_scale_factor == 1 and self.enable_mixed_scaling:
+                    self.unscaled_sym_bvs_idx.append(idx)
                 pass
             elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
                 scalable_idx.append(idx)
@@ -422,6 +447,43 @@ class Context:
                     scalable_idx.append(idx)
 
         return scalable_idx
+
+    def get_bounded_bv_size(self):
+        for arg in self.context_args:
+            if isinstance(arg, BoundedBitVector):
+                return arg.size
+        return -1
+
+    def create_bounded_args_map(self):
+        self.in_bound_map = {}
+        self.out_bound_map = {}
+        if not self.is_bounded:
+            return
+
+        # Currently assuming only one such bounded variable
+        # exists per context, can generalize later when a different case
+        # arises
+        in_knob_0 = self.in_precision_index[0]
+        assert in_knob_0[0] == "variable_idx", "Unsupported token when creating bounded args map"
+
+        in_index = in_knob_0[1]
+
+        for i in range(1, len(self.in_precision_index)):
+            prec_str, value = self.in_precision_index[i]
+            prec = prec_str.split("precision")[-1]
+
+            self.in_bound_map[prec] = (in_index, value)
+
+        out_knob_0 = self.out_precision_index[0]
+        assert out_knob_0[0] == "variable_idx", "Unsupported token when creating bounded args map"
+
+        out_index = out_knob_0[1]
+
+        for i in range(1, len(self.out_precision_index)):
+            prec_str, value = self.out_precision_index[i]
+            prec = prec_str.split("precision")[-1]
+
+            self.out_bound_map[prec] = (out_index, value)
 
     def is_signed(self):
         return (self.signedness != None) and self.signedness == 1
@@ -449,9 +511,22 @@ class Context:
         return self.in_vectsize != None
 
     def supports_input_precision(self, prec):
+
+        for k in self.in_bound_map:
+            # print("Bounded Precision:",k)
+            if int(k) == prec:
+
+                # print("SUCCESS!")
+                return True
+
         return self.in_precision == prec
 
     def supports_output_precision(self, prec):
+
+        for k in self.out_bound_map:
+            if int(k) == prec:
+                return True
+
         return self.out_precision == prec
 
     def get_max_arg_size(self, scale_factor=1):
@@ -495,7 +570,58 @@ class Context:
         print("out_vectsize: ", self.out_vectsize)
 
         for arg in self.context_args:
-            arg.print_operand(prefix=prefix+"------>")
+            if isinstance(arg, Context):
+                arg.print_context(prefix=prefix + "\t")
+            else:
+                arg.print_operand(prefix=prefix+"------>")
+
+    def get_expr_type_info(self):
+
+        type_info = []
+
+        for arg in self.context_args:
+            if isinstance(arg, Context):
+                type_info += arg.get_expr_type_info()
+            elif isinstance(arg, Reg):
+                type_info.append((arg.precision, arg.size, arg.signed))
+
+        return type_info
+
+    def print_context_expr(self, prefix=""):
+        print("{} ({} ; {}".format(prefix, self.dsl_name + "_dsl", self.name))
+
+        for arg in self.context_args:
+            if isinstance(arg, Context):
+                arg.print_context_expr(prefix=prefix + "\t")
+            else:
+                print(prefix + "\t" + arg.get_dsl_value())
+
+        print("{} )".format(prefix))
+
+    def specialize_context_bounded(self, prec):
+        new_context_args = []
+
+        # print("Specializing context ", self.name)
+        bounded_bv_size = self.get_bounded_bv_size()
+        for arg in self.context_args:
+            if isinstance(arg, BoundedBitVector):
+                value = None
+
+                setting = self.out_bound_map[str(prec)]
+
+                value = str(setting[1])
+
+                context_arg = ConstBitVector(
+                    value, bounded_bv_size, name="vc_{}".format("bounded"))
+                new_context_args.append(context_arg)
+            else:
+                new_context_args.append(arg)
+
+        # No longer bounded since specialized
+        self.context_args = new_context_args
+        self.is_bounded = False
+        self.in_precision = prec
+        self.out_precision = prec
 
     def parse_args(self, args):
 
@@ -516,6 +642,10 @@ class Context:
             if arg.startswith(SYM_BV_STR):
                 bv_size = int(arg.split(SYM_BV_STR)[-1])
                 context_arg = BitVector("v{}".format(idx), bv_size)
+            elif arg.startswith(BOUNDED_BV_STR):
+                bv_size = int(arg.split(BOUNDED_BV_STR)[-1])
+                context_arg = BoundedBitVector("v{}".format(idx), bv_size)
+                self.is_bounded = True
             elif arg.startswith(CONST_BV_STR):
                 tokens = arg.split(" ")
                 assert len(tokens) == 3, "Unable to parse bv constant"
@@ -591,6 +721,8 @@ class Context:
 
                 context_arg = Integer("num_{}".format(idx), int(arg))
 
+            elif arg == "#t" or arg == "#f":
+                context_arg = Bool("bool_{}".format(idx), arg)
             else:
                 print("ARG {}:\t{}".format(idx, arg))
                 print(issubclass(type(arg), OperandType))
@@ -637,10 +769,11 @@ class DSLInstruction(InstructionType):
                     in_precision_index=None,
                     out_precision_index=None, cost=None,
                     signedness=None, in_lanesize_index=None,
-                    out_lanesize_index=None):
+                    out_lanesize_index=None,
+                    ctx_sema=None):
 
         self.contexts.append(
-            Context(name=name, in_vectsize=in_vectsize, out_vectsize=out_vectsize,
+            Context(name=name, dsl_name=self.name, in_vectsize=in_vectsize, out_vectsize=out_vectsize,
                     lane_size=lane_size, in_precision=in_precision,
                     out_precision=out_precision, SIMD=SIMD, args=args,
                     in_vectsize_index=in_vectsize_index,
@@ -650,7 +783,8 @@ class DSLInstruction(InstructionType):
                     cost=cost, signedness=signedness,
                     in_lanesize_index=in_lanesize_index,
                     out_lanesize_index=out_lanesize_index,
-                    semantics=self.semantics
+                    semantics=self.semantics,
+                    ctx_sema=ctx_sema
                     )
         )
 
@@ -774,6 +908,9 @@ class DSLInstruction(InstructionType):
             return True
 
         return any([supports(ctx) for ctx in self.contexts])
+
+    def has_bounded_behavior(self):
+        return any([ctx.is_bounded for ctx in self.contexts])
 
     def supports_scaling(self):
 

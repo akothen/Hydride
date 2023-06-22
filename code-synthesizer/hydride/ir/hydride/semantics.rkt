@@ -2321,10 +2321,24 @@
                             (define %2 (+  j0.new  %lastidx0))
                             (define %3 (extract  %2 j0.new a))
                             (define %5 (extract  %2 j0.new b))
-                            (define %6.ab0 (bvaddnw %3 %5 %elemsize0 %arg3 ))
-                            (define %7.ab0 (bvaddnw %6.ab0 %arg1 %elemsize0 %arg2 ))
-                            (define %8 (bvashr  %7.ab0  %arg0))
-                            %8
+                            ;; Modified semantics
+                            (define zext-size (* 2 %elemsize0))
+                            (define %3.ext (zero-extend  %3 (bitvector zext-size)))
+                            (define %5.ext (zero-extend  %5 (bitvector zext-size)))
+                            (define %arg1.ext (zero-extend  %arg1 (bitvector zext-size)))
+                            (define %arg0.ext (zero-extend  %arg0 (bitvector zext-size)))
+                            ;;===============
+                            ;(define %6.ab0 (bvaddnw %3 %5 %elemsize0 %arg3 ))
+                            ;(define %7.ab0 (bvaddnw %6.ab0 %arg1 %elemsize0 %arg2 ))
+                            ;(define %8 (bvlshr  %7.ab0  %arg0)) ;; should be logical right shift
+                            ;%8
+
+
+                            ;; Modified semantics
+                            (define %6.ab0 (bvaddnw %3.ext %5.ext zext-size %arg3 ))
+                            (define %7.ab0 (bvaddnw %6.ab0 %arg1.ext zext-size %arg2 ))
+                            (define %8 (bvlshr  %7.ab0  %arg0.ext)) ;; should be logical right shift
+                            (extract (- %elemsize0 1) 0 %8)
                             )
                   )
                 )

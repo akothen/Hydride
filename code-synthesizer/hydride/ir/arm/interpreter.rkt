@@ -55,6 +55,26 @@
 		(llvm_shuffle_vectors (arm:interpret v0 env) (arm:interpret v1 env) num_2 
 		 prec_i_o (arm:interpret v4 env) num_5)
 	]
+	[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-add (arm:interpret v0 env) (arm:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sub (arm:interpret v0 env) (arm:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-mul (arm:interpret v0 env) (arm:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-sdiv (arm:interpret v0 env) (arm:interpret v1 env) num_2 
+		 prec_i_o)
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(llvm-vect-udiv (arm:interpret v0 env) (arm:interpret v1 env) num_2 
+		 prec_i_o)
+	]
 	[ (vraddhn_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
 		(vraddhn_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
 		 size_i_o num_4 num_5 

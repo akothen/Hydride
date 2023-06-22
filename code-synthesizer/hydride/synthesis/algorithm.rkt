@@ -30,6 +30,7 @@
 (require hydride/ir/hvx/printer)
 (require hydride/ir/hvx/binder)
 (require hydride/ir/hvx/scale)
+(require hydride/ir/hvx/instcombine_fast)
 
 (require hydride/ir/arm/definition)
 (require hydride/ir/arm/cost_model)
@@ -39,6 +40,9 @@
 (require hydride/ir/arm/scale)
 
 (require hydride/synthesis/scalable_synthesis)
+(require hydride/synthesis/ir_to_ir_transform)
+
+(require hydride/ir/arith/utils)
 
 (provide (all-defined-out))
 
@@ -56,7 +60,11 @@
     (display "; (reg ")
     (display (~s v))
     (display ") ")
-    (displayln (halide:print-buffer-type-info k))
+
+    (displayln (cond
+                 [(equal? input-lang 'halide) (halide:print-buffer-type-info k)]
+
+                 [(equal? input-lang 'mlir) (arith:print-buffer-type-info k)]))
     v)
   (define printed-map (hash-map id-map print-helper))
 
@@ -90,10 +98,8 @@
 
   (cond
     [(equal? arch "x86") (set-target-x86)]
-
-    [(equal? arch "hvx") (set-target-hvx)]
-
-    [(equal? arch "arm") (set-target-arm)])
+    [(equal? arch "arm") (set-target-arm)]
+    [(equal? arch "hvx") (set-target-hvx)])
 
   (cond
     [(equal? solver 'boolector) (current-solver (boolector))]
@@ -106,17 +112,147 @@
   (define scale-factor
     (cond
       [(equal? arch "x86") 4]
+      [(equal? arch "arm") 1]
+      [(equal? arch "hvx") 32]))
 
-      [(equal? arch "hvx") 32]
+  ;; Halide IR doesn't have operations for saturating cast,
+  ;; so it lowers into redudnant opts. Recover saturating casts
+  ;; again with a simple matching
+  (define matched-halide-expr (halide:match-saturating-cast halide-expr))
 
-      [(equal? arch "arm") 1 ;4
-       ]))
+  (debug-log "Matched expression")
+  (debug-log matched-halide-expr)
+
+  (define type-info (make-type-info id-map))
+  (define synthesized-sol
+    (scale-down-synthesis matched-halide-expr
+                          expr-depth
+                          VF
+                          id-map
+                          solver
+                          opt?
+                          sym?
+                          scale-factor
+                          synth-log))
+  (debug-log "========================================")
+  (debug-log "Original Halide Expression:")
+  (debug-log halide-expr)
+  (debug-log "Synthesis completed:")
+
+  ;; Synthesis completed with Hydride Target Agnostic
+  ;; Operations, check if further simplification can
+  ;; be performed. E.g. if the bitvector operands of
+  ;; any operation are all literals then that operation
+  ;; can instead be replaced with it's result. Traverse
+  ;; bottom up and incrementally simplify operations.
+
+  (define const-fold-functor
+    (cond
+      [(equal? target 'hvx) hvx:const-fold]
+      [(equal? target 'arm) arm:const-fold]
+      [(equal? target 'x86) hydride:const-fold]))
+
+  (define cost-functor
+    (cond
+      [(equal? target 'hvx) hvx:cost]
+      [(equal? target 'arm) arm:cost]
+      [(equal? target 'x86) hydride:cost]))
+
+  (define folded (const-fold-functor synthesized-sol))
+
+  (debug-log "folded-expression")
+  (debug-log folded)
+
+  (define perform-instcombine? #f)
+
+  (define simplified
+    (cond
+      [perform-instcombine?
+       (define start-sec (current-seconds))
+       (define simplified-expr (inst-combine-hydride-expr folded 3 arch type-info))
+       (define end-sec (current-seconds))
+
+       (define elapsed-instcombine (- end-sec start-sec))
+       (debug-log (format "inst-combine took ~a seconds ..." elapsed-instcombine))
+       simplified-expr]
+      [else folded]))
+
+  (debug-log "Simplified expression")
+  (debug-log simplified)
+
+  ;; Lower target agnostic specialized shuffles to sequences
+  ;; of target specific shuffle operations.
+  (define swizzle-start (current-seconds))
+  (define legalized-shuffles-expr
+    (legalize-expr-swizzles simplified solver synth-log cost-functor #t #f))
+  (define swizzle-end (current-seconds))
+  (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
+  (debug-log id-map)
+  (debug-log "========================================")
+  ;; Apply constant folding again after lowering swizzles
+  ;; as additional simplfication oppurtunities may have resulted
+  (const-fold-functor legalized-shuffles-expr))
+
+(define (make-type-info id-map)
+  (define regs (hash-values id-map))
+  (define container
+    (for/list ([i (range (length regs))])
+      '()))
+
+  (set! container (list->vector container))
+
+  (define (hash-helper k v)
+    (define index (bitvector->natural v))
+    (define prec (halide:vec-precision k))
+    (define size (halide:vec-size k))
+    (debug-log (format "Inserted ~a at vector in index ~a\n" prec index))
+    (vector-set! container index (vector prec size)))
+
+  (hash-map id-map hash-helper)
+
+  (debug-log "Created typeinfo:")
+  (debug-log container)
+  container)
+
+(define (synthesize-mlir-expr halide-expr
+                              id-map
+                              expr-depth
+                              VF
+                              solver
+                              opt?
+                              sym?
+                              prev-hash-file
+                              prev-hash-name
+                              arch)
+  (debug-log id-map)
+  (if (equal? prev-hash-file "")
+      '()
+      (begin
+        (debug-log "Found previous hash!\n")
+        (define prev-hash (import-synth-map prev-hash-file prev-hash-name))
+        (set! synth-log (hash-copy prev-hash))
+        (debug-log synth-log)))
+
+  ;; Update globals
+  (set-input-mlir)
+
+  (cond
+    [(equal? arch "x86") (set-target-x86)]
+    [(equal? arch "arm") (set-target-arm)]
+    [(equal? arch "hvx") (set-target-hvx)])
+
+  (cond
+    [(equal? solver 'boolector) (current-solver (boolector))]
+
+    [(equal? solver 'z3) (current-solver (z3))])
+
+  (define scale-factor 1)
   (define synthesized-sol
     (scale-down-synthesis halide-expr expr-depth VF id-map solver opt? sym? scale-factor synth-log))
-  (displayln "========================================")
-  (displayln "Original Halide Expression:")
-  (pretty-print halide-expr)
-  (displayln "Synthesis completed:")
+  (debug-log "========================================")
+  (debug-log "Original MLIR Expression:")
+  (debug-log halide-expr)
+  (debug-log "Synthesis completed:")
 
   ;; Synthesis completed with Hydride Target Agnostic
   ;; Operations, check if further simplification can
@@ -145,8 +281,8 @@
   (define legalized-shuffles-expr (legalize-expr-swizzles folded solver synth-log cost-functor #t #f))
   (define swizzle-end (current-seconds))
   (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
-  (pretty-print id-map)
-  (displayln "========================================")
+  (debug-log id-map)
+  (debug-log "========================================")
   ;; Apply constant folding again after lowering swizzles
   ;; as additional simplfication oppurtunities may have resulted
   (const-fold-functor legalized-shuffles-expr))
@@ -205,23 +341,23 @@
         (debug-log (format "Vectorization factor for sub expression ~a\n" expr-VF))
 
         (define (invoke-spec env-full)
-          (printf "invoke-spec with env: ~a\n" env-full)
+          (debug-log (format "invoke-spec with env: ~a\n" env-full))
           (define synth-buffers-full (halide:create-buffers leaves env-full))
 
           (define-values (_expr-extract-full _num-used)
             (halide:bind-expr-args halide-expr synth-buffers-full actual-expr-depth))
 
-          (println _expr-extract-full)
+          (debug-log _expr-extract-full)
 
           (define _result_full
             (halide:assemble-bitvector (halide:interpret _expr-extract-full) expr-VF))
-          (displayln "Spec result")
-          (println _result_full)
+          (debug-log "Spec result")
+          (debug-log _result_full)
           _result_full)
 
         ;; Calculate result for last most lane
         (define (invoke-spec-lane lane-idx env-lane)
-          (printf "invoke-spec-lane with env: ~a\n" env-lane)
+          (debug-log (format "invoke-spec-lane with env: ~a\n" env-lane))
           (define synth-buffers-lane (halide:create-buffers leaves env-lane))
           (define-values (_expr-extract _num-used)
             (halide:bind-expr-args halide-expr synth-buffers-lane actual-expr-depth))
@@ -232,19 +368,19 @@
         (define depth-limit
           (cond
             [(equal? target 'hvx) 5]
-            [(equal? target 'x86) 3]
-            [(equal? target 'arm) 3]))
+            [(equal? target 'arm) 5]
+            [(equal? target 'x86) 3]))
         (define optimize? opt?)
         (define symbolic? sym?)
 
-        (displayln (format "Synthesizing sub-expression using expression-depth ~a \n"
+        (debug-log (format "Synthesizing sub-expression using expression-depth ~a \n"
                            actual-expr-depth))
-        (pretty-print expr-extract)
+        (debug-log expr-extract)
 
         (define hashed-expr (halide:hash-expr expr-extract))
 
-        (displayln "Hashed expression")
-        (println hashed-expr)
+        (debug-log "Hashed expression")
+        (debug-log hashed-expr)
         (debug-log "Leaves are bitvectors of sizes:")
         (debug-log leaves-sizes)
         (define-values (satisfiable? materialize elap)
@@ -295,8 +431,8 @@
                      (cost-model mat1)]
                     [else 30]))
 
-                (displayln "Hashed expression")
-                (println hashed-expr)
+                (debug-log "Hashed expression")
+                (debug-log hashed-expr)
 
                 ;(define-values (sat? mat el)
                 ;(synthesize-sol-with-depth
@@ -330,7 +466,7 @@
                   [(and (not sat?) sat?1)
                    (hash-set! synth-log hashed-expr (vector sat?1 mat1 (- test-end test-start)))])
 
-                (displayln "Here")
+                (debug-log "Here")
 
                 (define result
                   (cond
@@ -343,8 +479,8 @@
 
         (if satisfiable?
             (begin
-              (displayln "Solution")
-              (pretty-print materialize))
+              (debug-log "Solution")
+              (debug-log materialize))
             (begin
               (debug-log "Unsatisfiable, try smaller window within given sub-expression")
               (define-values (expr-extract num-used)
@@ -371,16 +507,16 @@
 
               (hash-set! synth-log hashed-expr (vector satisfiable? materialize 0))))
 
-        (println materialize)
+        (debug-log materialize)
 
-        (displayln "Cost")
+        (debug-log "Cost")
 
         (define cost-functor
           (cond
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
             [(equal? target 'x86) hydride:cost]))
-        (println (cost-functor materialize))
+        (debug-log (cost-functor materialize))
 
         ;; Now that we've synthesized the sub-expression
         ;; we can clear the symbolic heap

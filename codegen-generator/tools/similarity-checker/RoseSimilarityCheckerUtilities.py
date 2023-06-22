@@ -171,7 +171,6 @@ def GetOpDeterminingLoopBoundsInBlockList(Function: RoseFunction, BlockList: lis
                 if Op.getInputBitVector() == FunctionOutput:
                     if isinstance(Op.getOutputBitwidth(), RoseArgument):
                         # if Block in BlockToBVInsertOp:
-
                         #  return None
                         Result.append(Op)
                         # BlockToBVInsertOp[Block] = Op

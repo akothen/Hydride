@@ -82,6 +82,14 @@ class GetLengthDef:
         len_expr = "(* {} {}) ".format(args[5].name, args[3].name)
         defaults.append("[{} {}]".format(dsl_use, len_expr))
 
+        # Special case handling for llvm vector SIMD operations
+
+        for dsl_struct in llvm_simd_structs:
+            dsl_use = struct_definer.emit_dsl_struct_use(dsl_struct)
+            args = dsl_struct.get_sample_context().context_args
+            len_expr = "(* {} {}) ".format(args[2].name, args[3].name)
+            defaults.append("[{} {}]".format(dsl_use, len_expr))
+
         return ["\t{}".format(d) for d in defaults]
 
     def emit_fallback_def(self, env_name="env"):

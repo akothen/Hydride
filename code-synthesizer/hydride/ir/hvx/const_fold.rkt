@@ -79,6 +79,56 @@
 		[else ( llvm_shuffle_vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 )]
 		)
 	]
+[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-add_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-add_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-sub_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-sub_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-mul_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-mul_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-sdiv_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-sdiv_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (hvx:interpret ( llvm-vect-udiv_dsl v0-folded v1-folded num_2 prec_i_o ) (vector)))
+]
+		[else ( llvm-vect-udiv_dsl v0-folded v1-folded num_2 prec_i_o )]
+		)
+	]
 	[ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(define v0-folded (hvx:const-fold v0))
 		(define v1-folded (hvx:const-fold v1))
@@ -1276,7 +1326,30 @@
 		[else ( hexagon_V6_vmpyewuh_64_128B_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 prec_o num_18 num_19 num_20 num_21 num_22 prec_i num_24 )]
 		)
 	]
-	[v (error "Unrecognized expression" v)]
+[ (hexagon_V6_vshuffvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(define v2-folded (hvx:const-fold v2))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (hvx:interpret ( hexagon_V6_vshuffvdd_128B_dsl v0-folded v1-folded v2-folded size_o num_4 num_5 size_i num_7 num_8 ) (vector)))
+]
+		[else ( hexagon_V6_vshuffvdd_128B_dsl v0-folded v1-folded v2-folded size_o num_4 num_5 size_i num_7 num_8 )]
+		)
+	]
+[ (hexagon_V6_vdealvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
+		(define v0-folded (hvx:const-fold v0))
+		(define v1-folded (hvx:const-fold v1))
+		(define v2-folded (hvx:const-fold v2))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (hvx:interpret ( hexagon_V6_vdealvdd_128B_dsl v0-folded v1-folded v2-folded size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 ) (vector)))
+]
+		[else ( hexagon_V6_vdealvdd_128B_dsl v0-folded v1-folded v2-folded size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 )]
+		)
+	]
+
+	[v (error "Unrecognized expression const fold" v)]
  )
 )
 ;; ================================================================================

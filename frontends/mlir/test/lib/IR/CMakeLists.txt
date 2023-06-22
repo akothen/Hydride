@@ -1,6 +1,5 @@
 # Exclude tests from libMLIR.so
 add_mlir_library(MLIRTestIR
-  HydrideRosette.cpp
   TestBuiltinAttributeInterfaces.cpp
   TestClone.cpp
   TestDiagnostics.cpp

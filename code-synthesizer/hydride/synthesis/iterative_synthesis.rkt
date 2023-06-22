@@ -53,6 +53,21 @@
 (define (set-iterative-optimize)
   (set! iterative-optimize #t))
 
+;; Global timeout between threads if overall
+;; synthesis timeout exceeded
+
+(define start-time -1)
+
+(define (set-start-time-global-timeout)
+  (set! start-time (current-seconds)))
+
+(define global-timeout? #f)
+
+(define (set-global-timeout val)
+  (set! global-timeout? val))
+
+(define GLOBAL_TIMEOUT 10000) ; timeout after 10000 seconds for any single input expression
+
 ;; Evaluate the symbol defined at index i
 ;; of symbols for the counter example in cex
 (define (eval-bv-cex symbols cex i)
@@ -78,11 +93,11 @@
         (begin
 
           (define synth-sol-lane (invoke_sol_lane lane-idx symbols))
-          (displayln "Verify across lanes hydride:")
-          (displayln synth-sol-lane)
-          (displayln "Verify across lanes spec:")
-          (displayln (invoke_ref_lane lane-idx symbols))
-          (displayln "Is this printed?")
+          (debug-log "Verify across lanes hydride:")
+          (debug-log synth-sol-lane)
+          (debug-log "Verify across lanes spec:")
+          (debug-log (invoke_ref_lane lane-idx symbols))
+          (debug-log "Is this printed?")
 
           (define verification-timeout? #f)
           (define cex
@@ -100,6 +115,8 @@
           (define verified? (not (sat? cex))) ;; True i verified equal on lane-idx
 
           (if (not verified?) (set! uneq? #t) '())
+
+          (current-solver (z3))
 
           verified?)))
 
@@ -236,7 +253,7 @@
     [else (and (car ls) (fold-and (cdr ls)))]))
 
 (define (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-  (displayln "get-concrete-asserts")
+  (debug-log "get-concrete-asserts")
 
   (define (helper i)
     (assert-query-fn (list-ref cex-ls i) (list-ref failing-ls i)))
@@ -270,7 +287,7 @@
                                     cost-bound
                                     failed-sols)
   (begin
-    (displayln "*** regular-concrete-synthesis ***")
+    (debug-log "*** regular-concrete-synthesis ***")
     (synthesize #:forall (list cex-ls)
                 #:guarantee (begin
                               ;; loop over inputs and add asserts
@@ -282,25 +299,36 @@
   (begin
     (debug-log "*********** z3-optimize *****************")
 
+    (define synthesis-timeout? #f)
     (define sol?
-      ;(with-handlers ([exn:fail? (lambda (exn) (unsat))])
-      ;               (with-deep-time-limit 10000 ;7200 ; 2 hours timeout
-      (optimize #:minimize (list (cost-fn grammar))
-                #:guarantee
-                ;; loop over inputs and add asserts
-                (begin
-                  (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-                  ;(assert (< (cost-fn grammar) cost-bound))
-                  ))
-      ;                                    )
+      (cond
+        [synthesis-timeout?
+         (with-handlers ([exn:fail? (lambda (exn)
+                                      (begin
+                                        (debug-log "Synthesis timed-out ...")
+                                        (unsat)))])
+           (with-deep-time-limit 10000 ; 2 hours timeout
+                                 (optimize #:minimize (list (cost-fn grammar))
+                                           #:guarantee
+                                           ;; loop over inputs and add asserts
+                                           (begin
+                                             (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                                             ;(assert (< (cost-fn grammar) cost-bound))
+                                             ))))]
+        [else
 
-      ;             )
-      )
+         (optimize #:minimize (list (cost-fn grammar))
+                   #:guarantee
+                   ;; loop over inputs and add asserts
+                   (begin
+                     (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                     ;(assert (< (cost-fn grammar) cost-bound))
+                     ))]))
     (if (sat? sol?)
         (begin
           (define mat (evaluate grammar sol?))
-          (displayln "Z3 Synthesized Solution")
-          (println mat))
+          (debug-log "Z3 Synthesized Solution")
+          (debug-log mat))
         '())
     sol?))
 
@@ -384,19 +412,19 @@
   (define interpreter
     (cond
       [(equal? target 'x86) hydride:interpret]
-      [(equal? target 'hvx) hvx:interpret]
-      [(equal? target 'arm) arm:interpret]))
+      [(equal? target 'arm) arm:interpret]
+      [(equal? target 'hvx) hvx:interpret]))
 
   (for/list ([cex cex-ls])
     (define hydride-result (interpreter mat cex))
     (define halide-result (invoke_ref cex))
-    (displayln "Counter Example:")
-    (println cex)
-    (displayln "Hydride Result:")
-    (println hydride-result)
+    (debug-log "Counter Example:")
+    (debug-log cex)
+    (debug-log "Hydride Result:")
+    (debug-log hydride-result)
 
-    (displayln "Halide Result:")
-    (println halide-result)
+    (debug-log "Halide Result:")
+    (debug-log halide-result)
     cex))
 
 (define (get-failing-lanes invoke_ref synth-sol cex-ls word-size interpreter)
@@ -417,15 +445,15 @@
             0 ; 0 if the element in the lane is the same
             1))))
 
-  (displayln "Difference  Predicate")
-  (println difference-predicate)
+  (debug-log "Difference  Predicate")
+  (debug-log difference-predicate)
 
   (define differing-lanes
     (for/list ([diff-list difference-predicate])
       (if (equal? (member 1 diff-list) #f) 0 (index-of diff-list 1))))
 
-  (displayln "differing-lanes")
-  (println differing-lanes)
+  (debug-log "differing-lanes")
+  (debug-log differing-lanes)
   differing-lanes)
 
 ;; Synthesis may yield a union node for on of the synthesized sub-expressions
@@ -438,12 +466,12 @@
   (define (fn e)
     (cond
       [(union? e)
-       (displayln "Union term in expr")
-       (displayln e)
+       (debug-log "Union term in expr")
+       (debug-log e)
        (for/list ([i (union-contents e)])
-         (displayln "===================")
-         (displayln i)
-         (displayln (cdr i)))
+         (debug-log "===================")
+         (debug-log i)
+         (debug-log (cdr i)))
        ;e
        (define extracted (cdr (list-ref (union-contents e) 0)))
        (visitor-fn extracted fn)]
@@ -472,12 +500,19 @@
     [(and optimize? (not iterative-optimize) optimize-bound-found)
      (debug-log "Escaping early as other thread found optimize bound solution")
      (values #f '() -1)]
+    [(and global-timeout? (>= (- (current-seconds) start-time) GLOBAL_TIMEOUT))
+     (debug-log "Global Timeout exceeded: exiting ...")
+     (values #f '() -1)]
+    [(>= (length cexs) 15)
+     (debug-log "Escaping early as exceeded quota for number of cex allowed")
+     (values #f '() -1)]
     [else
      ;; Clear the verification condition up till this point
      (clear-vc!)
 
      ;(gc-terms!)
 
+     (collect-garbage)
      (debug-log "Garbage collected")
      ;; If the cexs is empty
      ;; create a random set of concrete inputs
@@ -507,8 +542,8 @@
      (define (assert-query-synth-fn env random-idx)
 
        (define full-interpret-res (interpreter-fn grammar env))
-       (displayln "Lane Index")
-       (println random-idx)
+       (debug-log "Lane Index")
+       (debug-log random-idx)
 
        (define low (* word-size random-idx))
        (define high (+ low (- word-size 1)))
@@ -517,8 +552,8 @@
 
        (define halide-res (invoke_ref_lane (+ random-idx 0) env))
 
-       (displayln "Spec Produced:")
-       (println halide-res)
+       (debug-log "Spec Produced:")
+       (debug-log halide-res)
 
        (if synthesize-by-lane
            (debug-log "Synthesize by lane...")
@@ -565,8 +600,8 @@
      (define visitor-functor
        (cond
          [(equal? target 'x86) hydride:visitor]
-         [(equal? target 'hvx) hvx:visitor]
-         [(equal? target 'arm) arm:visitor]))
+         [(equal? target 'arm) arm:visitor]
+         [(equal? target 'hvx) hvx:visitor]))
 
      (define is-union (not (concrete? materialize)))
 
@@ -626,8 +661,8 @@
           (define const-fold
             (cond
               [(equal? target 'x86) hydride:const-fold]
-              [(equal? target 'hvx) hvx:const-fold]
-              [(equal? target 'arm) arm:const-fold]))
+              [(equal? target 'arm) arm:const-fold]
+              [(equal? target 'hvx) hvx:const-fold]))
 
           (if verified? ;; If solution is found to be correct for all possible inputs
 
@@ -636,6 +671,7 @@
 
                   ;; If true, then attempt synthesizing a solution with a tighter cost bound
                   (begin
+                    (debug-log "Iteartive optimization, refine search")
                     (define simplify (const-fold materialize))
                     (debug-log (format "Searching for better solution with cost < ~a \n"
                                        (cost-fn simplify)))
@@ -786,9 +822,9 @@
         (debug-log "Unchecked solution:")
         (debug-log materialize)
         (print-forms sol?)
-        (displayln "Testing materialized!")
-        (println (invoke_f2 (generate-params-f2 (list-ref cex-ls 0))))
-        (println (evaluate (materialize (generate-params-f1 (list-ref cex-ls 0))) sol?))
+        (debug-log "Testing materialized!")
+        (debug-log (invoke_f2 (generate-params-f2 (list-ref cex-ls 0))))
+        (debug-log (evaluate (materialize (generate-params-f1 (list-ref cex-ls 0))) sol?))
 
         (define (exec-synth-sol env)
           (evaluate (materialize env) sol?))

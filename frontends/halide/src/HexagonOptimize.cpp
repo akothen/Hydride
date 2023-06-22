@@ -293,7 +293,7 @@ bool is_double_vector(const Expr &x, const Target &target) {
 // matched operands. Prior to substitution, the matches are mutated
 // with op_mutator.
 Expr apply_patterns(Expr x, const vector<Pattern> &patterns, const Target &target, IRMutator *op_mutator) {
-    constexpr int debug_level = 3;
+    constexpr int debug_level = 0;
     debug(debug_level) << "apply_patterns " << x << "\n";
     vector<Expr> matches;
     for (const Pattern &p : patterns) {
@@ -323,8 +323,10 @@ Expr apply_patterns(Expr x, const vector<Pattern> &patterns, const Target &targe
                 op = op_mutator->mutate(op);
             }
 
+
+            debug(0) << "rewrote " << x << "\n";
             x = replace_pattern(x, matches, p);
-            debug(debug_level) << "rewrote to: " << x << "\n";
+            debug(0) << "to: " << x << "\n";
             return x;
         }
     }
@@ -2463,6 +2465,7 @@ Stmt scatter_gather_generator(Stmt s) {
 
 Stmt optimize_hexagon_instructions(Stmt s, const Target &t) {
 
+    debug(0) << "*** Hexagon Optimize! ***" << "\n";
 
     // We need to redo intrinsic matching due to simplification that has
     // happened after the end of target independent lowering.

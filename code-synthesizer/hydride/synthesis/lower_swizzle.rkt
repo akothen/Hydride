@@ -33,6 +33,7 @@
 (require hydride/synthesis/scalable_synthesis)
 
 (require hydride/synthesis/python)
+(require racket/hash)
 
 (provide (all-defined-out))
 
@@ -110,7 +111,7 @@
   llvm-shuffled)
 
 ;; Memoize synthesis of swizzles
-;(define swizzle-synth-log (make-hash))
+(define swizzle-synth-log-glob (make-hash))
 
 (define (lower-swizzle swizzle-expr solver swizzle-synth-log cost-fn optimize? symbolic?)
   (debug-log (format "lower-swizzle on expression: ~a \n" swizzle-expr))
@@ -119,9 +120,7 @@
   ;; since we want multiple positions to be true simultaneously
   (set-synthesize-full)
 
-  (define base_name (string-append "base_" (~s (random 10000))))
-
-  (define swizzle-grammar (get-swizzle-expr-grammar swizzle-expr base_name 16))
+  ;(hash-union swizzle-synth-log-glob swizzle-synth-log)
 
   (define swizzle-prec
     (destruct swizzle-expr
@@ -206,25 +205,36 @@
       [(equal? target 'arm) arm:interpret]
       [(equal? target 'x86) hydride:interpret]))
 
-  (define-values (satisfiable? materialize elapsed)
-    (if (hash-has-key? swizzle-synth-log swizzle-hash)
-        (begin
-          (define memo-result (hash-ref swizzle-synth-log swizzle-hash))
-          (values (vector-ref memo-result 0) (vector-ref memo-result 1) (vector-ref memo-result 2)))
-        ;(synthesize-sol-with-depth 1 2  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
+  (debug-log swizzle-hash)
 
-        (synthesize-sol-with-depth 1
-                                   4
-                                   invoke_ref
-                                   invoke_ref_lane
-                                   swizzle-grammar
-                                   bitwidth-list
-                                   optimize?
-                                   interpret-functor
-                                   cost-fn
-                                   symbolic?
-                                   cost-bound
-                                   solver)))
+  (define-values (satisfiable? materialize elapsed)
+    (cond
+      [(hash-has-key? swizzle-synth-log-glob swizzle-hash)
+       (debug-log "Swizzle-hash hit!")
+       (define memo-result (hash-ref swizzle-synth-log-glob swizzle-hash))
+       (values (vector-ref memo-result 0) (vector-ref memo-result 1) (vector-ref memo-result 2))]
+      ;(synthesize-sol-with-depth 1 2  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
+
+      [else
+
+       (define base_name (string-append "base_" (~s (random 10000))))
+
+       (define swizzle-grammar (get-swizzle-expr-grammar swizzle-expr base_name 16))
+       (synthesize-sol-with-depth 1
+                                  4
+                                  invoke_ref
+                                  invoke_ref_lane
+                                  swizzle-grammar
+                                  bitwidth-list
+                                  optimize?
+                                  interpret-functor
+                                  cost-fn
+                                  symbolic?
+                                  cost-bound
+                                  solver)]))
+
+  ;; Reset context for next synthesis
+  (set-optimize-bound-found #f)
 
   (define lowered-expression
     (cond
@@ -234,13 +244,16 @@
        materialize]
       [else (lower-swizzle-to-llvm-shuffle swizzle-expr)]))
 
+  ;; Reset context for next synthesis
+  (set-optimize-bound-found #f)
+
   ;; Restore synthesize-by-lane global
   ;; to original value
   (set-synthesize-by-lane)
 
   ;; Add entry to hash
   (if satisfiable?
-      (hash-set! swizzle-synth-log swizzle-hash (vector satisfiable? lowered-expression elapsed))
+      (hash-set! swizzle-synth-log-glob swizzle-hash (vector satisfiable? lowered-expression elapsed))
       '())
 
   ;; Bind the original operands of the shuffle back

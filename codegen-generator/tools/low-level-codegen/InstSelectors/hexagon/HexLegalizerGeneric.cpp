@@ -8706,7 +8706,6 @@
          
       } 
     }
-    
 
     {
       std::vector<std::string> InstNames = {"llvm.hydride.hexagon_V6_vmpyuh_128B_dsl",
@@ -8771,6 +8770,70 @@
             auto *InstFunction = Intrinsic::getDeclaration(I->getModule(), Intrinsic::hexagon_V6_vmpyh_128B);
             errs() << "INST FUNCTION NAME: " << "hexagon_V6_vmpyh_128B" << "\n"; 
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}; 
+            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+            if (Args.size() != 0) {
+              auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+              errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+              InstToInstMap[CI] = NewCallInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }
+          }
+         
+      } 
+    }
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.hexagon_V6_vshuffvdd_128B_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+          if(isAMatch(CI, 3, 2048)
+       && isAMatch(CI, 4, 2048)
+       && isAMatch(CI, 5, 0)
+       && isAMatch(CI, 6, 1024)
+       && isAMatch(CI, 7, 8)
+       && isAMatch(CI, 8, 0)) { 
+            auto *InstFunction = Intrinsic::getDeclaration(I->getModule(), Intrinsic::hexagon_V6_vshuffvdd_128B);
+            errs() << "INST FUNCTION NAME: " << "hexagon_V6_vshuffvdd_128B" << "\n"; 
+            std::vector<int> Permutation = {0, 1, 2, -1, -1, -1, -1, -1, -1}; 
+            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+            if (Args.size() != 0) {
+              auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+              errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+              InstToInstMap[CI] = NewCallInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }
+          }
+         
+      } 
+    }
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.hexagon_V6_vdealvdd_128B_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+          if(isAMatch(CI, 3, 2048)
+       && isAMatch(CI, 4, 2048)
+       && isAMatch(CI, 5, 0)
+       && isAMatch(CI, 6, 512)
+       && isAMatch(CI, 7, 0)
+       && isAMatch(CI, 8, 512)
+       && isAMatch(CI, 9, 0)
+       && isAMatch(CI, 10, 512)
+       && isAMatch(CI, 11, 0)
+       && isAMatch(CI, 12, 512)
+       && isAMatch(CI, 13, 8)
+       && isAMatch(CI, 14, 2)
+       && isAMatch(CI, 15, 2)
+       && isAMatch(CI, 16, 2)
+       && isAMatch(CI, 17, 1)
+       && isAMatch(CI, 18, 2)
+       && isAMatch(CI, 19, 1)
+       && isAMatch(CI, 20, 0)) { 
+            auto *InstFunction = Intrinsic::getDeclaration(I->getModule(), Intrinsic::hexagon_V6_vdealvdd_128B);
+            errs() << "INST FUNCTION NAME: " << "hexagon_V6_vdealvdd_128B" << "\n"; 
+            std::vector<int> Permutation = {0, 1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}; 
             std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
             if (Args.size() != 0) {
               auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 

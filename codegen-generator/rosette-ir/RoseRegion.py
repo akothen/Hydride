@@ -343,6 +343,25 @@ class RoseRegion:
         # Set the child's parent to undef region
         Child.setParent(RoseAbstractions.RoseUndefRegion())
 
+    # This function leaves the parent unmodified
+    def updateRegion(self, Region):
+        assert isinstance(Region, RoseRegion)
+        self.Children = deepcopy(self.Children)
+        self.Keys = deepcopy(self.Keys)
+        # Update the parents of all children
+        if type(self.Children) == list:
+            # Set the parents of the children
+            for Child in self.Children:
+                Child.setParent(self)
+        else:
+            assert self.Keys != None
+            for Key in self.Keys:
+                # Set the parents of the children
+                for Child in self.Children[Key]:
+                    Child.setParent(self)
+        # Make sure all the children are valid
+        assert self.areChildrenValid() == True
+
     def cloneRegion(self):
         # Sanity check
         assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
@@ -379,15 +398,15 @@ class RoseRegion:
                     Region2 = CheckRegion.getChild(Index, Key)
                     if Region1.isStructurallyIsomorphicWith(Region2) == False:
                         return False
-        else:
-            if self.getNumChildren() != CheckRegion.getNumChildren():
-                return False
-            for Index in range(self.getNumChildren()):
-                Region1 = self.getChild(Index)
-                Region2 = CheckRegion.getChild(Index)
-                if Region1.isStructurallyIsomorphicWith(Region2) == False:
+            else:
+                if self.getNumChildren() != CheckRegion.getNumChildren():
                     return False
-        return True
+                for Index in range(self.getNumChildren()):
+                    Region1 = self.getChild(Index)
+                    Region2 = CheckRegion.getChild(Index)
+                    if Region1.isStructurallyIsomorphicWith(Region2) == False:
+                        return False
+            return True
 
     def containsRegionOfType(self, SubRegionType, Level: int = -1):
         # Some sanity checks

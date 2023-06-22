@@ -7,13 +7,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "PassDetail.h"
+#include "mlir/Dialect/Affine/IR/AffineOps.h"
 #include "mlir/Dialect/Arithmetic/IR/Arithmetic.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/Vector/IR/VectorOps.h"
+
+#include "mlir/Conversion/LLVMCommon/ConversionTarget.h"
+#include "mlir/Conversion/LLVMCommon/TypeConverter.h"
+
 #include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/BuiltinTypes.h"
+#include "mlir/IR/Matchers.h"
 #include "mlir/IR/Operation.h"
 #include "mlir/IR/OperationSupport.h"
+#include "mlir/IR/PatternMatch.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Support/FileUtilities.h"
 #include "mlir/Transforms/HydrideUtils.h"
@@ -40,6 +48,10 @@ std::map<void *, unsigned> VariableToRegMap;
 
 std::map<unsigned, vector::LoadOp> RegToLoadMap;
 std::map<vector::LoadOp, unsigned> LoadToRegMap;
+
+std::map<unsigned, vector::TransferReadOp> RegToTransferReadMap;
+std::map<vector::TransferReadOp, unsigned> TransferReadToRegMap;
+
 Encoding encoding;
 
 std::queue<Operation *> RootExprOp;
@@ -47,6 +59,13 @@ std::queue<Operation *> RootExprOp;
 unsigned op_lanes = 0;
 
 namespace {
+
+class MyPatternRewriter : public PatternRewriter {
+public:
+  MyPatternRewriter(MLIRContext *ctx) : PatternRewriter(ctx) {}
+
+  /// Override the necessary PatternRewriter hooks here.
+};
 
 class HydrideSynthEmitter {
 public:
@@ -130,7 +149,59 @@ public:
     if (vecType && vecType.getElementType()) {
       bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
       elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
-      // llvm::outs() << "elemT is: " << elemT << "\n";
+      unsigned rank = vecType.getRank();
+
+      define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
+                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
+                             ")" + "))";
+
+      // todo: mlir interpreter for create-buffer
+      define_buffer_str = "(define " + reg_name + " (arith:create-tensor " +
+                          reg_name + "_tensor " + "(vector";
+
+      for (unsigned d = 0; d < rank; d++) {
+        define_buffer_str += " " + std::to_string(vecType.getShape()[d]);
+      }
+
+      define_buffer_str += ") ";
+      define_buffer_str += "(vector";
+
+      for (unsigned d = 0; d < rank; d++) {
+        define_buffer_str += " " + std::to_string(d);
+      }
+
+      define_buffer_str += ") ";
+
+      define_buffer_str += elemT + ")" + ")";
+    } else {
+      define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
+                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
+                             ")" + "))";
+
+      // todo: mlir interpreter for create-buffer
+      define_buffer_str = "(define " + reg_name + " (arith:create-buffer " +
+                          reg_name + "_bitvector " + elemT + ")" + ")";
+    }
+
+    if (elemT == "'") {
+      return "";
+    }
+
+    return define_bitvector_str + "\n" + define_buffer_str;
+  }
+
+  std::string define_transfer_buffer(vector::TransferReadOp op) {
+    // std::string reg_name = "reg_"
+
+    std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
+    size_t bitwidth = 0;
+    std::string define_bitvector_str;
+    std::string define_buffer_str;
+    auto vecType = op.getVector().getType().dyn_cast<VectorType>();
+    std::string elemT = "'";
+    if (vecType && vecType.getElementType()) {
+      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
+      elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
       unsigned rank = vecType.getRank();
 
       define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
@@ -148,7 +219,7 @@ public:
 
       define_buffer_str += ") ";
 
-      define_buffer_str += "(shape";
+      define_buffer_str += "(vector";
 
       for (unsigned d = 0; d < rank; d++) {
 
@@ -169,8 +240,6 @@ public:
     }
 
     if (elemT == "'") {
-      /* llvm::outs() << "Define_load_buffer escaping early for " << reg_name
-                   << "of bitwidth " << bitwidth << "\n"; */
       return "";
     }
 
@@ -225,6 +294,13 @@ public:
                    std::to_string(id) + " " + get_reg_id(id) + ")" + "\n";
     }
 
+    for (auto bi = TransferReadToRegMap.begin();
+         bi != TransferReadToRegMap.end(); bi++) {
+      unsigned id = bi->second;
+      add_entry += "(hash-set! " + map_name + " " + "reg_" +
+                   std::to_string(id) + " " + get_reg_id(id) + ")" + "\n";
+    }
+
     for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end();
          bi++) {
       unsigned id = bi->second;
@@ -238,8 +314,14 @@ public:
   std::string emit_symbolic_buffers() {
     std::string buffers = "";
     for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
-      const vector::LoadOp loadOp = bi->first;
+      auto loadOp = bi->first;
       buffers += define_load_buffer(loadOp) + "\n";
+    }
+
+    for (auto bi = TransferReadToRegMap.begin();
+         bi != TransferReadToRegMap.end(); bi++) {
+      auto transferReadOp = bi->first;
+      buffers += define_transfer_buffer(transferReadOp) + "\n";
     }
 
     for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end();
@@ -254,8 +336,21 @@ public:
   std::string emit_symbolic_buffers_vector(std::string vector_name) {
     std::string buffers = "(define " + vector_name + " (vector ";
     for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
-      const vector::LoadOp loadOp = bi->first;
+      auto loadOp = bi->first;
       buffers += "reg_" + std::to_string(LoadToRegMap[loadOp]) + " ";
+    }
+
+    for (auto bi = TransferReadToRegMap.begin();
+         bi != TransferReadToRegMap.end(); bi++) {
+      auto transferReadOp = bi->first;
+      buffers +=
+          "reg_" + std::to_string(TransferReadToRegMap[transferReadOp]) + " ";
+    }
+
+    for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end();
+         bi++) {
+      auto val = bi->first;
+      buffers += "reg_" + std::to_string(VariableToRegMap[val]) + " ";
     }
 
     buffers += "))";
@@ -334,6 +429,12 @@ struct HydrideArithPass : public HydrideArithBase<HydrideArithPass> {
   void EmitSynthesis(std::string benchmark_name, std::string expr,
                      unsigned expr_id);
 
+  FlatSymbolRefAttr getOrInsertHydrideFunc(MyPatternRewriter &rewriter,
+                                           ModuleOp module, int expr_id,
+                                           std::string curr_func_name,
+                                           Type retType,
+                                           std::vector<Type> argTypes);
+
   std::string MLIRValVisit(Value val);
 
   std::string MLIRArithOpVisit(Operation *op);
@@ -343,7 +444,14 @@ struct HydrideArithPass : public HydrideArithBase<HydrideArithPass> {
   std::string print_binary_op(std::string bv_name, Value a, Value b,
                               bool is_vector_op);
 
+  ModuleOp mainModule;
+
 protected:
+  std::string visit(arith::ConstantOp constantOp) {
+    auto constInt = constantOp.getValue().cast<IntegerAttr>().getInt();
+    return std::to_string(constInt);
+  }
+
   std::string visit(arith::AddIOp addOp) {
     Value a = addOp.getLhs();
     Value b = addOp.getRhs();
@@ -351,9 +459,149 @@ protected:
     std::string ret_str = print_binary_op("add", a, b, is_vec);
     return ret_str;
   }
-  std::string visit(arith::ConstantOp constantOp) {
-    auto constInt = constantOp.getValue().cast<IntegerAttr>().getInt();
-    return std::to_string(constInt);
+
+  std::string visit(arith::DivUIOp divUIOp) {
+    Value a = divUIOp.getLhs();
+    Value b = divUIOp.getRhs();
+    bool is_vec = divUIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("div", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::DivSIOp divSIOp) {
+    Value a = divSIOp.getLhs();
+    Value b = divSIOp.getRhs();
+    bool is_vec = divSIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("div", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::SubIOp subOp) {
+    Value a = subOp.getLhs();
+    Value b = subOp.getRhs();
+    bool is_vec = subOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("sub", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::MinUIOp minUIOp) {
+    Value a = minUIOp.getLhs();
+    Value b = minUIOp.getRhs();
+    bool is_vec = minUIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("min", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::MinSIOp minSIOp) {
+    Value a = minSIOp.getLhs();
+    Value b = minSIOp.getRhs();
+    bool is_vec = minSIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("min", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::MaxUIOp maxUIOp) {
+    Value a = maxUIOp.getLhs();
+    Value b = maxUIOp.getRhs();
+    bool is_vec = maxUIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("max", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::MaxSIOp maxSIOp) {
+    Value a = maxSIOp.getLhs();
+    Value b = maxSIOp.getRhs();
+    bool is_vec = maxSIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("max", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::MulIOp mulOp) {
+    Value a = mulOp.getLhs();
+    Value b = mulOp.getRhs();
+    bool is_vec = mulOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("mul", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::ShRSIOp shrSIOp) {
+    Value a = shrSIOp.getLhs();
+    Value b = shrSIOp.getRhs();
+    bool is_vec = shrSIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("shr", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::ShRUIOp shrUIOp) {
+    Value a = shrUIOp.getLhs();
+    Value b = shrUIOp.getRhs();
+    bool is_vec = shrUIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("shr", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::ShLIOp shlIOp) {
+    Value a = shlIOp.getLhs();
+    Value b = shlIOp.getRhs();
+    bool is_vec = shlIOp.getResult().getType().isa<VectorType>();
+    std::string ret_str = print_binary_op("shl", a, b, is_vec);
+    return ret_str;
+  }
+
+  std::string visit(arith::CmpIOp cmpOp) {
+    Value a = cmpOp.getOperand(0);
+    Value b = cmpOp.getOperand(1);
+    bool is_vec = a.getType().dyn_cast<VectorType>() ? true : false;
+    auto pred = cmpOp.getPredicate();
+    std::string ret_str;
+    // signed.unsigned
+    switch (pred) {
+    case (arith::CmpIPredicate::eq): {
+      ret_str = print_binary_op("eq", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::ne): {
+      ret_str = print_binary_op("ne", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::uge): {
+      ret_str = print_binary_op("ge", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::ugt): {
+      ret_str = print_binary_op("gt", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::ule): {
+      ret_str = print_binary_op("le", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::ult): {
+      ret_str = print_binary_op("lt", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::sge): {
+      ret_str = print_binary_op("ge", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::sgt): {
+      ret_str = print_binary_op("gt", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::sle): {
+      ret_str = print_binary_op("le", a, b, is_vec);
+      return ret_str;
+    }
+    case (arith::CmpIPredicate::slt): {
+      ret_str = print_binary_op("lt", a, b, is_vec);
+      return ret_str;
+    }
+    default:
+      break;
+    }
+    llvm::errs() << "Unsupported Predicate"
+                 << "\n";
+    return "";
   }
 
   std::string visit(vector::BitCastOp bitcastOp) {
@@ -363,7 +611,7 @@ protected:
     std::string source = MLIRValVisit(bitcastOp.getSource());
     // (arith:tensor-bitcast source-elt-ty dest-elt-ty source-tensor)
     std::string ret_str =
-        "(vector:tensor-bitcast (" + mlir::stringifyType(castSrcEltType) + " " +
+        "(vector:bitcast (" + mlir::stringifyType(castSrcEltType) + " " +
         mlir::stringifyType(castDstEltType) + +" " + source + ") )";
     return ret_str;
   }
@@ -374,8 +622,8 @@ protected:
     VectorType broadcastType = broadcastOp.getVectorType();
     unsigned rank = broadcastType.getRank();
     std::string source = MLIRValVisit(broadcastOp.getSource());
-    std::string ret_str = "(vector:tensor-broadcast (" + std::to_string(rank) +
-                          " " + source + ") )";
+    std::string ret_str =
+        "(vector:broadcast (" + std::to_string(rank) + " " + source + ") )";
     return ret_str;
   }
 
@@ -383,10 +631,12 @@ protected:
     auto extractPos = extractElementOp.getPosition();
 
     Value src = extractElementOp.getVector();
-
-    // std::string ret_str = "(vector:extract-element (" + MLIRValVisit(src) + " " + std::to_string(extractPos) + ") )";
-    // return ret_str;
-    return "";
+    std::string val_str;
+    llvm::raw_string_ostream val_ostream(val_str);
+    val_ostream << extractPos;
+    std::string ret_str = "(vector:extract-element (" + MLIRValVisit(src) +
+                          " " + val_ostream.str() + ") )";
+    return ret_str;
   }
 
   std::string visit(vector::ExtractOp extractOp) {
@@ -440,9 +690,41 @@ protected:
 
     Value src = extractStridedSliceOp.getVector();
 
-    std::string ret_str = "(vector:extract_strided_slice " + MLIRValVisit(src) +
+    std::string ret_str = "(vector:extract-strided-slice " + MLIRValVisit(src) +
                           " " + RosetteOffsetVec + " " + RosetteSliceVec + " " +
                           RosetteStrideVec + " " + ")";
+    return ret_str;
+  }
+
+  std::string visit(vector::InsertStridedSliceOp insertStridedSliceOp) {
+
+    auto sliceOffsets =
+        extractVector<int64_t>(insertStridedSliceOp.getOffsets());
+    auto sliceStrides =
+        extractVector<int64_t>(insertStridedSliceOp.getStrides());
+
+    std::string RosetteOffsetVec = "(vector";
+    std::string RosetteStrideVec = "(vector";
+
+    for (auto d : sliceOffsets) {
+
+      RosetteOffsetVec += " " + std::to_string(d);
+    }
+
+    for (auto d : sliceStrides) {
+
+      RosetteStrideVec += " " + std::to_string(d);
+    }
+
+    RosetteOffsetVec += ")";
+    RosetteStrideVec += ")";
+
+    Value src = insertStridedSliceOp.getSource();
+    Value dst = insertStridedSliceOp.getDest();
+
+    std::string ret_str = "(vector:insert-strided-slice " + MLIRValVisit(src) +
+                          " " + MLIRValVisit(dst) + " " + RosetteOffsetVec +
+                          " " + RosetteStrideVec + " " + ")";
     return ret_str;
   }
 
@@ -479,8 +761,9 @@ protected:
                           MLIRValVisit(lhs) + " " + MLIRValVisit(rhs) + ")";
     return ret_str;
   }
+
   std::string visit(vector::ReductionOp reductionOp) {
-    std::string acc = stringifyType(reductionOp.getAcc().getType());
+    auto src = reductionOp.getVector();
     auto kind = reductionOp.getKind();
     std::string kind_str;
     switch (kind) {
@@ -514,10 +797,11 @@ protected:
     default:
       kind_str = "'nop";
     }
-    llvm::outs() << "acc: " << acc << "\n";
-    llvm::outs() << "kind: " << kind_str << "\n";
-    return "";
+    std::string ret_str =
+        "(vector:reduction (" + MLIRValVisit(src) + " " + kind_str + ") )";
+    return ret_str;
   }
+
   std::string visit(vector::ReshapeOp reshapeOp) { return ""; }
 
   std::string visit(vector::SplatOp splatOp) {
@@ -525,7 +809,7 @@ protected:
     unsigned rank = splatType.getRank();
     std::string source = MLIRValVisit(splatOp.getInput());
     std::string ret_str =
-        "(vector:splat (" + std::to_string(rank) + " " + source + ") )";
+        "(vector:splat (" + source + " " + std::to_string(rank) + ") )";
     return ret_str;
   }
 
@@ -545,7 +829,8 @@ protected:
     if (is_sca) {
       auto intType = loadOp->getResult(0).getType().dyn_cast<VectorType>();
       std::string bits = std::to_string(intType.getElementTypeBitWidth() * 1);
-      unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
       std::string reg_name = "reg_" + std::to_string(reg_counter);
       RegToLoadMap[reg_counter] = loadOp;
       LoadToRegMap[loadOp] = reg_counter;
@@ -555,7 +840,8 @@ protected:
       auto vecType = loadOp->getResult(0).getType().dyn_cast<VectorType>();
       std::string bits = std::to_string(vecType.getElementTypeBitWidth() *
                                         vecType.getNumElements());
-      unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
       std::string reg_name = "reg_" + std::to_string(reg_counter);
       RegToLoadMap[reg_counter] = loadOp;
       LoadToRegMap[loadOp] = reg_counter;
@@ -567,13 +853,56 @@ protected:
       // + ")";
     }
   }
+
+  std::string visit(vector::TransferReadOp transferReadOp) {
+
+    bool is_sca = transferReadOp->getResult(0).getType().isa<IntegerType>();
+    if (TransferReadToRegMap.find(transferReadOp) !=
+        TransferReadToRegMap.end()) {
+      return "reg_" + std::to_string(TransferReadToRegMap[transferReadOp]);
+    }
+
+    if (is_sca) {
+      auto intType =
+          transferReadOp->getResult(0).getType().dyn_cast<VectorType>();
+      std::string bits = std::to_string(intType.getElementTypeBitWidth() * 1);
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
+      std::string reg_name = "reg_" + std::to_string(reg_counter);
+      RegToTransferReadMap[reg_counter] = transferReadOp;
+      TransferReadToRegMap[transferReadOp] = reg_counter;
+      return reg_name;
+    } else {
+
+      auto vecType =
+          transferReadOp->getResult(0).getType().dyn_cast<VectorType>();
+      std::string bits = std::to_string(vecType.getElementTypeBitWidth() *
+                                        vecType.getNumElements());
+      unsigned reg_counter = RegToLoadMap.size() + RegToTransferReadMap.size() +
+                             RegToVariableMap.size();
+      std::string reg_name = "reg_" + std::to_string(reg_counter);
+      RegToTransferReadMap[reg_counter] = transferReadOp;
+      TransferReadToRegMap[transferReadOp] = reg_counter;
+
+      return reg_name;
+    }
+  }
 };
 } // namespace
 
 void HydrideArithPass::runOnOperation() {
 
+  LLVMConversionTarget target(getContext());
+  target.addLegalOp<ModuleOp>();
+  // target.addLegalDialect<mlir::LLVMDialect>();
+  LLVMTypeConverter typeConverter(&getContext());
+
+  this->mainModule = dyn_cast<ModuleOp>(getOperation());
+
+  std::string curr_func_name;
   // Compute the operation statistics for the currently visited operation.
-  getOperation()->walk([&](func::FuncOp funcOp) {
+  this->mainModule->walk([&](func::FuncOp funcOp) {
+    curr_func_name = funcOp.getName().str();
     funcOp.walk([&](Operation *op) {
       if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
         RootExprOp.push(op);
@@ -581,6 +910,12 @@ void HydrideArithPass::runOnOperation() {
       if (auto storeOp = dyn_cast<vector::StoreOp>(op)) {
         RootExprOp.push(op);
       }
+      if (auto transferWriteOp = dyn_cast<vector::TransferWriteOp>(op)) {
+        RootExprOp.push(op);
+      }
+      /* if (auto storeOp = dyn_cast<AffineStoreOp>(op)) {
+        RootExprOp.push(op);
+      } */
       if (op->getNumResults() > 0) {
         auto vecType = op->getResult(0).getType().dyn_cast<VectorType>();
         if (vecType && vecType.getElementType()) {
@@ -600,21 +935,123 @@ void HydrideArithPass::runOnOperation() {
     // if store, expr from MLIRValVisit on single source vector
     // if other op, expr from MLIRValVisit for all operands
     std::string expr;
-    llvm::outs() << "op: " << *op << "\n";
     if (auto returnOp = dyn_cast<func::ReturnOp>(op)) {
       for (Value operand : op->getOperands()) {
         expr = MLIRValVisit(operand);
-        EmitSynthesis("benchmark", expr, expr_id);
+        EmitSynthesis(curr_func_name, expr, expr_id);
+        std::vector<Type> arg_types(RegToLoadMap.size() +
+                                    RegToTransferReadMap.size() +
+                                    RegToVariableMap.size());
+        std::vector<Value> args_vec(RegToLoadMap.size() +
+                                    RegToTransferReadMap.size() +
+                                    RegToVariableMap.size());
+
+        for (auto reg : RegToLoadMap) {
+          arg_types[reg.first] = reg.second.getType();
+          args_vec[reg.first] = reg.second;
+        }
+
+        for (auto reg : RegToTransferReadMap) {
+          arg_types[reg.first] = reg.second.getVector().getType();
+          args_vec[reg.first] = reg.second;
+        }
+
+        for (auto reg : RegToVariableMap) {
+          auto val = Value::getFromOpaquePointer(reg.second);
+          arg_types[reg.first] = val.getType();
+          args_vec[reg.first] = val;
+        }
+
+        MLIRContext *ctx = returnOp.getContext();
+        MyPatternRewriter rewriter(ctx);
+        FlatSymbolRefAttr sym_ref = getOrInsertHydrideFunc(
+            rewriter, this->mainModule, expr_id, curr_func_name,
+            operand.getType(), arg_types);
+        rewriter.setInsertionPoint(returnOp);
+        Location loc = returnOp->getLoc();
+        auto callOp = rewriter.create<LLVM::CallOp>(
+            loc, TypeRange(operand.getType()), sym_ref, ValueRange(args_vec));
+        operand.replaceAllUsesWith(callOp.getResult(0));
         expr_id++;
       }
     }
     if (auto storeOp = dyn_cast<vector::StoreOp>(op)) {
       auto valToStore = storeOp.getValueToStore();
+      auto valToStoreType = valToStore.getType();
       expr = MLIRValVisit(valToStore);
-      EmitSynthesis("benchmark", expr, expr_id);
-      expr_id++;
+      EmitSynthesis(curr_func_name, expr, expr_id);
 
-    } else {
+      std::vector<Type> arg_types(RegToLoadMap.size() +
+                                  RegToTransferReadMap.size() +
+                                  RegToVariableMap.size());
+      std::vector<Value> args_vec(RegToLoadMap.size() +
+                                  RegToTransferReadMap.size() +
+                                  RegToVariableMap.size());
+      for (auto reg : RegToLoadMap) {
+        arg_types[reg.first] = reg.second.getType();
+        args_vec[reg.first] = reg.second;
+      }
+
+      for (auto reg : RegToVariableMap) {
+        auto val = Value::getFromOpaquePointer(reg.second);
+        arg_types[reg.first] = val.getType();
+        args_vec[reg.first] = val;
+      }
+
+      MLIRContext *ctx = storeOp.getContext();
+      MyPatternRewriter rewriter(ctx);
+      FlatSymbolRefAttr sym_ref =
+          getOrInsertHydrideFunc(rewriter, this->mainModule, expr_id,
+                                 curr_func_name, valToStoreType, arg_types);
+      // get all args in
+      rewriter.setInsertionPoint(storeOp);
+      Location loc = storeOp->getLoc();
+      auto callOp = rewriter.create<LLVM::CallOp>(
+          loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
+      storeOp->setOperands(0, 1, callOp.getResult(0));
+
+      expr_id++;
+    }
+
+    if (auto transferWriteOp = dyn_cast<vector::TransferWriteOp>(op)) {
+      auto valToStore = transferWriteOp.getVector();
+      auto valToStoreType = valToStore.getType();
+      expr = MLIRValVisit(valToStore);
+      EmitSynthesis(curr_func_name, expr, expr_id);
+      std::vector<Type> arg_types(RegToLoadMap.size() +
+                                  RegToTransferReadMap.size() +
+                                  RegToVariableMap.size());
+      std::vector<Value> args_vec(RegToLoadMap.size() +
+                                  RegToTransferReadMap.size() +
+                                  RegToVariableMap.size());
+
+      for (auto reg : RegToTransferReadMap) {
+        arg_types[reg.first] = reg.second.getVector().getType();
+        args_vec[reg.first] = reg.second;
+      }
+
+      for (auto reg : RegToVariableMap) {
+        auto val = Value::getFromOpaquePointer(reg.second);
+        arg_types[reg.first] = val.getType();
+        args_vec[reg.first] = val;
+      }
+
+      MLIRContext *ctx = transferWriteOp.getContext();
+      MyPatternRewriter rewriter(ctx);
+
+      FlatSymbolRefAttr sym_ref =
+          getOrInsertHydrideFunc(rewriter, this->mainModule, expr_id,
+                                 curr_func_name, valToStoreType, arg_types);
+      // get all args in
+      rewriter.setInsertionPoint(transferWriteOp);
+      Location loc = transferWriteOp->getLoc();
+      auto callOp = rewriter.create<LLVM::CallOp>(
+          loc, TypeRange(valToStoreType), sym_ref, ValueRange(args_vec));
+      transferWriteOp->setOperands(0, 1, callOp.getResult(0));
+      expr_id++;
+    }
+
+    else {
 
       if (op->getNumResults() > 0) {
         if (op->getDialect()->getNamespace() == "arith") {
@@ -623,16 +1060,43 @@ void HydrideArithPass::runOnOperation() {
           expr = MLIRVectorOpVisit(op);
         } else
           continue;
-        EmitSynthesis("benchmark", expr, expr_id);
+        EmitSynthesis(curr_func_name, expr, expr_id);
         expr_id++;
       }
     }
+
     RegToVariableMap.clear();
     VariableToRegMap.clear();
+    RegToTransferReadMap.clear();
+    TransferReadToRegMap.clear();
     RegToLoadMap.clear();
     LoadToRegMap.clear();
     RootExprOp.pop();
   }
+}
+
+FlatSymbolRefAttr HydrideArithPass::getOrInsertHydrideFunc(
+    MyPatternRewriter &rewriter, ModuleOp module, int expr_id,
+    std::string curr_func_name, Type retType, std::vector<Type> argTypes) {
+  // add logic for naming
+  std::string func_name =
+      "hydride.node." + curr_func_name + "." + std::to_string(expr_id);
+  auto *context = module.getContext();
+
+  // Create a function declaration for printf, the signature is:
+  //   * `i32 (i8*, ...)`
+  // auto llvmI32Ty = IntegerType::get(context, 32);
+  // auto llvmI8PtrTy = LLVM::LLVMPointerType::get(IntegerType::get(context,
+  // 8));
+
+  auto llvmFnType = LLVM::LLVMFunctionType::get(retType, argTypes,
+                                                /*isVarArg=*/false);
+
+  // Insert the printf function into the body of the parent module.
+  PatternRewriter::InsertionGuard insertGuard(rewriter);
+  rewriter.setInsertionPointToStart(module.getBody());
+  rewriter.create<LLVM::LLVMFuncOp>(module.getLoc(), func_name, llvmFnType);
+  return SymbolRefAttr::get(context, func_name);
 }
 
 std::string HydrideArithPass::MLIRValVisit(Value val) {
@@ -645,14 +1109,15 @@ std::string HydrideArithPass::MLIRValVisit(Value val) {
       } else if (valDefiningOp->getDialect()->getNamespace() == "vector") {
         return MLIRVectorOpVisit(valDefiningOp);
       } else {
-        // llvm::outs() << "var map for vector ops\n";
         if (VariableToRegMap.find(valDefiningOp) != VariableToRegMap.end()) {
           std::string reg_name =
               "reg_" + std::to_string(VariableToRegMap[valDefiningOp]);
           return reg_name;
         }
 
-        unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+        unsigned reg_counter =
+            (RegToLoadMap.size() + RegToTransferReadMap.size() +
+             RegToVariableMap.size());
 
         std::string reg_name = "reg_" + std::to_string(reg_counter);
 
@@ -672,7 +1137,8 @@ std::string HydrideArithPass::MLIRValVisit(Value val) {
       return reg_name;
     }
 
-    unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+    unsigned reg_counter = (RegToLoadMap.size() + RegToTransferReadMap.size() +
+                            RegToVariableMap.size());
 
     std::string reg_name = "reg_" + std::to_string(reg_counter);
 
@@ -693,7 +1159,7 @@ std::string HydrideArithPass::print_binary_op(std::string bv_name, Value a,
     // indent.push(indent.top() + 1);
     std::string rkt_lhs = MLIRValVisit(a);
     std::string rkt_rhs = MLIRValVisit(b);
-    // indent.pop();
+
     return "(arith:tensor-" + bv_name + " " + rkt_lhs + " " + rkt_rhs + ")";
   } else {
 
@@ -705,12 +1171,68 @@ std::string HydrideArithPass::print_binary_op(std::string bv_name, Value a,
 
 std::string HydrideArithPass::MLIRArithOpVisit(Operation *op) {
 
-  if (auto addOp = dyn_cast<arith::AddIOp>(op)) {
-
-    return visit(addOp);
-  }
   if (auto constantOp = dyn_cast<arith::ConstantOp>(op)) {
     return visit(constantOp);
+  }
+
+  if (auto addOp = dyn_cast<arith::AddIOp>(op)) {
+    return visit(addOp);
+  }
+
+  if (auto divUIOp = dyn_cast<arith::DivUIOp>(op)) {
+    return visit(divUIOp);
+  }
+
+  if (auto divSIOp = dyn_cast<arith::DivSIOp>(op)) {
+    return visit(divSIOp);
+  }
+
+  if (auto subOp = dyn_cast<arith::SubIOp>(op)) {
+    return visit(subOp);
+  }
+
+  if (auto divUIOp = dyn_cast<arith::DivUIOp>(op)) {
+    return visit(divUIOp);
+  }
+
+  if (auto minUIOp = dyn_cast<arith::MinUIOp>(op)) {
+    return visit(minUIOp);
+  }
+
+  if (auto minSIOp = dyn_cast<arith::MinSIOp>(op)) {
+    return visit(minSIOp);
+  }
+
+  if (auto maxUIOp = dyn_cast<arith::MaxUIOp>(op)) {
+    return visit(maxUIOp);
+  }
+
+  if (auto maxSIOp = dyn_cast<arith::MaxSIOp>(op)) {
+    return visit(maxSIOp);
+  }
+
+  if (auto mulOp = dyn_cast<arith::MulIOp>(op)) {
+    return visit(mulOp);
+  }
+
+  if (auto shrUIOp = dyn_cast<arith::ShRUIOp>(op)) {
+    return visit(shrUIOp);
+  }
+
+  if (auto shrSIOp = dyn_cast<arith::ShRSIOp>(op)) {
+    return visit(shrSIOp);
+  }
+
+  if (auto shlIOp = dyn_cast<arith::ShLIOp>(op)) {
+    return visit(shlIOp);
+  }
+
+  if (auto mulOp = dyn_cast<arith::MulIOp>(op)) {
+    return visit(mulOp);
+  }
+
+  if (auto cmpOp = dyn_cast<arith::CmpIOp>(op)) {
+    return visit(cmpOp);
   }
 
   for (Value operand : op->getOperands()) {
@@ -727,6 +1249,9 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
   if (auto loadOp = dyn_cast<vector::LoadOp>(op)) {
     return visit(loadOp);
   }
+  if (auto transferReadOp = dyn_cast<vector::TransferReadOp>(op)) {
+    return visit(transferReadOp);
+  }
 
   if (auto bitcastOp = dyn_cast<vector::BitCastOp>(op)) {
     return visit(bitcastOp);
@@ -736,9 +1261,9 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
     return visit(broadcastOp);
   }
 
-  /* if (auto extractElementOp = dyn_cast<vector::ExtractElementOp>(op)) {
+  if (auto extractElementOp = dyn_cast<vector::ExtractElementOp>(op)) {
     return visit(extractElementOp);
-  } */
+  }
 
   if (auto extractOp = dyn_cast<vector::ExtractOp>(op)) {
     return visit(extractOp);
@@ -747,6 +1272,10 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
   if (auto extractStridedSliceOp =
           dyn_cast<vector::ExtractStridedSliceOp>(op)) {
     return visit(extractStridedSliceOp);
+  }
+
+  if (auto insertStridedSliceOp = dyn_cast<vector::InsertStridedSliceOp>(op)) {
+    return visit(insertStridedSliceOp);
   }
 
   if (auto fmaOp = dyn_cast<vector::FMAOp>(op)) {
@@ -775,7 +1304,13 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
 
   for (Value operand : op->getOperands()) {
     if (auto OpOperandRoot = operand.getDefiningOp()) {
-      if (!isa<vector::LoadOp>(OpOperandRoot)) {
+      if (!isa<vector::LoadOp>(OpOperandRoot) &&
+          !isa<vector::LoadOp>(OpOperandRoot)) {
+        RootExprOp.push(OpOperandRoot);
+      }
+
+      if (!isa<vector::TransferReadOp>(OpOperandRoot) &&
+          !isa<vector::TransferReadOp>(OpOperandRoot)) {
         RootExprOp.push(OpOperandRoot);
       }
     }
@@ -786,7 +1321,8 @@ std::string HydrideArithPass::MLIRVectorOpVisit(Operation *op) {
     return reg_name;
   }
 
-  unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
+  unsigned reg_counter = (RegToLoadMap.size() + RegToTransferReadMap.size() +
+                          RegToVariableMap.size());
 
   std::string reg_name = "reg_" + std::to_string(reg_counter);
 
@@ -837,7 +1373,7 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
     expr_depth = (*expr_depth_var) - '0';
   }
 
-  std::string target_str = "X86";
+  std::string target_str = "x86";
 
   out_str += "(define synth-res " +
              HSE.emit_hydride_synthesis(

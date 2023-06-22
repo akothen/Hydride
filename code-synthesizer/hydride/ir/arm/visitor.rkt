@@ -60,6 +60,31 @@
 		(define v4-visited (arm:visitor v4 fn))
 		(fn ( llvm_shuffle_vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
 	]
+	[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (arm:visitor v0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(fn ( llvm-vect-add_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (arm:visitor v0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(fn ( llvm-vect-sub_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (arm:visitor v0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(fn ( llvm-vect-mul_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (arm:visitor v0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(fn ( llvm-vect-sdiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (arm:visitor v0 fn))
+		(define v1-visited (arm:visitor v1 fn))
+		(fn ( llvm-vect-udiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
 	[ (vraddhn_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
 		(define vc_0-visited (arm:visitor vc_0 fn))
 		(define v1-visited (arm:visitor v1 fn))
@@ -842,7 +867,7 @@
 		(define v8-visited (arm:visitor v8 fn))
 		(fn ( vqrshlq_u16_dsl v0-visited vc_1-visited vc_2-visited vc_3-visited vc_4-visited vc_5-visited vc_6-visited vc_7-visited v8-visited size_i_o num_10 num_11 num_12 prec_i_o num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 ))
 	]
-	[_ (error "Unrecognized expression")]
+	[_ (error "Unrecognized expression in visitor")]
  )
 )
 ;; ================================================================================

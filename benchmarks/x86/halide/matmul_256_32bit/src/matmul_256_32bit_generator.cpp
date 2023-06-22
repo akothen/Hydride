@@ -18,10 +18,13 @@ public:
 
     void generate() {
         RDom k(0, matrix_size);
-        matrix_mul(x, y) += cast<int32_t>(A(k, y)) * cast<int32_t>(B(x,k));
+        //matrix_mul(x, y) += cast<int32_t>(A(k, y)) * cast<int32_t>(B(x,k));
+
+        matrix_mul(x,y) = 0;
+        matrix_mul(x, y) += (cast<int32_t>(A(k, y)) * cast<int32_t>(B(x,k)));
         res(x, y) = matrix_mul(x, y);
 
-        RVar r8_x(matrix_mul.update(0).get_schedule().dims()[0].var);
+        RVar red_dim(matrix_mul.update(0).get_schedule().dims()[0].var);
 
         res
             .compute_root()
@@ -29,18 +32,23 @@ public:
             .split(x, x, xi, 64, TailStrategy::ShiftInwards)
             .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
             .vectorize(xii, 16)
-            .reorder({xii, xi, yi, x, y});
+            .reorder({xii, xi, yi, x, y})
+            .unroll(xi)
+            .unroll(yi);
             //.parallel(y);
         matrix_mul.update(0)
             .split(x, x, xi, 16, TailStrategy::GuardWithIf)
             .vectorize(xi, 16)
-            .reorder({xi, x, y, r8_x});
+            .reorder({xi, x, y, red_dim})
+            .unroll(x)
+            .unroll(y);
         matrix_mul
             .store_in(MemoryType::Stack)
             .compute_at(res, x)
             .split(x, x, xi, 16, TailStrategy::RoundUp)
-            .vectorize(xi, 16);
-            //.reorder({xi, x, y});
+            .vectorize(xi, 16)
+            .unroll(x)
+            .unroll(y);
 
         res.print_loop_nest();
     }   

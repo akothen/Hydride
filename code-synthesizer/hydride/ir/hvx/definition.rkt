@@ -124,4 +124,6 @@
 (struct hexagon_V6_vnot_128B_dsl (v0 size_i_o num_2 num_3 num_4 prec_i_o num_6) #:transparent #:mutable)
 (struct hexagon_V6_pred_or_n_128B_dsl (v0 v1 size_o num_3 num_4 num_5 prec_o num_7) #:transparent #:mutable)
 (struct hexagon_V6_vmpyewuh_64_128B_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 prec_o num_18 num_19 num_20 num_21 num_22 prec_i num_24) #:transparent #:mutable)
+(struct hexagon_V6_vshuffvdd_128B_dsl (v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8) #:transparent #:mutable)
+(struct hexagon_V6_vdealvdd_128B_dsl (v0 v1 v2 size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18) #:transparent #:mutable)
 ;; ================================================================================

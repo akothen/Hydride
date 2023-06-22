@@ -51,6 +51,31 @@
 		(define v4-visited (hvx:visitor v4 fn))
 		(fn ( llvm_shuffle_vectors_dsl v0-visited v1-visited num_2 prec_i_o v4-visited num_5 ))
 	]
+[ (llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-add_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sub_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-sub_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-mul_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-mul_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-sdiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
+	[ (llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(fn ( llvm-vect-udiv_dsl v0-visited v1-visited num_2 prec_i_o ))
+	]
 	[ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(define v0-visited (hvx:visitor v0 fn))
 		(define v1-visited (hvx:visitor v1 fn))
@@ -703,7 +728,20 @@
 		(define v3-visited (hvx:visitor v3 fn))
 		(fn ( hexagon_V6_vmpyewuh_64_128B_dsl vc_0-visited vc_1-visited v2-visited v3-visited size_i_o num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 prec_o num_18 num_19 num_20 num_21 num_22 prec_i num_24 ))
 	]
-	[_ (error "Unrecognized expression")]
+[ (hexagon_V6_vshuffvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 size_i num_7 num_8)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(define v2-visited (hvx:visitor v2 fn))
+		(fn ( hexagon_V6_vshuffvdd_128B_dsl v0-visited v1-visited v2-visited size_o num_4 num_5 size_i num_7 num_8 ))
+	]
+[ (hexagon_V6_vdealvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
+		(define v0-visited (hvx:visitor v0 fn))
+		(define v1-visited (hvx:visitor v1 fn))
+		(define v2-visited (hvx:visitor v2 fn))
+		(fn ( hexagon_V6_vdealvdd_128B_dsl v0-visited v1-visited v2-visited size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 ))
+	]
+
+	[_ (error "Unrecognized expression in visitor")]
  )
 )
 ;; ================================================================================

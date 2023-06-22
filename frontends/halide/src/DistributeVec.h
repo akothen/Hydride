@@ -153,6 +153,12 @@ namespace Halide {
                 std::vector<Expr> visit(const int , unsigned num_chunks);
 
 
+                // To generate expressions which can be distributed properly for casting which widen/narrow beyond the next widened/narrowed size, we break down such casts into two casts, so the expressions can be passed to the synthesizer.
+                Expr RewriteAsDoubleCast(const Cast* op);
+
+                bool isDoubleCast(const Cast* op);
+
+
                 // Statements
                 Stmt visit(const Store *op);
                 Stmt visit(const LetStmt *op);
