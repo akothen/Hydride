@@ -77,43 +77,47 @@ class ReplaceDiv : public IRMutator {
 
     Expr visit(const Call *op) override {
 
-        if (op->is_intrinsic(Call::shift_right)) {
-            debug(0) << "Found shr\n";
-            // if (!op->type.is_float() && op->type.is_vector()) {
-            //     debug(0) << "Lowering armshr to armshl\n";
-            //     return (op->args[0] << simplify(-op->args[1]));
-            // }
-            // Current legalizer doesn't support immediate argument
-            if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
-                debug(0) << "Lowering armshr to armshl\n";
-                return op->args[0] << simplify(-op->args[1]);
+            if (op->is_intrinsic(Call::shift_right)) {
+                debug(0) << "Found shr\n";
+                // if (!op->type.is_float() && op->type.is_vector()) {
+                //     debug(0) << "Lowering armshr to armshl\n";
+                //     return (op->args[0] << simplify(-op->args[1]));
+                // }
+                // Current legalizer doesn't support immediate argument
+                if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
+                    debug(0) << "Lowering armshr to armshl\n";
+                    return op->args[0] << simplify(-op->args[1]);
+                }
             }
-        }
 
-        return IRMutator::visit(op);
-    }
+            return IRMutator::visit(op);
+        }
 
     Expr visit(const Mul *op) override {
 
-        // size_t bits = op->type.bits();
-        // size_t lanes = op->type.lanes();
+        /*
+        size_t bits = op->type.bits();
+        size_t lanes = op->type.lanes();
 
-        // if (!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)) {
-        //     debug(0) << "Found multiplication to slice!"
-        //              << "\n";
-        //     Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1, 32));
-        //     Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1, 32));
+        if(!op->type.is_float() && op->type.is_vector() && (bits == 32) && (lanes == 64)){
+            debug(0) << "Found multiplication to slice!" << "\n";
+            Expr left_op_first_half = (Shuffle::make_slice(op->a, 0, 1 , 32));
+            Expr right_op_first_half = (Shuffle::make_slice(op->b, 0, 1 , 32));
 
-        //     Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1, 32));
-        //     Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1, 32));
+            Expr left_op_second_half = (Shuffle::make_slice(op->a, 32, 1 , 32));
+            Expr right_op_second_half = (Shuffle::make_slice(op->b, 32, 1 , 32));
 
-        //     Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
-        //     Expr right_mul = (Mul::make(left_op_second_half, right_op_second_half));
 
-        //     Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
-        //     debug(0) << "Halide Lowered Mul to: " << lowered_mul << "\n";
-        //     return mutate(lowered_mul);
-        // }
+
+
+            Expr left_mul = (Mul::make(left_op_first_half, right_op_first_half));
+            Expr right_mul =  (Mul::make(left_op_second_half, right_op_second_half));
+
+            Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
+            debug(0) << "Halide Lowered Mul to: "<<lowered_mul <<"\n";
+            return mutate(lowered_mul);
+        }
+        */
 
         return IRMutator::visit(op);
     }
@@ -137,18 +141,19 @@ class ReplaceDiv : public IRMutator {
 
     //     if (!op->type.is_float() && op->type.is_vector()) {
 
-    //         if (bits == 16 && op->value.type().lanes() != 2) {  // Just my guess, to pass assertion at IR.cpp:269 for ARM @ "add" benchmark
+    //         if (bits == 16 && op->value.type().lanes() != 2) {
 
     //             debug(0) << "======"
     //                      << "\n";
-    //             debug(0) << "Orignal broadcast value: " << op->value << "\n";
     //             debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
     //             Expr Broadcast2 = Broadcast::make(op->value, 2);
     //             Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
     //             debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
     //             debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
     //             return ModifiedBroadcast;
-    //         } else {
+    //         }
+
+    //         else {
     //             return op;
     //         }
     //     }
@@ -339,6 +344,8 @@ public:
             std::string reg_name = "reg_" + std::to_string(VariableToRegMap[op]);
             return tabs() + reg_name;
         }
+
+        // Traverse variable map to update as well
 
         std::string bits = std::to_string(op->type.bits() * op->type.lanes());
         unsigned reg_counter = (RegToLoadMap.size() + RegToVariableMap.size());
@@ -1632,7 +1639,7 @@ public:
             target_str = "hvx";
             break;
         case IROptimizer::ARM:
-            // std::cout << "Using Hexagon Optimizer" <<"\n";
+            // std::cout << "Using ARM Optimizer" <<"\n";
             target_str = "arm";
             break;
         default:
@@ -1822,7 +1829,6 @@ public:
         std::cout << "Expression after legalizing division operations to target: " << spec_expr << "\n";
 
         std::cout << "Expression before InlineLets: " << spec_expr << "\n";
-
         spec_expr = InlineLets().mutate(spec_expr);
         std::cout << "Expression after InlineLets: " << spec_expr << "\n";
 
@@ -1830,6 +1836,8 @@ public:
         // Lift cse for more readable specs
         spec_expr = common_subexpression_elimination(spec_expr);
         std::cout << "Expression after CSE: "<< spec_expr <<"\n";
+
+
         // For cleaner specs synthesize let seperately from
         // body
         if(spec_expr.node_type() == IRNodeType::Let){
@@ -1840,8 +1848,12 @@ public:
 
            Expr OptVal = IRMutator::mutate(LetVal);
            Expr OptBody = IRMutator::mutate(LetBody);
+
            return Let::make(spec_expr.as<Let>()->name, OptVal, OptBody);
+
+
         }
+
         */
 
         std::cout << "Expression before abstraction: " << spec_expr << "\n";
@@ -1968,19 +1980,19 @@ private:
         // for vector selection.
         Expr visit(const Select *op) override {
 
-            // if (op->type.is_vector() && op->condition.type().is_scalar()) {
-            //     std::cout << "Potentially new select lowering"
-            //               << "\n";
-            //     Expr cond = (op->condition.type().is_scalar() ?
-            //                      Broadcast::make(op->condition, op->true_value.type().lanes()) :
-            //                      op->condition);
+            /*
+            if(op->type.is_vector() && op->condition.type().is_scalar()) {
+                std::cout << "Potentially new select lowering" <<"\n";
+                Expr cond = (op->condition.type().is_scalar() ?
+                        Broadcast::make(op->condition, op->true_value.type().lanes()) :
+                        op->condition);
 
-            //     Expr Sel = Select::make(cond, op->true_value, op->false_value);
+                Expr Sel = Select::make(cond, op->true_value, op->false_value);
 
-            //     debug(0) << "New select instruction: " << Sel << "\n";
+                debug(0) << "New select instruction: "<< Sel << "\n";
 
-            //     return mutate(Sel);
-            // }
+                return mutate(Sel);
+            }*/
 
             return IRMutator::visit(op);
         }
@@ -2117,42 +2129,6 @@ private:
                     }
                 }
 
-                // } else if (op->is_intrinsic(Call::rounding_halving_add)) {
-
-                //     Expr Two, One;
-                //     if (op->args[1].type().is_uint()) {
-                //         Two = make_const(UInt(op->args[1].type().bits()), 2);
-                //         One = make_const(UInt(op->args[1].type().bits()), 1);
-                //     } else {
-                //         Two = make_const(Int(op->args[1].type().bits()), 2);
-                //         One = make_const(Int(op->args[1].type().bits()), 1);
-                //     }
-
-                //     size_t element_bits = op->args[0].type().bits();
-
-                //     if (_arch == Architecture::HVX) {
-
-                //         // if (element_bits < 32) {
-                //         //     lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
-                //         // } else {
-                //         //     lower_using_halide = true;
-                //         // }
-                //     } else if (_arch == Architecture::X86) {
-
-                //         if (element_bits < 64) {
-                //             lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
-                //         } else {
-                //             lower_using_halide = true;
-                //         }
-                //     } else if (_arch == Architecture::ARM) {
-
-                //         if (element_bits <= 64) {
-                //             lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + One) / Two);
-                //         } else {
-                //             lower_using_halide = true;
-                //         }
-                //     }
-
             } else if (op->is_intrinsic(Call::rounding_halving_sub)) {
 
                 Expr Two, One;
@@ -2254,7 +2230,6 @@ private:
                 } else if (_arch == Architecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
-                        // lowered = (widen(op->args[0]) * widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
                     }
@@ -3679,7 +3654,7 @@ Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueB
 Stmt optimize_arm_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
 
     std::set<const BaseExprNode *> mutated_exprs;
-    debug(0) << "Input Statement to Compile through ARM:\n"
+    debug(0) << "Input Statement to Compile through HVX:\n"
              << s << "\n";
     s = hydride_optimize_arm(fvb, s, mutated_exprs);
 

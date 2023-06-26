@@ -68,8 +68,12 @@ similarity:
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
-hydride_sema:
+
+hydride_pkg = $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm/get_ops.rkt # 
+$(hydride_pkg): $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
 	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && python3 -m EmitHydridePkgDefs)
+hydride_sema: 
+	$(MAKE) $(hydride_pkg)
 	raco pkg update $(HYDRIDE_ROOT)/code-synthesizer/hydride/
 legalizer:
 	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && python3 RoseARMLegalizerGen.py)
