@@ -277,209 +277,6 @@ class StepWiseSynthesizer(SynthesizerBase):
         return buckets
 
 
-    def get_ops_from_bucket_at_step(self, bucket, step = 1, items_per_bucket = 1, max_num_clauses = 10):
-
-
-        indices_set_per_key = []
-        shuffle_width = 3
-
-        actual_max_width = 0
-
-        for key in bucket:
-            if key != '[]':
-                actual_max_width += items_per_bucket
-            else:
-                actual_max_width += min(len(bucket[key]['ops']), shuffle_width)
-
-
-
-
-        max_num_clauses = min(actual_max_width, max_num_clauses)
-
-        def findsubsets(s, n):
-            combinations =  list(itertools.combinations(s, n))
-
-
-            # Wrap combination in another list so that
-            # we can do a cross product of indices by
-            # simply concatinating lists
-            return [[list(comb)] for comb in combinations]
-
-        def cross_product(l1, l2):
-            prod = []
-            for i1 in l1:
-                for i2 in l2:
-                    prod.append(i1 + i2)
-
-            return prod
-
-
-
-        # List of tuples of indices into buckets
-        grammar_combs = [[]]
-
-        # Traverse shuffle combinations first before
-        # shuffling other buckets
-
-
-        shuffle_key = []
-        if '[]' in  bucket:
-            shuffle_key = ['[]']
-
-        sorted_keys_lexo = sorted([key for key in bucket if key != '[]'], key = lambda x : string_hash(x))
-        #print("keys in bucket:", [key for key in bucket if key != '[]'])
-        #print("sorted keys lexo", sorted_keys_lexo)
-        sorted_keys =  sorted_keys_lexo + shuffle_key
-
-        sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2) ), 0)
-        print("Sample key sizes:", sample_key_sizes)
-        #print("Total buckets without shuffle:", len(sorted_keys)-1)
-
-        # For higher depths, to maintain tractability during synthesis, we only include
-        # a sample of the buckets at each step. Note that the '[]' bucket (i.e. shuffles)
-        # is sampled at every interval
-
-        sample_keys = list(itertools.combinations(sorted_keys_lexo, sample_key_sizes))
-
-        #print("sample_keys_pre:",sample_keys)
-        sample_keys = [list(ele) for ele in sample_keys]
-
-        #sample_keys = [sample for sample in sample_keys if sum([1  for ele in sample if "bvmul" in ele]) < 3]
-
-        #print("sample_keys:",sample_keys)
-        #print("Sample keys:")
-        #for sample in sample_keys:
-        #    print(sample)
-
-
-
-
-        # Certain combinations may not span the entire set of operations
-        # that are present in the spec. We can trivially remove those combinatons
-
-        spec_ops = self.spec.get_semantics_ops_list()
-        print("spec_ops:", spec_ops)
-        def spans_spec(comb, non_matching_lim = 1):
-            eval_str = [ast.literal_eval(ele) for ele in comb]
-            fold_ops = []
-            for ops in eval_str:
-                fold_ops += ops
-
-
-            non_matching_count = 0
-
-            for op in spec_ops:
-                if op not in fold_ops:
-                    non_matching_count += 1
-
-            #print("non_matching:", non_matching_count)
-            #print("non_matching_lim: ", non_matching_lim)
-            return  (non_matching_count < non_matching_lim)
-
-        debug(sample_key_sizes)
-
-        flexibility_start = 0
-        if "bvmul" in spec_ops:
-            flexibility_start = 0
-
-        print("flexibility_start:", flexibility_start)
-
-        for flexibility in range(flexibility_start ,self.partition_flexibility):
-            helper_fn = lambda x : spans_spec(x, non_matching_lim = flexibility + 1)
-            test_flex = list(filter(helper_fn, sample_keys))
-
-            if test_flex != []:
-                sample_keys = test_flex
-                print("Flexibility: ", flexibility)
-                break
-            elif flexibility == self.partition_flexibility - 1:
-                debug("Spec:", spec_ops)
-                print("effective step:", step)
-                #print(sample_keys)
-                assert False, "Current set of operations not sufficient to support partitioning grammar"
-
-
-        #print("Sample keys after flexibility: ", sample_keys)
-
-        #print("Got sample keys:" )
-        #for key in sample_keys:
-        #    print(key)
-
-
-        #print("Filtered sample keys")
-        #print(sample_keys)
-        #print(sample_keys)
-        assert sample_keys != [] , "Key's after filtering are empty"
-
-        # key_switch_sample: Number of steps after which sampling should switch keys
-        key_switch_sample = 4
-
-        # Switch sample keys after 'key_switch_sample' steps
-        key_subset_index = (step  // key_switch_sample) % len(sample_keys)
-        debug("key subset index: ", key_subset_index, "key subset into step", step % key_switch_sample)
-        #print("Head of sample keys")
-        #print(sample_keys[:5])
-
-        print("Current combination: ",sample_keys[key_subset_index])
-
-        sorted_keys = list(sample_keys[key_subset_index]) + shuffle_key
-        for key in sorted_keys:
-            debug(key)
-            idx_range = range(0,len(bucket[key]['ops']))
-            limit = items_per_bucket
-            if key == '[]':
-                limit = 3
-
-            idx_subsets = findsubsets(idx_range, min(limit, len(idx_range)))
-
-            grammar_combs = cross_product(grammar_combs, idx_subsets)
-
-
-
-
-        if step >= len(grammar_combs) and False:
-            print("Repeat step with incremeneted step")
-            return self.get_ops_from_bucket_at_step(bucket, step = step + 1, items_per_bucket = items_per_bucket,
-                                                    max_num_clauses = max_num_clauses)
-
-
-
-
-        print("Number of grammar combinations:", len(grammar_combs))
-
-        for i in range(min(5, len(grammar_combs))):
-            debug(grammar_combs[i])
-
-        debug("Current Step: ",step, ", depth:", self.depth)
-
-
-        # Preserve ordering efficient deduplicator
-        def f7(seq):
-            seen = set()
-            seen_add = seen.add
-            return [x for x in seq if not (str(x) in seen or seen_add(str(x)))]
-
-        #print("Before:",len(grammar_combs))
-        #grammar_combs = f7(grammar_combs)
-        #print("After:",len(grammar_combs))
-
-
-
-        step_combination = grammar_combs[step % len(grammar_combs)]
-
-
-
-        comb_ops = []
-        comb_ctxs = []
-        for idx, key in enumerate(sorted_keys):
-            key_subset = step_combination[idx]
-
-            for key_idx in key_subset:
-                comb_ops.append(bucket[key]['ops'][key_idx])
-                comb_ctxs.append(bucket[key]['ctxs'][key_idx])
-
-        return (comb_ops, comb_ctxs)
-
 
 
 
@@ -535,12 +332,25 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         sample_key_sizes = max(min(len(sorted_keys) -1, int(max_num_clauses / 2) ), 0)
 
+
+
         spec_ops = self.spec.get_semantics_ops_list()
         if sample_key_sizes <= 3 and "bvmul" not in spec_ops:
             sample_key_sizes =  max(min(len(sorted_keys) -1,4 ), 0)
 
 
-        #print("Sample key sizes:", sample_key_sizes)
+        print("Sample key sizes:", sample_key_sizes)
+
+        if sample_key_sizes == 0:
+
+            ops = []
+            ctxs = []
+
+            for key in bucket:
+                ops += bucket[key]['ops']
+                ctxs += bucket[key]['ctxs']
+
+            return ops, ctxs
 
 
         # For higher depths, to maintain tractability during synthesis, we only include
@@ -552,6 +362,8 @@ class StepWiseSynthesizer(SynthesizerBase):
 
 
         previous_keys = sample_keys
+        assert previous_keys != [], "Combination should be non-empty"
+        #print("previous keys",previous_keys)
         if self.depth >= 2:
             sample_keys = [sample for sample in sample_keys if sum([1  for ele in sample if "bvmul" in ele]) <= 3]
 
@@ -666,7 +478,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 idx_range = range(0,len(bucket[key]['ops']))
                 limit = items_per_bucket
                 if key == '[]':
-                    limit = 3 # Set to 4 for hvx_matmul and depthwise_conv, normally 3
+                    limit = 4 # Set to 4 for hvx_matmul and depthwise_conv, normally 3
 
                 idx_subsets = findsubsets(idx_range, min(limit, len(idx_range)))
 
@@ -739,6 +551,35 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return (pruned_ops, pruned_ctxs)
 
+
+
+
+
+    def does_need_scalar_casts(self):
+
+        if self.target not in ["hvx"]:
+            return False
+
+
+        for inp in self.input_sizes:
+            if inp <= 16:
+                return True
+
+        return False
+
+
+    def get_scalar_casts(self):
+
+        if not self.does_need_scalar_casts():
+            return ([], [])
+
+        # ZEXT
+        zext_inst = self.get_scalar_zexts()
+
+        insts = [zext_inst] * len(zext_inst.contexts)
+        ctxs = zext_inst.contexts
+
+        return (insts, ctxs)
 
 
 
@@ -913,11 +754,13 @@ class StepWiseSynthesizer(SynthesizerBase):
                 MAX_NUM_CLAUSES = 7 #7 7 by default changing to 8 for matmul
 
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-            debug("Bucket return from partitioning")
-            debug(bucket.keys())
             (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 3, max_num_clauses = MAX_NUM_CLAUSES)
-            #(operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step(bucket, step = self.step, items_per_bucket = 2, max_num_clauses = MAX_NUM_CLAUSES)
 
+
+        (scalar_zext_ops, scalar_zext_contexts) = self.get_scalar_casts()
+
+        operation_dsl_insts += scalar_zext_ops
+        operation_dsl_args_list += scalar_zext_contexts
 
 
         grammar_ops_str = []
@@ -1009,8 +852,11 @@ class StepWiseSynthesizer(SynthesizerBase):
             lit_holes = lit_holes,
             return_type = self.output_slice_length,
             input_sizes = self.input_sizes,
+            input_precs = self.spec.input_precision,
             imms = imms,
-            include_ramp_lit = include_ramp_lit
+            include_ramp_lit = include_ramp_lit,
+            input_signedness =self.spec.input_signedness,
+            use_buffer_id = self.spec.use_buffer_id()
         )
 
 

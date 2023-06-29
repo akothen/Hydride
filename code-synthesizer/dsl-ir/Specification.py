@@ -5,7 +5,7 @@ class Specification:
 
     def __init__(self, name = None, semantics = None,
                  output_shape = [], input_shapes = [] ,args = [], input_precision = [],
-                 output_precision = None, spec_invokation = "", imms = []):
+                 output_precision = None, spec_invokation = "", imms = [], input_signedness = None):
         self.name = name
         self.semantics = semantics
         self.input_shapes = input_shapes
@@ -15,6 +15,13 @@ class Specification:
         self.output_precision = output_precision
         self.spec_invokation = spec_invokation
         self.imms = imms
+        self.input_signedness = input_signedness
+        self.scalar_zext_sizes = []
+
+
+    def use_buffer_id(self):
+        return self.target == 'halide'
+
 
     def set_target(self,target):
         self.target = target
@@ -157,9 +164,35 @@ class Specification:
 
 
 
+    def get_input_sizes(self):
+        sizes = []
+
+        for idx, shape in enumerate(self.input_shapes):
+            sizes.append(
+                shape[0] * shape[1] * self.input_precision[idx]
+            )
+
+
+        if self.target in ["hvx"]:
+
+            num_inputs = len(sizes)
+
+            for i in range(num_inputs):
+                if sizes[i] <= 16:
+                    print("Adding casted scalar in specification")
+                    self.scalar_zext_sizes.append(32)
+                    break
+
+        return sizes
+
+
 
 
 def parse_spec(spec_dict):
+    input_signedness = None
+    if 'input_signedness' in spec_dict:
+        input_signedness = spec_dict['input_signedness']
+
     return Specification(
         name = spec_dict['name'],
         semantics = spec_dict['semantics'],
@@ -169,6 +202,7 @@ def parse_spec(spec_dict):
         spec_invokation = spec_dict['spec_invokation'],
         input_precision = spec_dict['input_precision'],
         output_precision = spec_dict['output_precision'],
-        imms = spec_dict['imms']
+        imms = spec_dict['imms'],
+        input_signedness = input_signedness
     )
 

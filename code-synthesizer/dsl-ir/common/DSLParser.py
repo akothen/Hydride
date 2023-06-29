@@ -94,7 +94,7 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict, keep_duplicate = False):
                              in_lanesize_index = sub_obj['in_lanesize_index'],
                              out_lanesize_index = sub_obj['out_lanesize_index'],
                              ctx_sema = sub_obj['ctx_sema'] ,
-
+                             extensions = sub_obj['Extensions']
                              )
 
     return dsl_inst

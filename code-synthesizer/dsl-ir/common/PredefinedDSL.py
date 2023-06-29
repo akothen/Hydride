@@ -473,7 +473,45 @@ def create_llvm_vect_simd_dsl(op_name , bv_op , input_vector_sizes = [],
 
 
 
+zext_scalar_sema = [
+    "(define (scalar-zext a input-size output-size)",
+    "(zero-extend a (bitvector output-size))",
+    ")"
+]
 
+
+def create_llvm_scalar_zext_dsl(
+                                  input_precisions = [],
+                                  output_precisions = []
+                                  ):
+
+    scalar_llvm_zext_dsl = DSLInstruction(name = "llvm-zext", simd = True,
+                                          operation = True, semantics = zext_scalar_sema)
+
+
+    for i in range(0, len(input_precisions)):
+        scalar_llvm_zext_dsl.add_context(
+            name = "llvm-zext-{}-{}".format(input_precisions[i], output_precisions[i]),
+            in_vectsize = input_precisions[i],
+            out_vectsize =  output_precisions[i],
+            lane_size = input_precisions[i],
+            in_precision = input_precisions[i],
+            out_precision = output_precisions[i],
+            SIMD = "True",
+            args = ["SYMBOLIC_BV_{}".format(input_precisions[i]), str(input_precisions[i]), str(output_precisions[i])],
+            in_vectsize_index = 1,
+            out_vectsize_index = 2,
+            in_lanesize_index = 1,
+            out_lanesize_index = 2,
+            in_precision_index = 1,
+            out_precision_index = 2,
+            cost = "1",
+        )
+
+    return  scalar_llvm_zext_dsl
+
+
+dummy_scalar_zext = create_llvm_scalar_zext_dsl(input_precisions = [8, 16] , output_precisions = [32, 32])
 
 # Place holder DSL object definitions to enable generating
 # the Hydride symbolic interpreter
@@ -563,7 +601,8 @@ default_structs = [
     dummy_vector_sub_dsl,
     dummy_vector_mul_dsl,
     dummy_vector_sdiv_dsl,
-    dummy_vector_udiv_dsl
+    dummy_vector_udiv_dsl,
+    dummy_scalar_zext,
 ]
 
 llvm_simd_structs =[
