@@ -34,7 +34,7 @@ public:
     Input<uint8_t> output_min_{ "output_min" };
     Input<uint8_t> output_max_{ "output_max" };
 
-    Output<Buffer<uint8_t>> output_{ "output", 2 };
+    Output<Buffer<int16_t>> output_{ "output", 2 };
 
     void generate() {
         Var c("c"), b("b");
@@ -114,7 +114,7 @@ public:
             .split(c, co, c, accum_registers / tile_batches, TailStrategy::ShiftInwards)
             .split(b, bo, b, tile_batches, TailStrategy::ShiftInwards)
             .reorder(c, b, bo, co)
-            //.vectorize(c)
+            .vectorize(c)
             .unroll(b);
 
         // Handle the batch 1 case. In this case, we need an accumulator for both
@@ -124,7 +124,7 @@ public:
             .split(c, co, c, accum_registers / 2, TailStrategy::ShiftInwards)
             .split(b, bo, b, 1)
             .reorder(c, b, bo, co)
-            //.vectorize(c)
+            .vectorize(c)
             .unroll(b);
 
         // Make dummy outer loops if there aren't enough channels or batches.
