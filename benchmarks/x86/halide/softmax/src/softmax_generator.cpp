@@ -65,19 +65,20 @@ namespace hannk {
 
       // Schedules for x86
       output_
-        .vectorize(x, 64, TailStrategy::Predicate);
+        .compute_root()
+        .vectorize(x, 64);
       inv_sum_exp_row
         .compute_at(output_, y);
       sum_exp_row
         .compute_at(output_, y)
         .update()
         .atomic()
-        .vectorize(rx, 64, TailStrategy::GuardWithIf);
+        .vectorize(rx, 64);
       max_x
         .compute_at(output_, y)
         .update()
         .atomic()
-        .vectorize(rx, 64, TailStrategy::GuardWithIf);
+        .vectorize(rx, 64);
       
       output_.print_loop_nest();
     }
