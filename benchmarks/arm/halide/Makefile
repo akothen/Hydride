@@ -114,3 +114,61 @@ clean:
 	rm -rf /tmp/base_*
 	rm -rf /tmp/hydride_hash*
 	rm -rf /tmp/hydride.node*
+# $(benchmarks): %/$(BIN)/%_generator:
+# 	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7    \
+# 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
+# 		-g $*/src/$*_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
+# 		$(hannk) \
+# 		-o $*/$(BIN)/$*_generator \
+# 		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static) \
+# 		-rpath $(HALIDE_DISTRIB)/lib
+# $(benchmarks): %/$(BIN)/%.a: %/$(BIN)/%_generator
+# 	HYDRIDE_DISTRIBUTE_LOOK_AHEAD=1 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$* HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_TARGET=arm ./$*/$(BIN)/$*_generator \
+# 		-t 0 \
+# 		-o $*/$(BIN) \
+# 		-g $* \
+# 		-e static_library,stmt,h,llvm_assembly,assembly \
+# 		-f $* target=$(TARGET)
+# 	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$*/$(BIN)/$*_generator \
+# 		-r halide_runtime_x86 \
+# 		-o $*/$(BIN) \
+# 		-e object,c_header \
+# 		target=$(TARGET)
+# $(benchmarks): %/$(BIN)/%_run.out: %/$(BIN)/%.a
+# 	$(CC) -Dbenchmark_$* --std=c++17 \
+# 		-O0\
+# 		-I $(HALIDE_DISTRIB)/include -I ./$*/$(BIN) \
+# 		-lstdc++ -ldl -pthread \
+# 		test/run.cpp \
+# 		test/stubs.cpp \
+# 		$*/$(BIN)/$*.a \
+# 		$*/$(BIN)/halide_runtime_x86.o \
+# 		-o $*/$(BIN)/$*_run.out
+# $(benchmarks): %.gen: %/$(BIN)
+# 	$(MAKE) @/$(BIN)/$*_generator
+# $(benchmarks): %.syn: %/$(BIN)
+# 	$(MAKE) @/$(BIN)/$*.a
+# $(benchmarks): %.link: %/$(BIN)
+# 	$(MAKE) @/$(BIN)/$*_run.out
+%.link:
+	$(CC) -Dbenchmark_$* --std=c++17 \
+		-O0\
+		-I $(HALIDE_DISTRIB)/include -I ./$*/bin \
+		-lstdc++ -ldl -pthread \
+		test/run.cpp \
+		test/stubs.cpp \
+		$*/bin/$*.a \
+		$*/bin/halide_runtime_x86.o \
+		-o $*/bin/$*_run.out -DDEBUG
+	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
+%.linkd:
+	$(CC) -Dbenchmark_$* --std=c++17 \
+		-O0\
+		-I $(HALIDE_DISTRIB)/include -I ./$*/bin_ref \
+		-lstdc++ -ldl -pthread \
+		test/run.cpp \
+		test/stubs.cpp \
+		$*/bin_ref/$*.a \
+		$*/bin_ref/halide_runtime_x86.o \
+		-o $*/bin_ref/$*_run.out -DDEBUG
+	$*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin

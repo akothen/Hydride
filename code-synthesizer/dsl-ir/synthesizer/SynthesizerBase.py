@@ -1232,7 +1232,7 @@ class SynthesizerBase:
             EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
                              ["bvmul"], ["sign-extend", "zero-extend"]]
             if self.target == "arm":
-                EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
+                EXPENSIVE_OPS = [["bvsdiv", "bvudiv"],
                                  ["bvmul"], ["sign-extend", "zero-extend"]]
 
             if self.target == "hvx":

@@ -124,3 +124,14 @@ Problems:
 
 - Why cast-uint involves bvusat: Spec Ops ['zero-extend', 'bvusat']
 - Assertion failed: (isValidElementType(ElementType) && "Element type of a VectorType must " "be an integer, floating point, or " "pointer type."), function get, file Type.cpp, line 647.
+
+- sobel3x3:
+    - llvm
+        - shl by 1-> umull with 2
+        - uqxtn -> min
+    - asm
+        - shl -> umlal
+        - uqxtn -> min + xtn2
+- matmul:
+    - loop unrolled by llvm-opt?
+    - TODO: unroll by myself?

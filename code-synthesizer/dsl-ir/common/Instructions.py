@@ -174,6 +174,9 @@ class Context:
         self.parse_args(args)
         self.create_bounded_args_map()
 
+    def __repr__(self):
+        return self.name
+
     def get_bv_ops(self):
 
         if self.ctx_sema != None:
@@ -761,6 +764,9 @@ class DSLInstruction(InstructionType):
             super().__init__(InstructionType.InstructionTypeEnum.Shuffle)
         else:
             super().__init__(InstructionType.InstructionTypeEnum.NON_SIMD)
+
+    def __repr__(self):
+        return self.name
 
     def add_context(self, name="", in_vectsize=None, out_vectsize=None,
                     lane_size=None, in_precision=None,

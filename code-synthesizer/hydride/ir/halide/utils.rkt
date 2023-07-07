@@ -100,8 +100,8 @@
 (define signed-upcasting-list (list extract sign-extend ))
 (define unsigned-upcasting-list (list extract zero-extend ))
 
-(define signed-downcasting-list (list extract  bvssat))
-(define unsigned-downcasting-list (list extract  bvusat))
+(define signed-downcasting-list (list extract))
+(define unsigned-downcasting-list (list extract))
 
 
 (define (get-bv-ops p)
