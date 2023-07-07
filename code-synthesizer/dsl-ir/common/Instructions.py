@@ -171,6 +171,7 @@ class Context:
         self.ctx_sema = ctx_sema
 
         self.num_args = len(args)
+        self.unparsed_args = args
         self.parse_args(args)
         self.create_bounded_args_map()
         self.extensions = extensions

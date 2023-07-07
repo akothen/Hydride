@@ -753,8 +753,11 @@ class StepWiseSynthesizer(SynthesizerBase):
             if self.depth >= 4:
                 MAX_NUM_CLAUSES = 7 #7 7 by default changing to 8 for matmul
 
+
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-            (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 3, max_num_clauses = MAX_NUM_CLAUSES)
+
+            if len(operation_dsl_insts) > MAX_NUM_CLAUSES:
+                (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 3, max_num_clauses = MAX_NUM_CLAUSES)
 
 
         (scalar_zext_ops, scalar_zext_contexts) = self.get_scalar_casts()
