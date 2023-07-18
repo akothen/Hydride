@@ -88,38 +88,17 @@
 		 num_6 prec_i_o num_8 
 		 num_9 num_10 num_11)
 	]
-	[ (vsubw_high_u8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(vsubw_high_u8 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8 
-		 num_9 num_10 num_11 
-		 num_12)
-	]
 	[ (vmull_n_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i num_7 prec_o num_9 num_10 num_11)
 		(vmull_n_u16 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
 		 prec_i num_7 prec_o 
 		 num_9 num_10 num_11)
 	]
-	[ (vmlsl_high_n_s32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
-		(vmlsl_high_n_s32 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_i_o num_4 num_5 
-		 num_6 prec_i_o num_8 
-		 num_9 num_10 num_11 
-		 num_12 num_13)
-	]
 	[ (vmlaq_n_u16_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
 		(vmlaq_n_u16 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
 		 size_i_o num_4 num_5 
 		 num_6 prec_i_o num_8 
 		 num_9 num_10 num_11)
-	]
-	[ (vaddl_high_s16_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(vaddl_high_s16 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
-		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
-		 num_9 num_10 num_11 
-		 num_12)
 	]
 	[ (vqsub_u8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(vqsub_u8 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
@@ -211,13 +190,6 @@
 		 num_9 num_10 num_11 
 		 num_12)
 	]
-	[ (vqdmull_high_n_s32_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12)
-		(vqdmull_high_n_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_o num_4 num_5 
-		 num_6 prec_o num_8 
-		 num_9 num_10 num_11 
-		 num_12)
-	]
 	[ (vsubhn_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12)
 		(vsubhn_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
 		 size_i_o num_4 num_5 
@@ -250,22 +222,6 @@
 		 num_9 num_10 num_11 
 		 num_12 num_13)
 	]
-	[ (vqdmlsl_high_n_s32_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
-		(vqdmlsl_high_n_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16 num_17 
-		 num_18)
-	]
-	[ (vabdl_high_s8_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-		(vabdl_high_s8 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_o num_4 num_5 
-		 num_6 prec_o num_8 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14)
-	]
 	[ (vmovq_n_u8_dsl v0 size_o num_2 num_3 num_4 prec_o)
 		(vmovq_n_u8 (arm:interpret v0 env) size_o num_2 
 		 num_3 num_4 prec_o)
@@ -281,23 +237,6 @@
 		(vtst_s8 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret v2 env) 
 		 (arm:interpret v3 env) size_i_o num_5 
 		 num_6 num_7 prec_i_o)
-	]
-	[ (vmovl_high_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_o num_7 num_8 num_9 prec_o num_11 num_12 num_13 num_14 num_15 num_16)
-		(vmovl_high_s16 (arm:interpret v0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
-		 (arm:interpret vc_3 env) (arm:interpret vc_4 env) (arm:interpret vc_5 env) 
-		 size_o num_7 num_8 
-		 num_9 prec_o num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16)
-	]
-	[ (vqdmlal_high_n_s32_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
-		(vqdmlal_high_n_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16 num_17 
-		 num_18)
 	]
 	[ (vmls_n_s16_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
 		(vmls_n_s16 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
@@ -327,13 +266,6 @@
 		 num_6 prec_i_o num_8 
 		 num_9 num_10 num_11)
 	]
-	[ (vqdmull_high_s32_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12)
-		(vqdmull_high_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_o num_4 num_5 
-		 num_6 prec_o num_8 
-		 num_9 num_10 num_11 
-		 num_12)
-	]
 	[ (vabdl_s8_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14)
 		(vabdl_s8 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
 		 size_i_o num_4 num_5 
@@ -346,13 +278,6 @@
 		 size_i_o num_4 num_5 
 		 num_6 prec_i num_8 
 		 prec_o num_10 num_11 
-		 num_12 num_13)
-	]
-	[ (vmlsl_high_u32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
-		(vmlsl_high_u32 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_i_o num_4 num_5 
-		 num_6 prec_i_o num_8 
-		 num_9 num_10 num_11 
 		 num_12 num_13)
 	]
 	[ (vrsra_n_u8_dsl vc_0 vc_1 vc_2 vc_3 vc_4 v5 v6 v7 size_i_o num_9 num_10 num_11 prec_i_o num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20)
@@ -380,13 +305,6 @@
 		 num_3 num_4 num_5 
 		 prec_i_o num_7 num_8 
 		 num_9 num_10)
-	]
-	[ (vaddw_high_s32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(vaddw_high_s32 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8 
-		 num_9 num_10 num_11 
-		 num_12)
 	]
 	[ (vtrn1_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14)
 		(vtrn1_u16 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
@@ -434,15 +352,6 @@
 		 num_6 num_7 prec_i_o 
 		 num_9 num_10 num_11)
 	]
-	[ (vqdmlal_high_n_s16_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
-		(vqdmlal_high_n_s16 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16 num_17 
-		 num_18)
-	]
 	[ (vqneg_s32_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(vqneg_s32 (arm:interpret v0 env) size_i_o num_2 
 		 num_3 num_4 prec_i_o 
@@ -477,15 +386,6 @@
 		 num_6 num_7 prec_i_o 
 		 num_9 num_10)
 	]
-	[ (vqdmlsl_high_s32_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
-		(vqdmlsl_high_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16 num_17 
-		 num_18)
-	]
 	[ (vqdmulh_s16_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(vqdmulh_s16 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
 		 (arm:interpret v3 env) (arm:interpret v4 env) size_i_o 
@@ -493,32 +393,10 @@
 		 prec_i_o num_10 num_11 
 		 num_12 num_13)
 	]
-	[ (vqdmlsl_high_n_s16_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
-		(vqdmlsl_high_n_s16 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16 num_17 
-		 num_18)
-	]
-	[ (vmlsl_high_n_s16_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
-		(vmlsl_high_n_s16 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_i_o num_4 num_5 
-		 num_6 prec_i_o num_8 
-		 num_9 num_10 num_11 
-		 num_12 num_13)
-	]
 	[ (vpaddq_u64_dsl vc_0 v1 v2 size_i prec_i_o num_5 num_6 num_7 num_8 num_9 num_10 num_11)
 		(vpaddq_u64 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
 		 size_i prec_i_o num_5 
 		 num_6 num_7 num_8 
-		 num_9 num_10 num_11)
-	]
-	[ (vmull_high_n_s16_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11)
-		(vmull_high_n_s16 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
-		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
 		 num_9 num_10 num_11)
 	]
 	[ (vmlal_n_u32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i num_8 prec_o num_10 num_11 num_12 num_13)
@@ -583,13 +461,6 @@
 		 num_9 num_10 num_11 
 		 num_12)
 	]
-	[ (vqdmull_high_n_s16_dsl vc_0 v1 v2 size_o num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 num_12)
-		(vqdmull_high_n_s16 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_o num_4 num_5 
-		 num_6 prec_o num_8 
-		 num_9 num_10 num_11 
-		 num_12)
-	]
 	[ (vneg_s8_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(vneg_s8 (arm:interpret v0 env) size_i_o num_2 
 		 num_3 num_4 prec_i_o 
@@ -603,12 +474,6 @@
 		 num_12 num_13 num_14 
 		 num_15 num_16 num_17 
 		 num_18)
-	]
-	[ (vmull_high_n_u32_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11)
-		(vmull_high_n_u32 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
-		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
-		 num_9 num_10 num_11)
 	]
 	[ (vpmax_u32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 prec_i num_16)
 		(vpmax_u32 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
@@ -637,13 +502,6 @@
 		 (arm:interpret v3 env) size_i_o num_5 
 		 num_6 num_7 prec_i_o 
 		 num_9 num_10 num_11)
-	]
-	[ (vsubl_high_s16_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(vsubl_high_s16 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
-		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
-		 num_9 num_10 num_11 
-		 num_12)
 	]
 	[ (vqadd_u64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(vqadd_u64 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
@@ -701,13 +559,6 @@
 		 prec_i_o num_7 num_8 
 		 num_9)
 	]
-	[ (vmlal_high_s8_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
-		(vmlal_high_s8 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_i_o num_4 num_5 
-		 num_6 prec_i_o num_8 
-		 num_9 num_10 num_11 
-		 num_12 num_13)
-	]
 	[ (vqdmlal_n_s32_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i num_9 prec_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
 		(vqdmlal_n_s32 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
 		 (arm:interpret v3 env) size_i_o num_5 
@@ -716,21 +567,6 @@
 		 num_12 num_13 num_14 
 		 num_15 num_16 num_17 
 		 num_18)
-	]
-	[ (vqdmlal_high_s16_dsl vc_0 v1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
-		(vqdmlal_high_s16 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15 num_16 num_17 
-		 num_18)
-	]
-	[ (vmull_high_u8_dsl v0 v1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11)
-		(vmull_high_u8 (arm:interpret v0 env) (arm:interpret v1 env) size_o 
-		 num_3 num_4 num_5 
-		 prec_o num_7 num_8 
-		 num_9 num_10 num_11)
 	]
 	[ (vmls_n_s32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
 		(vmls_n_s32 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
@@ -744,13 +580,6 @@
 		 num_6 prec_i_o num_8 
 		 num_9 num_10 num_11 
 		 num_12)
-	]
-	[ (vmlal_high_n_u32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
-		(vmlal_high_n_u32 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_i_o num_4 num_5 
-		 num_6 prec_i_o num_8 
-		 num_9 num_10 num_11 
-		 num_12 num_13)
 	]
 	[ (vmovl_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_i_o num_7 num_8 num_9 prec_i prec_o num_12 num_13 num_14 num_15 num_16)
 		(vmovl_s16 (arm:interpret v0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
@@ -768,13 +597,6 @@
 		 num_12 num_13 num_14 
 		 num_15 num_16 num_17 
 		 num_18 num_19)
-	]
-	[ (vmlal_high_n_s16_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13)
-		(vmlal_high_n_s16 (arm:interpret v0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
-		 size_i_o num_4 num_5 
-		 num_6 prec_i_o num_8 
-		 num_9 num_10 num_11 
-		 num_12 num_13)
 	]
 	[ (vshr_n_s8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
 		(vshr_n_s8 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret v2 env) 
@@ -900,14 +722,6 @@
 		 num_15 num_16 num_17 
 		 num_18 num_19 num_20 
 		 num_21 num_22)
-	]
-	[ (vshll_high_n_s8_dsl v0 vc_1 vc_2 v3 size_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(vshll_high_n_s8 (arm:interpret v0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
-		 (arm:interpret v3 env) size_o num_5 
-		 num_6 num_7 prec_o 
-		 num_9 num_10 num_11 
-		 num_12 num_13 num_14 
-		 num_15)
 	]
 	[ (vshld_s64_dsl v0 vc_1 vc_2 vc_3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
 		(vshld_s64 (arm:interpret v0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 

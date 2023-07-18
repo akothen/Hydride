@@ -661,6 +661,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             key_subset = step_indices[idx]
 
             for key_idx in key_subset:
+                print(bucket[key])
                 comb_ops.append(bucket[key]['ops'][key_idx])
                 comb_ctxs.append(bucket[key]['ctxs'][key_idx])
 

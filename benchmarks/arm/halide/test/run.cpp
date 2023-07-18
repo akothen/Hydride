@@ -18,12 +18,16 @@
 #include "gaussian7x7.h"
 #elif benchmark_sobel3x3
 #include "sobel3x3.h"
+#elif benchmark_sobel5x5
+#include "sobel5x5.h"
 #elif benchmark_blur3x3
 #include "blur3x3.h"
 #elif benchmark_blur5x5
 #include "blur5x5.h"
 #elif benchmark_blur7x7
 #include "blur7x7.h"
+#elif benchmark_conv3x3a16
+#include "conv3x3a16.h"
 #elif benchmark_dilate3x3
 #include "dilate3x3.h"
 #elif benchmark_dilate5x5
@@ -51,9 +55,11 @@
 #elif benchmark_fully_connected
 #include "fully_connected.h"
 #elif benchmark_conv_nn
-#include "conv.h"
-#elif benchmark_matmul_256
-#include "matmul_256.h"
+#include "conv_nn.h"
+#elif benchmark_matmul
+#include "matmul.h"
+#elif benchmark_matmul
+#include "matmul.h"
 #elif benchmark_matmul_256_32bit
 #include "matmul_256_32bit.h"
 #elif benchmark_matmul_1024_32bit
@@ -62,6 +68,8 @@
 #include "handtune_matmul.h"
 #elif benchmark_depthwise_conv
 #include "depthwise_conv.h"
+#elif benchmark_softmax
+#include "softmax.h"
 #endif
 
 #define LOG2VLEN 7
@@ -84,6 +92,9 @@ void *aligned_malloc(size_t size, unsigned alignment) {
   return result;
 }
 
+void *memalign(unsigned alignment, size_t size) {
+  return aligned_malloc(size, alignment);
+}
 
 int write_file(int fp, unsigned char *src, int height, int width, int border_width) {
     int i;
@@ -579,7 +590,7 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
     Halide::Runtime::Buffer<uint8_t> filter_buf(input, 6, f_shape);
-    Halide::Runtime::Buffer<int32_t> bias_((long*)bias, 1, b_shape);
+    Halide::Runtime::Buffer<int32_t> bias_(bias, 1, b_shape);
 
     cycles = benchmark([&]() {
             int error = conv_nn(input_buf, 3, filter_buf, 5, bias_, 1, 1, 1, 1, 32767, 1, 3, 5, 250, output_buf);
@@ -777,6 +788,67 @@ int main(int argc, char **argv) {
 #endif
 
 
+#if benchmark_sobel5x5
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+
+    float exec_time = benchmark([&]() {
+            int error = sobel5x5(input_buf, output_buf);
+            if (error != 0) {
+            printf("sobel5x5 pipeline failed: %d\n", error);
+            }
+            });
+
+      printf("Execution took %0.4f s\n", exec_time);
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - sobel5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_matmul
+
+    int32_t matrix_size = 1024;
+    
+    halide_dimension_t x_dim{ 0, matrix_size, 1 };
+    halide_dimension_t y_dim{ 0, matrix_size, matrix_size };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    int16_t *matATensor = (int16_t *)aligned_malloc(
+        matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
+    int16_t *matBTensor = (int16_t *)aligned_malloc(
+        matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
+    int32_t *outputTensor = (int32_t *)aligned_malloc(
+        matrix_size * matrix_size * sizeof(int32_t), 1 << LOG2VLEN);
+
+    printf("Allocated new memory!\n");
+
+    Halide::Runtime::Buffer<int16_t> matA((int16_t*)matATensor, dims, shape);
+    Halide::Runtime::Buffer<int16_t> matB((int16_t*) matBTensor, dims, shape);
+    Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)outputTensor, dims, shape);
+
+      // Run in 128 byte mode
+      cycles = benchmark([&]() {
+          int error = matmul(matA, matB, output_buf);
+          if (error != 0) {
+              printf("matmul pipeline failed: %d\n", error);
+          }
+          });
+
+
+    printf("AppReported (): Image %dx%d - matmul(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
 #if benchmark_matmul_256
 
     halide_dimension_t x_dim{ 0, 256, 1 };
@@ -962,7 +1034,28 @@ int main(int argc, char **argv) {
 
 #endif
 
+#if benchmark_softmax
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
 
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+    cycles = benchmark([&]() {
+        int error = softmax(input_buf, 0, 100, 0, 5, 225, output_buf);
+        if (error != 0) {
+        printf("softmax pipeline failed: %d\n", error);
+        }
+    });
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (HVX128B-mode): Image %dx%d - softmax(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
+#endif
 
 #if benchmark_gaussian3x3
     halide_dimension_t x_dim{ 0, width, 1 };
@@ -1045,6 +1138,41 @@ int main(int argc, char **argv) {
 
     printf("AppReported (): Image %dx%d - gaussian7x7(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles/(width*height));
 #endif
+
+#if benchmark_conv3x3a16
+    signed char mask[9] =
+    {
+        1, 2, 1,
+        2, 4, 2,
+        1, 2, 1
+    };
+
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    halide_dimension_t mask_shape[2];
+    mask_shape[0].min = 0; mask_shape[0].extent = 3; mask_shape[0].stride = 1;
+    mask_shape[1].min = 0; mask_shape[1].extent = 3; mask_shape[1].stride = 3;
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+    Halide::Runtime::Buffer<int8_t> mask_buf(mask, dims, mask_shape);
+
+    // Run in 128 byte mode
+    cycles = benchmark([&]() {
+        int error = conv3x3a16(input_buf, mask_buf, output_buf);
+        if (error != 0) {
+            printf("conv3x3a16 pipeline failed: %d\n", error);
+        }
+        });
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+    printf("AppReported (): Image %dx%d - conv3x3a16(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+  #endif
 
 #if benchmark_median3x3
     printf("\t*** median3x3\n");

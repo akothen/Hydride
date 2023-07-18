@@ -4,11 +4,16 @@ LLVM_SYMBOLIZER_PATH ?= $(LLVM_ROOT)/bin
 
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
+			 gaussian7x7 \
 			 dilate3x3 \
 			 dilate5x5 \
+			 dilate7x7 \
 			 median3x3 \
 			 sobel3x3 \
+			 sobel5x5 \
 			 blur3x3 \
+			 blur5x5 \
+			 blur7x7 \
 			 chroma \
 			 depthwise_conv \
 			 matmul \
@@ -23,7 +28,7 @@ benchmarks = gaussian3x3 \
 			 max_pool \
 			 average_pool \
 			 conv_nn \
-			 fully_connected \
+			 conv3x3a16 \
 			 camera_pipe \
 			 fft \
 			 softmax \
@@ -96,9 +101,50 @@ ifeq ($(BENCHMARK),1)
 
 endif
 
+fully_connected: %: %/$(BIN)
+	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
+		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
+		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
+		$(hannk) \
+		-o $@/$(BIN)/$@_generator \
+		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static) \
+		-rpath $(HALIDE_DISTRIB)/lib
+
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib;  export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=arm   HL_SYNTH_BW=$(INT_BW) $(STARTING_HASH) ./$@/$(BIN)/$@_generator \
+	    -t 0 \
+		-o $@/$(BIN) \
+		-g $@ output.type=uint8 \
+		-e static_library,stmt,h,llvm_assembly,assembly \
+		-f $@ target=$(TARGET)
+	
+	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/$(BIN)/$@_generator \
+		-r halide_runtime_x86 \
+		-o $@/$(BIN) \
+		-e object,c_header \
+		target=$(TARGET)
+	
+	$(CC) -Dbenchmark_$@ --std=c++17 \
+		-O0\
+		-I $(HALIDE_DISTRIB)/include -I ./$@/$(BIN) \
+		-lstdc++ -ldl -pthread \
+		test/run.cpp \
+		test/stubs.cpp \
+		$@/$(BIN)/$@.a \
+		$@/$(BIN)/halide_runtime_x86.o \
+		-o $@/$(BIN)/$@_run.out
+
+	
+ifeq ($(BENCHMARK),1) 
+
+# Benchmark the generated $(BIN)ary
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+
+endif
+
 #-lpng -lpthread -ldl -ljpeg 
 	
-
+fully_connected/bin_ref fully_connected/bin: %:
+	mkdir $@
 
 # Make the bin dirs if needed
 $(bin_dirs): %:

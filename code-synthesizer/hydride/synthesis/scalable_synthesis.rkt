@@ -555,7 +555,7 @@
                              scale-factor)
   (println (format "Invoked step-wise-synthesis!\n"))
 
-  (define step-limit 5)
+  (define step-limit 10) ;; temporary change for arm
 
   (define solved? #f)
   (define min-cost

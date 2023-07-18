@@ -23,6 +23,8 @@ DEBUG_LIST = [
     # "vqadd_s16",
     "vmovl_s16",
     "vqmovn_s32",
+    "vshld_s64",
+    "vadd_u64",
     # "vshr_n_s8",
     # "vshr_n_s16",
     # "vshr_n_s32",
@@ -621,6 +623,11 @@ class SynthesizerBase:
 
                     disallowed_ops.append(var)
 
+        if self.target == "arm":
+            # Prevent vsraq taking place of vadd
+            if "bvashr" not in spec_ops and "bvlshr" not in spec_ops and len(spec_ops) <= 2:
+                disallowed_ops += ["bvashr", "bvlshr"]
+
         print("Disallowed bvops: ", disallowed_ops)
         pruned_ops = []
         pruned_ctxs = []
@@ -858,6 +865,7 @@ class SynthesizerBase:
                 pass
 
             if N < len(ops):
+                print("Prunning", globally_sorted_operation_insts[:-N])
                 print(N, "<",  len(ops))
                 return (globally_sorted_operation_insts[-N:], globally_sorted_operation_contexts[-N:])
             else:
@@ -1233,7 +1241,7 @@ class SynthesizerBase:
                              ["bvmul"], ["sign-extend", "zero-extend"]]
             if self.target == "arm":
                 EXPENSIVE_OPS = [["bvsdiv", "bvudiv"],
-                                 ["bvmul"], ["sign-extend", "zero-extend"]]
+                                 ["bvmul"]]
 
             if self.target == "hvx":
                 EXPENSIVE_OPS.append(

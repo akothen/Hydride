@@ -37,12 +37,14 @@ public:
             .split(x, x, xi, 16, TailStrategy::GuardWithIf)
             .vectorize(xi, vector_size)
             .reorder({xi, x, y, r8_x})
+            .unroll(x, 4).unroll(y, 4)
             ;
         matrix_mul
             .store_in(MemoryType::Stack)
             .compute_at(res, x)
             .split(x, x, xi, 16, TailStrategy::RoundUp)
             .vectorize(xi, vector_size)
+            .unroll(x, 4)
             ;
             //.reorder({xi, x, y});
 

@@ -3,8 +3,8 @@ from collections import namedtuple
 from RoseTypes import *
 
 
-HalfFloatTy = RoseHalfFloatType.create()
-HalfFloatTyBitwidth = HalfFloatTy.getBitwidth()
+# HalfFloatTy = RoseHalfFloatType.create()
+# HalfFloatTyBitwidth = HalfFloatTy.getBitwidth()
 
 FloatTy = RoseFloatType.create()
 FloatTyBitwidth = FloatTy.getBitwidth()
