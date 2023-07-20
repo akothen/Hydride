@@ -756,7 +756,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
 
-            if len(operation_dsl_insts) > MAX_NUM_CLAUSES:
+            if len(operation_dsl_insts) > 5 :
                 (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 3, max_num_clauses = MAX_NUM_CLAUSES)
 
 
