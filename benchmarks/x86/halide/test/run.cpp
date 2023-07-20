@@ -42,6 +42,8 @@
 #include "mul.h"
 #elif benchmark_average_pool
 #include "average_pool.h"
+#elif benchmark_average_pool_add
+#include "average_pool_add.h"
 #elif benchmark_idct4
 #include "idct4.h"
 #elif benchmark_idct8
@@ -50,14 +52,18 @@
 #include "sbc.h"
 #elif benchmark_max_pool
 #include "max_pool.h"
+#elif benchmark_max_pool_add
+#include "max_pool_add.h"
 #elif benchmark_l2norm
 #include "l2norm.h"
 #elif benchmark_fully_connected
 #include "fully_connected.h"
 #elif benchmark_conv_nn
-#include "conv.h"
+#include "conv_nn.h"
 #elif benchmark_conv3x3a16
 #include "conv3x3a16.h"
+#elif benchmark_softmax 
+#include "softmax.h"
 #elif benchmark_matmul_256
 #include "matmul_256.h"
 #elif benchmark_matmul_256_32bit
@@ -261,6 +267,32 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - mul(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+
+#if benchmark_softmax
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
+
+    float exec_time  = benchmark([&]() {
+        int error = softmax(input_buf, 0, 100, 0, 5, 225, output_buf);
+        if (error != 0) {
+        printf("softmax pipeline failed: %d\n", error);
+        }
+    });
+
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+
+
+    printf("AppReported (HVX128B-mode): Image %dx%d - softmax(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
+
+      printf("Execution took %0.4f s\n", exec_time);
+#endif
+
 #if benchmark_average_pool
     halide_dimension_t c_dim{ 0, 1024, 1 };
     halide_dimension_t x_dim{ 0, width/32, 128 };
@@ -285,6 +317,33 @@ int main(int argc, char **argv) {
 #endif
 
     printf("AppReported (): Image %dx%d - average_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_average_pool_add
+    halide_dimension_t c_dim{ 0, 1024, 1 };
+    halide_dimension_t x_dim{ 0, width/32, 128 };
+    halide_dimension_t y_dim{ 0, height/32, 128 * (width / 32) };
+    halide_dimension_t b_dim{ 0, 1, 128 * (width / 32) * (height / 32) };
+    halide_dimension_t shape[4] = { c_dim, x_dim, y_dim, b_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
+
+    benchmark([&]() {
+            int error = average_pool_add(input_buf, input_buf, 2, 2, 8, 8, 5, 225, output_buf);
+            if (error != 0) {
+            printf("average_pool_add pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - average_pool_add(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 #if benchmark_max_pool
@@ -313,6 +372,32 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+
+#if benchmark_max_pool_add
+    halide_dimension_t c_dim{ 0, 1024, 1 };
+    halide_dimension_t x_dim{ 0, width / 32, 128 };
+    halide_dimension_t y_dim{ 0, height / 32, 128 * (width / 32) };
+    halide_dimension_t b_dim{ 0, 1, 128 * (width / 32) * (height / 32) };
+    halide_dimension_t shape[4] = { c_dim, x_dim, y_dim, b_dim };
+
+    Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
+    Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
+
+     benchmark([&]() {
+            int error = max_pool_add(input_buf,input_buf, 2, 2, 8, 8, 5, 225, output_buf);
+            if (error != 0) {
+            printf("max_pool_add pipeline failed: %d\n", error);
+            }
+            });
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
 
 #if benchmark_idct4
     halide_dimension_t x_dim{ 0, 4, 1 };
@@ -556,7 +641,8 @@ int main(int argc, char **argv) {
 #endif
 
 #if benchmark_conv_nn
-    int* bias = (int*)memalign(1 << LOG2VLEN, width * height * sizeof(int));
+    int* bias = (int*) aligned_malloc(width * height * sizeof(int), 1 << LOG2VLEN);
+    //int* bias = (int*)memalign(1 << LOG2VLEN, width * height * sizeof(int));
     for (int i = 0; i < (width * height); i++)
         bias[i] = 10000;
 
@@ -585,7 +671,7 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
     Halide::Runtime::Buffer<uint8_t> filter_buf(input, 6, f_shape);
-    Halide::Runtime::Buffer<int32_t> bias_((long*)bias, 1, b_shape);
+    Halide::Runtime::Buffer<int32_t> bias_(bias, 1, b_shape);
 
     cycles = benchmark([&]() {
             int error = conv_nn(input_buf, 3, filter_buf, 5, bias_, 1, 1, 1, 1, 32767, 1, 3, 5, 250, output_buf);

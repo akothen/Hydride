@@ -1,6 +1,6 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
-#include "../../common_params.h"
+//#include "../../common_params.h"
 
 
 using namespace Halide;
@@ -9,7 +9,7 @@ using namespace Halide::ConciseCasts;
 
 namespace hannk {
 
-class AveragePool : public Generator<AveragePool> {
+class AveragePoolAdd : public Generator<AveragePoolAdd> {
 public:
     // Unsigned 8-bit input tensor, indexed by c, x, y, b.
     Input<Buffer<uint8_t>> input_{ "input", 4 };
@@ -89,4 +89,4 @@ private:
 
 }  // namespace hannk
 
-HALIDE_REGISTER_GENERATOR(hannk::AveragePool, average_pool)
+HALIDE_REGISTER_GENERATOR(hannk::AveragePoolAdd, average_pool_add)
