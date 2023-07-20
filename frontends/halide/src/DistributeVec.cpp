@@ -152,6 +152,7 @@ namespace Halide {
 
 #define DISTRIBUTE_BINARY_OP(OP_NAME) \
         std::vector<Expr> DistributeVec::visit(const OP_NAME* op, unsigned num_chunks){ \
+            internal_assert(num_chunks != 0) << "Should not perform distribution into 0 chunks \n"; \
             debug(0) << "Distributing Binary Op " << #OP_NAME << "!  into num chunks " << num_chunks << "\n";\
             std::vector<Expr> exprs; \
             \
@@ -388,9 +389,18 @@ namespace Halide {
 
             // If down-casting then traverse bitvector sizes from smallest to largest for fit
             if(result_num_bits < operand_num_bits){
+                // TODO: This needs to be handled better. For x86 we want if the operand is 1024 downcasting to 512, we should use 256 instead of 128.
+
+                /*
                 start = bitvector_sizes.size() - 1;
                 end = -1;
                 step = -1;
+                */
+
+                // [512, 256, 128]
+                start = 0;
+                end = bitvector_sizes.size();
+                step = 1;
             } else {
                 start = 0;
                 end = bitvector_sizes.size();
@@ -419,11 +429,14 @@ namespace Halide {
                 } else if (operand_num_bits > result_num_bits ){
                     // Decreasing bitwidth, give larger register size to operand
                     //operand_num_chunks = operand_num_bits / bitvector_size;
-                    operand_num_chunks = operand_num_bits / (bitvector_sizes[i + step]);
+                    // operand_num_chunks = operand_num_bits / (bitvector_sizes[i + step]);
+                    internal_assert( (i+step) < (signed) bitvector_sizes.size()) << "Out of bounds access for bitvector_sizes";
+                    operand_num_chunks = operand_num_bits / (bitvector_sizes[i]);
                 } else {
                     operand_num_chunks = orig_num_chunks;
                 }
 
+                internal_assert(operand_num_chunks != 0) << "Operand num chunks must be positive"<<"\n";
 
                 debug(0) << "Operand num chunks for cast is "<< operand_num_chunks <<"\n";
                 distributed_value = dispatch(op->value, operand_num_chunks);
@@ -432,7 +445,7 @@ namespace Halide {
 
                 int lanes_per_chunk = op->type.lanes() / (int) operand_num_chunks;
 
-                internal_assert((op->type.lanes() * op->type.bits()) / bitvector_size == operand_num_chunks) << "Cast Distribution broken..." << "\n";
+                // internal_assert((op->type.lanes() * op->type.bits()) / bitvector_size == operand_num_chunks) << "Cast Distribution broken..." << "\n";
 
 
                 debug(0) << "Lanes per chunk for cast is " << lanes_per_chunk << "\n";
@@ -463,45 +476,6 @@ namespace Halide {
                 }
 
 
-
-#if 0
-                unsigned operands_num_chunks = larger_size / bitvector_size; // 2 ?
-                distributed_value = dispatch(op->value, operands_num_chunks);
-
-                // In the case where the operands are distributed by 
-                // into different number of chunks, we first concatenate 
-                // the results and then extract the slices accordingly.
-                if(operands_num_chunks != num_chunks){
-                    internal_assert(distributed_value.size() != 0) << "Concat empty vectors for cast nodes\n";
-                    debug(0) << "make concat "<<"cast"<<"\n";
-                    for(auto val : distributed_value){
-                        debug(0) << "Individual elem: "<<val<<"\n";
-                    }
-                    // SIMPLIFY ADDED
-                    Expr Combined = (Shuffle::make_concat(distributed_value));
-                    
-
-
-                    // Distribute not over 'chunks' number of equally sized
-                    // expressions.
-                    std::vector<Expr> slice_casts;
-                    if(num_chunks == 1){
-                        slice_casts.push_back(Combined);
-                    } else {
-                        int step_size = op->type.lanes() / (int) num_chunks;
-                        for(unsigned i = 0; i < num_chunks; i++){
-                            // SIMPLIFY ADDED
-                            Expr new_shuffle = (Shuffle::make_slice(Combined, (int) i * step_size, 1, step_size));
-                            slice_casts.push_back(new_shuffle);
-                        }
-                    }
-
-                    distributed_value = slice_casts;
-                    //break;
-                }
-
-                //? break;
-#endif
             }
 
             // Simply split current expression and return
@@ -771,8 +745,8 @@ namespace Halide {
                 }\
                 std::vector<Expr> distributed_op_0 = dispatch(op->args[0], num_chunks); \
                 std::vector<Expr> distributed_op_1 = dispatch(op->args[1], num_chunks); \
-                debug(0) << "Distributed op 0 size: " << distributed_op_0.size() <<"\n";\
-                debug(0) << "Distributed op 1 size: " << distributed_op_1.size() <<"\n";\
+                debug(0) << #OP_NAME << " Distributed op 0 size: " << distributed_op_0.size() <<"\n";\
+                debug(0) << #OP_NAME << " Distributed op 1 size: " << distributed_op_1.size() <<"\n";\
                 debug(0) << Arg0 <<"\n" << Arg1 <<"\n";\
                 internal_assert(distributed_op_0.size() == distributed_op_1.size()) << "DISTRIBUTE_CALL_CLAUSE divided operands differently!\n";\
                     for(unsigned i = 0; i < num_chunks; i++){\
@@ -1145,8 +1119,10 @@ namespace Halide {
 
             if(VI.contains_vector_reduce){
                 debug(0) << "Contains vector reduce, skipping!" << "\n";
-                Expr DistribVal = dispatch(op->value, 1)[0];
-                Stmt NewStoredVal = Store::make(op->name, DistribVal, op->index, op->param, op->predicate, op->alignment);
+
+                // Disable for X86
+                //Expr DistribVal = dispatch(op->value, 1)[0];
+                Stmt NewStoredVal = Store::make(op->name, op->value, op->index, op->param, op->predicate, op->alignment);
                 return NewStoredVal;
 
             }
