@@ -71,10 +71,10 @@
                           (max 1 (- expr-depth 1))))
        (max 1 (- expr-depth 1))]
       [(halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth)
-       (debug-log (format "Contains shr in arm, hence increase depth from ~a to ~a\n"
+       (debug-log (format "Contains shr in arm, at least 2 depth are needed, hence increase depth from ~a to ~a\n"
                           expr-depth
-                          (+ expr-depth 1)))
-       (+ expr-depth 1)]
+                          (max expr-depth 2)))
+       (max expr-depth 2)]
       [(not (halide:contains-mul-op-in-subexpr halide-expr expr-depth))
        (define max-no-mul-depth 4)
        (debug-log
@@ -555,7 +555,7 @@
                              scale-factor)
   (println (format "Invoked step-wise-synthesis!\n"))
 
-  (define step-limit 10) ;; temporary change for arm
+  (define step-limit 5) ;; temporary change for arm
 
   (define solved? #f)
   (define min-cost

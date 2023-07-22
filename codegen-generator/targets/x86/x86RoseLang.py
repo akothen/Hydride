@@ -5106,7 +5106,7 @@ def Compile_Tests():
     #sema = test14__()
     #sema = test179()
     sema = test181()
-    sema = test171()
+    
     sema = test182()
     sema = test103()
     #sema = test180()
@@ -5183,6 +5183,7 @@ def Compile_Tests():
     #sema = test178__()
     #sema = test50()
     #sema = test96()
+    sema = test171()
     print(sema)
     from PseudoCodeParser import GetSemaFromXML, InitX86Parser
     Node = ET.fromstring(sema)
@@ -5200,7 +5201,8 @@ def Compile_Tests():
 
 
 if __name__ == '__main__':
-  # Compile_Tests()
-    Compile()
+#   Compile_Tests()
+#   print(test171())
+    Compile("_mm512_dpbusd_epi32")
 
 

@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 from typing import List, Tuple
-from ARMTypes import ARMGlobalConst
+from ARMTypes import ARMGlobalConst, asl_type_bits
 import asl.ARMAST as asl
 
 PARSER_ID_COUNTER = 0
@@ -240,7 +240,7 @@ class VarDeclInit(ASTNode):
         return f"VarDeclInit({self.decl.__repr__()}, {self.expr.__repr__()}, {self.id.__repr__()})"
 
 
-class Undefiend(ASTNode):
+class Undefined(ASTNode):
     def __repr__(self):
         return f"Undefiend()"
 
@@ -264,19 +264,8 @@ def ASTShrink_(AST):
     elif isinstance(AST, asl.StmtVarsDecl):
         return VarsDecl([Var(i, GenUniqueID()) for i in AST.ids], ASTShrink_(AST.ty), GenUniqueID())
     elif isinstance(AST, asl.TypeRef):
-        d = {
-            "integer": 64,
-            "boolean": 1,
-            "CompareOp": 3,
-            "MemOp": 2,
-            "CountOp": 2,
-            "LogicalOp": 2,
-            "VBitOp": 2,
-            "ReduceOp": 3,
-            "bit": 1,
-        }
-        if AST.qid.id in d:
-            return (AST.qid.id, Number(d[AST.qid.id]))
+        if AST.qid.id in asl_type_bits:
+            return (AST.qid.id, Number(asl_type_bits[AST.qid.id]))
         raise NotImplementedError(f"{AST}")
     elif isinstance(AST, asl.TypeFun):  # Only Returns Type width
         if AST.id == "bits":
@@ -344,7 +333,7 @@ def ASTShrink_(AST):
     elif isinstance(AST, asl.ExprLitBin):
         return BitVec(AST.bitvector)
     elif isinstance(AST, asl.StmtUndefined):
-        return Undefiend()
+        return Undefined()
     elif isinstance(AST, asl.ExprIf):
         return IfElse(ASTShrink_(AST.exprtest), ASTShrink_(AST.exprresult), ASTShrink_(AST.exprelse), GenUniqueID())
     elif isinstance(AST, asl.ExprUnknown):

@@ -2,21 +2,24 @@ import sys
 from ARMSemanticGen import SemaGenerator
 from ARMTypes import expand_instr, extract_assignment_from_name, ReservedImmTypes, PointerType, ReservedVecTypes
 from ARMIntrinsicClassify import toI
+from ARMMeta import *
 
 
 def GenerateCTest(AllSema):
     CannotVerify = []
     para_set = set()
-    notSSA = ['addv', 'addlv', 'maxv', 'minv', 'abd', 'rbit', 'aba',
-              'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
-    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte', 'sli', 'sli_n', 'sliq_n', 'slid_n',
-           'shl_n', 'shlq_n', 'shld_n', 'sri_n', 'sriq_n', 'srid_n']  # unimplemented
-    op_mismatch = ['qrdmlah', 'qrdmlsh']
-    not_compiled_in_gcc = ['dot', 'eor3q', 'rax1q', 'bcaxq', 'xarq']
+    skip_list = notSSA+UIP+op_mismatch+not_compiled_in_gcc+semantics_changed
+    str_list = [
+        """#include "utils.h"
+
+int main()
+{
+    printf("#lang rosette\\n(require \\"compiled.rkt\\")\\n");
+        """
+    ]
     for i, v in AllSema.items():
         try:
-            assert not any(j in i for j in notSSA + UIP +
-                           op_mismatch + not_compiled_in_gcc)
+            assert not any(j in i for j in skip_list)
             for expand_name in expand_instr(toI[i]):
                 basename, assignment = extract_assignment_from_name(
                     expand_name)
@@ -41,13 +44,24 @@ def GenerateCTest(AllSema):
                     else:
                         parastr.append(str(const_vals[val_index]))
                         val_index += 1
-                print(
+                # print(
+                #     f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype}, {i})')
+                str_list.append(
                     f'{funcname}({basename}, {", ".join(parastr)}, {v.rettype}, {i})')
         except AssertionError:
             CannotVerify.append(i)
-    # print("Cannot verify", CannotVerify, file=sys.stderr)
+    str_list.append("""    printf("(displayln \\"All tests passed\\")\\n");
+    return 0;
+}
+""")
+    print("Cannot verify", CannotVerify, file=sys.stderr)
+    return str_list
 
 
 if __name__ == "__main__":
     AllSema = SemaGenerator(deserialize=True).getResult()
-    GenerateCTest(AllSema)
+    str_list = GenerateCTest(AllSema)
+    str = '\n'.join(str_list)
+    print("Writing to rosette_test/ARMTest.cpp...")
+    with open("rosette_test/ARMTest.cpp", "w") as f:
+        f.write(str)

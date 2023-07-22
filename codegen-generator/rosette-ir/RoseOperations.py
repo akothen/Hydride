@@ -350,6 +350,11 @@ class RoseSelectOp(RoseOperation):
             assert Condition.getValue() == 0
             return self.getOperand(2)
         return RoseUndefValue()
+    
+    def getOutputBitwidth(self):
+        assert(self.getThenValue().getType().getBitwidth() == self.getElseValue().getType().getBitwidth())
+        return self.getThenValue().getType().getBitwidth()
+
 
 
 class RoseCastOp(RoseOperation):

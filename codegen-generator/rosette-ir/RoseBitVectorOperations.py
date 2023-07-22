@@ -1714,3 +1714,30 @@ class RoseBVAbsOp(RoseBitVectorOp):
         if SolvedResult != None:
             return RoseConstant(SolvedResult, self.getType())
         return RoseUndefValue()
+
+class RoseBVConcatOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
+        assert isinstance(Operand1.getType(), RoseBitVectorType)
+        assert isinstance(Operand2.getType(), RoseBitVectorType)
+        OperandList = [Operand1, Operand2]
+        super().__init__(RoseOpcode.bvconcat, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+               ParentBlock=RoseUndefRegion()):
+        return RoseBVConcatOp(Name, Operand1, Operand2, ParentBlock)
+
+    def to_rosette(self, NumSpace=0):
+        # if not isinstance(self.getExtensionKind(), RoseConstant):
+        #  return super().to_rosette(NumSpace, ReverseIndexing)
+        # Use existing Rosette function
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + "(define " + Name + " ("
+        String += "concat"
+        String += " " + self.getOperand(0).getName()
+        String += " " + self.getOperand(1).getName()
+        String += "))\n"
+        return String

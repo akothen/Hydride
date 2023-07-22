@@ -9,7 +9,7 @@ using Halide::ConciseCasts::u8_sat;
 class MatrixMultiply : public Generator<MatrixMultiply> {
     public:
         // Two signed 16-bit input matrices, indexed by x, y.
-        GeneratorParam<int> matrix_size{"size", 1024};
+        GeneratorParam<int> matrix_size{"size", 128};
         Input<Buffer<int16_t>> A{ "A", 2 };
         Input<Buffer<int16_t>> B{ "B", 2 };
 
@@ -40,7 +40,7 @@ class MatrixMultiply : public Generator<MatrixMultiply> {
             Var yi("yi");
             RVar r8_x(matrix_mul.update(0).get_schedule().dims()[0].var);
             res
-                .split(x, x, xi, 1024, TailStrategy::ShiftInwards)
+                .split(x, x, xi, 128, TailStrategy::ShiftInwards)//TODO
                 .split(y, y, yi, 4, TailStrategy::ShiftInwards)
                 .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
                 // .unroll(yi)

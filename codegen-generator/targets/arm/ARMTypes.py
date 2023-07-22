@@ -22,6 +22,7 @@ ARMSema = namedtuple('ARMSema', [
     'elem_type',
     'preparation',
     'resolving',
+    'belongs_to',
 ])
 Parameter = namedtuple(
     'Parameter', ['name', 'type', 'is_signed', 'is_imm', 'is_mask'])
@@ -288,3 +289,15 @@ PUT0_LANE_N_ELEM_DIFF = ["SMLAL", "UMLAL", "SMLSL", "UMLSL", "SQDMLAL",
                          "UQDMLAL", "SQDMLSL", "UQDMLSL", "SMULL", "UMULL", "SQDMULL", "UQDMULL"]
 PUT0_LANE_N_ELEM_SAME = ["MLS", "MUL", "MLA",
                          "SQDMULH", "SDOT", "UDOT", "SQRDMLSH", "SQRDMLAH", "SQRDMULH"]
+
+asl_type_bits = {
+    "integer": 64,
+    "boolean": 1,
+    "CompareOp": 3,
+    "MemOp": 2,
+    "CountOp": 2,
+    "LogicalOp": 2,
+    "VBitOp": 2,
+    "ReduceOp": 3,
+    "bit": 1,
+}

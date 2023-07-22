@@ -1,10 +1,11 @@
+import pprint
 import pickle
 from asl.ARMParser import get_parser
 from asl.ARMAST import Instruction
 from ARMTypes import *
 from ARMAST import *
 from typing import Dict
-from ARMManualCorrectAST import ManualAST
+
 import json
 
 
@@ -44,7 +45,7 @@ class DecodeContext:
 
     def walkConstExprRV(self, AST: ASTNode):
         if isinstance(AST, Var):
-            if AST.name.startswith("R") and AST.name != "R":
+            if AST.name.startswith("R") and AST.name != "R" and not AST.name.startswith("Reduce"):
                 return '00000'  # We just don't care about register
             else:
                 return self.lookup(AST.name)
@@ -169,7 +170,7 @@ class DecodeContext:
                 self.walkConstExprStmt(AST.then)
             else:
                 self.walkConstExprStmt(AST.otherwise)
-        elif isinstance(AST, Undefiend):
+        elif isinstance(AST, Undefined):
             raise NotImplementedError("Such field reaches undefined")
         elif isinstance(AST, VarsDecl):
             pass
@@ -290,26 +291,27 @@ class SemaGenerator():
         if deserialize:
             self.deserialize()
         else:
-            from ARMIntrinsicClassify import Intrinsics2Encodings
-            print("loading...")
-            with open(JSONDIR+"asl/arm_instrs.sexpr") as f:
-                data = f.read()
-            parser = get_parser()
-            print("parsing...")
-            Instrs: List[Instruction] = parser.parse(data)
-            print("parse done...")
+            # from ARMIntrinsicClassify import Intrinsics2Encodings
+            # print("loading...")
+            # with open(JSONDIR+"asl/arm_instrs.sexpr") as f:
+            #     data = f.read()
+            # parser = get_parser()
+            # print("parsing...")
+            # Instrs: List[Instruction] = parser.parse(data)
+            # print("parse done...")
 
-            encodingNames = set(Intrinsics2Encodings.values())
-            map2AST = {}
-            for i in Instrs:
-                for j in i.instEncodings:
-                    if j.encName in encodingNames:
-                        wholeCode = j.encDecode
-                        if type(j.encDecode) != asl.Nothing:
-                            wholeCode += i.instPostDecode
-                        map2AST[j.encName] = (
-                            i.instExecute, wholeCode)
-            assert len(map2AST) == len(encodingNames)
+            # encodingNames = set(Intrinsics2Encodings.values())
+            # map2AST = {}
+            # for i in Instrs:
+            #     for j in i.instEncodings:
+            #         if j.encName in encodingNames:
+            #             wholeCode = j.encDecode
+            #             if type(j.encDecode) != asl.Nothing:
+            #                 wholeCode += i.instPostDecode
+            #             map2AST[j.encName] = (
+            #                 i.instExecute, wholeCode)
+            # assert len(map2AST) == len(encodingNames)
+            from ARMParser import map2AST
             self.map2AST = map2AST
             print("map2AST done...")
 
@@ -328,7 +330,7 @@ class SemaGenerator():
         D = DecodeContext(field)
 
         # print(expandedName, field)
-        resolving = D.walk(ASTShrink(ASTs[1]))
+        resolving = D.walk(ASTs[1])
         if D.undefined or D.symbolnotfound:
             print(D.undefined, D.symbolnotfound)
             print(expandedName)
@@ -345,14 +347,14 @@ class SemaGenerator():
         return ARMSema(expandedName,
                        inst,
                        Params,
-                       ManualAST[enc] if enc in ManualAST else ASTShrink(
-                           ASTs[0]),
+                       ASTs[0],
                        intrin.return_type["value"],
                        signedness,
                        f"{inst} {intrin.operands}",
                        None, imm_width, None, None,
                        preparation,
                        resolving,
+                       enc,
                        )
 
     def getSemaByName(self, name):
@@ -420,10 +422,18 @@ class SemaGenerator():
         self.result = self.getResult()
         with open(JSONDIR+'AllSema.pickle', 'wb') as f:
             pickle.dump(self.result, f)
+        with open(JSONDIR+'AllSema.py', 'w') as f:
+            f.write("""from ARMTypes import *
+from ARMAST import *
+""")
+            f.write(f"AllSema = {pprint.pformat(self.result, indent=4)}")
 
     def deserialize(self):
-        with open(JSONDIR+'AllSema.pickle', 'rb') as f:
-            self.result = pickle.load(f)
+        # with open(JSONDIR+'AllSema.pickle', 'rb') as f:
+        #     self.result = pickle.load(f)
+        from AllSema import AllSema
+
+        self.result = AllSema
 
 
 if __name__ == "__main__":
@@ -431,7 +441,7 @@ if __name__ == "__main__":
     # print([i for i in S.SemaGenerator() if i is not None])
     S = SemaGenerator()
     # print(S.getSemaByName("vqshrun_n_s64__n_1"))
-    print(S.getSemaByName("vshl_s32").spec.__repr__())
+    # print(S.getSemaByName("vdot_s32").spec.__repr__())
     # print(S.getSemaByName("vabdl_s32").spec.__repr__())
     # S = SemaGenerator(deserialize=True)
     # print(S.getSemaByName("vsubq_s16"))

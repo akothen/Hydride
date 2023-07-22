@@ -1,30 +1,237 @@
 from ARMAST import *
 ManualAST = {
-    "aarch64_vector_arithmetic_binary_uniform_diff": [
-        VarDeclInit(VarsDecl([Var('operand1', '0')], ('bits', Var(
-            'datasize', '1')), '2'), ArrayIndex(Var('V', '3'), [Var('n', '4')], '5'), '6'),
-        VarDeclInit(VarsDecl([Var('operand2', '7')], ('bits', Var(
-            'datasize', '8')), '9'), ArrayIndex(Var('V', '10'), [Var('m', '11')], '12'), '13'),
-        VarsDecl([Var('result', '14')], ('bits', Var('datasize', '15')), '16'),
-        VarsDecl([Var('res', '14.')], ('bits', Var('datasize', '15.')), '16.'),
-        VarsDecl([Var('element1', '17')], ('integer', Number(64)), '18'),
-        VarsDecl([Var('element2', '19')], ('integer', Number(64)), '20'),
-        VarsDecl([Var('absdiff', '21')], ('bits', Var('esize', '22')), '23'),
-        Update(Var('res', '24'), IfElse(Var('accumulate', '25'), ArrayIndex(Var('V', '26'), [Var('d', '27')], '28'), Call('Zeros', [], '29'), '30')), For(Var('e', '31'), Number(0), BinaryExpr('-', Var('elements', '32'), Number(1), '33'), [Update(Var('element1', '34'), Call('Int', [ArrayIndex(Var('Elem', '35'), [Var('operand1', '36'), Var('e', '37'), Var('esize', '38')], '39'), Var('unsigned', '40')], '41')), Update(Var('element2', '42'), Call('Int', [ArrayIndex(Var('Elem', '43'), [Var('operand2', '44'), Var('e', '45'), Var('esize', '46')], '47'), Var('unsigned', '48')], '49')), Update(Var('absdiff', '50'), ArrayIndex(Call('Abs', [BinaryExpr('-', Var('element1', '51'), Var('element2', '52'), '53')], '54'), [SliceRange(BinaryExpr('-', Var('esize', '55'), Number(1), '56'), Number(0), '57')], '58')), Update(ArrayIndex(Var('Elem', '59'), [Var('result', '60'), Var('e', '61'), Var('esize', '62')], '63'), BinaryExpr('+', ArrayIndex(Var('Elem', '64'), [Var('res', '65'), Var('e', '66'), Var('esize', '67')], '68'), Var('absdiff', '69'), '70'))], 1, '71'), Update(ArrayIndex(Var('V', '72'), [Var('d', '73')], '74'), Var('result', '75'))],
-    "aarch64_vector_arithmetic_binary_disparate_diff": [
-        VarDeclInit(VarsDecl([Var('operand1', '0')], ('bits', Var('datasize', '1')), '2'), ArrayIndex(
-            Var('Vpart', '3'), [Var('n', '4'), Var('part', '5')], '6'), '7'),
-        VarDeclInit(VarsDecl([Var('operand2', '8')], ('bits', Var('datasize', '9')), '10'), ArrayIndex(
-            Var('Vpart', '11'), [Var('m', '12'), Var('part', '13')], '14'), '15'),
-        VarsDecl([Var('result', '16')], ('bits', BinaryExpr(
-            '*', Number(2), Var('datasize', '17'), '18')), '19'),
-        VarsDecl([Var('res', '16.')], ('bits', BinaryExpr(
-            '*', Number(2), Var('datasize', '17.'), '18.')), '19.'),
-        VarsDecl([Var('element1', '20')], ('integer', Number(64)), '21'),
-        VarsDecl([Var('element2', '22')], ('integer', Number(64)), '23'),
-        VarsDecl([Var('absdiff', '24')], ('bits', BinaryExpr(
-            '*', Number(2), Var('esize', '25'), '26')), '27'),
-        Update(Var('res', '28'), IfElse(Var('accumulate', '29'), ArrayIndex(
-            Var('V', '30'), [Var('d', '31')], '32'), Call('Zeros', [], '33'), '34')),
-        For(Var('e', '35'), Number(0), BinaryExpr('-', Var('elements', '36'), Number(1), '37'), [Update(Var('element1', '38'), Call('Int', [ArrayIndex(Var('Elem', '39'), [Var('operand1', '40'), Var('e', '41'), Var('esize', '42')], '43'), Var('unsigned', '44')], '45')), Update(Var('element2', '46'), Call('Int', [ArrayIndex(Var('Elem', '47'), [Var('operand2', '48'), Var('e', '49'), Var('esize', '50')], '51'), Var('unsigned', '52')], '53')), Update(Var('absdiff', '54'), ArrayIndex(Call('Abs', [BinaryExpr('-', Var('element1', '55'), Var('element2', '56'), '57')], '58'), [SliceRange(BinaryExpr('-', BinaryExpr('*', Number(2), Var('esize', '59'), '60'), Number(1), '61'), Number(0), '62')], '63')), Update(ArrayIndex(Var('Elem', '64'), [Var('result', '65'), Var('e', '66'), BinaryExpr('*', Number(2), Var('esize', '67'), '68')], '69'), BinaryExpr('+', ArrayIndex(Var('Elem', '70'), [Var('res', '71'), Var('e', '72'), BinaryExpr('*', Number(2), Var('esize', '73'), '74')], '75'), Var('absdiff', '76'), '77'))], 1, '78'), Update(ArrayIndex(Var('V', '79'), [Var('d', '80')], '81'), Var('result', '82'))]
+    "aarch64_vector_arithmetic_binary_uniform_diff":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            if (size == '11') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            boolean unsigned = (U == '1');
+            boolean accumulate = (ac == '1');
+        }""",
+        "execute": """        {
+            bits(datasize) operand1 = V[n];
+            bits(datasize) operand2 = V[m];
+            bits(datasize) result;
+            bits(datasize) result2;
+            integer element1;
+            integer element2;
+            bits(esize) absdiff;
+            result = (V[d] if accumulate else Zeros());
+            for e = 0 to (elements - 1)
+            {
+                element1 = Int(Elem[operand1,e,esize], unsigned);
+                element2 = Int(Elem[operand2,e,esize], unsigned);
+                absdiff = Abs((element1 - element2))[0~(esize - 1)];
+                Elem[result2,e,esize] = (Elem[result,e,esize] + absdiff);
+            }
+            V[d] = result2;
+        }""",
+    },
+    "aarch64_vector_arithmetic_binary_disparate_diff":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            if (size == '11') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = 64;
+            integer part = UInt(Q);
+            integer elements = (datasize DIV esize);
+            boolean accumulate = (op == '0');
+            boolean unsigned = (U == '1');
+        }""",
+        "execute": """        {
+            bits(datasize) operand1 = Vpart[n,part];
+            bits(datasize) operand2 = Vpart[m,part];
+            bits((2 * datasize)) result;
+            bits((2 * datasize)) result2;
+            integer element1;
+            integer element2;
+            bits((2 * esize)) absdiff;
+            result = (V[d] if accumulate else Zeros());
+            for e = 0 to (elements - 1)
+            {
+                element1 = Int(Elem[operand1,e,esize], unsigned);
+                element2 = Int(Elem[operand2,e,esize], unsigned);
+                absdiff = Abs((element1 - element2))[0~((2 * esize) - 1)];
+                Elem[result2,e,(2 * esize)] = (Elem[result,e,(2 * esize)] + absdiff);
+            }
+            V[d] = result2;
+        }""",
+    },
+    "aarch64_vector_arithmetic_binary_uniform_mul_int_dotp":{
+        "decode": """        {
+            if (! HaveDOTPExt()) then
+            {
+                UNDEFINED
+            }
+            if (size != '10') then
+            {
+                UNDEFINED
+            }
+            boolean signed = (U == '0');
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+        }""",
+        "execute": """        {
+            bits(datasize) operand1 = V[n];
+            bits(datasize) operand2 = V[m];
+            bits(datasize) result;
+            bits(datasize) result2;
+            result = V[d];
+            for e = 0 to (elements - 1)
+            {
+                integer res, zero;
+                integer element10, element20, element11, element21, element12, element22, element13, element23;
+                if signed then
+                {
+                    element10 = SInt(Elem[operand1,((4 * e) + 0),(esize DIV 4)]);
+                    element20 = SInt(Elem[operand2,((4 * e) + 0),(esize DIV 4)]);
+                    element11 = SInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
+                    element21 = SInt(Elem[operand2,((4 * e) + 1),(esize DIV 4)]);
+                    element12 = SInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
+                    element22 = SInt(Elem[operand2,((4 * e) + 2),(esize DIV 4)]);
+                    element13 = SInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
+                    element23 = SInt(Elem[operand2,((4 * e) + 3),(esize DIV 4)]);
+                    zero = SInt(Elem[result,e,esize]);
+                }
+                else
+                {
+                    element10 = UInt(Elem[operand1,((4 * e) + 0),(esize DIV 4)]);
+                    element20 = UInt(Elem[operand2,((4 * e) + 0),(esize DIV 4)]);
+                    element11 = UInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
+                    element21 = UInt(Elem[operand2,((4 * e) + 1),(esize DIV 4)]);
+                    element12 = UInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
+                    element22 = UInt(Elem[operand2,((4 * e) + 2),(esize DIV 4)]);
+                    element13 = UInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
+                    element23 = UInt(Elem[operand2,((4 * e) + 3),(esize DIV 4)]);
+                    zero = UInt(Elem[result,e,esize]);
+                }
+                res = element10*element20 + element11*element21 + element12*element22 + element13*element23;
+                Elem[result2,e,esize] = (zero + res)[0~(esize-1)];
+            }
+            V[d] = result2;
+        }""",
+    },
+    "aarch64_vector_arithmetic_binary_element_dotp":{
+        "decode": """        {
+            if (! HaveDOTPExt()) then
+            {
+                UNDEFINED
+            }
+            if (size != '10') then
+            {
+                UNDEFINED
+            }
+            boolean signed = (U == '0');
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt((M : Rm));
+            integer index = UInt((H : L));
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+        }""",
+        "execute": """        {
+            bits(datasize) operand1 = V[n];
+            bits(128) operand2 = V[m];
+            bits(datasize) result = V[d];
+            for e = 0 to (elements - 1)
+            {
+                integer res, zero;
+                integer element10, element20, element11, element21, element12, element22, element13, element23;
+                if signed then
+                {
+                    element10 = SInt(Elem[operand1,((4 * e) + 0),(es0ze DIV 4)]);
+                    element20 = SInt(Elem[operand2,((4 * index) + 0),(esize DIV 4)]);
+                    element11 = SInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
+                    element21 = SInt(Elem[operand2,((4 * index) + 1),(esize DIV 4)]);
+                    element12 = SInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
+                    element22 = SInt(Elem[operand2,((4 * index) + 2),(esize DIV 4)]);
+                    element13 = SInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
+                    element23 = SInt(Elem[operand2,((4 * index) + 3),(esize DIV 4)]);
+                    zero = SInt(Elem[result,e,esize]);
+                }
+                else
+                {
+                    element10 = UInt(Elem[operand1,((4 * e) + 0),(es0ze DIV 4)]);
+                    element20 = UInt(Elem[operand2,((4 * index) + 0),(esize DIV 4)]);
+                    element11 = UInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
+                    element21 = UInt(Elem[operand2,((4 * index) + 1),(esize DIV 4)]);
+                    element12 = UInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
+                    element22 = UInt(Elem[operand2,((4 * index) + 2),(esize DIV 4)]);
+                    element13 = UInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
+                    element23 = UInt(Elem[operand2,((4 * index) + 3),(esize DIV 4)]);
+                    zero = UInt(Elem[result,e,esize]);
+                }
+                res = element10*element20 + element11*element21 + element12*element22 + element13*element23;
+                Elem[result2,e,esize] = (zero + res)[0~(esize-1)];
+            }
+            V[d] = result;
+        }""",
+    },
+    "aarch64_vector_reduce_add_simd":{ # No other ways to match vaddv_s32 to any encoding
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            if (size == '11') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            ReduceOp op = ReduceOp_ADD;
+        }""",
+        "execute": """        {
+            bits(datasize) operand = V[n];
+            V[d] = Reduce(op, operand, esize);
+        }""",
+    },
+    "aarch64_vector_arithmetic_unary_add_pairwise":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            if (size == '11') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV (2 * esize));
+            boolean acc = (op == '1');
+            boolean unsigned = (U == '1');
+        }""",
+        "execute": """        {
+            bits(datasize) operand = V[n];
+            bits(datasize) result;
+            bits(datasize) result2;
+            bits((2 * esize)) sum;
+            integer op1;
+            integer op2;
+            result = (V[d] if acc else Zeros());
+            for e = 0 to (elements - 1)
+            {
+                op1 = Int(Elem[operand,((2 * e) + 0),esize], unsigned);
+                op2 = Int(Elem[operand,((2 * e) + 1),esize], unsigned);
+                sum = (op1 + op2)[0~((2 * esize) - 1)];
+                Elem[result2,e,(2 * esize)] = (Elem[result,e,(2 * esize)] + sum);
+            }
+            V[d] = result2;
+        }""",
+    },
 }

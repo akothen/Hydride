@@ -21,10 +21,11 @@ DEBUG_LIST = [
     # "vpmin_s8",
     # "vmin_s8",
     # "vqadd_s16",
-    "vmovl_s16",
-    "vqmovn_s32",
-    "vshld_s64",
-    "vadd_u64",
+    # "vmovl_s16",
+    # "vqmovn_s32",
+    "vmlaq_s32",
+    # "vshld_s64",
+    # "vadd_u64",
     # "vshr_n_s8",
     # "vshr_n_s16",
     # "vshr_n_s32",
@@ -627,7 +628,12 @@ class SynthesizerBase:
             # Prevent vsraq taking place of vadd
             if "bvashr" not in spec_ops and "bvlshr" not in spec_ops and len(spec_ops) <= 2:
                 disallowed_ops += ["bvashr", "bvlshr"]
+            if "bvadd" in spec_ops and "bvsub" not in spec_ops:
+                disallowed_ops += ["bvsub"]
+            if "bvsub" in spec_ops and "bvadd" not in spec_ops:
+                disallowed_ops += ["bvadd"]
 
+        print("Spec bvops: ", spec_ops)
         print("Disallowed bvops: ", disallowed_ops)
         pruned_ops = []
         pruned_ctxs = []
@@ -645,21 +651,41 @@ class SynthesizerBase:
                     #   continue
                     # Attempt for ARM
                     if self.target == "arm":
-                        if any(i in ctxs[idx].name for i in ["shr", "shl", "mul"]):
+                        if any(i in ctxs[idx].name for i in ["shr", "shl", "mul", "mla", "mls"]):
                             if "_s" in ctxs[idx].name and op == "zero-extend":
                                 continue
                             if "_u" in ctxs[idx].name and op == "sign-extend":
                                 continue
+                        if "movl" in ctxs[idx].name and op in ["bvashr", "bvsub"]:
+                            continue
                         # if "rshr" in ctxs[idx].name: #rshr
                         #   if op == "bvlshr":
                         #     continue
                     to_insert = False
+                    reason = f"{op} in {disallowed_ops}"
                     break
+            if self.target == "arm":
+                if "shr" in ctxs[idx].name:
+                    if "bvashr" in spec_ops or "bvlshr" in spec_ops:
+                        pass
+                    else:
+                        to_insert = False
+                        reason = f"No bvashr nor bvlshr found in spec_ops"
+                if "shl" in ctxs[idx].name:
+                    if "bvshl" in spec_ops:
+                        pass
+                    else:
+                        to_insert = False
+                        reason = f"No bvshl found in spec_ops"
+                # if "qrshrn_n" in ctxs[idx].name:
+                #     to_insert = False
+                #     reason = "?"
             if to_insert:
                 pruned_ops.append(ops[idx])
                 pruned_ctxs.append(ctxs[idx])
             else:
-                print("Pruning ", ctxs[idx].name, "due to bv op variants")
+                print("Pruning ", ctxs[idx].name,
+                      "due to bv op variants:", reason)
 
         return (pruned_ops, pruned_ctxs)
 
@@ -965,7 +991,7 @@ class SynthesizerBase:
                     if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
                         # if Target is ARM
                         if self.target == "arm":
-                            if any(i in ctx.name for i in ["shr", "shl", "mul"]):
+                            if any(i in ctx.name for i in ["shr", "shl", "mul", "mla", "mls"]):
                                 if "_s" in ctx.name and v == "zero-extend":
                                     continue
                                 if "_u" in ctx.name and v == "sign-extend":
@@ -1240,7 +1266,7 @@ class SynthesizerBase:
             EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
                              ["bvmul"], ["sign-extend", "zero-extend"]]
             if self.target == "arm":
-                EXPENSIVE_OPS = [["bvsdiv", "bvudiv"],
+                EXPENSIVE_OPS = [["bvsdiv", "bvudiv"], ["abs"],
                                  ["bvmul"]]
 
             if self.target == "hvx":
@@ -1249,8 +1275,7 @@ class SynthesizerBase:
                 EXPENSIVE_OPS.append(["bvsubnuw", "bvsubnsw", "bvsub"])
                 # EXPENSIVE_OPS.append(["bvssat", "bvusat"])
 
-            # Including dot-products type operations is only required
-            # when there is some form of accumulation with multiplication
+            # Including dot-products type operations is only required ion
             # hence, we limit dot-product operations to be included
             # only in such cases
             # EXPENSIVE_OPS += ["bvadd"]
@@ -1356,7 +1381,9 @@ class SynthesizerBase:
 
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
-
+        if self.target == "arm":
+            if "movl" in dsl_inst.name:
+                return True
         return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq", "if", "cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
 
     # Is the operation either a broadcast operation or an
@@ -1420,7 +1447,7 @@ class SynthesizerBase:
 
         for SKIP in SKIP_LIST:
             if SKIP in dsl_inst.name:
-                # print("checking if ",SKIP," in ",dsl_inst.name)
+                print("Intentionally skip", SKIP, " in ", dsl_inst.name)
                 return False
 
         if dsl_inst.name in DEBUG_LIST and DEBUG:

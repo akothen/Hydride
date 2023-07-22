@@ -972,38 +972,6 @@ concat
 )
 result)
 
-(define (vtrn1_u16  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 %arg3 %arg4 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
-   (define %28.new0 (*  %iterator1.new  %arg1))
-   (define %lastidx2 (-  %elemsize1  1))
-   (define %33 (+  %28.new0  %lastidx2))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-   (define %3.new0 (*  %iterator0.new  %arg0))
-   (define %lastidx0 (-  %elemsize0  1))
-   (define %8 (+  %3.new0  %lastidx0))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
-  )
-  )
- )
-)
-)
-)
-result)
-
 (define (vmull_u32  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 %arg4 )
 (define result
 (apply
@@ -1102,36 +1070,6 @@ concat
   (define %19 (extract  %highidx0 %arg0 %13.ab0))
   %19
  )
- )
-)
-)
-)
-result)
-
-(define (vzip1_s32  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 %arg3 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
-   (define %lastidx3 (-  %elemsize1  1))
-   (define %30 (+  %iterator1.new  %lastidx3))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-   (define %lastidx1 (-  %elemsize0  1))
-   (define %15 (+  %iterator0.new  %lastidx1))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
-  )
-  )
  )
 )
 )
@@ -1237,42 +1175,6 @@ concat
   (define %15 (extract  %highidx0 %arg0 %14))
   %15
  )
- )
-)
-)
-)
-result)
-
-(define (vtrn2_s32  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 %arg3 %arg4 %arg5 %arg6 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
-   (define %18.new0 (/  %iterator1.new  %arg6))
-   (define %19 (+  %18.new0  %arg5))
-   (define %20 (*  %19  %arg4))
-   (define %lastidx2 (-  %elemsize1  1))
-   (define %25 (+  %20  %lastidx2))
-   (define %34 (extract  %25 %20 b))
-   %34
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-   (define %9.new0 (/  %iterator0.new  %arg2))
-   (define %10 (+  %9.new0  %arg1))
-   (define %11 (*  %10  %arg0))
-   (define %lastidx1 (-  %elemsize0  1))
-   (define %16 (+  %11  %lastidx1))
-   (define %17 (extract  %16 %11 a))
-   %17
-  )
-  )
  )
 )
 )
@@ -1420,29 +1322,6 @@ concat
 )
 result)
 
-(define (vuzp2_s16  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 )
-(define %1 (concat b a))
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %7.new0 (/  e0.new  %arg2))
-  (define %8 (+  %7.new0  %arg1))
-  (define %9 (*  %8  %arg0))
-  (define %lastidx1 (-  %elemsize0  1))
-  (define %14 (+  %9  %lastidx1))
-  (define %15 (extract  %14 %9 %1))
-  %15
- )
- )
-)
-)
-)
-result)
-
 (define (vclezq_s8  %arg1.norm %arg0.norm %arg2.norm a.norm %vectsize0.norm %outerlanesize0.norm %innerlaneoffset0.norm %innerlanesize0.norm %elemsize0.norm %arg3.norm %arg4.norm )
 (define result.norm
 (apply
@@ -1515,27 +1394,6 @@ concat
   (define %36 (extract  %26 %21.new0 a))
   (define %37.ab0 (bvaddnw %36 %19 %arg1 %arg2 ))
   %37.ab0
- )
- )
-)
-)
-)
-result)
-
-(define (vuzp1_u16  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 )
-(define %1 (concat b a))
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %9.new0 (*  e0.new  %arg0))
-  (define %lastidx1 (-  %elemsize0  1))
-  (define %14 (+  %9.new0  %lastidx1))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
  )
  )
 )
@@ -2131,42 +1989,6 @@ concat
 )
 )
 result.norm)
-
-(define (vzip2_s8  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 %arg3 %arg4 %arg5 %arg6 %arg7 %arg8 %arg9 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
-   (define %iterator1.new.div (/  %iterator1.new  %arg9))
-   (define %25 (+  %arg5  %iterator1.new.div))
-   (define %26 (*  %25  %arg4))
-   (define %lastidx3 (-  %elemsize1  1))
-   (define %30 (+  %26  %lastidx3))
-   (define %31 (extract  %30 %26 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-   (define %iterator0.new.div (/  %iterator0.new  %arg3))
-   (define %10 (+  %arg1  %iterator0.new.div))
-   (define %11 (*  %10  %arg0))
-   (define %lastidx1 (-  %elemsize0  1))
-   (define %15 (+  %11  %lastidx1))
-   (define %16 (extract  %15 %11 a))
-   %16
-  )
-  )
- )
-)
-)
-)
-result)
 
 (define (vshr_n_s8  %arg4 %arg1 a n %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg2 %arg3 %arg5 %arg6 )
 (define %1.ab0 (bvsizeext  n 192 %arg0))

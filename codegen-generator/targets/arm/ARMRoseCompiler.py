@@ -504,6 +504,7 @@ def Slicing(Stmt: ArrayIndex, Context: ARMRoseContext):
         Stmt.slices) == 1, f"Only one dim slicing is supported, but got {Stmt.slices}"
     SR = Stmt.slices[0]
     if isinstance(SR, SliceRange):
+        # breakpoint()
         Low = CompileRValueExpr(SR.lo, Context)
         High = CompileRValueExpr(SR.hi, Context)
         # Context.setIndexNumberType(OriginalNumberTy)
@@ -944,6 +945,8 @@ def CompileCallRv(Stmt: Call, Context: ARMRoseContext):
     #     CompileStatement(s, Context)
     if Stmt.funcname in Builtins:
         return CompileBuiltIn(Stmt, Context)
+    if Stmt.funcname in InlinedBuiltins:
+        return InlinedBuiltins[Stmt.funcname](Stmt, Context)
     assert False, f"Function {Stmt.funcname} not found"
 
 
@@ -1821,6 +1824,66 @@ def HandleToZeros(_):
     return LamdaImplFunc
 
 
+def HandleToZeros(_):
+    def LamdaImplFunc(Name: str, Operands: list, Context: ARMRoseContext):
+        assert len(Operands) == 0
+        wid = Context.getLHSType()[1]
+        assert type(wid) == int
+        Op = RoseConstant(0, RoseBitVectorType.create(wid))
+        Context.addSignednessInfoForValue(Op, False)
+        return Op
+
+    return LamdaImplFunc
+
+
+def InlineReduce(Stmt: Call, Context: ARMRoseContext):
+    '''
+    ? = Reduce(op, vec, width)  ; n=4
+    ->
+    bits(esize) tmp1, tmp2, tmp3;
+    tmp1 = op(vec[0], vec[1]);
+    tmp2 = op(tmp1, vec[2]);
+    tmp3 = op(tmp2, vec[3]);
+
+    '''
+    assert len(Stmt.args) == 3
+    vecWidth = CompileVarRv(Stmt.args[1], Context).getType().getBitwidth()
+    reduceWidth = Context.getConstexprFor(Stmt.args[2].name)
+    op = CompileVarRv(Stmt.args[0], Context).Val
+    tmp = Context.genName()
+    n = vecWidth//reduceWidth
+    
+    newvars = [Var(tmp+f'.reduce{i}', Context.genName()) for i in range(n-1)]
+    inline_list = [
+        VarsDecl(newvars,
+                 ('bits', Stmt.args[2]), Context.genName())
+    ]
+
+    def reduceWrapper(op, n1, n2):
+        if op == 5:
+            return BinaryExpr('+', n1, n2, Context.genName())
+    assert op == 5
+    # breakpoint()
+    inline_list.append(Update(newvars[0],
+                              reduceWrapper(op,
+                                            ArrayIndex(Var('Elem', Context.genName()), [
+                                                Stmt.args[1], Number(0), Stmt.args[2]], Context.genName()),
+                                            ArrayIndex(Var('Elem', Context.genName()), [
+                                                Stmt.args[1], Number(1), Stmt.args[2]], Context.genName()))
+                              ))
+    
+    for i in range(1, n-1):
+        inline_list.append(Update(newvars[i],
+                                  reduceWrapper(op,
+                                                newvars[i-1],
+                                                ArrayIndex(Var('Elem', Context.genName()), [
+                                                    Stmt.args[1], Number(i+1), Stmt.args[2]], Context.genName()))))
+    for i in inline_list:
+        CompileStatement(i, Context)
+    return CompileRValueExpr(newvars[-1], Context)
+    # breakpoint()
+
+
 # Builtin functions
 Builtins = {
     'Saturate32': HandleToSSaturate(32),
@@ -1872,9 +1935,12 @@ Builtins = {
     'UnsignedRecipEstimate': NotImplemented('UnsignedRecipEstimate'),
     'UnsignedRSqrtEstimate': NotImplemented('UnsignedRSqrtEstimate'),
     'NOT': HandleToNotFunc(None),
-    'Reduce': NotImplemented('Reduce'),
+
     'ROL': HandleToROL(None),
     'ROR': HandleToROL(None),
     'LSL': NotImplemented('LSL'),
     'LSR': NotImplemented('LSR'),
+}
+InlinedBuiltins = {
+    'Reduce': InlineReduce
 }

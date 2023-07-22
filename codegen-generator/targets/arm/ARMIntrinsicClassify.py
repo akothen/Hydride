@@ -4,6 +4,7 @@ from ARMAST import Flag, JSONDIR
 from ARMTypes import *
 import json
 from typing import Set, List, Dict, Tuple
+from ARMMeta import *
 
 # v[p][q][r]name[u][n][q][x][_high][_lane | laneq][_n][_result]_type
 # https://developer.arm.com/documentation/102467/0200/Program-conventions?lang=en
@@ -215,13 +216,8 @@ def wedo(instr):
     tosupport = ["TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):
         return False
-    notSSA = ['addv', 'addlv', 'maxv', 'minv', 'rbit', 'aba',
-              'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'paddd']
-    UIP = ['cls', 'clz', 'cnt', 'recpe', 'rsqrte', 'sli', 'sli_n', 'sliq_n', 'slid_n',
-           'shl_n', 'shlq_n', 'shld_n', 'sri_n', 'sriq_n', 'srid_n']  # unimplemented
-    op_mismatch = ['qrdmlah', 'qrdmlsh']
-    not_compiled_in_gcc = ['dot', 'eor3q', 'rax1q', 'bcaxq', 'xarq']
-    if any([j in instr["name"] for j in notSSA + UIP + op_mismatch + not_compiled_in_gcc]):
+    skip_list = notSSA+UIP+op_mismatch+not_compiled_in_gcc
+    if any([j in instr["name"] for j in skip_list]):
         return False
     return True
 
@@ -256,6 +252,8 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
     }
     if intrin.startswith("vset"):
         desiredprefix = "INS"
+    if intrin in ['vaddv_s32', 'vaddv_u32']:
+        desiredprefix = "ADDV"
     desiredprefix = alias.get(desiredprefix, desiredprefix)
 
     def checkUniqueness(x):
@@ -270,6 +268,7 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
         return (k, enc[k])
 
     # print(intrin, desiredprefix)
+
     if (z := checkUniqueness(desiredprefix)):
         return z
     else:
@@ -299,6 +298,9 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
         elif desiredprefix in ["ADDP"]:
             def handleADDP():
                 if "addv" in intrin:
+                    # if "x2" in intrinsic["arguments"][0]:
+                    #     return "_asimd"
+                    # else:
                     return "_asisd"
                 if flag.x == "d":
                     return "_asisd"
@@ -356,6 +358,7 @@ def findMatchingEncoding():
         if not wedo(i):
             continue
         k, v = searchEncodingForIntrinsic(i)
+        # print(intrin.name, v)
         assert type(intrin.name) == str
 
         result[intrin.name] = v
@@ -399,6 +402,7 @@ def Intrin2Field():
             notwedo += 1
             continue
         k, v = searchEncodingForIntrinsic(i)
+        # print(intrin.name, v)
         field = EncodingFields[k]
         for expanded_name in expand_instr(intrin):
             # print(expanded_name, extract_assignment_from_name(expanded_name))
@@ -425,6 +429,7 @@ def Intrin2Field():
     skip = []
     skipintrin = []
     name2encoding = {}
+    # breakpoint()
     for encodings, intrins in inv_map.items():
         # print(encodings, intrins)
         # if encodings in skip:
@@ -648,6 +653,7 @@ if __name__ == "__main__":
     #          "vrshl_s8", "vqmovn_s64", "vpadd_s8", "vaddl_high_s8"]
     check = ["vmlal_high_n_s16", "vget_lane_s32__lane_0",
              "vmlal_high_lane_s16__lane_0", "vmul_n_s16", "vmla_lane_s16__lane_0", "vqshrun_n_s64__n_1", "vqshrn_n_u64__n_1", "vqshrn_n_u64__n_1", "vdup_n_s8", "vdup_lane_s8__lane_0"]
+    check = ["vaddv_s32", "vaddvq_s32", "vaddvq_s64"]
     for v in check:
         vv, _ = extract_assignment_from_name(v)
         print(vv, IntrinsicsFlags[vv])

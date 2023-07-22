@@ -4,6 +4,7 @@ import ARMTestCases
 from ARMRoseCompiler import ARMRoseContext, CompileSemantics
 from ARMTypes import *
 from ARMAST import *
+from ARMMeta import *
 # CheckFPAdvSIMDEnabled64();
 # bits(datasize) operand1 = V[n];
 # bits(datasize) operand2 = V[m];
@@ -23,8 +24,7 @@ from ARMAST import *
 import sys
 from RosetteGen import GenerateRosetteForFunction
 
-skip = ['addlv', 'maxv', 'minv', 'rbit',
-        'dot', 'aba', 'rev', 'ada', 'create', 'vdup_n_s64', 'vdup_n_u64', 'vcopy']
+skip = notSSA + ['vcopy']
 
 
 def Compile(InstName: str = None):
@@ -37,7 +37,9 @@ def Compile(InstName: str = None):
         # interested = ["vshr_n_u8"]
         # interested = ["max", "min"]
         # interested = ["vmovl_s8","vdupq_n_s16"]
-        interested = ["vshl", "vqshl", "vrshl", "vqrshl"]
+        # interested = ["vshl", "vqshl", "vrshl", "vqrshl"]
+        # interested = ["dot"]
+        # interested = ["ada", "paddd"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
@@ -123,14 +125,20 @@ def TestcaseGen():
         AllRosetteCode += RosetteCode
     print(len(compiled), "functions compiled:", file=sys.stderr)
     print(compiled, file=sys.stderr)
+    print("Writing to rosette_test/compiled.rkt...")
     AllRosetteCode += "(provide (all-defined-out))"
     with open(f'rosette_test/compiled.rkt', 'w') as f:
         f.write(AllRosetteCode)
 
 
 if __name__ == "__main__":
-    # Compile()
-    TestcaseGen()
+
+    if "--gen" in sys.argv:
+        TestcaseGen()
+    else:
+        Compile()
+        
+    # TestcaseGen()
 
     # print(RosetteCode)
 

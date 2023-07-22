@@ -237,6 +237,9 @@ class RoseOpcode(Enum):
             BVInputs = self.getBVOpInputs(Inputs)
             assert (len(BVInputs) > 1)
             return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth())
+        if self.value == self.bvconcat.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            return RoseBitVectorType.create(BVInputs[0].getType().getBitwidth()+BVInputs[1].getType().getBitwidth())
         if self.value == self.bvsdiv.value \
                 or self.value == self.bvudiv.value \
                 or self.value == self.bvsrem.value \
@@ -486,8 +489,8 @@ class RoseOpcode(Enum):
                 return False
             if BVInputs[1].getType().getBitwidth() < Inputs[4].getValue():
                 return False
-            if self.getOutputType(Inputs) != OutputType:
-                return False
+            # if self.getOutputType(Inputs) != OutputType:  # ARM Hotfix: Don't know what is it doing here
+            #     return False
             return True
         if self.value == self.bvsignextend.value \
                 or self.value == self.bvzeroextend.value:
@@ -573,7 +576,8 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsmin.value \
                 or self.value == self.bvumin.value \
                 or self.value == self.bvsmax.value \
-                or self.value == self.bvumax.value:
+                or self.value == self.bvumax.value \
+                or self.value == self.bvconcat.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) <= 0:
                 return False

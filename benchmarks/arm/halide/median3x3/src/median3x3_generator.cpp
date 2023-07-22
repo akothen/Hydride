@@ -60,10 +60,10 @@ public:
         output.dim(0).set_min(0);
         output.dim(1).set_min(0);
 
-        const int vector_size = natural_vector_size<uint8_t>();
+        const int vector_size = 512;
         bounded_input
             .compute_at(Func(output), y)
-            .align_storage(x, 128)
+            .align_storage(x, 512)
             .vectorize(x, vector_size, TailStrategy::RoundUp);
         output
             .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)

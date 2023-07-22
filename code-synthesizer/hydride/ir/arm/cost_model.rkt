@@ -65,27 +65,22 @@
 (define cost_vadd_u64_dsl 1)
 (define cost_vmull_n_s32_dsl 1)
 (define cost_vhadd_u8_dsl 1)
-(define cost_vtrn1_u16_dsl 1)
 (define cost_vmull_u32_dsl 1)
 (define cost_vsra_n_u8_dsl 1)
 (define cost_vqdmull_s32_dsl 1)
 (define cost_vmaxq_u16_dsl 1)
-(define cost_vzip1_s32_dsl 1)
 (define cost_vcgeq_u32_dsl 1)
 (define cost_vqneg_s32_dsl 1)
 (define cost_vqdmlsl_n_s16_dsl 1)
 (define cost_vmulq_u8_dsl 1)
-(define cost_vtrn2_s32_dsl 1)
 (define cost_vcltz_s32_dsl 1)
 (define cost_vqdmulh_s16_dsl 1)
 (define cost_vpaddq_u64_dsl 1)
 (define cost_vmlal_n_u32_dsl 1)
 (define cost_vmlsq_u16_dsl 1)
-(define cost_vuzp2_s16_dsl 1)
 (define cost_vclezq_s8_dsl 1)
 (define cost_vhsubq_u16_dsl 1)
 (define cost_vmlal_n_s16_dsl 1)
-(define cost_vuzp1_u16_dsl 1)
 (define cost_vqdmulhq_n_s16_dsl 1)
 (define cost_vabs_s32_dsl 1)
 (define cost_vaddl_u8_dsl 1)
@@ -107,7 +102,6 @@
 (define cost_vmls_n_s32_dsl 1)
 (define cost_vaddw_s16_dsl 1)
 (define cost_vmovl_s16_dsl 1)
-(define cost_vzip2_s8_dsl 1)
 (define cost_vshr_n_s8_dsl 1)
 (define cost_vqrshrnd_n_s64_dsl 1)
 (define cost_vqshrunh_n_s16_dsl 1)
@@ -401,13 +395,6 @@
 		 
 		)
 	]
-	[ (vtrn1_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14)
-		(+ cost_vtrn1_u16_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		 
-		)
-	]
 	[ (vmull_u32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11)
 		(+ cost_vmull_u32_dsl (arm:cost  v0)  (arm:cost  v1)  
 		 
@@ -434,13 +421,6 @@
 		 
 		)
 	]
-	[ (vzip1_s32_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
-		(+ cost_vzip1_s32_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		 
-		)
-	]
 	[ (vcgeq_u32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
 		(+ cost_vcgeq_u32_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
 		 (arm:cost  v3)  
@@ -463,14 +443,6 @@
 	]
 	[ (vmulq_u8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
 		(+ cost_vmulq_u8_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		)
-	]
-	[ (vtrn2_s32_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 num_16)
-		(+ cost_vtrn2_s32_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
 		 
 		 
 		)
@@ -507,12 +479,6 @@
 		 
 		)
 	]
-	[ (vuzp2_s16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
-		(+ cost_vuzp2_s16_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		)
-	]
 	[ (vclezq_s8_dsl vc_0 vc_1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
 		(+ cost_vclezq_s8_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
 		 (arm:cost  v3)  
@@ -529,11 +495,6 @@
 		(+ cost_vmlal_n_s16_dsl (arm:cost  v0)  (arm:cost  v1)  (arm:cost  v2)  
 		 
 		 
-		 
-		)
-	]
-	[ (vuzp1_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(+ cost_vuzp1_u16_dsl (arm:cost  v0)  (arm:cost  v1)  
 		 
 		)
 	]
@@ -679,15 +640,6 @@
 	[ (vmovl_s16_dsl v0 vc_1 vc_2 vc_3 vc_4 vc_5 size_i_o num_7 num_8 num_9 prec_i prec_o num_12 num_13 num_14 num_15 num_16)
 		(+ cost_vmovl_s16_dsl (arm:cost  v0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
 		 (arm:cost  vc_3)  (arm:cost  vc_4)  (arm:cost  vc_5)  
-		 
-		 
-		 
-		)
-	]
-	[ (vzip2_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19)
-		(+ cost_vzip2_s8_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
 		 
 		 
 		 
