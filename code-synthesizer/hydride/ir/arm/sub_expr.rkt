@@ -3261,6 +3261,66 @@
 )
 
 	]
+	[(vpadal_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 1) (equal? num_16 2)); vpadal_s8
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 0) (equal? num_16 2)); vpadal_u16
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 0) (equal? num_16 2)); vpadal_u8
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 1) (equal? num_16 2)); vpadalq_s16
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 1) (equal? num_16 2)); vpadalq_s32
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 0) (equal? num_16 2)); vpadal_u32
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 1) (equal? num_16 2)); vpadal_s32
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 0) (equal? num_16 2)); vpadalq_u16
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 1) (equal? num_16 2)); vpadalq_s8
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 1) (equal? num_16 2)); vpadal_s16
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 0) (equal? num_16 2)); vpadalq_u8
+ 
+  (list v0 v1)]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 0) (equal? num_16 2)); vpadalq_u32
+ 
+  (list v0 v1)]
+		[else (error "Unable to get ops  for vpadal_s8")]
+)
+
+	]
+	[(vdotq_s32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23 num_24 num_25 num_26 num_27 num_28 num_29 num_30)
+		(cond 
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 -1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? num_16 1) (equal? num_17 8) (equal? num_18 3) (equal? num_19 1) (equal? num_20 1) (equal? num_21 8) (equal? num_22 2) (equal? num_23 1) (equal? num_24 1) (equal? num_25 8) (equal? num_26 1) (equal? num_27 2) (equal? num_28 1) (equal? num_29 1) (equal? num_30 4)); vdotq_s32
+ 
+  (list v0 v1 v2)]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 -1) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 1) (equal? num_16 1) (equal? num_17 8) (equal? num_18 3) (equal? num_19 1) (equal? num_20 1) (equal? num_21 8) (equal? num_22 2) (equal? num_23 1) (equal? num_24 1) (equal? num_25 8) (equal? num_26 1) (equal? num_27 2) (equal? num_28 1) (equal? num_29 1) (equal? num_30 4)); vdot_s32
+ 
+  (list v0 v1 v2)]
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 -1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 0) (equal? num_16 0) (equal? num_17 8) (equal? num_18 3) (equal? num_19 0) (equal? num_20 0) (equal? num_21 8) (equal? num_22 2) (equal? num_23 0) (equal? num_24 0) (equal? num_25 8) (equal? num_26 1) (equal? num_27 2) (equal? num_28 0) (equal? num_29 0) (equal? num_30 4)); vdotq_u32
+ 
+  (list v0 v1 v2)]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 -1) (equal? num_13 -1) (equal? num_14 0) (equal? num_15 0) (equal? num_16 0) (equal? num_17 8) (equal? num_18 3) (equal? num_19 0) (equal? num_20 0) (equal? num_21 8) (equal? num_22 2) (equal? num_23 0) (equal? num_24 0) (equal? num_25 8) (equal? num_26 1) (equal? num_27 2) (equal? num_28 0) (equal? num_29 0) (equal? num_30 4)); vdot_u32
+ 
+  (list v0 v1 v2)]
+		[else (error "Unable to get ops  for vdotq_s32")]
+)
+
+	]
  )
 )
 ;; ================================================================================

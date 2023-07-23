@@ -1838,13 +1838,13 @@ def HandleToZeros(_):
 
 def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     '''
-    ? = Reduce(op, vec, width)  ; n=4
+    ? = Reduce(op, operand, esize)  ; n=4
     ->
-    bits(esize) tmp1, tmp2, tmp3;
-    tmp1 = op(vec[0], vec[1]);
-    tmp2 = op(tmp1, vec[2]);
-    tmp3 = op(tmp2, vec[3]);
-
+    bits(esize) tmp1, tmp2, tmp3, tmp4;
+    tmp1 = op(Elem[operand,0,esize], Elem[operand,1,esize]);
+    tmp2 = op(tmp1, Elem[operand,2,esize]);
+    tmp3 = op(tmp2, Elem[operand,3,esize]);
+    Elem[tmp4,0,esize] = tmp3
     '''
     assert len(Stmt.args) == 3
     vecWidth = CompileVarRv(Stmt.args[1], Context).getType().getBitwidth()
@@ -1852,8 +1852,8 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     op = CompileVarRv(Stmt.args[0], Context).Val
     tmp = Context.genName()
     n = vecWidth//reduceWidth
-    
-    newvars = [Var(tmp+f'.reduce{i}', Context.genName()) for i in range(n-1)]
+
+    newvars = [Var(tmp+f'.reduce{i}', Context.genName()) for i in range(n)]
     inline_list = [
         VarsDecl(newvars,
                  ('bits', Stmt.args[2]), Context.genName())
@@ -1871,13 +1871,16 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
                                             ArrayIndex(Var('Elem', Context.genName()), [
                                                 Stmt.args[1], Number(1), Stmt.args[2]], Context.genName()))
                               ))
-    
+
     for i in range(1, n-1):
         inline_list.append(Update(newvars[i],
                                   reduceWrapper(op,
                                                 newvars[i-1],
                                                 ArrayIndex(Var('Elem', Context.genName()), [
                                                     Stmt.args[1], Number(i+1), Stmt.args[2]], Context.genName()))))
+    inline_list.append(Update(ArrayIndex(Var('Elem', Context.genName()), [
+        newvars[-1], Number(0), Stmt.args[2]], Context.genName()), newvars[-2]))
+
     for i in inline_list:
         CompileStatement(i, Context)
     return CompileRValueExpr(newvars[-1], Context)
