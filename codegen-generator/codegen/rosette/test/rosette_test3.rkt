@@ -26,7 +26,7 @@
             (define %lastidx1 (- 32  1))
             (define %highidx0 (+  %lastidx1  16))
             (define %10 (extract highidx0 16 %9.ab0))
-            (define %11.ab0 (bvsaturate %10 32 16 1))
+            (define %11.ab0 (bvsaturate %10 16 16 1))
             %11.ab0
           )
         )
