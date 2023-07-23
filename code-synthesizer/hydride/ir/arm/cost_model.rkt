@@ -120,6 +120,8 @@
 (define cost_vshld_s64_dsl 1)
 (define cost_vqshlh_n_u16_dsl 1)
 (define cost_vqrshlq_u16_dsl 1)
+(define cost_vpadal_s8_dsl 1)
+(define cost_vdotq_s32_dsl 1)
 
 (define (arm:cost prog)
  (destruct prog
@@ -789,6 +791,27 @@
 		(+ cost_vqrshlq_u16_dsl (arm:cost  v0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
 		 (arm:cost  vc_3)  (arm:cost  vc_4)  (arm:cost  vc_5)  
 		 (arm:cost  vc_6)  (arm:cost  vc_7)  (arm:cost  v8)  
+		 
+		 
+		 
+		 
+		)
+	]
+	[ (vpadal_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(+ cost_vpadal_s8_dsl (arm:cost  v0)  (arm:cost  v1)  
+		 
+		 
+		 
+		 
+		)
+	]
+	[ (vdotq_s32_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23 num_24 num_25 num_26 num_27 num_28 num_29 num_30)
+		(+ cost_vdotq_s32_dsl (arm:cost  v0)  (arm:cost  v1)  (arm:cost  v2)  
+		 
+		 
+		 
+		 
+		 
 		 
 		 
 		 
