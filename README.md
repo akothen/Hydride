@@ -136,4 +136,5 @@ Problems:
     - loop unrolled by llvm-opt?
     - TODO: unroll by myself?
 
-# _mm512_dpbusd_epi32
+- For vshrq_n_s64 (and something like), changed SYMBOLIC_BV_32 to SYMBOLIC_BV_64. Becuase Hydride only upcasts literals, so when shift by vectors, synthesize won't succeed.
+- For some variants of vaddv, 
