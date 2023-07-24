@@ -7,6 +7,9 @@ using Halide::ConciseCasts::u8;
 using Halide::ConciseCasts::u32;
 using Halide::ConciseCasts::u8_sat;
 
+using namespace Halide;
+using namespace Halide::Internal;
+
 class MatrixMultiply256 : public Generator<MatrixMultiply256> {
 public:
     // Two signed 16-bit input matrices, indexed by x, y.
@@ -28,6 +31,8 @@ public:
         output(c, x, y) = bias_expr;
 
         RVar red_dim(matrix_mul.update(0).get_schedule().dims()[0].var);
+
+
 
         output
             .compute_root()
@@ -66,4 +71,4 @@ private:
         yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
-HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit)
+HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit_bias_add)

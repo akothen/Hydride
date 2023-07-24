@@ -7,6 +7,10 @@ using Halide::ConciseCasts::u8;
 using Halide::ConciseCasts::u32;
 using Halide::ConciseCasts::u8_sat;
 
+
+using namespace Halide;
+using namespace Halide::Internal;
+
 class MatrixMultiply256 : public Generator<MatrixMultiply256> {
 public:
     // Two signed 16-bit input matrices, indexed by x, y.
@@ -24,7 +28,7 @@ public:
 
         matrix_mul(c, x, y) = add_(c, x, y);
         matrix_mul(c, x, y) += (cast<int32_t>(A(c, k, y)) * cast<int32_t>(B(c, x, k)));
-        Func bias_expr = matrix_mul(c, x, y);
+        Expr bias_expr = matrix_mul(c, x, y);
         bias_expr += bias_(c);
         output(c, x, y) = max(bias_expr, 0);
 
@@ -67,4 +71,4 @@ private:
         yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
-HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit)
+HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit_bias_add_add)
