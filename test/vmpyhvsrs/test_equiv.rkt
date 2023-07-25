@@ -1,4 +1,3 @@
-
 #lang rosette
 
 (require rosette/lib/synthax)
@@ -25,10 +24,10 @@
             (define %7 (bvshl %6 (bv 1 32)))
             (define %8.ab0 (bvaddnw %7 (bv #x00000000000000000000000000008000 32) 32 -1 ))
             (define %9.ab0 (bvsaturate %8.ab0 32 32 1))
-            (define %lastidx1 (- 32  1)) ;; 31 
+            (define %lastidx1 (- 16  1))
             (define %highidx0 (+  %lastidx1  16))
-            (printf "extracting ~a ~a from ~a\n" %highidx0 16 %9.ab0) ;; Appears to be extracting out of bounds
-            (define %10 (extract %highidx0 16 %9.ab0)) ; Before was  highidx0 instead of  highidx0
+            (printf "extracting ~a ~a from ~a\n" %highidx0 16 %9.ab0)
+            (define %10 (extract %highidx0 16 %9.ab0))
             (define %11.ab0 (bvsaturate %10 16 16 1))
             %11.ab0
           )
@@ -81,4 +80,3 @@
   )
 
 (println cex)
-
