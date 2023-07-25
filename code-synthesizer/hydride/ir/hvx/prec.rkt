@@ -26,6 +26,12 @@
             [(idx-i id) 1]
             [(idx-j id) 1]
             [(reg id) (bvlength (vector-ref-bv env id))] ;; FIX-ME NOTE: DO NOT USE THIS METHOD FOR PREC
+            [ (llvm-zext_dsl v0 size_i size_o)
+             size_o 
+             ]
+            [ (scalar_splat_dsl v0 size_i size_o)
+             size_o 
+             ]
             [(lit v) (bvlength v)]
             [(nop v1) (hvx:get-prec v1 env)]
             [(idx-add i1 i2) 1]

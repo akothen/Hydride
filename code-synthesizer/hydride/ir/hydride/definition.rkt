@@ -27,6 +27,8 @@
 (struct nop (v1) #:transparent)
 (struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
 (struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
+(struct llvm-zext_dsl (v0 size_i size_o) #:transparent #:mutable)
+(struct scalar_splat_dsl (v0 size_i size_o) #:transparent #:mutable)
 (struct vector-two-input-swizzle_dsl (v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8) #:transparent #:mutable)
 (struct interleave-vectors_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct interleave-vector_dsl (v0 size_i_o prec_i_o) #:transparent #:mutable)

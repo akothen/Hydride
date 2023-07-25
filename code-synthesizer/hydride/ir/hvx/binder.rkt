@@ -31,6 +31,12 @@
             [(idx-j id) (idx-j id)]
             [(reg id) (vector-ref-bv env id)]
             [(lit v) (lit v)]
+            [ (llvm-zext_dsl v0 size_i size_o)
+                (llvm-zext_dsl (hvx:bind-expr v0 env) (hvx:bind-expr size_i env) (hvx:bind-expr size_o env))
+            ]
+	[ (scalar_splat_dsl v0 size_i size_o)
+		(scalar_splat_dsl (hvx:bind-expr v0 env) (hvx:bind-expr size_i env) (hvx:bind-expr size_o env))
+	]
             [(idx-add i1 i2) (idx-add i1 i2)]
             [(idx-mul i1 i2) (idx-mul i1 i2)]
             [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)

@@ -29,6 +29,12 @@
             [(nop v1) (hvx:get-length v1 env)]
             [(idx-add i1 i2) 1]
             [(idx-mul i1 i2) 1]
+            [ (llvm-zext_dsl v0 size_i size_o)
+		       size_o 
+	        ]
+            [ (scalar_splat_dsl v0 size_i size_o)
+		       size_o 
+	        ]
             [(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8) (* (max 1 (/ num_2 num_5)) (+ num_4 (* 2 num_6)) prec_i_o)]
             [(interleave-vectors_dsl v0 v1 size_i_o prec_i_o) (* 2 size_i_o)]
             [(interleave-vector_dsl v0 size_i_o prec_i_o) size_i_o]

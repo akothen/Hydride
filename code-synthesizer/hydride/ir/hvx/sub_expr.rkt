@@ -18,6 +18,14 @@
  (destruct prog
 	[(reg id) (list (reg id))]
 	[(lit v) '()]
+[(llvm-zext_dsl v0 size_i size_o)
+		(list v0)
+	]
+
+[(scalar_splat_dsl v0 size_i size_o)
+		(list v0)
+	]
+
 		[(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
 		(list v0 v1)
 	]

@@ -19,6 +19,17 @@
           (destruct prog
                     [(reg id) (values (reg (bv num-consumed 8)) (+ 1 num-consumed))]
                     [(lit v) (values (lit v) num-consumed) ]
+
+		[(scalar_splat_dsl v0 size_i size_o)
+		(define-values (expr-0 num-consumed-0) (hvx:extract-expr v0 num-consumed (- depth 1)))
+
+(values (scalar_splat_dsl expr-0 size_i size_o ) num-consumed-0)
+	]
+[(llvm-zext_dsl v0 size_i size_o)
+		(define-values (expr-0 num-consumed-0) (hvx:extract-expr v0 num-consumed (- depth 1)))
+
+(values (llvm-zext_dsl expr-0 size_i size_o ) num-consumed-0)
+	]
                     [(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
                      (define-values (expr-0 num-consumed-0) (hvx:extract-expr v0 num-consumed (- depth 1)))
                      (define-values (expr-1 num-consumed-1) (hvx:extract-expr v1 num-consumed-0 (- depth 1)))

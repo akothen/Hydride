@@ -138,6 +138,14 @@
   dst
 )
 
+(define (llvm-zext a input_size output_size)
+  (zero-extend a (bitvector output_size))
+  )
+
+
+(define (scalar_splat a input_size output_size)
+  (apply concat (for/list ([i (range (/ output_size input_size))])  a ))
+  )
 
 
 
