@@ -9,7 +9,7 @@ from RoseContext import *
 from ARMAST import *
 from ARMRoseTypes import *
 from ARMTypes import *
-IntSimWidth = 192
+
 IntegerWidth = 32
 
 
@@ -25,7 +25,12 @@ class ARMRoseContext(RoseContext):
         self.Number64Type = RoseIntegerType.create(64)
         self.varType = {}
         self.returnOperand = None
+        self.hasInsert = False  # To pass some assertion in similar checker
+        self.IntSimWidth = 192
         super().__init__()
+
+    def setHasInsert(self):
+        self.hasInsert = True
 
     def setReturned(self, returnOperand):
         assert not self.returnOperand, "Returning twice"
@@ -83,9 +88,14 @@ class ARMRoseContext(RoseContext):
             ChildContext.copyAbstractionsFromParent()
             ChildContext.setConstexpr(self.constexpr)
             ChildContext.setPreparation(self.preparation)
+            ChildContext.IntSimWidth = self.IntSimWidth
             super().createContext(ID, ChildContext)
         else:
             assert False
+
+    def replaceParentAbstractionsWithChild(self):
+        self.ParentContext.hasInsert = self.hasInsert
+        return super().replaceParentAbstractionsWithChild()
 
     def destroyContext(self, ContextName: str):
         ChildContext = self.getChildContext(ContextName)
@@ -121,17 +131,24 @@ class ARMRoseContext(RoseContext):
                             # Add this variable as an abstraction
                             self.addCompiledAbstraction(ChildContext.getVariableID(VariableName),
                                                         Op.getInputBitVector())
+
             super().destroyContext(ContextName)
         else:
             assert False
 
 
-def CompileSemantics(Sema, RootContext: ARMRoseContext):
+def CompileSemantics(Sema: ARMSema, RootContext: ARMRoseContext):
     RootContext.setConstexpr(Sema.resolving)
     RootContext.setPreparation(Sema.preparation)
     OutParams = []
     ParamValues = []
     ParamsIDs = []
+    specialIntSimWidth = {
+        "dot": 32
+    }
+    for keyword, value in specialIntSimWidth.items():
+        if keyword in Sema.intrin:
+            RootContext.IntSimWidth = value
     for Index, Param in enumerate(Sema.params):
         if Param.type in PointerType:
             raise NotImplementedError(
@@ -184,9 +201,7 @@ def CompileSemantics(Sema, RootContext: ARMRoseContext):
     # CompiledRetVal = RoseUndefValue()
     for Index, Param in enumerate(Sema.params):
         if Param.type in ReservedImmTypes:
-            # Bitwidth = RoseConstant.create(IntSimWidth, RootContext.NumberType)
-            # Bitwidth = RoseBitVectorType(IntSimWidth)
-            Bitwidth = IntSimWidth
+            Bitwidth = RootContext.IntSimWidth
             varName = Param.name+"192"
             varID = RootContext.genName()
             NewOp = RoseBVZeroExtendOp.create(
@@ -285,7 +300,7 @@ def CompileVarsDecl(Stmt: VarsDecl, Context: ARMRoseContext):
             CompileVarRv(ids, Context)
     if Stmt.basetype[0] == 'integer':
         for ids in Stmt.ids:
-            Context.setTypeForVar(ids.name, ('bits', IntSimWidth))
+            Context.setTypeForVar(ids.name, ('bits', Context.IntSimWidth))
             CompileVarRv(ids, Context)
 
 
@@ -666,7 +681,7 @@ def CompileBinaryExprRv(Stmt: BinaryExpr, Context: ARMRoseContext):
     Operand2 = CompileRValueExpr(Stmt.b, Context)
     Operation = BinaryOps[Stmt.op]()(
         Context.genName(),  Operand1, Operand2, Context)
-    if type(Operation) == RoseConstant:
+    if type(Operation) == RoseConstant or Operation == Operand1 or Operation == Operand2:
         return Operation
     Context.addAbstractionToIR(Operation)
 
@@ -674,6 +689,11 @@ def CompileBinaryExprRv(Stmt: BinaryExpr, Context: ARMRoseContext):
     Context.addCompiledAbstraction(Stmt.id, Operation)
 
     return Operation
+
+
+def CompileList(Stmts: List, Context: ARMRoseContext):
+    for i in Stmts:
+        CompileStatement(i, Context)
 
 
 def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
@@ -712,6 +732,17 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
                 RHSExprVal = HandleToConcat()(
                     Context.genName(), RHSExprVal, CompileRValueExpr(Var("r", Context.genName()), Context),   Context)
                 Context.addAbstractionToIR(RHSExprVal)
+            if not Context.hasInsert:
+                newVar = Var(Context.genName()+"fakeReturn", Context.genName())
+                vecWidth = RHSExprVal.getType().getBitwidth()
+                inline_list = [
+                    VarsDecl([newVar],
+                             ('bits', Number(vecWidth)), Context.genName()),
+                    Update(ArrayIndex(Var('Elem', Context.genName()), [
+                        newVar, Number(0), Number(vecWidth)], Context.genName()), Stmt.rhs)
+                ]
+                CompileList(inline_list, Context)
+                RHSExprVal = CompileRValueExpr(newVar, Context)
             RetOp = RoseReturnOp.create(RHSExprVal)
             Context.addAbstractionToIR(RetOp)
             Context.setReturned(RHSExprVal)
@@ -738,6 +769,7 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
                         BitVector, Context.isValueSigned(RHSExprVal))
             LHSOp = RoseBVInsertSliceOp.create(
                 RHSExprVal, BitVector, Low, High, BitwidthValue)
+            Context.setHasInsert()
         else:
             raise NotImplementedError(
                 f"Got Update for {type(LVal)}, LVal = {LVal}")
@@ -1116,6 +1148,9 @@ def ComputeConstant(op: str, Operand1: RoseValue, Operand2: RoseValue,
                 Operand2.getType(), RoseIntegerType)
             val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
             return RoseConstant.create(val, RoseBooleanType.create())
+    elif isinstance(Operand2, RoseConstant):
+        if (op in ["<<<", "+", '-', ">>", "<<"]) and Operand2.getValue() == 0:
+            return Operand1
     return None
 
 
@@ -1426,6 +1461,13 @@ def HandleToARMShl():
         assert isinstance(Operand2.getType(), RoseBitVectorType), breakpoint()
         # Op = RoseARMShlOp.create(Name, Operand1, Operand2)
         # assert Context.isValueSigned(Operand2)
+        '''
+            a << b ->
+            a<<b if b>=0 else a>>-b 
+        '''
+        inline_list = [
+
+        ]
 
         Cond = RoseBVSGTOp.create(
             Context.genName(), Operand2, RoseConstant(0, Operand2.getType()))
@@ -1506,12 +1548,9 @@ def HandleToInt(_):
         assert type(unsigned) == RoseConstant, "Only constant is supported."
         # Consider using BVSizeExtension?
         if unsigned.getValue():
-            Op = RoseBVZeroExtendOp.create(Name, Value, IntSimWidth)
-            Context.addSignednessInfoForValue(Op, IsSigned=False)
+            return HandleToUInt(None)(Name, [Value], Context)
         else:
-            Op = RoseBVSignExtendOp.create(Name, Value, IntSimWidth)
-            Context.addSignednessInfoForValue(Op, IsSigned=True)
-        return Op
+            return HandleToSInt(None)(Name, [Value], Context)
     return LamdaImplFunc
 
 
@@ -1519,7 +1558,9 @@ def HandleToSInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
         [Value] = Args
         assert isinstance(Value.getType(), RoseBitVectorType)
-        Op = RoseBVSignExtendOp.create(Name, Value, IntSimWidth)
+        if Value.getType().getBitwidth() == Context.IntSimWidth:
+            return Value
+        Op = RoseBVSignExtendOp.create(Name, Value, Context.IntSimWidth)
         Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc
@@ -1529,7 +1570,9 @@ def HandleToUInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
         [Value] = Args
         assert isinstance(Value.getType(), RoseBitVectorType)
-        Op = RoseBVZeroExtendOp.create(Name, Value, IntSimWidth)
+        if Value.getType().getBitwidth() == Context.IntSimWidth:
+            return Value
+        Op = RoseBVZeroExtendOp.create(Name, Value, Context.IntSimWidth)
         Context.addSignednessInfoForValue(Op, IsSigned=False)
         return Op
     return LamdaImplFunc
@@ -1840,8 +1883,9 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     '''
     ? = Reduce(op, operand, esize)  ; n=4
     ->
-    bits(esize) tmp1, tmp2, tmp3, tmp4;
-    tmp1 = op(Elem[operand,0,esize], Elem[operand,1,esize]);
+    bits(esize) tmp0, tmp1, tmp2, tmp3, tmp4;
+    tmp0 = Elem[operand,0,esize]
+    tmp1 = op(tmp0, Elem[operand,1,esize]);
     tmp2 = op(tmp1, Elem[operand,2,esize]);
     tmp3 = op(tmp2, Elem[operand,3,esize]);
     Elem[tmp4,0,esize] = tmp3
@@ -1853,7 +1897,7 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     tmp = Context.genName()
     n = vecWidth//reduceWidth
 
-    newvars = [Var(tmp+f'.reduce{i}', Context.genName()) for i in range(n)]
+    newvars = [Var(tmp+f'.reduce{i}', Context.genName()) for i in range(n+1)]
     inline_list = [
         VarsDecl(newvars,
                  ('bits', Stmt.args[2]), Context.genName())
@@ -1866,23 +1910,22 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     # breakpoint()
     inline_list.append(Update(newvars[0],
                               reduceWrapper(op,
+                                            Number(0),
                                             ArrayIndex(Var('Elem', Context.genName()), [
-                                                Stmt.args[1], Number(0), Stmt.args[2]], Context.genName()),
-                                            ArrayIndex(Var('Elem', Context.genName()), [
-                                                Stmt.args[1], Number(1), Stmt.args[2]], Context.genName()))
+                                                Stmt.args[1], Number(0), Stmt.args[2]], Context.genName())
+                                            )
                               ))
 
-    for i in range(1, n-1):
+    for i in range(1, n):
         inline_list.append(Update(newvars[i],
                                   reduceWrapper(op,
                                                 newvars[i-1],
                                                 ArrayIndex(Var('Elem', Context.genName()), [
-                                                    Stmt.args[1], Number(i+1), Stmt.args[2]], Context.genName()))))
+                                                    Stmt.args[1], Number(i), Stmt.args[2]], Context.genName()))))
     inline_list.append(Update(ArrayIndex(Var('Elem', Context.genName()), [
         newvars[-1], Number(0), Stmt.args[2]], Context.genName()), newvars[-2]))
 
-    for i in inline_list:
-        CompileStatement(i, Context)
+    CompileList(inline_list, Context)
     return CompileRValueExpr(newvars[-1], Context)
     # breakpoint()
 

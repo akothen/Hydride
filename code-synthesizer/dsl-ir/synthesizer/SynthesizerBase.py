@@ -23,7 +23,7 @@ DEBUG_LIST = [
     # "vqadd_s16",
     # "vmovl_s16",
     # "vqmovn_s32",
-    "vmlaq_s32",
+    "vdotq_u32",
     # "vshld_s64",
     # "vadd_u64",
     # "vshr_n_s8",

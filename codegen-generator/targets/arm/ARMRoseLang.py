@@ -28,6 +28,8 @@ skip = notSSA + ['vcopy']
 
 
 def Compile(InstName: str = None):
+    skipForSimilarity = skip + ['and','bsl','bic','eor','orr','orn'] +# Similarity can't handle them
+    ['addv']
     from RoseFunctionInfo import RoseFunctionInfo
 
     if InstName == None:
@@ -38,12 +40,16 @@ def Compile(InstName: str = None):
         # interested = ["max", "min"]
         # interested = ["vmovl_s8","vdupq_n_s16"]
         # interested = ["vshl", "vqshl", "vrshl", "vqrshl"]
-        # interested = []
-        # interested = ["dot", "addv", "ada"]
+        # interested = ["vdot"]
+        # interested = ["vdot"]
+        # interested = ["vaddvq_u8", 'vdot_u32']
+        # interested = ["addv"]
         # interested = ["dot",  "ada"]
-        interested = ["vshr"]
+        # interested = ["vshr"]
+        # interested = ["vmovl_u16"]
+        # interested = ["vbic_u16","vbic_u8",]
+        # interested = ["vand_u16","vand_u8",]
         
-        interested = ["addv"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
@@ -51,7 +57,7 @@ def Compile(InstName: str = None):
         # SemaList = [SemaGenerator(deserialize=True).getSemaByName("vand_s8")]
         SemaList = []
         for k, func in AllSema.items():
-            if any(kk in k for kk in skip):
+            if any(kk in k for kk in skipForSimilarity):
                 continue
             k, assignment = extract_assignment_from_name(k)
             if len(assignment) >= 1:
@@ -75,7 +81,8 @@ def Compile(InstName: str = None):
     for Index, Spec in enumerate(SemaList):
         # if Index < 1100:
         #     continue
-        if any(kk in Spec.intrin for kk in skip):
+        if any(kk in Spec.intrin for kk in skipForSimilarity):
+            print("Skip spec", Spec.intrin, e, file=sys.stderr)
             continue
         try:
             RootContext = ARMRoseContext()
@@ -92,6 +99,7 @@ def Compile(InstName: str = None):
             print(Index)
             print("CompiledFunction:")
             CompiledFunction.print()
+            print(GenerateRosetteForFunction(CompiledFunction, ""))
             FunctionInfoList.append(FunctionInfo)
             compiled.append(Spec.intrin)
         except NotImplementedError as e:

@@ -50,7 +50,7 @@ endif
 SHELL = bash
 CXX ?= g++
 PREFIX ?= /usr/local
-LLVM_CONFIG ?= /home/scarlet/Hydride/frontends/halide/llvm-build/bin/llvm-config
+LLVM_CONFIG ?= $(HYDRIDE_ROOT)/frontends/halide/llvm-build/bin/llvm-config
 LLVM_COMPONENTS= $(shell $(LLVM_CONFIG) --components)
 LLVM_VERSION = $(shell $(LLVM_CONFIG) --version | sed 's/\([0-9][0-9]*\)\.\([0-9]\).*/\1.\2/')
 

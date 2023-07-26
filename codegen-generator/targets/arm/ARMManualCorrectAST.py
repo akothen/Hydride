@@ -95,34 +95,41 @@ ManualAST = {
             result = V[d];
             for e = 0 to (elements - 1)
             {
-                integer res, zero;
+                integer res, zero, res0, res1, res2, res3;
                 integer element10, element20, element11, element21, element12, element22, element13, element23;
                 if signed then
                 {
                     element10 = SInt(Elem[operand1,((4 * e) + 0),(esize DIV 4)]);
                     element20 = SInt(Elem[operand2,((4 * e) + 0),(esize DIV 4)]);
+                    res0 = element10*element20;
                     element11 = SInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
                     element21 = SInt(Elem[operand2,((4 * e) + 1),(esize DIV 4)]);
+                    res1 = element11*element21;
                     element12 = SInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
                     element22 = SInt(Elem[operand2,((4 * e) + 2),(esize DIV 4)]);
+                    res2 = element12*element22;
                     element13 = SInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = SInt(Elem[operand2,((4 * e) + 3),(esize DIV 4)]);
+                    res3 = element13*element23;
                     zero = SInt(Elem[result,e,esize]);
                 }
                 else
                 {
                     element10 = UInt(Elem[operand1,((4 * e) + 0),(esize DIV 4)]);
                     element20 = UInt(Elem[operand2,((4 * e) + 0),(esize DIV 4)]);
+                    res0 = element10*element20;
                     element11 = UInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
                     element21 = UInt(Elem[operand2,((4 * e) + 1),(esize DIV 4)]);
+                    res1 = element11*element21;
                     element12 = UInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
                     element22 = UInt(Elem[operand2,((4 * e) + 2),(esize DIV 4)]);
+                    res2 = element12*element22;
                     element13 = UInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = UInt(Elem[operand2,((4 * e) + 3),(esize DIV 4)]);
+                    res3 = element13*element23;
                     zero = UInt(Elem[result,e,esize]);
                 }
-                res = element10*element20 + element11*element21 + element12*element22 + element13*element23;
-                Elem[result2,e,esize] = (zero + res)[0~(esize-1)];
+                Elem[result2,e,esize] = (zero + res0 + res1 + res2 + res3);
             }
             V[d] = result2;
         }""",
@@ -158,28 +165,35 @@ ManualAST = {
                 {
                     element10 = SInt(Elem[operand1,((4 * e) + 0),(es0ze DIV 4)]);
                     element20 = SInt(Elem[operand2,((4 * index) + 0),(esize DIV 4)]);
+                    res0 = element10*element20;
                     element11 = SInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
                     element21 = SInt(Elem[operand2,((4 * index) + 1),(esize DIV 4)]);
+                    res1 = element11*element21;
                     element12 = SInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
                     element22 = SInt(Elem[operand2,((4 * index) + 2),(esize DIV 4)]);
+                    res2 = element12*element22;
                     element13 = SInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = SInt(Elem[operand2,((4 * index) + 3),(esize DIV 4)]);
+                    res3 = element13*element23;
                     zero = SInt(Elem[result,e,esize]);
                 }
                 else
                 {
                     element10 = UInt(Elem[operand1,((4 * e) + 0),(es0ze DIV 4)]);
                     element20 = UInt(Elem[operand2,((4 * index) + 0),(esize DIV 4)]);
+                    res0 = element10*element20;
                     element11 = UInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
                     element21 = UInt(Elem[operand2,((4 * index) + 1),(esize DIV 4)]);
+                    res1 = element11*element21;
                     element12 = UInt(Elem[operand1,((4 * e) + 2),(esize DIV 4)]);
                     element22 = UInt(Elem[operand2,((4 * index) + 2),(esize DIV 4)]);
+                    res2 = element12*element22;
                     element13 = UInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = UInt(Elem[operand2,((4 * index) + 3),(esize DIV 4)]);
+                    res3 = element13*element23;
                     zero = UInt(Elem[result,e,esize]);
                 }
-                res = element10*element20 + element11*element21 + element12*element22 + element13*element23;
-                Elem[result2,e,esize] = (zero + res)[0~(esize-1)];
+                Elem[result2,e,esize] = (zero + res0 + res1 + res2 + res3);
             }
             V[d] = result;
         }""",

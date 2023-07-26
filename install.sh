@@ -1,6 +1,6 @@
 
 ### This install script is invoked from the root directory
-HYDRIDE_DIR=/home/scarlet/Hydride
+HYDRIDE_DIR=$HYDRIDE_ROOT
 
 NUM_THREADS_INPUT=24
 

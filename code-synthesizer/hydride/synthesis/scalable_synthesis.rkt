@@ -555,7 +555,7 @@
                              scale-factor)
   (println (format "Invoked step-wise-synthesis!\n"))
 
-  (define step-limit 5) ;; temporary change for arm
+  (define step-limit 10) ;; temporary change for arm
 
   (define solved? #f)
   (define min-cost
@@ -575,7 +575,7 @@
 
   ;(set! depth-limit (max depth-limit (+ 2 starting-depth) ))
 
-  (set! starting-depth 2)
+  (set! starting-depth 1)
   (set! depth-limit 4)
 
   (define start-time (current-seconds))

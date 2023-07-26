@@ -39,6 +39,8 @@ def Compile(InstName: str = None):
         print("CompiledFunction:")
         CompiledFunction.print()
         FunctionInfoList.append(FunctionInfo)
+        from RosetteGen import GenerateRosetteForFunction
+        print(GenerateRosetteForFunction(CompiledFunction, ""))
 
     return FunctionInfoList
 
@@ -5203,6 +5205,6 @@ def Compile_Tests():
 if __name__ == '__main__':
 #   Compile_Tests()
 #   print(test171())
-    Compile("_mm512_dpbusd_epi32")
+    Compile("_mm512_reduce_add_epi32")
 
 

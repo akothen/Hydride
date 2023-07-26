@@ -7,8 +7,8 @@ LLVM_BRANCH="release/12.x"
 LLVM_SRC=$HALIDE_ROOT/llvm-project/llvm
 
 # Install options
-NUM_THREADS=16
-NUM_THREADS_INPUT=16
+NUM_THREADS=64
+NUM_THREADS_INPUT=64
 
 echo "#############################################################################"
 # read -p "Number of threads: " NUM_THREADS_INPUT

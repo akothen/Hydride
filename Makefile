@@ -1,6 +1,7 @@
 UNAME_S = $(shell uname -s)
 EXT = so
 MAKEFILE=Makefile.qemu
+PYTHON?=python3
 ifeq ($(UNAME_S),Darwin)
 	MAKEFILE=Makefile
     EXT = dylib

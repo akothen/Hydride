@@ -6,7 +6,7 @@ rosette_test/a.out: rosette_test/ARMTest.cpp
 	g++ rosette_test/ARMTest.cpp -o rosette_test/a.out
 rosette_test/alltests.rkt: rosette_test/a.out
 	rosette_test/a.out > rosette_test/alltests.rkt
-rat: rosette_test/compiled.rkt rosette_test/alltests.rkt
+rat: rosette_test/compiled.rkt # rosette_test/alltests.rkt
 	racket rosette_test/alltests.rkt
 compile: rosette_test/compiled.rkt
 
