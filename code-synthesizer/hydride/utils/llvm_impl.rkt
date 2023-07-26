@@ -86,12 +86,29 @@
   dst)
 
 (define (llvm-vect-udiv a b num_elems precision)
-  (define dst
-    (apply concat
-           (for/list ([%it (reverse (range 0 num_elems 1))])
-             (define %low (* precision %it))
-             (define %high (%low (- precision 1)))
-             (define %exta (extract %high %low a))
-             (define %extb (extract %high %low b))
-             (bvudiv %exta %extb))))
-  dst)
+  (define dst 
+    (apply
+      concat
+      (for/list ([%it (reverse (range 0 num_elems 1))])
+        (define %low (* precision %it))
+        (define %high (%low (- precision 1)))
+        (define %exta (extract  %high %low a))
+        (define %extb (extract  %high %low b))
+        (bvudiv %exta %extb)
+      )
+    )
+  )
+  dst
+)
+
+(define (llvm-zext a input_size output_size)
+  (zero-extend a (bitvector output_size))
+  )
+
+
+(define (scalar_splat a input_size output_size)
+  (apply concat (for/list ([i (range (/ output_size input_size))])  a ))
+  )
+
+
+

@@ -137,6 +137,13 @@
 (define (hvx:cost prog)
   (destruct prog
             [(reg id) 1]
+            [ (llvm-zext_dsl v0 size_i size_o)
+                    (+ 1 (hvx:cost  v0) )
+                ]
+
+		[ (scalar_splat_dsl v0 size_i size_o)
+		(+ 1 (hvx:cost  v0) )
+	]
             [(lit v) 1 ]
             [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
              (+ 4 (hvx:cost  v0)  (hvx:cost  v1)  
@@ -1112,6 +1119,9 @@
 (define (hvx-instcombine:cost prog)
  (destruct prog
 	[(reg id) 1]
+[ (llvm-zext_dsl v0 size_i size_o)
+		(+ 1 (hvx-instcombine:cost  v0) )
+	]
 	[(lit v) 1 ]
 		[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
 		(+ 4 (hvx-instcombine:cost  v0)  (hvx-instcombine:cost  v1)  

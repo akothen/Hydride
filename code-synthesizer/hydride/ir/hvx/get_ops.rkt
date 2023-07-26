@@ -588,9 +588,9 @@
             [(hexagon_V6_vlsrh_128B_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
              (cond 
                [(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 1024) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 32) (equal? num_10 0)) 
-                (remove-duplicates (append (list  'bvlshr 'bvand 'zero-extend) (hvx:get-bv-ops v1) (hvx:get-bv-ops v2)))]
+                (remove-duplicates (append (list  'bvlshr 'bvand 'zero-extend 'extract 'concat) (hvx:get-bv-ops v1) (hvx:get-bv-ops v2)))]
                [(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 1024) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 32) (equal? num_10 0)) 
-                (remove-duplicates (append (list  'bvlshr 'bvand 'zero-extend) (hvx:get-bv-ops v1) (hvx:get-bv-ops v2)))]
+                (remove-duplicates (append (list  'bvlshr 'bvand 'zero-extend  'extract 'concat) (hvx:get-bv-ops v1) (hvx:get-bv-ops v2)))]
                [else (error "Unable to get ops  for hexagon_V6_vlsrh_128B")]
                )
 
@@ -1142,7 +1142,7 @@
             [(hexagon_V6_vcombine_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11)
              (cond 
                [(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? num_6 8) (equal? num_7 0) (equal? num_8 1024) (equal? prec_i_o 8) (equal? num_10 1024) (equal? num_11 0)) 
-                (remove-duplicates (append (list  ) (hvx:get-bv-ops v0) (hvx:get-bv-ops v1)))]
+                (remove-duplicates (append (list  'extract `concat) (hvx:get-bv-ops v0) (hvx:get-bv-ops v1)))]
                [else (error "Unable to get ops  for hexagon_V6_vcombine_128B")]
                )
 

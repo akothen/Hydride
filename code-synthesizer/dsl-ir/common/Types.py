@@ -63,9 +63,13 @@ class BitVector(OperandType):
     def get_rkt_comment(self):
         return ";; {}-bit Bitvector operand".format(self.size)
 
-    def print_operand(self, prefix=""):
-        print("{} {}\t| Symbolic Bitvector {}".format(
-            prefix, self.name, self.size))
+    def get_dsl_value(self):
+        return "(symbolic_bitvector {})".format(self.size)
+
+
+    def print_operand(self, prefix = ""):
+        print("{} {}\t| Symbolic Bitvector {}".format(prefix, self.name, self.size))
+
 
 
 # Bitvector type operand which essentially

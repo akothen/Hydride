@@ -27,6 +27,15 @@
 	[(nop v1) (hvx:visitor v1 fn)]
 	[(idx-add i1 i2) (fn prog) ]
 	[(idx-mul i1 i2) (fn prog) ]
+
+[ (scalar_splat_dsl v0 size_i size_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(fn ( scalar_splat_dsl v0-visited size_i size_o ))
+	]
+[ (llvm-zext_dsl v0 size_i size_o)
+		(define v0-visited (hvx:visitor v0 fn))
+		(fn ( llvm-zext_dsl v0-visited size_i size_o ))
+	]
 	[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
 		(define v0-visited (hvx:visitor v0 fn))
 		(define v1-visited (hvx:visitor v1 fn))

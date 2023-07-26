@@ -152,12 +152,14 @@ namespace Halide {
 
 #define DISTRIBUTE_BINARY_OP(OP_NAME) \
         std::vector<Expr> DistributeVec::visit(const OP_NAME* op, unsigned num_chunks){ \
-            debug(0) << "Distributing Binary Op! into num chunks " << num_chunks << "\n";\
+            internal_assert(num_chunks != 0) << "Should not perform distribution into 0 chunks \n"; \
+            debug(0) << "Distributing Binary Op " << #OP_NAME << "!  into num chunks " << num_chunks << "\n";\
             std::vector<Expr> exprs; \
             \
             \
             if(op->type.is_scalar()){\
-                exprs.push_back(OP_NAME::make(op->a, op->b));\
+                Expr DistributedBOP = OP_NAME::make(dispatch(op->a,1)[0], dispatch(op->b,1)[0]);\
+                exprs.push_back(DistributedBOP);\
                 return exprs;\
             }\
             unsigned orig_num_chunks = num_chunks;\
@@ -374,16 +376,44 @@ namespace Halide {
 
 
 
+
+
             // Calculate operand_num_chunks which may be different from the num_chunks 
             // passed to this method. We want to fit all operations
             // in the desired vector width 'bitvector_size'
-            unsigned result_num_bits = op->type.bits() * op->type.lanes(); // 2048
-            unsigned operand_num_bits = op->value.type().bits() * op->value.type().lanes(); // 1024
+            unsigned result_num_bits = op->type.bits() * op->type.lanes();  
+            unsigned operand_num_bits = op->value.type().bits() * op->value.type().lanes(); 
+
+
+            int start, end, step;
+
+            // If down-casting then traverse bitvector sizes from smallest to largest for fit
+            if(result_num_bits < operand_num_bits){
+                // TODO: This needs to be handled better. For x86 we want if the operand is 1024 downcasting to 512, we should use 256 instead of 128.
+
+                /*
+                start = bitvector_sizes.size() - 1;
+                end = -1;
+                step = -1;
+                */
+
+                // [512, 256, 128]
+                start = 0;
+                end = bitvector_sizes.size();
+                step = 1;
+            } else {
+                start = 0;
+                end = bitvector_sizes.size();
+                step = 1;
+            }
 
             bool possible_to_lower = false;
             std::vector<Expr> distributed_value;
-            for(unsigned bitvector_size : bitvector_sizes){
+            //for(unsigned bitvector_size : bitvector_sizes){
+            for(int i = start; i != end; i += step){
 
+                unsigned bitvector_size = bitvector_sizes[i];
+                
                 if(larger_size % bitvector_size != 0) continue; 
                 debug(0) << "Using "<<bitvector_size << " to lower cast \n";
                 possible_to_lower = true;
@@ -396,11 +426,17 @@ namespace Halide {
                     operand_num_chunks = result_num_bits / bitvector_size;
                     
 
-                } else {
+                } else if (operand_num_bits > result_num_bits ){
                     // Decreasing bitwidth, give larger register size to operand
-                    operand_num_chunks = operand_num_bits / bitvector_size;
+                    //operand_num_chunks = operand_num_bits / bitvector_size;
+                    // operand_num_chunks = operand_num_bits / (bitvector_sizes[i + step]);
+                    internal_assert( (i+step) < (signed) bitvector_sizes.size()) << "Out of bounds access for bitvector_sizes";
+                    operand_num_chunks = operand_num_bits / (bitvector_sizes[i]);
+                } else {
+                    operand_num_chunks = orig_num_chunks;
                 }
 
+                internal_assert(operand_num_chunks != 0) << "Operand num chunks must be positive"<<"\n";
 
                 debug(0) << "Operand num chunks for cast is "<< operand_num_chunks <<"\n";
                 distributed_value = dispatch(op->value, operand_num_chunks);
@@ -408,6 +444,8 @@ namespace Halide {
                 std::vector<Expr> DistributedCasts;
 
                 int lanes_per_chunk = op->type.lanes() / (int) operand_num_chunks;
+
+                // internal_assert((op->type.lanes() * op->type.bits()) / bitvector_size == operand_num_chunks) << "Cast Distribution broken..." << "\n";
 
 
                 debug(0) << "Lanes per chunk for cast is " << lanes_per_chunk << "\n";
@@ -438,45 +476,6 @@ namespace Halide {
                 }
 
 
-
-#if 0
-                unsigned operands_num_chunks = larger_size / bitvector_size; // 2 ?
-                distributed_value = dispatch(op->value, operands_num_chunks);
-
-                // In the case where the operands are distributed by 
-                // into different number of chunks, we first concatenate 
-                // the results and then extract the slices accordingly.
-                if(operands_num_chunks != num_chunks){
-                    internal_assert(distributed_value.size() != 0) << "Concat empty vectors for cast nodes\n";
-                    debug(0) << "make concat "<<"cast"<<"\n";
-                    for(auto val : distributed_value){
-                        debug(0) << "Individual elem: "<<val<<"\n";
-                    }
-                    // SIMPLIFY ADDED
-                    Expr Combined = (Shuffle::make_concat(distributed_value));
-                    
-
-
-                    // Distribute not over 'chunks' number of equally sized
-                    // expressions.
-                    std::vector<Expr> slice_casts;
-                    if(num_chunks == 1){
-                        slice_casts.push_back(Combined);
-                    } else {
-                        int step_size = op->type.lanes() / (int) num_chunks;
-                        for(unsigned i = 0; i < num_chunks; i++){
-                            // SIMPLIFY ADDED
-                            Expr new_shuffle = (Shuffle::make_slice(Combined, (int) i * step_size, 1, step_size));
-                            slice_casts.push_back(new_shuffle);
-                        }
-                    }
-
-                    distributed_value = slice_casts;
-                    //break;
-                }
-
-                //? break;
-#endif
             }
 
             // Simply split current expression and return
@@ -623,10 +622,12 @@ namespace Halide {
         std::vector<Expr> DistributeVec::visit(const VectorReduce* op, unsigned num_chunks){
 
 
+            debug(0) << "Distribute VectorReduce with num chunks: " << num_chunks << "\n";
             std::vector<Expr> exprs;
+            internal_assert(num_chunks == 1) << "Vector Reduce can only be distributed as 1!\n";\
 
 
-            exprs.push_back(VectorReduce::make(op->op, op->value, op->type.lanes()));
+            exprs.push_back(VectorReduce::make(op->op, dispatch(op->value, num_chunks)[0], op->type.lanes()));
 
             return exprs;
         }
@@ -744,8 +745,8 @@ namespace Halide {
                 }\
                 std::vector<Expr> distributed_op_0 = dispatch(op->args[0], num_chunks); \
                 std::vector<Expr> distributed_op_1 = dispatch(op->args[1], num_chunks); \
-                debug(0) << "Distributed op 0 size: " << distributed_op_0.size() <<"\n";\
-                debug(0) << "Distributed op 1 size: " << distributed_op_1.size() <<"\n";\
+                debug(0) << #OP_NAME << " Distributed op 0 size: " << distributed_op_0.size() <<"\n";\
+                debug(0) << #OP_NAME << " Distributed op 1 size: " << distributed_op_1.size() <<"\n";\
                 debug(0) << Arg0 <<"\n" << Arg1 <<"\n";\
                 internal_assert(distributed_op_0.size() == distributed_op_1.size()) << "DISTRIBUTE_CALL_CLAUSE divided operands differently!\n";\
                     for(unsigned i = 0; i < num_chunks; i++){\
@@ -863,7 +864,8 @@ namespace Halide {
             DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(rounding_halving_add)  // TODO: Widens internally, distribute differently
             DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(rounding_halving_sub)// TODO: Widens internally, distribute differently
             DISTRIBUTE_CALL_CLAUSE(absd)
-            DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(rounding_shift_right)// TODO: Widens internally, distribute differently
+            //DISTRIBUTE_CALL_INTERNAL_WIDEN_CLAUSE(rounding_shift_right)// TODO: Widens internally, distribute differently
+            DISTRIBUTE_CALL_CLAUSE(rounding_shift_right)// TODO: Widens internally, distribute differently
             DISTRIBUTE_CALL_CLAUSE(widening_mul)
             DISTRIBUTE_CALL_CLAUSE(widening_add)
             DISTRIBUTE_CALL_CLAUSE(widening_sub)
@@ -1070,8 +1072,19 @@ namespace Halide {
 
             Stmt OrigStore =  Store::make(op->name, op->value, op->index, op->param, op->predicate, op->alignment);
 
+            // Vector Reduce Operands may need to be distributed properly
+            if(op->value.as<VectorReduce>()){
+                debug(0) << "Found scalar store of vector reduce ..." << "\n";
+                Expr DistribVal = dispatch(op->value, 1)[0];
+                Stmt NewStoredVal = Store::make(op->name, DistribVal, op->index, op->param, op->predicate, op->alignment);
+                return NewStoredVal;
+
+            }
+
             // Un-neccessary to distribute loads and variable copies
             if(op->value.type().is_scalar() || op->value.as<Load>() || op->value.as<Variable>() || op->value.as<Broadcast>()){
+                debug(0) << "Skipping Distributing Store: "<< OrigStore << "\n";
+                debug(0) << "With Stored Value: "<< op->value << "\n";
                 return OrigStore;
             }
 
@@ -1106,7 +1119,11 @@ namespace Halide {
 
             if(VI.contains_vector_reduce){
                 debug(0) << "Contains vector reduce, skipping!" << "\n";
-                return OrigStore;
+
+                // Disable for X86
+                //Expr DistribVal = dispatch(op->value, 1)[0];
+                Stmt NewStoredVal = Store::make(op->name, op->value, op->index, op->param, op->predicate, op->alignment);
+                return NewStoredVal;
 
             }
 
@@ -1163,7 +1180,6 @@ namespace Halide {
 
                 bool single_store = is_divisible_into_vector_size(expr_bitwidth);
 
-                //if (single_store && num_chunks != 1){
                 if (single_store && num_chunks != 1){
                     debug(0) << "Using single store for OrigStore:"<<OrigStore<<"\n";
                     Expr CombinedExpr = Shuffle::make_concat(distributed_value);
@@ -1181,8 +1197,9 @@ namespace Halide {
 
 
                     debug(0) << "New Store: "<< SingleStore <<"\n";
+                    debug(0) << "New Simplified Store: "<< simplify(SingleStore) <<"\n";
 
-                    return SingleStore;
+                    return simplify(SingleStore);
 
 
                 } else {
@@ -1209,10 +1226,12 @@ namespace Halide {
 
         Stmt DistributeVec::visit(const LetStmt* op){
 
+
+            debug(0) << "Distributing Let\n";
             if(is_pure(op->value)){
                 VariableNameToExpr[op->name] = op->value;
             }
-            return LetStmt::make(op->name, op->value, dispatch(op->body));
+            return LetStmt::make(op->name, dispatch(op->value, /* num_chunks */ 1)[0], dispatch(op->body));
         }
 
 

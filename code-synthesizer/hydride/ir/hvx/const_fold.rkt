@@ -30,6 +30,25 @@
 	[(nop v1) (hvx:const-fold v1)]
 	[(idx-add i1 i2)(idx-add i1 i2) ]
 	[(idx-mul i1 i2) (idx-mul i1 i2) ]
+
+	[ (scalar_splat_dsl v0 size_i size_o)
+		(define v0-folded (hvx:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (hvx:interpret ( scalar_splat_dsl v0-folded size_i size_o ) (vector)))
+]
+		[else ( scalar_splat_dsl v0-folded size_i size_o )]
+		)
+	]
+    [ (llvm-zext_dsl v0 size_i size_o)
+     (define v0-folded (hvx:const-fold v0))
+     (cond
+       [(and (lit? v0-folded))
+        (lit (hvx:interpret ( llvm-zext_dsl v0-folded size_i size_o ) (vector)))
+        ]
+       [else ( llvm-zext_dsl v0-folded size_i size_o )]
+       )
+     ]
 	[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8)
 		(define v0-folded (hvx:const-fold v0))
 		(define v1-folded (hvx:const-fold v1))

@@ -66,6 +66,14 @@
 		(llvm-vect-udiv (hvx:interpret v0 env) (hvx:interpret v1 env) num_2 
 		 prec_i_o)
 	]
+[ (llvm-zext_dsl v0 size_i size_o)
+ (zero-extend (hvx:interpret v0 env) (bitvector size_o))
+
+ ]
+
+	[ (scalar_splat_dsl v0 size_i size_o)
+		(scalar_splat (hvx:interpret v0 env) size_i size_o)
+	]
             [ (hexagon_V6_vshuffob_128B_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
              (hexagon_V6_vshuffob_128B (hvx:interpret v0 env) (hvx:interpret v1 env) size_i_o 
                                        num_3 num_4 num_5 

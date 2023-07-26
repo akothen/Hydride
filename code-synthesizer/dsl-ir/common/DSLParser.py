@@ -71,25 +71,26 @@ def populate_dsl_inst(dsl_inst, sub_inst_dict, keep_duplicate=False):
         if "ctx_sema" not in sub_obj:
             sub_obj['ctx_sema'] = None
 
-        dsl_inst.add_context(name=subinst_name,
-                             in_vectsize=sub_obj['in_vectsize'],
-                             out_vectsize=sub_obj['out_vectsize'],
-                             lane_size=sub_obj['lanesize'],
-                             in_precision=sub_obj['in_precision'],
-                             out_precision=sub_obj['out_precision'],
-                             SIMD=sub_obj['SIMD'],
-                             args=sub_obj['args'],
-                             in_vectsize_index=sub_obj['in_vectsize_index'],
-                             out_vectsize_index=sub_obj['out_vectsize_index'],
-                             # lanesize_index = sub_obj['lanesize_index'],
-                             in_precision_index=sub_obj['in_precision_index'],
-                             out_precision_index=sub_obj['out_precision_index'],
-                             signedness=signedness,
-                             cost=parse_cost(sub_obj['Cost']),
-                             in_lanesize_index=sub_obj['in_lanesize_index'],
-                             out_lanesize_index=sub_obj['out_lanesize_index'],
-                             ctx_sema=sub_obj['ctx_sema'],
 
+        dsl_inst.add_context(name = subinst_name,
+                             in_vectsize = sub_obj['in_vectsize'],
+                             out_vectsize = sub_obj['out_vectsize'],
+                             lane_size = sub_obj['lanesize'],
+                             in_precision = sub_obj['in_precision'],
+                             out_precision = sub_obj['out_precision'],
+                             SIMD = sub_obj['SIMD'],
+                             args = sub_obj['args'],
+                             in_vectsize_index = sub_obj['in_vectsize_index'],
+                             out_vectsize_index = sub_obj['out_vectsize_index'],
+                             #lanesize_index = sub_obj['lanesize_index'],
+                             in_precision_index = sub_obj['in_precision_index'],
+                             out_precision_index = sub_obj['out_precision_index'],
+                             signedness = signedness,
+                             cost = parse_cost(sub_obj['Cost']),
+                             in_lanesize_index = sub_obj['in_lanesize_index'],
+                             out_lanesize_index = sub_obj['out_lanesize_index'],
+                             ctx_sema = sub_obj['ctx_sema'] ,
+                             extensions = sub_obj['Extensions']
                              )
 
     return dsl_inst
