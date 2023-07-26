@@ -136,6 +136,24 @@
 		[else ( llvm-vect-udiv_dsl v0-folded v1-folded num_2 prec_i_o )]
 		)
 	]
+	[ (llvm-zext_dsl v0 size_i size_o)
+		(define v0-folded (arm:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (arm:interpret ( llvm-zext_dsl v0-folded size_i size_o ) (vector)))
+]
+		[else ( llvm-zext_dsl v0-folded size_i size_o )]
+		)
+	]
+	[ (scalar_splat_dsl v0 size_i size_o)
+		(define v0-folded (arm:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (arm:interpret ( scalar_splat_dsl v0-folded size_i size_o ) (vector)))
+]
+		[else ( scalar_splat_dsl v0-folded size_i size_o )]
+		)
+	]
 	[ (vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(define vc_0-folded (arm:const-fold vc_0))
 		(define vc_1-folded (arm:const-fold vc_1))

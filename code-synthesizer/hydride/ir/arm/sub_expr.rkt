@@ -57,6 +57,12 @@
 		[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o)
 		(list v0 v1)
 	]
+		[(llvm-zext_dsl v0 size_i size_o)
+		(list v0)
+	]
+		[(scalar_splat_dsl v0 size_i size_o)
+		(list v0)
+	]
 	[(vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_6 64) (equal? num_7 0) (equal? num_8 64) (equal? prec_i_o 32) (equal? num_10 1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 1)); vqrdmulh_s32

@@ -219,7 +219,7 @@ if __name__ == "__main__":
         write_to_file(definition_header.format(target=TARGET))
         QUQ = sd.emit_struct_defs(dsl_list).split("\n")
         if TARGET != "x86":
-            QUQ = QUQ[:3]+QUQ[22:]
+            QUQ = QUQ[:3]+QUQ[24:]
         write_to_file("\n".join(QUQ))
     with open("get_name.rkt", "w+") as RacketFile:
         def write_to_file(line):

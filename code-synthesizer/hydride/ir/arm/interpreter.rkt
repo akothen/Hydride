@@ -75,6 +75,12 @@
 		(llvm-vect-udiv (arm:interpret v0 env) (arm:interpret v1 env) num_2 
 		 prec_i_o)
 	]
+	[ (llvm-zext_dsl v0 size_i size_o)
+		(llvm-zext (arm:interpret v0 env) size_i size_o)
+	]
+	[ (scalar_splat_dsl v0 size_i size_o)
+		(scalar_splat (arm:interpret v0 env) size_i size_o)
+	]
 	[ (vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(vqrdmulh_s32 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
 		 (arm:interpret v3 env) (arm:interpret v4 env) size_i_o 

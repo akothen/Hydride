@@ -80,6 +80,12 @@
 		(llvm-vect-udiv_dsl (arm:bind-expr v0 env) (arm:bind-expr v1 env) (arm:bind-expr num_2 env) 
 		 (arm:bind-expr prec_i_o env))
 	]
+	[ (llvm-zext_dsl v0 size_i size_o)
+		(llvm-zext_dsl (arm:bind-expr v0 env) (arm:bind-expr size_i env) (arm:bind-expr size_o env))
+	]
+	[ (scalar_splat_dsl v0 size_i size_o)
+		(scalar_splat_dsl (arm:bind-expr v0 env) (arm:bind-expr size_i env) (arm:bind-expr size_o env))
+	]
 	[ (vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
 		(vqrdmulh_s32_dsl (arm:bind-expr vc_0 env) (arm:bind-expr vc_1 env) (arm:bind-expr vc_2 env) 
 		 (arm:bind-expr v3 env) (arm:bind-expr v4 env) (arm:bind-expr size_i_o env) 
