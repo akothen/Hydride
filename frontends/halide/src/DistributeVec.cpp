@@ -163,14 +163,21 @@ namespace Halide {
                 return exprs;\
             }\
             unsigned orig_num_chunks = num_chunks;\
+            bool distributable = false; \
             if(distribution_look_ahead){\
                 size_t expr_bitwidth = op->type.lanes() * op->type.bits();\
                     for (unsigned bv : bitvector_sizes){\
                         if(expr_bitwidth % bv == 0){\
                             num_chunks = expr_bitwidth / bv;\
+                            distributable = true;\
                             break;\
                         }\
                     }\
+            }\
+            if(!distributable){\
+                Expr DistributedBOP = OP_NAME::make(dispatch(op->a,1)[0], dispatch(op->b,1)[0]);\
+                exprs.push_back(DistributedBOP);\
+                return exprs;\
             }\
             Expr OrigBOP = OP_NAME::make(op->a, op->b); \
             \
@@ -337,6 +344,7 @@ namespace Halide {
             Expr OrigExpr = Cast::make(op->type, op->value);
             debug(0) << "Distribute Cast "<< OrigExpr <<" into " << num_chunks<< "!\n";
 
+            bool distributable = false;
             if(isDoubleCast(op)){
                 debug(0) << "Double cast: split into two exprs "<<"\n";
                 Expr SplitCast = RewriteAsDoubleCast(op);
@@ -363,10 +371,17 @@ namespace Halide {
                     for (unsigned bv : bitvector_sizes){
                         if(expr_bitwidth % bv == 0){
                             num_chunks = expr_bitwidth / bv;
+                            distributable = true;
                             break;
                         }
                     }
                     debug(0) << "Distrubtion of cast using new num_chunks: "<< num_chunks << "\n";
+            }
+
+            if(!distributable){
+                Expr DistributedCast = Cast::make(op->type, dispatch(op->value, 1)[0]);
+                exprs.push_back(DistributedCast);
+                return exprs;
             }
 
 
