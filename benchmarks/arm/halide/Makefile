@@ -101,7 +101,7 @@ ifeq ($(BENCHMARK),1)
 
 endif
 
-fully_connected: %: %/$(BIN)
+fully_connected: fully_connected/$(BIN)
 	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
 		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
@@ -143,7 +143,10 @@ endif
 
 #-lpng -lpthread -ldl -ljpeg 
 	
-fully_connected/bin_ref fully_connected/bin: %:
+fully_connected/bin_ref:
+	mkdir $@
+
+fully_connected/bin:
 	mkdir $@
 
 # Make the bin dirs if needed

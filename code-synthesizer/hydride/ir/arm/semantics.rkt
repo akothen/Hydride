@@ -3062,6 +3062,68 @@ concat
 )
 result)
 
+(define (vget_low_u32  a %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 )
+(define %3fakeReturn
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([%inner.it (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %14 (+  %inner.it  %arg0))
+  (define %lastidx0 (-  %elemsize0  1))
+  (define %15 (+  %14  %lastidx0))
+  (define %2 (extract  %15 %14 a))
+  %2
+ )
+ )
+)
+)
+)
+%3fakeReturn)
+
+(define (vcombine_u16  low high %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 )
+(define %5fakeReturn
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([%inner.it (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %19 (+  %inner.it  %arg1))
+  (define %lastidx1 (-  %elemsize0  1))
+  (define %20 (+  %19  %lastidx1))
+  (define %1 (extract  %20 %19 high))
+  (define %3 (extract  %20 %19 low))
+  (define %4 (concat %1 %3))
+  %4
+ )
+ )
+)
+)
+)
+%5fakeReturn)
+
+(define (vget_high_u16  a %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 )
+(define %4fakeReturn
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([%inner.it (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %16 (+  %inner.it  %arg1))
+  (define %lastidx1 (-  %elemsize0  1))
+  (define %17 (+  %16  %lastidx1))
+  (define %3 (extract  %17 %16 a))
+  %3
+ )
+ )
+)
+)
+)
+%4fakeReturn)
+
 
 ;; ================================================================================
 

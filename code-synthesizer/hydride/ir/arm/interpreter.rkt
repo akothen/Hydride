@@ -825,6 +825,21 @@
 		 num_9 num_10 num_11 
 		 num_12)
 	]
+	[ (vget_low_u32_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6)
+		(vget_low_u32 (arm:interpret v0 env) size_i_o num_2 
+		 num_3 num_4 prec_i_o 
+		 num_6)
+	]
+	[ (vcombine_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8)
+		(vcombine_u16 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
+		 num_3 num_4 num_5 
+		 prec_i prec_o num_8)
+	]
+	[ (vget_high_u16_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(vget_high_u16 (arm:interpret v0 env) size_i_o num_2 
+		 num_3 num_4 prec_i_o 
+		 num_6 num_7)
+	]
 	[v (error "Unrecognized Term in Interpreter" v)]
  )
 )

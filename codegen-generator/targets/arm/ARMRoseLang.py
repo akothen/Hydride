@@ -28,8 +28,10 @@ skip = notSSA + ['vcopy']
 
 
 def Compile(InstName: str = None):
-    skipForSimilarity = skip + ['and','bsl','bic','eor','orr','orn'] +# Similarity can't handle them
-    ['addv']
+    skipForSimilarity = skip + [
+        'and', 'bsl', 'bic', 'eor', 'orr', 'orn'  # Similarity can't handle them
+        'addv' # Transofrmation can't handle them
+    ]
     from RoseFunctionInfo import RoseFunctionInfo
 
     if InstName == None:
@@ -48,8 +50,8 @@ def Compile(InstName: str = None):
         # interested = ["vshr"]
         # interested = ["vmovl_u16"]
         # interested = ["vbic_u16","vbic_u8",]
-        # interested = ["vand_u16","vand_u8",]
-        
+        interested = ["get","combine"]
+
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(

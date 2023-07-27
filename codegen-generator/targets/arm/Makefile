@@ -6,7 +6,7 @@ rosette_test/a.out: rosette_test/ARMTest.cpp
 	g++ rosette_test/ARMTest.cpp -o rosette_test/a.out
 rosette_test/alltests.rkt: rosette_test/a.out
 	rosette_test/a.out > rosette_test/alltests.rkt
-rat: rosette_test/compiled.rkt # rosette_test/alltests.rkt
+rat: rosette_test/compiled.rkt rosette_test/alltests.rkt
 	racket rosette_test/alltests.rkt
 compile: rosette_test/compiled.rkt
 
@@ -22,9 +22,9 @@ sema: ARMIntrinsicClassify.py
 	python3 ARMSemanticGen.py
 ARMReadableSemantics.py: ARMParser.py ARMMeta.py
 	python3 ARMParser.py --gen
-AllSema.py: ARMSemanticGen.py ARMIntrinsicClassify.py ARMReadableSemantics.py ARMManualCorrectAST.py
+AllSema.py: ARMSemanticGen.py ARMIntrinsicClassify.py ARMReadableSemantics.py ARMManualCorrectAST.py ARMHandCraftIntrinsics.py
 	python3 ARMSemanticGen.py
-AllSema.pickle: ARMSemanticGen.py ARMIntrinsicClassify.py ARMReadableSemantics.py ARMManualCorrectAST.py
+AllSema.pickle: ARMSemanticGen.py ARMIntrinsicClassify.py ARMReadableSemantics.py ARMManualCorrectAST.py ARMHandCraftIntrinsics.py
 	python3 ARMSemanticGen.py
 
 rdbg: test.rkt

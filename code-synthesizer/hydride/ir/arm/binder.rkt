@@ -830,6 +830,21 @@
 		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr num_11 env) 
 		 (arm:bind-expr num_12 env))
 	]
+	[ (vget_low_u32_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6)
+		(vget_low_u32_dsl (arm:bind-expr v0 env) (arm:bind-expr size_i_o env) (arm:bind-expr num_2 env) 
+		 (arm:bind-expr num_3 env) (arm:bind-expr num_4 env) (arm:bind-expr prec_i_o env) 
+		 (arm:bind-expr num_6 env))
+	]
+	[ (vcombine_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8)
+		(vcombine_u16_dsl (arm:bind-expr v0 env) (arm:bind-expr v1 env) (arm:bind-expr size_i_o env) 
+		 (arm:bind-expr num_3 env) (arm:bind-expr num_4 env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr prec_i env) (arm:bind-expr prec_o env) (arm:bind-expr num_8 env))
+	]
+	[ (vget_high_u16_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(vget_high_u16_dsl (arm:bind-expr v0 env) (arm:bind-expr size_i_o env) (arm:bind-expr num_2 env) 
+		 (arm:bind-expr num_3 env) (arm:bind-expr num_4 env) (arm:bind-expr prec_i_o env) 
+		 (arm:bind-expr num_6 env) (arm:bind-expr num_7 env))
+	]
 	[v v]
  )
 )

@@ -1401,6 +1401,34 @@
 		[else ( vsubw_u8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 )]
 		)
 	]
+	[ (vget_low_u32_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6)
+		(define v0-folded (arm:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (arm:interpret ( vget_low_u32_dsl v0-folded size_i_o num_2 num_3 num_4 prec_i_o num_6 ) (vector)))
+]
+		[else ( vget_low_u32_dsl v0-folded size_i_o num_2 num_3 num_4 prec_i_o num_6 )]
+		)
+	]
+	[ (vcombine_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8)
+		(define v0-folded (arm:const-fold v0))
+		(define v1-folded (arm:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (arm:interpret ( vcombine_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 ) (vector)))
+]
+		[else ( vcombine_u16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 )]
+		)
+	]
+	[ (vget_high_u16_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(define v0-folded (arm:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (arm:interpret ( vget_high_u16_dsl v0-folded size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7 ) (vector)))
+]
+		[else ( vget_high_u16_dsl v0-folded size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7 )]
+		)
+	]
 	[v (error "Unrecognized expression" v)]
  )
 )

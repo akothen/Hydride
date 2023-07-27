@@ -3,7 +3,7 @@ from ARMReadableSemantics import map2Code
 import pprint
 from ARMAST import *
 from ARMRoseTypes import *
-from ARMSemanticGen import SemaGenerator
+
 from ARMTypes import *
 import sys
 
@@ -538,6 +538,7 @@ def verify(s1: ASTNode, s2: ASTNode):
 
 
 def test():
+    from ARMSemanticGen import SemaGenerator
     S = SemaGenerator(True)
     res = S.getResult()
     # ans = emitSema(res["vdot_s32"].spec)

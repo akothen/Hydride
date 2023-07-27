@@ -250,6 +250,8 @@ def searchEncodingForIntrinsic(intrinsic: InstrDesc):
         "MVN": "NOT",
         "MOV": "ORR",
     }
+    # if intrin.startswith("vget"):
+    #     return ("DUP_asisdone_only", "aarch64_vector_transfer_vector_cpy_dup_sisd") if "64" in intrin else ("DUP_asimdins_DV_v", "aarch64_vector_transfer_vector_cpy_dup_sisd")
     if intrin.startswith("vset"):
         desiredprefix = "INS"
     if intrin in ['vaddv_s32', 'vaddv_u32']:

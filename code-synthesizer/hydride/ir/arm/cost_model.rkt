@@ -138,6 +138,9 @@
 (define cost_vpaddq_u32_dsl 1)
 (define cost_vmvn_u8_dsl 1)
 (define cost_vsubw_u8_dsl 1)
+(define cost_vget_low_u32_dsl 1)
+(define cost_vcombine_u16_dsl 1)
+(define cost_vget_high_u16_dsl 1)
 
 (define (arm:cost prog)
  (destruct prog
@@ -929,6 +932,21 @@
 		(+ cost_vsubw_u8_dsl (arm:cost  v0)  (arm:cost  v1)  
 		 
 		 
+		 
+		)
+	]
+	[ (vget_low_u32_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6)
+		(+ cost_vget_low_u32_dsl (arm:cost  v0)  
+		 
+		)
+	]
+	[ (vcombine_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8)
+		(+ cost_vcombine_u16_dsl (arm:cost  v0)  (arm:cost  v1)  
+		 
+		)
+	]
+	[ (vget_high_u16_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(+ cost_vget_high_u16_dsl (arm:cost  v0)  
 		 
 		)
 	]

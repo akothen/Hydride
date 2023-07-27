@@ -92,8 +92,9 @@ class IRPrinter:
             # Literals don't have any precision information generated during synthesis, hence we use
             # the user of the literals value to identify its type information.
             if isinstance(ir_arg,  ConstBitVector):
+                hack_size = 64 if ir_arg.size == 192 else ir_arg.size
                 expr_typeinfo = "(string-append ({} {})  \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
-                    self.printer_name, ir_arg.name, "(~s 1)", f"(~s {ir_arg.size})")
+                    self.printer_name, ir_arg.name, "(~s 1)", f"(~s {hack_size})")
                 str_expr += expr_typeinfo
             else:
                 lit_typeinfo = ""
@@ -166,7 +167,7 @@ class IRPrinter:
                 if isinstance(ir_arg,  ConstBitVector):
                     hack_size = 64 if ir_arg.size == 192 else ir_arg.size
                     expr_typeinfo = "(string-append ({} {})  \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
-                        self.printer_name, ir_arg.name, "(~s 1)", f"(~s {ir_arg.size})")
+                        self.printer_name, ir_arg.name, "(~s 1)", f"(~s {hack_size})")
                     str_expr += expr_typeinfo
                 else:
                     lit_typeinfo = "(begin (define-values (num_elem arg_prec) (cond [(equal? (get-length {} (vector 0)) 32)   (values 1 32)] [(equal? (get-length {} (vector 0)) 192)   (values 1 192)] [(< (/ (get-length {} (vector 0)) {}) 1)  (values  (/ (get-length {} (vector 0)) (get-prec {} (vector 0))) (/ (get-prec {} (vector 0))) )] [else (values (/ (get-length {} (vector 0)) {}) {})]))".format(

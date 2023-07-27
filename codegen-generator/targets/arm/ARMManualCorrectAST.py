@@ -1,6 +1,6 @@
 from ARMAST import *
 ManualAST = {
-    "aarch64_vector_arithmetic_binary_uniform_diff":{
+    "aarch64_vector_arithmetic_binary_uniform_diff": {
         "decode": """        {
             integer d = UInt(Rd);
             integer n = UInt(Rn);
@@ -34,7 +34,7 @@ ManualAST = {
             V[d] = result2;
         }""",
     },
-    "aarch64_vector_arithmetic_binary_disparate_diff":{
+    "aarch64_vector_arithmetic_binary_disparate_diff": {
         "decode": """        {
             integer d = UInt(Rd);
             integer n = UInt(Rn);
@@ -69,7 +69,7 @@ ManualAST = {
             V[d] = result2;
         }""",
     },
-    "aarch64_vector_arithmetic_binary_uniform_mul_int_dotp":{
+    "aarch64_vector_arithmetic_binary_uniform_mul_int_dotp": {
         "decode": """        {
             if (! HaveDOTPExt()) then
             {
@@ -134,7 +134,7 @@ ManualAST = {
             V[d] = result2;
         }""",
     },
-    "aarch64_vector_arithmetic_binary_element_dotp":{
+    "aarch64_vector_arithmetic_binary_element_dotp": {
         "decode": """        {
             if (! HaveDOTPExt()) then
             {
@@ -198,7 +198,7 @@ ManualAST = {
             V[d] = result;
         }""",
     },
-    "aarch64_vector_reduce_add_simd":{ # No other ways to match vaddv_s32 to any encoding
+    "aarch64_vector_reduce_add_simd": {  # No other ways to match vaddv_s32 to any encoding
         "decode": """        {
             integer d = UInt(Rd);
             integer n = UInt(Rn);
@@ -216,7 +216,7 @@ ManualAST = {
             V[d] = Reduce(op, operand, esize);
         }""",
     },
-    "aarch64_vector_arithmetic_unary_add_pairwise":{
+    "aarch64_vector_arithmetic_unary_add_pairwise": {
         "decode": """        {
             integer d = UInt(Rd);
             integer n = UInt(Rn);
@@ -247,5 +247,27 @@ ManualAST = {
             }
             V[d] = result2;
         }""",
+    },
+    "combine_handcrafted": {
+        "decode": """
+        """,
+        "execute": """{
+            bits(datasize) operand1 = V[n];
+            bits(datasize) operand2 = V[m];
+            V[d] = operand2[0~(datasize-1)]:operand1[0~(datasize-1)];
+        }"""
+    },
+    "get_handcrafted": {
+        "decode": """
+        """,
+        "execute": """{
+            bits(2*datasize) operand = V[n];
+            if part then {
+                V[d] = operand[(datasize)~((2 * datasize) - 1)];
+            }
+            else {
+                V[d] = operand[0~(datasize - 1)];
+            }
+        }"""
     },
 }

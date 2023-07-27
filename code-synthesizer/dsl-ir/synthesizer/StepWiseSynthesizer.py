@@ -808,5 +808,9 @@ class StepWiseSynthesizer(SynthesizerBase):
             return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
             return 15
+        if self.target == 'arm' and ctx.name == "vget_high_s32":
+            return 15
+        if self.target == 'arm' and ctx.name == "vcombine_u16":
+            return 15
         else:
             return super().score_context(dsl_inst, ctx)

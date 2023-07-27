@@ -23,11 +23,11 @@ DEBUG_LIST = [
     # "vqadd_s16",
     # "vmovl_s16",
     # "vqmovn_s32",
-    "vdotq_u32",
+    # "vdotq_u32",
     # "vshld_s64",
     # "vadd_u64",
     # "vshr_n_s8",
-    # "vshr_n_s16",
+    "vmul_s16",
     # "vshr_n_s32",
     # "vshr_n_s64",
     # "vneg_s8",
@@ -626,7 +626,7 @@ class SynthesizerBase:
 
         if self.target == "arm":
             # Prevent vsraq taking place of vadd
-            if "bvashr" not in spec_ops and "bvlshr" not in spec_ops and len(spec_ops) <= 2:
+            if "bvashr" not in spec_ops and "bvlshr" not in spec_ops and "bvmul" not in spec_ops:
                 disallowed_ops += ["bvashr", "bvlshr"]
             if "bvadd" in spec_ops and "bvsub" not in spec_ops:
                 disallowed_ops += ["bvsub"]
@@ -658,6 +658,11 @@ class SynthesizerBase:
                                 continue
                         if "movl" in ctxs[idx].name and op in ["bvashr", "bvsub"]:
                             continue
+                        if any(i in ctxs[idx].name for i in ["mul", "mla", "mls"]):
+                            if "_u32" in ctxs[idx].name or "_s32" in ctxs[idx].name:
+                                if op in ["zero-extend", "sign-extend"]:
+                                    continue
+
                         # if "rshr" in ctxs[idx].name: #rshr
                         #   if op == "bvlshr":
                         #     continue
@@ -891,7 +896,8 @@ class SynthesizerBase:
                 pass
 
             if N < len(ops):
-                print("Prunning", globally_sorted_operation_insts[:-N])
+                print("Prunning", [(i, self.score_context(i, j)) for i, j in zip(
+                    globally_sorted_operation_insts[:-N], globally_sorted_operation_contexts[:-N])])
                 print(N, "<",  len(ops))
                 return (globally_sorted_operation_insts[-N:], globally_sorted_operation_contexts[-N:])
             else:
@@ -996,6 +1002,10 @@ class SynthesizerBase:
                                     continue
                                 if "_u" in ctx.name and v == "sign-extend":
                                     continue
+                            if any(i in ctx.name for i in ["mul", "mla", "mls"]):
+                                if "_u32" in ctx.name or "_s32" in ctx.name:
+                                    if v in ["zero-extend", "sign-extend"]:
+                                        continue
                             # if "rshr" in ctx.name: #rshr
                             #   if v == "bvlshr":
                             #     continue

@@ -332,6 +332,7 @@ class SemaGenerator():
         # print(expandedName, field)
         resolving = D.walk(ASTs[1])
         if D.undefined or D.symbolnotfound:
+            breakpoint()
             print(D.undefined, D.symbolnotfound)
             print(expandedName)
             print(enc, field)
@@ -368,6 +369,7 @@ class SemaGenerator():
         return None
 
     def SemaGenerator(self):
+        assert False, "Deprecated"
         from ARMIntrinsicClassify import Intrinsics2Fields
         for i in Intrinsics2Fields:
             ii, assign = extract_assignment_from_name(i)
@@ -416,6 +418,11 @@ class SemaGenerator():
                 self.result[k] = z
         # for k in self.result.keys():
         #   print(k)
+        from ARMHandCraftIntrinsics import HandCraftedIntrinsics, HandCraftedSema
+        for group, intrin_list in HandCraftedIntrinsics.items():
+            for intrin in intrin_list:
+                self.result[intrin] = HandCraftedSema[group](self.toI[intrin])
+
         return self.result
 
     def serialize(self):
