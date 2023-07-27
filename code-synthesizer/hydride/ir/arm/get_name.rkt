@@ -2814,6 +2814,8 @@
 	[(vget_high_u16_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
+   (append (list  "vget_high_u16") (arm:get-target-name v0))]
+		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
    (append (list  "vget_high_s32") (arm:get-target-name v0))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
    (append (list  "vget_high_s8") (arm:get-target-name v0))]
@@ -2822,14 +2824,42 @@
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
    (append (list  "vget_high_s16") (arm:get-target-name v0))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
-   (append (list  "vget_high_u16") (arm:get-target-name v0))]
-		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
    (append (list  "vget_high_s64") (arm:get-target-name v0))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
    (append (list  "vget_high_u64") (arm:get-target-name v0))]
 		[(and  (equal? size_i_o 64) (equal? num_2 64) (equal? num_3 0) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 64)) 
    (append (list  "vget_high_u8") (arm:get-target-name v0))]
 		[else (error "Unable to get name  for vget_high_u16")]
+)
+
+	]
+	[(vpaddl_s16_dsl vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 1) (equal? num_16 2)) 
+   (append (list  "vpaddl_s16") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 0) (equal? num_16 2)) 
+   (append (list  "vpaddlq_u8") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 0) (equal? num_16 2)) 
+   (append (list  "vpaddl_u16") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 1) (equal? num_16 2)) 
+   (append (list  "vpaddl_s32") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 1) (equal? num_16 2)) 
+   (append (list  "vpaddlq_s32") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 0) (equal? num_16 2)) 
+   (append (list  "vpaddlq_u32") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 1) (equal? num_16 2)) 
+   (append (list  "vpaddlq_s8") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 0) (equal? num_16 2)) 
+   (append (list  "vpaddlq_u16") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 1) (equal? num_16 2)) 
+   (append (list  "vpaddl_s8") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 16) (equal? prec_o 32) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 16) (equal? num_13 1) (equal? num_14 8) (equal? num_15 1) (equal? num_16 2)) 
+   (append (list  "vpaddlq_s16") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 8) (equal? num_13 1) (equal? num_14 4) (equal? num_15 0) (equal? num_16 2)) 
+   (append (list  "vpaddl_u8") (arm:get-target-name v1))]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 32) (equal? prec_i 32) (equal? prec_o 64) (equal? num_8 -1) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 0) (equal? num_12 32) (equal? num_13 1) (equal? num_14 16) (equal? num_15 0) (equal? num_16 2)) 
+   (append (list  "vpaddl_u32") (arm:get-target-name v1))]
+		[else (error "Unable to get name  for vpaddl_s16")]
 )
 
 	]

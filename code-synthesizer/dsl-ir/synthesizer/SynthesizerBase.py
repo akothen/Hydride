@@ -626,7 +626,7 @@ class SynthesizerBase:
 
         if self.target == "arm":
             # Prevent vsraq taking place of vadd
-            if "bvashr" not in spec_ops and "bvlshr" not in spec_ops and "bvmul" not in spec_ops:
+            if "bvashr" not in spec_ops and "bvlshr" not in spec_ops and "bvmul" not in spec_ops and "bvshl" not in spec_ops:
                 disallowed_ops += ["bvashr", "bvlshr"]
             if "bvadd" in spec_ops and "bvsub" not in spec_ops:
                 disallowed_ops += ["bvsub"]

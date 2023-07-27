@@ -1429,6 +1429,16 @@
 		[else ( vget_high_u16_dsl v0-folded size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7 )]
 		)
 	]
+	[ (vpaddl_s16_dsl vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(define vc_0-folded (arm:const-fold vc_0))
+		(define v1-folded (arm:const-fold v1))
+		(cond
+		[(and (lit? vc_0-folded) (lit? v1-folded))
+(lit (arm:interpret ( vpaddl_s16_dsl vc_0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 ) (vector)))
+]
+		[else ( vpaddl_s16_dsl vc_0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 )]
+		)
+	]
 	[v (error "Unrecognized expression" v)]
  )
 )

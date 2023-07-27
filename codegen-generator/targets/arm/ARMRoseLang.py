@@ -50,7 +50,8 @@ def Compile(InstName: str = None):
         # interested = ["vshr"]
         # interested = ["vmovl_u16"]
         # interested = ["vbic_u16","vbic_u8",]
-        interested = ["get","combine"]
+        # interested = ["get","combine"]
+        interested = ["paddl"]
 
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:

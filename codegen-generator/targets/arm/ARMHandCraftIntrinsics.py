@@ -6,10 +6,13 @@ HandCraftedIntrinsics = {"vcombine": ["vcombine_"+i+j for i in ["s", "u"]
                          for j in ["8", "16", "32", "64"]],
                          "vget": ["vget_"+k+i+j for k in ["low_", "high_"] for i in ["s", "u"]
                                   for j in ["8", "16", "32", "64"]],
+                         #  "vpad_l": ["vpad"+d+"l"+k+i+j for d in ["a", "d"]for k in ["", "q"] for i in ["_s", "_u"]
+                         #             for j in ["8", "16", "32"]],
                          }
 HandCraftedField = {
     "vcombine": "combine_handcrafted",
     "vget": "get_handcrafted",
+    # "vpad_l": "pad_l_handcrafted",
 }
 
 
@@ -51,7 +54,35 @@ def vgetSema(instr: InstrDesc) -> ARMSema:
                    )
 
 
+# def vpad_lSema(instr: InstrDesc) -> ARMSema:
+#     Params, signedness, preparation, imm_width = parse_instr_attr(
+#         instr, {})
+#     s = SimpleParser()
+#     s.build()
+#     datasize = 128 if 'q' in instr.name else 64
+#     esize = int(instr.name.split("_")[1:])
+#     elements = datasize // (2*esize)
+#     return ARMSema(instr.name,
+#                    "_AD_LP",
+#                    Params,
+#                    s.parse(ManualAST["pad_l_handcrafted"]["execute"]),
+#                    instr.return_type["value"],
+#                    signedness,
+#                    f"?",
+#                    None, imm_width, None, None,
+#                    preparation,
+#                    {'datasize': datasize,
+#                     'esize': esize,
+#                     'elements': elements,
+#                     'acc': 1 if "ada" in instr.name else 0,
+#                     'unsigned': 1 if '_u' in instr.name else 0,
+#                     },
+#                    "pad_l_handcrafted",
+#                    )
+
+
 HandCraftedSema = {
     "vcombine": vcombineSema,
     "vget": vgetSema,
+    # "vpad_l": vpad_lSema,
 }

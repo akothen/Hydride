@@ -270,4 +270,29 @@ ManualAST = {
             }
         }"""
     },
+    # "pad_l_handcrafted": {
+    #     "decode": """
+    #     """,
+    #     "execute": """{
+    #         bits(datasize) operand = V[n];
+    #         bits(datasize) result;
+    #         bits(datasize) result2;
+
+    #         bits(2*esize) sum;
+    #         integer op1;
+    #         integer op2;
+
+    #         if acc then result = V[d];
+    #         for e = 0 to elements-1
+    #             op1 = Int(Elem[operand, 2*e+0, esize], unsigned);
+    #             op2 = Int(Elem[operand, 2*e+1, esize], unsigned);
+    #             sum = (op1 + op2)[(2*esize-1)~0];
+    #             if acc then
+    #                 Elem[result2, e, 2*esize] = Elem[result, e, 2*esize] + sum;
+    #             else
+    #                 Elem[result2, e, 2*esize] = sum;
+
+    #         V[d] = result2;
+    #     }"""
+    # }
 }

@@ -845,6 +845,14 @@
 		 (arm:bind-expr num_3 env) (arm:bind-expr num_4 env) (arm:bind-expr prec_i_o env) 
 		 (arm:bind-expr num_6 env) (arm:bind-expr num_7 env))
 	]
+	[ (vpaddl_s16_dsl vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(vpaddl_s16_dsl (arm:bind-expr vc_0 env) (arm:bind-expr v1 env) (arm:bind-expr size_i_o env) 
+		 (arm:bind-expr num_3 env) (arm:bind-expr num_4 env) (arm:bind-expr num_5 env) 
+		 (arm:bind-expr prec_i env) (arm:bind-expr prec_o env) (arm:bind-expr num_8 env) 
+		 (arm:bind-expr num_9 env) (arm:bind-expr num_10 env) (arm:bind-expr num_11 env) 
+		 (arm:bind-expr num_12 env) (arm:bind-expr num_13 env) (arm:bind-expr num_14 env) 
+		 (arm:bind-expr num_15 env) (arm:bind-expr num_16 env))
+	]
 	[v v]
  )
 )

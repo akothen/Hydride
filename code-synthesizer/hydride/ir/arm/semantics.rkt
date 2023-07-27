@@ -3124,6 +3124,39 @@ concat
 )
 %4fakeReturn)
 
+(define (vpaddl_s16  %arg1 a %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg2 %arg3 %arg4 %arg5 %arg6 %arg7 %arg8 %arg9 %arg10 )
+(define result2
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %5.new0 (*  e0.new  %arg10))
+  (define %lastidx3 (-  %elemsize0  1))
+  (define %10 (+  %5.new0  %lastidx3))
+  (define %11 (extract  %10 %5.new0 a))
+  (define %12.ab0 (bvsizeext  %11 192 %arg9))
+  (define %13.new0 (/  e0.new  %arg8))
+  (define %14 (+  %13.new0  %arg7))
+  (define %15 (*  %14  %arg6))
+  (define %lastidx2 (-  %elemsize0  1))
+  (define %20 (+  %15  %lastidx2))
+  (define %21 (extract  %20 %15 a))
+  (define %22.ab0 (bvsizeext  %21 192 %arg5))
+  (define %25.ab0 (bvaddnw %12.ab0 %22.ab0 192 %arg4 ))
+  (define %lastidx1 (-  %arg0  1))
+  (define %highidx0 (+  %lastidx1  %arg3))
+  (define %26 (extract  %highidx0 %arg3 %25.ab0))
+  (define %44.ab0 (bvaddnw %arg1 %26 %arg0 %arg2 ))
+  %44.ab0
+ )
+ )
+)
+)
+)
+result2)
+
 
 ;; ================================================================================
 

@@ -211,8 +211,7 @@ def wedo(instr):
         return False
     if instr["base_instruction"][0] == "NOP":  # TODO: vreinterpret
         return False
-    skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT",
-            "SADDLP", "UADDLP"]  # TODO: not found in XML
+    skip = ["SMMLA", "UMMLA", "USMMLA", "USDOT", "SUDOT"]  # TODO: not found in XML
     tosupport = ["TBL", "TBX"]  # TODO: need to support
     if any([instr["base_instruction"][0].startswith(j) for j in tosupport+skip]):
         return False

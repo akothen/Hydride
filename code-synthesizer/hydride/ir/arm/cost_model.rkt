@@ -141,6 +141,7 @@
 (define cost_vget_low_u32_dsl 1)
 (define cost_vcombine_u16_dsl 1)
 (define cost_vget_high_u16_dsl 1)
+(define cost_vpaddl_s16_dsl 1)
 
 (define (arm:cost prog)
  (destruct prog
@@ -947,6 +948,14 @@
 	]
 	[ (vget_high_u16_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(+ cost_vget_high_u16_dsl (arm:cost  v0)  
+		 
+		)
+	]
+	[ (vpaddl_s16_dsl vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16)
+		(+ cost_vpaddl_s16_dsl (arm:cost  vc_0)  (arm:cost  v1)  
+		 
+		 
+		 
 		 
 		)
 	]
