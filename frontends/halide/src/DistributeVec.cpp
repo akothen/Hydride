@@ -368,6 +368,7 @@ namespace Halide {
 
             if(distribution_look_ahead){
                 size_t expr_bitwidth = std::max(op->type.lanes() * op->type.bits(), op->value.type().lanes() * op->value.type().bits());
+
                     for (unsigned bv : bitvector_sizes){
                         if(expr_bitwidth % bv == 0){
                             num_chunks = expr_bitwidth / bv;
@@ -375,6 +376,22 @@ namespace Halide {
                             break;
                         }
                     }
+
+
+                    size_t min_expr_bitwidth = std::min(op->type.lanes() * op->type.bits(), op->value.type().lanes() * op->value.type().bits());
+                    bool min_distributable = false;
+
+
+                    for (unsigned bv : bitvector_sizes){
+                        if(min_expr_bitwidth % bv == 0){
+                            num_chunks = expr_bitwidth / bv;
+                            min_distributable = true;
+                            break;
+                        }
+                    }
+
+                    distributable = distributable && min_distributable;
+
                     debug(0) << "Distrubtion of cast using new num_chunks: "<< num_chunks << "\n";
             }
 
