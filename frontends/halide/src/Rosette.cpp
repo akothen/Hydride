@@ -3558,7 +3558,7 @@ Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
         std::vector<unsigned> arm_vector_sizes = {128, 64};
 
-        bool model_sat_support = false;
+        bool model_sat_support = true;
 
         // const char *enable_hydride = getenv("HL_BENCH_MATMUL");
         // if (enable_hydride) {
