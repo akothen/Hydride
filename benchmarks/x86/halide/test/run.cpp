@@ -994,9 +994,9 @@ int main(int argc, char **argv) {
     printf("benchmark matmul_256_32bit_bias_add!\n");
 
     constexpr int dims_3 = 3;
-    int32_t matrix_size = 64;
+    int32_t matrix_size = 256;
     
-    int bias_size = matrix_size;
+    int bias_size = 64;
     halide_dimension_t x_dim{ 0, matrix_size, 1 };
     halide_dimension_t y_dim{ 0, matrix_size, matrix_size * 1 };
     halide_dimension_t b_dim{ 0, bias_size, matrix_size * matrix_size };
@@ -1059,9 +1059,9 @@ int main(int argc, char **argv) {
     printf("benchmark matmul_256_32bit_bias_add_relu!\n");
 
     constexpr int dims_3 = 3;
-    int32_t matrix_size = 64;
+    int32_t matrix_size = 256;
     
-    int bias_size = matrix_size;
+    int bias_size = 64;
     halide_dimension_t x_dim{ 0, matrix_size, 1 };
     halide_dimension_t y_dim{ 0, matrix_size, matrix_size * 1 };
     halide_dimension_t b_dim{ 0, bias_size, matrix_size * matrix_size };
@@ -1124,9 +1124,9 @@ int main(int argc, char **argv) {
     printf("benchmark matmul_256_32bit_bias_add_add!\n");
 
     constexpr int dims_3 = 3;
-    int32_t matrix_size = 64;
+    int32_t matrix_size = 256;
     
-    int bias_size = matrix_size;
+    int bias_size = 64;
     halide_dimension_t x_dim{ 0, matrix_size, 1 };
     halide_dimension_t y_dim{ 0, matrix_size, matrix_size * 1 };
     halide_dimension_t b_dim{ 0, bias_size, matrix_size * matrix_size };
