@@ -2,7 +2,7 @@ from common.Types import *
 from common.Instructions import *
 from common.PredefinedDSL import *
 import random
-from ARMLegalInst import arm_legal_inst
+from ARMLegalInst import arm_legal_inst, ARMExemption, ARMSelection
 from ShuffleList import ShuffleList
 
 DEBUG = True
@@ -27,7 +27,7 @@ DEBUG_LIST = [
     # "vshld_s64",
     # "vadd_u64",
     # "vshr_n_s8",
-    "vmul_s16",
+    "vqrdmulh_s32",
     # "vshr_n_s32",
     # "vshr_n_s64",
     # "vneg_s8",
@@ -650,22 +650,8 @@ class SynthesizerBase:
                     # if (op == "bvsubnsw" or op == "bvsubnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
                     #   continue
                     # Attempt for ARM
-                    if self.target == "arm":
-                        if any(i in ctxs[idx].name for i in ["shr", "shl", "mul", "mla", "mls"]):
-                            if "_s" in ctxs[idx].name and op == "zero-extend":
-                                continue
-                            if "_u" in ctxs[idx].name and op == "sign-extend":
-                                continue
-                        if "movl" in ctxs[idx].name and op in ["bvashr", "bvsub"]:
-                            continue
-                        if any(i in ctxs[idx].name for i in ["mul", "mla", "mls"]):
-                            if "_u32" in ctxs[idx].name or "_s32" in ctxs[idx].name:
-                                if op in ["zero-extend", "sign-extend"]:
-                                    continue
-
-                        # if "rshr" in ctxs[idx].name: #rshr
-                        #   if op == "bvlshr":
-                        #     continue
+                    if self.target == "arm" and ARMExemption(ctxs[idx].name, op):
+                        continue
                     to_insert = False
                     reason = f"{op} in {disallowed_ops}"
                     break
@@ -972,6 +958,12 @@ class SynthesizerBase:
 
             skip = False
 
+            # if "qrdmulh" in ctx.name:
+            #     breakpoint()
+            if self.target=="arm" and not ARMSelection(ctx.name):
+                print("Skipping ", ctx.name, ", not in ARM selection")
+                continue
+
             for c_op in ctx_ops:
                 variants = get_op_variant(c_op)
 
@@ -996,19 +988,9 @@ class SynthesizerBase:
                     # which is not being used in the spec, skip
                     if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
                         # if Target is ARM
-                        if self.target == "arm":
-                            if any(i in ctx.name for i in ["shr", "shl", "mul", "mla", "mls"]):
-                                if "_s" in ctx.name and v == "zero-extend":
-                                    continue
-                                if "_u" in ctx.name and v == "sign-extend":
-                                    continue
-                            if any(i in ctx.name for i in ["mul", "mla", "mls"]):
-                                if "_u32" in ctx.name or "_s32" in ctx.name:
-                                    if v in ["zero-extend", "sign-extend"]:
-                                        continue
-                            # if "rshr" in ctx.name: #rshr
-                            #   if v == "bvlshr":
-                            #     continue
+                        if self.target == "arm" and ARMExemption(ctx.name, v):
+                            continue
+
                         print("Skipping ", ctx.name, "as it is using a variant op:",
                               v, "of the original op", c_op)
                         skip = True

@@ -2371,11 +2371,22 @@ private:
                         lower_using_halide = true;
                     }
                 } else if (_arch == Architecture::ARM) {
-                    size_t element_bits = op->args[0].type().bits();
-                    if (element_bits < 64) {
-                        lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                    int value = -1;
+
+                    if (as_const_uint(op->args[2])) {
+                        value = *as_const_uint(op->args[2]);
+                    }
+
+                    if (as_const_int(op->args[2])) {
+                        value = *as_const_int(op->args[2]);
+                    }
+
+                    if (value == 31) {
+                        debug(0) << "Found constant rounding_mul_shift_right with value 31: " << op->args[2] << "\n";
                     } else {
-                        lower_using_halide = false;
+                        debug(0) << "Lowering rounding_mul_shift_right using halide"
+                                 << "\n";
+                        lower_using_halide = true;
                     }
                 }
 
@@ -2400,7 +2411,7 @@ private:
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits <= 64) {
-                        lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
+                        lowered = saturating_narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                     } else {
                         lower_using_halide = true;
                     }

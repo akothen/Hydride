@@ -29,7 +29,7 @@ BV_OPS = [
     "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
     "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
     "bvlt", "bvle", "bvgt", "bvge", "bvmulnw",
-    #"bitvector->integer"
+    # "bitvector->integer"
 ]
 
 BV_OP_VARIANTS = [
@@ -137,15 +137,15 @@ def get_variant_by_sign(op, sign):
 
 
 class Context:
-    def __init__(self, name = "", dsl_name = "", in_vectsize = None, out_vectsize = None,
-                 lane_size = None, in_precision = None,
-                 out_precision = None, SIMD = False, args = [],
-                 in_vectsize_index = None, out_vectsize_index = None,
-                 in_precision_index = None,
-                 out_precision_index = None, cost = None,
-                 signedness = None, in_lanesize_index = None,
-                 out_lanesize_index = None, semantics = None,
-                 ctx_sema = None, extensions = None
+    def __init__(self, name="", dsl_name="", in_vectsize=None, out_vectsize=None,
+                 lane_size=None, in_precision=None,
+                 out_precision=None, SIMD=False, args=[],
+                 in_vectsize_index=None, out_vectsize_index=None,
+                 in_precision_index=None,
+                 out_precision_index=None, cost=None,
+                 signedness=None, in_lanesize_index=None,
+                 out_lanesize_index=None, semantics=None,
+                 ctx_sema=None, extensions=None
                  ):
         self.name = name
         self.dsl_name = dsl_name
@@ -270,21 +270,25 @@ class Context:
         # if self.target=="arm": # TODO: temporary patch, should be fixed on the parser side
         if True:
             arm_sema = {
-                r"qadd[q]?_s": "bvaddnsw",
-                r"qadd[q]?_u": "bvaddnuw",
-                r"qsub[q]?_s": "bvsubnsw",
-                r"qsub[q]?_u": "bvsubnuw",
+                r"qadd[q]?_s": ["bvaddnsw", ["bvadd", "bvssat"]],
+                r"qadd[q]?_u": ["bvaddnuw", ["bvadd", "bvusat"]],
+                r"qsub[q]?_s": ["bvsubnsw", ["bvsub", "bvssat"]],
+                r"qsub[q]?_u": ["bvsubnuw", ["bvsub", "bvusat"]],
                 # r"qsub[q]?_s":"bvmulnsw",
                 # r"qsub[q]?_u":"bvmulnuw",
-                r"q\w*(mul|mla|mls)([^_\s]*_){1,3}s": "bvmulnsw",
-                r"q\w*(mul|mla|mls)([^_\s]*_){1,3}u": "bvmulnuw",
+                r"qrdmulh": ["bvaddnsw", []],
+                r"q\w*(mul|mla|mls)([^_\s]*_){1,3}s": ["bvmulnsw", ["bvmul", "bvssat"]],
+                r"q\w*(mul|mla|mls)([^_\s]*_){1,3}u": ["bvmulnuw", ["bvmul", "bvusat"]],
             }
             for k, v in arm_sema.items():
                 import re
                 if re.search(k, self.name):
                     # if k in ctx.name:
                     # breakpoint()
-                    operations.append(v)
+                    operations.append(v[0])
+                    break
+                    # for ii in v[1]:
+                    #     operations=[i for i in operations if i != ii]
 
         return list(set(operations))
 
@@ -517,7 +521,6 @@ class Context:
 
     def supports_input_precision(self, prec):
 
-
         for k in self.in_bound_map:
             # print("Bounded Precision:",k)
             if int(k) == prec:
@@ -598,8 +601,10 @@ class Context:
             return ""
         else:
             return "_dsl"
-    def print_context_expr(self, prefix = ""):
-        print("{} ({} ; {}".format(prefix, self.dsl_name + self.dsl_name_suffix() , self.name))
+
+    def print_context_expr(self, prefix=""):
+        print("{} ({} ; {}".format(prefix, self.dsl_name +
+              self.dsl_name_suffix(), self.name))
 
         for arg in self.context_args:
             if isinstance(arg, Context):
@@ -609,15 +614,16 @@ class Context:
 
         print("{} )".format(prefix))
 
-
-    def emit_context_expr_string(self, prefix = ""):
-        string = ("{} ({} ; {}".format(prefix, self.dsl_name + self.dsl_name_suffix() , self.name))
+    def emit_context_expr_string(self, prefix=""):
+        string = ("{} ({} ; {}".format(
+            prefix, self.dsl_name + self.dsl_name_suffix(), self.name))
 
         for arg in self.context_args:
             if isinstance(arg, Context):
-                string += "\n" + arg.emit_context_expr_string(prefix = prefix + "\t")
+                string += "\n" + \
+                    arg.emit_context_expr_string(prefix=prefix + "\t")
             else:
-                string += "\n"+ (prefix +"\t" + arg.get_dsl_value() )
+                string += "\n" + (prefix + "\t" + arg.get_dsl_value())
 
         string += "\n" + ("{} )".format(prefix))
         return string
@@ -790,41 +796,33 @@ class DSLInstruction(InstructionType):
     def __repr__(self):
         return self.name
 
-
-
-
-
-
-
-
-
-    def add_context(self, name = "", in_vectsize = None, out_vectsize = None,
-                    lane_size = None, in_precision = None,
-                    out_precision = None, SIMD = False, args = [],
-                    in_vectsize_index = None, out_vectsize_index = None,
-                    in_precision_index = None,
-                    out_precision_index = None, cost = None,
-                    signedness = None, in_lanesize_index = None,
-                    out_lanesize_index = None,
-                    ctx_sema = None, extensions = None):
+    def add_context(self, name="", in_vectsize=None, out_vectsize=None,
+                    lane_size=None, in_precision=None,
+                    out_precision=None, SIMD=False, args=[],
+                    in_vectsize_index=None, out_vectsize_index=None,
+                    in_precision_index=None,
+                    out_precision_index=None, cost=None,
+                    signedness=None, in_lanesize_index=None,
+                    out_lanesize_index=None,
+                    ctx_sema=None, extensions=None):
 
         if extensions != None and 'halide' in extensions:
             self.add_dsl_to_name = False
 
         self.contexts.append(
-            Context(name = name, dsl_name = self.name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
-                    lane_size = lane_size, in_precision = in_precision,
-                    out_precision = out_precision, SIMD = SIMD, args = args,
-                    in_vectsize_index = in_vectsize_index,
-                    out_vectsize_index = out_vectsize_index,
-                    in_precision_index = in_precision_index,
-                    out_precision_index = out_precision_index,
-                    cost = cost, signedness = signedness,
-                    in_lanesize_index = in_lanesize_index,
-                    out_lanesize_index = out_lanesize_index,
-                    semantics = self.semantics,
-                    ctx_sema = ctx_sema,
-                    extensions = extensions
+            Context(name=name, dsl_name=self.name, in_vectsize=in_vectsize, out_vectsize=out_vectsize,
+                    lane_size=lane_size, in_precision=in_precision,
+                    out_precision=out_precision, SIMD=SIMD, args=args,
+                    in_vectsize_index=in_vectsize_index,
+                    out_vectsize_index=out_vectsize_index,
+                    in_precision_index=in_precision_index,
+                    out_precision_index=out_precision_index,
+                    cost=cost, signedness=signedness,
+                    in_lanesize_index=in_lanesize_index,
+                    out_lanesize_index=out_lanesize_index,
+                    semantics=self.semantics,
+                    ctx_sema=ctx_sema,
+                    extensions=extensions
                     )
         )
 
@@ -851,7 +849,7 @@ class DSLInstruction(InstructionType):
 
     def get_dsl_name(self):
         if self.add_dsl_to_name:
-            return self.name +"_dsl"
+            return self.name + "_dsl"
         else:
             return self.name
 
