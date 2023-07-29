@@ -28,7 +28,7 @@ armr.%:
 armrd.%:
 	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
-$(LIB_HALIDE): $(HALIDE_SRC)/src/CodeGen_LLVM.cpp $(HALIDE_SRC)/src/Rosette.cpp
+$(LIB_HALIDE): $(HALIDE_SRC)/src/Rosette.cpp $(HALIDE_SRC)/src/DistributeVec.cpp
 	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
 x86median: $(LIB_HALIDE)
 	make -C $(HYDRIDE_ROOT)/benchmarks/x86-deprecated/halide median3x3

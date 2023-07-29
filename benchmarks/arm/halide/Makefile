@@ -221,3 +221,11 @@ clean:
 		$*/bin_ref/halide_runtime_x86.o \
 		-o $*/bin_ref/$*_run.out -DDEBUG
 	$*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
+
+result.tar: Makefile
+	tar -cf $@ Makefile
+%.pack: result.tar
+	tar -uf result.tar $*/bin/$*.a $*/bin/$*.h
+unpack:
+	tar -xf result.tar
+

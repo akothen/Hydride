@@ -2372,7 +2372,6 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     int value = -1;
-
                     if (as_const_uint(op->args[2])) {
                         value = *as_const_uint(op->args[2]);
                     }
@@ -2825,6 +2824,7 @@ private:
 
             switch (_arch) {
             case Architecture::ARM:
+                supported_input_sizes.push_back(128);
                 supported_input_sizes.push_back(64);
                 break;
             case Architecture::HVX:
