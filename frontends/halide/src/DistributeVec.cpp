@@ -174,11 +174,6 @@ namespace Halide {
                         }\
                     }\
             }\
-            if(!distributable){\
-                Expr DistributedBOP = OP_NAME::make(dispatch(op->a,1)[0], dispatch(op->b,1)[0]);\
-                exprs.push_back(DistributedBOP);\
-                return exprs;\
-            }\
             Expr OrigBOP = OP_NAME::make(op->a, op->b); \
             \
             unsigned num_bits = op->type.bits() * op->type.lanes(); \
