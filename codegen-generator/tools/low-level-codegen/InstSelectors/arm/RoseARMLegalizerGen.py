@@ -26,6 +26,13 @@ class RoseInstSelectorGenerator():
     def genHeader(self):
         String = GenHeadersForAutoGenFiles("//")
         Content = [
+            "#include \"ARMLegalizer.h\""
+        ]
+        return String + "\n".join(Content)
+
+    def genHeaderHeader(self):
+        String = GenHeadersForAutoGenFiles("//")
+        Content = [
             "#include \"llvm/IR/Function.h\"",
             "#include \"llvm/IR/LLVMContext.h\"",
             "#include \"llvm/IR/Module.h\"",
@@ -194,8 +201,9 @@ public:
         return String
 
     def generatePatternSet(self, TargetAgnosticInst: str, InstDict: dict):
+
         InstNames = list()
-        String = ""
+        String = GenHeadersForAutoGenFiles("//")
         for InstName, InstInfo in InstDict.items():
             # ValidityChecker = RoseISAValidityChecker()
             # if ValidityChecker.checkValidityOnTarget(InstName, "ARM") == False:
@@ -207,18 +215,34 @@ public:
             else:
                 String += self.generateNormalPattern(InstName, InstInfo)
 
-        FinalPattern = '''
-    {{
-      std::vector<std::string> InstNames = {{{}}};
-      if(isNameMatch(CI, InstNames)) {{ 
+        FinalPattern = GenHeadersForAutoGenFiles("//") + f'''
+#include "ARMLegalizer.h"
+bool ARMLegalizer::legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I){{
+'''+'''
+    std::vector<std::string> InstNames = {{{}}};
+    if(isNameMatch(CI, InstNames)) {{ 
         {} 
-      }} 
-    }}
-    '''.format(",\n".join(InstNames), String)
+    }} 
+}}
+'''.format(",\n".join(InstNames), String)
+
+        with open(TargetAgnosticInst.capitalize()+"Selector.cpp", "w") as f:
+            f.write(FinalPattern)
         print("FinalPattern:")
+        FinalPattern = f"  if (legalize_{TargetAgnosticInst}(CI, I)) return true;"
         print(FinalPattern)
         return FinalPattern
 
+    def generateInstSelectorDecl(self):
+        Content = list()
+        for TargetAgnosticInst, InstList in self.ISASemantics.items():
+            # print("TargetAgnosticInst:")
+            # print(TargetAgnosticInst)
+            # print("InstList:")
+            # print(InstList)
+            Content.append(f"bool legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I);")
+        return "\n".join(Content)
+    
     def generateInstSelectorForAllInsts(self):
         Content = list()
         for TargetAgnosticInst, InstList in self.ISASemantics.items():
@@ -267,11 +291,9 @@ using namespace llvm;
 class ARMLegalizer : public Legalizer {{
 public:
 {}
-
-}};
-
 {}
-    '''.format(self.generateInstSelector(), self.generatePassToRunOnFunction())
+}};
+    '''.format(self.generateInstSelector(), self.generateInstSelectorDecl())
         return String
 
     def generateCodeForRegisteringPass(self):
@@ -284,8 +306,7 @@ static RegisterPass<ARMLegalizationPass> X("arm-hydride-legalize",
 
     def generateFileWithInstSelector(self):
         Content = self.genHeader()
-        Content += self.generateLegalizerPassDeclaration()
-        Content += self.generateLegalizerPassDefinition()
+        Content += self.generatePassToRunOnFunction()
         Content += self.generateCodeForRegisteringPass()
         FileName = "ARMLegalizer.cpp"
         try:
@@ -297,6 +318,12 @@ static RegisterPass<ARMLegalizationPass> X("arm-hydride-legalize",
         except IOError:
             print("Error making: {}".format(FileName))
             assert False
+        Content = self.genHeaderHeader()
+        Content += self.generateLegalizerPassDeclaration()
+        Content += self.generateLegalizerPassDefinition()
+        FileName = "ARMLegalizer.h"
+        with open(FileName, "w") as f:
+            f.write(Content)
 
 
 if __name__ == '__main__':
