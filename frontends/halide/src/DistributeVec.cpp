@@ -163,13 +163,11 @@ namespace Halide {
                 return exprs;\
             }\
             unsigned orig_num_chunks = num_chunks;\
-            bool distributable = false; \
             if(distribution_look_ahead){\
                 size_t expr_bitwidth = op->type.lanes() * op->type.bits();\
                     for (unsigned bv : bitvector_sizes){\
                         if(expr_bitwidth % bv == 0){\
                             num_chunks = expr_bitwidth / bv;\
-                            distributable = true;\
                             break;\
                         }\
                     }\
