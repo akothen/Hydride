@@ -163,21 +163,14 @@ namespace Halide {
                 return exprs;\
             }\
             unsigned orig_num_chunks = num_chunks;\
-            bool distributable = false; \
             if(distribution_look_ahead){\
                 size_t expr_bitwidth = op->type.lanes() * op->type.bits();\
                     for (unsigned bv : bitvector_sizes){\
                         if(expr_bitwidth % bv == 0){\
                             num_chunks = expr_bitwidth / bv;\
-                            distributable = true;\
                             break;\
                         }\
                     }\
-            }\
-            if(!distributable){\
-                Expr DistributedBOP = OP_NAME::make(dispatch(op->a,1)[0], dispatch(op->b,1)[0]);\
-                exprs.push_back(DistributedBOP);\
-                return exprs;\
             }\
             Expr OrigBOP = OP_NAME::make(op->a, op->b); \
             \
