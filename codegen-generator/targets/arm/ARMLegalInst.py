@@ -21,6 +21,8 @@ def ARMExemption(ctx_name, op):
     # if "rshr" in ctx_name: #rshr
     #   if op == "bvlshr":
     #     return True
+    if "abd" in ctx_name and op in ["bvsub", "bvadd"]:
+        return True
     if "qrdmulh" in ctx_name and op in ["bvmulnsw", "bvmulnuw"]:
         return True
     return False

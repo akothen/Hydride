@@ -4,6 +4,7 @@ from common.Instructions import *
 from common.PredefinedDSL import *
 import random
 from ShuffleList import ShuffleList
+from pprint import pprint
 
 from synthesizer.SynthesizerBase import SynthesizerBase
 
@@ -263,13 +264,6 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return buckets
 
-
-
-
-
-
-
-
     # Identify set of key combinations which span (with flexibility) the spec
     # For each key combination identify the set of concrete contexts (take 100 first combinations for bound)
     #       - Each key combination get's at most k iterations
@@ -317,12 +311,9 @@ class StepWiseSynthesizer(SynthesizerBase):
         sample_key_sizes = max(
             min(len(sorted_keys) - 1, int(max_num_clauses / 2)), 0)
 
-
-
         spec_ops = self.spec.get_semantics_ops_list()
         if sample_key_sizes <= 3 and "bvmul" not in spec_ops:
-            sample_key_sizes =  max(min(len(sorted_keys) -1,4 ), 0)
-
+            sample_key_sizes = max(min(len(sorted_keys) - 1, 4), 0)
 
         print("Sample key sizes:", sample_key_sizes)
 
@@ -349,7 +340,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         previous_keys = sample_keys
         assert previous_keys != [], "Combination should be non-empty"
-        #print("previous keys",previous_keys)
+        # print("previous keys",previous_keys)
         if self.depth >= 2:
             sample_keys = [sample for sample in sample_keys if sum(
                 [1 for ele in sample if "bvmul" in ele]) <= 3]
@@ -448,7 +439,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 idx_range = range(0, len(bucket[key]['ops']))
                 limit = items_per_bucket
                 if key == '[]':
-                    limit = 4 # Set to 4 for hvx_matmul and depthwise_conv, normally 3
+                    limit = 4  # Set to 4 for hvx_matmul and depthwise_conv, normally 3
 
                 idx_subsets = findsubsets(
                     idx_range, min(limit, len(idx_range)))
@@ -461,8 +452,12 @@ class StepWiseSynthesizer(SynthesizerBase):
             # sys.exit(1)
 
             # At most 'key_switch_sample' combinations belong to given key combination
-            key_grammar_combs = key_grammar_combs[: min(
-                len(key_grammar_combs), key_switch_sample)]
+            if len(key_grammar_combs) > key_switch_sample:
+                new = []
+                N = len(key_grammar_combs)
+                for i in range(key_switch_sample):
+                    new.append(key_grammar_combs[(998244353*i) % N])
+                key_grammar_combs = new
             key_grammar_combs = f7(key_grammar_combs)
 
             # print("Adding {} combinations for key sample {}".format(len(key_grammar_combs), sorted_keys))
@@ -492,6 +487,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         step_combination = context_combinations[step % len(
             context_combinations)]
+        print("!"*50)
+        pprint(context_combinations)
+        print("!"*50)
 
         (step_keys, step_indices) = step_combination
 
@@ -504,7 +502,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             for key_idx in key_subset:
                 comb_ops.append(bucket[key]['ops'][key_idx])
                 comb_ctxs.append(bucket[key]['ctxs'][key_idx])
-
+        print(comb_ctxs)
         return (comb_ops, comb_ctxs)
 
     def prune_masked_operations(self, ops, ctxs):
@@ -519,19 +517,16 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return (pruned_ops, pruned_ctxs)
 
-
     def does_need_scalar_casts(self):
 
         if self.target not in ["hvx"]:
             return False
-
 
         for inp in self.input_sizes:
             if inp <= 16:
                 return True
 
         return False
-
 
     def get_scalar_casts(self):
 
@@ -546,12 +541,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return (insts, ctxs)
 
+    def emit_synthesis_grammar(self, main_grammar_name="synth_grammar", use_lit_holes=USE_LIT_HOLES):
 
-
-
-    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = USE_LIT_HOLES):
-
-        ## Memory loading layer
+        # Memory loading layer
         spec_memory_loads = self.get_memory_loads()
         memory_dsl_insts = [spec_memory_loads] * \
             len(spec_memory_loads.contexts)
@@ -704,18 +696,17 @@ class StepWiseSynthesizer(SynthesizerBase):
             if self.depth >= 4:
                 MAX_NUM_CLAUSES = 7  # 7 7 by default changing to 8 for matmul
 
+            bucket = self.partition_ops_into_buckets(
+                operation_dsl_insts, operation_dsl_args_list)
 
-            bucket = self.partition_ops_into_buckets(operation_dsl_insts, operation_dsl_args_list)
-
-            if len(operation_dsl_insts) > 5 :
-                (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(bucket, step = self.step, items_per_bucket = 3, max_num_clauses = MAX_NUM_CLAUSES)
-
+            if len(operation_dsl_insts) > 5:
+                (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(
+                    bucket, step=self.step, items_per_bucket=3, max_num_clauses=MAX_NUM_CLAUSES)
 
         (scalar_zext_ops, scalar_zext_contexts) = self.get_scalar_casts()
 
         operation_dsl_insts += scalar_zext_ops
         operation_dsl_args_list += scalar_zext_contexts
-
 
         grammar_ops_str = []
         for idx, dsl_inst in enumerate(operation_dsl_insts):
@@ -785,17 +776,17 @@ class StepWiseSynthesizer(SynthesizerBase):
         ], "Must have non-empty grammar"
 
         return self.grammar_generator.emit_grammar(
-            operation_layer_name = main_grammar_name,
-            operation_dsl_insts = operation_dsl_insts,
-            operation_dsl_args_list = operation_dsl_args_list,
-            top_level_grammar_name = main_grammar_name,
-            top_level_grammar_args = top_level_grammar_args,
-            lit_holes = lit_holes,
-            return_type = self.output_slice_length,
-            input_sizes = self.input_sizes,
+            operation_layer_name=main_grammar_name,
+            operation_dsl_insts=operation_dsl_insts,
+            operation_dsl_args_list=operation_dsl_args_list,
+            top_level_grammar_name=main_grammar_name,
+            top_level_grammar_args=top_level_grammar_args,
+            lit_holes=lit_holes,
+            return_type=self.output_slice_length,
+            input_sizes=self.input_sizes,
             # input_precs = self.spec.input_precision,
-            imms = imms,
-            include_ramp_lit = include_ramp_lit,
+            imms=imms,
+            include_ramp_lit=include_ramp_lit,
             # input_signedness =self.spec.input_signedness,
             # use_buffer_id = self.spec.use_buffer_id()
         )
@@ -808,9 +799,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
             return 15
-        if self.target == 'arm' and ctx.name == "vget_high_u16":
-            return 15
-        if self.target == 'arm' and ctx.name == "vget_low_u32":
-            return 15
-        else:
-            return super().score_context(dsl_inst, ctx)
+        # if self.target == 'arm' and ctx.name == "vget_high_u16":
+        #     return 15
+        # if self.target == 'arm' and ctx.name == "vget_low_u32":
+        #     return 15
+        return super().score_context(dsl_inst, ctx)

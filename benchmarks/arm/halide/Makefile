@@ -47,6 +47,7 @@ else
 endif
 EXPR_DEPTH ?=2
 SYNTH_BITWIDTH ?= 16 
+INT_BW ?= 16
 
 BENCHMARK ?=1
 
@@ -101,7 +102,7 @@ ifeq ($(BENCHMARK),1)
 
 endif
 
-fully_connected: fully_connected/$(BIN)
+fully_connected: %: %/$(BIN)
 	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
 		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
@@ -143,11 +144,9 @@ endif
 
 #-lpng -lpthread -ldl -ljpeg 
 	
-fully_connected/bin_ref:
+fully_connected/bin_ref fully_connected/bin: %:
 	mkdir $@
 
-fully_connected/bin:
-	mkdir $@
 
 # Make the bin dirs if needed
 $(bin_dirs): %:
@@ -210,6 +209,17 @@ clean:
 		$*/bin/halide_runtime_x86.o \
 		-o $*/bin/$*_run.out -DDEBUG
 	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
+%.linkr:
+	$(CC) -Dbenchmark_$* --std=c++17 \
+		-O0\
+		-I $(HALIDE_DISTRIB)/include -I ./$*/bin \
+		-lstdc++ -ldl -pthread \
+		test/run.cpp \
+		test/stubs.cpp \
+		$*/bin/$*.a \
+		$*/bin/halide_runtime_x86.o \
+		-o $*/bin/$*_run.out
+	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
 %.linkd:
 	$(CC) -Dbenchmark_$* --std=c++17 \
 		-O0\
@@ -223,9 +233,13 @@ clean:
 	$*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
 
 result.tar: Makefile
-	tar -cf $@ Makefile
+	tar -cvf $@ Makefile
 %.pack: result.tar
-	tar -uf result.tar $*/bin/$*.a $*/bin/$*.h
+	tar -uvf result.tar $*/bin/$*.a $*/bin/$*.h
 unpack:
-	tar -xf result.tar
-
+	tar -xvf result.tar
+%.unpack:
+	tar -xvf result.tar $*/bin/$*.a $*/bin/$*.h
+fetch:
+	-gcp --backup=t result.tar result.tar.bak
+	scp muchenx2@nusrat.cs.illinois.edu:Hydride/benchmarks/arm/halide/result.tar .

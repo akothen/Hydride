@@ -1194,7 +1194,9 @@ namespace Halide {
                 //if(!is_divisible_into_vector_size(num_chunks * bits)){
                 //    num_chunks = 1; 
                 //}
-
+                if (expr_bitwidth <= 64){
+                    num_chunks = 1;
+                }
                 debug(0) << "Need to distribute stores into "<<num_chunks <<" chunks!\n";
 
                 std::vector<Expr> distributed_predicate = dispatch(op->predicate, num_chunks);

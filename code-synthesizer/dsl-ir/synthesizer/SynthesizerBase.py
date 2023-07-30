@@ -22,7 +22,7 @@ DEBUG_LIST = [
     # "vmin_s8",
     # "vqadd_s16",
     # "vmovl_s16",
-    # "vqmovn_s32",
+    "vqmovn_u32",
     # "vdotq_u32",
     # "vshld_s64",
     # "vadd_u64",
@@ -650,7 +650,7 @@ class SynthesizerBase:
                     # if (op == "bvsubnsw" or op == "bvsubnuw") and ("bvssat" in spec_ops or "bvusat" in spec_ops):
                     #   continue
                     # Attempt for ARM
-                    if self.target == "arm" and ARMExemption(ctxs[idx].name, op):
+                    if self.target == "arm" and ARMExemption(ctxs[idx].name, op, spec_ops):
                         continue
                     to_insert = False
                     reason = f"{op} in {disallowed_ops}"
@@ -882,7 +882,7 @@ class SynthesizerBase:
                 pass
 
             if N < len(ops):
-                print("Prunning", [(i, self.score_context(i, j)) for i, j in zip(
+                print("Prunning", [(j, self.score_context(i, j)) for i, j in zip(
                     globally_sorted_operation_insts[:-N], globally_sorted_operation_contexts[:-N])])
                 print(N, "<",  len(ops))
                 return (globally_sorted_operation_insts[-N:], globally_sorted_operation_contexts[-N:])
@@ -903,8 +903,8 @@ class SynthesizerBase:
         print("Num Upcasts allocation:", num_upcasts)
         print("Num Downcasts allocation:", num_downcasts)
 
-        print("Num Upcasts actual:", len(upcast_ops))
-        print("Num Downcasts actual:", len(downcast_ops))
+        print("Num Upcasts actual:", len(upcast_ops), upcast_ops)
+        print("Num Downcasts actual:", len(downcast_ops), downcast_ops)
 
         upcasts = get_top_N_ops(upcast_ops, upcast_ctxs, num_upcasts)
         downcasts = get_top_N_ops(downcast_ops, downcast_ctxs, num_downcasts)
@@ -953,14 +953,14 @@ class SynthesizerBase:
 
         for ctx in dsl_inst.contexts:
 
-            # self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+            # self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned()
             ctx_ops = ctx.get_bv_ops()
 
             skip = False
 
-            # if "qrdmulh" in ctx.name:
+            # if "vqadd" in ctx.name:
             #     breakpoint()
-            if self.target=="arm" and not ARMSelection(ctx.name):
+            if self.target == "arm" and not ARMSelection(ctx.name):
                 print("Skipping ", ctx.name, ", not in ARM selection")
                 continue
 
@@ -978,6 +978,11 @@ class SynthesizerBase:
                     continue
 
                 for v in variants:
+                    # dsl_inst: equivalance class
+                    # ctx: each operatoin in class -> ctx_ops and c_op
+                    # spec: halide expr -> spec_ops
+                    # variants: similar op with opposite meaning
+                    
 
                     # Flexible accumulation for dot product like operations
                     if v in ctx_ops and v not in spec_ops and "bvmul" in spec_ops and v == "bvadd":
@@ -988,7 +993,7 @@ class SynthesizerBase:
                     # which is not being used in the spec, skip
                     if v in ctx_ops and v not in spec_ops and not skip and v != "bvadd":
                         # if Target is ARM
-                        if self.target == "arm" and ARMExemption(ctx.name, v):
+                        if self.target == "arm" and ARMExemption(ctx.name, v, spec_ops):
                             continue
 
                         print("Skipping ", ctx.name, "as it is using a variant op:",
@@ -1145,21 +1150,9 @@ class SynthesizerBase:
     # most useful contexts
 
     def score_context(self, dsl_inst,  ctx):
+        # if ctx.name in ["vqmovn_u16","vzip1q_u8"]:
+        #     breakpoint()
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
-        score = 0
-        score += int(([ctx.supports_input_precision(input_precision)
-                     for input_precision in self.spec.input_precision]).count(True) != 0)
-        score += int(ctx.supports_output_precision(self.spec.output_precision))
-        score += int(ctx.supports_output_size(self.output_slice_length))
-        score += max(int(([ctx.supports_input_size(input_size)
-                     for input_size in self.input_sizes]).count(True)), 2)
-
-        spec_ops = self.spec.get_semantics_ops_list()
-        dsl_ops = dsl_inst.get_semantics_ops_list()
-        # dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
-        dsl_ops = ctx.get_bv_ops()
-
-        score += min(len(list(set(spec_ops) & set(dsl_ops))), 2)
 
         if is_broadcast_like:
             score = 0
@@ -1184,6 +1177,27 @@ class SynthesizerBase:
                 unique_input_sizes = self.input_sizes
                 score += min(int([ctx.supports_output_size(isize)
                              for isize in unique_input_sizes].count(True)), 3)  # * 2
+            
+            # for saturation we want 
+            spec_ops = self.spec.get_semantics_ops_list()
+            dsl_ops = ctx.get_bv_ops()
+
+            score += min(len(list(set(spec_ops) & set(dsl_ops) & set(["bvusat","bvssat","sign-extend","zero-extend"]))), 2)*2
+        else:
+            score = 0
+            score += int(([ctx.supports_input_precision(input_precision)
+                        for input_precision in self.spec.input_precision]).count(True) != 0)
+            score += int(ctx.supports_output_precision(self.spec.output_precision))
+            score += int(ctx.supports_output_size(self.output_slice_length))
+            score += min(int(([ctx.supports_input_size(input_size)
+                        for input_size in self.input_sizes]).count(True)), 2) #ARM:?
+
+            spec_ops = self.spec.get_semantics_ops_list()
+            dsl_ops = dsl_inst.get_semantics_ops_list()
+            # dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+            dsl_ops = ctx.get_bv_ops()
+
+            score += min(len(list(set(spec_ops) & set(dsl_ops))), 2)
 
         # Does specification contain conditional code:
         spec_ops = self.spec.get_semantics_ops_list()
@@ -1280,7 +1294,9 @@ class SynthesizerBase:
                     if dsl_inst.name in DEBUG_LIST and DEBUG:
                         print(
                             "Ops overlap failed due to expensive op in DSL for ", expensive_op)
-
+                    if "abd" in dsl_inst.name:
+                        if all([op in spec_ops for op in ['zero-extend', 'bvumax', 'bvumin', 'bvsub']]):
+                            continue
                     return False
 
             # Match in any order
