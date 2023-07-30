@@ -81,13 +81,6 @@
 	[ (scalar_splat_dsl v0 size_i size_o)
 		(scalar_splat (arm:interpret v0 env) size_i size_o)
 	]
-	[ (vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
-		(vqrdmulh_s32 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
-		 (arm:interpret v3 env) (arm:interpret v4 env) size_i_o 
-		 num_6 num_7 num_8 
-		 prec_i_o num_10 num_11 
-		 num_12 num_13)
-	]
 	[ (vqshrn_n_s64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 prec_i num_11)
 		(vqshrn_n_s64 (arm:interpret v0 env) (arm:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
@@ -430,12 +423,6 @@
 		(vabs_s8 (arm:interpret v0 env) size_i_o num_2 
 		 num_3 num_4 prec_i_o 
 		 num_6 num_7)
-	]
-	[ (vqdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
-		(vqdmulhq_s16 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret v2 env) 
-		 (arm:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10 num_11)
 	]
 	[ (vqdmull_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i num_8 prec_o num_10 num_11 num_12)
 		(vqdmull_n_s16 (arm:interpret vc_0 env) (arm:interpret v1 env) (arm:interpret v2 env) 
@@ -847,6 +834,19 @@
 		 num_9 num_10 num_11 
 		 num_12 num_13 num_14 
 		 num_15 num_16)
+	]
+	[ (vqrdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
+		(vqrdmulhs_s32 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret vc_2 env) 
+		 (arm:interpret v3 env) (arm:interpret v4 env) size_i_o 
+		 num_6 num_7 num_8 
+		 prec_i_o num_10 num_11 
+		 num_12 num_13)
+	]
+	[ (vqdmulh_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
+		(vqdmulh_s16 (arm:interpret vc_0 env) (arm:interpret vc_1 env) (arm:interpret v2 env) 
+		 (arm:interpret v3 env) size_i_o num_5 
+		 num_6 num_7 prec_i_o 
+		 num_9 num_10 num_11)
 	]
 	[v (error "Unrecognized Term in Interpreter" v)]
  )

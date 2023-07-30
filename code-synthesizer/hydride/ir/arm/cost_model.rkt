@@ -28,7 +28,6 @@
 ;; ================================================================================
 ;;                                DSL Cost Model
 ;; ================================================================================
-(define cost_vqrdmulh_s32_dsl 1)
 (define cost_vqshrn_n_s64_dsl 1)
 (define cost_vmov_n_u16_dsl 1)
 (define cost_vcltzq_s64_dsl 1)
@@ -80,7 +79,6 @@
 (define cost_vqabs_s8_dsl 1)
 (define cost_vcge_s32_dsl 1)
 (define cost_vabs_s8_dsl 1)
-(define cost_vqdmulhq_s16_dsl 1)
 (define cost_vqdmull_n_s16_dsl 1)
 (define cost_vqshrnh_n_u16_dsl 1)
 (define cost_vpmin_s32_dsl 1)
@@ -142,6 +140,8 @@
 (define cost_vcombine_u16_dsl 1)
 (define cost_vget_high_u16_dsl 1)
 (define cost_vpaddl_s16_dsl 1)
+(define cost_vqrdmulhs_s32_dsl 1)
+(define cost_vqdmulh_s16_dsl 1)
 
 (define (arm:cost prog)
  (destruct prog
@@ -191,13 +191,6 @@
 	]
 		[ (scalar_splat_dsl v0 size_i size_o)
 		(+ 1 (arm:cost  v0) )
-	]
-	[ (vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
-		(+ cost_vqrdmulh_s32_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
-		 (arm:cost  v3)  (arm:cost  v4)  
-		 
-		 
-		)
 	]
 	[ (vqshrn_n_s64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 prec_i num_11)
 		(+ cost_vqshrn_n_s64_dsl (arm:cost  v0)  (arm:cost  v1)  
@@ -539,12 +532,6 @@
 	]
 	[ (vabs_s8_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(+ cost_vabs_s8_dsl (arm:cost  v0)  
-		 
-		)
-	]
-	[ (vqdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
-		(+ cost_vqdmulhq_s16_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
-		 (arm:cost  v3)  
 		 
 		)
 	]
@@ -956,6 +943,19 @@
 		 
 		 
 		 
+		 
+		)
+	]
+	[ (vqrdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
+		(+ cost_vqrdmulhs_s32_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
+		 (arm:cost  v3)  (arm:cost  v4)  
+		 
+		 
+		)
+	]
+	[ (vqdmulh_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
+		(+ cost_vqdmulh_s16_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
+		 (arm:cost  v3)  
 		 
 		)
 	]

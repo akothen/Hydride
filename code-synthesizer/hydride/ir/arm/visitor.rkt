@@ -93,14 +93,6 @@
 		(define v0-visited (arm:visitor v0 fn))
 		(fn ( scalar_splat_dsl v0-visited size_i size_o ))
 	]
-	[ (vqrdmulh_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
-		(define vc_0-visited (arm:visitor vc_0 fn))
-		(define vc_1-visited (arm:visitor vc_1 fn))
-		(define vc_2-visited (arm:visitor vc_2 fn))
-		(define v3-visited (arm:visitor v3 fn))
-		(define v4-visited (arm:visitor v4 fn))
-		(fn ( vqrdmulh_s32_dsl vc_0-visited vc_1-visited vc_2-visited v3-visited v4-visited size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 ))
-	]
 	[ (vqshrn_n_s64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 prec_i num_11)
 		(define v0-visited (arm:visitor v0 fn))
 		(define v1-visited (arm:visitor v1 fn))
@@ -419,13 +411,6 @@
 	[ (vabs_s8_dsl v0 size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(define v0-visited (arm:visitor v0 fn))
 		(fn ( vabs_s8_dsl v0-visited size_i_o num_2 num_3 num_4 prec_i_o num_6 num_7 ))
-	]
-	[ (vqdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
-		(define vc_0-visited (arm:visitor vc_0 fn))
-		(define vc_1-visited (arm:visitor vc_1 fn))
-		(define v2-visited (arm:visitor v2 fn))
-		(define v3-visited (arm:visitor v3 fn))
-		(fn ( vqdmulhq_s16_dsl vc_0-visited vc_1-visited v2-visited v3-visited size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 ))
 	]
 	[ (vqdmull_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i num_8 prec_o num_10 num_11 num_12)
 		(define vc_0-visited (arm:visitor vc_0 fn))
@@ -807,6 +792,21 @@
 		(define vc_0-visited (arm:visitor vc_0 fn))
 		(define v1-visited (arm:visitor v1 fn))
 		(fn ( vpaddl_s16_dsl vc_0-visited v1-visited size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 ))
+	]
+	[ (vqrdmulhs_s32_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define vc_1-visited (arm:visitor vc_1 fn))
+		(define vc_2-visited (arm:visitor vc_2 fn))
+		(define v3-visited (arm:visitor v3 fn))
+		(define v4-visited (arm:visitor v4 fn))
+		(fn ( vqrdmulhs_s32_dsl vc_0-visited vc_1-visited vc_2-visited v3-visited v4-visited size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 ))
+	]
+	[ (vqdmulh_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11)
+		(define vc_0-visited (arm:visitor vc_0 fn))
+		(define vc_1-visited (arm:visitor vc_1 fn))
+		(define v2-visited (arm:visitor v2 fn))
+		(define v3-visited (arm:visitor v3 fn))
+		(fn ( vqdmulh_s16_dsl vc_0-visited vc_1-visited v2-visited v3-visited size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 ))
 	]
 	[_ (error "Unrecognized expression in visitor")]
  )
