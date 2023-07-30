@@ -1,4 +1,4 @@
-#include "elementwise_program.h"
+#include "interpreter/elementwise_program.h"
 
 #include <iomanip>
 #include <iostream>
@@ -86,7 +86,7 @@ ElementwiseAssembler::ElementwiseAssembler(int16_t *buffer, int buffer_size)
     : instructions(buffer, InstructionSize, buffer_size / InstructionSize) {
 }
 
-Halide::Runtime::Buffer<int16_t> ElementwiseAssembler::assemble(std::initializer_list<Slot> outputs) {
+Halide::Runtime::Buffer<int16_t, 2> ElementwiseAssembler::assemble(std::initializer_list<Slot> outputs) {
     // Check if the outputs are in the right place already.
     bool in_order = true;
     int needed_index = size - (int)outputs.size() + 1;
