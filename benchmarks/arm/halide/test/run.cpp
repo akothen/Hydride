@@ -76,9 +76,13 @@
 #define VLEN (1<<LOG2VLEN)
 
 #define O_CREAT_WRONLY_TRUNC (O_CREAT | O_WRONLY | O_TRUNC)
-
+#if benchmark_fully_connected
+#define NUM_ITERATIONS 10
+#define WARMUP 1
+#else
 #define NUM_ITERATIONS 1000
-#define WARMUP 50 
+#define WARMUP 50
+#endif
 
 extern "C" {
     ssize_t      write(int, const void *, size_t);

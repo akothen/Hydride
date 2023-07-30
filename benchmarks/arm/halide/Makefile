@@ -102,7 +102,7 @@ ifeq ($(BENCHMARK),1)
 
 endif
 
-fully_connected: %: %/$(BIN)
+fully_connected: %:
 	g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
 		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
 		-g $@/src/$@_generator.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
