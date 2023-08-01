@@ -29,10 +29,12 @@ class MatrixMultiplyHVX : public Generator<MatrixMultiplyHVX> {
             matrix_mul(x, y) = saturating_add(matrix_mul(x, y) , cast<int32_t>(A(k, y)) * cast<int32_t>(B(x,k)));
 
 
+
             res(x, y) = matrix_mul(x, y);
 
-            res.vectorize(x ,64)
-                
+            res
+               // .unroll(x,4)
+                .vectorize(x ,64)
                 ;
 
 
