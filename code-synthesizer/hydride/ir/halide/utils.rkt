@@ -334,7 +334,7 @@
     [(vector_reduce op width vec)
      (cond
        [(eq? op 'add)
-        (append (list extract bvadd bvmul) (if (halide:is-signed-expr? vec vec) (list sign-extend) (list  zero-extend )) (get-bv-ops vec))]
+        (append (list extract bvadd) (if (halide:is-signed-expr? vec vec) (list sign-extend) (list  zero-extend )) (get-bv-ops vec))]
        [else (error "Unexpected vector_reduce op:" op)])]
 
     ;; Shuffles

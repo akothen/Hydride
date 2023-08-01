@@ -77,8 +77,10 @@ hydride_sema:
 	$(MAKE) $(hydride_pkg)
 	raco pkg update $(HYDRIDE_ROOT)/code-synthesizer/hydride/
 legalizer:
+	rm $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/*.cpp
 	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && python3 RoseARMLegalizerGen.py)
-	make -C $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build
+	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build && cmake ..)
+	make -C $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build -j64
 arm_sema:
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
 syncsema:

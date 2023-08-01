@@ -95,26 +95,23 @@ class IRPrinter:
                 hack_size = 64 if ir_arg.size == 192 else ir_arg.size
                 expr_typeinfo = "(string-append ({} {})  \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
                     self.printer_name, ir_arg.name, "(~s 1)", f"(~s {hack_size})")
-                str_expr += expr_typeinfo
+                
+
+                lit_typeinfo = "(begin (define-values (num_elem arg_prec) (values 1 {}) )".format(hack_size)
+                lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
+                    self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + "arg_prec" + ")")
+                lit_typeinfo += ")"
             else:
-                lit_typeinfo = ""
+                lit_typeinfo = "(begin (define-values (num_elem arg_prec) (cond [(equal? (get-length {} (vector 0)) 32)   (values 1 32)] [(equal? (get-length {} (vector 0)) 192)   (values 1 192)] [(< (/ (get-length {} (vector 0)) {}) 1)  (values  (/ (get-length {} (vector 0)) (get-prec {} (vector 0))) (/ (get-prec {} (vector 0))) )] [else (values (/ (get-length {} (vector 0)) {}) {})]))".format(
+                    ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, input_prec_arg.name)
+                # lit_typeinfo = "(begin (define num_elem (/ (get-length {} (vector 0)) {})) ".format(ir_arg.name, input_prec_arg.name)
+                lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
+                    self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + "arg_prec" + ")")
+                lit_typeinfo += ")"
 
-                # Fallback to default printer
-                # as DSL inst provides no precision information
-                if input_prec_arg == None:
-                    lit_typeinfo = "({} {})".format(
-                        self.printer_name, ir_arg.name)
-                else:
-                    lit_typeinfo = "(begin (define-values (num_elem arg_prec) (cond [(equal? (get-length {} (vector 0)) 32)   (values 1 32)] [(equal? (get-length {} (vector 0)) 192)   (values 1 192)] [(< (/ (get-length {} (vector 0)) {}) 1)  (values  (/ (get-length {} (vector 0)) (get-prec {} (vector 0))) (/ (get-prec {} (vector 0))) )] [else (values (/ (get-length {} (vector 0)) {}) {})]))".format(
-                        ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, input_prec_arg.name)
-                    # lit_typeinfo = "(begin (define num_elem (/ (get-length {} (vector 0)) {})) ".format(ir_arg.name, input_prec_arg.name)
-                    lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
-                        self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + "arg_prec" + ")")
-                    lit_typeinfo += ")"
-
-                conditional_printer = "(if (lit? {}) {} ({} {})) \" \"".format(
-                    ir_arg.name, lit_typeinfo, self.printer_name, ir_arg.name)
-                str_expr += "{} \" \" ".format(conditional_printer)
+            conditional_printer = "(if (lit? {}) {} ({} {})) \" \"".format(
+                ir_arg.name, lit_typeinfo, self.printer_name, ir_arg.name)
+            str_expr += "{} \" \" ".format(conditional_printer)
 
         str_expr += "\")\")"
 
@@ -168,7 +165,12 @@ class IRPrinter:
                     hack_size = 64 if ir_arg.size == 192 else ir_arg.size
                     expr_typeinfo = "(string-append ({} {})  \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
                         self.printer_name, ir_arg.name, "(~s 1)", f"(~s {hack_size})")
-                    str_expr += expr_typeinfo
+                    
+
+                    lit_typeinfo = "(begin (define-values (num_elem arg_prec) (values 1 {}) )".format(hack_size)
+                    lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(
+                        self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + "arg_prec" + ")")
+                    lit_typeinfo += ")"
                 else:
                     lit_typeinfo = "(begin (define-values (num_elem arg_prec) (cond [(equal? (get-length {} (vector 0)) 32)   (values 1 32)] [(equal? (get-length {} (vector 0)) 192)   (values 1 192)] [(< (/ (get-length {} (vector 0)) {}) 1)  (values  (/ (get-length {} (vector 0)) (get-prec {} (vector 0))) (/ (get-prec {} (vector 0))) )] [else (values (/ (get-length {} (vector 0)) {}) {})]))".format(
                         ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, ir_arg.name, input_prec_arg.name, input_prec_arg.name)
@@ -177,9 +179,9 @@ class IRPrinter:
                         self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + "arg_prec" + ")")
                     lit_typeinfo += ")"
 
-                    conditional_printer = "(if (lit? {}) {} ({} {})) \" \"".format(
-                        ir_arg.name, lit_typeinfo, self.printer_name, ir_arg.name)
-                    str_expr += "{} \" \" ".format(conditional_printer)
+            conditional_printer = "(if (lit? {}) {} ({} {})) \" \"".format(
+                ir_arg.name, lit_typeinfo, self.printer_name, ir_arg.name)
+            str_expr += "{} \" \" ".format(conditional_printer)
 
         str_expr += "\")\")"
 

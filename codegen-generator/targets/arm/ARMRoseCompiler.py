@@ -1529,8 +1529,8 @@ BinaryOps = {
     '==': HandleToEqual,
     '!=': HandleToNotEqual,
     '>>': HandleToShr,
-    '<<': HandleToARMShl,
-    '<<<': HandleToShl,  # real shift left
+    '<<': HandleToShl,
+    # '<<<': HandleToShl,  # real shift left
     '&': HandleToAnd,
     '|': HandleToOr,
     'AND': HandleToAnd,

@@ -21,13 +21,14 @@ DEBUG_LIST = [
     # "vpmin_s8",
     # "vmin_s8",
     # "vqadd_s16",
-    # "vmovl_s16",
-    "vqmovn_u32",
+    "vmov_n_u16",
+    "vmovl_s8",
+    # "vqmovn_u32",
     # "vdotq_u32",
     # "vshld_s64",
     # "vadd_u64",
     # "vshr_n_s8",
-    "vqrdmulh_s32",
+    # "vqrdmulh_s32",
     # "vshr_n_s32",
     # "vshr_n_s64",
     # "vneg_s8",
@@ -803,7 +804,7 @@ class SynthesizerBase:
         compute_ops = []
         compute_ctxs = []
 
-        MAX_OCCURANCES = 2
+        MAX_OCCURANCES = 3
 
         names = []
 
@@ -812,9 +813,10 @@ class SynthesizerBase:
         for i in (range(0, len(operation_insts))):
             op = operation_insts[i]
             ctx = operation_contexts[i]
+            # print(ctx.name, self.score_context(op,ctx))
 
             if names.count(op.name) == MAX_OCCURANCES:
-                continue
+                print(f"Pruning {ctx.name} becuase {ctx.name} has exceeded MAX_OCCURANCES")
 
             names.append(op.name)
 
@@ -903,8 +905,8 @@ class SynthesizerBase:
         print("Num Upcasts allocation:", num_upcasts)
         print("Num Downcasts allocation:", num_downcasts)
 
-        print("Num Upcasts actual:", len(upcast_ops), upcast_ops)
-        print("Num Downcasts actual:", len(downcast_ops), downcast_ops)
+        print("Num Upcasts actual:", len(upcast_ops), upcast_ctxs)
+        print("Num Downcasts actual:", len(downcast_ops), downcast_ctxs)
 
         upcasts = get_top_N_ops(upcast_ops, upcast_ctxs, num_upcasts)
         downcasts = get_top_N_ops(downcast_ops, downcast_ctxs, num_downcasts)

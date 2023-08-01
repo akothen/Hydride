@@ -138,3 +138,11 @@ Problems:
 
 - For vshrq_n_s64 (and something like), changed SYMBOLIC_BV_32 to SYMBOLIC_BV_64. Becuase Hydride only upcasts literals, so when shift by vectors, synthesize won't succeed.
 - For some variants of vaddv, 
+
+Final output
+STARTING_HASH=matmul_input_hash
+change name
+
+IV:
+
+hash_files

@@ -203,7 +203,7 @@ public:
     def generatePatternSet(self, TargetAgnosticInst: str, InstDict: dict):
 
         InstNames = list()
-        String = GenHeadersForAutoGenFiles("//")
+        String = ""
         for InstName, InstInfo in InstDict.items():
             # ValidityChecker = RoseISAValidityChecker()
             # if ValidityChecker.checkValidityOnTarget(InstName, "ARM") == False:

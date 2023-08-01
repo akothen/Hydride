@@ -6,7 +6,7 @@ for eqc in semantcs.values():
         arm_legal_inst.append(intrin)
 
 
-def ARMExemption(ctx_name, op):
+def ARMExemption(ctx_name, op, spec_ops):
     if any(i in ctx_name for i in ["shr", "shl", "mul", "mla", "mls"]):
         if "_s" in ctx_name and op == "zero-extend":
             return True
@@ -25,11 +25,15 @@ def ARMExemption(ctx_name, op):
         return True
     if "qrdmulh" in ctx_name and op in ["bvmulnsw", "bvmulnuw"]:
         return True
+    if op == "bvusat" and any(i in spec_ops for i in ["bvaddnuw", "bvsubnuw", "bvmulnuw"]):
+        return True
+    if op == "bvssat" and any(i in spec_ops for i in ["bvaddnsw", "bvsubnsw", "bvmulnsw"]):
+        return True
     return False
+
 
 def ARMSelection(ctx_name):
     if "_n_" in ctx_name:
-        if not any(i in ctx_name for i in ["shr","shl","dup","mov","sra"]):
+        if not any(i in ctx_name for i in ["shr", "shl", "dup", "mov", "sra"]):
             return False
     return True
-    

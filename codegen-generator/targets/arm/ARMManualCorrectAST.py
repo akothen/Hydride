@@ -295,4 +295,37 @@ ManualAST = {
     #         V[d] = result2;
     #     }"""
     # }
+    # "aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_simd":{
+    #     "decode": """        {
+    #         integer d = UInt(Rd);
+    #         integer n = UInt(Rn);
+    #         integer m = UInt(Rm);
+    #         if ((size == '11') || (size == '00')) then
+    #         {
+    #             UNDEFINED
+    #         }
+    #         integer esize = (8 << UInt(size));
+    #         integer datasize = (128 if (Q == '1') else 64);
+    #         integer elements = (datasize DIV esize);
+    #         boolean rounding = (U == '1');
+    #     }""",
+    #     "execute": """        {
+    #         bits(datasize) operand1 = V[n];
+    #         bits(datasize) operand2 = V[m];
+    #         bits(datasize) result;
+    #         integer round_const = ((1 << (esize - 2)) if rounding else 0);
+    #         bits(2*esize) element1;
+    #         bits(2*esize) element2;
+    #         integer product;
+    #         boolean sat;
+    #         for e = 0 to (elements - 1)
+    #         {
+    #             element1 = SInt(Elem[operand1,e,esize]);
+    #             element2 = SInt(Elem[operand2,e,esize]);
+    #             product = (element1 * element2)[0~(2*esize - 1)] + round_const;
+    #             Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize - 1))[0~(esize - 1)];
+    #         }
+    #         V[d] = result;
+    #     }""",
+    # },
 }

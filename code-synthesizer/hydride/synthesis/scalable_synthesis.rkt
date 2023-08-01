@@ -555,7 +555,7 @@
                              scale-factor)
   (println (format "Invoked step-wise-synthesis!\n"))
 
-  (define step-limit 5) ;; temporary change for arm
+  (define step-limit 8) ;; temporary change for arm
 
   (define solved? #f)
   (define min-cost
@@ -594,15 +594,22 @@
        (format "=====================\nSTARTING SYNTHESIS FOR DEPTH ~a\n=====================\n" d))
       (define steps-per-depth
         (cond
-          [(<= d 3) step-limit]
+          ;;; [(<= d 3) step-limit]
+          [(<= d 1) 5]
+          [(<= d 2) step-limit]
+          [(<= d 3) 3]
           ;(* 1 step-limit)
           [(equal? d 4) 64]
           [else 64]))
 
       (define NUM_THREADS
         (cond
-          [(<= d 2) 1]
-          [else 4]))
+          ;;; [(<= d 2) 1]
+          ;;; [else 4]))
+          [(<= d 1) 1]
+          [(<= d 2) 2]
+          [(<= d 3) 4]
+          [else 8]))
 
       (for/list ([s (range 0 steps-per-depth NUM_THREADS)])
 

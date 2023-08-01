@@ -396,7 +396,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         assert sample_keys != [], "Key's after filtering are empty"
 
         # key_switch_sample: Number of steps after which sampling should switch keys
-        key_switch_sample = 4
+        key_switch_sample = 10
 
         filtered_sample_keys = sample_keys[: min(len(sample_keys), 100)]
 
@@ -452,12 +452,15 @@ class StepWiseSynthesizer(SynthesizerBase):
             # sys.exit(1)
 
             # At most 'key_switch_sample' combinations belong to given key combination
-            if len(key_grammar_combs) > key_switch_sample:
+            N = len(key_grammar_combs)
+            print(f"{len(key_grammar_combs) =}")
+            if N > key_switch_sample:
                 new = []
-                N = len(key_grammar_combs)
                 for i in range(key_switch_sample):
                     new.append(key_grammar_combs[(998244353*i) % N])
                 key_grammar_combs = new
+            # else:
+            #     key_grammar_combs = key_grammar_combs
             key_grammar_combs = f7(key_grammar_combs)
 
             # print("Adding {} combinations for key sample {}".format(len(key_grammar_combs), sorted_keys))
@@ -498,7 +501,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         for idx, key in enumerate(step_keys):
             key_subset = step_indices[idx]
 
-            print(bucket[key])
+            print(key, bucket[key]['ctxs'])
             for key_idx in key_subset:
                 comb_ops.append(bucket[key]['ops'][key_idx])
                 comb_ctxs.append(bucket[key]['ctxs'][key_idx])
@@ -627,11 +630,11 @@ class StepWiseSynthesizer(SynthesizerBase):
         # in too many instructions which would explode synthesis times.
 
         debug("Number of possible instructions in Grammar before pruning:",
-              len(operation_dsl_insts))
-
+              len(operation_dsl_insts), operation_dsl_args_list)
+        
         if self.ENABLE_PRUNING and not self.is_shuffle:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
-            if self.target not in ["hvx"]:
+            if self.target not in ["hvx", "arm"]:
                 (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(
                     operation_dsl_insts, operation_dsl_args_list,  score=2)
 
@@ -674,6 +677,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         if not self.is_shuffle:
             (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(
                 operation_dsl_insts, operation_dsl_args_list, bound=BOUND)
+            # pass
         else:
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_masked_operations(
                 operation_dsl_insts, operation_dsl_args_list)
@@ -798,6 +802,8 @@ class StepWiseSynthesizer(SynthesizerBase):
         if self.target == 'hvx' and ctx.name == "hexagon_V6_hi_128B":
             return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
+            return 15
+        if ctx.name == "vmulq_s16" and self.spec.semantics == ['(extract bvadd sign-extend bvmul zero-extend)']:
             return 15
         # if self.target == 'arm' and ctx.name == "vget_high_u16":
         #     return 15
