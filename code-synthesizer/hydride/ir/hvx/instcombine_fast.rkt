@@ -404,7 +404,63 @@
          )
        ]
 
+      ;; combine multiply add
+      [(hexagon_V6_vaddhsat_128B_dsl 
+         (hexagon_V6_vmpybv_128B_dsl 
+           reg_a ;<128 x i8>
 
+           reg_b;<128 x i8>
+           1024  1024  0  512  8  0  512  8  16  1  1  1  16  1024  1  1  8  2  0  );<128 x i16>
+
+         acc_vec ;<128 x i16>
+         2048  2048  0  2048  16  -1  0  )
+
+
+       (displayln "Rewriting mulitply add into widening add")
+       (hexagon_V6_vmpybv_acc_128B_dsl 
+         acc_vec ;<128 x i16>
+         reg_a ;<128 x i8>
+         reg_b;<128 x i8>
+         1024  1024  0  512  8  0  512  8  16  1  -1  1  0  16  -1  1  0  8  1024  2  0  )
+       ]
+      [
+
+       (hexagon_V6_vaddhsat_128B_dsl 
+         (hexagon_V6_vmpyub_128B_dsl 
+           reg_a;<128 x i8>
+           reg_const ; <4 x i8>
+           32  32  0  512  8  0  512  8  16  1  1  0  4  4  16  1024  1  0  4  1  4  8  2  0  );<128 x i16>
+
+         reg_addend;<128 x i16>
+         2048  2048  0  2048  16  -1  0  )
+
+       (hexagon_V6_vmpyub_acc_128B_dsl
+         reg_addend
+         reg_a
+         reg_const
+         32 32 0 512 8 0 512 8 16 1 -1 0 0 4 4 16 -1 0 0 4 1 4 8 1024 2 0
+         )
+       ]
+
+      [
+
+       (hexagon_V6_vaddhsat_128B_dsl 
+
+         reg_addend;<128 x i16>
+
+         (hexagon_V6_vmpyub_128B_dsl 
+           reg_a;<128 x i8>
+           reg_const ; <4 x i8>
+           32  32  0  512  8  0  512  8  16  1  1  0  4  4  16  1024  1  0  4  1  4  8  2  0  );<128 x i16>
+         2048  2048  0  2048  16  -1  0  )
+
+       (hexagon_V6_vmpyub_acc_128B_dsl
+         reg_addend
+         reg_a
+         reg_const
+         32 32 0 512 8 0 512 8 16 1 -1 0 0 4 4 16 -1 0 0 4 1 4 8 1024 2 0
+         )
+       ]
 
 
       [_ ele]

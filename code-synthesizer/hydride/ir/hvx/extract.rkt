@@ -2668,10 +2668,23 @@
 )
 
 	]
+[(hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(cond 
+		[(and  (equal? size_i_o 1024) (equal? num_7 1024) (equal? num_8 0) (equal? num_9 1024) (equal? prec_i_o 16) (equal? num_11 32) (equal? num_12 1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 1) (equal? num_18 -1) (equal? num_19 32) (equal? num_20 16) (equal? num_21 1) (equal? num_22 1) (equal? num_23 0)); hexagon_V6_vmpyhvsrs_128B
+ 
+ (define-values (expr-0 num-consumed-0) (hvx:extract-expr v4 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (hvx:extract-expr v5 num-consumed-0 (- depth 1)))
+ 
+ (values (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 expr-0 expr-1 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23 ) num-consumed-1)]
+		[else (error "Unable to extract  for hexagon_V6_vmpyhvsrs_128B")]
+)
+
+	]
 
 
                     )
           ]
+
         )
   )
 

@@ -7,9 +7,9 @@ using Halide::ConciseCasts::u8;
 using Halide::ConciseCasts::u32;
 using Halide::ConciseCasts::u8_sat;
 
-
 using namespace Halide;
 using namespace Halide::Internal;
+
 
 class MatrixMultiply256 : public Generator<MatrixMultiply256> {
 public:
@@ -20,7 +20,7 @@ public:
     Input<Buffer<int16_t>> C{ "C", 3 };
     Input<Buffer<int32_t>> bias_{ "bias", 1 };
 
-    Output<Buffer<int32_t>> output{ "output", 3 };
+    Output<Buffer<int32_t>> res{ "res", 3 };
 
     void generate() {
         RDom k(0, matrix_size);
@@ -32,12 +32,12 @@ public:
         intermediate(c, x, y) = max(bias_expr, 0);
         matrix_mul2(c, x, y) = 0;
         matrix_mul2(c, x, y) += (intermediate(c, k, y) * cast<int32_t>(C(c, x, k)));
-        output(c, x, y) = matrix_mul2(c, x, y);
+        res(c, x, y) = matrix_mul2(c, x, y);
 
         RVar red_dim1(matrix_mul1.update(0).get_schedule().dims()[0].var);
         RVar red_dim2(matrix_mul2.update(0).get_schedule().dims()[0].var);
 
-        output
+        res
             .compute_root()
             .reorder(x, y, c)
             .split(y, y, yi, 4, TailStrategy::ShiftInwards)
@@ -45,46 +45,57 @@ public:
             .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
             .vectorize(xii, 16)
             .reorder({xii, xi, yi, x, y})
-            .unroll(xi)
-            .unroll(yi);
+            .unroll(xi);
+        matrix_mul1.update(0)
+            //.store_in(MemoryType::Stack)
+            .reorder(x, y, c)
+            .split(x, x, xi, 16, TailStrategy::GuardWithIf)
+            .split(y, y, yi, 16, TailStrategy::GuardWithIf)
+            .reorder({xi, x, yi, y, red_dim1})
+            .vectorize(xi, 16)
+            .unroll(y)
+            .unroll(yi)
+            .unroll(x)
+            .unroll(red_dim1, 4)
+            ;
         matrix_mul1
             .store_in(MemoryType::Stack)
-            .reorder(x, y, c)
-            .compute_at(output, x)
+            .compute_at(res, x)
             .split(x, x, xi, 16, TailStrategy::RoundUp)
+            .reorder({xi, x, y})
             .vectorize(xi, 16)
-            .unroll(x)
-            .unroll(y);
-        matrix_mul1.update(0)
-            .split(x, x, xi, 16, TailStrategy::GuardWithIf)
-            .vectorize(xi, 16)
-            .reorder({xi, x, y, red_dim1})
-            .unroll(x)
-            .unroll(y);
-        matrix_mul2
-            .store_in(MemoryType::Stack)
-            .reorder(x, y, c)
-            .compute_at(output, x)
-            .split(x, x, xi, 16, TailStrategy::RoundUp)
-            .vectorize(xi, 16)
-            .unroll(x)
             .unroll(y);
         matrix_mul2.update(0)
+            //.store_in(MemoryType::Stack)
+            .reorder(x, y, c)
             .split(x, x, xi, 16, TailStrategy::GuardWithIf)
+            .split(y, y, yi, 16, TailStrategy::GuardWithIf)
+            .reorder({xi, x, yi, y, red_dim2})
             .vectorize(xi, 16)
-            .reorder({xi, x, y, red_dim2})
+            .unroll(y)
+            .unroll(yi)
             .unroll(x)
+            .unroll(red_dim2, 4)
+            ;
+        matrix_mul2
+            .store_in(MemoryType::Stack)
+            .compute_at(res, x)
+            .split(x, x, xi, 16, TailStrategy::RoundUp)
+            .reorder({xi, x, y})
+            .vectorize(xi, 16)
             .unroll(y);
 
-        output.print_loop_nest();
+        res.print_loop_nest();
     }   
 
     void schedule() {}
 
 private:
-    Func matrix_mul1{"matrix_mul1"}, matrix_mul2{"matrix_mul2"}, intermediate{"intermediate"};
-    Var  c{ "c" }, x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, ci{"ci"}, 
-        yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
+    //Func matrix_mul{"matrix_mul"};
+    Func matrix_mul1{"matrix_mul1"}, matrix_mul2{"matrix_mul2"}, 
+          intermediate{"intermediate"};
+    Var c{ "c" }, x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, yii{"yii"}, 
+        xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
-HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_bias_relu_matmul)
+HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit)

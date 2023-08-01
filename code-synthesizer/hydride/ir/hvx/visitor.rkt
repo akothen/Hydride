@@ -749,6 +749,15 @@
 		(define v2-visited (hvx:visitor v2 fn))
 		(fn ( hexagon_V6_vdealvdd_128B_dsl v0-visited v1-visited v2-visited size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 ))
 	]
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(define vc_0-visited (hvx:visitor vc_0 fn))
+		(define vc_1-visited (hvx:visitor vc_1 fn))
+		(define vc_2-visited (hvx:visitor vc_2 fn))
+		(define vc_3-visited (hvx:visitor vc_3 fn))
+		(define v4-visited (hvx:visitor v4 fn))
+		(define v5-visited (hvx:visitor v5 fn))
+		(fn ( hexagon_V6_vmpyhvsrs_128B_dsl vc_0-visited vc_1-visited vc_2-visited vc_3-visited v4-visited v5-visited size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23 ))
+	]
 
 	[_ (error "Unrecognized expression in visitor")]
  )

@@ -891,6 +891,16 @@
 		 (hvx:bind-expr num_15 env) (hvx:bind-expr num_16 env) (hvx:bind-expr num_17 env) 
 		 (hvx:bind-expr num_18 env))
 	]
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(hexagon_V6_vmpyhvsrs_128B_dsl (hvx:bind-expr vc_0 env) (hvx:bind-expr vc_1 env) (hvx:bind-expr vc_2 env) 
+		 (hvx:bind-expr vc_3 env) (hvx:bind-expr v4 env) (hvx:bind-expr v5 env) 
+		 (hvx:bind-expr size_i_o env) (hvx:bind-expr num_7 env) (hvx:bind-expr num_8 env) 
+		 (hvx:bind-expr num_9 env) (hvx:bind-expr prec_i_o env) (hvx:bind-expr num_11 env) 
+		 (hvx:bind-expr num_12 env) (hvx:bind-expr num_13 env) (hvx:bind-expr num_14 env) 
+		 (hvx:bind-expr num_15 env) (hvx:bind-expr num_16 env) (hvx:bind-expr num_17 env) 
+		 (hvx:bind-expr num_18 env) (hvx:bind-expr num_19 env) (hvx:bind-expr num_20 env) 
+		 (hvx:bind-expr num_21 env) (hvx:bind-expr num_22 env) (hvx:bind-expr num_23 env))
+	]
             [v v]
             )
   )

@@ -887,6 +887,16 @@
 		 num_18)
 	]
 
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(hexagon_V6_vmpyhvsrs_128B (hvx:interpret vc_0 env) (hvx:interpret vc_1 env) (hvx:interpret vc_2 env) 
+		 (hvx:interpret vc_3 env) (hvx:interpret v4 env) (hvx:interpret v5 env) 
+		 size_i_o num_7 num_8 
+		 num_9 prec_i_o num_11 
+		 num_12 num_13 num_14 
+		 num_15 num_16 num_17 
+		 num_18 num_19 num_20 
+		 num_21 num_22 num_23)
+	]
             [v (error "Unrecognized Term in Interpreter" v)]
             )
   )

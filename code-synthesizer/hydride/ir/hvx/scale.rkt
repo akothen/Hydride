@@ -6148,6 +6148,40 @@
                [else (error "Unable to identify how to scale up " prog)]
                )
              ]
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000001 (bitvector 32)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? vc_2 (lit (bv #x00000000000000000000000000000002 (bitvector 32)))) (equal? vc_3 (lit (bv #x0000000000000000000000000000000f (bitvector 64)))) (equal? size_i_o 32) (equal? num_7 32) (equal? num_8 0) (equal? num_9 32) (equal? prec_i_o 16) (equal? num_11 32) (equal? num_12 1) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 1) (equal? num_18 -1) (equal? num_19 32) (equal? num_20 16) (equal? num_21 1) (equal? num_22 1) (equal? num_23 0))
+(displayln "Scaling case for hexagon_V6_vmpyhvsrs_128B")
+(hexagon_V6_vmpyhvsrs_128B_dsl
+vc_0
+vc_1
+vc_2
+vc_3
+(hvx:scale-expr v4 scale-factor)
+(hvx:scale-expr v5 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_7)
+num_8
+(* scale-factor num_9)
+prec_i_o
+num_11
+num_12
+num_13
+num_14
+num_15
+num_16
+num_17
+num_18
+num_19
+num_20
+num_21
+num_22
+num_23
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
             [_ (error "Unrecognized expression")]
             )
   )

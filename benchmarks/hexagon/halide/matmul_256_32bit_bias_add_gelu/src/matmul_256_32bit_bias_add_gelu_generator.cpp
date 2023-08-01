@@ -44,14 +44,16 @@ public:
                             );
 
         RVar red_dim(matrix_mul.update(0).get_schedule().dims()[0].var);
+        
+        const int vector_size = natural_vector_size<int16_t>();
 
         output
             .compute_root()
             .reorder(x, y, c)
             .split(y, y, yi, 4, TailStrategy::ShiftInwards)
             .split(x, x, xi, 64, TailStrategy::ShiftInwards)
-            .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
-            .vectorize(xii, 16)
+            .split(xi, xi, xii, vector_size, TailStrategy::ShiftInwards)
+            .vectorize(xii, vector_size)
             .reorder({xii, xi, yi, x, y})
             .unroll(xi)
             .unroll(yi);
@@ -59,13 +61,13 @@ public:
             .store_in(MemoryType::Stack)
             .reorder(x, y, c)
             .compute_at(output, x)
-            .split(x, x, xi, 16, TailStrategy::RoundUp)
-            .vectorize(xi, 16)
+            .split(x, x, xi, vector_size, TailStrategy::RoundUp)
+            .vectorize(xi, vector_size)
             .unroll(x)
             .unroll(y);
         matrix_mul.update(0)
-            .split(x, x, xi, 16, TailStrategy::GuardWithIf)
-            .vectorize(xi, 16)
+            .split(x, x, xi, vector_size, TailStrategy::GuardWithIf)
+            .vectorize(xi, vector_size)
             .reorder({xi, x, y, red_dim})
             .unroll(x)
             .unroll(y);

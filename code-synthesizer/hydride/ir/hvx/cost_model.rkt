@@ -133,6 +133,7 @@
 (define cost_hexagon_V6_vmpyewuh_64_128B_dsl 2)
 (define cost_hexagon_V6_vshuffvdd_128B_dsl 1)
 (define cost_hexagon_V6_vdealvdd_128B_dsl 1)
+(define cost_hexagon_V6_vmpyhvsrs_128B_dsl 1)
 
 (define (hvx:cost prog)
   (destruct prog
@@ -990,6 +991,16 @@
              ]
             [ (hexagon_V6_vdealvdd_128B_dsl v0 v1 v2 size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18)
 		(+ cost_hexagon_V6_vdealvdd_128B_dsl (hvx:cost  v0)  (hvx:cost  v1)  (hvx:cost  v2)  
+		 
+		 
+		 
+		 
+		 
+		)
+	]
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(+ cost_hexagon_V6_vmpyhvsrs_128B_dsl (hvx:cost  vc_0)  (hvx:cost  vc_1)  (hvx:cost  vc_2)  
+		 (hvx:cost  vc_3)  (hvx:cost  v4)  (hvx:cost  v5)  
 		 
 		 
 		 
@@ -1975,6 +1986,17 @@
 		 
 		)
 	]
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(+ cost_hexagon_V6_vmpyhvsrs_128B_dsl (hvx-instcombine:cost  vc_0)  (hvx-instcombine:cost  vc_1)  (hvx-instcombine:cost  vc_2)  
+		 (hvx-instcombine:cost  vc_3)  (hvx-instcombine:cost  v4)  (hvx-instcombine:cost  v5)  
+		 
+		 
+		 
+		 
+		 
+		)
+	]
+
 	[v  (error "Unrecognized Term in cost model" v)]
  )
 )
