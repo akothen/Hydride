@@ -100,4 +100,4 @@ private:
         yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
-HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit)
+HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_bias_gelu_matmul)

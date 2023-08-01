@@ -1,4 +1,5 @@
 #include "Halide.h"
+#include "../../hannk/common_halide.h"
 
 
 using Halide::Generator;
@@ -9,6 +10,7 @@ using Halide::ConciseCasts::u8_sat;
 
 using namespace Halide;
 using namespace Halide::Internal;
+using namespace hannk;
 
 
 class MatrixMultiply256 : public Generator<MatrixMultiply256> {
@@ -29,7 +31,19 @@ public:
         matrix_mul1(c, x, y) += (cast<int32_t>(A(c, k, y)) * cast<int32_t>(B(c, x, k)));
         Expr bias_expr = matrix_mul1(c, x, y);
         bias_expr += bias_(c);
-        intermediate(c, x, y) = max(bias_expr, 0);
+        //Expr sqrt_2_over_pi = approx_reciprocal_sqrt(0, 3/2, Int(32));
+        Expr sqrt_6283 = approx_reciprocal_sqrt(0, 6283, Int(32));
+        Expr sqrt_1000 = approx_reciprocal_sqrt(0, 1000, Int(32));
+        Expr sqrt_two_times_pi = sqrt_6283 / sqrt_1000;  // sqrt(1/2pi)
+        Expr one_half = approx_reciprocal(0, 2, Int(32));  // 1/2
+        Expr one_third = approx_reciprocal(0, 3, Int(32));  // 1/3
+        // Gelu approximation based on https://paperswithcode.com/method/gelu.
+        intermediate(c, x, y) = bias_expr * one_half 
+                          * (1 
+                             + bias_expr * one_third * sqrt_two_times_pi 
+                              * (6 + bias_expr * bias_expr)
+                            );
+        //max(bias_expr, 0);
         matrix_mul2(c, x, y) = 0;
         matrix_mul2(c, x, y) += (intermediate(c, k, y) * cast<int32_t>(C(c, x, k)));
         res(c, x, y) = matrix_mul2(c, x, y);
@@ -98,4 +112,4 @@ private:
         xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
-HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_bias_relu_matmul)
+HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit)

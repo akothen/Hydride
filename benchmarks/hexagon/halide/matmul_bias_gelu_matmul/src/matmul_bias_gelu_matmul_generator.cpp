@@ -1,7 +1,6 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 
-
 using Halide::Generator;
 using Halide::RVar;
 using Halide::ConciseCasts::u8;
@@ -19,6 +18,7 @@ public:
     GeneratorParam<int> matrix_size{"size", 256};
     Input<Buffer<int16_t>> A{ "A", 3 };
     Input<Buffer<int16_t>> B{ "B", 3 };
+    Input<Buffer<int16_t>> C{ "C", 3 };
     Input<Buffer<int32_t>> bias_{ "bias", 1 };
 
     Output<Buffer<int32_t>> output{ "output", 3 };
@@ -26,47 +26,69 @@ public:
     void generate() {
         RDom k(0, matrix_size);
 
-        matrix_mul(c, x, y) = 0;
-        matrix_mul(c, x, y) += (cast<int32_t>(A(c, k, y)) * cast<int32_t>(B(c, x, k)));
-        Expr bias_expr = matrix_mul(c, x, y);
+        matrix_mul1(c, x, y) = 0;
+        matrix_mul1(c, x, y) += (cast<int32_t>(A(c, k, y)) * cast<int32_t>(B(c, x, k)));
+        Expr bias_expr = matrix_mul1(c, x, y);
         bias_expr += bias_(c);
         //Expr sqrt_2_over_pi = approx_reciprocal_sqrt(0, 3/2, Int(32));
         Expr sqrt_6283 = approx_reciprocal_sqrt(0, 6283, Int(32));
         Expr sqrt_1000 = approx_reciprocal_sqrt(0, 1000, Int(32));
-        Expr sqrt_two_times_pi = sqrt_6283 / sqrt_1000;
+        Expr sqrt_two_times_pi = sqrt_6283 / sqrt_1000;  // sqrt(1/2pi)
         Expr one_half = approx_reciprocal(0, 2, Int(32));  // 1/2
         Expr one_third = approx_reciprocal(0, 3, Int(32));  // 1/3
         // Gelu approximation based on https://paperswithcode.com/method/gelu.
-        output(c, x, y) = bias_expr * one_half 
+        intermediate(c, x, y) = bias_expr * one_half 
                           * (1 
                              + bias_expr * one_third * sqrt_two_times_pi 
                               * (6 + bias_expr * bias_expr)
                             );
+        //max(bias_expr, 0);
+        matrix_mul2(c, x, y) = 0;
+        matrix_mul2(c, x, y) += (intermediate(c, k, y) * cast<int32_t>(C(c, x, k)));
+        output(c, x, y) = matrix_mul2(c, x, y);
 
-        RVar red_dim(matrix_mul.update(0).get_schedule().dims()[0].var);
+        RVar red_dim1(matrix_mul1.update(0).get_schedule().dims()[0].var);
+        RVar red_dim2(matrix_mul2.update(0).get_schedule().dims()[0].var);
+
+
+        const int vector_size = natural_vector_size<int16_t>();
 
         output
             .compute_root()
             .reorder(x, y, c)
             .split(y, y, yi, 4, TailStrategy::ShiftInwards)
             .split(x, x, xi, 64, TailStrategy::ShiftInwards)
-            .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
-            .vectorize(xii, 16)
+            .split(xi, xi, xii, vector_size, TailStrategy::ShiftInwards)
+            .vectorize(xii, vector_size)
             .reorder({xii, xi, yi, x, y})
             .unroll(xi)
             .unroll(yi);
-        matrix_mul
+        matrix_mul1
             .store_in(MemoryType::Stack)
             .reorder(x, y, c)
             .compute_at(output, x)
-            .split(x, x, xi, 16, TailStrategy::RoundUp)
-            .vectorize(xi, 16)
+            .split(x, x, xi, vector_size, TailStrategy::RoundUp)
+            .vectorize(xi, vector_size)
             .unroll(x)
             .unroll(y);
-        matrix_mul.update(0)
-            .split(x, x, xi, 16, TailStrategy::GuardWithIf)
-            .vectorize(xi, 16)
-            .reorder({xi, x, y, red_dim})
+        matrix_mul1.update(0)
+            .split(x, x, xi, vector_size, TailStrategy::GuardWithIf)
+            .vectorize(xi, vector_size)
+            .reorder({xi, x, y, red_dim1})
+            .unroll(x)
+            .unroll(y);
+        matrix_mul2
+            .store_in(MemoryType::Stack)
+            .reorder(x, y, c)
+            .compute_at(output, x)
+            .split(x, x, xi, vector_size, TailStrategy::RoundUp)
+            .vectorize(xi, vector_size)
+            .unroll(x)
+            .unroll(y);
+        matrix_mul2.update(0)
+            .split(x, x, xi, vector_size, TailStrategy::GuardWithIf)
+            .vectorize(xi, vector_size)
+            .reorder({xi, x, y, red_dim2})
             .unroll(x)
             .unroll(y);
 
@@ -76,9 +98,9 @@ public:
     void schedule() {}
 
 private:
-    Func matrix_mul{"matrix_mul"};
+    Func matrix_mul1{"matrix_mul1"}, matrix_mul2{"matrix_mul2"}, intermediate{"intermediate"};
     Var  c{ "c" }, x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"}, ci{"ci"}, 
         yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
 };
 
-HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256_32bit_bias_add_gelu)
+HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_bias_gelu_matmul)

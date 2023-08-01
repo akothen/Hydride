@@ -1367,7 +1367,20 @@
 		[else ( hexagon_V6_vdealvdd_128B_dsl v0-folded v1-folded v2-folded size_o num_4 num_5 num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 )]
 		)
 	]
-
+[ (hexagon_V6_vmpyhvsrs_128B_dsl vc_0 vc_1 vc_2 vc_3 v4 v5 size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23)
+		(define vc_0-folded (hvx:const-fold vc_0))
+		(define vc_1-folded (hvx:const-fold vc_1))
+		(define vc_2-folded (hvx:const-fold vc_2))
+		(define vc_3-folded (hvx:const-fold vc_3))
+		(define v4-folded (hvx:const-fold v4))
+		(define v5-folded (hvx:const-fold v5))
+		(cond
+		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? vc_2-folded) (lit? vc_3-folded) (lit? v4-folded) (lit? v5-folded))
+(lit (hvx:interpret ( hexagon_V6_vmpyhvsrs_128B_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded v5-folded size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23 ) (vector)))
+]
+		[else ( hexagon_V6_vmpyhvsrs_128B_dsl vc_0-folded vc_1-folded vc_2-folded vc_3-folded v4-folded v5-folded size_i_o num_7 num_8 num_9 prec_i_o num_11 num_12 num_13 num_14 num_15 num_16 num_17 num_18 num_19 num_20 num_21 num_22 num_23 )]
+		)
+	]
 	[v (error "Unrecognized expression const fold" v)]
  )
 )
