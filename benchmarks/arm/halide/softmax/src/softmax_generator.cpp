@@ -63,21 +63,39 @@ namespace hannk {
                 output_(x, y) = u8_sat(saturating_add(output, output_zero_));
 
                 // Schedule.
-                const int vector_size = natural_vector_size<uint8_t>();
+                // const int vector_size = natural_vector_size<uint8_t>();
 
-                output_.vectorize(x, vector_size, TailStrategy::Predicate);
+                // output_.vectorize(x, vector_size, TailStrategy::Predicate);
 
-                max_x.compute_at(output_, y)
+                // max_x.compute_at(output_, y)
+                //     .update()
+                //     .atomic()
+                //     .vectorize(rx, vector_size, TailStrategy::GuardWithIf);
+
+                // sum_exp_row.compute_at(output_, y)
+                //     .update()
+                //     .atomic()
+                //     .vectorize(rx, vector_size, TailStrategy::GuardWithIf);
+
+                // inv_sum_exp_row.compute_at(output_, y);
+
+                output_
+                    .compute_root()
+                    .vectorize(x, 64);
+                inv_sum_exp_row
+                    .compute_at(output_, y);
+                sum_exp_row
+                    .compute_at(output_, y)
                     .update()
                     .atomic()
-                    .vectorize(rx, vector_size, TailStrategy::GuardWithIf);
-
-                sum_exp_row.compute_at(output_, y)
+                    .vectorize(rx, 64);
+                max_x
+                    .compute_at(output_, y)
                     .update()
                     .atomic()
-                    .vectorize(rx, vector_size, TailStrategy::GuardWithIf);
-
-                inv_sum_exp_row.compute_at(output_, y);
+                    .vectorize(rx, 64);
+                
+                output_.print_loop_nest();
             }
     };
 

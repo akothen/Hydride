@@ -37,15 +37,18 @@ public:
         // Schedules for x86
         const int vector_size = natural_vector_size<uint8_t>();
 
-        output_.compute_root()
-            .vectorize(x, vector_size, TailStrategy::Predicate);
-
-        inv_sqrt.compute_at(output_, y);
-
-        sum_input_sq.compute_at(output_, y)
+        output_
+            .compute_root()
+            .vectorize(x, 128);
+        inv_sqrt
+            .store_in(MemoryType::Stack)
+            .compute_at(output_, y);
+        sum_input_sq
+            .store_in(MemoryType::Stack)
+            .compute_at(output_, y)
             .update()
             .atomic()
-            .vectorize(rx, vector_size);
+            .vectorize(rx, 128);
     }
 
 

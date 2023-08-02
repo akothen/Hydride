@@ -19,6 +19,8 @@ arme3.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=3 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 arme4.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=4 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
+arme5.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
+	EXPR_DEPTH=5 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 arme9.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	EXPR_DEPTH=9 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 armd.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
@@ -36,7 +38,7 @@ armrd.%:
 	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
-$(LIB_HALIDE): $(HALIDE_SRC)/src/Rosette.cpp $(HALIDE_SRC)/src/DistributeVec.cpp
+$(LIB_HALIDE):
 	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
 x86median: $(LIB_HALIDE)
 	make -C $(HYDRIDE_ROOT)/benchmarks/x86-deprecated/halide median3x3
@@ -64,6 +66,7 @@ $(LEGALIZER): $(LEGALIZER_CPP)
 $(ALL_ARM_SEMA):
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
 halide: $(LIB_HALIDE)
+	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
 similaritytest:
 	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	

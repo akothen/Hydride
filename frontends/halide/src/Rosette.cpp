@@ -77,21 +77,21 @@ class ReplaceDiv : public IRMutator {
 
     Expr visit(const Call *op) override {
 
-            if (op->is_intrinsic(Call::shift_right)) {
-                debug(0) << "Found shr\n";
-                // if (!op->type.is_float() && op->type.is_vector()) {
-                //     debug(0) << "Lowering armshr to armshl\n";
-                //     return (op->args[0] << simplify(-op->args[1]));
-                // }
-                // Current legalizer doesn't support immediate argument
-                if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
-                    debug(0) << "Lowering armshr to armshl\n";
-                    return op->args[0] << simplify(-op->args[1]);
-                }
+        if (op->is_intrinsic(Call::shift_right)) {
+            debug(0) << "Found shr\n";
+            // if (!op->type.is_float() && op->type.is_vector()) {
+            //     debug(0) << "Lowering armshr to armshl\n";
+            //     return (op->args[0] << simplify(-op->args[1]));
+            // }
+            // Current legalizer doesn't support immediate argument
+            if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
+                debug(0) << "Lowering armshr to armshl\n";
+                return op->args[0] << simplify(-op->args[1]);
             }
-
-            return IRMutator::visit(op);
         }
+
+        return IRMutator::visit(op);
+    }
 
     Expr visit(const Mul *op) override {
 
@@ -2380,8 +2380,8 @@ private:
                         value = *as_const_int(op->args[2]);
                     }
 
-                    if (value == 31) {
-                        debug(0) << "Found constant rounding_mul_shift_right with value 31: " << op->args[2] << "\n";
+                    if (value == 31 || value == 15) {
+                        debug(0) << "Found constant rounding_mul_shift_right with special value 15/31: " << op->args[2] << "\n";
                     } else {
                         debug(0) << "Lowering rounding_mul_shift_right using halide"
                                  << "\n";

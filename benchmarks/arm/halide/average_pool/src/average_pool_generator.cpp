@@ -71,14 +71,31 @@ public:
         output_(c, x, y, b) = clamp(u8_sat(average), output_min_, output_max_);
 
 
-        // TODO: Figure out how to vectorize this efficiently without this
-        // code duplication. We should be able to just vectorize and predicate
-        // somehow.
-        const int vector_size = natural_vector_size<uint8_t>();
-        Expr output_channels = output_.dim(0).extent();
-        for (int i : {4, 2, 1}) {
-            output_.specialize(output_channels >= vector_size * i)
-                .vectorize(c, vector_size * i, TailStrategy::ShiftInwards);
+        // Schedule.
+        // {
+        //     require_same_min_extent(0, input_, output_);
+        //     require_same_min_extent(3, input_, output_);
+
+        //     // Reorder b inside x so inv_filter_count can be computed outside
+        //     // that loop.
+        //     output_.compute_root()
+        //         .reorder(c, b, x, y);
+
+        //     // TODO: Figure out how to vectorize this efficiently without this
+        //     // code duplication. We should be able to just vectorize and predicate
+        //     // somehow.
+        //     const int vector_size = natural_vector_size<uint8_t>();
+        //     Expr output_channels = output_.dim(0).extent();
+        //     for (int i : {4, 2, 1}) {
+        //         output_.specialize(output_channels >= vector_size * i)
+        //             .vectorize(c, vector_size * i, TailStrategy::ShiftInwards);
+        //     }
+        // }
+        {
+            output_
+            .compute_root()
+            .reorder(c, b, x, y)
+            .vectorize(c, 128);
         }
     }
 
