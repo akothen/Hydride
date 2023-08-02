@@ -5,6 +5,7 @@ from asl.ARMAST import Instruction
 from ARMTypes import *
 from ARMAST import *
 from typing import Dict
+from ARMPipeline import pipeline
 
 import json
 
@@ -80,7 +81,7 @@ class DecodeContext:
             return (self.walkConstExprRV(AST.hi), self.walkConstExprRV(AST.lo))
         elif isinstance(AST, Number):
             return AST.val
-        elif isinstance(AST, IfElse):
+        elif isinstance(AST, IfElseExpr):
             cond = self.walkConstExprRV(AST.cond)
             assert type(cond) == bool
             if cond:
@@ -158,14 +159,16 @@ class DecodeContext:
                 self.walkConstExprStmt(i)
         elif isinstance(AST, VarDeclInit):
             self.result[self.walkConstExprLV(
-                AST.decl.ids[0])] = self.walkConstExprRV(AST.expr)
+                AST.lhs)] = self.walkConstExprRV(AST.rhs)
+        elif isinstance(AST, VarDeclUndef):
+            pass
         elif isinstance(AST, Update):
             self.result[self.walkConstExprLV(
                 AST.lhs)] = self.walkConstExprRV(AST.rhs)
-        elif isinstance(AST, If):
+        elif isinstance(AST, IfStmt):
             if self.walkConstExprRV(AST.cond):
                 self.walkConstExprStmt(AST.then)
-        elif isinstance(AST, IfElse):
+        elif isinstance(AST, IfElseStmt):
             if self.walkConstExprRV(AST.cond):
                 self.walkConstExprStmt(AST.then)
             else:
@@ -173,7 +176,7 @@ class DecodeContext:
         elif isinstance(AST, Undefined):
             raise NotImplementedError("Such field reaches undefined")
         elif isinstance(AST, VarsDecl):
-            pass
+            self.walkConstExprStmt(AST.init_list)
         elif isinstance(AST, Match):
             Rval = self.walkConstExprRV(AST.val)
             for c in AST.cases:

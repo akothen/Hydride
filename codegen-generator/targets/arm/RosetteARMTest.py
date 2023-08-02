@@ -8,7 +8,8 @@ from ARMMeta import *
 def GenerateCTest(AllSema):
     CannotVerify = []
     para_set = set()
-    skip_list = notSSA+UIP+op_mismatch+not_compiled_in_gcc+semantics_changed
+    skip_list = notSSA+UIP+op_mismatch + \
+        not_compiled_in_gcc+semantics_changed+skipForCodeGen
     str_list = [
         """#include "utils.h"
 

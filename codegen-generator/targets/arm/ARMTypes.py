@@ -167,7 +167,7 @@ ARMGlobalConstSTR = {
     "ReduceOp_ADD": "101"
 }
 ReservedImmTypes = {
-    "const int"
+    "const int",
 }
 PointerType = {
     "int8_t const *",

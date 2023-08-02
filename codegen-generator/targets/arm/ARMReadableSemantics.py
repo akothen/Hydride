@@ -1458,7 +1458,7 @@ map2Code = {
             boolean sat;
             for e = 0 to (elements - 1)
             {
-                shift = SInt(Elem[operand2,e,esize]);
+                shift = SInt(Elem[operand2,e,esize][0~7]);
                 if rounding then
                 {
                     round_const = (1 << ((- shift) - 1));
@@ -1502,7 +1502,7 @@ map2Code = {
             boolean sat;
             for e = 0 to (elements - 1)
             {
-                shift = SInt(Elem[operand2,e,esize]);
+                shift = SInt(Elem[operand2,e,esize][0~7]);
                 if rounding then
                 {
                     round_const = (1 << ((- shift) - 1));

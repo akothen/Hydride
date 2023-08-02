@@ -1,10 +1,12 @@
 
 from ARMSemanticGen import SemaGenerator
 import ARMTestCases
+from ARMPipeline import pipeline
 from ARMRoseCompiler import ARMRoseContext, CompileSemantics
 from ARMTypes import *
 from ARMAST import *
 from ARMMeta import *
+from ARMASTPrinter import getSemaAsString
 # CheckFPAdvSIMDEnabled64();
 # bits(datasize) operand1 = V[n];
 # bits(datasize) operand2 = V[m];
@@ -29,8 +31,8 @@ skip = notSSA + ['vcopy']
 
 def Compile(InstName: str = None):
     skipForSimilarity = skip + [
-        'and', 'bsl', 'bic', 'eor', 'orr', 'orn',  # Similarity can't handle them
-        'addv', 'paddd' # Transformation can't handle them
+        'and', 'bsl', 'bic', 'eor', 'orr', 'orn',  # Extract can't handle
+        'addv', 'paddd'  # Transformation can't handle them
     ]
     from RoseFunctionInfo import RoseFunctionInfo
 
@@ -38,6 +40,7 @@ def Compile(InstName: str = None):
         whitelist = []
         # whitelist = ["vshr"]
         interested = []
+        # interested = ["vaba_s16"]
         # interested = ["vshr_n_u8"]
         # interested = ["max", "min"]
         # interested = ["vmovl_s8","vdupq_n_s16"]
@@ -53,8 +56,8 @@ def Compile(InstName: str = None):
         # interested = ["get","combine"]
         # interested = ["paddl"]
         # interested = ['qrdmulh', 'qdmulh']
-        
-
+        # interested = ['vabal_high_s16']
+        # interested = ['qrshl','qshl']
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
@@ -95,6 +98,8 @@ def Compile(InstName: str = None):
             print(RootContext)
             print("Spec:")
             print(Spec)
+            Spec = pipeline(Spec)
+            print(getSemaAsString(Spec.spec))
             FunctionInfo = RoseFunctionInfo()
             CompiledFunction = CompileSemantics(Spec, RootContext)
             FunctionInfo.addContext(RootContext)
@@ -131,6 +136,7 @@ def TestcaseGen():
         try:
             # print("Compiling", k, file=sys.stderr)
             print(func.intrin, func)
+            func = pipeline(func)
             Function = CompileSemantics(func, ARMRoseContext())
         except NotImplementedError as e:
             print("Failed to compile", k, e, file=sys.stderr)
@@ -148,12 +154,37 @@ def TestcaseGen():
         f.write(AllRosetteCode)
 
 
+def TestcaseGen2():
+    from RoseCodeGenerator import RoseCodeGenerator
+    CodeGenerator = RoseCodeGenerator(Target="ARM")
+    FunctionInfoList = CodeGenerator.codeGen(
+        JustGenRosette=False, ExtractConstants=False)
+    AllRosetteCode = "#lang rosette\n(require \"bvops.rkt\")\n"
+    for FunctionInfo in FunctionInfoList:
+        RosetteCode = GenerateRosetteForFunction(
+            FunctionInfo.getLatestFunction(), "")
+        AllRosetteCode += RosetteCode
+    print("Writing to rosette_test/compiled.rkt...")
+    AllRosetteCode += "(provide (all-defined-out))"
+    with open(f'rosette_test/compiled.rkt', 'w') as f:
+        f.write(AllRosetteCode)
+
+
+def TestWithTransormation():
+    from RoseCodeGenerator import RoseCodeGenerator
+    CodeGenerator = RoseCodeGenerator(Target="ARM")
+    FunctionInfoList = CodeGenerator.codeGen(
+        JustGenRosette=False, ExtractConstants=False)
+    for FunctionInfo in FunctionInfoList:
+        print(GenerateRosetteForFunction(FunctionInfo.getLatestFunction(), ""))
+
+
 if __name__ == "__main__":
 
     if "--gen" in sys.argv:
-        TestcaseGen()
+        TestcaseGen2()
     else:
-        Compile()
+        TestWithTransormation()
 
     # TestcaseGen()
 

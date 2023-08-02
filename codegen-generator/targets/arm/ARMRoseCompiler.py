@@ -26,7 +26,6 @@ class ARMRoseContext(RoseContext):
         self.varType = {}
         self.returnOperand = None
         self.hasInsert = False  # To pass some assertion in similar checker
-        self.IntSimWidth = 192
         super().__init__()
 
     def setHasInsert(self):
@@ -41,6 +40,7 @@ class ARMRoseContext(RoseContext):
         self.constexpr = constexpr
 
     def getConstexprFor(self, qid: str) -> (int):
+
         if qid in self.constexpr:
             return self.constexpr[qid]
         if qid in ARMGlobalConst:
@@ -88,7 +88,7 @@ class ARMRoseContext(RoseContext):
             ChildContext.copyAbstractionsFromParent()
             ChildContext.setConstexpr(self.constexpr)
             ChildContext.setPreparation(self.preparation)
-            ChildContext.IntSimWidth = self.IntSimWidth
+            # ChildContext.IntSimWidth = self.IntSimWidth
             super().createContext(ID, ChildContext)
         else:
             assert False
@@ -143,18 +143,18 @@ def CompileSemantics(Sema: ARMSema, RootContext: ARMRoseContext):
     OutParams = []
     ParamValues = []
     ParamsIDs = []
-    specialIntSimWidth = {
-        "dot": 32
-    }
-    for keyword, value in specialIntSimWidth.items():
-        if keyword in Sema.intrin:
-            RootContext.IntSimWidth = value
+    # specialIntSimWidth = {
+    #     "dot": 32
+    # }
+    # for keyword, value in specialIntSimWidth.items():
+    #     if keyword in Sema.intrin:
+    #         RootContext.IntSimWidth = value
     for Index, Param in enumerate(Sema.params):
         if Param.type in PointerType:
             raise NotImplementedError(
                 f"Parameter type {Param.type} not supported yet")
         if Param.type in ReservedImmTypes:
-            ParamType = RoseBitVectorType(32)
+            ParamType = RoseBitVectorType(64)
         else:
             ParamType = ARMTypes[Param.type]
         # Create a new rosette value
@@ -199,22 +199,22 @@ def CompileSemantics(Sema: ARMSema, RootContext: ARMRoseContext):
     # Compile all the statements
     print("===Compiling===")
     # CompiledRetVal = RoseUndefValue()
-    for Index, Param in enumerate(Sema.params):
-        if Param.type in ReservedImmTypes:
-            Bitwidth = RootContext.IntSimWidth
-            varName = Param.name+"192"
-            varID = RootContext.genName()
-            NewOp = RoseBVZeroExtendOp.create(
-                RootContext.genName(), ParamValues[Index], Bitwidth)
-            RootContext.addSignednessInfoForValue(NewOp, IsSigned=False)
-            RootContext.addAbstractionToIR(NewOp)
-            RootContext.addVariable(varName, varID)
-            RootContext.addCompiledAbstraction(varID, NewOp)
-            for i in Sema.preparation:
-                if Sema.preparation[i] == Param.name:
-                    Sema.preparation[i] = varName
-            print("Inserting BVZeroExtendOp for ", Param.name)
-            NewOp.print()
+    # for Index, Param in enumerate(Sema.params):
+    #     if Param.type in ReservedImmTypes:
+    #         Bitwidth = 32
+    #         varName = Param.name+"32"
+    #         varID = RootContext.genName()
+    #         NewOp = RoseBVZeroExtendOp.create(
+    #             RootContext.genName(), ParamValues[Index], Bitwidth)
+    #         RootContext.addSignednessInfoForValue(NewOp, IsSigned=False)
+    #         RootContext.addAbstractionToIR(NewOp)
+    #         RootContext.addVariable(varName, varID)
+    #         RootContext.addCompiledAbstraction(varID, NewOp)
+    #         for i in Sema.preparation:
+    #             if Sema.preparation[i] == Param.name:
+    #                 Sema.preparation[i] = varName
+    #         print("Inserting BVZeroExtendOp for ", Param.name)
+    #         NewOp.print()
             # breakpoint()
     for Index, Stmt in enumerate(Sema.spec):
         CompileStatement(Stmt, RootContext)
@@ -266,42 +266,41 @@ def Useless(*args, **kwargs):
 def CompileVarDeclInit(Stmt: VarDeclInit, Context: ARMRoseContext):
     '''
     bits(datasize) operand1 = V[n];
-    -----------------------   ----
-              decl            expr
+    -------------- --------   ----
+       base_type     lhs      expr
     '''
-    assert len(
-        Stmt.decl.ids) == 1, f"Only one variable can be declared, but got {Stmt.decl.ids}"
-    CompileVarsDecl(Stmt.decl, Context)
-    return CompileUpdate(Update(Stmt.decl.ids[0], Stmt.expr), Context)
+
+    return CompileUpdate(Update(Stmt.lhs, Stmt.rhs), Context)
+
+
+def CompileVarDeclOnly(Stmt: Var, Context: ARMRoseContext, base_type):
+    if base_type[0] == 'bits':
+        datasizeVal = CompileRValueExpr(base_type[1], Context)
+        assert isinstance(
+            datasizeVal, RoseConstant), f"Width of variable must be a constant but got {datasizeVal}"
+        datasize = datasizeVal.getValue()
+        Context.setTypeForVar(Stmt.name, ('bits', datasize))
+        CompileVarRv(Stmt, Context)
 
 
 def CompileVarsDecl(Stmt: VarsDecl, Context: ARMRoseContext):
     '''
-    bits(datasize) operand1
-         --------  ========
-          width      ids
-    integer op1;
+    bits(datasize)  operand1
+         --------  =========
+          width    init_list
     '''
     # CompileStatement(Stmt.decl, Context)
     # CompileStatement(Stmt.width, Context)
     # return CompileVarsDecl(Stmt.decl, Context)
     # Context.
-    if Stmt.basetype[0] == 'bits':
-        datasizeVal = CompileRValueExpr(Stmt.basetype[1], Context)
-        assert isinstance(
-            datasizeVal, RoseConstant), f"Width of variable must be a constant but got {datasizeVal}"
-        datasize = datasizeVal.getValue()
-        for ids in Stmt.ids:
-            Context.setTypeForVar(ids.name, ('bits', datasize))
-            CompileVarRv(ids, Context)
-    if Stmt.basetype[0] == 'boolean':
-        for ids in Stmt.ids:
-            Context.setTypeForVar(ids.name, ('boolean', 1))
-            CompileVarRv(ids, Context)
-    if Stmt.basetype[0] == 'integer':
-        for ids in Stmt.ids:
-            Context.setTypeForVar(ids.name, ('bits', Context.IntSimWidth))
-            CompileVarRv(ids, Context)
+    for decls in Stmt.init_list:
+        if isinstance(decls, VarDeclInit):
+            CompileVarDeclOnly(decls.lhs, Context, Stmt.basetype)
+            CompileUpdate(Update(decls.lhs, decls.rhs), Context)
+        elif isinstance(decls, VarDeclUndef):
+            CompileVarDeclOnly(decls.lhs, Context, Stmt.basetype)
+        else:
+            assert False, f"Unknown type of declaration: {decls}"
 
 
 def CompileVarRv(Variable: Var, Context: ARMRoseContext):
@@ -344,23 +343,41 @@ def CompileVarRv(Variable: Var, Context: ARMRoseContext):
     return var
 
 
-def ElemToSlicedArray(Stmt: ArrayIndex):
-    assert Stmt.obj.name == 'Elem', f"Elem can only be indexed by a variable, but got {Stmt.obj.name}"
-    args = Stmt.slices
-    assert len(
-        args) == 3, f"Elem can only be indexed by three arguments, but got {args}"
+def ElemToSlicedArray(Stmt: ElemSlice):
     # [e*esize,e*esize+esize-1]
-    lo = BinaryExpr('*', args[1], args[2], Stmt.id+f".1")
-    hi = BinaryExpr('+', BinaryExpr('*', args[1], args[2], Stmt.id+f".2"), BinaryExpr(
-        '-', args[2], Number(1), Stmt.id+f".32"), Stmt.id+f".4")
+    lo = BinaryExpr('*', Stmt.cnt, Stmt.esize, Stmt.id+f".1")
+    hi = BinaryExpr('+', BinaryExpr('*', Stmt.cnt, Stmt.esize, Stmt.id+f".2"), BinaryExpr(
+        '-', Stmt.esize, Number(1), Stmt.id+f".32"), Stmt.id+f".4")
     # hi = BinaryExpr('-', BinaryExpr(
-    #     '*', BinaryExpr('+', args[1], Number(1), Stmt.id+f".2"), args[2], Stmt.id+f".3"), Number(1), Stmt.id+f".4")
+    #     '*', BinaryExpr('+', Stmt.cnt, Number(1), Stmt.id+f".2"), Stmt.esize, Stmt.id+f".3"), Number(1), Stmt.id+f".4")
     # Node = SliceRange(args[0], [lo, hi], Stmt.id)
     SL = SliceRange(
         hi, lo, Stmt.id+f".5")
-    SL.wid = args[2]
-    Node = ArrayIndex(args[0], [SL], Stmt.id+f".6")
+    SL.wid = Stmt.esize
+    Node = ArrayIndex(Stmt.op, [SL], Stmt.id+f".6")
     return Node
+
+
+def VtoLv(Stmt: VReg, Context: ARMRoseContext):
+    ID = Stmt.id
+    assert type(Stmt.reg) == Var, f"Got {Stmt}"
+    reg = Stmt.reg.name
+    assert reg in Context.preparation, f"Register {reg} is not defined"
+    return Var(Context.getArgumentForRegister(reg), ID)
+
+
+def VParttoLv(Stmt: VPartReg, Context: ARMRoseContext):
+    ID = Stmt.id
+    assert type(Stmt.reg) == Var, f"Got {Stmt}"
+    Part = CompileRValueExpr(Stmt.part, Context)
+    assert isinstance(Part, RoseConstant)
+
+    reg = Stmt.reg.name
+    assert reg in Context.preparation, f"Register {reg} is not defined"
+    if Part.getValue():
+        ID = "part." + ID
+
+    return Var(Context.getArgumentForRegister(reg), ID)
 
 
 def VorVpartToLv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -410,6 +427,52 @@ def CompileVorVpartToRv(Stmt: ArrayIndex, Context: ARMRoseContext):
     raise NotImplementedError(f"Got {tmp}")
 
 
+def CompileElemSliceRv(Stmt: VReg, Context: ARMRoseContext):
+    '''
+    Elem [operand1, e, esize]
+    ---- ====================
+    obj          idxs
+    '''
+    return CompileArrayIndexRv(ElemToSlicedArray(Stmt), Context)
+
+
+def CompileVPartRegRv(Stmt: VReg, Context: ARMRoseContext):
+    '''
+    V    [         n        ]
+    Elem [operand1, e, esize]
+    ---- ====================
+    obj          idxs
+    '''
+    tmp = VParttoLv(Stmt, Context)
+    if tmp.id.startswith("part."):
+        lhs = Context.getLHSType()
+        width = lhs[1]
+        assert lhs[0] == 'bits', f"Got {lhs}"
+        assert width in [32, 64]
+
+        return CompileRValueExpr(ArrayIndex(tmp, [SliceRange(Number(2*width-1), Number(width), Context.genName())], Context.genName()), Context)
+    return CompileRValueExpr(tmp, Context)
+
+
+def CompileVRegRv(Stmt: VReg, Context: ARMRoseContext):
+    '''
+    V    [         n        ]
+    Elem [operand1, e, esize]
+    ---- ====================
+    obj          idxs
+    '''
+    tmp = VtoLv(Stmt, Context)
+    return CompileRValueExpr(tmp, Context)
+    # if type(Stmt.obj) == Var:
+    #     if Stmt.obj.name in ['V', 'Vpart', 'X']:
+    #     elif Stmt.obj.name == 'Elem':
+    #         return CompileArrayIndexRv(ElemToSlicedArray(Stmt), Context)
+    #     else:
+    #         return ComputeArrayIndexOrSliceRv(Stmt, Context)
+    # else:
+    #     return ComputeArrayIndexOrSliceRv(Stmt, Context)
+
+
 def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
     '''
     V    [         n        ]
@@ -417,15 +480,7 @@ def CompileArrayIndexRv(Stmt: ArrayIndex, Context: ARMRoseContext):
     ---- ====================
     obj          idxs
     '''
-    if type(Stmt.obj) == Var:
-        if Stmt.obj.name in ['V', 'Vpart', 'X']:
-            return CompileVorVpartToRv(Stmt, Context)
-        elif Stmt.obj.name == 'Elem':
-            return CompileArrayIndexRv(ElemToSlicedArray(Stmt), Context)
-        else:
-            return ComputeArrayIndexOrSliceRv(Stmt, Context)
-    else:
-        return ComputeArrayIndexOrSliceRv(Stmt, Context)
+    return ComputeArrayIndexOrSliceRv(Stmt, Context)
 
 
 def SimplifyArrayIndexLv(Stmt: ArrayIndex, Context: ARMRoseContext):
@@ -679,6 +734,9 @@ def CompileBinaryExprRv(Stmt: BinaryExpr, Context: ARMRoseContext):
     '''
     Operand1 = CompileRValueExpr(Stmt.a, Context)
     Operand2 = CompileRValueExpr(Stmt.b, Context)
+    op = Stmt.op
+    # if isinstance(Stmt, SatBinaryExpr):
+    #     op += "Q"
     Operation = BinaryOps[Stmt.op]()(
         Context.genName(),  Operand1, Operand2, Context)
     if type(Operation) == RoseConstant or Operation == Operand1 or Operation == Operand2:
@@ -721,8 +779,15 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
         Context.addCompiledAbstraction(ID, RHSExprVal)
         print("Update ===", Stmt.lhs.name, ID, RHSExprVal, RHSExprVal.Type)
         return RHSExprVal
-    elif type(Stmt.lhs) == ArrayIndex:
-        LVal = SimplifyArrayIndexLv(Stmt.lhs, Context)
+    elif type(Stmt.lhs) in [ArrayIndex, ElemSlice, VReg, VPartReg]:
+        if type(Stmt.lhs) == ElemSlice:
+            LVal = ElemToSlicedArray(Stmt.lhs)
+        elif type(Stmt.lhs) == VReg:
+            LVal = VtoLv(Stmt.lhs, Context)
+        elif type(Stmt.lhs) == VPartReg:
+            LVal = VParttoLv(Stmt.lhs, Context)
+        else:
+            LVal = Stmt
         if type(LVal) == Var:  # V[d] or Vpart[d]
             Context.setLHSType(Context.getTypeForVar(LVal.name))
             RHSExprVal = CompileRValueExpr(Stmt.rhs, Context)
@@ -736,10 +801,14 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
                 newVar = Var(Context.genName()+"fakeReturn", Context.genName())
                 vecWidth = RHSExprVal.getType().getBitwidth()
                 inline_list = [
-                    VarsDecl([newVar],
+                    VarsDecl([VarDeclUndef(newVar, Context.genName())],
                              ('bits', Number(vecWidth)), Context.genName()),
-                    Update(ArrayIndex(Var('Elem', Context.genName()), [
-                        newVar, Number(0), Number(vecWidth)], Context.genName()), Stmt.rhs)
+                    Update(
+                        ElemSlice(newVar, Number(0), Number(
+                            vecWidth), Context.genName()),
+                        # ArrayIndex(Var('Elem', Context.genName()), [
+                        #     newVar, Number(0), Number(vecWidth)], Context.genName()),
+                        Stmt.rhs)
                 ]
                 CompileList(inline_list, Context)
                 RHSExprVal = CompileRValueExpr(newVar, Context)
@@ -759,10 +828,9 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
             Context.setLHSType(('bits', Bitwidth))
             RHSExprVal = CompileRValueExpr(Stmt.rhs, Context)
             Context.removeLHSType()
-            if RHSExprVal.getType().getBitwidth() < Bitwidth:
-                assert False
-            elif RHSExprVal.getType().getBitwidth() > Bitwidth:
-                assert False
+            assert RHSExprVal.getType().getBitwidth(
+            ) == Bitwidth, f"Bitwidth must be {Bitwidth}, but got {RHSExprVal.getType().getBitwidth()}"
+
             if not Context.isValueSignKnown(BitVector):
                 if Context.isValueSignKnown(RHSExprVal):
                     Context.addSignednessInfoForValue(
@@ -770,6 +838,7 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
             LHSOp = RoseBVInsertSliceOp.create(
                 RHSExprVal, BitVector, Low, High, BitwidthValue)
             Context.setHasInsert()
+
         else:
             raise NotImplementedError(
                 f"Got Update for {type(LVal)}, LVal = {LVal}")
@@ -834,7 +903,7 @@ def CompileIf(IfStmt, Context: ARMRoseContext):
     Context.destroyContext(IfStmt.id)
 
 
-def CompileIfElse(Stmt: IfElse, Context: ARMRoseContext):
+def CompileIfElseStmt(Stmt: IfElseStmt, Context: ARMRoseContext):
     '''
     if ({cond}) {then} else {otherwise}
     '''
@@ -982,7 +1051,7 @@ def CompileCallRv(Stmt: Call, Context: ARMRoseContext):
     assert False, f"Function {Stmt.funcname} not found"
 
 
-def CompileIfElseRv(Stmt: IfElse, Context: ARMRoseContext):
+def CompileIfElseRv(Stmt: IfElseExpr, Context: ARMRoseContext):
     # If this expression is compiled, no need to recompile
     if Context.isCompiledAbstraction(Stmt.id):
         return Context.getCompiledAbstractionForID(Stmt.id)
@@ -1018,18 +1087,22 @@ CompileAbstractions = {
     VarsDecl: CompileVarsDecl,
     For: CompileFor,
     Update: CompileUpdate,
-    IfElse: CompileIfElse,
-    If: CompileIf,
+    IfElseStmt: CompileIfElseStmt,
+    IfStmt: CompileIf,
     Match: CompileMatch,
 }
 CompileAbstractionsRV = {
     ArrayIndex: CompileArrayIndexRv,
+    VReg: CompileVRegRv,
+    VPartReg: CompileVPartRegRv,
     Var: CompileVarRv,
+    ElemSlice: CompileElemSliceRv,
     Number: CompileNumberRv,
     BinaryExpr: CompileBinaryExprRv,
+    SatBinaryExpr: CompileBinaryExprRv,
     UnaryExpr: CompileUnaryExpr,
     Call: CompileCallRv,
-    IfElse: CompileIfElseRv,
+    IfElseExpr: CompileIfElseRv,
 }
 CompileAbstractionsLV = {
 }
@@ -1081,17 +1154,17 @@ UnaryOps = {
 def TypePromotion(Operand1: RoseValue, Operand2: RoseValue, Context: ARMRoseContext):
     if isinstance(Operand1.getType(), RoseBitVectorType) \
             and isinstance(Operand2.getType(), RoseBitVectorType):
-        # if Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
-        #   # Only extends Operand2
-        #   assert not Context.isValueSigned(Operand2)  # unsigned
-        #   Bitwidth = RoseConstant.create(
-        #       Operand1.getType().getBitwidth(), Context.NumberType)
-        #   ID = Context.genName()
-        #   NewOp = HandleToZeroExtend(None)(
-        #       ID, [Operand2, Bitwidth], Context)
-        #   Context.addAbstractionToIR(NewOp)
-        #   Context.addCompiledAbstraction(ID, NewOp)
-        #   return [Operand1, NewOp]
+        if Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+          # Only extends Operand2
+          assert not Context.isValueSigned(Operand2)  # unsigned
+          Bitwidth = RoseConstant.create(
+              Operand1.getType().getBitwidth(), Context.NumberType)
+          ID = Context.genName()
+          NewOp = HandleToZeroExtend(None)(
+              ID, [Operand2, Bitwidth], Context)
+          Context.addAbstractionToIR(NewOp)
+          Context.addCompiledAbstraction(ID, NewOp)
+          return [Operand1, NewOp]
         return [Operand1, Operand2]  # Nothing to do
     if isinstance(Operand1.getType(), RoseBitVectorType) \
             and isinstance(Operand2.getType(), RoseIntegerType) and isinstance(Operand2, RoseConstant):
@@ -1115,6 +1188,10 @@ def TypeAlign(Operand1: RoseValue, Operand2: RoseValue, Context: ARMRoseContext)
                 Operand1.getType().getBitwidth(), Context.NumberType)
             NewOp = HandleToSignExtend(None)(
                 Context.genName(), [Operand2, Bitwidth], Context)
+            if isinstance(NewOp, RoseOperation):
+                Context.addAbstractionToIR(NewOp)
+            # Add the operation to the context
+            Context.addCompiledAbstraction(Context.genName(), NewOp)
             return [Operand1, NewOp]
 
     return [Operand1, Operand2]
@@ -1398,7 +1475,7 @@ def HandleToAshr():
     def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                       Context: ARMRoseContext):
         [Operand1, Operand2] = TypePromotion(Operand1, Operand2, Context)
-        # [Operand1, Operand2] = TypeAlign(Operand1, Operand2, Context)
+        [Operand1, Operand2] = TypeAlign(Operand1, Operand2, Context)
         assert isinstance(Operand1.getType(), RoseBitVectorType)
         assert isinstance(Operand2.getType(), RoseBitVectorType), breakpoint()
         Op = RoseBVAshrOp.create(Name, Operand1, Operand2)
@@ -1412,7 +1489,7 @@ def HandleToLshr():
     def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                       Context: ARMRoseContext):
         [Operand1, Operand2] = TypePromotion(Operand1, Operand2, Context)
-        # [Operand1, Operand2] = TypeAlign(Operand1, Operand2, Context)
+        [Operand1, Operand2] = TypeAlign(Operand1, Operand2, Context)
         assert isinstance(Operand1.getType(), RoseBitVectorType)
         assert isinstance(Operand2.getType(), RoseBitVectorType)
         Op = RoseBVLshrOp.create(Name, Operand1, Operand2)
@@ -1529,8 +1606,8 @@ BinaryOps = {
     '==': HandleToEqual,
     '!=': HandleToNotEqual,
     '>>': HandleToShr,
-    '<<': HandleToARMShl,
-    '<<<': HandleToShl,  # real shift left
+    '<<': HandleToShl,
+    # '<<<': HandleToShl,  # real shift left
     '&': HandleToAnd,
     '|': HandleToOr,
     'AND': HandleToAnd,
@@ -1542,25 +1619,27 @@ BinaryOps = {
 
 def HandleToInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
-        [Value, unsigned] = Args
+        [Value, unsigned, BW] = Args
         print("unsigned: ", unsigned)
         assert isinstance(Value.getType(), RoseBitVectorType)
         assert type(unsigned) == RoseConstant, "Only constant is supported."
         # Consider using BVSizeExtension?
         if unsigned.getValue():
-            return HandleToUInt(None)(Name, [Value], Context)
+            return HandleToUInt(None)(Name, [Value, BW], Context)
         else:
-            return HandleToSInt(None)(Name, [Value], Context)
+            return HandleToSInt(None)(Name, [Value, BW], Context)
     return LamdaImplFunc
 
 
 def HandleToSInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
-        [Value] = Args
+        [Value, BW] = Args
         assert isinstance(Value.getType(), RoseBitVectorType)
-        if Value.getType().getBitwidth() == Context.IntSimWidth:
+        assert isinstance(BW, RoseConstant)
+        if Value.getType().getBitwidth() == BW.getValue():
             return Value
-        Op = RoseBVSignExtendOp.create(Name, Value, Context.IntSimWidth)
+        Op = RoseBVSignExtendOp.create(
+            Name, Value, BW.getValue())
         Context.addSignednessInfoForValue(Op, IsSigned=True)
         return Op
     return LamdaImplFunc
@@ -1568,11 +1647,13 @@ def HandleToSInt(_):
 
 def HandleToUInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
-        [Value] = Args
+        [Value, BW] = Args
         assert isinstance(Value.getType(), RoseBitVectorType)
-        if Value.getType().getBitwidth() == Context.IntSimWidth:
+        assert isinstance(BW, RoseConstant)
+        if Value.getType().getBitwidth() == BW.getValue():
             return Value
-        Op = RoseBVZeroExtendOp.create(Name, Value, Context.IntSimWidth)
+        Op = RoseBVZeroExtendOp.create(
+            Name, Value, BW.getValue())
         Context.addSignednessInfoForValue(Op, IsSigned=False)
         return Op
     return LamdaImplFunc
@@ -1891,15 +1972,15 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     Elem[tmp4,0,esize] = tmp3
     '''
     assert len(Stmt.args) == 3
-    vecWidth = CompileVarRv(Stmt.args[1], Context).getType().getBitwidth()
-    reduceWidth = Context.getConstexprFor(Stmt.args[2].name)
-    op = CompileVarRv(Stmt.args[0], Context).Val
+    vecWidth = CompileRValueExpr(Stmt.args[1], Context).getType().getBitwidth()
+    reduceWidth = Stmt.args[2].val
+    op = CompileRValueExpr(Stmt.args[0], Context).Val
     tmp = Context.genName()
     n = vecWidth//reduceWidth
 
     newvars = [Var(tmp+f'.reduce{i}', Context.genName()) for i in range(n+1)]
     inline_list = [
-        VarsDecl(newvars,
+        VarsDecl([VarDeclUndef(newvar, Context.genName()) for newvar in newvars],
                  ('bits', Stmt.args[2]), Context.genName())
     ]
 
@@ -1911,8 +1992,10 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
     inline_list.append(Update(newvars[0],
                               reduceWrapper(op,
                                             Number(0),
-                                            ArrayIndex(Var('Elem', Context.genName()), [
-                                                Stmt.args[1], Number(0), Stmt.args[2]], Context.genName())
+                                            ElemSlice(Stmt.args[1], Number(0), Number(
+                                                reduceWidth), Context.genName())
+                                            # ArrayIndex(Var('Elem', Context.genName()), [
+                                            #     Stmt.args[1], Number(0), Stmt.args[2]], Context.genName())
                                             )
                               ))
 
@@ -1920,10 +2003,16 @@ def InlineReduce(Stmt: Call, Context: ARMRoseContext):
         inline_list.append(Update(newvars[i],
                                   reduceWrapper(op,
                                                 newvars[i-1],
-                                                ArrayIndex(Var('Elem', Context.genName()), [
-                                                    Stmt.args[1], Number(i), Stmt.args[2]], Context.genName()))))
-    inline_list.append(Update(ArrayIndex(Var('Elem', Context.genName()), [
-        newvars[-1], Number(0), Stmt.args[2]], Context.genName()), newvars[-2]))
+                                                # ArrayIndex(Var('Elem', Context.genName()), [
+                                                #     Stmt.args[1], Number(i), Stmt.args[2]], Context.genName())
+                                                ElemSlice(Stmt.args[1], Number(
+                                                    i), Stmt.args[2], Context.genName())
+                                                )))
+    inline_list.append(Update(
+        ElemSlice(newvars[-1], Number(0), Stmt.args[2], Context.genName()),
+        # ArrayIndex(Var('Elem', Context.genName()), [
+        #     newvars[-1], Number(0), Stmt.args[2]], Context.genName()),
+        newvars[-2]))
 
     CompileList(inline_list, Context)
     return CompileRValueExpr(newvars[-1], Context)
