@@ -87,10 +87,19 @@ protected:
         return t.code() == Type::Float && t.bits() == 16 && target.has_feature(Target::ARMFp16);
     }
     bool supports_call_as_float16(const Call *op) const override;
+
+    // For reference, disabling any arm specific codegen and falling back to LLVM
+    // (Disabled by default)
+    bool defer_to_llvm = false;
 };
 
 CodeGen_ARM::CodeGen_ARM(const Target &target)
     : CodeGen_Posix(target) {
+    const char *compile_via_llvm = getenv("HALIDE_COMPILE_LLVM");
+    if (compile_via_llvm) {
+        defer_to_llvm = true;
+        return;
+    }
 
     // RADDHN - Add and narrow with rounding
     // These must come before other narrowing rounding shift patterns
@@ -772,6 +781,10 @@ void CodeGen_ARM::init_module() {
 }
 
 void CodeGen_ARM::visit(const Cast *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (!neon_intrinsics_disabled() && op->type.is_vector()) {
         vector<Expr> matches;
         for (const Pattern &pattern : casts) {
@@ -854,6 +867,10 @@ void CodeGen_ARM::visit(const Cast *op) {
 }
 
 void CodeGen_ARM::visit(const Sub *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (neon_intrinsics_disabled()) {
         CodeGen_Posix::visit(op);
         return;
@@ -898,6 +915,10 @@ void CodeGen_ARM::visit(const Sub *op) {
 }
 
 void CodeGen_ARM::visit(const Min *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     // Use a 2-wide vector for scalar floats.
     if (!neon_intrinsics_disabled() && (op->type == Float(32) || op->type.is_vector())) {
         value = call_overloaded_intrin(op->type, "min", {op->a, op->b});
@@ -910,6 +931,10 @@ void CodeGen_ARM::visit(const Min *op) {
 }
 
 void CodeGen_ARM::visit(const Max *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     // Use a 2-wide vector for scalar floats.
     if (!neon_intrinsics_disabled() && (op->type == Float(32) || op->type.is_vector())) {
         value = call_overloaded_intrin(op->type, "max", {op->a, op->b});
@@ -922,6 +947,10 @@ void CodeGen_ARM::visit(const Max *op) {
 }
 
 void CodeGen_ARM::visit(const Store *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     // Predicated store
     if (!is_const_one(op->predicate)) {
         CodeGen_Posix::visit(op);
@@ -1099,6 +1128,10 @@ void CodeGen_ARM::visit(const Store *op) {
 }
 
 void CodeGen_ARM::visit(const Load *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     // Predicated load
     if (!is_const_one(op->predicate)) {
         CodeGen_Posix::visit(op);
@@ -1150,6 +1183,10 @@ void CodeGen_ARM::visit(const Load *op) {
 }
 
 void CodeGen_ARM::visit(const Call *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->is_intrinsic(Call::sorted_avg)) {
         value = codegen(halving_add(op->args[0], op->args[1]));
         return;
@@ -1207,6 +1244,10 @@ void CodeGen_ARM::visit(const Call *op) {
 }
 
 void CodeGen_ARM::visit(const LT *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->a.type().is_float() && op->type.is_vector()) {
         // Fast-math flags confuse LLVM's aarch64 backend, so
         // temporarily clear them for this instruction.
@@ -1221,6 +1262,10 @@ void CodeGen_ARM::visit(const LT *op) {
 }
 
 void CodeGen_ARM::visit(const LE *op) {
+    if (defer_to_llvm) {
+        CodeGen_Posix::visit(op);
+        return;
+    }
     if (op->a.type().is_float() && op->type.is_vector()) {
         // Fast-math flags confuse LLVM's aarch64 backend, so
         // temporarily clear them for this instruction.

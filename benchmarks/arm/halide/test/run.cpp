@@ -962,35 +962,23 @@ int main(int argc, char **argv) {
 
 #if benchmark_matmul
 
-    int32_t matrix_size = 1024;
-    
-    halide_dimension_t x_dim{ 0, matrix_size, 1 };
-    halide_dimension_t y_dim{ 0, matrix_size, matrix_size };
+    halide_dimension_t x_dim{ 0, 256, 1 };
+    halide_dimension_t y_dim{ 0, 256, 256 };
     halide_dimension_t shape[2] = { x_dim, y_dim };
 
-    int16_t *matATensor = (int16_t *)aligned_malloc(
-        matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
-    int16_t *matBTensor = (int16_t *)aligned_malloc(
-        matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
-    int32_t *outputTensor = (int32_t *)aligned_malloc(
-        matrix_size * matrix_size * sizeof(int32_t), 1 << LOG2VLEN);
+    Halide::Runtime::Buffer<int16_t> matA((int16_t*)input, dims, shape);
+    Halide::Runtime::Buffer<int16_t> matB((int16_t*) input, dims, shape);
+    Halide::Runtime::Buffer<int16_t> output_buf((int16_t*)output, dims, shape);
 
-    printf("Allocated new memory!\n");
-
-    Halide::Runtime::Buffer<int16_t> matA((int16_t*)matATensor, dims, shape);
-    Halide::Runtime::Buffer<int16_t> matB((int16_t*) matBTensor, dims, shape);
-    Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)outputTensor, dims, shape);
-
-      // Run in 128 byte mode
-      cycles = benchmark([&]() {
-          int error = matmul(matA, matB, output_buf);
-          if (error != 0) {
-              printf("matmul pipeline failed: %d\n", error);
-          }
-          });
+    cycles = benchmark([&]() {
+            int error = matmul(matA, matB, output_buf);
+            if (error != 0) {
+            printf("matmul_256 pipeline failed: %d\n", error);
+            }
+            });
 
 
-    printf("AppReported (): Image %dx%d - matmul(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+    printf("AppReported (): Image %dx%d - matmul_256(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 

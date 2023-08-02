@@ -222,7 +222,8 @@ bool ARMLegalizer::legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I){{
     std::vector<std::string> InstNames = {{{}}};
     if(isNameMatch(CI, InstNames)) {{ 
         {} 
-    }} 
+    }}
+    return false;
 }}
 '''.format(",\n".join(InstNames), String)
 

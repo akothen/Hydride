@@ -77,7 +77,7 @@ public:
         output_
             .compute_root()
             .reorder(c, b, x, y)
-            .vectorize(c, 64);
+            .vectorize(c, 128);
 
         output_.print_loop_nest();
     }

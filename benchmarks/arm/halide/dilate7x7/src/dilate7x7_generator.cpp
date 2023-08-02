@@ -47,34 +47,52 @@ class Dilate7x7 : public Generator<Dilate7x7> {
 
 
 
-            const int vector_size = 64;
-            Expr input_stride = input.dim(1).stride();
-            input.dim(1).set_stride((input_stride / vector_size) * vector_size);
+            // const int vector_size = 64;
+            // Expr input_stride = input.dim(1).stride();
+            // input.dim(1).set_stride((input_stride / vector_size) * vector_size);
 
-            Expr output_stride = output.dim(1).stride();
-            output.dim(1).set_stride((output_stride / vector_size) * vector_size);
-            bounded_input
-                .compute_at(Func(output), y)
-                .align_storage(x, 128)
-                .vectorize(x, vector_size, TailStrategy::RoundUp);
+            // Expr output_stride = output.dim(1).stride();
+            // output.dim(1).set_stride((output_stride / vector_size) * vector_size);
+            // bounded_input
+            //     .compute_at(Func(output), y)
+            //     .align_storage(x, 64)
+            //     .vectorize(x, vector_size, TailStrategy::RoundUp);
+            // output
+            //     // .hexagon()
+            //     .tile(x, y, xi, yi, vector_size, 4)
+            //     .vectorize(xi)
+            //     .unroll(yi);
+            // if (use_prefetch_sched) {
+            //     output.prefetch(input, y, 2);
+            // }
+            // if (use_parallel_sched) {
+            //     Var yo;
+            //     output.split(y, yo, y, 64).parallel(yo);
+            // }
+        // Schedules for x86
             output
-                // .hexagon()
-                .tile(x, y, xi, yi, vector_size, 4)
-                .vectorize(xi)
-                .unroll(yi);
-            if (use_prefetch_sched) {
-                output.prefetch(input, y, 2);
-            }
-            if (use_parallel_sched) {
-                Var yo;
-                output.split(y, yo, y, 128).parallel(yo);
-            }
-        
+                .compute_root()
+                .split(y, y, yi, 180, TailStrategy::ShiftInwards)
+                .split(yi, yi, yii, 30, TailStrategy::ShiftInwards)
+                .split(x, x, xi, 384, TailStrategy::ShiftInwards)
+                .split(xi, xi, xii, 128, TailStrategy::RoundUp)
+                .vectorize(xii, 64);
+            max_y
+                .store_in(MemoryType::Stack)
+                .compute_at(output, yi)
+                .split(x, x, xi, 64, TailStrategy::RoundUp)
+                .vectorize(xi, 64);
+            bounded_input
+                .store_in(MemoryType::Stack)
+                .store_at(output, y)
+                .compute_at(output, yi)
+                .split(x, x, xi, 64, TailStrategy::RoundUp)
+                .vectorize(xi, 64);
 
         }
 
     private:
-        Var x{ "x" }, y{ "y" };
+        Var x{ "x" }, y{ "y" },  yi{"yi"}, xi{"xi"}, yii{"yii"}, xii{"xii"}, yiii{"yiii"}, xiii{"xiii"};
         Func max_y{ "max_y" };
         Func bounded_input{ "bounded_input" };
 };

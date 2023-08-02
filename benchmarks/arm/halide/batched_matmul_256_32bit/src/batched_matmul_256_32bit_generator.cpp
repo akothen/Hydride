@@ -29,7 +29,7 @@ public:
         output
             .compute_root()
             .split(y, y, yi, 4, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 64, TailStrategy::ShiftInwards)
+            .split(x, x, xi, 16, TailStrategy::ShiftInwards)
             .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
             .vectorize(xii, 16)
             .reorder({xii, xi, yi, x, y})
