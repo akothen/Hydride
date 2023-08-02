@@ -103,6 +103,9 @@ ifeq ($(BENCHMARK),1)
 
 # Benchmark the generated $(BIN)ary
 	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
 
 endif
 
@@ -141,6 +144,9 @@ fully_connected:
 ifeq ($(BENCHMARK),1) 
 
 # Benchmark the generated $(BIN)ary
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
 	$@/$(BIN)/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
 
 endif

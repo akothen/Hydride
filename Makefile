@@ -24,8 +24,16 @@ arme9.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 armd.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
 	ENABLE_HYDRIDE=0 make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 armr.%:
+	@echo "=================================================="
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 armrd.%:
+	@echo "=================================================="
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
+	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 	(cd $(HYDRIDE_ROOT)/benchmarks/arm/halide && $*/bin_ref/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin)
 LIB_HALIDE=$(HALIDE_SRC)/distrib/lib/libHalide.$(EXT)
 $(LIB_HALIDE): $(HALIDE_SRC)/src/Rosette.cpp $(HALIDE_SRC)/src/DistributeVec.cpp

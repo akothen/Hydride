@@ -943,7 +943,7 @@ int main(int argc, char **argv) {
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
 #endif
 
-    printf("AppReported (): Image %dx%d - sobel3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+    printf("AppReported (): Image %dx%d - sobel5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 #if benchmark_matmul_256

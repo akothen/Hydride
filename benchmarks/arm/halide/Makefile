@@ -25,6 +25,9 @@ include Makefile.common
 		$*/bin/halide_runtime_x86.o \
 		-o $*/bin/$*_run.out
 	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
+	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
+	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
+	$*/bin/$*_run.out 3840 2160 ../test_vectors/football3840x2160.bin $*/out/out.bin
 %.linkd:
 	$(CC) -Dbenchmark_$* --std=c++17 \
 		-O0\
@@ -43,7 +46,8 @@ result.tar: Makefile
 	tar -uvf result.tar $*/bin/$*.a $*/bin/$*.h
 unpack:
 	tar -xvf result.tar
-%.unpack:
+
+%.unpack: %/bin
 	tar -xvf result.tar $*/bin/$*.a $*/bin/$*.h
 fetch:
 	-gcp --backup=t result.tar result.tar.bak
