@@ -902,7 +902,7 @@ namespace Halide {
             // call fits into bitvector sizes supported.
             if(op->is_intrinsic(Call::rounding_mul_shift_right)){
 
-                unsigned operands_num_bits = (op->type.bits() * op->type.lanes()) * 2; // widened size
+                unsigned operands_num_bits = (op->type.bits() * op->type.lanes()) * 1; // widened size
 
                 std::vector<Expr> distributed_value;
                 for(unsigned bitvector_size : bitvector_sizes){
