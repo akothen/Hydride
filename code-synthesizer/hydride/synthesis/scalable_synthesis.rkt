@@ -68,12 +68,14 @@
       [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
        (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n"
                           expr-depth
-                          (max 1 (- expr-depth 1))))
-       (max 1 (- expr-depth 1))]
+                          1)) ;; ARM
+       1] ;;ARM
       [(halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth)
-       (debug-log (format "Contains shr in arm, at least 2 depth are needed, hence increase depth from ~a to ~a\n"
-                          expr-depth
-                          (max expr-depth 2)))
+       (debug-log
+        (format
+         "Contains shr in arm, at least 2 depth are needed, hence increase depth from ~a to ~a\n"
+         expr-depth
+         (max expr-depth 2)))
        (max expr-depth 2)]
       [(not (halide:contains-mul-op-in-subexpr halide-expr expr-depth))
        (define max-no-mul-depth 4)

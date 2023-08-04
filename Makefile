@@ -8,7 +8,8 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 armec.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER)
-	- rm $(HYDRIDE_ROOT)/benchmarks/arm/halide/halide_expr_$**.rkt
+	# - rm $(HYDRIDE_ROOT)/benchmarks/arm/halide/halide_expr_$**.rkt
+	
 arme.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%
 	make -C $(HYDRIDE_ROOT)/benchmarks/arm/halide $* -f $(MAKEFILE)
 arme1.%: $(LIB_HALIDE) $(HYDRIDE_SEMA) $(LEGALIZER) armec.%

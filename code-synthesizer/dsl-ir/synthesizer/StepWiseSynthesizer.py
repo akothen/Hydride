@@ -490,9 +490,9 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         step_combination = context_combinations[step % len(
             context_combinations)]
-        print("!"*50)
-        pprint(context_combinations)
-        print("!"*50)
+        # print("!"*50)
+        # pprint(context_combinations)
+        # print("!"*50)
 
         (step_keys, step_indices) = step_combination
 

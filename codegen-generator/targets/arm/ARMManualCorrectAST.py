@@ -1,4 +1,31 @@
 from ARMAST import *
+vqshl_common = """        {
+            bits(datasize) operand1 = V[n];
+            bits(datasize) operand2 = V[m];
+            bits(datasize) result;
+            bits(esize*2) round_const = 0;
+            bits(esize*2) shift;
+            bits(esize*2) element;
+            boolean sat;
+            for e = 0 to (elements - 1)
+            {
+                shift = SInt(Elem[operand2,e,esize],esize*2);
+                if rounding then
+                {
+                    round_const = (1 << ((- shift) - 1));
+                }
+                element = ((Int(Elem[operand1,e,esize], unsigned, esize*2) + round_const) << shift);
+                if saturating then
+                {
+                    Elem[result,e,esize] = SatQ(element, esize, unsigned);
+                }
+                else
+                {
+                    Elem[result,e,esize] = element[0~(esize - 1)];
+                }
+            }
+            V[d] = result;
+        }"""
 ManualAST = {
     "aarch64_vector_arithmetic_binary_uniform_diff": {
         "decode": """        {
@@ -328,4 +355,40 @@ ManualAST = {
     #         V[d] = result;
     #     }""",
     # },
+    "aarch64_vector_arithmetic_binary_uniform_shift_sisd": {
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            integer esize = (8 << UInt(size));
+            integer datasize = esize;
+            integer elements = 1;
+            boolean unsigned = (U == '1');
+            boolean rounding = (R == '1');
+            boolean saturating = (S == '1');
+            if ((S == '0') && (size != '11')) then
+            {
+                UNDEFINED
+            }
+        }""",
+        "execute": vqshl_common
+    },
+    "aarch64_vector_arithmetic_binary_uniform_shift_simd": {
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            if ((size : Q) == '110') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            boolean unsigned = (U == '1');
+            boolean rounding = (R == '1');
+            boolean saturating = (S == '1');
+        }""",
+        "execute": vqshl_common
+    },
 }

@@ -1542,39 +1542,60 @@ BinaryOps = {
 
 def HandleToInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
-        [Value, unsigned] = Args
+        if len(Args) == 2:
+            [Value, unsigned] = Args
+            toPass = [Value]
+        else:
+            [Value, unsigned, BW] = Args
+            toPass = [Value, BW]
         print("unsigned: ", unsigned)
         assert isinstance(Value.getType(), RoseBitVectorType)
         assert type(unsigned) == RoseConstant, "Only constant is supported."
         # Consider using BVSizeExtension?
         if unsigned.getValue():
-            return HandleToUInt(None)(Name, [Value], Context)
+            return HandleToUInt(None)(Name, toPass, Context)
         else:
-            return HandleToSInt(None)(Name, [Value], Context)
+            return HandleToSInt(None)(Name, toPass, Context)
     return LamdaImplFunc
 
 
 def HandleToSInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
-        [Value] = Args
-        assert isinstance(Value.getType(), RoseBitVectorType)
-        if Value.getType().getBitwidth() == Context.IntSimWidth:
-            return Value
-        Op = RoseBVSignExtendOp.create(Name, Value, Context.IntSimWidth)
-        Context.addSignednessInfoForValue(Op, IsSigned=True)
-        return Op
+        if len(Args) == 1:
+            [Value] = Args
+            assert isinstance(Value.getType(), RoseBitVectorType)
+            if Value.getType().getBitwidth() == Context.IntSimWidth:
+                return Value
+            Op = RoseBVSignExtendOp.create(Name, Value, Context.IntSimWidth)
+            Context.addSignednessInfoForValue(Op, IsSigned=True)
+            return Op
+        else:
+            [Value, BW] = Args
+            assert isinstance(Value.getType(), RoseBitVectorType)
+            assert isinstance(BW, RoseConstant)
+            Op = RoseBVSignExtendOp.create(Name, Value, BW.getValue())
+            Context.addSignednessInfoForValue(Op, IsSigned=True)
+            return Op
     return LamdaImplFunc
 
 
 def HandleToUInt(_):
     def LamdaImplFunc(Name: str, Args: list, Context: ARMRoseContext):
-        [Value] = Args
-        assert isinstance(Value.getType(), RoseBitVectorType)
-        if Value.getType().getBitwidth() == Context.IntSimWidth:
-            return Value
-        Op = RoseBVZeroExtendOp.create(Name, Value, Context.IntSimWidth)
-        Context.addSignednessInfoForValue(Op, IsSigned=False)
-        return Op
+        if len(Args) == 1:
+            [Value] = Args
+            assert isinstance(Value.getType(), RoseBitVectorType)
+            if Value.getType().getBitwidth() == Context.IntSimWidth:
+                return Value
+            Op = RoseBVZeroExtendOp.create(Name, Value, Context.IntSimWidth)
+            Context.addSignednessInfoForValue(Op, IsSigned=False)
+            return Op
+        else:
+            [Value, BW] = Args
+            assert isinstance(Value.getType(), RoseBitVectorType)
+            assert isinstance(BW, RoseConstant)
+            Op = RoseBVZeroExtendOp.create(Name, Value, BW.getValue())
+            Context.addSignednessInfoForValue(Op, IsSigned=False)
+            return Op
     return LamdaImplFunc
 
 

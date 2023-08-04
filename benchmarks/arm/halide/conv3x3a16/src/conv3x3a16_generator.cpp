@@ -30,38 +30,47 @@ public:
     void schedule() {
         Var xi{"xi"}, yi{"yi"};
 
-        input.dim(0).set_min(0);
-        input.dim(1).set_min(0);
+        // input.dim(0).set_min(0);
+        // input.dim(1).set_min(0);
 
-        mask.dim(0).set_min(0);
-        mask.dim(1).set_min(0);
-        mask.dim(1).set_stride(3);
+        // mask.dim(0).set_min(0);
+        // mask.dim(1).set_min(0);
+        // mask.dim(1).set_stride(3);
 
-        output.dim(0).set_min(0);
-        output.dim(1).set_min(0);
+        // output.dim(0).set_min(0);
+        // output.dim(1).set_min(0);
 
-        const int vector_size = 128;
-        Expr input_stride = input.dim(1).stride();
-        input.dim(1).set_stride((input_stride / vector_size) * vector_size);
+        // const int vector_size = 128;
+        // Expr input_stride = input.dim(1).stride();
+        // input.dim(1).set_stride((input_stride / vector_size) * vector_size);
 
-        Expr output_stride = output.dim(1).stride();
-        output.dim(1).set_stride((output_stride / vector_size) * vector_size);
-        bounded_input
-            .compute_at(Func(output), y)
-            .align_storage(x, 128)
-            .vectorize(x, vector_size, TailStrategy::RoundUp);
+        // Expr output_stride = output.dim(1).stride();
+        // output.dim(1).set_stride((output_stride / vector_size) * vector_size);
+        // bounded_input
+        //     .compute_at(Func(output), y)
+        //     .align_storage(x, 128)
+        //     .vectorize(x, vector_size, TailStrategy::RoundUp);
+        // output
+        //     // .hexagon()
+        //     .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
+        //     .vectorize(xi)
+        //     .unroll(yi);
+        // if (use_prefetch_sched) {
+        //     output.prefetch(input, y, 2);
+        // }
+        // if (use_parallel_sched) {
+        //     Var yo;
+        //     output.split(y, yo, y, 128).parallel(yo);
+        // }
         output
-            // .hexagon()
-            .tile(x, y, xi, yi, vector_size, 4, TailStrategy::RoundUp)
-            .vectorize(xi)
+            .tile(x, y, xi, yi, 32, 16, TailStrategy::RoundUp)
+            .vectorize(xi, 32)
             .unroll(yi);
-        if (use_prefetch_sched) {
-            output.prefetch(input, y, 2);
-        }
-        if (use_parallel_sched) {
-            Var yo;
-            output.split(y, yo, y, 128).parallel(yo);
-        }
+        bounded_input
+            .store_in(MemoryType::Stack)
+            .compute_at(output, y)
+            .align_storage(x, 32)
+            .vectorize(x, 32, TailStrategy::RoundUp);
     }
 
 private:

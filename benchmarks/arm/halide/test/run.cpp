@@ -311,11 +311,11 @@ int main(int argc, char **argv) {
         printf("softmax pipeline failed: %d\n", error);
         }
     });
-
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
-
+#endif
 
     printf("AppReported (HVX128B-mode): Image %dx%d - softmax(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
 
@@ -745,11 +745,11 @@ int main(int argc, char **argv) {
             printf("conv3x3a16 pipeline failed: %d\n", error);
         }
         });
-
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
-
+#endif
     printf("AppReported (HVX128B-mode): Image %dx%d - conv3x3a16(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 
       printf("Execution took %0.4f s\n", exec_time);
