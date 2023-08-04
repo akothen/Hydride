@@ -88,6 +88,7 @@ namespace Halide {
                     Expr visit(const Mul *op) override{
 
                         /*
+
                         size_t bits = op->type.bits();
                         size_t lanes = op->type.lanes();
 
@@ -108,8 +109,7 @@ namespace Halide {
                             Expr lowered_mul = (Shuffle::make_concat({left_mul, right_mul}));
                             debug(0) << "Halide Lowered Mul to: "<<lowered_mul <<"\n";
                             return mutate(lowered_mul);
-                        }
-                        */
+                        }*/
 
                         return IRMutator::visit(op);
 
@@ -121,7 +121,6 @@ namespace Halide {
                     // to accomodate such behavior when needed.
                     Expr visit(const Broadcast *op) override{
 
-                        size_t bits = op->type.bits();
                         size_t lanes = op->type.lanes();
 
                         if(lanes == 1){
@@ -133,6 +132,9 @@ namespace Halide {
                         }
 
                         if(!op->type.is_float() && op->type.is_vector() ){
+
+                            /*
+                            size_t bits = op->type.bits();
 
                             if(bits == 16 && op->value.type().lanes() != 2){
 
@@ -147,15 +149,31 @@ namespace Halide {
                                 return ModifiedBroadcast;
                             }
 
-                            else {
-                                return op;
-                            }
+                            */
+                            /*
+                               else if(bits == 8 && op->value.type().lanes() != 4){
+
+
+
+                               debug(0) << "======"<<"\n";
+                               debug(0) << "Orignal bits: "<<bits << ", Original lanes: "<<lanes <<"\n";
+                               Expr Broadcast2 = Broadcast::make(op->value, 4);
+                               Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 4);
+                               debug(0) << "Modified broadcast to "<< ModifiedBroadcast <<"\n";
+                               debug(0) << "Modified broadcast bits  "<< ModifiedBroadcast.type().bits() << " and lanes "<<ModifiedBroadcast.type().lanes() <<"\n";
+                               return ModifiedBroadcast;
+                               }*/
+
+                            /*
+                               else {
+                               return op;
+                               }*/
 
 
                         }
 
 
-                        return IRMutator::visit(op);
+                        return op;
 
                     }
 
@@ -1719,7 +1737,7 @@ namespace Halide {
 
                             /* Disqualify expressions we do not currently support */
 
-                            //std::cout << "Current expression: "<<expr << "\n";
+                            debug(0) << "Current expression: "<<expr << "\n";
 
                             // If the expression produces a scalar output, ignore it
                             if (!expr.type().is_vector()){
@@ -1739,12 +1757,12 @@ namespace Halide {
                             if (arch == IROptimizer::HVX) {
                                 // If the expression produces a vector that is not a multiple of the base vector length, ignore it
                                 if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1)){
-                                    debug(1) << "Invalid vector size for hexagon: "<< expr.type().bits() * expr.type().lanes() << "\n";
+                                    debug(0) << "Invalid vector size for hexagon: "<< expr.type().bits() * expr.type().lanes() << "\n";
                                     return IRMutator::mutate(expr);
                                 }
 
                                 if((expr.type().bits() * expr.type().lanes() > 2048)){
-                                    debug(1) << "Invalid vector size for HVX: "<< expr.type().bits() * expr.type().lanes() << "\n";
+                                    debug(0) << "Invalid vector size for HVX: "<< expr.type().bits() * expr.type().lanes() << "\n";
                                     return IRMutator::mutate(expr);
                                 }
                             } else if (arch == IROptimizer::X86){
@@ -1891,29 +1909,34 @@ namespace Halide {
                             std::cout << "Expression after InlineLets: "<< spec_expr <<"\n";
 
 
-                            /*
-                            // Lift cse for more readable specs
-                            spec_expr = common_subexpression_elimination(spec_expr);
-                            std::cout << "Expression after CSE: "<< spec_expr <<"\n";
+
+                            const char* decompose_let  = getenv("HYDRIDE_DECOMPOSE_LET");
+
+                            if(decompose_let){
+                                // Lift cse for more readable specs
+                                spec_expr = common_subexpression_elimination(spec_expr);
+                                std::cout << "Expression after CSE: "<< spec_expr <<"\n";
 
 
-                            // For cleaner specs synthesize let seperately from
-                            // body
-                            if(spec_expr.node_type() == IRNodeType::Let){
-                               debug(0) << "Let Case: Synthesize value and body seperately"<<"\n";
-                               Expr LetVal =   spec_expr.as<Let>()->value;
-                               Expr LetBody =   spec_expr.as<Let>()->body;
-                                
-                               
-                               Expr OptVal = IRMutator::mutate(LetVal);
-                               Expr OptBody = IRMutator::mutate(LetBody);
-
-                               return Let::make(spec_expr.as<Let>()->name, OptVal, OptBody);
+                                // For cleaner specs synthesize let seperately from
+                                // body
+                                if(spec_expr.node_type() == IRNodeType::Let){
+                                    debug(0) << "Let Case: Synthesize value and body seperately"<<"\n";
+                                    Expr LetVal =   spec_expr.as<Let>()->value;
+                                    Expr LetBody =   spec_expr.as<Let>()->body;
 
 
+                                    debug(0) << "Let Value to synthesize: " << LetVal << "\n";
+                                    Expr OptVal = IRMutator::mutate(LetVal);
+                                    debug(0) << "Let Body to synthesize: " << LetBody << "\n";
+                                    Expr OptBody = IRMutator::mutate(LetBody);
+
+                                    return Let::make(spec_expr.as<Let>()->name, OptVal, OptBody);
+
+
+                                }
                             }
 
-                            */
 
 
                             std::cout << "Expression before abstraction: "<< spec_expr <<"\n";
@@ -2393,7 +2416,7 @@ namespace Halide {
                                     value = *as_const_int(op->args[2]);
                                 } 
 
-                                if(value == 31){
+                                if(value == 31 || value == 15){
                                     debug(0) << "Found constant rounding_mul_shift_right with value 31: "<< op->args[2] << "\n";
                                 } else {
                                     debug(0) << "Lowering rounding_mul_shift_right using halide"<<"\n";
@@ -2421,12 +2444,14 @@ namespace Halide {
                                     //lower_using_halide = true;
                                 } 
                             } else if (_arch == Architecture::X86){
+                                /*
                                 size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = saturating_narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                                 } else {
                                     lower_using_halide = true;
                                 } 
+                                */
                             }
 
                         } 
@@ -2788,7 +2813,7 @@ namespace Halide {
 
                         // Abstract scalar arithmetic 
                         // operations.
-                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)){
+                        if(!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 32)){
                             std::string uname = unique_name('h');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
@@ -2889,6 +2914,7 @@ namespace Halide {
                                 supported_input_sizes.push_back(1024);
                                 supported_input_sizes.push_back(128);
                                 supported_input_sizes.push_back(32);
+                                supported_input_sizes.push_back(8);
                                 break;
                             case Architecture::X86:
                                 debug(1) << "Abstraction vector sizes for X86 "<<"\n";
@@ -2917,10 +2943,9 @@ namespace Halide {
                         const Broadcast* inner_broadcast = op->value.as<Broadcast>();
 
                         if(inner_broadcast){
-
                             std::string uname = unique_name('h');
-                            abstractions[uname] = IRMutator::visit(op);
-                            return Variable::make(op->type, uname);
+                            abstractions[uname] = IRMutator::visit(inner_broadcast);
+                            return Broadcast::make(Variable::make(inner_broadcast->type, uname), op->lanes);
 
                         }
 
@@ -3620,6 +3645,36 @@ namespace Halide {
             return distributed;
         }
 
+        Stmt hydride_preprocess_x86(Stmt s){
+            debug(0) << "Proprocess x86 hydride" << "\n";
+
+            Stmt distributed;
+
+            std::set<const IRNode*> DeadStmts;
+
+            auto FLS = Hydride::FoldLoadStores(DeadStmts);
+
+            auto folded = FLS.mutate(s);
+            debug(0) << "Printing Folded Stmt:\n";
+            debug(0) << folded <<"\n";
+
+            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+
+            auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+            debug(0) << "Printing Pruned Stmt:\n";
+            debug(0) << pruned <<"\n";
+
+            std::vector<unsigned> x86_vector_sizes = { 512, 256, 128};
+
+
+            bool model_sat_support = true;
+
+            distributed = distribute_vector_exprs(pruned, x86_vector_sizes, model_sat_support);
+
+
+            return distributed;
+        }
+
         Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
 
             debug(0) << "Hydride Optimize HVX" <<"\n";
@@ -3702,7 +3757,7 @@ namespace Halide {
             debug(1) << pruned <<"\n";
 
             std::vector<unsigned> x86_vector_sizes = { 512, 256, 128 };
-            auto distributed = distribute_vector_exprs(pruned, x86_vector_sizes, false);
+            auto distributed = distribute_vector_exprs(pruned, x86_vector_sizes, true);
             debug(0) << "Distributed Stmt:\n";
             debug(0) << distributed <<"\n";
 
