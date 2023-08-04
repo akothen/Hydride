@@ -1,6 +1,5 @@
 
 from ARMSemanticGen import SemaGenerator
-import ARMTestCases
 from ARMRoseCompiler import ARMRoseContext, CompileSemantics
 from ARMTypes import *
 from ARMAST import *
@@ -29,8 +28,8 @@ skip = notSSA + ['vcopy']
 
 def Compile(InstName: str = None):
     skipForSimilarity = skip + [
-        'and', 'bsl', 'bic', 'eor', 'orr', 'orn',  # Similarity can't handle them
-        'addv', 'paddd' # Transformation can't handle them
+        'and', 'bsl', 'bic', 'eor', 'orr', 'orn',  # Extract can't handle
+        'addv', 'paddd'  # Transformation can't handle them
     ]
     from RoseFunctionInfo import RoseFunctionInfo
 
@@ -38,10 +37,11 @@ def Compile(InstName: str = None):
         whitelist = []
         # whitelist = ["vshr"]
         interested = []
+        # interested = ["vaba_s16"]
         # interested = ["vshr_n_u8"]
         # interested = ["max", "min"]
         # interested = ["vmovl_s8","vdupq_n_s16"]
-        interested = ["shr","sra"]
+        # interested = ["vshl", "vqshl", "vrshl", "vqrshl"]
         # interested = ["vdot"]
         # interested = ["vdot"]
         # interested = ["vaddvq_u8", 'vdot_u32']
@@ -53,12 +53,13 @@ def Compile(InstName: str = None):
         # interested = ["get","combine"]
         # interested = ["paddl"]
         # interested = ['qrdmulh', 'qdmulh']
-        
-
+        # interested = ['vabal_high_s16']
+        # interested = ["v"+i+"shl_" for i in ['qr','q','r',""]]
+        interested = ["aarch64_vector_arithmetic_binary_uniform_shift_sisd","aarch64_vector_arithmetic_binary_uniform_shift_simd"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
-            ) if k in interested or any(kk in k for kk in interested)}
+            ) if k in interested or v.belongs_to in interested}
         # SemaList = [SemaGenerator(deserialize=True).getSemaByName("vand_s8")]
         SemaList = []
         for k, func in AllSema.items():
@@ -148,12 +149,39 @@ def TestcaseGen():
         f.write(AllRosetteCode)
 
 
+def TestcaseGen2():
+    from RoseCodeGenerator import RoseCodeGenerator
+    CodeGenerator = RoseCodeGenerator(Target="ARM")
+    FunctionInfoList = CodeGenerator.codeGen(
+        JustGenRosette=False, ExtractConstants=False)
+    AllRosetteCode = "#lang rosette\n(require \"bvops.rkt\")\n"
+    for FunctionInfo in FunctionInfoList:
+        RosetteCode = GenerateRosetteForFunction(
+            FunctionInfo.getLatestFunction(), "")
+        AllRosetteCode += RosetteCode
+    print("Writing to rosette_test/compiled_new.rkt...")
+    AllRosetteCode += "(provide (all-defined-out))"
+    with open(f'rosette_test/compiled_new.rkt', 'w') as f:
+        f.write(AllRosetteCode)
+
+
+def TestWithTransormation():
+    from RoseCodeGenerator import RoseCodeGenerator
+    CodeGenerator = RoseCodeGenerator(Target="ARM")
+    FunctionInfoList = CodeGenerator.codeGen(
+        JustGenRosette=False, ExtractConstants=False)
+    for FunctionInfo in FunctionInfoList:
+        print(GenerateRosetteForFunction(FunctionInfo.getLatestFunction(), ""))
+
+
 if __name__ == "__main__":
 
     if "--gen" in sys.argv:
-        TestcaseGen()
-    else:
+        TestcaseGen2()
+    elif "--cdbg" in sys.argv:
         Compile()
+    else:
+        TestWithTransormation()
 
     # TestcaseGen()
 

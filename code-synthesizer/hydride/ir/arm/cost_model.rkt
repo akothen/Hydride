@@ -125,12 +125,7 @@
 (define cost_vpaddl_s16_dsl 1)
 (define cost_vqrdmulhs_s32_dsl 1)
 (define cost_vqdmulh_s16_dsl 1)
-(define cost_vshl_s16_dsl 1)
 (define cost_vshll_n_s32_dsl 1)
-(define cost_vqrshl_s16_dsl 1)
-(define cost_vrshld_u64_dsl 1)
-(define cost_vqshlb_n_u8_dsl 1)
-(define cost_vqshl_s8_dsl 1)
 (define cost_vrshr_n_s8_dsl 1)
 (define cost_vrsraq_n_s64_dsl 1)
 (define cost_vqrshrnd_n_u64_dsl 1)
@@ -138,6 +133,10 @@
 (define cost_vrsraq_n_u8_dsl 1)
 (define cost_vqrshrn_n_s64_dsl 1)
 (define cost_vrshr_n_u16_dsl 1)
+(define cost_vqshlq_u64_dsl 1)
+(define cost_vrshlq_s32_dsl 1)
+(define cost_vshld_u64_dsl 1)
+(define cost_vqrshl_u32_dsl 1)
 
 (define (arm:cost prog)
  (destruct prog
@@ -809,40 +808,8 @@
 		 
 		)
 	]
-	[ (vshl_s16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
-		(+ cost_vshl_s16_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		)
-	]
 	[ (vshll_n_s32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i num_7 prec_o num_9 num_10 num_11)
 		(+ cost_vshll_n_s32_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		)
-	]
-	[ (vqrshl_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
-		(+ cost_vqrshl_s16_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
-		 (arm:cost  v3)  
-		 
-		 
-		)
-	]
-	[ (vrshld_u64_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
-		(+ cost_vrshld_u64_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
-		 (arm:cost  v3)  
-		 
-		 
-		)
-	]
-	[ (vqshlb_n_u8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
-		(+ cost_vqshlb_n_u8_dsl (arm:cost  v0)  (arm:cost  v1)  
-		 
-		 
-		)
-	]
-	[ (vqshl_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
-		(+ cost_vqshl_s8_dsl (arm:cost  v0)  (arm:cost  v1)  
 		 
 		 
 		)
@@ -898,6 +865,34 @@
 	[ (vrshr_n_u16_dsl vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
 		(+ cost_vrshr_n_u16_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  vc_2)  
 		 (arm:cost  v3)  (arm:cost  v4)  
+		 
+		 
+		 
+		)
+	]
+	[ (vqshlq_u64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
+		(+ cost_vqshlq_u64_dsl (arm:cost  v0)  (arm:cost  v1)  
+		 
+		 
+		)
+	]
+	[ (vrshlq_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
+		(+ cost_vrshlq_s32_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
+		 (arm:cost  v3)  
+		 
+		 
+		 
+		)
+	]
+	[ (vshld_u64_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
+		(+ cost_vshld_u64_dsl (arm:cost  v0)  (arm:cost  v1)  
+		 
+		 
+		)
+	]
+	[ (vqrshl_u32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
+		(+ cost_vqrshl_u32_dsl (arm:cost  vc_0)  (arm:cost  vc_1)  (arm:cost  v2)  
+		 (arm:cost  v3)  
 		 
 		 
 		 

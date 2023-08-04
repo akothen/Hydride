@@ -1,3 +1,4 @@
+import sys
 import subprocess
 import re
 
@@ -26,7 +27,7 @@ benchmarks = [
     # "fully_connected",
     # "add",
     # "mul",
-    "softmax",
+    # "softmax",
     # "batched_matmul_256_32bit",
     # "average_pool_add",
     # "max_pool_add",
@@ -38,14 +39,16 @@ benchmarks = [
     # "matmul_bias_gelu_matmul",
 ]
 # benchmarks=["blur3x3","sobel3x3"]
+benchmarks = sys.argv[1:]
+
 result = []
 for b in benchmarks:
     # cmd=template.format(f,b)
-    cmd = "make armd."+b
+    cmd = "make armr."+b
     if "fully_connected" in b:
         cmd += " -B"
-    print(b)
-    # print(cmd)
+    # print(b)
+    print(cmd)
     time = []
     k = subprocess.check_output(cmd.split(' '))
     # print(k)

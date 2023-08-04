@@ -120,12 +120,7 @@
 (struct vpaddl_s16_dsl (vc_0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15 num_16) #:transparent #:mutable)
 (struct vqrdmulhs_s32_dsl (vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13) #:transparent #:mutable)
 (struct vqdmulh_s16_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11) #:transparent #:mutable)
-(struct vshl_s16_dsl (v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9) #:transparent #:mutable)
 (struct vshll_n_s32_dsl (v0 v1 size_i_o num_3 num_4 num_5 prec_i num_7 prec_o num_9 num_10 num_11) #:transparent #:mutable)
-(struct vqrshl_s16_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13) #:transparent #:mutable)
-(struct vrshld_u64_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13) #:transparent #:mutable)
-(struct vqshlb_n_u8_dsl (v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9) #:transparent #:mutable)
-(struct vqshl_s8_dsl (v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9) #:transparent #:mutable)
 (struct vrshr_n_s8_dsl (vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15) #:transparent #:mutable)
 (struct vrsraq_n_s64_dsl (vc_0 vc_1 v2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15) #:transparent #:mutable)
 (struct vqrshrnd_n_u64_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 prec_i num_15) #:transparent #:mutable)
@@ -133,5 +128,9 @@
 (struct vrsraq_n_u8_dsl (vc_0 vc_1 v2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15) #:transparent #:mutable)
 (struct vqrshrn_n_s64_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 prec_i num_15) #:transparent #:mutable)
 (struct vrshr_n_u16_dsl (vc_0 vc_1 vc_2 v3 v4 size_i_o num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15) #:transparent #:mutable)
+(struct vqshlq_u64_dsl (v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10) #:transparent #:mutable)
+(struct vrshlq_s32_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15) #:transparent #:mutable)
+(struct vshld_u64_dsl (v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10) #:transparent #:mutable)
+(struct vqrshl_u32_dsl (vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15) #:transparent #:mutable)
 ;; ================================================================================
 
