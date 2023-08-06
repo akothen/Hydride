@@ -55,7 +55,7 @@ def Compile(InstName: str = None):
         # interested = ['qrdmulh', 'qdmulh']
         # interested = ['vabal_high_s16']
         # interested = ["v"+i+"shl_" for i in ['qr','q','r',""]]
-        interested = ["aarch64_vector_arithmetic_binary_uniform_shift_sisd","aarch64_vector_arithmetic_binary_uniform_shift_simd"]
+        # interested = ["aarch64_vector_arithmetic_binary_uniform_shift_sisd","aarch64_vector_arithmetic_binary_uniform_shift_simd"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(

@@ -264,6 +264,72 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return buckets
 
+    def get_ops_from_bucket_at_step_lcg_sampling(self, bucket, step=1, items_per_bucket=1, max_num_clauses=10):
+        spec_ops = self.spec.get_semantics_ops_list()
+        pprint(spec_ops)
+        pprint(bucket)
+        ops_list = []
+        ctx_list = []
+        key_list = []
+        n = 0
+        for key in bucket:
+            for ops, ctx in zip(bucket[key]['ops'], bucket[key]['ctxs']):
+                ops_list.append(ops)
+                ctx_list.append(ctx)
+                key_list.append(key)
+                n += 1
+        binom = [[0 for _ in range(n+1)] for _ in range(n+1)]
+        for i in range(n+1):
+            binom[i][0] = 1
+            binom[i][i] = 1
+        for i in range(1, n+1):
+            for j in range(1, i):
+                binom[i][j] = binom[i-1][j-1] + binom[i-1][j]
+
+        def genCombination(Z, n, m):
+            # Return a combination encoded by Z
+            # First build a binom coefficient table
+            for i in range(n):
+                if Z < binom[n-i-1][m-1]:
+                    return [n-i-1] + genCombination(Z, n-i-1, m-1)
+                else:
+                    Z -= binom[n-i-1][m-1]
+            return []
+        non_matching_lim = 1
+
+        def successComb(combination):
+            eval_str = [ast.literal_eval(key_list[idx]) for idx in combination]
+            fold_ops = []
+            for ops in eval_str:
+                fold_ops += ops
+
+            non_matching_count = 0
+
+            for op in spec_ops:
+                if op not in fold_ops:
+                    non_matching_count += 1
+
+            # print("Checking in span:", eval_str, (non_matching_count < non_matching_lim) )
+            if non_matching_count < non_matching_lim:
+                comb_ops = [ops_list[i] for i in combination]
+                comb_ctxs = [ctx_list[i] for i in combination]
+                return (comb_ops, comb_ctxs)
+            return False
+        i = 0
+        magic_number = 998244353
+        magic_number2 = 2333
+        num_clauses = min(max_num_clauses, n)
+        N = binom[n][num_clauses]
+        while True:
+            combination = genCombination(i, n, num_clauses)
+            if (result := successComb(combination)):
+                if step == 0:
+                    return result
+                step -= 1
+            i = (magic_number*i+magic_number2) % N
+            if i == 0:
+                assert "Repeating previous steps"
+
     # Identify set of key combinations which span (with flexibility) the spec
     # For each key combination identify the set of concrete contexts (take 100 first combinations for bound)
     #       - Each key combination get's at most k iterations
@@ -271,6 +337,7 @@ class StepWiseSynthesizer(SynthesizerBase):
     # Step simply indexes into this list instead: avoid multiple same combinations issues
 
     def get_ops_from_bucket_at_step_alt(self, bucket, step=1, items_per_bucket=1, max_num_clauses=10):
+        # return self.get_ops_from_bucket_at_step_lcg_sampling(bucket, step=step, items_per_bucket=items_per_bucket, max_num_clauses=max_num_clauses)
         indices_set_per_key = []
         shuffle_width = 3
 
@@ -355,6 +422,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             print(sum([1 for ele in sample if "bvmul" in ele]))
 
         print("spec_ops:", spec_ops)
+        pprint(bucket)
 
         def spans_spec(comb, non_matching_lim=1):
             eval_str = [ast.literal_eval(ele) for ele in comb]
@@ -453,7 +521,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
             # At most 'key_switch_sample' combinations belong to given key combination
             N = len(key_grammar_combs)
-            print(f"{len(key_grammar_combs) =}")
+            # print(f"{len(key_grammar_combs) =}")
             if N > key_switch_sample:
                 new = []
                 for i in range(key_switch_sample):
@@ -631,7 +699,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         debug("Number of possible instructions in Grammar before pruning:",
               len(operation_dsl_insts), operation_dsl_args_list)
-        
+
         if self.ENABLE_PRUNING and not self.is_shuffle:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
             if self.target not in ["hvx", "arm"]:

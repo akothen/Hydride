@@ -119,7 +119,7 @@ fully_connected:
 		-o $@/$(BIN)/$@_generator \
 		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static) $(ADDITIONAL)
 
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; time export HYDRIDE_BENCHMARK=$@_arm_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=arm HYDRIDE_DISTRIBUTE_LOOK_AHEAD=1   HL_SYNTH_BW=$(INT_BW) $(STARTING_HASH) ./$@/$(BIN)/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; export HYDRIDE_BENCHMARK=$@_arm_depth$(EXPR_DEPTH); time HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=arm HYDRIDE_DISTRIBUTE_LOOK_AHEAD=1   HL_SYNTH_BW=$(INT_BW) $(STARTING_HASH) ./$@/$(BIN)/$@_generator \
 	    -t 0 \
 		-o $@/$(BIN) \
 		-g $@ output.type=uint8 \
