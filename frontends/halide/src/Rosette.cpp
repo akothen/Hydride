@@ -2212,7 +2212,8 @@ private:
                 } else if (_arch == Architecture::X86) {
                     lowered = saturating_add(op->args[0], (One << max(Zero, op->args[1])) / Two) >> op->args[1];
                 } else if (_arch == Architecture::ARM) {
-                    lowered = saturating_add(op->args[0], (One << max(Zero, op->args[1])) / Two) >> op->args[1];
+                    // Don't want this be lowered for arm
+                    lowered = saturating_add(op->args[0], (One << (op->args[1]-1))) >> op->args[1];
                 }
             } else if (op->is_intrinsic(Call::widening_mul)) {
                 if (_arch == Architecture::HVX) {
@@ -2235,8 +2236,7 @@ private:
                     }
                 } else if (_arch == Architecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
-                    if (element_bits <= 64) {
-                        lowered = (widen(op->args[0]) * widen(op->args[1]));
+                    if (element_bits < 64) {
                     } else {
                         lower_using_halide = true;
                     }
@@ -2383,9 +2383,9 @@ private:
                     if (value == 31 || value == 15) {
                         debug(0) << "Found constant rounding_mul_shift_right with special value 15/31: " << op->args[2] << "\n";
                     } else {
-                        debug(0) << "Lowering rounding_mul_shift_right using halide"
-                                 << "\n";
-                        lower_using_halide = true;
+                        // debug(0) << "Lowering rounding_mul_shift_right using halide"
+                        //          << "\n";
+                        lowered = saturating_narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     }
                 }
 
@@ -2429,7 +2429,13 @@ private:
                 } else if (_arch == Architecture::X86) {
                     return mutate(lower_intrinsic(op));
                 } else if (_arch == Architecture::ARM) {
-                    return mutate(lower_intrinsic(op));
+                    auto waqu = mutate(lower_intrinsic(op));
+                    debug(0) << "Halide lowered " << op->name << "(";
+                    for (auto arg : op->args) {
+                        debug(0) << arg << ", ";
+                    }
+                    debug(0) << ") to " << waqu << "\n";
+                    return waqu;
                 }
             }
             return IRMutator::visit(op);

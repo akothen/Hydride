@@ -21,8 +21,8 @@ DEBUG_LIST = [
     # "vpmin_s8",
     # "vmin_s8",
     # "vqadd_s16",
-    "vmov_n_u16",
-    "vmovl_s8",
+    "vqmovn_u32",
+    # "vmovl_s8",
     # "vqmovn_u32",
     # "vdotq_u32",
     # "vshld_s64",
@@ -1259,7 +1259,7 @@ class SynthesizerBase:
 
             def is_cast_expr(ops_list):
                 if self.target == "arm":  # HOTFIX
-                    if "vmovl" in dsl_inst.name:
+                    if "vmovl" in dsl_inst.name or "vqmovn" in dsl_inst.name:
                         return True
                 in_cast_set = True
                 for op in ops_list:

@@ -871,7 +871,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             return 15
         if self.target == 'hvx' and ctx.name == "hexagon_V6_lo_128B":
             return 15
-        if ctx.name == "vmulq_s16" and self.spec.semantics == ['(extract bvadd sign-extend bvmul zero-extend)']:
+        if ctx.name == "vmull_u8" and self.spec.semantics == ['(extract bvadd sign-extend bvmul zero-extend)']:
             return 15
         # if self.target == 'arm' and ctx.name == "vget_high_u16":
         #     return 15
