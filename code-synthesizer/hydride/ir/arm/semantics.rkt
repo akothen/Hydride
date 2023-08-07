@@ -2608,32 +2608,6 @@ concat
 )
 result)
 
-(define (vshl_s16  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %lastidx0 (-  %elemsize0  1))
-  (define %5 (+  e0.new  %lastidx0))
-  (define %6 (extract  %5 e0.new b))
-  (define %7.ab0 (bvsizeext  %6 192 %arg2))
-  (define %12 (extract  %5 e0.new a))
-  (define %13.ab0 (bvsizeext  %12 192 %arg1))
-  (define %15 (bvshl  %13.ab0  %7.ab0))
-  (define %lastidx1 (-  %elemsize0  1))
-  (define %highidx0 (+  %lastidx1  %arg0))
-  (define %21 (extract  %highidx0 %arg0 %15))
-  %21
- )
- )
-)
-)
-)
-result)
-
 (define (vshll_n_s32  a n %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 %arg4 )
 (define %1.ab0 (bvsizeext  n 192 %arg0))
 (define result
@@ -2652,111 +2626,6 @@ concat
   (define %highidx0 (+  %lastidx1  %arg2))
   (define %21 (extract  %highidx0 %arg2 %10))
   %21
- )
- )
-)
-)
-)
-result)
-
-(define (vqrshl_s16  %arg4 %arg3 a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg5 %arg6 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %lastidx0 (-  %elemsize0  1))
-  (define %5 (+  e0.new  %lastidx0))
-  (define %6 (extract  %5 e0.new b))
-  (define %7.ab0 (bvsizeext  %6 192 %arg6))
-  (define %8 (bvneg  %7.ab0))
-  (define %9.ab0 (bvsubnw %8 %arg4 192 %arg5 ))
-  (define %10 (bvshl  %arg3  %9.ab0))
-  (define %15 (extract  %5 e0.new a))
-  (define %16.ab0 (bvsizeext  %15 192 %arg2))
-  (define %17.ab0 (bvaddnw %16.ab0 %10 192 %arg1 ))
-  (define %18 (bvshl  %17.ab0  %7.ab0))
-  (define %23.ab0 (bvsaturate  %18 192 %elemsize0 %arg0))
-  %23.ab0
- )
- )
-)
-)
-)
-result)
-
-(define (vrshld_u64  %arg4 %arg3 a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg5 %arg6 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %lastidx0 (-  %elemsize0  1))
-  (define %5 (+  e0.new  %lastidx0))
-  (define %6 (extract  %5 e0.new b))
-  (define %7.ab0 (bvsizeext  %6 192 %arg6))
-  (define %8 (bvneg  %7.ab0))
-  (define %9.ab0 (bvsubnw %8 %arg4 192 %arg5 ))
-  (define %10 (bvshl  %arg3  %9.ab0))
-  (define %15 (extract  %5 e0.new a))
-  (define %16.ab0 (bvsizeext  %15 192 %arg2))
-  (define %17.ab0 (bvaddnw %16.ab0 %10 192 %arg1 ))
-  (define %18 (bvshl  %17.ab0  %7.ab0))
-  (define %lastidx1 (-  %elemsize0  1))
-  (define %highidx0 (+  %lastidx1  %arg0))
-  (define %24 (extract  %highidx0 %arg0 %18))
-  %24
- )
- )
-)
-)
-)
-result)
-
-(define (vqshlb_n_u8  a n %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 )
-(define %1.ab0 (bvsizeext  n 192 %arg0))
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %lastidx0 (-  %elemsize0  1))
-  (define %6 (+  e0.new  %lastidx0))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.ab0 (bvsizeext  %7 192 %arg2))
-  (define %9 (bvshl  %8.ab0  %1.ab0))
-  (define %14.ab0 (bvsaturate  %9 192 %elemsize0 %arg1))
-  %14.ab0
- )
- )
-)
-)
-)
-result)
-
-(define (vqshl_s8  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 )
-(define result
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
- (apply
- concat
- (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
-  (define %lastidx0 (-  %elemsize0  1))
-  (define %5 (+  e0.new  %lastidx0))
-  (define %6 (extract  %5 e0.new b))
-  (define %7.ab0 (bvsizeext  %6 192 %arg2))
-  (define %12 (extract  %5 e0.new a))
-  (define %13.ab0 (bvsizeext  %12 192 %arg1))
-  (define %15 (bvshl  %13.ab0  %7.ab0))
-  (define %20.ab0 (bvsaturate  %15 192 %elemsize0 %arg0))
-  %20.ab0
  )
  )
 )
@@ -2958,6 +2827,114 @@ concat
   (define %24 (extract  %highidx0 %arg6 %13))
   (define %25.ab0 (bvaddnw %arg4 %24 %elemsize0 %arg5 ))
   %25.ab0
+ )
+ )
+)
+)
+)
+result)
+
+(define (vqshlq_u64  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %lastidx0 (-  %elemsize0  1))
+  (define %8 (+  e0.new  %lastidx0))
+  (define %9 (extract  %8 e0.new b))
+  (define %11.ab0 (bvsizeext  %9 %arg2 %arg3))
+  (define %16 (extract  %8 e0.new a))
+  (define %18.ab0 (bvsizeext  %16 %arg2 %arg1))
+  (define %20 (bvshl  %18.ab0  %11.ab0))
+  (define %25.ab0 (bvsaturate  %20 %arg2 %elemsize0 %arg0))
+  %25.ab0
+ )
+ )
+)
+)
+)
+result)
+
+(define (vrshlq_s32  %arg5 %arg4 a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 %arg6 %arg7 %arg8 )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %lastidx0 (-  %elemsize0  1))
+  (define %8 (+  e0.new  %lastidx0))
+  (define %9 (extract  %8 e0.new b))
+  (define %11.ab0 (bvsizeext  %9 %arg8 %arg7))
+  (define %12 (bvneg  %11.ab0))
+  (define %13.ab0 (bvsubnw %12 %arg5 %arg8 %arg6 ))
+  (define %14 (bvshl  %arg4  %13.ab0))
+  (define %19 (extract  %8 e0.new a))
+  (define %21.ab0 (bvsizeext  %19 %arg3 %arg2))
+  (define %22.ab0 (bvaddnw %21.ab0 %14 %arg3 %arg1 ))
+  (define %23 (bvshl  %22.ab0  %11.ab0))
+  (define %lastidx1 (-  %elemsize0  1))
+  (define %highidx0 (+  %lastidx1  %arg0))
+  (define %29 (extract  %highidx0 %arg0 %23))
+  %29
+ )
+ )
+)
+)
+)
+result)
+
+(define (vshld_u64  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %lastidx0 (-  %elemsize0  1))
+  (define %8 (+  e0.new  %lastidx0))
+  (define %9 (extract  %8 e0.new b))
+  (define %11.ab0 (bvsizeext  %9 %arg2 %arg3))
+  (define %16 (extract  %8 e0.new a))
+  (define %18.ab0 (bvsizeext  %16 %arg2 %arg1))
+  (define %20 (bvshl  %18.ab0  %11.ab0))
+  (define %lastidx1 (-  %elemsize0  1))
+  (define %highidx0 (+  %lastidx1  %arg0))
+  (define %26 (extract  %highidx0 %arg0 %20))
+  %26
+ )
+ )
+)
+)
+)
+result)
+
+(define (vqrshl_u32  %arg5 %arg4 a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 %arg6 %arg7 %arg8 )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])
+ (apply
+ concat
+ (for/list ([e0.new (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
+  (define %lastidx0 (-  %elemsize0  1))
+  (define %8 (+  e0.new  %lastidx0))
+  (define %9 (extract  %8 e0.new b))
+  (define %11.ab0 (bvsizeext  %9 %arg8 %arg7))
+  (define %12 (bvneg  %11.ab0))
+  (define %13.ab0 (bvsubnw %12 %arg5 %arg8 %arg6 ))
+  (define %14 (bvshl  %arg4  %13.ab0))
+  (define %19 (extract  %8 e0.new a))
+  (define %21.ab0 (bvsizeext  %19 %arg3 %arg2))
+  (define %22.ab0 (bvaddnw %21.ab0 %14 %arg3 %arg1 ))
+  (define %23 (bvshl  %22.ab0  %11.ab0))
+  (define %28.ab0 (bvsaturate  %23 %arg8 %elemsize0 %arg0))
+  %28.ab0
  )
  )
 )
