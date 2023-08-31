@@ -234,7 +234,7 @@
        (define (halide-cost-fn e) 1)
        (define (halide-length-fn e env) (halide:vec-size e))
        (define (halide-prec-fn e env) (halide:vec-precision e))
-       (values halide:interpret-with-env halide-cost-fn halide:visit halide-length-fn halide-prec-fn halide:get-bv-ops)
+       (values halide:interpret-hydride halide-cost-fn halide:visit halide-length-fn halide-prec-fn halide:get-bv-ops)
        ]
       [else
         (error "Unsupported src language in rewrite-ir" src-language)
@@ -262,7 +262,7 @@
        (define (halide-cost-fn e) 1)
        (define (halide-length-fn e env) (halide:vec-size e))
        (define (halide-prec-fn e env) (halide:vec-precision e))
-       (values halide:interpret-with-env halide-cost-fn halide:visit halide-length-fn halide-prec-fn halide:get-bv-ops)
+       (values halide:interpret-hydride halide-cost-fn halide:visit halide-length-fn halide-prec-fn halide:get-bv-ops)
        ]
       [else
         (error "Unsupported target language in rewrite-ir" target-language)
@@ -806,7 +806,7 @@
           ]
         [_
           (define start-time (current-seconds))
-          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target 'regular "" "" "" "" 3))
+          (define simplified-current-expr (inst-combine current-expr #t #f 'z3 sizes precs target 'regular "" "" "" "" 2))
           (define end-time (current-seconds))
           (define elapsed-time (- end-time start-time))
           (displayln (format "Inst Combine Query Elapsed ~a seconds" elapsed-time))

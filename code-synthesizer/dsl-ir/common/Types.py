@@ -18,18 +18,18 @@ class OperandType:
         self.TypeEnum = Enum
         self.is_hole = False
 
-    def __eq__(self, Other):
-        if Other == None:
-            return False
+    #def __eq__(self, Other):
+    #    if Other == None:
+    #        return False
+    #
+    #    assert isinstance(Other, OperandType)
+    #    return self.TypeEnum == Other.TypeEnum
 
-        assert isinstance(Other, OperandType)
-        return self.TypeEnum == Other.TypeEnum
-
-    def __ne__(self, Other):
-        if Other == None:
-            return True
-        assert isinstance(Other, OperandType)
-        return self.TypeEnum != Other.TypeEnum
+    #def __ne__(self, Other):
+    #    if Other == None:
+    #        return True
+    #    assert isinstance(Other, OperandType)
+    #    return self.TypeEnum != Other.TypeEnum
 
     def __hash__(self):
         return hash(self.TypeEnum)
@@ -111,6 +111,15 @@ class ConstBitVector(OperandType):
         super().__init__(OperandType.OperandTypeEnum.ConstBitVector)
 
 
+    def __eq__(self, Other):
+        if Other == None:
+            return False
+
+        if isinstance(Other, ConstBitVector):
+            return (Other.value == self.value) and (Other.size == self.size)
+        else:
+            return False
+
     def get_rkt_value(self):
         return "(bv {} (bitvector {}))".format(self.value , self.size)
 
@@ -144,6 +153,15 @@ class LaneSize(OperandType):
         self.output_precision = output_precision
         super().__init__(OperandType.OperandTypeEnum.LaneSize)
 
+
+    def __eq__(self, Other):
+        if Other == None:
+            return False
+
+        if isinstance(Other, LaneSize):
+            return (Other.value == self.value) and (Other.input_precision == self.input_precision) and (Other.output_precision == self.output_precision)
+        else:
+            return False
 
     def get_rkt_value(self):
         if self.value != None:
@@ -181,6 +199,15 @@ class Precision(OperandType):
         else:
             return str(self.name)
 
+
+    def __eq__(self, Other):
+        if Other == None:
+            return False
+
+        if isinstance(Other, Precision):
+            return (Other.value == self.value) and (Other.input_precision == self.input_precision) and (Other.output_precision == self.output_precision)
+        else:
+            return False
 
     def get_rkt_comment(self):
         return ";; Precision Operand "
@@ -425,9 +452,27 @@ class Reg(OperandType):
         super().__init__(OperandType.OperandTypeEnum.Reg)
 
 
+    def __eq__(self, Other):
+        if Other == None:
+            return False
+
+        if isinstance(Other, Reg):
+            return Other.index == self.index
+        else:
+            return False
 
     def get_rkt_value(self):
         return "(reg (bv "+str(self.index) +" (bitvector 8)))"
+
+    def get_halide_dsl_value(self):
+        type_prefix = "'"
+        if not self.signed:
+            type_prefix = "'u"
+        type_core = "int"+str(self.precision)
+
+        type_str = type_prefix + type_core
+
+        return "(buffer-index  "+str(self.index) +" "+type_str+" "+str(self.size)+") ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
 
     def get_dsl_value(self):
         return "(reg (bv "+str(self.index) +" (bitvector 8))) ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
