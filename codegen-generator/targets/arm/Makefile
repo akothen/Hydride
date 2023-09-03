@@ -15,7 +15,7 @@ casegengen: rosette_test/ARMTest.cpp
 case: rosette_test/alltests.rkt
 	
 cdbg: ARMRoseLang.py ARMRoseCompiler.py AllSema.py
-	python3 ARMRoseLang.py
+	python3 ARMRoseLang.py --cdbg
 gdbg: ARMIntrinsicClassify.py
 	python3 ARMIntrinsicClassify.py
 sema: ARMIntrinsicClassify.py

@@ -207,8 +207,9 @@ class RoseContext:
     def copyAbstractionsFromParent(self):
         assert not self.isRootContext()
         assert isinstance(self.ParentContext, RoseContext)
-        self.CompiledAbstractions = deepcopy(
-            self.ParentContext.getCompiledAbstractions())
+        self.CompiledAbstractions = self.ParentContext.getCompiledAbstractions().copy()
+        # self.CompiledAbstractions = deepcopy(
+        #     self.ParentContext.getCompiledAbstractions())
         # Copy the variables too
         for Name, ID in self.ParentContext.getDefinedVariables().items():
             self.Variables[Name] = ID

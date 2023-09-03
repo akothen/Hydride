@@ -318,9 +318,10 @@ def CompileVarRv(Variable: Var, Context: ARMRoseContext):
     print("Looking for variable: ", Variable.name)
     if Context.isVariableDefined(Variable.name):
         ID = Context.getVariableID(Variable.name)
+        res = Context.getCompiledAbstractionForID(ID)
         print("Found variable: ", Variable.name,
-              ID, Context.getCompiledAbstractionForID(ID))
-        return Context.getCompiledAbstractionForID(ID)
+              ID, res)
+        return res
     if Variable.name in Context.preparation:
         return CompileVarRv(Var(Context.preparation[Variable.name], Variable.id), Context)
 

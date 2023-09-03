@@ -4,6 +4,7 @@ from ARMRoseCompiler import ARMRoseContext, CompileSemantics
 from ARMTypes import *
 from ARMAST import *
 from ARMMeta import *
+import ARMArithTransformPass
 # CheckFPAdvSIMDEnabled64();
 # bits(datasize) operand1 = V[n];
 # bits(datasize) operand2 = V[m];
@@ -22,7 +23,7 @@ from ARMMeta import *
 # V[d] = result;
 import sys
 from RosetteGen import GenerateRosetteForFunction
-
+DEBUG = True
 skip = notSSA + ['vcopy']
 
 
@@ -54,6 +55,9 @@ def Compile(InstName: str = None):
         # interested = ["paddl"]
         # interested = ['qrdmulh', 'qdmulh']
         # interested = ['vabal_high_s16']
+        # interested = ['vshr_n_s16']
+        # interested = ['vqdmlal_high_n_s16']
+        # interested = ['vcltzq_s8']
         # interested = ["v"+i+"shl_" for i in ['qr','q','r',""]]
         # interested = ["aarch64_vector_arithmetic_binary_uniform_shift_sisd","aarch64_vector_arithmetic_binary_uniform_shift_simd"]
         AllSema = SemaGenerator(deserialize=True).getResult()
@@ -98,6 +102,8 @@ def Compile(InstName: str = None):
             print(Spec)
             FunctionInfo = RoseFunctionInfo()
             CompiledFunction = CompileSemantics(Spec, RootContext)
+            if DEBUG:
+                ARMArithTransformPass.Run(CompiledFunction, RootContext)
             FunctionInfo.addContext(RootContext)
             FunctionInfo.addRawSemantics(Spec)
             FunctionInfo.addFunctionAtNewStage(CompiledFunction)
@@ -174,12 +180,48 @@ def TestWithTransormation():
         print(GenerateRosetteForFunction(FunctionInfo.getLatestFunction(), ""))
 
 
+def Verify():
+    from RoseCodeGenerator import RoseCodeGenerator
+    from RoseAbstractions import RoseFunction
+    CodeGenerator = RoseCodeGenerator(Target="ARM")
+    FunctionInfoList = CodeGenerator.codeGen(
+        JustGenRosette=False, ExtractConstants=False)
+    AllRosetteCode = """#lang rosette
+(require "bvops.rkt")
+(require "compiled.rkt")
+"""
+    for FunctionInfo in FunctionInfoList:
+        F: RoseFunction = FunctionInfo.getLatestFunction()
+        Fname = F.Name
+        F.Name = F.Name+".check"
+        RosetteCode = GenerateRosetteForFunction(
+            F, "")
+        AllRosetteCode += RosetteCode
+        As = ""
+        for Arg in F.getArgs():
+            Bitwidth = Arg.getType().getBitwidth()
+            Aname = Arg.getName() + "_" + Fname
+            AllRosetteCode += "(define-symbolic {} (bitvector {}))\n".format(Aname,
+                                                                             str(Bitwidth))
+            As += Aname + " "
+        AllRosetteCode += f"(verify (assert (equal? ({Fname}.check {As}) ({Fname} {As}))))\n"
+        AllRosetteCode += f'(display "{Fname}" (current-error-port))\n'
+
+    print("Writing to rosette_test/verify_new.rkt...")
+    # AllRosetteCode += "(provide (all-defined-out))"
+    with open(f'rosette_test/compiled_verify.rkt', 'w') as f:
+        f.write(AllRosetteCode)
+
+
 if __name__ == "__main__":
 
+    DEBUG = True
     if "--gen" in sys.argv:
         TestcaseGen2()
     elif "--cdbg" in sys.argv:
         Compile()
+    elif "--verify" in sys.argv:
+        Verify()
     else:
         TestWithTransormation()
 
