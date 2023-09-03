@@ -4,6 +4,7 @@ from ARMRoseCompiler import ARMRoseContext, CompileSemantics
 from ARMTypes import *
 from ARMAST import *
 from ARMMeta import *
+import ARMArithTransformPass
 # CheckFPAdvSIMDEnabled64();
 # bits(datasize) operand1 = V[n];
 # bits(datasize) operand2 = V[m];
@@ -22,7 +23,7 @@ from ARMMeta import *
 # V[d] = result;
 import sys
 from RosetteGen import GenerateRosetteForFunction
-
+DEBUG = True
 skip = notSSA + ['vcopy']
 
 
@@ -42,8 +43,7 @@ def Compile(InstName: str = None):
         # interested = ["max", "min"]
         # interested = ["vmovl_s8","vdupq_n_s16"]
         # interested = ["vshl", "vqshl", "vrshl", "vqrshl"]
-        # interested = ["vdot"]
-        # interested = ["vdot"]
+        # interested = ["_n_"]
         # interested = ["vaddvq_u8", 'vdot_u32']
         # interested = ["addv"]
         # interested = ["dot",  "ada"]
@@ -54,12 +54,19 @@ def Compile(InstName: str = None):
         # interested = ["paddl"]
         # interested = ['qrdmulh', 'qdmulh']
         # interested = ['vabal_high_s16']
+        # interested = ['vshr_n_s16']
+        # interested = ['vqdmlal_high_n_s16']
         # interested = ["v"+i+"shl_" for i in ['qr','q','r',""]]
         # interested = ["aarch64_vector_arithmetic_binary_uniform_shift_sisd","aarch64_vector_arithmetic_binary_uniform_shift_simd"]
+        # interested = ['vcge_u32', 'vclt_u16', 'vclt_s16']
+        # interested = ['vtrn1_s8']
+        # interested = ['vqshl']
+        interested = ['vtrn1_s8']
+        # interested = ["vqmovn_u16"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
-            ) if k in interested or v.belongs_to in interested}
+            ) if k in interested or v.belongs_to in interested or any(kk in k for kk in interested)}
         # SemaList = [SemaGenerator(deserialize=True).getSemaByName("vand_s8")]
         SemaList = []
         for k, func in AllSema.items():
@@ -98,6 +105,8 @@ def Compile(InstName: str = None):
             print(Spec)
             FunctionInfo = RoseFunctionInfo()
             CompiledFunction = CompileSemantics(Spec, RootContext)
+            if DEBUG:
+                ARMArithTransformPass.Run(CompiledFunction, RootContext)
             FunctionInfo.addContext(RootContext)
             FunctionInfo.addRawSemantics(Spec)
             FunctionInfo.addFunctionAtNewStage(CompiledFunction)
@@ -176,6 +185,7 @@ def TestWithTransormation():
 
 if __name__ == "__main__":
 
+    DEBUG = True
     if "--gen" in sys.argv:
         TestcaseGen2()
     elif "--cdbg" in sys.argv:

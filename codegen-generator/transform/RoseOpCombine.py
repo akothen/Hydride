@@ -1270,6 +1270,9 @@ def RunOpCombineOnBlock(Block: RoseBlock, Context: RoseContext):
         # what we have dealt with above.
         if isinstance(Op, RoseBVExtractSliceOp):
             if isinstance(Op.getInputBitVector(), RoseBVExtractSliceOp):
+                if Op.getParent() != Op.getInputBitVector().getParent():
+                    # Nothing to do
+                    continue
                 SecondExtractOp = Op
                 # Check if the only use of this extract op is the only use
                 FirstExtractOp = SecondExtractOp.getInputBitVector()

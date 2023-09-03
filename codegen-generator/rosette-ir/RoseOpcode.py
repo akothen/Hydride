@@ -157,7 +157,7 @@ class RoseOpcode(Enum):
     def getBVOpInputs(self, Inputs: list):
         BVInputs = []
         for Input in Inputs:
-            assert isinstance(Input, RoseValue)
+            assert isinstance(Input, RoseValue), Input
             if isinstance(Input.getType(), RoseBitVectorType):
                 BVInputs.append(Input)
         return BVInputs
