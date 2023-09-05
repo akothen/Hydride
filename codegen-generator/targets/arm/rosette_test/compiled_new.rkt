@@ -24351,25 +24351,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  15))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  15))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24380,25 +24370,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  31))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  31))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24409,25 +24389,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  7))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  7))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24438,25 +24408,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  15))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  15))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24467,25 +24427,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  31))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  31))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24496,25 +24446,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  7))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  7))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24525,25 +24465,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  15))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  15))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24554,25 +24484,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  31))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  31))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24583,25 +24503,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  63))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  63))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  63))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24612,25 +24522,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  7))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  7))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24641,25 +24541,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  15))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  15))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24670,25 +24560,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  31))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  31))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24699,25 +24579,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  63))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  63))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  63))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24728,25 +24598,15 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %22.new0 (*  %iterator1.new  2))
-   (define %26 (+  %22.new0  7))
-   (define %27 (extract  %26 %22.new0 b))
-   %27
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %1.new0 (*  %iterator0.new  2))
-   (define %5 (+  %1.new0  7))
-   (define %12 (extract  %5 %1.new0 a))
-   %12
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %1.new0 (*  p0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %12 (extract  %5 %1.new0 a))
+  (define %27 (extract  %5 %1.new0 b))
+(concat %27 %12)
+ )
  )
 )
 )
@@ -24757,29 +24617,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %15.new0 (/  %iterator1.new  8))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  16))
-   (define %22 (+  %17  15))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %6.new0 (/  %iterator0.new  8))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  16))
-   (define %13 (+  %8  15))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define %6.new0 (/  p0.new  8))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  16))
+  (define %13 (+  %8  15))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24790,29 +24638,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %15.new0 (/  %iterator1.new  16))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  32))
-   (define %22 (+  %17  31))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %6.new0 (/  %iterator0.new  16))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  32))
-   (define %13 (+  %8  31))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define %6.new0 (/  p0.new  16))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  32))
+  (define %13 (+  %8  31))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24823,29 +24659,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %15.new0 (/  %iterator1.new  4))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  8))
-   (define %22 (+  %17  7))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %6.new0 (/  %iterator0.new  4))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  8))
-   (define %13 (+  %8  7))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define %6.new0 (/  p0.new  4))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  8))
+  (define %13 (+  %8  7))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24856,29 +24680,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %15.new0 (/  %iterator1.new  8))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  16))
-   (define %22 (+  %17  15))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %6.new0 (/  %iterator0.new  8))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  16))
-   (define %13 (+  %8  15))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define %6.new0 (/  p0.new  8))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  16))
+  (define %13 (+  %8  15))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24889,29 +24701,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %15.new0 (/  %iterator1.new  16))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  32))
-   (define %22 (+  %17  31))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %6.new0 (/  %iterator0.new  16))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  32))
-   (define %13 (+  %8  31))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define %6.new0 (/  p0.new  16))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  32))
+  (define %13 (+  %8  31))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24922,29 +24722,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %15.new0 (/  %iterator1.new  4))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  8))
-   (define %22 (+  %17  7))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %6.new0 (/  %iterator0.new  4))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  8))
-   (define %13 (+  %8  7))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define %6.new0 (/  p0.new  4))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  8))
+  (define %13 (+  %8  7))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24955,29 +24743,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %15.new0 (/  %iterator1.new  8))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  16))
-   (define %22 (+  %17  15))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %6.new0 (/  %iterator0.new  8))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  16))
-   (define %13 (+  %8  15))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %6.new0 (/  p0.new  8))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  16))
+  (define %13 (+  %8  15))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -24988,29 +24764,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %15.new0 (/  %iterator1.new  16))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  32))
-   (define %22 (+  %17  31))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %6.new0 (/  %iterator0.new  16))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  32))
-   (define %13 (+  %8  31))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %6.new0 (/  p0.new  16))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  32))
+  (define %13 (+  %8  31))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -25021,29 +24785,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %15.new0 (/  %iterator1.new  32))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  64))
-   (define %22 (+  %17  63))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %6.new0 (/  %iterator0.new  32))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  64))
-   (define %13 (+  %8  63))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define %6.new0 (/  p0.new  32))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  64))
+  (define %13 (+  %8  63))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -25054,29 +24806,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %15.new0 (/  %iterator1.new  4))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  8))
-   (define %22 (+  %17  7))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %6.new0 (/  %iterator0.new  4))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  8))
-   (define %13 (+  %8  7))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %6.new0 (/  p0.new  4))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  8))
+  (define %13 (+  %8  7))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -25087,29 +24827,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %15.new0 (/  %iterator1.new  8))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  16))
-   (define %22 (+  %17  15))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %6.new0 (/  %iterator0.new  8))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  16))
-   (define %13 (+  %8  15))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %6.new0 (/  p0.new  8))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  16))
+  (define %13 (+  %8  15))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -25120,29 +24848,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %15.new0 (/  %iterator1.new  16))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  32))
-   (define %22 (+  %17  31))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %6.new0 (/  %iterator0.new  16))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  32))
-   (define %13 (+  %8  31))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %6.new0 (/  p0.new  16))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  32))
+  (define %13 (+  %8  31))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -25153,29 +24869,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %15.new0 (/  %iterator1.new  32))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  64))
-   (define %22 (+  %17  63))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %6.new0 (/  %iterator0.new  32))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  64))
-   (define %13 (+  %8  63))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define %6.new0 (/  p0.new  32))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  64))
+  (define %13 (+  %8  63))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -25186,29 +24890,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %15.new0 (/  %iterator1.new  4))
-   (define %16 (+  %15.new0  1))
-   (define %17 (*  %16  8))
-   (define %22 (+  %17  7))
-   (define %31 (extract  %22 %17 b))
-   %31
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %6.new0 (/  %iterator0.new  4))
-   (define %7 (+  %6.new0  1))
-   (define %8 (*  %7  8))
-   (define %13 (+  %8  7))
-   (define %14 (extract  %13 %8 a))
-   %14
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %6.new0 (/  p0.new  4))
+  (define %7 (+  %6.new0  1))
+  (define %8 (*  %7  8))
+  (define %13 (+  %8  7))
+  (define %14 (extract  %13 %8 a))
+  (define %31 (extract  %13 %8 b))
+(concat %31 %14)
+ )
  )
 )
 )
@@ -26439,23 +26131,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %27 (+  %iterator1.new  15))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %12 (+  %iterator0.new  15))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define %12 (+  p0.new  15))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26466,23 +26149,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %27 (+  %iterator1.new  31))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %12 (+  %iterator0.new  31))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define %12 (+  p0.new  31))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26493,23 +26167,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %27 (+  %iterator1.new  7))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %12 (+  %iterator0.new  7))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define %12 (+  p0.new  7))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26520,23 +26185,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %27 (+  %iterator1.new  15))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %12 (+  %iterator0.new  15))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define %12 (+  p0.new  15))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26547,23 +26203,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %27 (+  %iterator1.new  31))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %12 (+  %iterator0.new  31))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define %12 (+  p0.new  31))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26574,23 +26221,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %27 (+  %iterator1.new  7))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %12 (+  %iterator0.new  7))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define %12 (+  p0.new  7))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26601,23 +26239,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %27 (+  %iterator1.new  15))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %12 (+  %iterator0.new  15))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %12 (+  p0.new  15))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26628,23 +26257,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %27 (+  %iterator1.new  31))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %12 (+  %iterator0.new  31))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %12 (+  p0.new  31))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26655,23 +26275,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %27 (+  %iterator1.new  63))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %12 (+  %iterator0.new  63))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define %12 (+  p0.new  63))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26682,23 +26293,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %27 (+  %iterator1.new  7))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %12 (+  %iterator0.new  7))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %12 (+  p0.new  7))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26709,23 +26311,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %27 (+  %iterator1.new  15))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %12 (+  %iterator0.new  15))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %12 (+  p0.new  15))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26736,23 +26329,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %27 (+  %iterator1.new  31))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %12 (+  %iterator0.new  31))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %12 (+  p0.new  31))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26763,23 +26347,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %27 (+  %iterator1.new  63))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %12 (+  %iterator0.new  63))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define %12 (+  p0.new  63))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26790,23 +26365,14 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %27 (+  %iterator1.new  7))
-   (define %28 (extract  %27 %iterator1.new b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %12 (+  %iterator0.new  7))
-   (define %13 (extract  %12 %iterator0.new a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %12 (+  p0.new  7))
+  (define %13 (extract  %12 p0.new a))
+  (define %28 (extract  %12 p0.new b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26817,29 +26383,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %22 (+  2  %iterator1.new.div))
-   (define %23 (*  %22  16))
-   (define %27 (+  %23  15))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %7 (+  2  %iterator0.new.div))
-   (define %8 (*  %7  16))
-   (define %12 (+  %8  15))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define p0.new.div (/  p0.new  16))
+  (define %7 (+  2  p0.new.div))
+  (define %8 (*  %7  16))
+  (define %12 (+  %8  15))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26850,29 +26404,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %22 (+  1  %iterator1.new.div))
-   (define %23 (*  %22  32))
-   (define %27 (+  %23  31))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %7 (+  1  %iterator0.new.div))
-   (define %8 (*  %7  32))
-   (define %12 (+  %8  31))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define p0.new.div (/  p0.new  32))
+  (define %7 (+  1  p0.new.div))
+  (define %8 (*  %7  32))
+  (define %12 (+  %8  31))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26883,29 +26425,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %22 (+  4  %iterator1.new.div))
-   (define %23 (*  %22  8))
-   (define %27 (+  %23  7))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %7 (+  4  %iterator0.new.div))
-   (define %8 (*  %7  8))
-   (define %12 (+  %8  7))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define p0.new.div (/  p0.new  8))
+  (define %7 (+  4  p0.new.div))
+  (define %8 (*  %7  8))
+  (define %12 (+  %8  7))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26916,29 +26446,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %22 (+  2  %iterator1.new.div))
-   (define %23 (*  %22  16))
-   (define %27 (+  %23  15))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %7 (+  2  %iterator0.new.div))
-   (define %8 (*  %7  16))
-   (define %12 (+  %8  15))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 16))])
+  (define p0.new.div (/  p0.new  16))
+  (define %7 (+  2  p0.new.div))
+  (define %8 (*  %7  16))
+  (define %12 (+  %8  15))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26949,29 +26467,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %22 (+  1  %iterator1.new.div))
-   (define %23 (*  %22  32))
-   (define %27 (+  %23  31))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %7 (+  1  %iterator0.new.div))
-   (define %8 (*  %7  32))
-   (define %12 (+  %8  31))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 32))])
+  (define p0.new.div (/  p0.new  32))
+  (define %7 (+  1  p0.new.div))
+  (define %8 (*  %7  32))
+  (define %12 (+  %8  31))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -26982,29 +26488,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %22 (+  4  %iterator1.new.div))
-   (define %23 (*  %22  8))
-   (define %27 (+  %23  7))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %7 (+  4  %iterator0.new.div))
-   (define %8 (*  %7  8))
-   (define %12 (+  %8  7))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 32 8))])
+  (define p0.new.div (/  p0.new  8))
+  (define %7 (+  4  p0.new.div))
+  (define %8 (*  %7  8))
+  (define %12 (+  %8  7))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27015,29 +26509,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %22 (+  4  %iterator1.new.div))
-   (define %23 (*  %22  16))
-   (define %27 (+  %23  15))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %7 (+  4  %iterator0.new.div))
-   (define %8 (*  %7  16))
-   (define %12 (+  %8  15))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define p0.new.div (/  p0.new  16))
+  (define %7 (+  4  p0.new.div))
+  (define %8 (*  %7  16))
+  (define %12 (+  %8  15))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27048,29 +26530,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %22 (+  2  %iterator1.new.div))
-   (define %23 (*  %22  32))
-   (define %27 (+  %23  31))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %7 (+  2  %iterator0.new.div))
-   (define %8 (*  %7  32))
-   (define %12 (+  %8  31))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define p0.new.div (/  p0.new  32))
+  (define %7 (+  2  p0.new.div))
+  (define %8 (*  %7  32))
+  (define %12 (+  %8  31))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27081,29 +26551,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %iterator1.new.div (/  %iterator1.new  64))
-   (define %22 (+  1  %iterator1.new.div))
-   (define %23 (*  %22  64))
-   (define %27 (+  %23  63))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %iterator0.new.div (/  %iterator0.new  64))
-   (define %7 (+  1  %iterator0.new.div))
-   (define %8 (*  %7  64))
-   (define %12 (+  %8  63))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define p0.new.div (/  p0.new  64))
+  (define %7 (+  1  p0.new.div))
+  (define %8 (*  %7  64))
+  (define %12 (+  %8  63))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27114,29 +26572,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %22 (+  8  %iterator1.new.div))
-   (define %23 (*  %22  8))
-   (define %27 (+  %23  7))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %7 (+  8  %iterator0.new.div))
-   (define %8 (*  %7  8))
-   (define %12 (+  %8  7))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define p0.new.div (/  p0.new  8))
+  (define %7 (+  8  p0.new.div))
+  (define %8 (*  %7  8))
+  (define %12 (+  %8  7))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27147,29 +26593,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %22 (+  4  %iterator1.new.div))
-   (define %23 (*  %22  16))
-   (define %27 (+  %23  15))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %7 (+  4  %iterator0.new.div))
-   (define %8 (*  %7  16))
-   (define %12 (+  %8  15))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define p0.new.div (/  p0.new  16))
+  (define %7 (+  4  p0.new.div))
+  (define %8 (*  %7  16))
+  (define %12 (+  %8  15))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27180,29 +26614,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %22 (+  2  %iterator1.new.div))
-   (define %23 (*  %22  32))
-   (define %27 (+  %23  31))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %7 (+  2  %iterator0.new.div))
-   (define %8 (*  %7  32))
-   (define %12 (+  %8  31))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define p0.new.div (/  p0.new  32))
+  (define %7 (+  2  p0.new.div))
+  (define %8 (*  %7  32))
+  (define %12 (+  %8  31))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27213,29 +26635,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %iterator1.new.div (/  %iterator1.new  64))
-   (define %22 (+  1  %iterator1.new.div))
-   (define %23 (*  %22  64))
-   (define %27 (+  %23  63))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %iterator0.new.div (/  %iterator0.new  64))
-   (define %7 (+  1  %iterator0.new.div))
-   (define %8 (*  %7  64))
-   (define %12 (+  %8  63))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 64))])
+  (define p0.new.div (/  p0.new  64))
+  (define %7 (+  1  p0.new.div))
+  (define %8 (*  %7  64))
+  (define %12 (+  %8  63))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )
@@ -27246,29 +26656,17 @@ result)
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 128 128))])
- (concat 
-  (apply
-  concat
-  (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %22 (+  8  %iterator1.new.div))
-   (define %23 (*  %22  8))
-   (define %27 (+  %23  7))
-   (define %28 (extract  %27 %23 b))
-   %28
-  )
-  )
-  (apply
-  concat
-  (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %7 (+  8  %iterator0.new.div))
-   (define %8 (*  %7  8))
-   (define %12 (+  %8  7))
-   (define %13 (extract  %12 %8 a))
-   %13
-  )
-  )
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define p0.new.div (/  p0.new  8))
+  (define %7 (+  8  p0.new.div))
+  (define %8 (*  %7  8))
+  (define %12 (+  %8  7))
+  (define %13 (extract  %12 %8 a))
+  (define %28 (extract  %12 %8 b))
+(concat %28 %13)
+ )
  )
 )
 )

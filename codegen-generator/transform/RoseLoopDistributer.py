@@ -27,6 +27,7 @@ def IsLoopDistrbutionLegal(InsertOps: list):
         InsertOps[Index].print()
         print("InsertOps[Index + 1]:")
         InsertOps[Index + 1].print()
+        breakpoint()
         if AreBitSlicesContiguous(InsertOps[Index], InsertOps[Index + 1]):
             return False
     return True
