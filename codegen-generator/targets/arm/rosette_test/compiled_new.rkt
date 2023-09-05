@@ -8,17 +8,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 32)))
-  (define %16.downcasted0 (extract  15 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 32)))
+  (define %14.downcasted0 (extract  15 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -33,17 +33,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 64)))
-  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 64)))
+  (define %14.downcasted0 (extract  31 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -58,17 +58,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 16)))
-  (define %16.downcasted0 (extract  7 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 16)))
+  (define %14.downcasted0 (extract  7 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -83,17 +83,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 32)))
-  (define %16.downcasted0 (extract  15 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 32)))
+  (define %14.downcasted0 (extract  15 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -108,17 +108,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 64)))
-  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 64)))
+  (define %14.downcasted0 (extract  31 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -133,17 +133,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 16)))
-  (define %16.downcasted0 (extract  7 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 16)))
+  (define %14.downcasted0 (extract  7 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -160,19 +160,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  15))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %24.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (integer->bitvector (abs (bitvector->integer %24.downcasted0)) (bitvector 32)))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %33 (+  e0.new  31))
-  (define %43 (extract  %33 e0.new a))
-  (define %44 (bvadd  %43  %26.downcasted0))
-  %44
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 32)))
+  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
+  (define %24 (+  e0.new  31))
+  (define %29 (extract  %24 e0.new a))
+  (define %30 (bvadd  %29  %20.downcasted0))
+  %30
  )
  )
 )
@@ -189,19 +189,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  31))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %24.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (integer->bitvector (abs (bitvector->integer %24.downcasted0)) (bitvector 64)))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %33 (+  e0.new  63))
-  (define %43 (extract  %33 e0.new a))
-  (define %44 (bvadd  %43  %26.downcasted0))
-  %44
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 64)))
+  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
+  (define %24 (+  e0.new  63))
+  (define %29 (extract  %24 e0.new a))
+  (define %30 (bvadd  %29  %20.downcasted0))
+  %30
  )
  )
 )
@@ -218,19 +218,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  7))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 16)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 16)))
-  (define %24.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (integer->bitvector (abs (bitvector->integer %24.downcasted0)) (bitvector 16)))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %33 (+  e0.new  15))
-  (define %43 (extract  %33 e0.new a))
-  (define %44 (bvadd  %43  %26.downcasted0))
-  %44
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 16)))
+  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
+  (define %24 (+  e0.new  15))
+  (define %29 (extract  %24 e0.new a))
+  (define %30 (bvadd  %29  %20.downcasted0))
+  %30
  )
  )
 )
@@ -247,19 +247,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  15))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 32)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 32)))
-  (define %24.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (integer->bitvector (abs (bitvector->integer %24.downcasted0)) (bitvector 32)))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %33 (+  e0.new  31))
-  (define %43 (extract  %33 e0.new a))
-  (define %44 (bvadd  %43  %26.downcasted0))
-  %44
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 32)))
+  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
+  (define %24 (+  e0.new  31))
+  (define %29 (extract  %24 e0.new a))
+  (define %30 (bvadd  %29  %20.downcasted0))
+  %30
  )
  )
 )
@@ -276,19 +276,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  31))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 64)))
-  (define %24.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (integer->bitvector (abs (bitvector->integer %24.downcasted0)) (bitvector 64)))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %33 (+  e0.new  63))
-  (define %43 (extract  %33 e0.new a))
-  (define %44 (bvadd  %43  %26.downcasted0))
-  %44
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 64)))
+  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
+  (define %24 (+  e0.new  63))
+  (define %29 (extract  %24 e0.new a))
+  (define %30 (bvadd  %29  %20.downcasted0))
+  %30
  )
  )
 )
@@ -305,19 +305,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  7))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 16)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 16)))
-  (define %24.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (integer->bitvector (abs (bitvector->integer %24.downcasted0)) (bitvector 16)))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %33 (+  e0.new  15))
-  (define %43 (extract  %33 e0.new a))
-  (define %44 (bvadd  %43  %26.downcasted0))
-  %44
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 16)))
+  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
+  (define %24 (+  e0.new  15))
+  (define %29 (extract  %24 e0.new a))
+  (define %30 (bvadd  %29  %20.downcasted0))
+  %30
  )
  )
 )
@@ -332,19 +332,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %18.downcasted0 (bvsub  %9.downcasted0  %15.downcasted0))
-  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 32)))
-  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  31))
-  (define %37 (extract  %27 %22.new0 a))
-  (define %38 (bvadd  %37  %20.downcasted0))
-  %38
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 32)))
+  (define %14.downcasted0 (extract  31 0 %13.downcasted0))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %23 (extract  %18 %15.new0 a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -359,19 +359,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %18.downcasted0 (bvsub  %9.downcasted0  %15.downcasted0))
-  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 64)))
-  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  63))
-  (define %37 (extract  %27 %22.new0 a))
-  (define %38 (bvadd  %37  %20.downcasted0))
-  %38
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 64)))
+  (define %14.downcasted0 (extract  63 0 %13.downcasted0))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %23 (extract  %18 %15.new0 a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -386,19 +386,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7 (+  e0.new  7))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 16)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 16)))
-  (define %18.downcasted0 (bvsub  %9.downcasted0  %15.downcasted0))
-  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 16)))
-  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  15))
-  (define %37 (extract  %27 %22.new0 a))
-  (define %38 (bvadd  %37  %20.downcasted0))
-  %38
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 16)))
+  (define %14.downcasted0 (extract  15 0 %13.downcasted0))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  15))
+  (define %23 (extract  %18 %15.new0 a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -413,19 +413,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 32)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 32)))
-  (define %18.downcasted0 (bvsub  %9.downcasted0  %15.downcasted0))
-  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 32)))
-  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  31))
-  (define %37 (extract  %27 %22.new0 a))
-  (define %38 (bvadd  %37  %20.downcasted0))
-  %38
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 32)))
+  (define %14.downcasted0 (extract  31 0 %13.downcasted0))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %23 (extract  %18 %15.new0 a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -440,19 +440,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %18.downcasted0 (bvsub  %9.downcasted0  %15.downcasted0))
-  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 64)))
-  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  63))
-  (define %37 (extract  %27 %22.new0 a))
-  (define %38 (bvadd  %37  %20.downcasted0))
-  %38
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 64)))
+  (define %14.downcasted0 (extract  63 0 %13.downcasted0))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %23 (extract  %18 %15.new0 a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -467,19 +467,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7 (+  e0.new  7))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 16)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 16)))
-  (define %18.downcasted0 (bvsub  %9.downcasted0  %15.downcasted0))
-  (define %19.downcasted0 (integer->bitvector (abs (bitvector->integer %18.downcasted0)) (bitvector 16)))
-  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  15))
-  (define %37 (extract  %27 %22.new0 a))
-  (define %38 (bvadd  %37  %20.downcasted0))
-  %38
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 16)))
+  (define %14.downcasted0 (extract  15 0 %13.downcasted0))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  15))
+  (define %23 (extract  %18 %15.new0 a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -494,17 +494,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 32)))
-  (define %16.downcasted0 (extract  15 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 32)))
+  (define %14.downcasted0 (extract  15 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -519,17 +519,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 64)))
-  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 64)))
+  (define %14.downcasted0 (extract  31 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -544,17 +544,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 16)))
-  (define %16.downcasted0 (extract  7 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 16)))
+  (define %14.downcasted0 (extract  7 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -569,17 +569,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 32)))
-  (define %16.downcasted0 (extract  15 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 32)))
+  (define %14.downcasted0 (extract  15 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -594,17 +594,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 64)))
-  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 64)))
+  (define %14.downcasted0 (extract  31 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -619,17 +619,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %14.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %15.downcasted0 (integer->bitvector (abs (bitvector->integer %14.downcasted0)) (bitvector 16)))
-  (define %16.downcasted0 (extract  7 0 %15.downcasted0))
-  (define %25 (extract  %4 e0.new a))
-  (define %26 (bvadd  %25  %16.downcasted0))
-  %26
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (integer->bitvector (abs (bitvector->integer %12.downcasted0)) (bitvector 16)))
+  (define %14.downcasted0 (extract  7 0 %13.downcasted0))
+  (define %23 (extract  %3 e0.new a))
+  (define %24 (bvadd  %23  %14.downcasted0))
+  %24
  )
  )
 )
@@ -644,16 +644,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 32)))
-  (define %17.downcasted0 (extract  15 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 16)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 32)))
+  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 16)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -668,16 +668,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 64)))
-  (define %17.downcasted0 (extract  31 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 32)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 64)))
+  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 32)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -692,16 +692,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 16)))
-  (define %17.downcasted0 (extract  7 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 8)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 16)))
+  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 8)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -716,16 +716,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 32)))
-  (define %17.downcasted0 (extract  15 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 16)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 32)))
+  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 16)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -740,16 +740,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 64)))
-  (define %17.downcasted0 (extract  31 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 32)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 64)))
+  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 32)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -764,16 +764,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 16)))
-  (define %17.downcasted0 (extract  7 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 8)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 16)))
+  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 8)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -790,17 +790,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  15))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 32)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvsub  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (integer->bitvector (abs (bitvector->integer %25.downcasted0)) (bitvector 32)))
-  (define %27.downcasted0 (extract  31 0 %26.downcasted0))
-  (define %45 (bvadd  (bv 0 32)  %27.downcasted0))
-  %45
+  (define %7.new0 (/  e0.new  2))
+  (define %10 (+  %7.new0  15))
+  (define %11 (extract  %10 %7.new0 %2))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %17 (extract  %10 %7.new0 %5))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
+  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 32)))
+  (define %21.downcasted0 (extract  31 0 %20.downcasted0))
+  (define %31 (bvadd  (bv 0 32)  %21.downcasted0))
+  %31
  )
  )
 )
@@ -817,17 +817,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  31))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 64)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvsub  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (integer->bitvector (abs (bitvector->integer %25.downcasted0)) (bitvector 64)))
-  (define %27.downcasted0 (extract  63 0 %26.downcasted0))
-  (define %45 (bvadd  (bv 0 64)  %27.downcasted0))
-  %45
+  (define %7.new0 (/  e0.new  2))
+  (define %10 (+  %7.new0  31))
+  (define %11 (extract  %10 %7.new0 %2))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %17 (extract  %10 %7.new0 %5))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
+  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 64)))
+  (define %21.downcasted0 (extract  63 0 %20.downcasted0))
+  (define %31 (bvadd  (bv 0 64)  %21.downcasted0))
+  %31
  )
  )
 )
@@ -844,17 +844,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  7))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 16)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvsub  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (integer->bitvector (abs (bitvector->integer %25.downcasted0)) (bitvector 16)))
-  (define %27.downcasted0 (extract  15 0 %26.downcasted0))
-  (define %45 (bvadd  (bv 0 16)  %27.downcasted0))
-  %45
+  (define %7.new0 (/  e0.new  2))
+  (define %10 (+  %7.new0  7))
+  (define %11 (extract  %10 %7.new0 %2))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
+  (define %17 (extract  %10 %7.new0 %5))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 16)))
+  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 16)))
+  (define %21.downcasted0 (extract  15 0 %20.downcasted0))
+  (define %31 (bvadd  (bv 0 16)  %21.downcasted0))
+  %31
  )
  )
 )
@@ -871,17 +871,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  15))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 32)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvsub  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (integer->bitvector (abs (bitvector->integer %25.downcasted0)) (bitvector 32)))
-  (define %27.downcasted0 (extract  31 0 %26.downcasted0))
-  (define %45 (bvadd  (bv 0 32)  %27.downcasted0))
-  %45
+  (define %7.new0 (/  e0.new  2))
+  (define %10 (+  %7.new0  15))
+  (define %11 (extract  %10 %7.new0 %2))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
+  (define %17 (extract  %10 %7.new0 %5))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
+  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 32)))
+  (define %21.downcasted0 (extract  31 0 %20.downcasted0))
+  (define %31 (bvadd  (bv 0 32)  %21.downcasted0))
+  %31
  )
  )
 )
@@ -898,17 +898,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  31))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 64)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvsub  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (integer->bitvector (abs (bitvector->integer %25.downcasted0)) (bitvector 64)))
-  (define %27.downcasted0 (extract  63 0 %26.downcasted0))
-  (define %45 (bvadd  (bv 0 64)  %27.downcasted0))
-  %45
+  (define %7.new0 (/  e0.new  2))
+  (define %10 (+  %7.new0  31))
+  (define %11 (extract  %10 %7.new0 %2))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
+  (define %17 (extract  %10 %7.new0 %5))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
+  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 64)))
+  (define %21.downcasted0 (extract  63 0 %20.downcasted0))
+  (define %31 (bvadd  (bv 0 64)  %21.downcasted0))
+  %31
  )
  )
 )
@@ -925,17 +925,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  7))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 16)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvsub  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (integer->bitvector (abs (bitvector->integer %25.downcasted0)) (bitvector 16)))
-  (define %27.downcasted0 (extract  15 0 %26.downcasted0))
-  (define %45 (bvadd  (bv 0 16)  %27.downcasted0))
-  %45
+  (define %7.new0 (/  e0.new  2))
+  (define %10 (+  %7.new0  7))
+  (define %11 (extract  %10 %7.new0 %2))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
+  (define %17 (extract  %10 %7.new0 %5))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 16)))
+  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 16)))
+  (define %21.downcasted0 (extract  15 0 %20.downcasted0))
+  (define %31 (bvadd  (bv 0 16)  %21.downcasted0))
+  %31
  )
  )
 )
@@ -950,16 +950,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new a))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 32)))
-  (define %15 (extract  %8 e0.new b))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 32)))
-  (define %19.downcasted0 (bvsub  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 32)))
-  (define %21.downcasted0 (extract  31 0 %20.downcasted0))
-  (define %39 (bvadd  (bv 0 32)  %21.downcasted0))
-  %39
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 32)))
+  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 32)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -974,16 +974,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new a))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %15 (extract  %8 e0.new b))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 64)))
-  (define %19.downcasted0 (bvsub  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 64)))
-  (define %21.downcasted0 (extract  63 0 %20.downcasted0))
-  (define %39 (bvadd  (bv 0 64)  %21.downcasted0))
-  %39
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 64)))
+  (define %15.downcasted0 (extract  63 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 64)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -998,16 +998,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new a))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 16)))
-  (define %15 (extract  %8 e0.new b))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 16)))
-  (define %19.downcasted0 (bvsub  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 16)))
-  (define %21.downcasted0 (extract  15 0 %20.downcasted0))
-  (define %39 (bvadd  (bv 0 16)  %21.downcasted0))
-  %39
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 16)))
+  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 16)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1022,16 +1022,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new a))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 32)))
-  (define %15 (extract  %8 e0.new b))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 32)))
-  (define %19.downcasted0 (bvsub  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 32)))
-  (define %21.downcasted0 (extract  31 0 %20.downcasted0))
-  (define %39 (bvadd  (bv 0 32)  %21.downcasted0))
-  %39
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 32)))
+  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 32)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1046,16 +1046,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new a))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %15 (extract  %8 e0.new b))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 64)))
-  (define %19.downcasted0 (bvsub  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 64)))
-  (define %21.downcasted0 (extract  63 0 %20.downcasted0))
-  (define %39 (bvadd  (bv 0 64)  %21.downcasted0))
-  %39
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 64)))
+  (define %15.downcasted0 (extract  63 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 64)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1070,16 +1070,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new a))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 16)))
-  (define %15 (extract  %8 e0.new b))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 16)))
-  (define %19.downcasted0 (bvsub  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (integer->bitvector (abs (bitvector->integer %19.downcasted0)) (bitvector 16)))
-  (define %21.downcasted0 (extract  15 0 %20.downcasted0))
-  (define %39 (bvadd  (bv 0 16)  %21.downcasted0))
-  %39
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 16)))
+  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 16)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1094,16 +1094,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 32)))
-  (define %17.downcasted0 (extract  15 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 16)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 32)))
+  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 16)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1118,16 +1118,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 64)))
-  (define %17.downcasted0 (extract  31 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 32)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 64)))
+  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 32)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1142,16 +1142,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 16)))
-  (define %17.downcasted0 (extract  7 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 8)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 16)))
+  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 8)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1166,16 +1166,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 32)))
-  (define %17.downcasted0 (extract  15 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 16)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 32)))
+  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 16)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1190,16 +1190,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 64)))
-  (define %17.downcasted0 (extract  31 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 32)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 64)))
+  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 32)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1214,16 +1214,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %15.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %16.downcasted0 (integer->bitvector (abs (bitvector->integer %15.downcasted0)) (bitvector 16)))
-  (define %17.downcasted0 (extract  7 0 %16.downcasted0))
-  (define %27 (bvadd  (bv 0 8)  %17.downcasted0))
-  %27
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
+  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (integer->bitvector (abs (bitvector->integer %13.downcasted0)) (bitvector 16)))
+  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
+  (define %25 (bvadd  (bv 0 8)  %15.downcasted0))
+  %25
  )
  )
 )
@@ -1238,12 +1238,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 32)))
-  (define %13.downcasted0 (extract  15 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 32)))
+  (define %11.downcasted0 (extract  15 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1258,12 +1258,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 64)))
-  (define %13.downcasted0 (extract  31 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 64)))
+  (define %11.downcasted0 (extract  31 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1278,12 +1278,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 128)))
-  (define %13.downcasted0 (extract  63 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 128)))
+  (define %11.downcasted0 (extract  63 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1298,12 +1298,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 16)))
-  (define %13.downcasted0 (extract  7 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 16)))
+  (define %11.downcasted0 (extract  7 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1318,12 +1318,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 128)))
-  (define %13.downcasted0 (extract  63 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 128)))
+  (define %11.downcasted0 (extract  63 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1338,12 +1338,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 32)))
-  (define %13.downcasted0 (extract  15 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 32)))
+  (define %11.downcasted0 (extract  15 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1358,12 +1358,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 64)))
-  (define %13.downcasted0 (extract  31 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 64)))
+  (define %11.downcasted0 (extract  31 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1378,12 +1378,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 128)))
-  (define %13.downcasted0 (extract  63 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 128)))
+  (define %11.downcasted0 (extract  63 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1398,12 +1398,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 16)))
-  (define %13.downcasted0 (extract  7 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 16)))
+  (define %11.downcasted0 (extract  7 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -1418,11 +1418,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1437,11 +1437,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1456,11 +1456,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1475,11 +1475,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1494,11 +1494,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1513,11 +1513,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1532,11 +1532,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1551,11 +1551,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1570,11 +1570,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1589,11 +1589,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -1608,19 +1608,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vaddhn_high_s32  r a b )
 (define result
 (apply
@@ -1629,19 +1629,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vaddhn_high_s64  r a b )
 (define result
 (apply
@@ -1650,19 +1650,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vaddhn_high_u16  r a b )
 (define result
 (apply
@@ -1671,19 +1671,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vaddhn_high_u32  r a b )
 (define result
 (apply
@@ -1692,19 +1692,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vaddhn_high_u64  r a b )
 (define result
 (apply
@@ -1713,19 +1713,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vaddhn_s16  a b )
 (define result
 (apply
@@ -1734,13 +1734,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
@@ -1755,13 +1755,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
@@ -1776,13 +1776,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
@@ -1797,13 +1797,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
@@ -1818,13 +1818,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
@@ -1839,13 +1839,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvadd  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
@@ -1862,15 +1862,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  15))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 32)))
-  (define %20.downcasted0 (bvadd  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  31 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvadd  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  31 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -1887,15 +1887,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  31))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 64)))
-  (define %20.downcasted0 (bvadd  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  63 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvadd  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  63 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -1912,15 +1912,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  7))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 16)))
-  (define %20.downcasted0 (bvadd  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  15 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvadd  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  15 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -1937,15 +1937,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  15))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 32)))
-  (define %20.downcasted0 (bvadd  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  31 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvadd  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  31 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -1962,15 +1962,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  31))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 64)))
-  (define %20.downcasted0 (bvadd  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  63 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvadd  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  63 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -1987,15 +1987,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  7))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 16)))
-  (define %20.downcasted0 (bvadd  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  15 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvadd  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  15 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -2010,14 +2010,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %14.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2032,14 +2032,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %14.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2054,14 +2054,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %14.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2076,14 +2076,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %14.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2098,14 +2098,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %14.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2120,14 +2120,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %14.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2142,11 +2142,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2161,11 +2161,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2180,11 +2180,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2199,11 +2199,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2218,11 +2218,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2237,11 +2237,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2256,11 +2256,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2275,11 +2275,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvadd  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvadd  %4  %9))
+  %14
  )
  )
 )
@@ -2287,7 +2287,7 @@ concat
 )
 result)
 (define (vaddw_high_s16  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -2295,16 +2295,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  15))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %22.downcasted0 (bvadd  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  31 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvadd  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -2312,7 +2312,7 @@ concat
 )
 result)
 (define (vaddw_high_s32  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -2320,16 +2320,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  31))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 128)))
-  (define %22.downcasted0 (bvadd  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  63 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
+  (define %15.downcasted0 (bvadd  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -2337,7 +2337,7 @@ concat
 )
 result)
 (define (vaddw_high_s8  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -2345,16 +2345,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  7))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %22.downcasted0 (bvadd  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  15 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  7))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvadd  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -2362,7 +2362,7 @@ concat
 )
 result)
 (define (vaddw_high_u16  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -2370,16 +2370,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  15))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 64)))
-  (define %22.downcasted0 (bvadd  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  31 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvadd  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -2387,7 +2387,7 @@ concat
 )
 result)
 (define (vaddw_high_u32  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -2395,16 +2395,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  31))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 128)))
-  (define %22.downcasted0 (bvadd  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  63 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 128)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 128)))
+  (define %15.downcasted0 (bvadd  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -2412,7 +2412,7 @@ concat
 )
 result)
 (define (vaddw_high_u8  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -2420,16 +2420,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 32)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  7))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 32)))
-  (define %22.downcasted0 (bvadd  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  15 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  7))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvadd  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -2444,16 +2444,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %16 (+  e0.new  15))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
-  (define %19.downcasted0 (bvadd  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  31 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2468,16 +2468,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %16 (+  e0.new  31))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 128)))
-  (define %19.downcasted0 (bvadd  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  63 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2492,16 +2492,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %16 (+  e0.new  7))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
-  (define %19.downcasted0 (bvadd  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  15 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %9 (+  e0.new  7))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2516,16 +2516,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %16 (+  e0.new  15))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
-  (define %19.downcasted0 (bvadd  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  31 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2540,16 +2540,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 128)))
-  (define %16 (+  e0.new  31))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 128)))
-  (define %19.downcasted0 (bvadd  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  63 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2564,16 +2564,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %16 (+  e0.new  7))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
-  (define %19.downcasted0 (bvadd  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  15 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %9 (+  e0.new  7))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -2588,12 +2588,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 65535 16) (bv 0 16)))
-  %18
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 65535 16) (bv 0 16)))
+  %17
  )
  )
 )
@@ -2608,12 +2608,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 4294967295 32) (bv 0 32)))
-  %18
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 4294967295 32) (bv 0 32)))
+  %17
  )
  )
 )
@@ -2628,12 +2628,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %18
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %17
  )
  )
 )
@@ -2648,12 +2648,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 255 8) (bv 0 8)))
-  %18
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 255 8) (bv 0 8)))
+  %17
  )
  )
 )
@@ -2668,12 +2668,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 65535 16) (bv 0 16)))
-  %18
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 65535 16) (bv 0 16)))
+  %17
  )
  )
 )
@@ -2688,12 +2688,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 4294967295 32) (bv 0 32)))
-  %18
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 4294967295 32) (bv 0 32)))
+  %17
  )
  )
 )
@@ -2708,12 +2708,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %18
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %17
  )
  )
 )
@@ -2728,12 +2728,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 255 8) (bv 0 8)))
-  %18
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 255 8) (bv 0 8)))
+  %17
  )
  )
 )
@@ -2748,12 +2748,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %18
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %17
  )
  )
 )
@@ -2768,12 +2768,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %18
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %17
  )
  )
 )
@@ -2788,12 +2788,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 65535 16) (bv 0 16)))
-  %18
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 65535 16) (bv 0 16)))
+  %17
  )
  )
 )
@@ -2808,12 +2808,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 4294967295 32) (bv 0 32)))
-  %18
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 4294967295 32) (bv 0 32)))
+  %17
  )
  )
 )
@@ -2828,12 +2828,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %18
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %17
  )
  )
 )
@@ -2848,12 +2848,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 255 8) (bv 0 8)))
-  %18
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 255 8) (bv 0 8)))
+  %17
  )
  )
 )
@@ -2868,12 +2868,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 65535 16) (bv 0 16)))
-  %18
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 65535 16) (bv 0 16)))
+  %17
  )
  )
 )
@@ -2888,12 +2888,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 4294967295 32) (bv 0 32)))
-  %18
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 4294967295 32) (bv 0 32)))
+  %17
  )
  )
 )
@@ -2908,12 +2908,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %18
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %17
  )
  )
 )
@@ -2928,12 +2928,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bveq  %5  %10))
-  (define %18 (if (equal? %11 #t) (bv 255 8) (bv 0 8)))
-  %18
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bveq  %4  %9))
+  (define %17 (if (equal? %10 #t) (bv 255 8) (bv 0 8)))
+  %17
  )
  )
 )
@@ -2948,11 +2948,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -2967,11 +2967,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -2986,11 +2986,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3005,11 +3005,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -3024,11 +3024,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -3043,11 +3043,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -3062,11 +3062,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3081,11 +3081,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -3100,11 +3100,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3119,11 +3119,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3138,11 +3138,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -3157,11 +3157,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -3176,11 +3176,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3195,11 +3195,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -3214,11 +3214,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -3233,11 +3233,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -3252,11 +3252,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3271,11 +3271,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bveq  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bveq  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -3290,12 +3290,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -3310,12 +3310,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -3330,12 +3330,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3350,12 +3350,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -3370,12 +3370,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -3390,12 +3390,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -3410,12 +3410,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3430,12 +3430,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -3450,12 +3450,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3470,12 +3470,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3490,12 +3490,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -3510,12 +3510,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -3530,12 +3530,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3550,12 +3550,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -3570,12 +3570,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -3590,12 +3590,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -3610,12 +3610,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3630,12 +3630,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -3650,11 +3650,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -3669,11 +3669,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -3688,11 +3688,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3707,11 +3707,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -3726,11 +3726,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3745,11 +3745,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -3764,11 +3764,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -3783,11 +3783,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -3802,11 +3802,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsge  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsge  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -3821,12 +3821,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -3841,12 +3841,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -3861,12 +3861,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3881,12 +3881,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -3901,12 +3901,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -3921,12 +3921,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -3941,12 +3941,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -3961,12 +3961,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -3981,12 +3981,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4001,12 +4001,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4021,12 +4021,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4041,12 +4041,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4061,12 +4061,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4081,12 +4081,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4101,12 +4101,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4121,12 +4121,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4141,12 +4141,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4161,12 +4161,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4181,11 +4181,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -4200,11 +4200,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -4219,11 +4219,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -4238,11 +4238,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -4257,11 +4257,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -4276,11 +4276,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -4295,11 +4295,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -4314,11 +4314,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -4333,11 +4333,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsgt  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsgt  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -4352,12 +4352,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4372,12 +4372,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4392,12 +4392,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4412,12 +4412,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4432,12 +4432,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4452,12 +4452,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4472,12 +4472,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4492,12 +4492,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4512,12 +4512,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4532,12 +4532,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4552,12 +4552,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4572,12 +4572,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4592,12 +4592,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4612,12 +4612,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4632,12 +4632,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4652,12 +4652,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4672,12 +4672,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4692,12 +4692,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvuge  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvuge  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4712,11 +4712,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -4731,11 +4731,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -4750,11 +4750,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -4769,11 +4769,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -4788,11 +4788,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -4807,11 +4807,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -4826,11 +4826,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -4845,11 +4845,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -4864,11 +4864,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvsle  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvsle  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -4883,12 +4883,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4903,12 +4903,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -4923,12 +4923,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -4943,12 +4943,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -4963,12 +4963,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -4983,12 +4983,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -5003,12 +5003,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -5023,12 +5023,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -5043,12 +5043,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -5063,12 +5063,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -5083,12 +5083,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -5103,12 +5103,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -5123,12 +5123,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -5143,12 +5143,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvsgt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvsgt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -5163,12 +5163,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -5183,12 +5183,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -5203,12 +5203,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -5223,12 +5223,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %11 (extract  %4 e0.new a))
-  (define %13.downcasted0 (bvugt  %5  %11))
-  (define %20 (if (equal? %13.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %10 (extract  %3 e0.new a))
+  (define %12.downcasted0 (bvugt  %4  %10))
+  (define %19 (if (equal? %12.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -5243,11 +5243,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -5262,11 +5262,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -5281,11 +5281,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -5300,11 +5300,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -5319,11 +5319,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -5338,11 +5338,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 16)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 65535 16) (bv 0 16)))
-  %14
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 16)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 65535 16) (bv 0 16)))
+  %13
  )
  )
 )
@@ -5357,11 +5357,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 32)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
-  %14
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 32)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 4294967295 32) (bv 0 32)))
+  %13
  )
  )
 )
@@ -5376,11 +5376,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 64)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %14
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 64)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %13
  )
  )
 )
@@ -5395,11 +5395,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %7.downcasted0 (bvslt  %5  (bv 0 8)))
-  (define %14 (if (equal? %7.downcasted0 #t) (bv 255 8) (bv 0 8)))
-  %14
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %6.downcasted0 (bvslt  %4  (bv 0 8)))
+  (define %13 (if (equal? %6.downcasted0 #t) (bv 255 8) (bv 0 8)))
+  %13
  )
  )
 )
@@ -5407,190 +5407,190 @@ concat
 )
 result)
 (define (vcombine_s16  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_s32  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_s64  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_s8  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_u16  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_u32  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_u64  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vcombine_u8  low high )
-(define %5fakeReturn
+(define %3fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %19 (+  %inner.it  0))
-  (define %20 (+  %19  63))
-  (define %1 (extract  %20 %19 high))
-  (define %3 (extract  %20 %19 low))
-  (define %4 (concat %1 %3))
-  %4
+  (define %15 (+  %inner.it  0))
+  (define %16 (+  %15  63))
+  (define %0 (extract  %16 %15 high))
+  (define %1 (extract  %16 %15 low))
+  (define %2 (concat %0 %1))
+  %2
  )
  )
 )
 )
 )
-%5fakeReturn)
+%3fakeReturn)
 (define (vdot_s32  r a b )
 (define result2
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 32))])
- (define %120.clone.0 (+  e0.new  31))
- (define %121.clone.0 (extract  %120.clone.0 e0.new r))
- (define result2 %121.clone.0)
- (define %29.ext0.red
+ (define %83.clone.0 (+  e0.new  31))
+ (define %84.clone.0 (extract  %83.clone.0 e0.new r))
+ (define result2 %84.clone.0)
+ (define %16.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 8))])
-  (define %4.new0 (+  e0.new  iterator.0.new))
-  (define %11.new0 (+  %4.new0  7))
-  (define %13 (extract  %11.new0 %4.new0 a))
-  (define %14 (sign-extend  %13 (bitvector 32)))
-  (define %27 (extract  %11.new0 %4.new0 b))
-  (define %28 (sign-extend  %27 (bitvector 32)))
-  (define %29 (bvmul  %14  %28))
-  %29
+  (define %1.new0 (+  e0.new  iterator.0.new))
+  (define %5.new0 (+  %1.new0  7))
+  (define %6 (extract  %5.new0 %1.new0 a))
+  (define %7 (sign-extend  %6 (bitvector 32)))
+  (define %14 (extract  %5.new0 %1.new0 b))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvmul  %7  %15))
+  %16
  )
 ))
- (define %126.clone.4.new1 (+  e0.new  31))
- (define %29.acc0 (bvadd %29.ext0.red result2))
- %29.acc0
+ (define %88.clone.4.new1 (+  e0.new  31))
+ (define %16.acc0 (bvadd %16.ext0.red result2))
+ %16.acc0
 )
 )
 )
@@ -5600,26 +5600,26 @@ result2)
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 32))])
- (define %120.clone.0 (+  e0.new  31))
- (define %121.clone.0 (extract  %120.clone.0 e0.new r))
- (define result2 %121.clone.0)
- (define %29.ext0.red
+ (define %83.clone.0 (+  e0.new  31))
+ (define %84.clone.0 (extract  %83.clone.0 e0.new r))
+ (define result2 %84.clone.0)
+ (define %16.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 8))])
-  (define %4.new0 (+  e0.new  iterator.0.new))
-  (define %11.new0 (+  %4.new0  7))
-  (define %13 (extract  %11.new0 %4.new0 a))
-  (define %14 (zero-extend  %13 (bitvector 32)))
-  (define %27 (extract  %11.new0 %4.new0 b))
-  (define %28 (zero-extend  %27 (bitvector 32)))
-  (define %29 (bvmul  %14  %28))
-  %29
+  (define %1.new0 (+  e0.new  iterator.0.new))
+  (define %5.new0 (+  %1.new0  7))
+  (define %6 (extract  %5.new0 %1.new0 a))
+  (define %7 (zero-extend  %6 (bitvector 32)))
+  (define %14 (extract  %5.new0 %1.new0 b))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvmul  %7  %15))
+  %16
  )
 ))
- (define %126.clone.4.new1 (+  e0.new  31))
- (define %29.acc0 (bvadd %29.ext0.red result2))
- %29.acc0
+ (define %88.clone.4.new1 (+  e0.new  31))
+ (define %16.acc0 (bvadd %16.ext0.red result2))
+ %16.acc0
 )
 )
 )
@@ -5629,26 +5629,26 @@ result2)
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 32))])
- (define %120.clone.0 (+  e0.new  31))
- (define %121.clone.0 (extract  %120.clone.0 e0.new r))
- (define result2 %121.clone.0)
- (define %29.ext0.red
+ (define %83.clone.0 (+  e0.new  31))
+ (define %84.clone.0 (extract  %83.clone.0 e0.new r))
+ (define result2 %84.clone.0)
+ (define %16.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 8))])
-  (define %4.new0 (+  e0.new  iterator.0.new))
-  (define %11.new0 (+  %4.new0  7))
-  (define %13 (extract  %11.new0 %4.new0 a))
-  (define %14 (sign-extend  %13 (bitvector 32)))
-  (define %27 (extract  %11.new0 %4.new0 b))
-  (define %28 (sign-extend  %27 (bitvector 32)))
-  (define %29 (bvmul  %14  %28))
-  %29
+  (define %1.new0 (+  e0.new  iterator.0.new))
+  (define %5.new0 (+  %1.new0  7))
+  (define %6 (extract  %5.new0 %1.new0 a))
+  (define %7 (sign-extend  %6 (bitvector 32)))
+  (define %14 (extract  %5.new0 %1.new0 b))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvmul  %7  %15))
+  %16
  )
 ))
- (define %126.clone.4.new1 (+  e0.new  31))
- (define %29.acc0 (bvadd %29.ext0.red result2))
- %29.acc0
+ (define %88.clone.4.new1 (+  e0.new  31))
+ (define %16.acc0 (bvadd %16.ext0.red result2))
+ %16.acc0
 )
 )
 )
@@ -5658,26 +5658,26 @@ result2)
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 32))])
- (define %120.clone.0 (+  e0.new  31))
- (define %121.clone.0 (extract  %120.clone.0 e0.new r))
- (define result2 %121.clone.0)
- (define %29.ext0.red
+ (define %83.clone.0 (+  e0.new  31))
+ (define %84.clone.0 (extract  %83.clone.0 e0.new r))
+ (define result2 %84.clone.0)
+ (define %16.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 8))])
-  (define %4.new0 (+  e0.new  iterator.0.new))
-  (define %11.new0 (+  %4.new0  7))
-  (define %13 (extract  %11.new0 %4.new0 a))
-  (define %14 (zero-extend  %13 (bitvector 32)))
-  (define %27 (extract  %11.new0 %4.new0 b))
-  (define %28 (zero-extend  %27 (bitvector 32)))
-  (define %29 (bvmul  %14  %28))
-  %29
+  (define %1.new0 (+  e0.new  iterator.0.new))
+  (define %5.new0 (+  %1.new0  7))
+  (define %6 (extract  %5.new0 %1.new0 a))
+  (define %7 (zero-extend  %6 (bitvector 32)))
+  (define %14 (extract  %5.new0 %1.new0 b))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvmul  %7  %15))
+  %16
  )
 ))
- (define %126.clone.4.new1 (+  e0.new  31))
- (define %29.acc0 (bvadd %29.ext0.red result2))
- %29.acc0
+ (define %88.clone.4.new1 (+  e0.new  31))
+ (define %16.acc0 (bvadd %16.ext0.red result2))
+ %16.acc0
 )
 )
 )
@@ -5893,293 +5893,293 @@ concat
 )
 result)
 (define (vget_high_s16  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_s32  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_s64  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_s8  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_u16  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_u32  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_u64  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_high_u8  a )
-(define %4fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %16 (+  %inner.it  64))
-  (define %17 (+  %16  63))
-  (define %3 (extract  %17 %16 a))
-  %3
+  (define %11 (+  %inner.it  64))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%4fakeReturn)
+%1fakeReturn)
 (define (vget_low_s16  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_s32  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_s64  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_s8  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_u16  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_u32  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_u64  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vget_low_u8  a )
-(define %3fakeReturn
+(define %1fakeReturn
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 64 64))])
  (apply
  concat
  (for/list ([%inner.it (reverse (range 0 64 64))])
-  (define %14 (+  %inner.it  0))
-  (define %15 (+  %14  63))
-  (define %2 (extract  %15 %14 a))
-  %2
+  (define %11 (+  %inner.it  0))
+  (define %12 (+  %11  63))
+  (define %0 (extract  %12 %11 a))
+  %0
  )
  )
 )
 )
 )
-%3fakeReturn)
+%1fakeReturn)
 (define (vhadd_s16  a b )
 (define result
 (apply
@@ -6188,14 +6188,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6210,14 +6210,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6232,14 +6232,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6254,14 +6254,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6276,14 +6276,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6298,14 +6298,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6320,14 +6320,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6342,14 +6342,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6364,14 +6364,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6386,14 +6386,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6408,14 +6408,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6430,14 +6430,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6452,14 +6452,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6474,14 +6474,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6496,14 +6496,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6518,14 +6518,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6540,14 +6540,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6562,14 +6562,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6584,14 +6584,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6606,14 +6606,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6628,14 +6628,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6650,14 +6650,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  16 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  16 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6672,14 +6672,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  32 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  32 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6694,14 +6694,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %13.downcasted0 (bvsub  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (extract  8 1 %13.downcasted0))
-  %18.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  8 1 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6716,12 +6716,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmax  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmax  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6736,12 +6736,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmax  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmax  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6756,12 +6756,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmax  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmax  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6776,12 +6776,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumax  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumax  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6796,12 +6796,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumax  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumax  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6816,12 +6816,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumax  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumax  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6836,12 +6836,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmax  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmax  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6856,12 +6856,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmax  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmax  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6876,12 +6876,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmax  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmax  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6896,12 +6896,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumax  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumax  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6916,12 +6916,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumax  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumax  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6936,12 +6936,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumax  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumax  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6956,12 +6956,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmin  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmin  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6976,12 +6976,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmin  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmin  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -6996,12 +6996,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmin  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmin  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7016,12 +7016,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumin  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumin  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7036,12 +7036,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumin  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumin  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7056,12 +7056,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumin  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumin  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7076,12 +7076,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmin  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmin  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7096,12 +7096,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmin  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmin  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7116,12 +7116,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsmin  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsmin  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7136,12 +7136,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumin  %5  %11))
-  (define %19.downcasted0 (extract  15 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumin  %4  %10))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7156,12 +7156,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumin  %5  %11))
-  (define %19.downcasted0 (extract  31 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumin  %4  %10))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7176,12 +7176,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvumin  %5  %11))
-  (define %19.downcasted0 (extract  7 0 %13.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvumin  %4  %10))
+  (define %17.downcasted0 (extract  7 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -7198,14 +7198,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7222,14 +7222,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7246,14 +7246,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7270,14 +7270,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7292,16 +7292,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7316,16 +7316,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7340,16 +7340,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7364,16 +7364,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7388,16 +7388,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7412,16 +7412,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7430,8 +7430,8 @@ concat
 result)
 (define (vmlal_high_n_s16  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  15 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+(define %7 (extract  15 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -7439,16 +7439,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  15))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  31 0 %21.downcasted0))
-  (define %29 (+  e0.new  31))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvadd  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
+  (define %20 (+  e0.new  31))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvadd  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -7457,8 +7457,8 @@ concat
 result)
 (define (vmlal_high_n_s32  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  31 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+(define %7 (extract  31 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -7466,16 +7466,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  31))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %21.downcasted0))
-  (define %29 (+  e0.new  63))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvadd  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  63 0 %15.downcasted0))
+  (define %20 (+  e0.new  63))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvadd  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -7484,8 +7484,8 @@ concat
 result)
 (define (vmlal_high_n_u16  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  15 0 c))
-(define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+(define %7 (extract  15 0 c))
+(define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -7493,16 +7493,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  15))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  31 0 %21.downcasted0))
-  (define %29 (+  e0.new  31))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvadd  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
+  (define %20 (+  e0.new  31))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvadd  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -7511,8 +7511,8 @@ concat
 result)
 (define (vmlal_high_n_u32  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  31 0 c))
-(define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+(define %7 (extract  31 0 c))
+(define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -7520,16 +7520,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  31))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %21.downcasted0))
-  (define %29 (+  e0.new  63))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvadd  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  63 0 %15.downcasted0))
+  (define %20 (+  e0.new  63))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvadd  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -7546,18 +7546,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  15))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 32)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %33 (+  e0.new  31))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvadd  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  e0.new  31))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvadd  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -7574,18 +7574,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  31))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 64)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %33 (+  e0.new  63))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvadd  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  e0.new  63))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvadd  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -7602,18 +7602,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  7))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 16)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %33 (+  e0.new  15))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvadd  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  e0.new  15))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvadd  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -7630,18 +7630,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  15))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 32)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %33 (+  e0.new  31))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvadd  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  e0.new  31))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvadd  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -7658,18 +7658,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  31))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 64)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %33 (+  e0.new  63))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvadd  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  e0.new  63))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvadd  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -7686,18 +7686,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  7))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 16)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %33 (+  e0.new  15))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvadd  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  e0.new  15))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvadd  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -7705,8 +7705,8 @@ concat
 )
 result)
 (define (vmlal_n_s16  a b c )
-(define %7 (extract  15 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+(define %4 (extract  15 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -7714,16 +7714,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %13 (+  e0.new  15))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvadd  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7731,8 +7731,8 @@ concat
 )
 result)
 (define (vmlal_n_s32  a b c )
-(define %7 (extract  31 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+(define %4 (extract  31 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -7740,16 +7740,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %13 (+  e0.new  31))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvadd  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7757,8 +7757,8 @@ concat
 )
 result)
 (define (vmlal_n_u16  a b c )
-(define %7 (extract  15 0 c))
-(define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+(define %4 (extract  15 0 c))
+(define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -7766,16 +7766,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %13 (+  e0.new  15))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 32)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvadd  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7783,8 +7783,8 @@ concat
 )
 result)
 (define (vmlal_n_u32  a b c )
-(define %7 (extract  31 0 c))
-(define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+(define %4 (extract  31 0 c))
+(define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -7792,16 +7792,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %13 (+  e0.new  31))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvadd  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7816,18 +7816,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 32)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 32)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  31))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvadd  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvadd  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -7842,18 +7842,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 64)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  63))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvadd  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvadd  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -7868,18 +7868,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 16)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 16)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  15))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvadd  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  15))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvadd  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -7894,18 +7894,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 32)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 32)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  31))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvadd  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvadd  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -7920,18 +7920,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 64)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  63))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvadd  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvadd  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -7946,18 +7946,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 16)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 16)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  15))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvadd  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  15))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvadd  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -7974,14 +7974,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -7998,14 +7998,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8022,14 +8022,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8046,14 +8046,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8068,16 +8068,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8092,16 +8092,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8116,16 +8116,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8140,16 +8140,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8164,16 +8164,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8188,16 +8188,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvadd  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvadd  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8214,14 +8214,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8238,14 +8238,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8262,14 +8262,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8286,14 +8286,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8308,16 +8308,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8332,16 +8332,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8356,16 +8356,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8380,16 +8380,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8404,16 +8404,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8428,16 +8428,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8446,8 +8446,8 @@ concat
 result)
 (define (vmlsl_high_n_s16  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  15 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+(define %7 (extract  15 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -8455,16 +8455,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  15))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  31 0 %21.downcasted0))
-  (define %29 (+  e0.new  31))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvsub  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
+  (define %20 (+  e0.new  31))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvsub  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -8473,8 +8473,8 @@ concat
 result)
 (define (vmlsl_high_n_s32  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  31 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+(define %7 (extract  31 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -8482,16 +8482,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  31))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %21.downcasted0))
-  (define %29 (+  e0.new  63))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvsub  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  63 0 %15.downcasted0))
+  (define %20 (+  e0.new  63))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvsub  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -8500,8 +8500,8 @@ concat
 result)
 (define (vmlsl_high_n_u16  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  15 0 c))
-(define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+(define %7 (extract  15 0 c))
+(define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -8509,16 +8509,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  15))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  31 0 %21.downcasted0))
-  (define %29 (+  e0.new  31))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvsub  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
+  (define %20 (+  e0.new  31))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvsub  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -8527,8 +8527,8 @@ concat
 result)
 (define (vmlsl_high_n_u32  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  31 0 c))
-(define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+(define %7 (extract  31 0 c))
+(define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -8536,16 +8536,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  31))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
-  (define %21.downcasted0 (bvmul  %18.downcasted0  %11.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %21.downcasted0))
-  (define %29 (+  e0.new  63))
-  (define %39 (extract  %29 e0.new a))
-  (define %40 (bvsub  %39  %22.downcasted0))
-  %40
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  63 0 %15.downcasted0))
+  (define %20 (+  e0.new  63))
+  (define %25 (extract  %20 e0.new a))
+  (define %26 (bvsub  %25  %16.downcasted0))
+  %26
  )
  )
 )
@@ -8562,18 +8562,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  15))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 32)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %33 (+  e0.new  31))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvsub  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  e0.new  31))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvsub  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -8590,18 +8590,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  31))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 64)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %33 (+  e0.new  63))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvsub  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  e0.new  63))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvsub  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -8618,18 +8618,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  7))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 16)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %33 (+  e0.new  15))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvsub  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  e0.new  15))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvsub  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -8646,18 +8646,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  15))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 32)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %33 (+  e0.new  31))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvsub  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  e0.new  31))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvsub  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -8674,18 +8674,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  31))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 64)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %33 (+  e0.new  63))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvsub  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  e0.new  63))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvsub  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -8702,18 +8702,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %11.new0 (/  e0.new  2))
-  (define %14 (+  %11.new0  7))
-  (define %15 (extract  %14 %11.new0 %2))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 16)))
-  (define %21 (extract  %14 %11.new0 %5))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvmul  %16.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %33 (+  e0.new  15))
-  (define %35 (extract  %33 e0.new a))
-  (define %36 (bvsub  %35  %26.downcasted0))
-  %36
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  e0.new  15))
+  (define %24 (extract  %23 e0.new a))
+  (define %25 (bvsub  %24  %19.downcasted0))
+  %25
  )
  )
 )
@@ -8721,8 +8721,8 @@ concat
 )
 result)
 (define (vmlsl_n_s16  a b c )
-(define %7 (extract  15 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+(define %4 (extract  15 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -8730,16 +8730,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %13 (+  e0.new  15))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvsub  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8747,8 +8747,8 @@ concat
 )
 result)
 (define (vmlsl_n_s32  a b c )
-(define %7 (extract  31 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+(define %4 (extract  31 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -8756,16 +8756,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %13 (+  e0.new  31))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvsub  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8773,8 +8773,8 @@ concat
 )
 result)
 (define (vmlsl_n_u16  a b c )
-(define %7 (extract  15 0 c))
-(define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+(define %4 (extract  15 0 c))
+(define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -8782,16 +8782,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %13 (+  e0.new  15))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 32)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvsub  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8799,8 +8799,8 @@ concat
 )
 result)
 (define (vmlsl_n_u32  a b c )
-(define %7 (extract  31 0 c))
-(define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+(define %4 (extract  31 0 c))
+(define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -8808,16 +8808,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %13 (+  e0.new  31))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %18.downcasted0 (bvmul  %15.downcasted0  %8.downcasted0))
-  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %36 (extract  %26 %21.new0 a))
-  (define %37 (bvsub  %36  %19.downcasted0))
-  %37
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %22 (extract  %17 %14.new0 a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -8832,18 +8832,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 32)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 32)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  31))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvsub  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvsub  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -8858,18 +8858,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 64)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  63))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvsub  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvsub  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -8884,18 +8884,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 16)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (sign-extend  %15 (bitvector 16)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  15))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvsub  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  15))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvsub  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -8910,18 +8910,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 32)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 32)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  31))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvsub  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  31))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvsub  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -8936,18 +8936,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 64)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  63))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvsub  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  63))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvsub  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -8962,18 +8962,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 16)))
-  (define %15 (extract  %8 e0.new c))
-  (define %16.downcasted0 (zero-extend  %15 (bitvector 16)))
-  (define %19.downcasted0 (bvmul  %10.downcasted0  %16.downcasted0))
-  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
-  (define %22.new0 (*  e0.new  2))
-  (define %27 (+  %22.new0  15))
-  (define %29 (extract  %27 %22.new0 a))
-  (define %30 (bvsub  %29  %20.downcasted0))
-  %30
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %14.new0 (*  e0.new  2))
+  (define %17 (+  %14.new0  15))
+  (define %18 (extract  %17 %14.new0 a))
+  (define %19 (bvsub  %18  %13.downcasted0))
+  %19
  )
  )
 )
@@ -8990,14 +8990,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9014,14 +9014,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9038,14 +9038,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9062,14 +9062,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %10 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %9 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9084,16 +9084,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9108,16 +9108,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9132,16 +9132,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9156,16 +9156,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9180,16 +9180,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9204,16 +9204,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %10 (extract  %4 e0.new c))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  (define %24 (extract  %4 e0.new a))
-  (define %25 (bvsub  %24  %15.downcasted0))
-  %25
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %9 (extract  %3 e0.new c))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %22 (extract  %3 e0.new a))
+  (define %23 (bvsub  %22  %13.downcasted0))
+  %23
  )
  )
 )
@@ -9319,12 +9319,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %5.new0 (/  e0.new  2))
-  (define %8 (+  %5.new0  15))
-  (define %9 (extract  %8 %5.new0 %2))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 32)))
-  (define %22.downcasted0 (extract  31 0 %10.downcasted0))
-  %22.downcasted0
+  (define %3.new0 (/  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 %2))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %13.downcasted0 (extract  31 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9340,12 +9340,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %5.new0 (/  e0.new  2))
-  (define %8 (+  %5.new0  31))
-  (define %9 (extract  %8 %5.new0 %2))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %22.downcasted0 (extract  63 0 %10.downcasted0))
-  %22.downcasted0
+  (define %3.new0 (/  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 %2))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %13.downcasted0 (extract  63 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9361,12 +9361,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %5.new0 (/  e0.new  2))
-  (define %8 (+  %5.new0  7))
-  (define %9 (extract  %8 %5.new0 %2))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 16)))
-  (define %22.downcasted0 (extract  15 0 %10.downcasted0))
-  %22.downcasted0
+  (define %3.new0 (/  e0.new  2))
+  (define %6 (+  %3.new0  7))
+  (define %7 (extract  %6 %3.new0 %2))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 16)))
+  (define %13.downcasted0 (extract  15 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9382,12 +9382,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %5.new0 (/  e0.new  2))
-  (define %8 (+  %5.new0  15))
-  (define %9 (extract  %8 %5.new0 %2))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 32)))
-  (define %22.downcasted0 (extract  31 0 %10.downcasted0))
-  %22.downcasted0
+  (define %3.new0 (/  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 %2))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %13.downcasted0 (extract  31 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9403,12 +9403,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %5.new0 (/  e0.new  2))
-  (define %8 (+  %5.new0  31))
-  (define %9 (extract  %8 %5.new0 %2))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %22.downcasted0 (extract  63 0 %10.downcasted0))
-  %22.downcasted0
+  (define %3.new0 (/  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 %2))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %13.downcasted0 (extract  63 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9424,12 +9424,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %5.new0 (/  e0.new  2))
-  (define %8 (+  %5.new0  7))
-  (define %9 (extract  %8 %5.new0 %2))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 16)))
-  (define %22.downcasted0 (extract  15 0 %10.downcasted0))
-  %22.downcasted0
+  (define %3.new0 (/  e0.new  2))
+  (define %6 (+  %3.new0  7))
+  (define %7 (extract  %6 %3.new0 %2))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 16)))
+  (define %13.downcasted0 (extract  15 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9444,11 +9444,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
-  (define %19.downcasted0 (extract  31 0 %7.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (extract  31 0 %5.downcasted0))
+  %10.downcasted0
  )
  )
 )
@@ -9463,11 +9463,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
-  (define %19.downcasted0 (extract  63 0 %7.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (extract  63 0 %5.downcasted0))
+  %10.downcasted0
  )
  )
 )
@@ -9482,11 +9482,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
-  (define %19.downcasted0 (extract  15 0 %7.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10.downcasted0 (extract  15 0 %5.downcasted0))
+  %10.downcasted0
  )
  )
 )
@@ -9501,11 +9501,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
-  (define %19.downcasted0 (extract  31 0 %7.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (extract  31 0 %5.downcasted0))
+  %10.downcasted0
  )
  )
 )
@@ -9520,11 +9520,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
-  (define %19.downcasted0 (extract  63 0 %7.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (extract  63 0 %5.downcasted0))
+  %10.downcasted0
  )
  )
 )
@@ -9539,11 +9539,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
-  (define %19.downcasted0 (extract  15 0 %7.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10.downcasted0 (extract  15 0 %5.downcasted0))
+  %10.downcasted0
  )
  )
 )
@@ -9558,17 +9558,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  7))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %10 (concat result r))
+%10)
 (define (vmovn_high_s32  r a )
 (define result
 (apply
@@ -9577,17 +9577,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  15))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  15))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %10 (concat result r))
+%10)
 (define (vmovn_high_s64  r a )
 (define result
 (apply
@@ -9596,17 +9596,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  31))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  31))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %10 (concat result r))
+%10)
 (define (vmovn_high_u16  r a )
 (define result
 (apply
@@ -9615,17 +9615,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  7))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %10 (concat result r))
+%10)
 (define (vmovn_high_u32  r a )
 (define result
 (apply
@@ -9634,17 +9634,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  15))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  15))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %10 (concat result r))
+%10)
 (define (vmovn_high_u64  r a )
 (define result
 (apply
@@ -9653,17 +9653,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  31))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  31))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %10 (concat result r))
+%10)
 (define (vmovn_s16  a )
 (define result
 (apply
@@ -9672,10 +9672,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  7))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
@@ -9690,10 +9690,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  15))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  15))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
@@ -9708,10 +9708,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  31))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  31))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
@@ -9726,10 +9726,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  7))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
@@ -9744,10 +9744,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  15))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  15))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
@@ -9762,10 +9762,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %17.new.high.idx0 (+  %4.new0  31))
-  (define %110.new (extract  %17.new.high.idx0 %4.new0 a))
-  %110.new
+  (define %0.new0 (*  e0.new  2))
+  (define %9.new.high.idx0 (+  %0.new0  31))
+  (define %40.new (extract  %9.new.high.idx0 %0.new0 a))
+  %40.new
  )
  )
 )
@@ -9902,12 +9902,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9924,12 +9924,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9946,12 +9946,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9968,12 +9968,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -9988,14 +9988,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10010,14 +10010,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10032,14 +10032,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10054,14 +10054,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10076,14 +10076,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10098,14 +10098,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10114,8 +10114,8 @@ concat
 result)
 (define (vmull_high_n_s16  a b )
 (define %2 (extract  127 64 a))
-(define %9 (extract  15 0 b))
-(define %10.downcasted0 (sign-extend  %9 (bitvector 32)))
+(define %7 (extract  15 0 b))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -10123,13 +10123,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12.new0 (/  e0.new  2))
-  (define %15 (+  %12.new0  15))
-  (define %16 (extract  %15 %12.new0 %2))
-  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
-  (define %20.downcasted0 (bvmul  %17.downcasted0  %10.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %20.downcasted0))
-  %21.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -10138,8 +10138,8 @@ concat
 result)
 (define (vmull_high_n_s32  a b )
 (define %2 (extract  127 64 a))
-(define %9 (extract  31 0 b))
-(define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+(define %7 (extract  31 0 b))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -10147,13 +10147,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12.new0 (/  e0.new  2))
-  (define %15 (+  %12.new0  31))
-  (define %16 (extract  %15 %12.new0 %2))
-  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
-  (define %20.downcasted0 (bvmul  %17.downcasted0  %10.downcasted0))
-  (define %21.downcasted0 (extract  63 0 %20.downcasted0))
-  %21.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  63 0 %15.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -10162,8 +10162,8 @@ concat
 result)
 (define (vmull_high_n_u16  a b )
 (define %2 (extract  127 64 a))
-(define %9 (extract  15 0 b))
-(define %10.downcasted0 (zero-extend  %9 (bitvector 32)))
+(define %7 (extract  15 0 b))
+(define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -10171,13 +10171,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12.new0 (/  e0.new  2))
-  (define %15 (+  %12.new0  15))
-  (define %16 (extract  %15 %12.new0 %2))
-  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
-  (define %20.downcasted0 (bvmul  %17.downcasted0  %10.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %20.downcasted0))
-  %21.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %15.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -10186,8 +10186,8 @@ concat
 result)
 (define (vmull_high_n_u32  a b )
 (define %2 (extract  127 64 a))
-(define %9 (extract  31 0 b))
-(define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+(define %7 (extract  31 0 b))
+(define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -10195,13 +10195,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12.new0 (/  e0.new  2))
-  (define %15 (+  %12.new0  31))
-  (define %16 (extract  %15 %12.new0 %2))
-  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
-  (define %20.downcasted0 (bvmul  %17.downcasted0  %10.downcasted0))
-  (define %21.downcasted0 (extract  63 0 %20.downcasted0))
-  %21.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  %14.downcasted0  %8.downcasted0))
+  (define %16.downcasted0 (extract  63 0 %15.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -10218,15 +10218,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  15))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 32)))
-  (define %30.downcasted0 (bvmul  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  31 0 %30.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %22.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  31 0 %22.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -10243,15 +10243,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  31))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 64)))
-  (define %30.downcasted0 (bvmul  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  63 0 %30.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %22.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  63 0 %22.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -10268,15 +10268,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  7))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 16)))
-  (define %30.downcasted0 (bvmul  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  15 0 %30.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %22.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  15 0 %22.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -10293,15 +10293,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  15))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 32)))
-  (define %30.downcasted0 (bvmul  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  31 0 %30.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %22.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  31 0 %22.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -10318,15 +10318,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  31))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 64)))
-  (define %30.downcasted0 (bvmul  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  63 0 %30.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %22.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  63 0 %22.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -10343,15 +10343,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  7))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 16)))
-  (define %30.downcasted0 (bvmul  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  15 0 %30.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %22.downcasted0 (bvmul  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  15 0 %22.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -10359,8 +10359,8 @@ concat
 )
 result)
 (define (vmull_n_s16  a b )
-(define %6 (extract  15 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
+(define %4 (extract  15 0 b))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -10368,12 +10368,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %12 (+  e0.new  15))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
-  (define %17.downcasted0 (bvmul  %14.downcasted0  %7.downcasted0))
-  (define %18.downcasted0 (extract  31 0 %17.downcasted0))
-  %18.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10381,8 +10381,8 @@ concat
 )
 result)
 (define (vmull_n_s32  a b )
-(define %6 (extract  31 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+(define %4 (extract  31 0 b))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -10390,12 +10390,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %12 (+  e0.new  31))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %17.downcasted0 (bvmul  %14.downcasted0  %7.downcasted0))
-  (define %18.downcasted0 (extract  63 0 %17.downcasted0))
-  %18.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10403,8 +10403,8 @@ concat
 )
 result)
 (define (vmull_n_u16  a b )
-(define %6 (extract  15 0 b))
-(define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
+(define %4 (extract  15 0 b))
+(define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -10412,12 +10412,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %12 (+  e0.new  15))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (zero-extend  %13 (bitvector 32)))
-  (define %17.downcasted0 (bvmul  %14.downcasted0  %7.downcasted0))
-  (define %18.downcasted0 (extract  31 0 %17.downcasted0))
-  %18.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10425,8 +10425,8 @@ concat
 )
 result)
 (define (vmull_n_u32  a b )
-(define %6 (extract  31 0 b))
-(define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+(define %4 (extract  31 0 b))
+(define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -10434,12 +10434,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %12 (+  e0.new  31))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (zero-extend  %13 (bitvector 64)))
-  (define %17.downcasted0 (bvmul  %14.downcasted0  %7.downcasted0))
-  (define %18.downcasted0 (extract  63 0 %17.downcasted0))
-  %18.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  63 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10454,14 +10454,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %24.downcasted0 (bvmul  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %24.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %16.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -10476,14 +10476,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %24.downcasted0 (bvmul  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %24.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %16.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -10498,14 +10498,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %24.downcasted0 (bvmul  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %24.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %16.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -10520,14 +10520,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %24.downcasted0 (bvmul  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %24.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %16.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -10542,14 +10542,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %24.downcasted0 (bvmul  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %24.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %16.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -10564,14 +10564,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %24.downcasted0 (bvmul  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %24.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvmul  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %16.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -10588,12 +10588,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10610,12 +10610,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10632,12 +10632,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10654,12 +10654,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %5.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %11.downcasted0  %5.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10674,14 +10674,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10696,14 +10696,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10718,14 +10718,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10740,14 +10740,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  15 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  15 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10762,14 +10762,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  31 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  31 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10784,14 +10784,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %13.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %14.downcasted0 (bvmul  %12.downcasted0  %13.downcasted0))
-  (define %15.downcasted0 (extract  7 0 %14.downcasted0))
-  %15.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %11.downcasted0 (zero-extend  %9 (bitvector 16)))
+  (define %12.downcasted0 (bvmul  %10.downcasted0  %11.downcasted0))
+  (define %13.downcasted0 (extract  7 0 %12.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -10806,10 +10806,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10824,10 +10824,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10842,10 +10842,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10860,10 +10860,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10878,10 +10878,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10896,10 +10896,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10914,10 +10914,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10932,10 +10932,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10950,10 +10950,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10968,10 +10968,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -10986,10 +10986,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -11004,10 +11004,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (bvnot  %5))
-  %10
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (bvnot  %4))
+  %9
  )
  )
 )
@@ -11022,12 +11022,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  15 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  15 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11042,12 +11042,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  31 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  31 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11062,12 +11062,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  63 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  63 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11082,12 +11082,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  7 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  7 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11102,12 +11102,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  63 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  63 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11122,12 +11122,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  15 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  15 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11142,12 +11142,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  31 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  31 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11162,12 +11162,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  63 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  63 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11182,12 +11182,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %13.downcasted0 (extract  7 0 %7.downcasted0))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (extract  7 0 %6.downcasted0))
+  %11.downcasted0
  )
  )
 )
@@ -11202,22 +11202,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
-  (define %12.new0 (/  e0.new  8))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  16))
-  (define %19 (+  %14  15))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %24.downcasted0))
-  (define %32 (+  %4.new0  31))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
+  (define %8.new0 (/  e0.new  8))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  16))
+  (define %15 (+  %10  15))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  %1.new0  31))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11232,22 +11232,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.new0 (/  e0.new  16))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  32))
-  (define %19 (+  %14  31))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %24.downcasted0))
-  (define %32 (+  %4.new0  63))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.new0 (/  e0.new  16))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  32))
+  (define %15 (+  %10  31))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  %1.new0  63))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11262,22 +11262,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  7))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
-  (define %12.new0 (/  e0.new  4))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  8))
-  (define %19 (+  %14  7))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 16)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %24.downcasted0))
-  (define %32 (+  %4.new0  15))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
+  (define %8.new0 (/  e0.new  4))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  8))
+  (define %15 (+  %10  7))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  %1.new0  15))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11292,22 +11292,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %12.new0 (/  e0.new  8))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  16))
-  (define %19 (+  %14  15))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 32)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %24.downcasted0))
-  (define %32 (+  %4.new0  31))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
+  (define %8.new0 (/  e0.new  8))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  16))
+  (define %15 (+  %10  15))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  %1.new0  31))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11322,22 +11322,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.new0 (/  e0.new  16))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  32))
-  (define %19 (+  %14  31))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 64)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %24.downcasted0))
-  (define %32 (+  %4.new0  63))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.new0 (/  e0.new  16))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  32))
+  (define %15 (+  %10  31))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  %1.new0  63))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11352,22 +11352,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  7))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %12.new0 (/  e0.new  4))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  8))
-  (define %19 (+  %14  7))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 16)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %24.downcasted0))
-  (define %32 (+  %4.new0  15))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
+  (define %8.new0 (/  e0.new  4))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  8))
+  (define %15 (+  %10  7))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  %1.new0  15))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11382,22 +11382,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
-  (define %12.new0 (/  e0.new  8))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  16))
-  (define %19 (+  %14  15))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %24.downcasted0))
-  (define %32 (+  %4.new0  31))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
+  (define %8.new0 (/  e0.new  8))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  16))
+  (define %15 (+  %10  15))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  %1.new0  31))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11412,22 +11412,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.new0 (/  e0.new  16))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  32))
-  (define %19 (+  %14  31))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %24.downcasted0))
-  (define %32 (+  %4.new0  63))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.new0 (/  e0.new  16))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  32))
+  (define %15 (+  %10  31))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  %1.new0  63))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11442,22 +11442,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  7))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
-  (define %12.new0 (/  e0.new  4))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  8))
-  (define %19 (+  %14  7))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 16)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %24.downcasted0))
-  (define %32 (+  %4.new0  15))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
+  (define %8.new0 (/  e0.new  4))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  8))
+  (define %15 (+  %10  7))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  %1.new0  15))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11472,22 +11472,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
-  (define %12.new0 (/  e0.new  8))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  16))
-  (define %19 (+  %14  15))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 32)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %24.downcasted0))
-  (define %32 (+  %4.new0  31))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  15))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
+  (define %8.new0 (/  e0.new  8))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  16))
+  (define %15 (+  %10  15))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  31 0 %18.downcasted0))
+  (define %23 (+  %1.new0  31))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11502,22 +11502,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.new0 (/  e0.new  16))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  32))
-  (define %19 (+  %14  31))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 64)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %24.downcasted0))
-  (define %32 (+  %4.new0  63))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  31))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.new0 (/  e0.new  16))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  32))
+  (define %15 (+  %10  31))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  63 0 %18.downcasted0))
+  (define %23 (+  %1.new0  63))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11532,22 +11532,22 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  7))
-  (define %10 (extract  %9 %4.new0 b))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
-  (define %12.new0 (/  e0.new  4))
-  (define %13 (+  %12.new0  1))
-  (define %14 (*  %13  8))
-  (define %19 (+  %14  7))
-  (define %20 (extract  %19 %14 b))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 16)))
-  (define %24.downcasted0 (bvadd  %11.downcasted0  %21.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %24.downcasted0))
-  (define %32 (+  %4.new0  15))
-  (define %42 (extract  %32 %4.new0 a))
-  (define %43 (bvadd  %42  %25.downcasted0))
-  %43
+  (define %1.new0 (*  e0.new  2))
+  (define %5 (+  %1.new0  7))
+  (define %6 (extract  %5 %1.new0 b))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
+  (define %8.new0 (/  e0.new  4))
+  (define %9 (+  %8.new0  1))
+  (define %10 (*  %9  8))
+  (define %15 (+  %10  7))
+  (define %16 (extract  %15 %10 b))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvadd  %7.downcasted0  %17.downcasted0))
+  (define %19.downcasted0 (extract  15 0 %18.downcasted0))
+  (define %23 (+  %1.new0  15))
+  (define %28 (extract  %23 %1.new0 a))
+  (define %29 (bvadd  %28  %19.downcasted0))
+  %29
  )
  )
 )
@@ -11555,163 +11555,163 @@ concat
 )
 result2)
 (define (vpadd_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 16))])
  (define result (bv #b0 16))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 16))])
   (define iterator.0.new.div (/  iterator.0.new  16))
-  (define %3.new1 (/  e0.new  8))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  16))
-  (define %8.new0 (+  %4  15))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  8))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  16))
+  (define %6.new0 (+  %2  15))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  15))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  15))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpadd_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 32))])
  (define result (bv #b0 32))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 64 32))])
   (define iterator.0.new.div (/  iterator.0.new  32))
-  (define %3.new1 (/  e0.new  16))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  32))
-  (define %8.new0 (+  %4  31))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  16))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  32))
+  (define %6.new0 (+  %2  31))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  31))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  31))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpadd_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 8))])
  (define result (bv #b0 8))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 16 8))])
   (define iterator.0.new.div (/  iterator.0.new  8))
-  (define %3.new1 (/  e0.new  4))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  8))
-  (define %8.new0 (+  %4  7))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  4))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  8))
+  (define %6.new0 (+  %2  7))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  7))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  7))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpadd_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 16))])
  (define result (bv #b0 16))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 16))])
   (define iterator.0.new.div (/  iterator.0.new  16))
-  (define %3.new1 (/  e0.new  8))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  16))
-  (define %8.new0 (+  %4  15))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  8))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  16))
+  (define %6.new0 (+  %2  15))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  15))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  15))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpadd_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 32))])
  (define result (bv #b0 32))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 64 32))])
   (define iterator.0.new.div (/  iterator.0.new  32))
-  (define %3.new1 (/  e0.new  16))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  32))
-  (define %8.new0 (+  %4  31))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  16))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  32))
+  (define %6.new0 (+  %2  31))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  31))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  31))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpadd_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 64 8))])
  (define result (bv #b0 8))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 16 8))])
   (define iterator.0.new.div (/  iterator.0.new  8))
-  (define %3.new1 (/  e0.new  4))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  8))
-  (define %8.new0 (+  %4  7))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  4))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  8))
+  (define %6.new0 (+  %2  7))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  7))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  7))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
@@ -11724,20 +11724,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %13.new0 (/  e0.new  8))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  16))
-  (define %20 (+  %15  15))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 32)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 32)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11752,20 +11752,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.new0 (/  e0.new  16))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  32))
-  (define %20 (+  %15  31))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 64)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 64)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11780,20 +11780,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  7))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %13.new0 (/  e0.new  4))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  8))
-  (define %20 (+  %15  7))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 16)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 16)))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 16)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 16)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11808,20 +11808,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %13.new0 (/  e0.new  8))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  16))
-  (define %20 (+  %15  15))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 32)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 32)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11836,20 +11836,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.new0 (/  e0.new  16))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  32))
-  (define %20 (+  %15  31))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 64)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 64)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11864,20 +11864,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  7))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %13.new0 (/  e0.new  4))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  8))
-  (define %20 (+  %15  7))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 16)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 16)))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 16)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 16)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11892,20 +11892,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %13.new0 (/  e0.new  8))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  16))
-  (define %20 (+  %15  15))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 32)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 32)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11920,20 +11920,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.new0 (/  e0.new  16))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  32))
-  (define %20 (+  %15  31))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 64)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 64)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11948,20 +11948,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  7))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %13.new0 (/  e0.new  4))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  8))
-  (define %20 (+  %15  7))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (sign-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 16)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 16)))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (sign-extend  %17 (bitvector 16)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 16)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -11976,20 +11976,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %13.new0 (/  e0.new  8))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  16))
-  (define %20 (+  %15  15))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 32)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  31 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 32)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 32)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -12004,20 +12004,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.new0 (/  e0.new  16))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  32))
-  (define %20 (+  %15  31))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 64)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  63 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 64)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 64)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -12032,20 +12032,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  7))
-  (define %11 (extract  %10 %5.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %13.new0 (/  e0.new  4))
-  (define %14 (+  %13.new0  1))
-  (define %15 (*  %14  8))
-  (define %20 (+  %15  7))
-  (define %21 (extract  %20 %15 a))
-  (define %22.downcasted0 (zero-extend  %21 (bitvector 16)))
-  (define %25.downcasted0 (bvadd  %12.downcasted0  %22.downcasted0))
-  (define %26.downcasted0 (extract  15 0 %25.downcasted0))
-  (define %44 (bvadd  (bv 0 16)  %26.downcasted0))
-  %44
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 16)))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 a))
+  (define %18.downcasted0 (zero-extend  %17 (bitvector 16)))
+  (define %19.downcasted0 (bvadd  %8.downcasted0  %18.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %19.downcasted0))
+  (define %30 (bvadd  (bv 0 16)  %20.downcasted0))
+  %30
  )
  )
 )
@@ -12053,223 +12053,223 @@ concat
 )
 result2)
 (define (vpaddq_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 16))])
  (define result (bv #b0 16))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 16))])
   (define iterator.0.new.div (/  iterator.0.new  16))
-  (define %3.new1 (/  e0.new  8))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  16))
-  (define %8.new0 (+  %4  15))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  8))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  16))
+  (define %6.new0 (+  %2  15))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  15))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  15))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 32))])
  (define result (bv #b0 32))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 64 32))])
   (define iterator.0.new.div (/  iterator.0.new  32))
-  (define %3.new1 (/  e0.new  16))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  32))
-  (define %8.new0 (+  %4  31))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  16))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  32))
+  (define %6.new0 (+  %2  31))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  31))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  31))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_s64  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 64))])
  (define result (bv #b0 64))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 128 64))])
   (define iterator.0.new.div (/  iterator.0.new  64))
-  (define %3.new1 (/  e0.new  32))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  64))
-  (define %8.new0 (+  %4  63))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  32))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  64))
+  (define %6.new0 (+  %2  63))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  63))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  63))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 8))])
  (define result (bv #b0 8))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 16 8))])
   (define iterator.0.new.div (/  iterator.0.new  8))
-  (define %3.new1 (/  e0.new  4))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  8))
-  (define %8.new0 (+  %4  7))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  4))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  8))
+  (define %6.new0 (+  %2  7))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  7))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  7))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 16))])
  (define result (bv #b0 16))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 32 16))])
   (define iterator.0.new.div (/  iterator.0.new  16))
-  (define %3.new1 (/  e0.new  8))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  16))
-  (define %8.new0 (+  %4  15))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  8))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  16))
+  (define %6.new0 (+  %2  15))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  15))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  15))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 32))])
  (define result (bv #b0 32))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 64 32))])
   (define iterator.0.new.div (/  iterator.0.new  32))
-  (define %3.new1 (/  e0.new  16))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  32))
-  (define %8.new0 (+  %4  31))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  16))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  32))
+  (define %6.new0 (+  %2  31))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  31))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  31))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_u64  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 64))])
  (define result (bv #b0 64))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 128 64))])
   (define iterator.0.new.div (/  iterator.0.new  64))
-  (define %3.new1 (/  e0.new  32))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  64))
-  (define %8.new0 (+  %4  63))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  32))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  64))
+  (define %6.new0 (+  %2  63))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  63))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  63))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpaddq_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
 (for/list ([e0.new (reverse (range 0 128 8))])
  (define result (bv #b0 8))
- (define %9.ext0.red
+ (define %7.ext0.red
 (apply
  bvadd
  (for/list ([iterator.0.new (reverse (range 0 16 8))])
   (define iterator.0.new.div (/  iterator.0.new  8))
-  (define %3.new1 (/  e0.new  4))
-  (define %3.new0 (+  %3.new1  iterator.0.new.div))
-  (define %4 (*  %3.new0  8))
-  (define %8.new0 (+  %4  7))
-  (define %9 (extract  %8.new0 %4 %1))
-  %9
+  (define %1.new1 (/  e0.new  4))
+  (define %1.new0 (+  %1.new1  iterator.0.new.div))
+  (define %2 (*  %1.new0  8))
+  (define %6.new0 (+  %2  7))
+  (define %7 (extract  %6.new0 %2 %0))
+  %7
  )
 ))
- (define %22.clone.0.new1 (+  e0.new  7))
- (define %9.acc0 (bvadd %9.ext0.red result))
- %9.acc0
+ (define %20.clone.0.new1 (+  e0.new  7))
+ (define %7.acc0 (bvadd %7.ext0.red result))
+ %7.acc0
 )
 )
 )
 result)
 (define (vpmax_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12277,17 +12277,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmax  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmax  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12295,7 +12295,7 @@ concat
 )
 result)
 (define (vpmax_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12303,17 +12303,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmax  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmax  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12321,7 +12321,7 @@ concat
 )
 result)
 (define (vpmax_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12329,17 +12329,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmax  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmax  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12347,7 +12347,7 @@ concat
 )
 result)
 (define (vpmax_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12355,17 +12355,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumax  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumax  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12373,7 +12373,7 @@ concat
 )
 result)
 (define (vpmax_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12381,17 +12381,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumax  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumax  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12399,7 +12399,7 @@ concat
 )
 result)
 (define (vpmax_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12407,17 +12407,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumax  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumax  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12425,7 +12425,7 @@ concat
 )
 result)
 (define (vpmaxq_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12433,17 +12433,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmax  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmax  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12451,7 +12451,7 @@ concat
 )
 result)
 (define (vpmaxq_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12459,17 +12459,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmax  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmax  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12477,7 +12477,7 @@ concat
 )
 result)
 (define (vpmaxq_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12485,17 +12485,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmax  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmax  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12503,7 +12503,7 @@ concat
 )
 result)
 (define (vpmaxq_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12511,17 +12511,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumax  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumax  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12529,7 +12529,7 @@ concat
 )
 result)
 (define (vpmaxq_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12537,17 +12537,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumax  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumax  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12555,7 +12555,7 @@ concat
 )
 result)
 (define (vpmaxq_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12563,17 +12563,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumax  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumax  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12581,7 +12581,7 @@ concat
 )
 result)
 (define (vpmin_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12589,17 +12589,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmin  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmin  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12607,7 +12607,7 @@ concat
 )
 result)
 (define (vpmin_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12615,17 +12615,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmin  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmin  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12633,7 +12633,7 @@ concat
 )
 result)
 (define (vpmin_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12641,17 +12641,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmin  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmin  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12659,7 +12659,7 @@ concat
 )
 result)
 (define (vpmin_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12667,17 +12667,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumin  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumin  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12685,7 +12685,7 @@ concat
 )
 result)
 (define (vpmin_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12693,17 +12693,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumin  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumin  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12711,7 +12711,7 @@ concat
 )
 result)
 (define (vpmin_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12719,17 +12719,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumin  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumin  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12737,7 +12737,7 @@ concat
 )
 result)
 (define (vpminq_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12745,17 +12745,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmin  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmin  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12763,7 +12763,7 @@ concat
 )
 result)
 (define (vpminq_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12771,17 +12771,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmin  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmin  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12789,7 +12789,7 @@ concat
 )
 result)
 (define (vpminq_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12797,17 +12797,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvsmin  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvsmin  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12815,7 +12815,7 @@ concat
 )
 result)
 (define (vpminq_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12823,17 +12823,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  15))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  8))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  16))
-  (define %18 (+  %13  15))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumin  %9  %19))
-  (define %27.downcasted0 (extract  15 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  15))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  8))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  16))
+  (define %16 (+  %11  15))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumin  %7  %17))
+  (define %24.downcasted0 (extract  15 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12841,7 +12841,7 @@ concat
 )
 result)
 (define (vpminq_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12849,17 +12849,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  31))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  16))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  32))
-  (define %18 (+  %13  31))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumin  %9  %19))
-  (define %27.downcasted0 (extract  31 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  31))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  16))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  32))
+  (define %16 (+  %11  31))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumin  %7  %17))
+  (define %24.downcasted0 (extract  31 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12867,7 +12867,7 @@ concat
 )
 result)
 (define (vpminq_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -12875,17 +12875,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %8 (+  %4.new0  7))
-  (define %9 (extract  %8 %4.new0 %1))
-  (define %11.new0 (/  e0.new  4))
-  (define %12 (+  %11.new0  1))
-  (define %13 (*  %12  8))
-  (define %18 (+  %13  7))
-  (define %19 (extract  %18 %13 %1))
-  (define %21.downcasted0 (bvumin  %9  %19))
-  (define %27.downcasted0 (extract  7 0 %21.downcasted0))
-  %27.downcasted0
+  (define %2.new0 (*  e0.new  2))
+  (define %6 (+  %2.new0  7))
+  (define %7 (extract  %6 %2.new0 %0))
+  (define %9.new0 (/  e0.new  4))
+  (define %10 (+  %9.new0  1))
+  (define %11 (*  %10  8))
+  (define %16 (+  %11  7))
+  (define %17 (extract  %16 %11 %0))
+  (define %19.downcasted0 (bvumin  %7  %17))
+  (define %24.downcasted0 (extract  7 0 %19.downcasted0))
+  %24.downcasted0
  )
  )
 )
@@ -12900,12 +12900,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 32)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 32 16 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 32)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 32 16 ))
+  %11.downcasted0
  )
  )
 )
@@ -12920,12 +12920,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 64)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 64 32 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 64)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 64 32 ))
+  %11.downcasted0
  )
  )
 )
@@ -12940,12 +12940,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 128)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 128 64 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 128)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 128 64 ))
+  %11.downcasted0
  )
  )
 )
@@ -12960,12 +12960,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 16)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 16 8 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 16)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 16 8 ))
+  %11.downcasted0
  )
  )
 )
@@ -12980,12 +12980,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 16)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 16 8 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 16)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 16 8 ))
+  %11.downcasted0
  )
  )
 )
@@ -13000,12 +13000,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 128)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 128 64 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 128)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 128 64 ))
+  %11.downcasted0
  )
  )
 )
@@ -13020,12 +13020,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 32)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 32 16 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 32)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 32 16 ))
+  %11.downcasted0
  )
  )
 )
@@ -13040,12 +13040,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 32)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 32 16 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 32)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 32 16 ))
+  %11.downcasted0
  )
  )
 )
@@ -13060,12 +13060,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 64)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 64 32 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 64)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 64 32 ))
+  %11.downcasted0
  )
  )
 )
@@ -13080,12 +13080,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 128)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 128 64 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 128)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 128 64 ))
+  %11.downcasted0
  )
  )
 )
@@ -13100,12 +13100,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 16)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 16 8 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 16)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 16 8 ))
+  %11.downcasted0
  )
  )
 )
@@ -13120,12 +13120,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (integer->bitvector (abs (bitvector->integer %6.downcasted0)) (bitvector 64)))
-  (define %12.downcasted0 (bvssat %7.downcasted0 64 32 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (integer->bitvector (abs (bitvector->integer %5.downcasted0)) (bitvector 64)))
+  (define %11.downcasted0 (bvssat %6.downcasted0 64 32 ))
+  %11.downcasted0
  )
  )
 )
@@ -13140,11 +13140,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -13159,11 +13159,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -13178,11 +13178,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -13197,11 +13197,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -13216,11 +13216,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -13235,11 +13235,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -13254,11 +13254,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -13273,11 +13273,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -13292,11 +13292,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -13311,11 +13311,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -13330,11 +13330,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -13349,11 +13349,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -13368,11 +13368,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -13387,11 +13387,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -13406,11 +13406,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -13425,11 +13425,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -13444,11 +13444,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -13463,11 +13463,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -13482,11 +13482,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -13501,11 +13501,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -13520,11 +13520,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -13539,11 +13539,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -13558,11 +13558,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnsw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnsw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -13577,11 +13577,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvaddnuw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvaddnuw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -13590,8 +13590,8 @@ concat
 result)
 (define (vqdmlal_high_n_s16  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  15 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+(define %7 (extract  15 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -13599,16 +13599,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  15))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
-  (define %19.downcasted0 (bvmul  (bv 2 32)  %18.downcasted0))
-  (define %20.downcasted0 (bvmulnsw  %19.downcasted0  %11.downcasted0 32))
-  (define %29 (+  e0.new  31))
-  (define %31 (extract  %29 e0.new a))
-  (define %34.downcasted0 (bvaddnsw  %31  %20.downcasted0 32))
-  %34.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  (bv 2 32)  %14.downcasted0))
+  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %8.downcasted0 32))
+  (define %21 (+  e0.new  31))
+  (define %22 (extract  %21 e0.new a))
+  (define %25.downcasted0 (bvaddnsw  %22  %16.downcasted0 32))
+  %25.downcasted0
  )
  )
 )
@@ -13617,8 +13617,8 @@ concat
 result)
 (define (vqdmlal_high_n_s32  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  31 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+(define %7 (extract  31 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -13626,16 +13626,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  31))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
-  (define %19.downcasted0 (bvmul  (bv 2 64)  %18.downcasted0))
-  (define %20.downcasted0 (bvmulnsw  %19.downcasted0  %11.downcasted0 64))
-  (define %29 (+  e0.new  63))
-  (define %31 (extract  %29 e0.new a))
-  (define %34.downcasted0 (bvaddnsw  %31  %20.downcasted0 64))
-  %34.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
+  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %8.downcasted0 64))
+  (define %21 (+  e0.new  63))
+  (define %22 (extract  %21 e0.new a))
+  (define %25.downcasted0 (bvaddnsw  %22  %16.downcasted0 64))
+  %25.downcasted0
  )
  )
 )
@@ -13652,18 +13652,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  15))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %22.downcasted0 (bvmul  (bv 2 32)  %15.downcasted0))
-  (define %23.downcasted0 (bvmulnsw  %22.downcasted0  %21.downcasted0 32))
-  (define %32 (+  e0.new  31))
-  (define %34 (extract  %32 e0.new a))
-  (define %37.downcasted0 (bvaddnsw  %34  %23.downcasted0 32))
-  %37.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  (bv 2 32)  %11.downcasted0))
+  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %17.downcasted0 32))
+  (define %24 (+  e0.new  31))
+  (define %25 (extract  %24 e0.new a))
+  (define %28.downcasted0 (bvaddnsw  %25  %19.downcasted0 32))
+  %28.downcasted0
  )
  )
 )
@@ -13680,18 +13680,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  31))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %22.downcasted0 (bvmul  (bv 2 64)  %15.downcasted0))
-  (define %23.downcasted0 (bvmulnsw  %22.downcasted0  %21.downcasted0 64))
-  (define %32 (+  e0.new  63))
-  (define %34 (extract  %32 e0.new a))
-  (define %37.downcasted0 (bvaddnsw  %34  %23.downcasted0 64))
-  %37.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  (bv 2 64)  %11.downcasted0))
+  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %17.downcasted0 64))
+  (define %24 (+  e0.new  63))
+  (define %25 (extract  %24 e0.new a))
+  (define %28.downcasted0 (bvaddnsw  %25  %19.downcasted0 64))
+  %28.downcasted0
  )
  )
 )
@@ -13699,8 +13699,8 @@ concat
 )
 result)
 (define (vqdmlal_n_s16  a b c )
-(define %7 (extract  15 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+(define %4 (extract  15 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -13708,16 +13708,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %13 (+  e0.new  15))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.downcasted0 (bvmul  (bv 2 32)  %15.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %8.downcasted0 32))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvaddnsw  %28  %17.downcasted0 32))
-  %31.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %11.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %5.downcasted0 32))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvaddnsw  %19  %13.downcasted0 32))
+  %22.downcasted0
  )
  )
 )
@@ -13725,8 +13725,8 @@ concat
 )
 result)
 (define (vqdmlal_n_s32  a b c )
-(define %7 (extract  31 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+(define %4 (extract  31 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -13734,16 +13734,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %13 (+  e0.new  31))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvmul  (bv 2 64)  %15.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %8.downcasted0 64))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvaddnsw  %28  %17.downcasted0 64))
-  %31.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %11.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %5.downcasted0 64))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvaddnsw  %19  %13.downcasted0 64))
+  %22.downcasted0
  )
  )
 )
@@ -13758,18 +13758,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.downcasted0 (bvmul  (bv 2 32)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 32))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvaddnsw  %28  %17.downcasted0 32))
-  %31.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 32))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvaddnsw  %19  %13.downcasted0 32))
+  %22.downcasted0
  )
  )
 )
@@ -13784,18 +13784,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvmul  (bv 2 64)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 64))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvaddnsw  %28  %17.downcasted0 64))
-  %31.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 64))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvaddnsw  %19  %13.downcasted0 64))
+  %22.downcasted0
  )
  )
 )
@@ -13810,18 +13810,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.downcasted0 (bvmul  (bv 2 32)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 32))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvaddnsw  %28  %17.downcasted0 32))
-  %31.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 32))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvaddnsw  %19  %13.downcasted0 32))
+  %22.downcasted0
  )
  )
 )
@@ -13836,18 +13836,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvmul  (bv 2 64)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 64))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvaddnsw  %28  %17.downcasted0 64))
-  %31.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 64))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvaddnsw  %19  %13.downcasted0 64))
+  %22.downcasted0
  )
  )
 )
@@ -13856,8 +13856,8 @@ concat
 result)
 (define (vqdmlsl_high_n_s16  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  15 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+(define %7 (extract  15 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -13865,16 +13865,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  15))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
-  (define %19.downcasted0 (bvmul  (bv 2 32)  %18.downcasted0))
-  (define %20.downcasted0 (bvmulnsw  %19.downcasted0  %11.downcasted0 32))
-  (define %29 (+  e0.new  31))
-  (define %31 (extract  %29 e0.new a))
-  (define %34.downcasted0 (bvsubnsw  %31  %20.downcasted0 32))
-  %34.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  (bv 2 32)  %14.downcasted0))
+  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %8.downcasted0 32))
+  (define %21 (+  e0.new  31))
+  (define %22 (extract  %21 e0.new a))
+  (define %25.downcasted0 (bvsubnsw  %22  %16.downcasted0 32))
+  %25.downcasted0
  )
  )
 )
@@ -13883,8 +13883,8 @@ concat
 result)
 (define (vqdmlsl_high_n_s32  a b c )
 (define %2 (extract  127 64 b))
-(define %10 (extract  31 0 c))
-(define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+(define %7 (extract  31 0 c))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -13892,16 +13892,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %13.new0 (/  e0.new  2))
-  (define %16 (+  %13.new0  31))
-  (define %17 (extract  %16 %13.new0 %2))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
-  (define %19.downcasted0 (bvmul  (bv 2 64)  %18.downcasted0))
-  (define %20.downcasted0 (bvmulnsw  %19.downcasted0  %11.downcasted0 64))
-  (define %29 (+  e0.new  63))
-  (define %31 (extract  %29 e0.new a))
-  (define %34.downcasted0 (bvsubnsw  %31  %20.downcasted0 64))
-  %34.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
+  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %8.downcasted0 64))
+  (define %21 (+  e0.new  63))
+  (define %22 (extract  %21 e0.new a))
+  (define %25.downcasted0 (bvsubnsw  %22  %16.downcasted0 64))
+  %25.downcasted0
  )
  )
 )
@@ -13918,18 +13918,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  15))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %22.downcasted0 (bvmul  (bv 2 32)  %15.downcasted0))
-  (define %23.downcasted0 (bvmulnsw  %22.downcasted0  %21.downcasted0 32))
-  (define %32 (+  e0.new  31))
-  (define %34 (extract  %32 e0.new a))
-  (define %37.downcasted0 (bvsubnsw  %34  %23.downcasted0 32))
-  %37.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  (bv 2 32)  %11.downcasted0))
+  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %17.downcasted0 32))
+  (define %24 (+  e0.new  31))
+  (define %25 (extract  %24 e0.new a))
+  (define %28.downcasted0 (bvsubnsw  %25  %19.downcasted0 32))
+  %28.downcasted0
  )
  )
 )
@@ -13946,18 +13946,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10.new0 (/  e0.new  2))
-  (define %13 (+  %10.new0  31))
-  (define %14 (extract  %13 %10.new0 %2))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %20 (extract  %13 %10.new0 %5))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %22.downcasted0 (bvmul  (bv 2 64)  %15.downcasted0))
-  (define %23.downcasted0 (bvmulnsw  %22.downcasted0  %21.downcasted0 64))
-  (define %32 (+  e0.new  63))
-  (define %34 (extract  %32 e0.new a))
-  (define %37.downcasted0 (bvsubnsw  %34  %23.downcasted0 64))
-  %37.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  (bv 2 64)  %11.downcasted0))
+  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %17.downcasted0 64))
+  (define %24 (+  e0.new  63))
+  (define %25 (extract  %24 e0.new a))
+  (define %28.downcasted0 (bvsubnsw  %25  %19.downcasted0 64))
+  %28.downcasted0
  )
  )
 )
@@ -13965,8 +13965,8 @@ concat
 )
 result)
 (define (vqdmlsl_n_s16  a b c )
-(define %7 (extract  15 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+(define %4 (extract  15 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -13974,16 +13974,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %13 (+  e0.new  15))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.downcasted0 (bvmul  (bv 2 32)  %15.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %8.downcasted0 32))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvsubnsw  %28  %17.downcasted0 32))
-  %31.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %11.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %5.downcasted0 32))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvsubnsw  %19  %13.downcasted0 32))
+  %22.downcasted0
  )
  )
 )
@@ -13991,8 +13991,8 @@ concat
 )
 result)
 (define (vqdmlsl_n_s32  a b c )
-(define %7 (extract  31 0 c))
-(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+(define %4 (extract  31 0 c))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -14000,16 +14000,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %13 (+  e0.new  31))
-  (define %14 (extract  %13 e0.new b))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvmul  (bv 2 64)  %15.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %8.downcasted0 64))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvsubnsw  %28  %17.downcasted0 64))
-  %31.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %11.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %5.downcasted0 64))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvsubnsw  %19  %13.downcasted0 64))
+  %22.downcasted0
  )
  )
 )
@@ -14024,18 +14024,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.downcasted0 (bvmul  (bv 2 32)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 32))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvsubnsw  %28  %17.downcasted0 32))
-  %31.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 32))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvsubnsw  %19  %13.downcasted0 32))
+  %22.downcasted0
  )
  )
 )
@@ -14050,18 +14050,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvmul  (bv 2 64)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 64))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvsubnsw  %28  %17.downcasted0 64))
-  %31.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 64))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvsubnsw  %19  %13.downcasted0 64))
+  %22.downcasted0
  )
  )
 )
@@ -14076,18 +14076,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.downcasted0 (bvmul  (bv 2 32)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 32))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  31))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvsubnsw  %28  %17.downcasted0 32))
-  %31.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 32))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  31))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvsubnsw  %19  %13.downcasted0 32))
+  %22.downcasted0
  )
  )
 )
@@ -14102,18 +14102,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new b))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %14 (extract  %7 e0.new c))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvmul  (bv 2 64)  %9.downcasted0))
-  (define %17.downcasted0 (bvmulnsw  %16.downcasted0  %15.downcasted0 64))
-  (define %21.new0 (*  e0.new  2))
-  (define %26 (+  %21.new0  63))
-  (define %28 (extract  %26 %21.new0 a))
-  (define %31.downcasted0 (bvsubnsw  %28  %17.downcasted0 64))
-  %31.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new c))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 64))
+  (define %15.new0 (*  e0.new  2))
+  (define %18 (+  %15.new0  63))
+  (define %19 (extract  %18 %15.new0 a))
+  (define %22.downcasted0 (bvsubnsw  %19  %13.downcasted0 64))
+  %22.downcasted0
  )
  )
 )
@@ -14121,8 +14121,8 @@ concat
 )
 result)
 (define (vqdmulh_n_s16  a b )
-(define %4 (extract  15 0 b))
-(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+(define %5 (extract  15 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
 (define result
 (apply
 concat
@@ -14132,12 +14132,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 16))])
   (define %10 (+  e0.new  15))
   (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvmul  (bv 2 64)  %12.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %5.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 16 64)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 64 16 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %6.downcasted0 32))
+  (define %20 (bvashr  %13.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -14145,8 +14144,8 @@ concat
 )
 result)
 (define (vqdmulh_n_s32  a b )
-(define %4 (extract  31 0 b))
-(define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+(define %5 (extract  31 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
 (define result
 (apply
 concat
@@ -14156,12 +14155,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 32))])
   (define %10 (+  e0.new  31))
   (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %13.downcasted0 (bvmul  (bv 2 128)  %12.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %5.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 32 128)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 128 32 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %6.downcasted0 64))
+  (define %20 (bvashr  %13.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -14178,14 +14176,13 @@ concat
  (for/list ([e0.new (reverse (range 0 64 16))])
   (define %4 (+  e0.new  15))
   (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
   (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvmul  (bv 2 64)  %6.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %12.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 16 64)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 64 16 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvmulnsw  %6.downcasted0  %12.downcasted0 32))
+  (define %20 (bvashr  %13.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -14202,14 +14199,13 @@ concat
  (for/list ([e0.new (reverse (range 0 64 32))])
   (define %4 (+  e0.new  31))
   (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
   (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %13.downcasted0 (bvmul  (bv 2 128)  %6.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %12.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 32 128)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 128 32 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmulnsw  %6.downcasted0  %12.downcasted0 64))
+  (define %20 (bvashr  %13.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -14226,14 +14222,13 @@ concat
  (for/list ([e0.new (reverse (range 0 16 16))])
   (define %4 (+  e0.new  15))
   (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
   (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvmul  (bv 2 64)  %6.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %12.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 16 64)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 64 16 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvmulnsw  %6.downcasted0  %12.downcasted0 32))
+  (define %20 (bvashr  %13.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -14241,8 +14236,8 @@ concat
 )
 result)
 (define (vqdmulhq_n_s16  a b )
-(define %4 (extract  15 0 b))
-(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+(define %5 (extract  15 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
 (define result
 (apply
 concat
@@ -14252,12 +14247,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 16))])
   (define %10 (+  e0.new  15))
   (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvmul  (bv 2 64)  %12.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %5.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 16 64)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 64 16 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %6.downcasted0 32))
+  (define %20 (bvashr  %13.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -14265,8 +14259,8 @@ concat
 )
 result)
 (define (vqdmulhq_n_s32  a b )
-(define %4 (extract  31 0 b))
-(define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+(define %5 (extract  31 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
 (define result
 (apply
 concat
@@ -14276,12 +14270,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 32))])
   (define %10 (+  e0.new  31))
   (define %11 (extract  %10 e0.new a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %13.downcasted0 (bvmul  (bv 2 128)  %12.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %5.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 32 128)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 128 32 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %6.downcasted0 64))
+  (define %20 (bvashr  %13.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -14298,14 +14291,13 @@ concat
  (for/list ([e0.new (reverse (range 0 128 16))])
   (define %4 (+  e0.new  15))
   (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
   (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvmul  (bv 2 64)  %6.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %12.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 16 64)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 64 16 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
+  (define %13.downcasted0 (bvmulnsw  %6.downcasted0  %12.downcasted0 32))
+  (define %20 (bvashr  %13.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -14322,14 +14314,13 @@ concat
  (for/list ([e0.new (reverse (range 0 128 32))])
   (define %4 (+  e0.new  31))
   (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
   (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %13.downcasted0 (bvmul  (bv 2 128)  %6.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %12.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 32 128)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 128 32 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmulnsw  %6.downcasted0  %12.downcasted0 64))
+  (define %20 (bvashr  %13.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -14346,14 +14337,13 @@ concat
  (for/list ([e0.new (reverse (range 0 32 32))])
   (define %4 (+  e0.new  31))
   (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
   (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %13.downcasted0 (bvmul  (bv 2 128)  %6.downcasted0))
-  (define %14.downcasted0 (bvmul  %13.downcasted0  %12.downcasted0))
-  (define %20.downcasted0 (bvashr  %14.downcasted0  (bv 32 128)))
-  (define %21.downcasted0 (bvssat %20.downcasted0 128 32 ))
-  %21.downcasted0
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmulnsw  %6.downcasted0  %12.downcasted0 64))
+  (define %20 (bvashr  %13.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -14362,8 +14352,8 @@ concat
 result)
 (define (vqdmull_high_n_s16  a b )
 (define %2 (extract  127 64 a))
-(define %9 (extract  15 0 b))
-(define %10.downcasted0 (sign-extend  %9 (bitvector 32)))
+(define %7 (extract  15 0 b))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
 (define result
 (apply
 concat
@@ -14371,13 +14361,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12.new0 (/  e0.new  2))
-  (define %15 (+  %12.new0  15))
-  (define %16 (extract  %15 %12.new0 %2))
-  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
-  (define %18.downcasted0 (bvmul  (bv 2 32)  %17.downcasted0))
-  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %10.downcasted0 32))
-  %19.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvmul  (bv 2 32)  %14.downcasted0))
+  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %8.downcasted0 32))
+  %16.downcasted0
  )
  )
 )
@@ -14386,8 +14376,8 @@ concat
 result)
 (define (vqdmull_high_n_s32  a b )
 (define %2 (extract  127 64 a))
-(define %9 (extract  31 0 b))
-(define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+(define %7 (extract  31 0 b))
+(define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
 (define result
 (apply
 concat
@@ -14395,13 +14385,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12.new0 (/  e0.new  2))
-  (define %15 (+  %12.new0  31))
-  (define %16 (extract  %15 %12.new0 %2))
-  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
-  (define %18.downcasted0 (bvmul  (bv 2 64)  %17.downcasted0))
-  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %10.downcasted0 64))
-  %19.downcasted0
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
+  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %8.downcasted0 64))
+  %16.downcasted0
  )
  )
 )
@@ -14418,15 +14408,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9.new0 (/  e0.new  2))
-  (define %12 (+  %9.new0  15))
-  (define %13 (extract  %12 %9.new0 %2))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
-  (define %19 (extract  %12 %9.new0 %5))
-  (define %20.downcasted0 (sign-extend  %19 (bitvector 32)))
-  (define %21.downcasted0 (bvmul  (bv 2 32)  %14.downcasted0))
-  (define %22.downcasted0 (bvmulnsw  %21.downcasted0  %20.downcasted0 32))
-  %22.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvmul  (bv 2 32)  %11.downcasted0))
+  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %17.downcasted0 32))
+  %19.downcasted0
  )
  )
 )
@@ -14443,15 +14433,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9.new0 (/  e0.new  2))
-  (define %12 (+  %9.new0  31))
-  (define %13 (extract  %12 %9.new0 %2))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %19 (extract  %12 %9.new0 %5))
-  (define %20.downcasted0 (sign-extend  %19 (bitvector 64)))
-  (define %21.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
-  (define %22.downcasted0 (bvmulnsw  %21.downcasted0  %20.downcasted0 64))
-  %22.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvmul  (bv 2 64)  %11.downcasted0))
+  (define %19.downcasted0 (bvmulnsw  %18.downcasted0  %17.downcasted0 64))
+  %19.downcasted0
  )
  )
 )
@@ -14459,8 +14449,8 @@ concat
 )
 result)
 (define (vqdmull_n_s16  a b )
-(define %6 (extract  15 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
+(define %4 (extract  15 0 b))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
 (define result
 (apply
 concat
@@ -14468,12 +14458,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %12 (+  e0.new  15))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
-  (define %15.downcasted0 (bvmul  (bv 2 32)  %14.downcasted0))
-  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %7.downcasted0 32))
-  %16.downcasted0
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %11.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %5.downcasted0 32))
+  %13.downcasted0
  )
  )
 )
@@ -14481,8 +14471,8 @@ concat
 )
 result)
 (define (vqdmull_n_s32  a b )
-(define %6 (extract  31 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+(define %4 (extract  31 0 b))
+(define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
 (define result
 (apply
 concat
@@ -14490,12 +14480,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %12 (+  e0.new  31))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
-  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %7.downcasted0 64))
-  %16.downcasted0
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %11.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %5.downcasted0 64))
+  %13.downcasted0
  )
  )
 )
@@ -14510,14 +14500,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
-  (define %15.downcasted0 (bvmul  (bv 2 32)  %8.downcasted0))
-  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %14.downcasted0 32))
-  %16.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 32))
+  %13.downcasted0
  )
  )
 )
@@ -14532,14 +14522,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %8.downcasted0))
-  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %14.downcasted0 64))
-  %16.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 64))
+  %13.downcasted0
  )
  )
 )
@@ -14554,14 +14544,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
-  (define %15.downcasted0 (bvmul  (bv 2 32)  %8.downcasted0))
-  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %14.downcasted0 32))
-  %16.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvmul  (bv 2 32)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 32))
+  %13.downcasted0
  )
  )
 )
@@ -14576,14 +14566,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %8.downcasted0))
-  (define %16.downcasted0 (bvmulnsw  %15.downcasted0  %14.downcasted0 64))
-  %16.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvmul  (bv 2 64)  %5.downcasted0))
+  (define %13.downcasted0 (bvmulnsw  %12.downcasted0  %11.downcasted0 64))
+  %13.downcasted0
  )
  )
 )
@@ -14598,18 +14588,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9 (+  e0.new  15))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovn_high_s32  r a )
 (define result
 (apply
@@ -14618,18 +14608,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9 (+  e0.new  31))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovn_high_s64  r a )
 (define result
 (apply
@@ -14638,18 +14628,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9 (+  e0.new  63))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovn_high_u16  r a )
 (define result
 (apply
@@ -14658,18 +14648,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9 (+  e0.new  15))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovn_high_u32  r a )
 (define result
 (apply
@@ -14678,18 +14668,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9 (+  e0.new  31))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovn_high_u64  r a )
 (define result
 (apply
@@ -14698,18 +14688,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9 (+  e0.new  63))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovn_s16  a )
 (define result
 (apply
@@ -14718,12 +14708,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
@@ -14738,12 +14728,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
@@ -14758,12 +14748,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
@@ -14778,12 +14768,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
@@ -14798,12 +14788,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
@@ -14818,12 +14808,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
@@ -14838,12 +14828,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
@@ -14858,12 +14848,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
@@ -14878,12 +14868,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
@@ -14898,12 +14888,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
@@ -14918,12 +14908,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvssat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvssat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
@@ -14938,12 +14928,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
@@ -14958,18 +14948,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9 (+  e0.new  15))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovun_high_s32  r a )
 (define result
 (apply
@@ -14978,18 +14968,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9 (+  e0.new  31))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovun_high_s64  r a )
 (define result
 (apply
@@ -14998,18 +14988,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9 (+  e0.new  63))
-  (define %11 (extract  %9 e0.new a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
 )
 )
-(define %18 (concat result r))
-%18)
+(define %11 (concat result r))
+%11)
 (define (vqmovun_s16  a )
 (define result
 (apply
@@ -15018,12 +15008,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
@@ -15038,12 +15028,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
@@ -15058,12 +15048,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
@@ -15078,12 +15068,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 128 32 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 128 32 ))
+  %10.downcasted0
  )
  )
 )
@@ -15098,12 +15088,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 32 8 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 32 8 ))
+  %10.downcasted0
  )
  )
 )
@@ -15118,12 +15108,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %16.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvusat %16.downcasted0 64 16 ))
-  %17.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %9.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10.downcasted0 (bvusat %9.downcasted0 64 16 ))
+  %10.downcasted0
  )
  )
 )
@@ -15138,12 +15128,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 32 16 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 32 16 ))
+  %11.downcasted0
  )
  )
 )
@@ -15158,12 +15148,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 64 32 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 64 32 ))
+  %11.downcasted0
  )
  )
 )
@@ -15178,12 +15168,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 128 64 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 128 64 ))
+  %11.downcasted0
  )
  )
 )
@@ -15198,12 +15188,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 16 8 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 16 8 ))
+  %11.downcasted0
  )
  )
 )
@@ -15218,12 +15208,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 16 8 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 16 8 ))
+  %11.downcasted0
  )
  )
 )
@@ -15238,12 +15228,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 128 64 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 128 64 ))
+  %11.downcasted0
  )
  )
 )
@@ -15258,12 +15248,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 32 16 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 32 16 ))
+  %11.downcasted0
  )
  )
 )
@@ -15278,12 +15268,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 32 16 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 32 16 ))
+  %11.downcasted0
  )
  )
 )
@@ -15298,12 +15288,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 64 32 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 64 32 ))
+  %11.downcasted0
  )
  )
 )
@@ -15318,12 +15308,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 128 64 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 128 64 ))
+  %11.downcasted0
  )
  )
 )
@@ -15338,12 +15328,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 16 8 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 16 8 ))
+  %11.downcasted0
  )
  )
 )
@@ -15358,12 +15348,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %7.downcasted0 (bvneg  %6.downcasted0))
-  (define %12.downcasted0 (bvssat %7.downcasted0 64 32 ))
-  %12.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %6.downcasted0 (bvneg  %5.downcasted0))
+  (define %11.downcasted0 (bvssat %6.downcasted0 64 32 ))
+  %11.downcasted0
  )
  )
 )
@@ -15371,8 +15361,8 @@ concat
 )
 result)
 (define (vqrdmulh_n_s16  a b )
-(define %6 (extract  15 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+(define %5 (extract  15 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
 (define result
 (apply
 concat
@@ -15380,15 +15370,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %12 (+  e0.new  15))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %7.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 32768 64)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 16 64)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 64 16 ))
-  %23.downcasted0
+  (define %10 (+  e0.new  15))
+  (define %11 (extract  %10 e0.new a))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmul  %12.downcasted0  %6.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 16384 64)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 64 32 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -15396,8 +15386,8 @@ concat
 )
 result)
 (define (vqrdmulh_n_s32  a b )
-(define %6 (extract  31 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 128)))
+(define %5 (extract  31 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
 (define result
 (apply
 concat
@@ -15405,15 +15395,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %12 (+  e0.new  31))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
-  (define %15.downcasted0 (bvmul  (bv 2 128)  %14.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %7.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 2147483648 128)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 32 128)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 128 32 ))
-  %23.downcasted0
+  (define %10 (+  e0.new  31))
+  (define %11 (extract  %10 e0.new a))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
+  (define %13.downcasted0 (bvmul  %12.downcasted0  %6.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 1073741824 128)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 128 64 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -15428,17 +15418,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %8.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %14.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 32768 64)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 16 64)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 64 16 ))
-  %23.downcasted0
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmul  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 16384 64)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 64 32 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -15453,17 +15443,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
-  (define %15.downcasted0 (bvmul  (bv 2 128)  %8.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %14.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 2147483648 128)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 32 128)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 128 32 ))
-  %23.downcasted0
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
+  (define %13.downcasted0 (bvmul  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 1073741824 128)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 128 64 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -15478,17 +15468,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %8.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %14.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 32768 64)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 16 64)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 64 16 ))
-  %23.downcasted0
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmul  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 16384 64)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 64 32 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -15496,8 +15486,8 @@ concat
 )
 result)
 (define (vqrdmulhq_n_s16  a b )
-(define %6 (extract  15 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+(define %5 (extract  15 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
 (define result
 (apply
 concat
@@ -15505,15 +15495,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %14.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %7.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 32768 64)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 16 64)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 64 16 ))
-  %23.downcasted0
+  (define %10 (+  e0.new  15))
+  (define %11 (extract  %10 e0.new a))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmul  %12.downcasted0  %6.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 16384 64)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 64 32 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -15521,8 +15511,8 @@ concat
 )
 result)
 (define (vqrdmulhq_n_s32  a b )
-(define %6 (extract  31 0 b))
-(define %7.downcasted0 (sign-extend  %6 (bitvector 128)))
+(define %5 (extract  31 0 b))
+(define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
 (define result
 (apply
 concat
@@ -15530,15 +15520,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %13 (extract  %12 e0.new a))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
-  (define %15.downcasted0 (bvmul  (bv 2 128)  %14.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %7.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 2147483648 128)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 32 128)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 128 32 ))
-  %23.downcasted0
+  (define %10 (+  e0.new  31))
+  (define %11 (extract  %10 e0.new a))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
+  (define %13.downcasted0 (bvmul  %12.downcasted0  %6.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 1073741824 128)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 128 64 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -15553,17 +15543,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
-  (define %15.downcasted0 (bvmul  (bv 2 64)  %8.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %14.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 32768 64)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 16 64)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 64 16 ))
-  %23.downcasted0
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
+  (define %13.downcasted0 (bvmul  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 16384 64)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 64 32 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 15 32)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -15578,17 +15568,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
-  (define %15.downcasted0 (bvmul  (bv 2 128)  %8.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %14.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 2147483648 128)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 32 128)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 128 32 ))
-  %23.downcasted0
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
+  (define %13.downcasted0 (bvmul  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 1073741824 128)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 128 64 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -15603,17 +15593,17 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
-  (define %13 (extract  %6 e0.new b))
-  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
-  (define %15.downcasted0 (bvmul  (bv 2 128)  %8.downcasted0))
-  (define %16.downcasted0 (bvmul  %15.downcasted0  %14.downcasted0))
-  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 2147483648 128)))
-  (define %22.downcasted0 (bvashr  %17.downcasted0  (bv 32 128)))
-  (define %23.downcasted0 (bvssat %22.downcasted0 128 32 ))
-  %23.downcasted0
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %6.downcasted0 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new b))
+  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
+  (define %13.downcasted0 (bvmul  %6.downcasted0  %12.downcasted0))
+  (define %14.downcasted0 (bvadd  %13.downcasted0  (bv 1073741824 128)))
+  (define %19.downcasted0 (bvssat %14.downcasted0 128 64 ))
+  (define %20 (bvashr  %19.downcasted0  (bv 31 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -15628,18 +15618,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 32 16 ))
-  %28
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 32 16 ))
+  %22
  )
  )
 )
@@ -15654,18 +15644,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 64 32 ))
-  %28
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 64 32 ))
+  %22
  )
  )
 )
@@ -15680,18 +15670,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 128 64 ))
-  %28
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 128 64 ))
+  %22
  )
  )
 )
@@ -15706,18 +15696,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 16 8 ))
-  %28
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 16 8 ))
+  %22
  )
  )
 )
@@ -15732,18 +15722,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 32 16 ))
-  %28
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 32 16 ))
+  %22
  )
  )
 )
@@ -15758,18 +15748,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 64 32 ))
-  %28
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 64 32 ))
+  %22
  )
  )
 )
@@ -15784,18 +15774,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 128 64 ))
-  %28
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 128 64 ))
+  %22
  )
  )
 )
@@ -15810,18 +15800,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 16 8 ))
-  %28
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 16 8 ))
+  %22
  )
  )
 )
@@ -15836,18 +15826,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 16 8 ))
-  %28
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 16 8 ))
+  %22
  )
  )
 )
@@ -15862,18 +15852,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 16 8 ))
-  %28
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 16 8 ))
+  %22
  )
  )
 )
@@ -15888,18 +15878,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 128 64 ))
-  %28
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 128 64 ))
+  %22
  )
  )
 )
@@ -15914,18 +15904,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 128 64 ))
-  %28
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 128 64 ))
+  %22
  )
  )
 )
@@ -15940,18 +15930,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 32 16 ))
-  %28
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 32 16 ))
+  %22
  )
  )
 )
@@ -15966,18 +15956,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 32 16 ))
-  %28
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 32 16 ))
+  %22
  )
  )
 )
@@ -15992,18 +15982,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 32 16 ))
-  %28
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 32 16 ))
+  %22
  )
  )
 )
@@ -16018,18 +16008,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 64 32 ))
-  %28
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 64 32 ))
+  %22
  )
  )
 )
@@ -16044,18 +16034,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 128 64 ))
-  %28
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 128 64 ))
+  %22
  )
  )
 )
@@ -16070,18 +16060,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 16 8 ))
-  %28
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 16 8 ))
+  %22
  )
  )
 )
@@ -16096,18 +16086,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 32 16 ))
-  %28
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 32 16 ))
+  %22
  )
  )
 )
@@ -16122,18 +16112,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 64 32 ))
-  %28
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 64 32 ))
+  %22
  )
  )
 )
@@ -16148,18 +16138,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 128 64 ))
-  %28
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 128 64 ))
+  %22
  )
  )
 )
@@ -16174,18 +16164,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 16 8 ))
-  %28
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 16 8 ))
+  %22
  )
  )
 )
@@ -16200,18 +16190,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvssat %23 64 32 ))
-  %28
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvssat %17 64 32 ))
+  %22
  )
  )
 )
@@ -16226,18 +16216,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %28 (bvusat %23 64 32 ))
-  %28
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (bvusat %17 64 32 ))
+  %22
  )
  )
 )
@@ -16245,9 +16235,8 @@ concat
 )
 result)
 (define (vqrshrn_high_n_s16  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16255,24 +16244,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvssat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrn_high_n_s32  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16280,24 +16268,24 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvssat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrn_high_n_s64  r a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16305,24 +16293,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvssat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrn_high_n_u16  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16330,24 +16317,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrn_high_n_u32  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16355,24 +16341,24 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrn_high_n_u64  r a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16380,24 +16366,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvusat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrn_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16405,14 +16390,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvssat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
@@ -16420,9 +16405,8 @@ concat
 )
 result)
 (define (vqrshrn_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16430,14 +16414,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvssat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
@@ -16446,8 +16430,8 @@ concat
 result)
 (define (vqrshrn_n_s64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16455,14 +16439,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvssat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
@@ -16470,9 +16454,8 @@ concat
 )
 result)
 (define (vqrshrn_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16480,14 +16463,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
@@ -16495,9 +16478,8 @@ concat
 )
 result)
 (define (vqrshrn_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16505,14 +16487,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
@@ -16521,8 +16503,8 @@ concat
 result)
 (define (vqrshrn_n_u64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16530,14 +16512,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvusat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
@@ -16546,8 +16528,8 @@ concat
 result)
 (define (vqrshrnd_n_s64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16555,14 +16537,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvssat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
@@ -16571,8 +16553,8 @@ concat
 result)
 (define (vqrshrnd_n_u64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16580,14 +16562,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvusat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
@@ -16595,9 +16577,8 @@ concat
 )
 result)
 (define (vqrshrnh_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16605,14 +16586,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvssat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
@@ -16620,9 +16601,8 @@ concat
 )
 result)
 (define (vqrshrnh_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16630,14 +16610,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
@@ -16645,9 +16625,8 @@ concat
 )
 result)
 (define (vqrshrns_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16655,14 +16634,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvssat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvssat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
@@ -16670,9 +16649,8 @@ concat
 )
 result)
 (define (vqrshrns_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16680,14 +16658,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
@@ -16695,9 +16673,8 @@ concat
 )
 result)
 (define (vqrshrun_high_n_s16  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16705,24 +16682,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrun_high_n_s32  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16730,24 +16706,24 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrun_high_n_s64  r a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16755,24 +16731,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvusat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %23 (concat result r))
-%23)
+(define %17 (concat result r))
+%17)
 (define (vqrshrun_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16780,14 +16755,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
@@ -16795,9 +16770,8 @@ concat
 )
 result)
 (define (vqrshrun_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16805,14 +16779,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
@@ -16821,8 +16795,8 @@ concat
 result)
 (define (vqrshrun_n_s64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16830,14 +16804,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvusat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
@@ -16846,8 +16820,8 @@ concat
 result)
 (define (vqrshrund_n_s64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16855,14 +16829,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 128 32 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (bvusat %11.downcasted0 128 32 ))
+  %16.downcasted0
  )
  )
 )
@@ -16870,9 +16844,8 @@ concat
 )
 result)
 (define (vqrshrunh_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16880,14 +16853,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 8 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 8 ))
+  %16.downcasted0
  )
  )
 )
@@ -16895,9 +16868,8 @@ concat
 )
 result)
 (define (vqrshruns_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -16905,14 +16877,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvashr  %16.downcasted0  %1.downcasted0))
-  (define %22.downcasted0 (bvusat %17.downcasted0 64 16 ))
-  %22.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %16.downcasted0 (bvusat %11.downcasted0 64 16 ))
+  %16.downcasted0
  )
  )
 )
@@ -16927,14 +16899,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 32 16 ))
-  %25
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 32 16 ))
+  %19
  )
  )
 )
@@ -16949,14 +16921,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 64 32 ))
-  %25
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 64 32 ))
+  %19
  )
  )
 )
@@ -16971,14 +16943,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 128 64 ))
-  %25
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 128 64 ))
+  %19
  )
  )
 )
@@ -16993,14 +16965,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 16 8 ))
-  %25
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 16 8 ))
+  %19
  )
  )
 )
@@ -17015,14 +16987,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 32 16 ))
-  %25
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 32 16 ))
+  %19
  )
  )
 )
@@ -17037,14 +17009,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 64 32 ))
-  %25
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 64 32 ))
+  %19
  )
  )
 )
@@ -17059,14 +17031,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 128 64 ))
-  %25
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 128 64 ))
+  %19
  )
  )
 )
@@ -17081,14 +17053,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 16 8 ))
-  %25
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 16 8 ))
+  %19
  )
  )
 )
@@ -17096,7 +17068,6 @@ concat
 )
 result)
 (define (vqshlb_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17104,12 +17075,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %6 (+  e0.new  7))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvssat %9.downcasted0 64 8 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvssat %8.downcasted0 64 8 ))
+  %13.downcasted0
  )
  )
 )
@@ -17117,7 +17088,6 @@ concat
 )
 result)
 (define (vqshlb_n_u8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17125,12 +17095,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %6 (+  e0.new  7))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 8 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 8 ))
+  %13.downcasted0
  )
  )
 )
@@ -17145,14 +17115,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 16 8 ))
-  %25
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 16 8 ))
+  %19
  )
  )
 )
@@ -17167,14 +17137,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 16 8 ))
-  %25
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 16 8 ))
+  %19
  )
  )
 )
@@ -17189,14 +17159,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 128 64 ))
-  %25
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 128 64 ))
+  %19
  )
  )
 )
@@ -17211,14 +17181,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 128 64 ))
-  %25
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 128 64 ))
+  %19
  )
  )
 )
@@ -17226,7 +17196,6 @@ concat
 )
 result)
 (define (vqshlh_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17234,12 +17203,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvssat %9.downcasted0 64 16 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvssat %8.downcasted0 64 16 ))
+  %13.downcasted0
  )
  )
 )
@@ -17247,7 +17216,6 @@ concat
 )
 result)
 (define (vqshlh_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17255,12 +17223,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 16 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 16 ))
+  %13.downcasted0
  )
  )
 )
@@ -17275,14 +17243,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 32 16 ))
-  %25
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 32 16 ))
+  %19
  )
  )
 )
@@ -17297,14 +17265,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 32 16 ))
-  %25
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 32 16 ))
+  %19
  )
  )
 )
@@ -17319,14 +17287,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 32 16 ))
-  %25
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 32 16 ))
+  %19
  )
  )
 )
@@ -17341,14 +17309,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 64 32 ))
-  %25
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 64 32 ))
+  %19
  )
  )
 )
@@ -17363,14 +17331,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 128 64 ))
-  %25
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 128 64 ))
+  %19
  )
  )
 )
@@ -17385,14 +17353,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 16 8 ))
-  %25
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 16 8 ))
+  %19
  )
  )
 )
@@ -17407,14 +17375,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 32 16 ))
-  %25
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 32 16 ))
+  %19
  )
  )
 )
@@ -17429,14 +17397,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 64 32 ))
-  %25
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 64 32 ))
+  %19
  )
  )
 )
@@ -17451,14 +17419,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 128 64 ))
-  %25
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 128 64 ))
+  %19
  )
  )
 )
@@ -17473,14 +17441,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 16 8 ))
-  %25
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 16 8 ))
+  %19
  )
  )
 )
@@ -17488,7 +17456,6 @@ concat
 )
 result)
 (define (vqshls_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17496,12 +17463,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvssat %9.downcasted0 64 32 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvssat %8.downcasted0 64 32 ))
+  %13.downcasted0
  )
  )
 )
@@ -17509,7 +17476,6 @@ concat
 )
 result)
 (define (vqshls_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17517,12 +17483,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 32 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 32 ))
+  %13.downcasted0
  )
  )
 )
@@ -17537,14 +17503,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvssat %20 64 32 ))
-  %25
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvssat %14 64 32 ))
+  %19
  )
  )
 )
@@ -17559,14 +17525,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %25 (bvusat %20 64 32 ))
-  %25
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (bvusat %14 64 32 ))
+  %19
  )
  )
 )
@@ -17574,7 +17540,6 @@ concat
 )
 result)
 (define (vqshlu_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17582,12 +17547,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 16 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 16 ))
+  %13.downcasted0
  )
  )
 )
@@ -17595,7 +17560,6 @@ concat
 )
 result)
 (define (vqshlu_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17603,12 +17567,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 32 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 32 ))
+  %13.downcasted0
  )
  )
 )
@@ -17624,12 +17588,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %6 (+  e0.new  63))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 128 64 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  63))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 128)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  %1.downcasted0))
+  (define %13.downcasted0 (bvusat %8.downcasted0 128 64 ))
+  %13.downcasted0
  )
  )
 )
@@ -17637,7 +17601,6 @@ concat
 )
 result)
 (define (vqshlu_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17645,12 +17608,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %6 (+  e0.new  7))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 8 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 8 ))
+  %13.downcasted0
  )
  )
 )
@@ -17658,7 +17621,6 @@ concat
 )
 result)
 (define (vqshlub_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17666,12 +17628,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %6 (+  e0.new  7))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 8 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 8 ))
+  %13.downcasted0
  )
  )
 )
@@ -17687,12 +17649,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %6 (+  e0.new  63))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 128 64 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  63))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 128)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  %1.downcasted0))
+  (define %13.downcasted0 (bvusat %8.downcasted0 128 64 ))
+  %13.downcasted0
  )
  )
 )
@@ -17700,7 +17662,6 @@ concat
 )
 result)
 (define (vqshluh_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17708,12 +17669,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 16 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 16 ))
+  %13.downcasted0
  )
  )
 )
@@ -17721,7 +17682,6 @@ concat
 )
 result)
 (define (vqshluq_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17729,12 +17689,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %6 (+  e0.new  15))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 16 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 16 ))
+  %13.downcasted0
  )
  )
 )
@@ -17742,7 +17702,6 @@ concat
 )
 result)
 (define (vqshluq_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17750,12 +17709,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 32 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 32 ))
+  %13.downcasted0
  )
  )
 )
@@ -17771,12 +17730,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %6 (+  e0.new  63))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 128 64 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  63))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 128)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  %1.downcasted0))
+  (define %13.downcasted0 (bvusat %8.downcasted0 128 64 ))
+  %13.downcasted0
  )
  )
 )
@@ -17784,7 +17743,6 @@ concat
 )
 result)
 (define (vqshluq_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17792,12 +17750,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %6 (+  e0.new  7))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 8 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 8 ))
+  %13.downcasted0
  )
  )
 )
@@ -17805,7 +17763,6 @@ concat
 )
 result)
 (define (vqshlus_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17813,12 +17770,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %6 (+  e0.new  31))
-  (define %7 (extract  %6 e0.new a))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
-  (define %9.downcasted0 (bvshl  %8.downcasted0  %1.downcasted0))
-  (define %14.downcasted0 (bvusat %9.downcasted0 64 32 ))
-  %14.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (bvusat %8.downcasted0 64 32 ))
+  %13.downcasted0
  )
  )
 )
@@ -17833,19 +17790,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %12 (extract  %10 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvashr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvssat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrn_high_n_s32  r a n )
 (define result
 (apply
@@ -17854,20 +17811,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvashr  %12  n))
-  (define %20.downcasted0 (bvssat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrn_high_n_s64  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17875,18 +17832,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10 (+  e0.new  63))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvashr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvssat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %10.downcasted0 (bvashr  %7  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrn_high_n_u16  r a n )
 (define result
 (apply
@@ -17895,19 +17852,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %12 (extract  %10 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrn_high_n_u32  r a n )
 (define result
 (apply
@@ -17916,20 +17873,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrn_high_n_u64  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17937,18 +17894,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10 (+  e0.new  63))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvusat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrn_n_s16  a n )
 (define result
 (apply
@@ -17957,13 +17914,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvashr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvssat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
@@ -17978,12 +17935,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  n))
-  (define %20.downcasted0 (bvssat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
@@ -17991,7 +17949,6 @@ concat
 )
 result)
 (define (vqshrn_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -17999,12 +17956,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvssat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvashr  %7  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
@@ -18019,13 +17976,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
@@ -18040,12 +17997,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
@@ -18053,7 +18011,6 @@ concat
 )
 result)
 (define (vqshrn_n_u64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -18061,12 +18018,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvusat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
@@ -18074,7 +18031,6 @@ concat
 )
 result)
 (define (vqshrnd_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -18082,12 +18038,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvssat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvashr  %7  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
@@ -18095,7 +18051,6 @@ concat
 )
 result)
 (define (vqshrnd_n_u64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -18103,12 +18058,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvusat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
@@ -18123,13 +18078,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvashr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvssat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
@@ -18144,13 +18099,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
@@ -18165,12 +18120,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  n))
-  (define %20.downcasted0 (bvssat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvssat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
@@ -18185,12 +18141,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
@@ -18205,19 +18162,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %12 (extract  %10 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvashr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrun_high_n_s32  r a n )
 (define result
 (apply
@@ -18226,20 +18183,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvashr  %12  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrun_high_n_s64  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -18247,18 +18204,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10 (+  e0.new  63))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvashr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvusat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %10.downcasted0 (bvashr  %7  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %21 (concat result r))
-%21)
+(define %16 (concat result r))
+%16)
 (define (vqshrun_n_s16  a n )
 (define result
 (apply
@@ -18267,13 +18224,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvashr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
@@ -18288,12 +18245,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
@@ -18301,7 +18259,6 @@ concat
 )
 result)
 (define (vqshrun_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -18309,12 +18266,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvusat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvashr  %7  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
@@ -18322,7 +18279,6 @@ concat
 )
 result)
 (define (vqshrund_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -18330,12 +18286,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  %1.downcasted0))
-  (define %20.downcasted0 (bvusat %15.downcasted0 64 32 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvashr  %7  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 32 ))
+  %15.downcasted0
  )
  )
 )
@@ -18350,13 +18306,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvashr  %13.downcasted0  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 8 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 8 ))
+  %15.downcasted0
  )
  )
 )
@@ -18371,12 +18327,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvashr  %12  n))
-  (define %20.downcasted0 (bvusat %15.downcasted0 32 16 ))
-  %20.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
+  (define %15.downcasted0 (bvusat %10.downcasted0 64 16 ))
+  %15.downcasted0
  )
  )
 )
@@ -18391,11 +18348,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -18410,11 +18367,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -18429,11 +18386,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -18448,11 +18405,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -18467,11 +18424,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -18486,11 +18443,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -18505,11 +18462,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -18524,11 +18481,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -18543,11 +18500,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -18562,11 +18519,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -18581,11 +18538,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -18600,11 +18557,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -18619,11 +18576,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -18638,11 +18595,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -18657,11 +18614,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -18676,11 +18633,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -18695,11 +18652,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -18714,11 +18671,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -18733,11 +18690,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 16))
-  %13.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 16))
+  %12.downcasted0
  )
  )
 )
@@ -18752,11 +18709,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -18771,11 +18728,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 64))
-  %13.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 64))
+  %12.downcasted0
  )
  )
 )
@@ -18790,11 +18747,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 8))
-  %13.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 8))
+  %12.downcasted0
  )
  )
 )
@@ -18809,11 +18766,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnsw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnsw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -18828,11 +18785,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %11 (extract  %4 e0.new b))
-  (define %13.downcasted0 (bvsubnuw  %5  %11 32))
-  %13.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %10 (extract  %3 e0.new b))
+  (define %12.downcasted0 (bvsubnuw  %4  %10 32))
+  %12.downcasted0
  )
  )
 )
@@ -18847,20 +18804,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %14 (+  e0.new  15))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vraddhn_high_s32  r a b )
 (define result
 (apply
@@ -18869,20 +18826,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %14 (+  e0.new  31))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vraddhn_high_s64  r a b )
 (define result
 (apply
@@ -18891,20 +18848,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %14 (+  e0.new  63))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vraddhn_high_u16  r a b )
 (define result
 (apply
@@ -18913,20 +18870,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %14 (+  e0.new  15))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vraddhn_high_u32  r a b )
 (define result
 (apply
@@ -18935,20 +18892,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %14 (+  e0.new  31))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vraddhn_high_u64  r a b )
 (define result
 (apply
@@ -18957,20 +18914,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %14 (+  e0.new  63))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vraddhn_s16  a b )
 (define result
 (apply
@@ -18979,14 +18936,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
@@ -19001,14 +18958,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
@@ -19023,14 +18980,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  63))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
@@ -19045,14 +19002,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
@@ -19067,14 +19024,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
@@ -19089,14 +19046,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  63))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvadd  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvadd  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
@@ -19111,15 +19068,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 32)))
-  (define %19.downcasted0 (extract  16 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 32)))
+  (define %18.downcasted0 (extract  16 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19134,15 +19091,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 64)))
-  (define %19.downcasted0 (extract  32 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 64)))
+  (define %18.downcasted0 (extract  32 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19157,15 +19114,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 16)))
-  (define %19.downcasted0 (extract  8 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 16)))
+  (define %18.downcasted0 (extract  8 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19180,15 +19137,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 32)))
-  (define %19.downcasted0 (extract  16 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 32)))
+  (define %18.downcasted0 (extract  16 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19203,15 +19160,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 64)))
-  (define %19.downcasted0 (extract  32 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 64)))
+  (define %18.downcasted0 (extract  32 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19226,15 +19183,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 16)))
-  (define %19.downcasted0 (extract  8 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 16)))
+  (define %18.downcasted0 (extract  8 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19249,15 +19206,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 32)))
-  (define %19.downcasted0 (extract  16 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 32)))
+  (define %18.downcasted0 (extract  16 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19272,15 +19229,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 64)))
-  (define %19.downcasted0 (extract  32 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 64)))
+  (define %18.downcasted0 (extract  32 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19295,15 +19252,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 16)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 16)))
-  (define %19.downcasted0 (extract  8 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 16)))
+  (define %18.downcasted0 (extract  8 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19318,15 +19275,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 32)))
-  (define %19.downcasted0 (extract  16 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 32)))
+  (define %18.downcasted0 (extract  16 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19341,15 +19298,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 64)))
-  (define %19.downcasted0 (extract  32 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 64)))
+  (define %18.downcasted0 (extract  32 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19364,15 +19321,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %6.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %11 (extract  %4 e0.new b))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 16)))
-  (define %17.downcasted0 (bvadd  %6.downcasted0  %12.downcasted0))
-  (define %18.downcasted0 (bvadd  %17.downcasted0  (bv 1 16)))
-  (define %19.downcasted0 (extract  8 1 %18.downcasted0))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvadd  %16.downcasted0  (bv 1 16)))
+  (define %18.downcasted0 (extract  8 1 %17.downcasted0))
+  %18.downcasted0
  )
  )
 )
@@ -19387,18 +19344,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  15 0 %23))
-  %29
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  15 0 %17))
+  %22
  )
  )
 )
@@ -19413,18 +19370,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  31 0 %23))
-  %29
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  31 0 %17))
+  %22
  )
  )
 )
@@ -19439,18 +19396,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  63 0 %23))
-  %29
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  63 0 %17))
+  %22
  )
  )
 )
@@ -19465,18 +19422,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  7 0 %23))
-  %29
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  7 0 %17))
+  %22
  )
  )
 )
@@ -19491,18 +19448,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  15 0 %23))
-  %29
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  15 0 %17))
+  %22
  )
  )
 )
@@ -19517,18 +19474,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  31 0 %23))
-  %29
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  31 0 %17))
+  %22
  )
  )
 )
@@ -19543,18 +19500,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  63 0 %23))
-  %29
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  63 0 %17))
+  %22
  )
  )
 )
@@ -19569,18 +19526,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  7 0 %23))
-  %29
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  7 0 %17))
+  %22
  )
  )
 )
@@ -19595,18 +19552,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  63 0 %23))
-  %29
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  63 0 %17))
+  %22
  )
  )
 )
@@ -19621,18 +19578,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  63 0 %23))
-  %29
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  63 0 %17))
+  %22
  )
  )
 )
@@ -19647,18 +19604,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  15 0 %23))
-  %29
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  15 0 %17))
+  %22
  )
  )
 )
@@ -19673,18 +19630,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  31 0 %23))
-  %29
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  31 0 %17))
+  %22
  )
  )
 )
@@ -19699,18 +19656,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  63 0 %23))
-  %29
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  63 0 %17))
+  %22
  )
  )
 )
@@ -19725,18 +19682,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (sign-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  7 0 %23))
-  %29
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (sign-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  7 0 %17))
+  %22
  )
  )
 )
@@ -19751,18 +19708,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 32)))
-  (define %14 (bvshl  (bv 1 32)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 32)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  15 0 %23))
-  %29
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 32)))
+  (define %9 (bvshl  (bv 1 32)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 32)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  15 0 %17))
+  %22
  )
  )
 )
@@ -19777,18 +19734,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 64)))
-  (define %14 (bvshl  (bv 1 64)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 64)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  31 0 %23))
-  %29
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 64)))
+  (define %9 (bvshl  (bv 1 64)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 64)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  31 0 %17))
+  %22
  )
  )
 )
@@ -19803,18 +19760,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 128)))
-  (define %14 (bvshl  (bv 1 128)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 128)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  63 0 %23))
-  %29
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 128)))
+  (define %9 (bvshl  (bv 1 128)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 128)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  63 0 %17))
+  %22
  )
  )
 )
@@ -19829,18 +19786,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %12 (bvneg  %11))
-  (define %13 (bvsub  %12  (bv 1 16)))
-  (define %14 (bvshl  (bv 1 16)  %13))
-  (define %19 (extract  %8 e0.new a))
-  (define %21 (zero-extend  %19 (bitvector 16)))
-  (define %22 (bvadd  %21  %14))
-  (define %23 (bvshl  %22  %11))
-  (define %29 (extract  7 0 %23))
-  %29
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %7 (bvneg  %6))
+  (define %8 (bvsub  %7  (bv 1 16)))
+  (define %9 (bvshl  (bv 1 16)  %8))
+  (define %14 (extract  %4 e0.new a))
+  (define %15 (zero-extend  %14 (bitvector 16)))
+  (define %16 (bvadd  %15  %9))
+  (define %17 (bvshl  %16  %6))
+  (define %22 (extract  7 0 %17))
+  %22
  )
  )
 )
@@ -19848,8 +19805,7 @@ concat
 )
 result)
 (define (vrshr_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -19858,14 +19814,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9 (+  e0.new  15))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  15 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 16)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  15))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -19873,8 +19829,7 @@ concat
 )
 result)
 (define (vrshr_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -19883,14 +19838,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9 (+  e0.new  31))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  31 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 32)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  31))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -19908,14 +19863,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %9 (+  e0.new  63))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 64)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  63))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 128)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
+  (define %22.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -19923,8 +19878,7 @@ concat
 )
 result)
 (define (vrshr_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -19933,14 +19887,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9 (+  e0.new  7))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  7 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 8)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  7))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -19948,8 +19902,7 @@ concat
 )
 result)
 (define (vrshr_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -19958,14 +19911,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9 (+  e0.new  15))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  15 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 16)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  15))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -19973,8 +19926,7 @@ concat
 )
 result)
 (define (vrshr_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -19983,14 +19935,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9 (+  e0.new  31))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  31 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 32)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  31))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20008,14 +19960,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %9 (+  e0.new  63))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 64)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  63))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 128)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
+  (define %22.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20023,8 +19975,7 @@ concat
 )
 result)
 (define (vrshr_n_u8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20033,14 +19984,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9 (+  e0.new  7))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  7 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 8)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  7))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20058,14 +20009,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %9 (+  e0.new  63))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 64)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  63))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 128)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
+  (define %22.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20083,14 +20034,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %9 (+  e0.new  63))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 64)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  63))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 128)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
+  (define %22.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20098,9 +20049,8 @@ concat
 )
 result)
 (define (vrshrn_high_n_s16  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20108,24 +20058,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  7 0 %17.downcasted0))
-  %23.downcasted0
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  7 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %24 (concat result r))
-%24)
+(define %17 (concat result r))
+%17)
 (define (vrshrn_high_n_s32  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20133,24 +20082,24 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  15 0 %17.downcasted0))
-  %23.downcasted0
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  15 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %24 (concat result r))
-%24)
+(define %17 (concat result r))
+%17)
 (define (vrshrn_high_n_s64  r a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20158,24 +20107,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  31 0 %17.downcasted0))
-  %23.downcasted0
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %24 (concat result r))
-%24)
+(define %17 (concat result r))
+%17)
 (define (vrshrn_high_n_u16  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20183,24 +20131,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  7 0 %17.downcasted0))
-  %23.downcasted0
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  7 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %24 (concat result r))
-%24)
+(define %17 (concat result r))
+%17)
 (define (vrshrn_high_n_u32  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20208,24 +20155,24 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  15 0 %17.downcasted0))
-  %23.downcasted0
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  15 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %24 (concat result r))
-%24)
+(define %17 (concat result r))
+%17)
 (define (vrshrn_high_n_u64  r a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20233,24 +20180,23 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  31 0 %17.downcasted0))
-  %23.downcasted0
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
 )
 )
-(define %24 (concat result r))
-%24)
+(define %17 (concat result r))
+%17)
 (define (vrshrn_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20258,14 +20204,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  7 0 %17.downcasted0))
-  %23.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  7 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -20273,9 +20219,8 @@ concat
 )
 result)
 (define (vrshrn_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20283,14 +20228,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  15 0 %17.downcasted0))
-  %23.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  15 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -20299,8 +20244,8 @@ concat
 result)
 (define (vrshrn_n_s64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20308,14 +20253,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  31 0 %17.downcasted0))
-  %23.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -20323,9 +20268,8 @@ concat
 )
 result)
 (define (vrshrn_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20333,14 +20277,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  7 0 %17.downcasted0))
-  %23.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  15))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  7 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -20348,9 +20292,8 @@ concat
 )
 result)
 (define (vrshrn_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
-(define %4.downcasted0 (bvshl  (bv 1 64)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
+(define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20358,14 +20301,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  15 0 %17.downcasted0))
-  %23.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  31))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  15 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -20374,8 +20317,8 @@ concat
 result)
 (define (vrshrn_n_u64  a n )
 (define %1.downcasted0 (zero-extend  n (bitvector 128)))
-(define %3.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
-(define %4.downcasted0 (bvshl  (bv 1 128)  %3.downcasted0))
+(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 128)))
+(define %3.downcasted0 (bvshl  (bv 1 128)  %2.downcasted0))
 (define result
 (apply
 concat
@@ -20383,14 +20326,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.downcasted0 (bvadd  %15.downcasted0  %4.downcasted0))
-  (define %17.downcasted0 (bvlshr  %16.downcasted0  %1.downcasted0))
-  (define %23.downcasted0 (extract  31 0 %17.downcasted0))
-  %23.downcasted0
+  (define %4.new0 (*  e0.new  2))
+  (define %7 (+  %4.new0  63))
+  (define %8 (extract  %7 %4.new0 a))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %16.downcasted0 (extract  31 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -20398,8 +20341,7 @@ concat
 )
 result)
 (define (vrshrq_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20408,14 +20350,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9 (+  e0.new  15))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  15 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 16)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  15))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20423,8 +20365,7 @@ concat
 )
 result)
 (define (vrshrq_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20433,14 +20374,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9 (+  e0.new  31))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  31 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 32)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  31))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20458,14 +20399,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9 (+  e0.new  63))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 64)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  63))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 128)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
+  (define %22.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20473,8 +20414,7 @@ concat
 )
 result)
 (define (vrshrq_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20483,14 +20423,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %9 (+  e0.new  7))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvashr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  7 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 8)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  7))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvashr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20498,8 +20438,7 @@ concat
 )
 result)
 (define (vrshrq_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20508,14 +20447,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9 (+  e0.new  15))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  15 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 16)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  15))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  15 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20523,8 +20462,7 @@ concat
 )
 result)
 (define (vrshrq_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20533,14 +20471,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9 (+  e0.new  31))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  31 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 32)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  31))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  31 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20558,14 +20496,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9 (+  e0.new  63))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 64)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  63))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 128)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
+  (define %22.downcasted0 (extract  63 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20573,8 +20511,7 @@ concat
 )
 result)
 (define (vrshrq_n_u8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20583,14 +20520,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %9 (+  e0.new  7))
-  (define %10 (extract  %9 e0.new a))
-  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
-  (define %12.downcasted0 (bvadd  %11.downcasted0  %3.downcasted0))
-  (define %13.downcasted0 (bvlshr  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  7 0 %13.downcasted0))
-  (define %25 (bvadd  (bv 0 8)  %24.downcasted0))
-  %25
+  (define %8 (+  e0.new  7))
+  (define %9 (extract  %8 e0.new a))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
+  (define %12.downcasted0 (bvlshr  %11.downcasted0  n))
+  (define %22.downcasted0 (extract  7 0 %12.downcasted0))
+  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
+  %23
  )
  )
 )
@@ -20598,8 +20535,7 @@ concat
 )
 result)
 (define (vrsra_n_s16  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20608,15 +20544,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  15 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20624,8 +20560,7 @@ concat
 )
 result)
 (define (vrsra_n_s32  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20634,15 +20569,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  31 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20660,15 +20595,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 128)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  63 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20676,8 +20611,7 @@ concat
 )
 result)
 (define (vrsra_n_s8  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20686,15 +20620,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  7 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  7))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20702,8 +20636,7 @@ concat
 )
 result)
 (define (vrsra_n_u16  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20712,15 +20645,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  15 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20728,8 +20661,7 @@ concat
 )
 result)
 (define (vrsra_n_u32  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20738,15 +20670,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  31 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20764,15 +20696,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 128)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  63 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20780,8 +20712,7 @@ concat
 )
 result)
 (define (vrsra_n_u8  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20790,15 +20721,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  7 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  7))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20816,15 +20747,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 128)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  63 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20842,15 +20773,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 128)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  63 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20858,8 +20789,7 @@ concat
 )
 result)
 (define (vrsraq_n_s16  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20868,15 +20798,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  15 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20884,8 +20814,7 @@ concat
 )
 result)
 (define (vrsraq_n_s32  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20894,15 +20823,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  31 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20920,15 +20849,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 128)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  63 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  %1.downcasted0))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20936,8 +20865,7 @@ concat
 )
 result)
 (define (vrsraq_n_s8  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20946,15 +20874,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvashr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  7 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  7))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvashr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20962,8 +20890,7 @@ concat
 )
 result)
 (define (vrsraq_n_u16  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20972,15 +20899,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  15 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  15))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -20988,8 +20915,7 @@ concat
 )
 result)
 (define (vrsraq_n_u32  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -20998,15 +20924,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  31 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  31))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -21024,15 +20950,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 128)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  63 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  63))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 128)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  %1.downcasted0))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -21040,8 +20966,7 @@ concat
 )
 result)
 (define (vrsraq_n_u8  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
-(define %2.downcasted0 (bvsub  %1.downcasted0  (bv 1 64)))
+(define %2.downcasted0 (bvsub  n  (bv 1 64)))
 (define %3.downcasted0 (bvshl  (bv 1 64)  %2.downcasted0))
 (define result
 (apply
@@ -21050,15 +20975,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
-  (define %11.downcasted0 (bvadd  %10.downcasted0  %3.downcasted0))
-  (define %12.downcasted0 (bvlshr  %11.downcasted0  %1.downcasted0))
-  (define %21 (extract  %8 e0.new a))
-  (define %23.downcasted0 (extract  7 0 %12.downcasted0))
-  (define %24 (bvadd  %21  %23.downcasted0))
-  %24
+  (define %7 (+  e0.new  7))
+  (define %8 (extract  %7 e0.new b))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %10.downcasted0 (bvadd  %9.downcasted0  %3.downcasted0))
+  (define %11.downcasted0 (bvlshr  %10.downcasted0  n))
+  (define %20 (extract  %7 e0.new a))
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  %20  %21.downcasted0))
+  %22
  )
  )
 )
@@ -21073,20 +20998,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %14 (+  e0.new  15))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vrsubhn_high_s32  r a b )
 (define result
 (apply
@@ -21095,20 +21020,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %14 (+  e0.new  31))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vrsubhn_high_s64  r a b )
 (define result
 (apply
@@ -21117,20 +21042,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %14 (+  e0.new  63))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vrsubhn_high_u16  r a b )
 (define result
 (apply
@@ -21139,20 +21064,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %14 (+  e0.new  15))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vrsubhn_high_u32  r a b )
 (define result
 (apply
@@ -21161,20 +21086,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %14 (+  e0.new  31))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vrsubhn_high_u64  r a b )
 (define result
 (apply
@@ -21183,20 +21108,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %14 (+  e0.new  63))
-  (define %16 (extract  %14 e0.new a))
-  (define %25 (extract  %14 e0.new b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
 )
 )
-(define %35 (concat result r))
-%35)
+(define %18 (concat result r))
+%18)
 (define (vrsubhn_s16  a b )
 (define result
 (apply
@@ -21205,14 +21130,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
@@ -21227,14 +21152,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
@@ -21249,14 +21174,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  63))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
@@ -21271,14 +21196,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 128 16)))
-  (define %34 (extract  15 8 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 128 16)))
+  (define %17 (extract  15 8 %12))
+  %17
  )
  )
 )
@@ -21293,14 +21218,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 32768 32)))
-  (define %34 (extract  31 16 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 32768 32)))
+  (define %17 (extract  31 16 %12))
+  %17
  )
  )
 )
@@ -21315,14 +21240,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  63))
-  (define %16 (extract  %14 %9.new0 a))
-  (define %25 (extract  %14 %9.new0 b))
-  (define %26 (bvsub  %16  %25))
-  (define %27 (bvadd  %26  (bv 2147483648 64)))
-  (define %34 (extract  63 32 %27))
-  %34
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %12 (bvadd  %11  (bv 2147483648 64)))
+  (define %17 (extract  63 32 %12))
+  %17
  )
  )
 )
@@ -21337,14 +21262,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  15 0 %20))
-  %26
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  15 0 %14))
+  %19
  )
  )
 )
@@ -21359,14 +21284,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  31 0 %20))
-  %26
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  31 0 %14))
+  %19
  )
  )
 )
@@ -21381,14 +21306,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  63 0 %20))
-  %26
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  63 0 %14))
+  %19
  )
  )
 )
@@ -21403,14 +21328,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  7 0 %20))
-  %26
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  7 0 %14))
+  %19
  )
  )
 )
@@ -21425,14 +21350,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  15 0 %20))
-  %26
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  15 0 %14))
+  %19
  )
  )
 )
@@ -21447,14 +21372,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  31 0 %20))
-  %26
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  31 0 %14))
+  %19
  )
  )
 )
@@ -21469,14 +21394,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  63 0 %20))
-  %26
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  63 0 %14))
+  %19
  )
  )
 )
@@ -21491,14 +21416,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  7 0 %20))
-  %26
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  7 0 %14))
+  %19
  )
  )
 )
@@ -21513,14 +21438,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  63 0 %20))
-  %26
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  63 0 %14))
+  %19
  )
  )
 )
@@ -21535,14 +21460,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  63 0 %20))
-  %26
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  63 0 %14))
+  %19
  )
  )
 )
@@ -21550,7 +21475,6 @@ concat
 )
 result)
 (define (vshll_high_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define %4 (extract  127 64 a))
 (define result
 (apply
@@ -21559,13 +21483,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %7.new0 (/  e0.new  2))
-  (define %10 (+  %7.new0  15))
-  (define %11 (extract  %10 %7.new0 %4))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvshl  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  31 0 %13.downcasted0))
-  %24.downcasted0
+  (define %5.new0 (/  e0.new  2))
+  (define %8 (+  %5.new0  15))
+  (define %9 (extract  %8 %5.new0 %4))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvshl  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  31 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -21573,7 +21497,6 @@ concat
 )
 result)
 (define (vshll_high_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define %4 (extract  127 64 a))
 (define result
 (apply
@@ -21582,13 +21505,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %7.new0 (/  e0.new  2))
-  (define %10 (+  %7.new0  31))
-  (define %11 (extract  %10 %7.new0 %4))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvshl  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  %24.downcasted0
+  (define %5.new0 (/  e0.new  2))
+  (define %8 (+  %5.new0  31))
+  (define %9 (extract  %8 %5.new0 %4))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvshl  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  63 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -21596,7 +21519,6 @@ concat
 )
 result)
 (define (vshll_high_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define %4 (extract  127 64 a))
 (define result
 (apply
@@ -21605,13 +21527,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %7.new0 (/  e0.new  2))
-  (define %10 (+  %7.new0  7))
-  (define %11 (extract  %10 %7.new0 %4))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvshl  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  15 0 %13.downcasted0))
-  %24.downcasted0
+  (define %5.new0 (/  e0.new  2))
+  (define %8 (+  %5.new0  7))
+  (define %9 (extract  %8 %5.new0 %4))
+  (define %10.downcasted0 (sign-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvshl  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  15 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -21619,7 +21541,6 @@ concat
 )
 result)
 (define (vshll_high_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define %4 (extract  127 64 a))
 (define result
 (apply
@@ -21628,13 +21549,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %7.new0 (/  e0.new  2))
-  (define %10 (+  %7.new0  15))
-  (define %11 (extract  %10 %7.new0 %4))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvshl  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  31 0 %13.downcasted0))
-  %24.downcasted0
+  (define %5.new0 (/  e0.new  2))
+  (define %8 (+  %5.new0  15))
+  (define %9 (extract  %8 %5.new0 %4))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvshl  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  31 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -21642,7 +21563,6 @@ concat
 )
 result)
 (define (vshll_high_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define %4 (extract  127 64 a))
 (define result
 (apply
@@ -21651,13 +21571,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %7.new0 (/  e0.new  2))
-  (define %10 (+  %7.new0  31))
-  (define %11 (extract  %10 %7.new0 %4))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvshl  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  63 0 %13.downcasted0))
-  %24.downcasted0
+  (define %5.new0 (/  e0.new  2))
+  (define %8 (+  %5.new0  31))
+  (define %9 (extract  %8 %5.new0 %4))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvshl  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  63 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -21665,7 +21585,6 @@ concat
 )
 result)
 (define (vshll_high_n_u8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define %4 (extract  127 64 a))
 (define result
 (apply
@@ -21674,13 +21593,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %7.new0 (/  e0.new  2))
-  (define %10 (+  %7.new0  7))
-  (define %11 (extract  %10 %7.new0 %4))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %13.downcasted0 (bvshl  %12.downcasted0  %1.downcasted0))
-  (define %24.downcasted0 (extract  15 0 %13.downcasted0))
-  %24.downcasted0
+  (define %5.new0 (/  e0.new  2))
+  (define %8 (+  %5.new0  7))
+  (define %9 (extract  %8 %5.new0 %4))
+  (define %10.downcasted0 (zero-extend  %9 (bitvector 64)))
+  (define %11.downcasted0 (bvshl  %10.downcasted0  n))
+  (define %16.downcasted0 (extract  15 0 %11.downcasted0))
+  %16.downcasted0
  )
  )
 )
@@ -21688,7 +21607,6 @@ concat
 )
 result)
 (define (vshll_n_s16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -21696,12 +21614,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %10.downcasted0 (bvshl  %9.downcasted0  %1.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %10.downcasted0))
-  %21.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (extract  31 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -21709,7 +21627,6 @@ concat
 )
 result)
 (define (vshll_n_s32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -21717,12 +21634,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %10.downcasted0 (bvshl  %9.downcasted0  %1.downcasted0))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  %21.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (extract  63 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -21730,7 +21647,6 @@ concat
 )
 result)
 (define (vshll_n_s8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -21738,12 +21654,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7 (+  e0.new  7))
-  (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
-  (define %10.downcasted0 (bvshl  %9.downcasted0  %1.downcasted0))
-  (define %21.downcasted0 (extract  15 0 %10.downcasted0))
-  %21.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (extract  15 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -21751,7 +21667,6 @@ concat
 )
 result)
 (define (vshll_n_u16  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -21759,12 +21674,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7 (+  e0.new  15))
-  (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
-  (define %10.downcasted0 (bvshl  %9.downcasted0  %1.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %10.downcasted0))
-  %21.downcasted0
+  (define %5 (+  e0.new  15))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (extract  31 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -21772,7 +21687,6 @@ concat
 )
 result)
 (define (vshll_n_u32  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -21780,12 +21694,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7 (+  e0.new  31))
-  (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
-  (define %10.downcasted0 (bvshl  %9.downcasted0  %1.downcasted0))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  %21.downcasted0
+  (define %5 (+  e0.new  31))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (extract  63 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -21793,7 +21707,6 @@ concat
 )
 result)
 (define (vshll_n_u8  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -21801,12 +21714,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7 (+  e0.new  7))
-  (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
-  (define %10.downcasted0 (bvshl  %9.downcasted0  %1.downcasted0))
-  (define %21.downcasted0 (extract  15 0 %10.downcasted0))
-  %21.downcasted0
+  (define %5 (+  e0.new  7))
+  (define %6 (extract  %5 e0.new a))
+  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
+  (define %8.downcasted0 (bvshl  %7.downcasted0  n))
+  (define %13.downcasted0 (extract  15 0 %8.downcasted0))
+  %13.downcasted0
  )
  )
 )
@@ -21821,14 +21734,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  15 0 %20))
-  %26
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  15 0 %14))
+  %19
  )
  )
 )
@@ -21843,14 +21756,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  31 0 %20))
-  %26
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  31 0 %14))
+  %19
  )
  )
 )
@@ -21865,14 +21778,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  63 0 %20))
-  %26
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  63 0 %14))
+  %19
  )
  )
 )
@@ -21887,14 +21800,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (sign-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  7 0 %20))
-  %26
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (sign-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  7 0 %14))
+  %19
  )
  )
 )
@@ -21909,14 +21822,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8 (+  e0.new  15))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 32)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 32)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  15 0 %20))
-  %26
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 32)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 32)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  15 0 %14))
+  %19
  )
  )
 )
@@ -21931,14 +21844,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8 (+  e0.new  31))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 64)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 64)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  31 0 %20))
-  %26
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 64)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 64)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  31 0 %14))
+  %19
  )
  )
 )
@@ -21953,14 +21866,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8 (+  e0.new  63))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 128)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 128)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  63 0 %20))
-  %26
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 128)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 128)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  63 0 %14))
+  %19
  )
  )
 )
@@ -21975,14 +21888,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %8 (+  e0.new  7))
-  (define %9 (extract  %8 e0.new b))
-  (define %11 (sign-extend  %9 (bitvector 16)))
-  (define %16 (extract  %8 e0.new a))
-  (define %18 (zero-extend  %16 (bitvector 16)))
-  (define %20 (bvshl  %18  %11))
-  (define %26 (extract  7 0 %20))
-  %26
+  (define %4 (+  e0.new  7))
+  (define %5 (extract  %4 e0.new b))
+  (define %6 (sign-extend  %5 (bitvector 16)))
+  (define %11 (extract  %4 e0.new a))
+  (define %12 (zero-extend  %11 (bitvector 16)))
+  (define %14 (bvshl  %12  %6))
+  (define %19 (extract  7 0 %14))
+  %19
  )
  )
 )
@@ -21999,11 +21912,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 16))])
   (define %7 (+  e0.new  15))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvashr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  15 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 16)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22020,10 +21933,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 32))])
   (define %7 (+  e0.new  31))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvashr  %8  n))
-  (define %22.downcasted0 (extract  31 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
-  %23
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %11.downcasted0 (bvashr  %9.downcasted0  n))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 32)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22031,7 +21945,6 @@ concat
 )
 result)
 (define (vshr_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22041,10 +21954,10 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %7 (+  e0.new  63))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvashr  %8  %1.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
-  %23
+  (define %11.downcasted0 (bvashr  %8  n))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 64)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22061,11 +21974,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 8))])
   (define %7 (+  e0.new  7))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvashr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  7 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 8)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22082,11 +21995,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 16))])
   (define %7 (+  e0.new  15))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvlshr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  15 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 16)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22103,10 +22016,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 32))])
   (define %7 (+  e0.new  31))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvlshr  %8  n))
-  (define %22.downcasted0 (extract  31 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
-  %23
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %11.downcasted0 (bvlshr  %9.downcasted0  n))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 32)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22114,7 +22028,6 @@ concat
 )
 result)
 (define (vshr_n_u64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22124,10 +22037,10 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %7 (+  e0.new  63))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvlshr  %8  %1.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
-  %23
+  (define %11.downcasted0 (bvlshr  %8  n))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 64)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22144,11 +22057,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 8))])
   (define %7 (+  e0.new  7))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvlshr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  7 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 8)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22156,7 +22069,6 @@ concat
 )
 result)
 (define (vshrd_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22166,10 +22078,10 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %7 (+  e0.new  63))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvashr  %8  %1.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
-  %23
+  (define %11.downcasted0 (bvashr  %8  n))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 64)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22177,7 +22089,6 @@ concat
 )
 result)
 (define (vshrd_n_u64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22187,10 +22098,10 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %7 (+  e0.new  63))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvlshr  %8  %1.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
-  %23
+  (define %11.downcasted0 (bvlshr  %8  n))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 64)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22205,19 +22116,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %12 (extract  %10 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %21.downcasted0 (extract  7 0 %15.downcasted0))
-  %21.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  7 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %22 (concat result r))
-%22)
+(define %16 (concat result r))
+%16)
 (define (vshrn_high_n_s32  r a n )
 (define result
 (apply
@@ -22226,20 +22137,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %21.downcasted0 (extract  15 0 %15.downcasted0))
-  %21.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  15 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %22 (concat result r))
-%22)
+(define %16 (concat result r))
+%16)
 (define (vshrn_high_n_s64  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22247,18 +22158,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10 (+  e0.new  63))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %15.downcasted0))
-  %21.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (extract  31 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %22 (concat result r))
-%22)
+(define %16 (concat result r))
+%16)
 (define (vshrn_high_n_u16  r a n )
 (define result
 (apply
@@ -22267,19 +22178,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %10 (+  e0.new  15))
-  (define %12 (extract  %10 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %21.downcasted0 (extract  7 0 %15.downcasted0))
-  %21.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  7 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %22 (concat result r))
-%22)
+(define %16 (concat result r))
+%16)
 (define (vshrn_high_n_u32  r a n )
 (define result
 (apply
@@ -22288,20 +22199,20 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %10 (+  e0.new  31))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %21.downcasted0 (extract  15 0 %15.downcasted0))
-  %21.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  15 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %22 (concat result r))
-%22)
+(define %16 (concat result r))
+%16)
 (define (vshrn_high_n_u64  r a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22309,18 +22220,18 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %10 (+  e0.new  63))
-  (define %12 (extract  %10 e0.new a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %15.downcasted0))
-  %21.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (extract  31 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
 )
 )
-(define %22 (concat result r))
-%22)
+(define %16 (concat result r))
+%16)
 (define (vshrn_n_s16  a n )
 (define result
 (apply
@@ -22329,13 +22240,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %21.downcasted0 (extract  7 0 %15.downcasted0))
-  %21.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  7 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
@@ -22350,12 +22261,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %21.downcasted0 (extract  15 0 %15.downcasted0))
-  %21.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  15 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
@@ -22363,7 +22275,6 @@ concat
 )
 result)
 (define (vshrn_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22371,12 +22282,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %15.downcasted0))
-  %21.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (extract  31 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
@@ -22391,13 +22302,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  15))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %15.downcasted0 (bvlshr  %13.downcasted0  n))
-  (define %21.downcasted0 (extract  7 0 %15.downcasted0))
-  %21.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  15))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  7 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
@@ -22412,12 +22323,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  31))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  n))
-  (define %21.downcasted0 (extract  15 0 %15.downcasted0))
-  %21.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  31))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
+  (define %15.downcasted0 (extract  15 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
@@ -22425,7 +22337,6 @@ concat
 )
 result)
 (define (vshrn_n_u64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22433,12 +22344,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5.new0 (*  e0.new  2))
-  (define %10 (+  %5.new0  63))
-  (define %12 (extract  %10 %5.new0 a))
-  (define %15.downcasted0 (bvlshr  %12  %1.downcasted0))
-  (define %21.downcasted0 (extract  31 0 %15.downcasted0))
-  %21.downcasted0
+  (define %3.new0 (*  e0.new  2))
+  (define %6 (+  %3.new0  63))
+  (define %7 (extract  %6 %3.new0 a))
+  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %15.downcasted0 (extract  31 0 %10.downcasted0))
+  %15.downcasted0
  )
  )
 )
@@ -22455,11 +22366,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 16))])
   (define %7 (+  e0.new  15))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvashr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  15 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 16)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22476,10 +22387,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 32))])
   (define %7 (+  e0.new  31))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvashr  %8  n))
-  (define %22.downcasted0 (extract  31 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
-  %23
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
+  (define %11.downcasted0 (bvashr  %9.downcasted0  n))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 32)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22487,7 +22399,6 @@ concat
 )
 result)
 (define (vshrq_n_s64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22497,10 +22408,10 @@ concat
  (for/list ([e0.new (reverse (range 0 128 64))])
   (define %7 (+  e0.new  63))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvashr  %8  %1.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
-  %23
+  (define %11.downcasted0 (bvashr  %8  n))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 64)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22517,11 +22428,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 8))])
   (define %7 (+  e0.new  7))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (sign-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (sign-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvashr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  7 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 8)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22538,11 +22449,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 16))])
   (define %7 (+  e0.new  15))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvlshr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  15 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 16)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  15 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 16)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22559,10 +22470,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 32))])
   (define %7 (+  e0.new  31))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvlshr  %8  n))
-  (define %22.downcasted0 (extract  31 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 32)  %22.downcasted0))
-  %23
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
+  (define %11.downcasted0 (bvlshr  %9.downcasted0  n))
+  (define %21.downcasted0 (extract  31 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 32)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22570,7 +22482,6 @@ concat
 )
 result)
 (define (vshrq_n_u64  a n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22580,10 +22491,10 @@ concat
  (for/list ([e0.new (reverse (range 0 128 64))])
   (define %7 (+  e0.new  63))
   (define %8 (extract  %7 e0.new a))
-  (define %11.downcasted0 (bvlshr  %8  %1.downcasted0))
-  (define %22.downcasted0 (extract  63 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 64)  %22.downcasted0))
-  %23
+  (define %11.downcasted0 (bvlshr  %8  n))
+  (define %21.downcasted0 (extract  63 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 64)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22600,11 +22511,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 8))])
   (define %7 (+  e0.new  7))
   (define %8 (extract  %7 e0.new a))
-  (define %9.downcasted0 (zero-extend  %8 (bitvector 32)))
+  (define %9.downcasted0 (zero-extend  %8 (bitvector 64)))
   (define %11.downcasted0 (bvlshr  %9.downcasted0  n))
-  (define %22.downcasted0 (extract  7 0 %11.downcasted0))
-  (define %23 (bvadd  (bv 0 8)  %22.downcasted0))
-  %23
+  (define %21.downcasted0 (extract  7 0 %11.downcasted0))
+  (define %22 (bvadd  (bv 0 8)  %21.downcasted0))
+  %22
  )
  )
 )
@@ -22619,14 +22530,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 32 16 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 32 16 ))
+  %17.downcasted0
  )
  )
 )
@@ -22641,14 +22552,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 64 32 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 64 32 ))
+  %17.downcasted0
  )
  )
 )
@@ -22663,14 +22574,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 128)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 128 64 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 128 64 ))
+  %17.downcasted0
  )
  )
 )
@@ -22685,14 +22596,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 16 8 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 16 8 ))
+  %17.downcasted0
  )
  )
 )
@@ -22707,14 +22618,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 16 8 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 16 8 ))
+  %17.downcasted0
  )
  )
 )
@@ -22729,14 +22640,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 128)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 128 64 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 128 64 ))
+  %17.downcasted0
  )
  )
 )
@@ -22751,14 +22662,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 32 16 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 32 16 ))
+  %17.downcasted0
  )
  )
 )
@@ -22773,14 +22684,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 32)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 32 16 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 32 16 ))
+  %17.downcasted0
  )
  )
 )
@@ -22795,14 +22706,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 64 32 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 64 32 ))
+  %17.downcasted0
  )
  )
 )
@@ -22817,14 +22728,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 128)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 128)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 128 64 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 128 64 ))
+  %17.downcasted0
  )
  )
 )
@@ -22839,14 +22750,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 16)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 16 8 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 16 8 ))
+  %17.downcasted0
  )
  )
 )
@@ -22861,14 +22772,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (sign-extend  %5 (bitvector 64)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvusat %18.downcasted0 64 32 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvusat %16.downcasted0 64 32 ))
+  %17.downcasted0
  )
  )
 )
@@ -22885,12 +22796,12 @@ concat
  (for/list ([e0.new (reverse (range 0 64 16))])
   (define %6 (+  e0.new  15))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvashr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  15 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  15 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -22907,11 +22818,12 @@ concat
  (for/list ([e0.new (reverse (range 0 64 32))])
   (define %6 (+  e0.new  31))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvashr  %7  n))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  31 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  31 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -22919,7 +22831,6 @@ concat
 )
 result)
 (define (vsra_n_s64  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -22929,11 +22840,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %6 (+  e0.new  63))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvashr  %7  %1.downcasted0))
+  (define %10.downcasted0 (bvashr  %7  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  63 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -22950,12 +22861,12 @@ concat
  (for/list ([e0.new (reverse (range 0 64 8))])
   (define %6 (+  e0.new  7))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvashr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  7 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  7 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -22972,12 +22883,12 @@ concat
  (for/list ([e0.new (reverse (range 0 64 16))])
   (define %6 (+  e0.new  15))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  15 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  15 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -22994,11 +22905,12 @@ concat
  (for/list ([e0.new (reverse (range 0 64 32))])
   (define %6 (+  e0.new  31))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  31 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  31 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23006,7 +22918,6 @@ concat
 )
 result)
 (define (vsra_n_u64  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -23016,11 +22927,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %6 (+  e0.new  63))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvlshr  %7  %1.downcasted0))
+  (define %10.downcasted0 (bvlshr  %7  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  63 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23037,12 +22948,12 @@ concat
  (for/list ([e0.new (reverse (range 0 64 8))])
   (define %6 (+  e0.new  7))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  7 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  7 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23050,7 +22961,6 @@ concat
 )
 result)
 (define (vsrad_n_s64  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -23060,11 +22970,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %6 (+  e0.new  63))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvashr  %7  %1.downcasted0))
+  (define %10.downcasted0 (bvashr  %7  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  63 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23072,7 +22982,6 @@ concat
 )
 result)
 (define (vsrad_n_u64  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -23082,11 +22991,11 @@ concat
  (for/list ([e0.new (reverse (range 0 64 64))])
   (define %6 (+  e0.new  63))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvlshr  %7  %1.downcasted0))
+  (define %10.downcasted0 (bvlshr  %7  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  63 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23103,12 +23012,12 @@ concat
  (for/list ([e0.new (reverse (range 0 128 16))])
   (define %6 (+  e0.new  15))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvashr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  15 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  15 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23125,11 +23034,12 @@ concat
  (for/list ([e0.new (reverse (range 0 128 32))])
   (define %6 (+  e0.new  31))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvashr  %7  n))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvashr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  31 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  31 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23137,7 +23047,6 @@ concat
 )
 result)
 (define (vsraq_n_s64  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -23147,11 +23056,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 64))])
   (define %6 (+  e0.new  63))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvashr  %7  %1.downcasted0))
+  (define %10.downcasted0 (bvashr  %7  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  63 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23168,12 +23077,12 @@ concat
  (for/list ([e0.new (reverse (range 0 128 8))])
   (define %6 (+  e0.new  7))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvashr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  7 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  7 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23190,12 +23099,12 @@ concat
  (for/list ([e0.new (reverse (range 0 128 16))])
   (define %6 (+  e0.new  15))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  15 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  15 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23212,11 +23121,12 @@ concat
  (for/list ([e0.new (reverse (range 0 128 32))])
   (define %6 (+  e0.new  31))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvlshr  %7  n))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  31 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  31 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23224,7 +23134,6 @@ concat
 )
 result)
 (define (vsraq_n_u64  a b n )
-(define %1.downcasted0 (zero-extend  n (bitvector 64)))
 (define result
 (apply
 concat
@@ -23234,11 +23143,11 @@ concat
  (for/list ([e0.new (reverse (range 0 128 64))])
   (define %6 (+  e0.new  63))
   (define %7 (extract  %6 e0.new b))
-  (define %10.downcasted0 (bvlshr  %7  %1.downcasted0))
+  (define %10.downcasted0 (bvlshr  %7  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  63 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  63 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23255,12 +23164,12 @@ concat
  (for/list ([e0.new (reverse (range 0 128 8))])
   (define %6 (+  e0.new  7))
   (define %7 (extract  %6 e0.new b))
-  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
   (define %10.downcasted0 (bvlshr  %8.downcasted0  n))
   (define %19 (extract  %6 e0.new a))
-  (define %21.downcasted0 (extract  7 0 %10.downcasted0))
-  (define %22 (bvadd  %19  %21.downcasted0))
-  %22
+  (define %20.downcasted0 (extract  7 0 %10.downcasted0))
+  (define %21 (bvadd  %19  %20.downcasted0))
+  %21
  )
  )
 )
@@ -23275,11 +23184,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23294,11 +23203,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23313,11 +23222,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23332,11 +23241,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23351,11 +23260,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23370,11 +23279,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23389,11 +23298,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23408,11 +23317,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23427,11 +23336,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23446,11 +23355,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -23465,19 +23374,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vsubhn_high_s32  r a b )
 (define result
 (apply
@@ -23486,19 +23395,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vsubhn_high_s64  r a b )
 (define result
 (apply
@@ -23507,19 +23416,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vsubhn_high_u16  r a b )
 (define result
 (apply
@@ -23528,19 +23437,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %4 (+  e0.new  15))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vsubhn_high_u32  r a b )
 (define result
 (apply
@@ -23549,19 +23458,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %4 (+  e0.new  31))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vsubhn_high_u64  r a b )
 (define result
 (apply
@@ -23570,19 +23479,19 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %23 (extract  %12 e0.new b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %4 (+  e0.new  63))
+  (define %5 (extract  %4 e0.new a))
+  (define %10 (extract  %4 e0.new b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
 )
 )
-(define %33 (concat result r))
-%33)
+(define %18 (concat result r))
+%18)
 (define (vsubhn_s16  a b )
 (define result
 (apply
@@ -23591,13 +23500,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
@@ -23612,13 +23521,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
@@ -23633,13 +23542,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
@@ -23654,13 +23563,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  15))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  15 8 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  15))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  15 8 %11))
+  %17
  )
  )
 )
@@ -23675,13 +23584,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  31))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  31 16 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  31))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  31 16 %11))
+  %17
  )
  )
 )
@@ -23696,13 +23605,13 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (*  e0.new  2))
-  (define %12 (+  %7.new0  63))
-  (define %14 (extract  %12 %7.new0 a))
-  (define %23 (extract  %12 %7.new0 b))
-  (define %24 (bvsub  %14  %23))
-  (define %32 (extract  63 32 %24))
-  %32
+  (define %1.new0 (*  e0.new  2))
+  (define %4 (+  %1.new0  63))
+  (define %5 (extract  %4 %1.new0 a))
+  (define %10 (extract  %4 %1.new0 b))
+  (define %11 (bvsub  %5  %10))
+  (define %17 (extract  63 32 %11))
+  %17
  )
  )
 )
@@ -23719,15 +23628,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  15))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 32)))
-  (define %20.downcasted0 (bvsub  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  31 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  31 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -23744,15 +23653,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  31))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 64)))
-  (define %20.downcasted0 (bvsub  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  63 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  63 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -23769,15 +23678,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  7))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (sign-extend  %18 (bitvector 16)))
-  (define %20.downcasted0 (bvsub  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  15 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (sign-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  15 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -23794,15 +23703,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  15))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 32)))
-  (define %20.downcasted0 (bvsub  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  31 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  15))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 32)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  31 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -23819,15 +23728,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  31))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 64)))
-  (define %20.downcasted0 (bvsub  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  63 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  31))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 64)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  63 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -23844,15 +23753,15 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %8.new0 (/  e0.new  2))
-  (define %11 (+  %8.new0  7))
-  (define %12 (extract  %11 %8.new0 %2))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %18 (extract  %11 %8.new0 %5))
-  (define %19.downcasted0 (zero-extend  %18 (bitvector 16)))
-  (define %20.downcasted0 (bvsub  %13.downcasted0  %19.downcasted0))
-  (define %31.downcasted0 (extract  15 0 %20.downcasted0))
-  %31.downcasted0
+  (define %6.new0 (/  e0.new  2))
+  (define %9 (+  %6.new0  7))
+  (define %10 (extract  %9 %6.new0 %2))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %16 (extract  %9 %6.new0 %5))
+  (define %17.downcasted0 (zero-extend  %16 (bitvector 16)))
+  (define %18.downcasted0 (bvsub  %11.downcasted0  %17.downcasted0))
+  (define %23.downcasted0 (extract  15 0 %18.downcasted0))
+  %23.downcasted0
  )
  )
 )
@@ -23867,14 +23776,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %14.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -23889,14 +23798,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %14.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -23911,14 +23820,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (sign-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %14.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -23933,14 +23842,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %5 (+  e0.new  15))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 32)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 32)))
-  (define %14.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  31 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -23955,14 +23864,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %5 (+  e0.new  31))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 64)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 64)))
-  (define %14.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  63 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -23977,14 +23886,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %5 (+  e0.new  7))
-  (define %6 (extract  %5 e0.new a))
-  (define %7.downcasted0 (zero-extend  %6 (bitvector 16)))
-  (define %12 (extract  %5 e0.new b))
-  (define %13.downcasted0 (zero-extend  %12 (bitvector 16)))
-  (define %14.downcasted0 (bvsub  %7.downcasted0  %13.downcasted0))
-  (define %25.downcasted0 (extract  15 0 %14.downcasted0))
-  %25.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 16)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -23999,11 +23908,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24018,11 +23927,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24037,11 +23946,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24056,11 +23965,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24075,11 +23984,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24094,11 +24003,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24113,11 +24022,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24132,11 +24041,11 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %15 (bvsub  %5  %10))
-  %15
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %14 (bvsub  %4  %9))
+  %14
  )
  )
 )
@@ -24144,7 +24053,7 @@ concat
 )
 result)
 (define (vsubw_high_s16  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -24152,16 +24061,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 64)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  15))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 64)))
-  (define %22.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  31 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvsub  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -24169,7 +24078,7 @@ concat
 )
 result)
 (define (vsubw_high_s32  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -24177,16 +24086,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 128)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  31))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 128)))
-  (define %22.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  63 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 128)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 128)))
+  (define %15.downcasted0 (bvsub  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -24194,7 +24103,7 @@ concat
 )
 result)
 (define (vsubw_high_s8  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -24202,16 +24111,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (sign-extend  %14 (bitvector 32)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  7))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (sign-extend  %20 (bitvector 32)))
-  (define %22.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  15 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (sign-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  7))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (sign-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvsub  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -24219,7 +24128,7 @@ concat
 )
 result)
 (define (vsubw_high_u16  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -24227,16 +24136,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %12 (+  e0.new  31))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 64)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  15))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 64)))
-  (define %22.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  31 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  31))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 64)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  15))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 64)))
+  (define %15.downcasted0 (bvsub  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  31 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -24244,7 +24153,7 @@ concat
 )
 result)
 (define (vsubw_high_u32  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -24252,16 +24161,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %12 (+  e0.new  63))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 128)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  31))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 128)))
-  (define %22.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  63 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  63))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 128)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  31))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 128)))
+  (define %15.downcasted0 (bvsub  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  63 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -24269,7 +24178,7 @@ concat
 )
 result)
 (define (vsubw_high_u8  a b )
-(define %3 (extract  127 64 b))
+(define %2 (extract  127 64 b))
 (define result
 (apply
 concat
@@ -24277,16 +24186,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %12 (+  e0.new  15))
-  (define %14 (extract  %12 e0.new a))
-  (define %15.downcasted0 (zero-extend  %14 (bitvector 32)))
-  (define %16.new0 (/  e0.new  2))
-  (define %19 (+  %16.new0  7))
-  (define %20 (extract  %19 %16.new0 %3))
-  (define %21.downcasted0 (zero-extend  %20 (bitvector 32)))
-  (define %22.downcasted0 (bvsub  %15.downcasted0  %21.downcasted0))
-  (define %33.downcasted0 (extract  15 0 %22.downcasted0))
-  %33.downcasted0
+  (define %6 (+  e0.new  15))
+  (define %7 (extract  %6 e0.new a))
+  (define %8.downcasted0 (zero-extend  %7 (bitvector 32)))
+  (define %9.new0 (/  e0.new  2))
+  (define %12 (+  %9.new0  7))
+  (define %13 (extract  %12 %9.new0 %2))
+  (define %14.downcasted0 (zero-extend  %13 (bitvector 32)))
+  (define %15.downcasted0 (bvsub  %8.downcasted0  %14.downcasted0))
+  (define %20.downcasted0 (extract  15 0 %15.downcasted0))
+  %20.downcasted0
  )
  )
 )
@@ -24301,16 +24210,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 64)))
-  (define %16 (+  e0.new  15))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 64)))
-  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  31 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 64)))
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -24325,16 +24234,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 128)))
-  (define %16 (+  e0.new  31))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 128)))
-  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  63 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 128)))
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -24349,16 +24258,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (sign-extend  %11 (bitvector 32)))
-  (define %16 (+  e0.new  7))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (sign-extend  %17 (bitvector 32)))
-  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  15 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (sign-extend  %4 (bitvector 32)))
+  (define %9 (+  e0.new  7))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -24373,16 +24282,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  31))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 64)))
-  (define %16 (+  e0.new  15))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 64)))
-  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  31 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  31))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %9 (+  e0.new  15))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 64)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  31 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -24397,16 +24306,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  63))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 128)))
-  (define %16 (+  e0.new  31))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 128)))
-  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  63 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  63))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %9 (+  e0.new  31))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 128)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  63 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -24421,16 +24330,16 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4.new0 (*  e0.new  2))
-  (define %9 (+  %4.new0  15))
-  (define %11 (extract  %9 %4.new0 a))
-  (define %12.downcasted0 (zero-extend  %11 (bitvector 32)))
-  (define %16 (+  e0.new  7))
-  (define %17 (extract  %16 e0.new b))
-  (define %18.downcasted0 (zero-extend  %17 (bitvector 32)))
-  (define %19.downcasted0 (bvsub  %12.downcasted0  %18.downcasted0))
-  (define %30.downcasted0 (extract  15 0 %19.downcasted0))
-  %30.downcasted0
+  (define %0.new0 (*  e0.new  2))
+  (define %3 (+  %0.new0  15))
+  (define %4 (extract  %3 %0.new0 a))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %9 (+  e0.new  7))
+  (define %10 (extract  %9 e0.new b))
+  (define %11.downcasted0 (zero-extend  %10 (bitvector 32)))
+  (define %12.downcasted0 (bvsub  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (extract  15 0 %12.downcasted0))
+  %17.downcasted0
  )
  )
 )
@@ -24446,19 +24355,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  15))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  15))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  15))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  15))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24475,19 +24384,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  31))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  31))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  31))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  31))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24504,19 +24413,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  7))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  7))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  7))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  7))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24533,19 +24442,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  15))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  15))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  15))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  15))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24562,19 +24471,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  31))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  31))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  31))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  31))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24591,19 +24500,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  7))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  7))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  7))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  7))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24620,19 +24529,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  15))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  15))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  15))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  15))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24649,19 +24558,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  31))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  31))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  31))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  31))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24678,19 +24587,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  63))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  63))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  63))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  63))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24707,19 +24616,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  7))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  7))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  7))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  7))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24736,19 +24645,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  15))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  15))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  15))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  15))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24765,19 +24674,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  31))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  31))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  31))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  31))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24794,19 +24703,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  63))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  63))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  63))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  63))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24823,19 +24732,19 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %28.new0 (*  %iterator1.new  2))
-   (define %33 (+  %28.new0  7))
-   (define %34 (extract  %33 %28.new0 b))
-   %34
+   (define %22.new0 (*  %iterator1.new  2))
+   (define %26 (+  %22.new0  7))
+   (define %27 (extract  %26 %22.new0 b))
+   %27
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %3.new0 (*  %iterator0.new  2))
-   (define %8 (+  %3.new0  7))
-   (define %17 (extract  %8 %3.new0 a))
-   %17
+   (define %1.new0 (*  %iterator0.new  2))
+   (define %5 (+  %1.new0  7))
+   (define %12 (extract  %5 %1.new0 a))
+   %12
   )
   )
  )
@@ -24852,23 +24761,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %18.new0 (/  %iterator1.new  8))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  16))
-   (define %25 (+  %20  15))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  8))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  16))
+   (define %22 (+  %17  15))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %9.new0 (/  %iterator0.new  8))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  16))
-   (define %16 (+  %11  15))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  8))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  16))
+   (define %13 (+  %8  15))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -24885,23 +24794,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %18.new0 (/  %iterator1.new  16))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  32))
-   (define %25 (+  %20  31))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  16))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  32))
+   (define %22 (+  %17  31))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %9.new0 (/  %iterator0.new  16))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  32))
-   (define %16 (+  %11  31))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  16))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  32))
+   (define %13 (+  %8  31))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -24918,23 +24827,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %18.new0 (/  %iterator1.new  4))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  8))
-   (define %25 (+  %20  7))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  4))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  8))
+   (define %22 (+  %17  7))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %9.new0 (/  %iterator0.new  4))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  8))
-   (define %16 (+  %11  7))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  4))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  8))
+   (define %13 (+  %8  7))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -24951,23 +24860,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %18.new0 (/  %iterator1.new  8))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  16))
-   (define %25 (+  %20  15))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  8))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  16))
+   (define %22 (+  %17  15))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %9.new0 (/  %iterator0.new  8))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  16))
-   (define %16 (+  %11  15))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  8))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  16))
+   (define %13 (+  %8  15))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -24984,23 +24893,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %18.new0 (/  %iterator1.new  16))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  32))
-   (define %25 (+  %20  31))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  16))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  32))
+   (define %22 (+  %17  31))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %9.new0 (/  %iterator0.new  16))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  32))
-   (define %16 (+  %11  31))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  16))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  32))
+   (define %13 (+  %8  31))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25017,23 +24926,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %18.new0 (/  %iterator1.new  4))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  8))
-   (define %25 (+  %20  7))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  4))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  8))
+   (define %22 (+  %17  7))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %9.new0 (/  %iterator0.new  4))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  8))
-   (define %16 (+  %11  7))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  4))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  8))
+   (define %13 (+  %8  7))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25050,23 +24959,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %18.new0 (/  %iterator1.new  8))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  16))
-   (define %25 (+  %20  15))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  8))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  16))
+   (define %22 (+  %17  15))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %9.new0 (/  %iterator0.new  8))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  16))
-   (define %16 (+  %11  15))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  8))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  16))
+   (define %13 (+  %8  15))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25083,23 +24992,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %18.new0 (/  %iterator1.new  16))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  32))
-   (define %25 (+  %20  31))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  16))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  32))
+   (define %22 (+  %17  31))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %9.new0 (/  %iterator0.new  16))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  32))
-   (define %16 (+  %11  31))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  16))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  32))
+   (define %13 (+  %8  31))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25116,23 +25025,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %18.new0 (/  %iterator1.new  32))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  64))
-   (define %25 (+  %20  63))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  32))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  64))
+   (define %22 (+  %17  63))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %9.new0 (/  %iterator0.new  32))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  64))
-   (define %16 (+  %11  63))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  32))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  64))
+   (define %13 (+  %8  63))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25149,23 +25058,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %18.new0 (/  %iterator1.new  4))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  8))
-   (define %25 (+  %20  7))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  4))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  8))
+   (define %22 (+  %17  7))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %9.new0 (/  %iterator0.new  4))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  8))
-   (define %16 (+  %11  7))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  4))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  8))
+   (define %13 (+  %8  7))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25182,23 +25091,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %18.new0 (/  %iterator1.new  8))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  16))
-   (define %25 (+  %20  15))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  8))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  16))
+   (define %22 (+  %17  15))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %9.new0 (/  %iterator0.new  8))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  16))
-   (define %16 (+  %11  15))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  8))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  16))
+   (define %13 (+  %8  15))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25215,23 +25124,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %18.new0 (/  %iterator1.new  16))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  32))
-   (define %25 (+  %20  31))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  16))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  32))
+   (define %22 (+  %17  31))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %9.new0 (/  %iterator0.new  16))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  32))
-   (define %16 (+  %11  31))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  16))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  32))
+   (define %13 (+  %8  31))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25248,23 +25157,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %18.new0 (/  %iterator1.new  32))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  64))
-   (define %25 (+  %20  63))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  32))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  64))
+   (define %22 (+  %17  63))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %9.new0 (/  %iterator0.new  32))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  64))
-   (define %16 (+  %11  63))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  32))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  64))
+   (define %13 (+  %8  63))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25281,23 +25190,23 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %18.new0 (/  %iterator1.new  4))
-   (define %19 (+  %18.new0  1))
-   (define %20 (*  %19  8))
-   (define %25 (+  %20  7))
-   (define %34 (extract  %25 %20 b))
-   %34
+   (define %15.new0 (/  %iterator1.new  4))
+   (define %16 (+  %15.new0  1))
+   (define %17 (*  %16  8))
+   (define %22 (+  %17  7))
+   (define %31 (extract  %22 %17 b))
+   %31
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %9.new0 (/  %iterator0.new  4))
-   (define %10 (+  %9.new0  1))
-   (define %11 (*  %10  8))
-   (define %16 (+  %11  7))
-   (define %17 (extract  %16 %11 a))
-   %17
+   (define %6.new0 (/  %iterator0.new  4))
+   (define %7 (+  %6.new0  1))
+   (define %8 (*  %7  8))
+   (define %13 (+  %8  7))
+   (define %14 (extract  %13 %8 a))
+   %14
   )
   )
  )
@@ -25313,14 +25222,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -25335,14 +25244,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -25357,14 +25266,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -25379,14 +25288,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -25401,14 +25310,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -25423,14 +25332,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -25445,14 +25354,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -25467,14 +25376,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -25489,14 +25398,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -25511,14 +25420,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -25533,14 +25442,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -25555,14 +25464,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -25577,14 +25486,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -25599,14 +25508,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -25621,14 +25530,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 65535 16) (bv 0 16)))
-  %20
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 65535 16) (bv 0 16)))
+  %19
  )
  )
 )
@@ -25643,14 +25552,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 4294967295 32) (bv 0 32)))
-  %20
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 4294967295 32) (bv 0 32)))
+  %19
  )
  )
 )
@@ -25665,14 +25574,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 18446744073709551615 64) (bv 0 64)))
-  %20
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 18446744073709551615 64) (bv 0 64)))
+  %19
  )
  )
 )
@@ -25687,14 +25596,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new a))
-  (define %10 (extract  %4 e0.new b))
-  (define %11 (bvand  %5  %10))
-  (define %12 (bvzero  %11))
-  (define %13 (not  %12))
-  (define %20 (if (equal? %13 #t) (bv 255 8) (bv 0 8)))
-  %20
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new a))
+  (define %9 (extract  %3 e0.new b))
+  (define %10 (bvand  %4  %9))
+  (define %11 (bvzero  %10))
+  (define %12 (not  %11))
+  (define %19 (if (equal? %12 #t) (bv 255 8) (bv 0 8)))
+  %19
  )
  )
 )
@@ -25709,14 +25618,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 32 16 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 32 16 ))
+  %17.downcasted0
  )
  )
 )
@@ -25731,14 +25640,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 64 32 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 64 32 ))
+  %17.downcasted0
  )
  )
 )
@@ -25753,14 +25662,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 128)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 128)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 128 64 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 128 64 ))
+  %17.downcasted0
  )
  )
 )
@@ -25775,14 +25684,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 16 8 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 16 8 ))
+  %17.downcasted0
  )
  )
 )
@@ -25797,14 +25706,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 8 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 16 8 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 16 8 ))
+  %17.downcasted0
  )
  )
 )
@@ -25819,14 +25728,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 128)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 128)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 128 64 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 128 64 ))
+  %17.downcasted0
  )
  )
 )
@@ -25841,14 +25750,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 16 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 32 16 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 32 16 ))
+  %17.downcasted0
  )
  )
 )
@@ -25863,14 +25772,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %4 (+  e0.new  15))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 32)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 32)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 32 16 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  15))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 32)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 32)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 32 16 ))
+  %17.downcasted0
  )
  )
 )
@@ -25885,14 +25794,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 64 32 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 64 32 ))
+  %17.downcasted0
  )
  )
 )
@@ -25907,14 +25816,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %4 (+  e0.new  63))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 128)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 128)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 128 64 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  63))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 128)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 128)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 128 64 ))
+  %17.downcasted0
  )
  )
 )
@@ -25929,14 +25838,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %4 (+  e0.new  7))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 16)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 16)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 16 8 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  7))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 16)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 16)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 16 8 ))
+  %17.downcasted0
  )
  )
 )
@@ -25951,14 +25860,14 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 32 32))])
-  (define %4 (+  e0.new  31))
-  (define %5 (extract  %4 e0.new b))
-  (define %7.downcasted0 (zero-extend  %5 (bitvector 64)))
-  (define %12 (extract  %4 e0.new a))
-  (define %13.downcasted0 (sign-extend  %12 (bitvector 64)))
-  (define %18.downcasted0 (bvadd  %7.downcasted0  %13.downcasted0))
-  (define %19.downcasted0 (bvssat %18.downcasted0 64 32 ))
-  %19.downcasted0
+  (define %3 (+  e0.new  31))
+  (define %4 (extract  %3 e0.new b))
+  (define %5.downcasted0 (zero-extend  %4 (bitvector 64)))
+  (define %10 (extract  %3 e0.new a))
+  (define %11.downcasted0 (sign-extend  %10 (bitvector 64)))
+  (define %16.downcasted0 (bvadd  %5.downcasted0  %11.downcasted0))
+  (define %17.downcasted0 (bvssat %16.downcasted0 64 32 ))
+  %17.downcasted0
  )
  )
 )
@@ -25966,7 +25875,7 @@ concat
 )
 result)
 (define (vuzp1_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -25974,10 +25883,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  15))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -25985,7 +25894,7 @@ concat
 )
 result)
 (define (vuzp1_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -25993,10 +25902,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  31))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26004,7 +25913,7 @@ concat
 )
 result)
 (define (vuzp1_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26012,10 +25921,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  7))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  7))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26023,7 +25932,7 @@ concat
 )
 result)
 (define (vuzp1_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26031,10 +25940,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  15))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26042,7 +25951,7 @@ concat
 )
 result)
 (define (vuzp1_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26050,10 +25959,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  31))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26061,7 +25970,7 @@ concat
 )
 result)
 (define (vuzp1_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26069,10 +25978,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  7))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  7))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26080,7 +25989,7 @@ concat
 )
 result)
 (define (vuzp1q_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26088,10 +25997,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  15))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26099,7 +26008,7 @@ concat
 )
 result)
 (define (vuzp1q_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26107,10 +26016,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  31))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26118,7 +26027,7 @@ concat
 )
 result)
 (define (vuzp1q_s64  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26126,10 +26035,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  63))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  63))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26137,7 +26046,7 @@ concat
 )
 result)
 (define (vuzp1q_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26145,10 +26054,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  7))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  7))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26156,7 +26065,7 @@ concat
 )
 result)
 (define (vuzp1q_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26164,10 +26073,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  15))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  15))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26175,7 +26084,7 @@ concat
 )
 result)
 (define (vuzp1q_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26183,10 +26092,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  31))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  31))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26194,7 +26103,7 @@ concat
 )
 result)
 (define (vuzp1q_u64  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26202,10 +26111,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  63))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  63))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26213,7 +26122,7 @@ concat
 )
 result)
 (define (vuzp1q_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26221,10 +26130,10 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %9.new0 (*  e0.new  2))
-  (define %14 (+  %9.new0  7))
-  (define %15 (extract  %14 %9.new0 %1))
-  %15
+  (define %6.new0 (*  e0.new  2))
+  (define %10 (+  %6.new0  7))
+  (define %11 (extract  %10 %6.new0 %0))
+  %11
  )
  )
 )
@@ -26232,7 +26141,7 @@ concat
 )
 result)
 (define (vuzp2_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26240,12 +26149,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (/  e0.new  8))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  16))
-  (define %14 (+  %9  15))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  8))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  16))
+  (define %12 (+  %7  15))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26253,7 +26162,7 @@ concat
 )
 result)
 (define (vuzp2_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26261,12 +26170,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (/  e0.new  16))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  32))
-  (define %14 (+  %9  31))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  16))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  32))
+  (define %12 (+  %7  31))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26274,7 +26183,7 @@ concat
 )
 result)
 (define (vuzp2_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26282,12 +26191,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (/  e0.new  4))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  8))
-  (define %14 (+  %9  7))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  4))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  8))
+  (define %12 (+  %7  7))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26295,7 +26204,7 @@ concat
 )
 result)
 (define (vuzp2_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26303,12 +26212,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 16))])
-  (define %7.new0 (/  e0.new  8))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  16))
-  (define %14 (+  %9  15))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  8))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  16))
+  (define %12 (+  %7  15))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26316,7 +26225,7 @@ concat
 )
 result)
 (define (vuzp2_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26324,12 +26233,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 32))])
-  (define %7.new0 (/  e0.new  16))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  32))
-  (define %14 (+  %9  31))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  16))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  32))
+  (define %12 (+  %7  31))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26337,7 +26246,7 @@ concat
 )
 result)
 (define (vuzp2_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26345,12 +26254,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 64 8))])
-  (define %7.new0 (/  e0.new  4))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  8))
-  (define %14 (+  %9  7))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  4))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  8))
+  (define %12 (+  %7  7))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26358,7 +26267,7 @@ concat
 )
 result)
 (define (vuzp2q_s16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26366,12 +26275,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %7.new0 (/  e0.new  8))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  16))
-  (define %14 (+  %9  15))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  8))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  16))
+  (define %12 (+  %7  15))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26379,7 +26288,7 @@ concat
 )
 result)
 (define (vuzp2q_s32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26387,12 +26296,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %7.new0 (/  e0.new  16))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  32))
-  (define %14 (+  %9  31))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  16))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  32))
+  (define %12 (+  %7  31))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26400,7 +26309,7 @@ concat
 )
 result)
 (define (vuzp2q_s64  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26408,12 +26317,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %7.new0 (/  e0.new  32))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  64))
-  (define %14 (+  %9  63))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  32))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  64))
+  (define %12 (+  %7  63))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26421,7 +26330,7 @@ concat
 )
 result)
 (define (vuzp2q_s8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26429,12 +26338,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %7.new0 (/  e0.new  4))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  8))
-  (define %14 (+  %9  7))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  4))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  8))
+  (define %12 (+  %7  7))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26442,7 +26351,7 @@ concat
 )
 result)
 (define (vuzp2q_u16  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26450,12 +26359,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 16))])
-  (define %7.new0 (/  e0.new  8))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  16))
-  (define %14 (+  %9  15))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  8))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  16))
+  (define %12 (+  %7  15))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26463,7 +26372,7 @@ concat
 )
 result)
 (define (vuzp2q_u32  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26471,12 +26380,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 32))])
-  (define %7.new0 (/  e0.new  16))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  32))
-  (define %14 (+  %9  31))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  16))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  32))
+  (define %12 (+  %7  31))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26484,7 +26393,7 @@ concat
 )
 result)
 (define (vuzp2q_u64  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26492,12 +26401,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 64))])
-  (define %7.new0 (/  e0.new  32))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  64))
-  (define %14 (+  %9  63))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  32))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  64))
+  (define %12 (+  %7  63))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26505,7 +26414,7 @@ concat
 )
 result)
 (define (vuzp2q_u8  a b )
-(define %1 (concat b a))
+(define %0 (concat b a))
 (define result
 (apply
 concat
@@ -26513,12 +26422,12 @@ concat
  (apply
  concat
  (for/list ([e0.new (reverse (range 0 128 8))])
-  (define %7.new0 (/  e0.new  4))
-  (define %8 (+  %7.new0  1))
-  (define %9 (*  %8  8))
-  (define %14 (+  %9  7))
-  (define %15 (extract  %14 %9 %1))
-  %15
+  (define %5.new0 (/  e0.new  4))
+  (define %6 (+  %5.new0  1))
+  (define %7 (*  %6  8))
+  (define %12 (+  %7  7))
+  (define %13 (extract  %12 %7 %0))
+  %13
  )
  )
 )
@@ -26534,17 +26443,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %30 (+  %iterator1.new  15))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  15))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %15 (+  %iterator0.new  15))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  15))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26561,17 +26470,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %30 (+  %iterator1.new  31))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  31))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %15 (+  %iterator0.new  31))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  31))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26588,17 +26497,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %30 (+  %iterator1.new  7))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  7))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %15 (+  %iterator0.new  7))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  7))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26615,17 +26524,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
-   (define %30 (+  %iterator1.new  15))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  15))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
-   (define %15 (+  %iterator0.new  15))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  15))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26642,17 +26551,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
-   (define %30 (+  %iterator1.new  31))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  31))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
-   (define %15 (+  %iterator0.new  31))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  31))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26669,17 +26578,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
-   (define %30 (+  %iterator1.new  7))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  7))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
-   (define %15 (+  %iterator0.new  7))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  7))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26696,17 +26605,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %30 (+  %iterator1.new  15))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  15))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %15 (+  %iterator0.new  15))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  15))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26723,17 +26632,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %30 (+  %iterator1.new  31))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  31))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %15 (+  %iterator0.new  31))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  31))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26750,17 +26659,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %30 (+  %iterator1.new  63))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  63))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %15 (+  %iterator0.new  63))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  63))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26777,17 +26686,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %30 (+  %iterator1.new  7))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  7))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %15 (+  %iterator0.new  7))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  7))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26804,17 +26713,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
-   (define %30 (+  %iterator1.new  15))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  15))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
-   (define %15 (+  %iterator0.new  15))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  15))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26831,17 +26740,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
-   (define %30 (+  %iterator1.new  31))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  31))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
-   (define %15 (+  %iterator0.new  31))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  31))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26858,17 +26767,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
-   (define %30 (+  %iterator1.new  63))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  63))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
-   (define %15 (+  %iterator0.new  63))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  63))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26885,17 +26794,17 @@ concat
   (apply
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
-   (define %30 (+  %iterator1.new  7))
-   (define %31 (extract  %30 %iterator1.new b))
-   %31
+   (define %27 (+  %iterator1.new  7))
+   (define %28 (extract  %27 %iterator1.new b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
-   (define %15 (+  %iterator0.new  7))
-   (define %16 (extract  %15 %iterator0.new a))
-   %16
+   (define %12 (+  %iterator0.new  7))
+   (define %13 (extract  %12 %iterator0.new a))
+   %13
   )
   )
  )
@@ -26913,22 +26822,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
    (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %25 (+  2  %iterator1.new.div))
-   (define %26 (*  %25  16))
-   (define %30 (+  %26  15))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  2  %iterator1.new.div))
+   (define %23 (*  %22  16))
+   (define %27 (+  %23  15))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
    (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %10 (+  2  %iterator0.new.div))
-   (define %11 (*  %10  16))
-   (define %15 (+  %11  15))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  2  %iterator0.new.div))
+   (define %8 (*  %7  16))
+   (define %12 (+  %8  15))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -26946,22 +26855,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
    (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %25 (+  1  %iterator1.new.div))
-   (define %26 (*  %25  32))
-   (define %30 (+  %26  31))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  1  %iterator1.new.div))
+   (define %23 (*  %22  32))
+   (define %27 (+  %23  31))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
    (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %10 (+  1  %iterator0.new.div))
-   (define %11 (*  %10  32))
-   (define %15 (+  %11  31))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  1  %iterator0.new.div))
+   (define %8 (*  %7  32))
+   (define %12 (+  %8  31))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -26979,22 +26888,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
    (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %25 (+  4  %iterator1.new.div))
-   (define %26 (*  %25  8))
-   (define %30 (+  %26  7))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  4  %iterator1.new.div))
+   (define %23 (*  %22  8))
+   (define %27 (+  %23  7))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
    (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %10 (+  4  %iterator0.new.div))
-   (define %11 (*  %10  8))
-   (define %15 (+  %11  7))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  4  %iterator0.new.div))
+   (define %8 (*  %7  8))
+   (define %12 (+  %8  7))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27012,22 +26921,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 16))])
    (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %25 (+  2  %iterator1.new.div))
-   (define %26 (*  %25  16))
-   (define %30 (+  %26  15))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  2  %iterator1.new.div))
+   (define %23 (*  %22  16))
+   (define %27 (+  %23  15))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 16))])
    (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %10 (+  2  %iterator0.new.div))
-   (define %11 (*  %10  16))
-   (define %15 (+  %11  15))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  2  %iterator0.new.div))
+   (define %8 (*  %7  16))
+   (define %12 (+  %8  15))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27045,22 +26954,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 32))])
    (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %25 (+  1  %iterator1.new.div))
-   (define %26 (*  %25  32))
-   (define %30 (+  %26  31))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  1  %iterator1.new.div))
+   (define %23 (*  %22  32))
+   (define %27 (+  %23  31))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 32))])
    (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %10 (+  1  %iterator0.new.div))
-   (define %11 (*  %10  32))
-   (define %15 (+  %11  31))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  1  %iterator0.new.div))
+   (define %8 (*  %7  32))
+   (define %12 (+  %8  31))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27078,22 +26987,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 32 8))])
    (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %25 (+  4  %iterator1.new.div))
-   (define %26 (*  %25  8))
-   (define %30 (+  %26  7))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  4  %iterator1.new.div))
+   (define %23 (*  %22  8))
+   (define %27 (+  %23  7))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 32 8))])
    (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %10 (+  4  %iterator0.new.div))
-   (define %11 (*  %10  8))
-   (define %15 (+  %11  7))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  4  %iterator0.new.div))
+   (define %8 (*  %7  8))
+   (define %12 (+  %8  7))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27111,22 +27020,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
    (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %25 (+  4  %iterator1.new.div))
-   (define %26 (*  %25  16))
-   (define %30 (+  %26  15))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  4  %iterator1.new.div))
+   (define %23 (*  %22  16))
+   (define %27 (+  %23  15))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
    (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %10 (+  4  %iterator0.new.div))
-   (define %11 (*  %10  16))
-   (define %15 (+  %11  15))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  4  %iterator0.new.div))
+   (define %8 (*  %7  16))
+   (define %12 (+  %8  15))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27144,22 +27053,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
    (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %25 (+  2  %iterator1.new.div))
-   (define %26 (*  %25  32))
-   (define %30 (+  %26  31))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  2  %iterator1.new.div))
+   (define %23 (*  %22  32))
+   (define %27 (+  %23  31))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
    (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %10 (+  2  %iterator0.new.div))
-   (define %11 (*  %10  32))
-   (define %15 (+  %11  31))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  2  %iterator0.new.div))
+   (define %8 (*  %7  32))
+   (define %12 (+  %8  31))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27177,22 +27086,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
    (define %iterator1.new.div (/  %iterator1.new  64))
-   (define %25 (+  1  %iterator1.new.div))
-   (define %26 (*  %25  64))
-   (define %30 (+  %26  63))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  1  %iterator1.new.div))
+   (define %23 (*  %22  64))
+   (define %27 (+  %23  63))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
    (define %iterator0.new.div (/  %iterator0.new  64))
-   (define %10 (+  1  %iterator0.new.div))
-   (define %11 (*  %10  64))
-   (define %15 (+  %11  63))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  1  %iterator0.new.div))
+   (define %8 (*  %7  64))
+   (define %12 (+  %8  63))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27210,22 +27119,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
    (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %25 (+  8  %iterator1.new.div))
-   (define %26 (*  %25  8))
-   (define %30 (+  %26  7))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  8  %iterator1.new.div))
+   (define %23 (*  %22  8))
+   (define %27 (+  %23  7))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
    (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %10 (+  8  %iterator0.new.div))
-   (define %11 (*  %10  8))
-   (define %15 (+  %11  7))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  8  %iterator0.new.div))
+   (define %8 (*  %7  8))
+   (define %12 (+  %8  7))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27243,22 +27152,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 16))])
    (define %iterator1.new.div (/  %iterator1.new  16))
-   (define %25 (+  4  %iterator1.new.div))
-   (define %26 (*  %25  16))
-   (define %30 (+  %26  15))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  4  %iterator1.new.div))
+   (define %23 (*  %22  16))
+   (define %27 (+  %23  15))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 16))])
    (define %iterator0.new.div (/  %iterator0.new  16))
-   (define %10 (+  4  %iterator0.new.div))
-   (define %11 (*  %10  16))
-   (define %15 (+  %11  15))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  4  %iterator0.new.div))
+   (define %8 (*  %7  16))
+   (define %12 (+  %8  15))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27276,22 +27185,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 32))])
    (define %iterator1.new.div (/  %iterator1.new  32))
-   (define %25 (+  2  %iterator1.new.div))
-   (define %26 (*  %25  32))
-   (define %30 (+  %26  31))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  2  %iterator1.new.div))
+   (define %23 (*  %22  32))
+   (define %27 (+  %23  31))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 32))])
    (define %iterator0.new.div (/  %iterator0.new  32))
-   (define %10 (+  2  %iterator0.new.div))
-   (define %11 (*  %10  32))
-   (define %15 (+  %11  31))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  2  %iterator0.new.div))
+   (define %8 (*  %7  32))
+   (define %12 (+  %8  31))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27309,22 +27218,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 64))])
    (define %iterator1.new.div (/  %iterator1.new  64))
-   (define %25 (+  1  %iterator1.new.div))
-   (define %26 (*  %25  64))
-   (define %30 (+  %26  63))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  1  %iterator1.new.div))
+   (define %23 (*  %22  64))
+   (define %27 (+  %23  63))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 64))])
    (define %iterator0.new.div (/  %iterator0.new  64))
-   (define %10 (+  1  %iterator0.new.div))
-   (define %11 (*  %10  64))
-   (define %15 (+  %11  63))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  1  %iterator0.new.div))
+   (define %8 (*  %7  64))
+   (define %12 (+  %8  63))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )
@@ -27342,22 +27251,22 @@ concat
   concat
   (for/list ([%iterator1.new (reverse (range 0 64 8))])
    (define %iterator1.new.div (/  %iterator1.new  8))
-   (define %25 (+  8  %iterator1.new.div))
-   (define %26 (*  %25  8))
-   (define %30 (+  %26  7))
-   (define %31 (extract  %30 %26 b))
-   %31
+   (define %22 (+  8  %iterator1.new.div))
+   (define %23 (*  %22  8))
+   (define %27 (+  %23  7))
+   (define %28 (extract  %27 %23 b))
+   %28
   )
   )
   (apply
   concat
   (for/list ([%iterator0.new (reverse (range 0 64 8))])
    (define %iterator0.new.div (/  %iterator0.new  8))
-   (define %10 (+  8  %iterator0.new.div))
-   (define %11 (*  %10  8))
-   (define %15 (+  %11  7))
-   (define %16 (extract  %15 %11 a))
-   %16
+   (define %7 (+  8  %iterator0.new.div))
+   (define %8 (*  %7  8))
+   (define %12 (+  %8  7))
+   (define %13 (extract  %12 %8 a))
+   %13
   )
   )
  )

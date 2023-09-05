@@ -20,8 +20,8 @@ gdbg: ARMIntrinsicClassify.py
 	python3 ARMIntrinsicClassify.py
 sema: ARMIntrinsicClassify.py
 	python3 ARMSemanticGen.py
-ARMReadableSemantics.py: ARMParser.py ARMMeta.py
-	python3 ARMParser.py --gen
+# ARMReadableSemantics.py: ARMParser.py ARMMeta.py
+# 	python3 ARMParser.py --gen
 AllSema.py: ARMSemanticGen.py ARMIntrinsicClassify.py ARMReadableSemantics.py ARMManualCorrectAST.py ARMHandCraftIntrinsics.py
 	python3 ARMSemanticGen.py
 AllSema.pickle: ARMSemanticGen.py ARMIntrinsicClassify.py ARMReadableSemantics.py ARMManualCorrectAST.py ARMHandCraftIntrinsics.py

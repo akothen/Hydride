@@ -1,10 +1,12 @@
 
 from ARMSemanticGen import SemaGenerator
 from ARMRoseCompiler import ARMRoseContext, CompileSemantics
+from ARMPipeline import pipeline
 from ARMTypes import *
 from ARMAST import *
 from ARMMeta import *
 import ARMArithTransformPass
+from ARMASTPrinter import getSemaAsString
 # CheckFPAdvSIMDEnabled64();
 # bits(datasize) operand1 = V[n];
 # bits(datasize) operand2 = V[m];
@@ -61,8 +63,10 @@ def Compile(InstName: str = None):
         # interested = ['vcge_u32', 'vclt_u16', 'vclt_s16']
         # interested = ['vtrn1_s8']
         # interested = ['vqshl']
-        interested = ['vtrn1_s8']
+        # interested = ['vtrn1_s8']
+        # interested = ['vdot_s32']
         # interested = ["vqmovn_u16"]
+        # interested = ["vabs_s8"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
@@ -103,6 +107,8 @@ def Compile(InstName: str = None):
             print(RootContext)
             print("Spec:")
             print(Spec)
+            # Spec = pipeline(Spec)
+            print(getSemaAsString(Spec.spec))
             FunctionInfo = RoseFunctionInfo()
             CompiledFunction = CompileSemantics(Spec, RootContext)
             if DEBUG:
@@ -141,6 +147,7 @@ def TestcaseGen():
         try:
             # print("Compiling", k, file=sys.stderr)
             print(func.intrin, func)
+            # func = pipeline(func)
             Function = CompileSemantics(func, ARMRoseContext())
         except NotImplementedError as e:
             print("Failed to compile", k, e, file=sys.stderr)
@@ -188,6 +195,8 @@ if __name__ == "__main__":
     DEBUG = True
     if "--gen" in sys.argv:
         TestcaseGen2()
+    if "--gen0" in sys.argv:
+        TestcaseGen()
     elif "--cdbg" in sys.argv:
         Compile()
     else:

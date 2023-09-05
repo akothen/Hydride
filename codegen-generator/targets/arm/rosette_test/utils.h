@@ -130,7 +130,7 @@ RegisterRandomScalar(int64_t);
     printVector(b);                                                            \
     printf(" %lu) (bv #x", sizeof(Type2) * 8);                                 \
     printVector(c);                                                            \
-    printf(" %lu) (bv %d 32)) (bv #x", sizeof(Type3) * 8, n);                  \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type3) * 8, n);                  \
     printVector(ret);                                                          \
     printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
   }
@@ -141,9 +141,9 @@ RegisterRandomScalar(int64_t);
     TypeRet ret = intrin(a, n, b, m);                                          \
     printf("(assert (eq? (" #ename " (bv #x");                                 \
     printVector(a);                                                            \
-    printf(" %lu) (bv %d 32)) (bv #x", sizeof(Type1) * 8, n);                  \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type1) * 8, n);                  \
     printVector(b);                                                            \
-    printf(" %lu) (bv %d 32)) (bv #x", sizeof(Type2) * 8, m);                  \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type2) * 8, m);                  \
     printVector(ret);                                                          \
     printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
   }
@@ -156,7 +156,7 @@ RegisterRandomScalar(int64_t);
     printVector(a);                                                            \
     printf(" %lu) (bv #x", sizeof(Type1) * 8);                                 \
     printVector(b);                                                            \
-    printf(" %lu) (bv %d 32)) (bv #x", sizeof(Type2) * 8, n);                  \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type2) * 8, n);                  \
     printVector(ret);                                                          \
     printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
   }
@@ -166,7 +166,7 @@ RegisterRandomScalar(int64_t);
     TypeRet ret = intrin(a, n);                                                \
     printf("(assert (eq? (" #ename " (bv #x");                                 \
     printVector(a);                                                            \
-    printf(" %lu) (bv %d 32)) (bv #x", sizeof(Type1) * 8, n);                  \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type1) * 8, n);                  \
     printVector(ret);                                                          \
     printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
   }
