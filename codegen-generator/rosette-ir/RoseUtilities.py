@@ -6,6 +6,7 @@
 ###################################################################
 
 
+from sympy import symbols, simplify, Integer
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -120,6 +121,9 @@ def AreBitSlicesContiguous(BVOp1: RoseBitVectorOp, BVOp2: RoseBitVectorOp) -> bo
     Low1.print()
     print("LOW2:")
     Low2.print()
+
+    if RoseConstantFolder(RoseSubOp.create("_owo", [Low2, Low1])) == Bitwidth:
+        return True
     # Handle easiest case first
     if isinstance(Low1, RoseConstant) and isinstance(Low2, RoseConstant):
         if (Low2.getValue() - Low1.getValue()) == Bitwidth:
@@ -1116,3 +1120,27 @@ def GetElemSizeOfArg(Function: RoseFunction, Arg: RoseArgument):
                     ElemSize = Op.getOutputBitwidth()
                     return ElemSize
     assert ElemSize != None
+
+
+def RoseConstantFolder(Query: RoseBitVectorOp):
+    def expr(Query: RoseBitVectorOp):
+        if isinstance(Query, RoseConstant):
+            return Query.getValue()
+        if isinstance(Query, RoseAddOp):
+            return expr(Query.getOperand(0)) + expr(Query.getOperand(1))
+        if isinstance(Query, RoseSubOp):
+            return expr(Query.getOperand(0)) - expr(Query.getOperand(1))
+        if isinstance(Query, RoseMulOp):
+            return expr(Query.getOperand(0)) * expr(Query.getOperand(1))
+        if type(Query) == RoseValue:
+            return symbols(Query.getName())
+        print("RoseConstantFolder encounter", type(Query))
+        assert False, type(Query)
+    try:
+        E = expr(Query)
+        E = simplify(E)
+        if E.is_Integer:
+            return Integer(E)
+        return None
+    except:
+        return None

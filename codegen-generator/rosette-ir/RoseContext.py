@@ -91,7 +91,7 @@ class RoseContext:
     def addSignednessInfoForValue(self, Value: RoseValue, IsSigned: bool):
         assert not isinstance(Value, RoseUndefValue)
         print("Set", "SIGNED" if IsSigned else "UNSIGNED",
-              "for Value:", Value)
+              "for Value:", hex(id(Value)), Value)
         self.CompiledValToSignedness[Value] = IsSigned
 
     def isValueSigned(self, Value: RoseValue):

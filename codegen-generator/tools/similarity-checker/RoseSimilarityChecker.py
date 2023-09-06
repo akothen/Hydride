@@ -23,7 +23,7 @@ from RoseTransformationsVerifier import *
 from copy import deepcopy
 
 
-NumThreads = 1
+NumThreads = 32
 
 EliminateUnnecessaryArgs = False
 

@@ -26,6 +26,83 @@ vqshl_common = """        {
             }
             V[d] = result;
         }"""
+qrdmulh_common= """        {
+            bits(datasize) operand1 = V[n];
+            bits(datasize) operand2 = V[m];
+            bits(datasize) result;
+            integer round_const = ((1 << (esize - 2)) if rounding else 0);
+            integer element1;
+            integer element2;
+            integer product;
+            boolean sat;
+            for e = 0 to (elements - 1)
+            {
+                element1 = SInt(Elem[operand1,e,esize]);
+                element2 = SInt(Elem[operand2,e,esize]);
+                product = (((element1) * element2) + round_const);
+                Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize-1))[0~(esize-1)];
+            }
+            V[d] = result;
+        }"""
+qrdmuh_n_common="""        {
+            bits(datasize) operand1 = V[n];
+            bits(idxdsize) operand2 = V[m];
+            bits(datasize) result;
+            integer round_const = ((1 << (esize - 2)) if round else 0);
+            integer element1;
+            integer element2;
+            integer product;
+            boolean sat;
+            element2 = SInt(Elem[operand2,index,esize]);
+            for e = 0 to (elements - 1)
+            {
+                element1 = SInt(Elem[operand1,e,esize]);
+                product = (((element1) * element2) + round_const);
+                Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize-1))[0~(esize-1)];
+            }
+            V[d] = result;
+        }"""
+negabssat_common="""        {
+            bits(datasize) operand = V[n];
+            bits(datasize) result;
+            integer element;
+            integer element2;
+            boolean sat;
+            for e = 0 to (elements - 1)
+            {
+                element = SInt(Elem[operand,e,esize]);
+                if neg then
+                {
+                    element2 = (- element);
+                }
+                else
+                {
+                    element2 = Abs(element);
+                }
+                Elem[result,e,esize] = SignedSatQ(element2, esize);
+            }
+            V[d] = result;
+        }"""
+negabs_common="""        {
+            bits(datasize) operand = V[n];
+            bits(datasize) result;
+            integer element;
+            integer element2;
+            for e = 0 to (elements - 1)
+            {
+                element = SInt(Elem[operand,e,esize]);
+                if neg then
+                {
+                    element2 = (- element);
+                }
+                else
+                {
+                    element2 = Abs(element);
+                }
+                Elem[result,e,esize] = element2[0~(esize - 1)];
+            }
+            V[d] = result;
+        }"""
 ManualAST = {
     "aarch64_vector_arithmetic_binary_uniform_diff": {
         "decode": """        {
@@ -122,7 +199,7 @@ ManualAST = {
             result = V[d];
             for e = 0 to (elements - 1)
             {
-                integer res, zero, res0, res1, res2, res3;
+                integer zero, res0, res1, res2, res3;
                 integer element10, element20, element11, element21, element12, element22, element13, element23;
                 if signed then
                 {
@@ -138,7 +215,7 @@ ManualAST = {
                     element13 = SInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = SInt(Elem[operand2,((4 * e) + 3),(esize DIV 4)]);
                     res3 = element13*element23;
-                    zero = SInt(Elem[result,e,esize]);
+                    zero = Elem[result,e,esize];
                 }
                 else
                 {
@@ -154,7 +231,7 @@ ManualAST = {
                     element13 = UInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = UInt(Elem[operand2,((4 * e) + 3),(esize DIV 4)]);
                     res3 = element13*element23;
-                    zero = UInt(Elem[result,e,esize]);
+                    zero = Elem[result,e,esize];
                 }
                 Elem[result2,e,esize] = (zero + res0 + res1 + res2 + res3);
             }
@@ -186,11 +263,11 @@ ManualAST = {
             bits(datasize) result = V[d];
             for e = 0 to (elements - 1)
             {
-                integer res, zero;
+                integer zero, res0, res1, res2, res3;
                 integer element10, element20, element11, element21, element12, element22, element13, element23;
                 if signed then
                 {
-                    element10 = SInt(Elem[operand1,((4 * e) + 0),(es0ze DIV 4)]);
+                    element10 = SInt(Elem[operand1,((4 * e) + 0),(esize DIV 4)]);
                     element20 = SInt(Elem[operand2,((4 * index) + 0),(esize DIV 4)]);
                     res0 = element10*element20;
                     element11 = SInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
@@ -202,11 +279,11 @@ ManualAST = {
                     element13 = SInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = SInt(Elem[operand2,((4 * index) + 3),(esize DIV 4)]);
                     res3 = element13*element23;
-                    zero = SInt(Elem[result,e,esize]);
+                    zero = Elem[result,e,esize];
                 }
                 else
                 {
-                    element10 = UInt(Elem[operand1,((4 * e) + 0),(es0ze DIV 4)]);
+                    element10 = UInt(Elem[operand1,((4 * e) + 0),(esize DIV 4)]);
                     element20 = UInt(Elem[operand2,((4 * index) + 0),(esize DIV 4)]);
                     res0 = element10*element20;
                     element11 = UInt(Elem[operand1,((4 * e) + 1),(esize DIV 4)]);
@@ -218,7 +295,7 @@ ManualAST = {
                     element13 = UInt(Elem[operand1,((4 * e) + 3),(esize DIV 4)]);
                     element23 = UInt(Elem[operand2,((4 * index) + 3),(esize DIV 4)]);
                     res3 = element13*element23;
-                    zero = UInt(Elem[result,e,esize]);
+                    zero = Elem[result,e,esize];
                 }
                 Elem[result2,e,esize] = (zero + res0 + res1 + res2 + res3);
             }
@@ -313,7 +390,7 @@ ManualAST = {
     #         for e = 0 to elements-1
     #             op1 = Int(Elem[operand, 2*e+0, esize], unsigned);
     #             op2 = Int(Elem[operand, 2*e+1, esize], unsigned);
-    #             sum = (op1 + op2)[(2*esize-1)~0];
+    #             sum = (op1 + op2)[0~(2*esize-1)];
     #             if acc then
     #                 Elem[result2, e, 2*esize] = Elem[result, e, 2*esize] + sum;
     #             else
@@ -322,39 +399,201 @@ ManualAST = {
     #         V[d] = result2;
     #     }"""
     # }
-    # "aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_simd":{
-    #     "decode": """        {
-    #         integer d = UInt(Rd);
-    #         integer n = UInt(Rn);
-    #         integer m = UInt(Rm);
-    #         if ((size == '11') || (size == '00')) then
-    #         {
-    #             UNDEFINED
-    #         }
-    #         integer esize = (8 << UInt(size));
-    #         integer datasize = (128 if (Q == '1') else 64);
-    #         integer elements = (datasize DIV esize);
-    #         boolean rounding = (U == '1');
-    #     }""",
-    #     "execute": """        {
-    #         bits(datasize) operand1 = V[n];
-    #         bits(datasize) operand2 = V[m];
-    #         bits(datasize) result;
-    #         integer round_const = ((1 << (esize - 2)) if rounding else 0);
-    #         bits(2*esize) element1;
-    #         bits(2*esize) element2;
-    #         integer product;
-    #         boolean sat;
-    #         for e = 0 to (elements - 1)
-    #         {
-    #             element1 = SInt(Elem[operand1,e,esize]);
-    #             element2 = SInt(Elem[operand2,e,esize]);
-    #             product = (element1 * element2)[0~(2*esize - 1)] + round_const;
-    #             Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize - 1))[0~(esize - 1)];
-    #         }
-    #         V[d] = result;
-    #     }""",
-    # },
+    "aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_sisd":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            if ((size == '11') || (size == '00')) then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = esize;
+            integer elements = 1;
+            boolean rounding = (U == '1');
+        }""",
+        "execute": qrdmulh_common,
+    },
+    "aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_simd":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            if ((size == '11') || (size == '00')) then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            boolean rounding = (U == '1');
+        }""",
+        "execute":qrdmulh_common,
+    },
+    "aarch64_vector_arithmetic_binary_element_mul_high_sisd":{
+        "decode": """        {
+            integer idxdsize = (128 if (H == '1') else 64);
+            integer index;
+            bit Rmhi;
+            case size of
+            {
+                when '01' of
+                {
+                    index = UInt(((H : L) : M));
+                    Rmhi = '0';
+                }
+                when '10' of
+                {
+                    index = UInt((H : L));
+                    Rmhi = M;
+                }
+                otherwise
+                {
+                    UNDEFINED
+                }
+            }
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt((Rmhi : Rm));
+            integer esize = (8 << UInt(size));
+            integer datasize = esize;
+            integer elements = 1;
+            boolean round = (op == '1');
+        }""",
+        "execute": qrdmuh_n_common,
+    },
+    "aarch64_vector_arithmetic_binary_element_mul_high_simd":{
+        "decode": """        {
+            integer idxdsize = (128 if (H == '1') else 64);
+            integer index;
+            bit Rmhi;
+            case size of
+            {
+                when '01' of
+                {
+                    index = UInt(((H : L) : M));
+                    Rmhi = '0';
+                }
+                when '10' of
+                {
+                    index = UInt((H : L));
+                    Rmhi = M;
+                }
+                otherwise
+                {
+                    UNDEFINED
+                }
+            }
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt((Rmhi : Rm));
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            boolean round = (op == '1');
+        }""",
+        "execute": qrdmuh_n_common,
+    },
+    "aarch64_vector_arithmetic_unary_diff_neg_int_sisd":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            if (size != '11') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = esize;
+            integer elements = 1;
+            boolean neg = (U == '1');
+        }""",
+        "execute": negabs_common,
+    },
+    "aarch64_vector_arithmetic_unary_diff_neg_int_simd":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            if ((size : Q) == '110') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            boolean neg = (U == '1');
+        }""",
+        "execute": negabs_common,
+    },
+    "aarch64_vector_arithmetic_unary_diff_neg_sat_sisd":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer esize = (8 << UInt(size));
+            integer datasize = esize;
+            integer elements = 1;
+            boolean neg = (U == '1');
+        }""",
+        "execute": negabssat_common,
+    },
+    "aarch64_vector_arithmetic_unary_diff_neg_sat_simd":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            if ((size : Q) == '110') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = (128 if (Q == '1') else 64);
+            integer elements = (datasize DIV esize);
+            boolean neg = (U == '1');
+        }""",
+        "execute": negabssat_common
+    },"aarch64_vector_arithmetic_binary_disparate_add_sub_narrow":{
+        "decode": """        {
+            integer d = UInt(Rd);
+            integer n = UInt(Rn);
+            integer m = UInt(Rm);
+            if (size == '11') then
+            {
+                UNDEFINED
+            }
+            integer esize = (8 << UInt(size));
+            integer datasize = 64;
+            integer part = UInt(Q);
+            integer elements = (datasize DIV esize);
+            boolean sub_op = (o1 == '1');
+            boolean round = (U == '1');
+        }""",
+        "execute": """        {
+            bits((2 * datasize)) operand1 = V[n];
+            bits((2 * datasize)) operand2 = V[m];
+            bits(datasize) result;
+            integer round_const = ((1 << (esize - 1)) if round else 0);
+            bits((2 * esize)) element1;
+            bits((2 * esize)) element2;
+            bits((2 * esize)) sum;
+            bits((2 * esize)) sum2;
+            for e = 0 to (elements - 1)
+            {
+                element1 = Elem[operand1,e,(2 * esize)];
+                element2 = Elem[operand2,e,(2 * esize)];
+                if sub_op then
+                {
+                    sum = (element1 - element2);
+                }
+                else
+                {
+                    sum = (element1 + element2);
+                }
+                sum2 = (sum + round_const);
+                Elem[result,e,esize] = sum2[esize~((2 * esize) - 1)];
+            }
+            Vpart[d,part] = result;
+        }""",
+    },
+    
     "aarch64_vector_arithmetic_binary_uniform_shift_sisd": {
         "decode": """        {
             integer d = UInt(Rd);
@@ -392,3 +631,4 @@ ManualAST = {
         "execute": vqshl_common
     },
 }
+

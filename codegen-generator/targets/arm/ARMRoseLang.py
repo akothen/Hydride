@@ -1,10 +1,12 @@
 
 from ARMSemanticGen import SemaGenerator
 from ARMRoseCompiler import ARMRoseContext, CompileSemantics
+from ARMPipeline import pipeline
 from ARMTypes import *
 from ARMAST import *
 from ARMMeta import *
 import ARMArithTransformPass
+from ARMASTPrinter import getSemaAsString
 # CheckFPAdvSIMDEnabled64();
 # bits(datasize) operand1 = V[n];
 # bits(datasize) operand2 = V[m];
@@ -43,8 +45,7 @@ def Compile(InstName: str = None):
         # interested = ["max", "min"]
         # interested = ["vmovl_s8","vdupq_n_s16"]
         # interested = ["vshl", "vqshl", "vrshl", "vqrshl"]
-        # interested = ["vdot"]
-        # interested = ["vdot"]
+        # interested = ["_n_"]
         # interested = ["vaddvq_u8", 'vdot_u32']
         # interested = ["addv"]
         # interested = ["dot",  "ada"]
@@ -57,13 +58,20 @@ def Compile(InstName: str = None):
         # interested = ['vabal_high_s16']
         # interested = ['vshr_n_s16']
         # interested = ['vqdmlal_high_n_s16']
-        # interested = ['vcltzq_s8']
+        # interested = ['vqdmulh_s16']
         # interested = ["v"+i+"shl_" for i in ['qr','q','r',""]]
         # interested = ["aarch64_vector_arithmetic_binary_uniform_shift_sisd","aarch64_vector_arithmetic_binary_uniform_shift_simd"]
+        # interested = ['vcge_u32', 'vclt_u16', 'vclt_s16']
+        # interested = ['zip']
+        # interested = ['vqshl']
+        # interested = ['vtrn1_s8']
+        # interested = ['vdot_s32']
+        # interested = ["vqmovn_u16"]
+        # interested = ["vcgez"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
             AllSema = {k: v for k, v in AllSema.items(
-            ) if k in interested or v.belongs_to in interested}
+            ) if k in interested or v.belongs_to in interested or any(kk in k for kk in interested)}
         # SemaList = [SemaGenerator(deserialize=True).getSemaByName("vand_s8")]
         SemaList = []
         for k, func in AllSema.items():
@@ -100,6 +108,8 @@ def Compile(InstName: str = None):
             print(RootContext)
             print("Spec:")
             print(Spec)
+            # Spec = pipeline(Spec)
+            print(getSemaAsString(Spec.spec))
             FunctionInfo = RoseFunctionInfo()
             CompiledFunction = CompileSemantics(Spec, RootContext)
             if DEBUG:
@@ -138,6 +148,7 @@ def TestcaseGen():
         try:
             # print("Compiling", k, file=sys.stderr)
             print(func.intrin, func)
+            # func = pipeline(func)
             Function = CompileSemantics(func, ARMRoseContext())
         except NotImplementedError as e:
             print("Failed to compile", k, e, file=sys.stderr)
@@ -180,48 +191,15 @@ def TestWithTransormation():
         print(GenerateRosetteForFunction(FunctionInfo.getLatestFunction(), ""))
 
 
-def Verify():
-    from RoseCodeGenerator import RoseCodeGenerator
-    from RoseAbstractions import RoseFunction
-    CodeGenerator = RoseCodeGenerator(Target="ARM")
-    FunctionInfoList = CodeGenerator.codeGen(
-        JustGenRosette=False, ExtractConstants=False)
-    AllRosetteCode = """#lang rosette
-(require "bvops.rkt")
-(require "compiled.rkt")
-"""
-    for FunctionInfo in FunctionInfoList:
-        F: RoseFunction = FunctionInfo.getLatestFunction()
-        Fname = F.Name
-        F.Name = F.Name+".check"
-        RosetteCode = GenerateRosetteForFunction(
-            F, "")
-        AllRosetteCode += RosetteCode
-        As = ""
-        for Arg in F.getArgs():
-            Bitwidth = Arg.getType().getBitwidth()
-            Aname = Arg.getName() + "_" + Fname
-            AllRosetteCode += "(define-symbolic {} (bitvector {}))\n".format(Aname,
-                                                                             str(Bitwidth))
-            As += Aname + " "
-        AllRosetteCode += f"(verify (assert (equal? ({Fname}.check {As}) ({Fname} {As}))))\n"
-        AllRosetteCode += f'(display "{Fname}" (current-error-port))\n'
-
-    print("Writing to rosette_test/verify_new.rkt...")
-    # AllRosetteCode += "(provide (all-defined-out))"
-    with open(f'rosette_test/compiled_verify.rkt', 'w') as f:
-        f.write(AllRosetteCode)
-
-
 if __name__ == "__main__":
 
     DEBUG = True
     if "--gen" in sys.argv:
         TestcaseGen2()
+    if "--gen0" in sys.argv:
+        TestcaseGen()
     elif "--cdbg" in sys.argv:
         Compile()
-    elif "--verify" in sys.argv:
-        Verify()
     else:
         TestWithTransormation()
 

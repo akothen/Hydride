@@ -1,7 +1,7 @@
 from ARMManualCorrectAST import ManualAST
 from ARMReadableSemantics import map2Code
 import pprint
-from ARMAST import *
+from ARMASTPrinter import *
 from ARMRoseTypes import *
 
 from ARMTypes import *
@@ -9,116 +9,6 @@ import sys
 
 import ply.lex as lex
 import ply.yacc as yacc
-
-indentation = 0
-
-
-def varsDeclSpecial(sema):
-    assert isinstance(sema, VarsDecl)
-    if sema.basetype[0] == "bits":
-        return f'bits('+emitSemaRV(sema.basetype[1])+') ' + ', '.join([emitSemaRV(i) for i in sema.ids])
-
-    if sema.basetype[0] in asl_type_bits:
-        return f'{sema.basetype[0]} ' + ', '.join([emitSemaRV(i) for i in sema.ids])
-    assert False, f'Unknown type {sema}'
-
-
-def emitSema(sema):
-    global indentation
-    if isinstance(sema, list):
-        res = [' '*(indentation-4)+'{']
-        for i in sema:
-            res += emitSema(i)
-        res += [' '*(indentation-4)+'}']
-        return res
-    if isinstance(sema, VarDeclInit):
-        return [' '*indentation+f'{varsDeclSpecial(sema.decl)} = {emitSemaRV(sema.expr)};']
-    # elif isinstance(sema, IfElse):
-    #     return [' '*indentation+f'({emitSema(sema.cond)} ? {emitSema(sema.cond)} : {emitSema(sema.otherwise)})']
-    elif isinstance(sema, VarsDecl):
-        return [' '*indentation+varsDeclSpecial(sema)+';']
-    elif isinstance(sema, For):
-        res = [
-            ' '*indentation +
-            f'for {emitSemaRV(sema.iterator)} = {emitSemaRV(sema.begin)} to {emitSemaRV(sema.end)}',
-        ]
-        indentation += 4
-        res += emitSema(sema.stmts)
-        indentation -= 4
-        return res
-    elif isinstance(sema, Update):
-        return [' '*indentation+f'{emitSemaRV(sema.lhs)} = {emitSemaRV(sema.rhs)};']
-    elif isinstance(sema, IfElse):
-        res = [
-            ' '*indentation+f'if {emitSemaRV(sema.cond)} then'
-        ]
-        indentation += 4
-        res += emitSema(sema.then)
-        indentation -= 4
-        res += [' '*indentation+f'else']
-        indentation += 4
-        res += emitSema(sema.otherwise)
-        indentation -= 4
-        return res
-    elif isinstance(sema, If):
-        res = [
-            ' '*indentation+f'if {emitSemaRV(sema.cond)} then'
-        ]
-        indentation += 4
-        res += emitSema(sema.then)
-        indentation -= 4
-        return res
-    elif isinstance(sema, Match):
-        res = [
-            ' '*indentation+'case '+emitSemaRV(sema.val)+' of'
-        ]
-        indentation += 4
-        res += emitSema(sema.cases)
-        indentation -= 4
-        return res
-    elif isinstance(sema, Case):
-        res = [
-            ' '*indentation+'when '+emitSemaRV(sema.val)+' of'
-        ]
-        indentation += 4
-        res += emitSema(sema.body)
-        indentation -= 4
-        return res
-    elif isinstance(sema, Undefined):
-        return [' '*indentation+f'UNDEFINED']
-    elif isinstance(sema, CaseBase):
-        res = [
-            ' '*indentation+f'otherwise'
-        ]
-        indentation += 4
-        res += emitSema(sema.body)
-        indentation -= 4
-        return res
-    else:
-        assert False, f'Unknown sema {sema}'
-
-
-def emitSemaRV(sema):
-    if isinstance(sema, ArrayIndex):
-        return f'{emitSemaRV(sema.obj)}[{",".join([emitSemaRV(i) for i in sema.slices])}]'
-    if isinstance(sema, SliceRange):
-        return f'{emitSemaRV(sema.lo)}~{emitSemaRV(sema.hi)}'
-    elif isinstance(sema, Var):
-        return sema.name
-    elif isinstance(sema, Number):
-        return str(sema.val)
-    elif isinstance(sema, BitVec):
-        return "'"+sema.bv+"'"
-    elif isinstance(sema, BinaryExpr):
-        return f'({emitSemaRV(sema.a)} {sema.op} {emitSemaRV(sema.b)})'
-    elif isinstance(sema, UnaryExpr):
-        return f'({sema.op} {emitSemaRV(sema.a)})'
-    elif isinstance(sema, Call):
-        return f'{sema.funcname}({", ".join([emitSemaRV(i) for i in sema.args])})'
-    elif isinstance(sema, IfElse):
-        return f'({emitSemaRV(sema.then)} if {emitSemaRV(sema.cond)} else {emitSemaRV(sema.otherwise)})'
-    else:
-        assert False, f'Unknown sema {sema}'
 
 
 class SimpleParser(object):
@@ -231,7 +121,20 @@ class SimpleParser(object):
         elif len(p) == 4 and p[2] == '[':
             p[0] = ArrayIndex(p[1], [], self.new_id())
         elif p[2] == '[':
-            p[0] = ArrayIndex(p[1], p[3], self.new_id())
+            if isinstance(p[1], Var):
+                if p[1].name == "Elem":
+                    assert len(p[3]) == 3
+                    p[0] = ElemSlice(p[3][0], p[3][1], p[3][2], self.new_id())
+                elif p[1].name in ["V", "X"]:
+                    assert len(p[3]) == 1
+                    p[0] = VReg(p[3][0], self.new_id())
+                elif p[1].name == "Vpart":
+                    assert len(p[3]) == 2
+                    p[0] = VPartReg(p[3][0], p[3][1], self.new_id())
+                else:
+                    p[0] = ArrayIndex(p[1], p[3], self.new_id())
+            else:
+                p[0] = ArrayIndex(p[1], p[3], self.new_id())
         elif len(p) == 4 and p[2] == '(':
             p[0] = Call(p[1].name, [], self.new_id())
         elif len(p) == 5 and p[2] == '(':
@@ -314,7 +217,7 @@ class SimpleParser(object):
         if len(p) == 2:
             p[0] = p[1]
         else:
-            p[0] = IfElse(p[3], p[1], p[5], self.new_id())
+            p[0] = IfElseExpr(p[3], p[1], p[5], self.new_id())
 
     def p_expression(self, p):
         '''expression : conditional_expression
@@ -342,9 +245,9 @@ class SimpleParser(object):
         if p[1] == 'case':
             p[0] = Match(p[2], p[4], self.new_id())
         elif len(p) == 7:
-            p[0] = IfElse(p[2], p[4], p[6], self.new_id())
+            p[0] = IfElseStmt(p[2], p[4], p[6], self.new_id())
         else:
-            p[0] = If(p[2], p[4], self.new_id())
+            p[0] = IfStmt(p[2], p[4], self.new_id())
 
     def p_case_statement(self, p):
         '''case_statement : WHEN expression OF statement
@@ -397,13 +300,14 @@ class SimpleParser(object):
     def p_declaration(self, p):
         '''declaration : declaration_specifiers init_declarator_list ';'
         '''
-        if isinstance(p[2][0], Update):
-            p[0] = VarDeclInit(VarsDecl([p[2][0].lhs], p[1],
-                               self.new_id()), p[2][0].rhs, self.new_id())
-        elif isinstance(p[2], List):
-            p[0] = VarsDecl(p[2], p[1], self.new_id())
-        else:
-            assert False, p[2]
+        # if isinstance(p[2][0], Update):
+        #     p[0] = VarDeclInit(VarsDecl([p[2][0].lhs], p[1],
+        #                        self.new_id()), p[2][0].rhs, self.new_id())
+        # elif isinstance(p[2], List):
+
+        p[0] = VarsDecl(p[2], p[1], self.new_id())
+        # else:
+        #     assert False, p[2]
 
     def p_declaration_specifiers(self, p):
         '''declaration_specifiers : BITS '(' expression ')'
@@ -437,10 +341,10 @@ class SimpleParser(object):
         '''init_declarator : IDENTIFIER
         | IDENTIFIER '=' expression'''
         if len(p) == 2:
-            p[0] = Var(p[1], self.new_id())
+            p[0] = VarDeclUndef(Var(p[1], self.new_id()), self.new_id())
         else:
             # p[0] = p[3]
-            p[0] = Update(Var(p[1], self.new_id()), p[3])
+            p[0] = VarDeclInit(Var(p[1], self.new_id()), p[3], self.new_id())
 
     # Error rule for syntax errors
 
@@ -481,11 +385,13 @@ def verify(s1: ASTNode, s2: ASTNode):
         for i, j in zip(s1, s2):
             verify(i, j)
     elif isinstance(s1, VarDeclInit):
-        verify(s1.decl, s2.decl)
-        verify(s1.expr, s2.expr)
+        verify(s1.lhs, s2.lhs)
+        verify(s1.rhs, s2.rhs)
+    elif isinstance(s1, VarDeclUndef):
+        verify(s1.lhs, s2.lhs)
     elif isinstance(s1, VarsDecl):
         verify(s1.basetype, s2.basetype)
-        verify(s1.ids, s2.ids)
+        verify(s1.init_list, s2.init_list)
     elif isinstance(s1, For):
         verify(s1.iterator, s2.iterator)
         verify(s1.begin, s2.begin)
@@ -494,11 +400,15 @@ def verify(s1: ASTNode, s2: ASTNode):
     elif isinstance(s1, Update):
         verify(s1.lhs, s2.lhs)
         verify(s1.rhs, s2.rhs)
-    elif isinstance(s1, IfElse):
+    elif isinstance(s1, IfElseStmt):
         verify(s1.cond, s2.cond)
         verify(s1.then, s2.then)
         verify(s1.otherwise, s2.otherwise)
-    elif isinstance(s1, If):
+    elif isinstance(s1, IfElseExpr):
+        verify(s1.cond, s2.cond)
+        verify(s1.then, s2.then)
+        verify(s1.otherwise, s2.otherwise)
+    elif isinstance(s1, IfStmt):
         verify(s1.cond, s2.cond)
         verify(s1.then, s2.then)
     elif isinstance(s1, Match):
@@ -510,6 +420,15 @@ def verify(s1: ASTNode, s2: ASTNode):
     elif isinstance(s1, ArrayIndex):
         verify(s1.obj, s2.obj)
         verify(s1.slices, s2.slices)
+    elif isinstance(s1, VReg):
+        verify(s1.reg, s2.reg)
+    elif isinstance(s1, VPartReg):
+        verify(s1.reg, s2.reg)
+        verify(s1.part, s2.part)
+    elif isinstance(s1, ElemSlice):
+        verify(s1.op, s2.op)
+        verify(s1.cnt, s2.cnt)
+        verify(s1.esize, s2.esize)
     elif isinstance(s1, SliceRange):
         verify(s1.lo, s2.lo)
         verify(s1.hi, s2.hi)
@@ -584,41 +503,64 @@ def verify_against():
                     wholeCode += i.instPostDecode
                 oldMap2AST[j.encName] = (
                     ASTShrink(i.instExecute), ASTShrink(wholeCode))
-    # assert len(map2AST) == len(encodingNames)
-    # print("map2AST done...")
-    newMap2Code = {}
-    global indentation
-    indentation = 12
-    for i, j in oldMap2AST.items():
-        newMap2Code[i] = {"decode": "\n".join(emitSema(j[1])), "execute": "\n".join(
-            emitSema(j[0])), }
-    with open("ARMReadableSemantics.py", "w") as f:
-        f.write("map2Code = {\n")
-        for i, j in newMap2Code.items():
-            f.write(f'    "{i}":'+'{\n')
-            for k, v in j.items():
-                f.write(f'        "{k}": """{v}""",\n')
-            f.write("    },\n")
-        f.write("}\n")
+    assert len(map2AST) == len(encodingNames)
+    print("map2AST done...")
+    # newMap2Code = {}
+    # global indentation
+    # indentation = 12
+    # for i, j in oldMap2AST.items():
+    #     newMap2Code[i] = {"decode": "\n".join(emitSema(j[1])), "execute": "\n".join(
+    #         emitSema(j[0])), }
+    # with open("ARMReadableSemantics.py", "w") as f:
+    #     f.write("map2Code = {\n")
+    #     for i, j in newMap2Code.items():
+    #         f.write(f'    "{i}":'+'{\n')
+    #         for k, v in j.items():
+    #             f.write(f'        "{k}": """{v}""",\n')
+    #         f.write("    },\n")
+    #     f.write("}\n")
 
-    # from ARMReadableSemantics import map2Code
-    # for i, j in map2Code.items():
-    #     p = SimpleParser()
-    #     p.build()
-    #     execute = p.parse(j["execute"])
-    #     p.build()
-    #     decode = p.parse(j["decode"])
-    #     verify(map2AST[i][0], execute)
-    #     verify(map2AST[i][1], decode)
+    from ARMReadableSemantics import map2Code
+    for i, j in map2Code.items():
+        p = SimpleParser()
+        p.build()
+        execute = p.parse(j["execute"])
+        p.build()
+        decode = p.parse(j["decode"])
+        verify(oldMap2AST[i][0], execute)
+        verify(oldMap2AST[i][1], decode)
+
+
+def verify_single(s: str):
+    print(s)
+    p = SimpleParser()
+    p.build()
+    ast = p.parse(s)
+    print(ast)
+    regen = "\n".join(emitSema(ast))
+    p.build()
+    print(regen)
+    ast2 = p.parse(regen)
+    verify(ast, ast2)
+
+
+def verify2():
+    for i, j in map2Code.items():
+        using = ManualAST.get(i, j)
+        verify_single(using["execute"])
+        verify_single(using["decode"])
 
 
 if __name__ == "__main__":
-    verify_against()
+    # verify_against()
+    verify2()
+
 
 map2AST = {}
 for i, j in map2Code.items():
     p = SimpleParser()
     using = ManualAST.get(i, j)
+    # print(using["execute"])
     p.build()
     execute = p.parse(using["execute"])
     p.build()

@@ -1,40 +1,33 @@
 #include <arm_neon.h>
-#include <stdio.h>
-#include <random>
 #include <cstdlib>
 #include <random>
+#include <stdio.h>
 using namespace std;
 
 mt19937 mt(time(nullptr));
-#define RegisterPrintVector(Type, Store, cType, spec)         \
-    void printVector(Type ret)                                \
-    {                                                         \
-        cType data[sizeof(ret) / sizeof(cType)];              \
-        Store(data, ret);                                     \
-        for (int i = sizeof(ret) / sizeof(cType) - 1; i >= 0; i--) \
-            printf(spec, data[i]);                            \
-    }
-#define RegisterRandomVector(Type, Load, cType) \
-    Type random_##Type()                        \
-    {                                           \
-        char a[sizeof(Type)];                   \
-        for (int i = 0; i < sizeof(Type); i++)  \
-            a[i] = mt();                        \
-        return Load((cType const *)a);          \
-    }
-#define RegisterRandomScalar(Type)             \
-    Type random_##Type()                       \
-    {                                          \
-        char a[sizeof(Type)];                  \
-        for (int i = 0; i < sizeof(Type); i++) \
-            a[i] = mt();                       \
-        return *((Type *)a);                   \
-    }
-#define RegisterPrintScalar(Type, cType, spec) \
-    void printVector(Type ret)                 \
-    {                                          \
-        printf(spec, (cType)ret);              \
-    }
+#define RegisterPrintVector(Type, Store, cType, spec)                          \
+  void printVector(Type ret) {                                                 \
+    cType data[sizeof(ret) / sizeof(cType)];                                   \
+    Store(data, ret);                                                          \
+    for (int i = sizeof(ret) / sizeof(cType) - 1; i >= 0; i--)                 \
+      printf(spec, data[i]);                                                   \
+  }
+#define RegisterRandomVector(Type, Load, cType)                                \
+  Type random_##Type() {                                                       \
+    char a[sizeof(Type)];                                                      \
+    for (int i = 0; i < sizeof(Type); i++)                                     \
+      a[i] = mt();                                                             \
+    return Load((cType const *)a);                                             \
+  }
+#define RegisterRandomScalar(Type)                                             \
+  Type random_##Type() {                                                       \
+    char a[sizeof(Type)];                                                      \
+    for (int i = 0; i < sizeof(Type); i++)                                     \
+      a[i] = mt();                                                             \
+    return *((Type *)a);                                                       \
+  }
+#define RegisterPrintScalar(Type, cType, spec)                                 \
+  void printVector(Type ret) { printf(spec, (cType)ret); }
 RegisterPrintVector(int8x16_t, vst1q_u8, uint8_t, "%02x");
 RegisterPrintVector(uint8x16_t, vst1q_u8, uint8_t, "%02x");
 RegisterPrintVector(int16x8_t, vst1q_u16, uint16_t, "%04x");
@@ -86,97 +79,94 @@ RegisterRandomScalar(int64_t);
 
 #define TESTNUM 3
 
-#define TestV(intrin, Type1, TypeRet,ename)              \
-    for (int _ = 0; _ < TESTNUM; _++)                    \
-    {                                               \
-        Type1 a = random_##Type1();                 \
-        TypeRet ret = intrin(a);                    \
-        printf("(assert (eq? (" #ename " (bv #x"); \
-        printVector(a);                             \
-        printf(" %lu)) (bv #x", sizeof(Type1) * 8);  \
-        printVector(ret);                           \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);   \
-    }
-#define TestVV(intrin, Type1, Type2, TypeRet,ename)       \
-    for (int _ = 0; _ < TESTNUM; _++)                    \
-    {                                               \
-        Type1 a = random_##Type1();                 \
-        Type2 b = random_##Type2();                 \
-        TypeRet ret = intrin(a, b);                 \
-        printf("(assert (eq? (" #ename " (bv #x"); \
-        printVector(a);                             \
-        printf(" %lu) (bv #x", sizeof(Type1) * 8);  \
-        printVector(b);                             \
-        printf(" %lu)) (bv #x", sizeof(Type2) * 8); \
-        printVector(ret);                           \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);   \
-    }
-#define TestVVV(intrin, Type1, Type2, Type3, TypeRet,ename) \
-    for (int _ = 0; _ < TESTNUM; _++)                     \
-    {                                                \
-        Type1 a = random_##Type1();                  \
-        Type2 b = random_##Type2();                  \
-        Type3 c = random_##Type3();                  \
-        TypeRet ret = intrin(a, b, c);               \
-        printf("(assert (eq? (" #ename " (bv #x");  \
-        printVector(a);                              \
-        printf(" %lu) (bv #x", sizeof(Type1) * 8);   \
-        printVector(b);                              \
-        printf(" %lu) (bv #x", sizeof(Type2) * 8);  \
-        printVector(c);                              \
-        printf(" %lu)) (bv #x", sizeof(Type3) * 8);  \
-        printVector(ret);                            \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);    \
-    }
-#define TestVVVI(intrin, Type1, Type2, Type3, n, TypeRet, ename) \
-    {                                                \
-        Type1 a = random_##Type1();                  \
-        Type2 b = random_##Type2();                  \
-        Type3 c = random_##Type3();                  \
-        TypeRet ret = intrin(a, b, c, n);               \
-        printf("(assert (eq? (" #ename " (bv #x");  \
-        printVector(a);                              \
-        printf(" %lu) (bv #x", sizeof(Type1) * 8);   \
-        printVector(b);                              \
-        printf(" %lu) (bv #x", sizeof(Type2) * 8);  \
-        printVector(c);                              \
-        printf(" %lu) (bv %d 192)) (bv #x", sizeof(Type3) * 8, n);  \
-        printVector(ret);                            \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);    \
-    }
-#define TestVIVI(intrin, Type1, n, Type2, m, TypeRet,ename)       \
-    {                                               \
-        Type1 a = random_##Type1();                 \
-        Type2 b = random_##Type2();                 \
-        TypeRet ret = intrin(a, n, b, m);                 \
-        printf("(assert (eq? (" #ename " (bv #x"); \
-        printVector(a);                             \
-        printf(" %lu) (bv %d 192)) (bv #x", sizeof(Type1) * 8, n);  \
-        printVector(b);                             \
-        printf(" %lu) (bv %d 192)) (bv #x", sizeof(Type2) * 8, m);  \
-        printVector(ret);                           \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);   \
-    }
-#define TestVVI(intrin, Type1, Type2, n, TypeRet, ename)       \
-    {                                               \
-        Type1 a = random_##Type1();                 \
-        Type2 b = random_##Type2();                 \
-        TypeRet ret = intrin(a, b, n);                 \
-        printf("(assert (eq? (" #ename " (bv #x"); \
-        printVector(a);                             \
-        printf(" %lu) (bv #x", sizeof(Type1) * 8);  \
-        printVector(b);                             \
-        printf(" %lu) (bv %d 192)) (bv #x", sizeof(Type2) * 8, n);  \
-        printVector(ret);                           \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);   \
-    }
-#define TestVI(intrin, Type1, n, TypeRet, ename)              \
-    {                                               \
-        Type1 a = random_##Type1();                 \
-        TypeRet ret = intrin(a, n);                    \
-        printf("(assert (eq? (" #ename " (bv #x"); \
-        printVector(a);                             \
-        printf(" %lu) (bv %d 192)) (bv #x", sizeof(Type1) * 8, n);  \
-        printVector(ret);                           \
-        printf(" %lu)))\n", sizeof(TypeRet) * 8);   \
-    }
+#define TestV(intrin, Type1, TypeRet, ename)                                   \
+  for (int _ = 0; _ < TESTNUM; _++) {                                          \
+    Type1 a = random_##Type1();                                                \
+    TypeRet ret = intrin(a);                                                   \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu)) (bv #x", sizeof(Type1) * 8);                                \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }
+#define TestVV(intrin, Type1, Type2, TypeRet, ename)                           \
+  for (int _ = 0; _ < TESTNUM; _++) {                                          \
+    Type1 a = random_##Type1();                                                \
+    Type2 b = random_##Type2();                                                \
+    TypeRet ret = intrin(a, b);                                                \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu) (bv #x", sizeof(Type1) * 8);                                 \
+    printVector(b);                                                            \
+    printf(" %lu)) (bv #x", sizeof(Type2) * 8);                                \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }
+#define TestVVV(intrin, Type1, Type2, Type3, TypeRet, ename)                   \
+  for (int _ = 0; _ < TESTNUM; _++) {                                          \
+    Type1 a = random_##Type1();                                                \
+    Type2 b = random_##Type2();                                                \
+    Type3 c = random_##Type3();                                                \
+    TypeRet ret = intrin(a, b, c);                                             \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu) (bv #x", sizeof(Type1) * 8);                                 \
+    printVector(b);                                                            \
+    printf(" %lu) (bv #x", sizeof(Type2) * 8);                                 \
+    printVector(c);                                                            \
+    printf(" %lu)) (bv #x", sizeof(Type3) * 8);                                \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }
+#define TestVVVI(intrin, Type1, Type2, Type3, n, TypeRet, ename)               \
+  {                                                                            \
+    Type1 a = random_##Type1();                                                \
+    Type2 b = random_##Type2();                                                \
+    Type3 c = random_##Type3();                                                \
+    TypeRet ret = intrin(a, b, c, n);                                          \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu) (bv #x", sizeof(Type1) * 8);                                 \
+    printVector(b);                                                            \
+    printf(" %lu) (bv #x", sizeof(Type2) * 8);                                 \
+    printVector(c);                                                            \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type3) * 8, n);                  \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }
+#define TestVIVI(intrin, Type1, n, Type2, m, TypeRet, ename)                   \
+  {                                                                            \
+    Type1 a = random_##Type1();                                                \
+    Type2 b = random_##Type2();                                                \
+    TypeRet ret = intrin(a, n, b, m);                                          \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type1) * 8, n);                  \
+    printVector(b);                                                            \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type2) * 8, m);                  \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }
+#define TestVVI(intrin, Type1, Type2, n, TypeRet, ename)                       \
+  {                                                                            \
+    Type1 a = random_##Type1();                                                \
+    Type2 b = random_##Type2();                                                \
+    TypeRet ret = intrin(a, b, n);                                             \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu) (bv #x", sizeof(Type1) * 8);                                 \
+    printVector(b);                                                            \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type2) * 8, n);                  \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }
+#define TestVI(intrin, Type1, n, TypeRet, ename)                               \
+  {                                                                            \
+    Type1 a = random_##Type1();                                                \
+    TypeRet ret = intrin(a, n);                                                \
+    printf("(assert (eq? (" #ename " (bv #x");                                 \
+    printVector(a);                                                            \
+    printf(" %lu) (bv %d 64)) (bv #x", sizeof(Type1) * 8, n);                  \
+    printVector(ret);                                                          \
+    printf(" %lu)))\n", sizeof(TypeRet) * 8);                                  \
+  }

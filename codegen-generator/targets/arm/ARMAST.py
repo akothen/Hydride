@@ -1,6 +1,6 @@
 import os
 from collections import namedtuple
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from ARMTypes import ARMGlobalConst, asl_type_bits
 import asl.ARMAST as asl
 
@@ -23,7 +23,15 @@ class ASTNode:
     pass
 
 
-class Number(ASTNode):
+class ASTExpr(ASTNode):
+    pass
+
+
+class ASTStmt(ASTNode):
+    pass
+
+
+class Number(ASTExpr):
     val: int
 
     def __init__(self, val: int):
@@ -32,8 +40,13 @@ class Number(ASTNode):
     def __repr__(self):
         return f"Number({self.val.__repr__()})"
 
+    def __eq__(self, other):
+        if other.__class__ != Number:
+            return False
+        return self.val == other.val
 
-class BitVec(ASTNode):
+
+class BitVec(ASTExpr):
     bv: str
 
     def __init__(self, bv: int):
@@ -43,32 +56,68 @@ class BitVec(ASTNode):
         return f"BitVec({self.bv.__repr__()})"
 
 
-class SliceRange(ASTNode):
-    hi: ASTNode
-    lo: ASTNode
+class SliceRange(ASTExpr):
+    hi: ASTExpr
+    lo: ASTExpr
     id: str
-    wid: ASTNode
+    wid: ASTExpr
 
-    def __init__(self, hi: ASTNode, lo: ASTNode, id: str):
+    def __init__(self, hi: ASTExpr, lo: ASTExpr, id: str):
         self.lo, self.hi, self.id = lo, hi, id
 
     def __repr__(self):
         return f"SliceRange({self.hi.__repr__()}, {self.lo.__repr__()}, {self.id.__repr__()})"
 
 
-class ArrayIndex(ASTNode):
-    obj: ASTNode
-    slices: List[ASTNode]
+class ArrayIndex(ASTExpr):
+    obj: ASTExpr
+    slices: List[ASTExpr]
     id: str
 
-    def __init__(self, obj: ASTNode, slices: List[ASTNode], id: str):
+    def __init__(self, obj: ASTExpr, slices: List[ASTExpr], id: str):
         self.obj, self.slices, self.id = obj, slices, id
 
     def __repr__(self):
         return f"ArrayIndex({self.obj.__repr__()}, {self.slices.__repr__()}, {self.id.__repr__()})"
 
 
-class Var(ASTNode):
+class ElemSlice(ASTExpr):
+    op: ASTExpr
+    cnt: ASTExpr
+    esize: ASTExpr
+    id: str
+
+    def __init__(self, op: ASTExpr, cnt: ASTExpr, esize: ASTExpr, id: str):
+        self.op, self.cnt, self.esize, self.id = op, cnt, esize, id
+
+    def __repr__(self):
+        return f"ElemSlice({self.op.__repr__()}, {self.cnt.__repr__()}, {self.esize.__repr__()}, {self.id.__repr__()})"
+
+
+class VReg(ASTExpr):
+    reg: ASTExpr
+    id: str
+
+    def __init__(self, reg: ASTExpr, id: str):
+        self.reg, self.id = reg, id
+
+    def __repr__(self):
+        return f"VReg({self.reg.__repr__()}, {self.id.__repr__()})"
+
+
+class VPartReg(ASTExpr):
+    reg: ASTExpr
+    part: ASTExpr
+    id: str
+
+    def __init__(self, reg: ASTExpr, part: ASTExpr, id: str):
+        self.reg, self.part, self.id = reg, part, id
+
+    def __repr__(self):
+        return f"VPartReg({self.reg.__repr__()}, {self.part.__repr__()}, {self.id.__repr__()})"
+
+
+class Var(ASTExpr):
     name: str
     id: str
 
@@ -79,100 +128,129 @@ class Var(ASTNode):
         return f"Var({self.name.__repr__()}, {self.id.__repr__()})"
 
 
-class Update(ASTNode):
-    lhs: ASTNode
-    rhs: ASTNode
+class Update(ASTStmt):
+    lhs: ASTExpr
+    rhs: ASTExpr
 
-    def __init__(self, lhs: ASTNode, rhs: ASTNode):
+    def __init__(self, lhs: ASTExpr, rhs: ASTExpr):
         self.lhs, self.rhs = lhs, rhs
 
     def __repr__(self):
         return f"Update({self.lhs.__repr__()}, {self.rhs.__repr__()})"
 
 
-class For(ASTNode):
+class For(ASTStmt):
     iterator: Var
-    begin: ASTNode
-    end: ASTNode
-    stmts: List[ASTNode]
+    begin: ASTExpr
+    end: ASTExpr
+    stmts: List[ASTStmt]
     inc: int
     id: str
 
-    def __init__(self, iterator: Var, begin: ASTNode, end: ASTNode, stmts: List[ASTNode], inc: int, id: str):
+    def __init__(self, iterator: Var, begin: ASTExpr, end: ASTExpr, stmts: List[ASTStmt], inc: int, id: str):
         self.iterator, self.begin, self.end, self.stmts, self.inc, self.id = iterator, begin, end, stmts, inc, id
 
     def __repr__(self):
         return f"For({self.iterator.__repr__()}, {self.begin.__repr__()}, {self.end.__repr__()}, {self.stmts.__repr__()}, {self.inc.__repr__()}, {self.id.__repr__()})"
 
 
-class While(ASTNode):
-    cond: ASTNode
-    body: List[ASTNode]
+class While(ASTStmt):
+    cond: ASTExpr
+    body: List[ASTStmt]
     id: str
 
-    def __init__(self, cond: ASTNode, body: List[ASTNode], id: str):
+    def __init__(self, cond: ASTExpr, body: List[ASTStmt], id: str):
         self.cond, self.body, self.id = cond, body, id
 
     def __repr__(self):
         return f"While({self.cond.__repr__()}, {self.body.__repr__()}, {self.id.__repr__()})"
 
 
-class IfElse(ASTNode):
-    cond: ASTNode
-    then: List[ASTNode]
-    otherwise: List[ASTNode]
+class IfElseStmt(ASTStmt):
+    cond: ASTExpr
+    then: List[ASTStmt]
+    otherwise: List[ASTStmt]
     id: str
 
-    def __init__(self, cond: ASTNode, then: List[ASTNode], otherwise: List[ASTNode], id: str):
+    def __init__(self, cond: ASTExpr, then: List[ASTStmt], otherwise: List[ASTStmt], id: str):
         self.cond, self.then, self.otherwise, self.id = cond, then, otherwise, id
 
     def __repr__(self):
-        return f"IfElse({self.cond.__repr__()}, {self.then.__repr__()}, {self.otherwise.__repr__()}, {self.id.__repr__()})"
+        return f"IfElseStmt({self.cond.__repr__()}, {self.then.__repr__()}, {self.otherwise.__repr__()}, {self.id.__repr__()})"
 
 
-class If(ASTNode):
-    cond: ASTNode
-    then: List[ASTNode]
+class IfElseExpr(ASTExpr):
+    cond: ASTExpr
+    then: ASTExpr
+    otherwise: ASTExpr
     id: str
 
-    def __init__(self, cond: ASTNode, then: List[ASTNode], id: str):
+    def __init__(self, cond: ASTExpr, then: ASTExpr, otherwise: ASTExpr, id: str):
+        self.cond, self.then, self.otherwise, self.id = cond, then, otherwise, id
+
+    def __repr__(self):
+        return f"IfElseExpr({self.cond.__repr__()}, {self.then.__repr__()}, {self.otherwise.__repr__()}, {self.id.__repr__()})"
+
+
+class IfStmt(ASTStmt):
+    cond: ASTExpr
+    then: List[ASTStmt]
+    id: str
+
+    def __init__(self, cond: ASTExpr, then: List[ASTStmt], id: str):
         self.cond, self.then, self.id = cond, then, id
 
     def __repr__(self):
-        return f"If({self.cond.__repr__()}, {self.then.__repr__()}, {self.id.__repr__()})"
+        return f"IfStmt({self.cond.__repr__()}, {self.then.__repr__()}, {self.id.__repr__()})"
 
 
-class Call(ASTNode):
+class Call(ASTExpr):
     funcname: str
-    args: List[ASTNode]
+    args: List[ASTExpr]
     id: str
 
-    def __init__(self, funcname: str, args: List[ASTNode], id: str):
+    def __init__(self, funcname: str, args: List[ASTExpr], id: str):
         self.funcname, self.args, self.id = funcname, args, id
 
     def __repr__(self):
         return f"Call({self.funcname.__repr__()}, {self.args.__repr__()}, {self.id.__repr__()})"
 
 
-class BinaryExpr(ASTNode):
+class BinaryExpr(ASTExpr):
     op: str
-    a: ASTNode
-    b: ASTNode
+    a: ASTExpr
+    b: ASTExpr
     id: str
 
-    def __init__(self, op: str, a: ASTNode, b: ASTNode, id: str):
+    def __init__(self, op: str, a: ASTExpr, b: ASTExpr, id: str):
         self.op, self.a, self.b, self.id = op, a, b, id
 
     def __repr__(self):
         return f"BinaryExpr({self.op.__repr__()}, {self.a.__repr__()}, {self.b.__repr__()}, {self.id.__repr__()})"
 
 
-class UnaryExpr(ASTNode):
+class SatBinaryExpr(BinaryExpr):
+    unsigned: ASTExpr
+    satsize: ASTExpr
+
+    def __init__(self, op: str, a: ASTExpr, b: ASTExpr, satsize: ASTExpr, unsigned: ASTExpr, id: str):
+        super().__init__(op, a, b, id)
+        self.satsize = satsize
+        self.unsigned = unsigned
+
+    def createFromBinOp(be: BinaryExpr, satmode: Tuple[ASTExpr, ASTExpr]):
+        return SatBinaryExpr(be.op, be.a, be.b, satmode[0], satmode[1], be.id)
+
+    def __repr__(self):
+        return f"SatBinaryExpr({self.op.__repr__()}, {self.a.__repr__()}, {self.b.__repr__()}, {self.satsize.__repr__()}, {self.unsigned.__repr__()}, {self.id.__repr__()})"
+
+
+class UnaryExpr(ASTExpr):
     op: str
-    a: ASTNode
+    a: ASTExpr
     id: str
 
-    def __init__(self, op: str, a: ASTNode, id: str):
+    def __init__(self, op: str, a: ASTExpr, id: str):
         self.op, self.a, self.id = op, a, id
 
     def __repr__(self):
@@ -183,11 +261,11 @@ class UnaryExpr(ASTNode):
 #     ['cond', 'then', 'otherwise', 'id']
 
 
-class CaseBase(ASTNode):
-    body: List[ASTNode]
+class CaseBase(ASTStmt):
+    body: List[ASTStmt]
     id: str
 
-    def __init__(self, body: List[ASTNode], id: str):
+    def __init__(self, body: List[ASTStmt], id: str):
         self.body, self.id = body, id
 
     def __repr__(self):
@@ -195,49 +273,60 @@ class CaseBase(ASTNode):
 
 
 class Case(CaseBase):
-    val: ASTNode
+    val: ASTExpr
 
-    def __init__(self, val: ASTNode, body: List[ASTNode], id: str):
+    def __init__(self, val: ASTExpr, body: List[ASTStmt], id: str):
         self.val, self.body, self.id = val, body, id
 
     def __repr__(self):
         return f"Case({self.val.__repr__()}, {self.body.__repr__()}, {self.id.__repr__()})"
 
 
-class Match(ASTNode):
-    val: ASTNode
-    cases: List[CaseBase]
+class Match(ASTStmt):
+    val: ASTExpr
+    cases: List[ASTStmt]
     id: str
 
-    def __init__(self, val: ASTNode, cases: List[CaseBase], id: str):
+    def __init__(self, val: ASTExpr, cases: List[CaseBase], id: str):
         self.val, self.cases, self.id = val, cases, id
 
     def __repr__(self):
         return f"Match({self.val.__repr__()}, {self.cases.__repr__()}, {self.id.__repr__()})"
 
 
-class VarsDecl(ASTNode):
-    ids: List[Var]
-    basetype: Tuple[str, ASTNode]
-    id: str
-
-    def __init__(self, ids: List[Var], basetype: Tuple[str, ASTNode], id: str):
-        self.ids, self.basetype, self.id = ids, basetype, id
-
-    def __repr__(self):
-        return f"VarsDecl({self.ids.__repr__()}, {self.basetype.__repr__()}, {self.id.__repr__()})"
-
-
 class VarDeclInit(ASTNode):
-    decl: VarsDecl
-    expr: ASTNode
+    lhs: Var
+    rhs: ASTExpr
     id: str
 
-    def __init__(self, decl: VarsDecl, expr: ASTNode, id: str):
-        self.decl, self.expr, self.id = decl, expr, id
+    def __init__(self, lhs: Var, expr: ASTExpr, id: str):
+        self.lhs, self.rhs, self.id = lhs, expr, id
 
     def __repr__(self):
-        return f"VarDeclInit({self.decl.__repr__()}, {self.expr.__repr__()}, {self.id.__repr__()})"
+        return f"VarDeclInit({self.lhs.__repr__()}, {self.rhs.__repr__()}, {self.id.__repr__()})"
+
+
+class VarDeclUndef(ASTNode):
+    lhs: Var
+    id: str
+
+    def __init__(self, lhs: Var, id: str):
+        self.lhs, self.id = lhs, id
+
+    def __repr__(self):
+        return f"VarDeclUndef({self.lhs.__repr__()}, {self.id.__repr__()})"
+
+
+class VarsDecl(ASTStmt):
+    init_list: List[VarDeclInit | VarDeclUndef]
+    basetype: Tuple[str, ASTExpr]
+    id: str
+
+    def __init__(self, init_list: List[VarDeclInit | VarDeclUndef], basetype: Tuple[str, ASTNode], id: str):
+        self.init_list, self.basetype, self.id = init_list, basetype, id
+
+    def __repr__(self):
+        return f"VarsDecl({self.init_list.__repr__()}, {self.basetype.__repr__()}, {self.id.__repr__()})"
 
 
 class Undefined(ASTNode):
@@ -292,8 +381,8 @@ def ASTShrink_(AST):
         assert type(AST.slices) == list, f"{AST}"
         # Patch for striping <7:0> on `vshl`s
         slice = ASTShrink_(AST.slices)
-        if len(slice) == 1 and isinstance(slice[0], SliceRange) and isinstance(slice[0].hi, Number) and isinstance(slice[0].lo, Number) and slice[0].hi.val == 7 and slice[0].lo.val == 0:
-            return ASTShrink_(AST.expr)
+        # if len(slice) == 1 and isinstance(slice[0], SliceRange) and isinstance(slice[0].hi, Number) and isinstance(slice[0].lo, Number) and slice[0].hi.val == 7 and slice[0].lo.val == 0:
+        #     return ASTShrink_(AST.expr)
         return ArrayIndex(ASTShrink_(AST.expr), slice, GenUniqueID())
     elif isinstance(AST, asl.LValSliceOf):
         assert type(AST.slices) == list, f"{AST}"
@@ -324,7 +413,7 @@ def ASTShrink_(AST):
         else:
             if len(AST.stmtifcases) == 1:
                 try:
-                    return If(ASTShrink_(AST.stmtifcases[0].expr), ASTShrink_(AST.stmtifcases[0].stmts), GenUniqueID())
+                    return IfStmt(ASTShrink_(AST.stmtifcases[0].expr), ASTShrink_(AST.stmtifcases[0].stmts), GenUniqueID())
                 except SatException as e:
                     return None
             else:
@@ -366,6 +455,64 @@ def ASTShrink_(AST):
 def ASTShrink(AST):
     ResetUniqueID()
     return ASTShrink_(AST)
+
+
+def ASTcopy(AST):
+    if isinstance(AST, str):
+        return AST
+    if isinstance(AST, Tuple):
+        return tuple(ASTcopy(i) for i in AST)
+    if isinstance(AST, list):
+        return [ASTcopy(i) for i in AST]
+    if isinstance(AST, Number):
+        return Number(AST.val)
+    if isinstance(AST, BitVec):
+        return BitVec(AST.bv)
+    if isinstance(AST, SliceRange):
+        return SliceRange(ASTcopy(AST.hi), ASTcopy(AST.lo), AST.id)
+    if isinstance(AST, ArrayIndex):
+        return ArrayIndex(ASTcopy(AST.obj), ASTcopy(AST.slices), AST.id)
+    if isinstance(AST, ElemSlice):
+        return ElemSlice(ASTcopy(AST.op), ASTcopy(AST.cnt), ASTcopy(AST.esize), AST.id)
+    if isinstance(AST, VReg):
+        return VReg(ASTcopy(AST.reg), AST.id)
+    if isinstance(AST, VPartReg):
+        return VPartReg(ASTcopy(AST.reg), ASTcopy(AST.part), AST.id)
+    if isinstance(AST, Var):
+        return Var(AST.name, AST.id)
+    if isinstance(AST, Update):
+        return Update(ASTcopy(AST.lhs), ASTcopy(AST.rhs))
+    if isinstance(AST, For):
+        return For(ASTcopy(AST.iterator), ASTcopy(AST.begin), ASTcopy(AST.end), ASTcopy(AST.stmts), AST.inc, AST.id)
+    if isinstance(AST, While):
+        return While(ASTcopy(AST.cond), ASTcopy(AST.body), AST.id)
+    if isinstance(AST, IfElseStmt):
+        return IfElseStmt(ASTcopy(AST.cond), ASTcopy(AST.then), ASTcopy(AST.otherwise), AST.id)
+    if isinstance(AST, IfElseExpr):
+        return IfElseExpr(ASTcopy(AST.cond), ASTcopy(AST.then), ASTcopy(AST.otherwise), AST.id)
+    if isinstance(AST, IfStmt):
+        return IfStmt(ASTcopy(AST.cond), ASTcopy(AST.then), AST.id)
+    if isinstance(AST, Call):
+        return Call(AST.funcname, ASTcopy(AST.args), AST.id)
+    if isinstance(AST, BinaryExpr):
+        return BinaryExpr(AST.op, ASTcopy(AST.a), ASTcopy(AST.b), AST.id)
+    if isinstance(AST, UnaryExpr):
+        return UnaryExpr(AST.op, ASTcopy(AST.a), AST.id)
+    if isinstance(AST, Case):
+        return Case(ASTcopy(AST.val), ASTcopy(AST.body), AST.id)
+    if isinstance(AST, CaseBase):
+        return CaseBase(ASTcopy(AST.body), AST.id)
+    if isinstance(AST, Match):
+        return Match(ASTcopy(AST.val), ASTcopy(AST.cases), AST.id)
+    if isinstance(AST, VarDeclInit):
+        return VarDeclInit(ASTcopy(AST.lhs), ASTcopy(AST.rhs), AST.id)
+    if isinstance(AST, VarDeclUndef):
+        return VarDeclUndef(ASTcopy(AST.lhs), AST.id)
+    if isinstance(AST, VarsDecl):
+        return VarsDecl(ASTcopy(AST.init_list), ASTcopy(AST.basetype), AST.id)
+    if isinstance(AST, Undefined):
+        return Undefined()
+    raise NotImplementedError(f"{AST}")
 
 
 Flag = namedtuple(
