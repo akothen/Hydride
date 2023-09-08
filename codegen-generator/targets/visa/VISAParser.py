@@ -3,7 +3,7 @@ import ply.yacc as yacc
 import sys
 from VISAAST import *
 
-asl_type_bits = ['UD', 'D', 'bit']
+visa_type = ['UD', 'D', 'bit']
 reserved_types = []
 
 
@@ -16,6 +16,7 @@ class SimpleParser(object):
         'ELSE',
         'WHILE',
         'IS',
+        'REL_OP'
     ]
     tokens = [
         'CONSTANT',
@@ -32,7 +33,7 @@ class SimpleParser(object):
         'INC_OP',
         'DEC_OP',
         'ADD_ASSIGN',
-    ] + list(reserved)+reserved_types+asl_type_bits
+    ] + list(reserved)+reserved_types+visa_type
 
     # Regular expression rules for simple tokens
     literals = "+-*/()[]{}=,.;?:<>!~&|^%~"
@@ -85,7 +86,7 @@ class SimpleParser(object):
     def t_IDENTIFIER(self, t):
         r'[a-zA-Z_][a-zA-Z_0-9]*'
         # Check for reserved words
-        if t.value in asl_type_bits:
+        if t.value in visa_type:
             t.type = t.value
         elif t.value.upper() in self.reserved:
             t.type = t.value.upper()
@@ -187,6 +188,7 @@ class SimpleParser(object):
         | relational_expression '>' shift_expression
         | relational_expression LE_OP shift_expression
         | relational_expression GE_OP shift_expression
+        | relational_expression REL_OP shift_expression
         equality_expression : relational_expression
         | equality_expression EQ_OP relational_expression
         | equality_expression NE_OP relational_expression
@@ -240,7 +242,7 @@ class SimpleParser(object):
         '''selection_statement : IF '(' expression ')' statement
         | IF '(' expression ')' statement ELSE statement
         '''
-        if len(p) == 7:
+        if len(p) == 8:
             p[0] = IfElseStmt(p[3], p[5], p[7])
         else:
             p[0] = IfStmt(p[3], p[5])
@@ -319,7 +321,10 @@ class SimpleParser(object):
         #     assert False, p[2]
 
     def p_declaration_specifiers(self, p):
-        '''declaration_specifiers : UD'''
+        '''declaration_specifiers : UD
+        | D
+        | bit
+        '''
 
         p[0] = p[1]
 

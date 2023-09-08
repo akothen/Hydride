@@ -178,42 +178,6 @@ class UnaryExpr(ASTExpr):
         return f"UnaryExpr({self.op.__repr__()}, {self.a.__repr__()})"
 
 
-# # class Select(ASTNode):
-# #     ['cond', 'then', 'otherwise', 'id']
-
-
-# class CaseBase(ASTStmt):
-#     body: List[ASTStmt]
-#     id: str
-
-#     def __init__(self, body: List[ASTStmt], id: str):
-#         self.body, self.id = body, id
-
-#     def __repr__(self):
-#         return f"CaseBase({self.body.__repr__()}, {self.id.__repr__()})"
-
-
-# class Case(CaseBase):
-#     val: ASTExpr
-
-#     def __init__(self, val: ASTExpr, body: List[ASTStmt], id: str):
-#         self.val, self.body, self.id = val, body, id
-
-#     def __repr__(self):
-#         return f"Case({self.val.__repr__()}, {self.body.__repr__()}, {self.id.__repr__()})"
-
-
-# class Match(ASTStmt):
-#     val: ASTExpr
-#     cases: List[ASTStmt]
-#     id: str
-
-#     def __init__(self, val: ASTExpr, cases: List[CaseBase], id: str):
-#         self.val, self.cases, self.id = val, cases, id
-
-#     def __repr__(self):
-#         return f"Match({self.val.__repr__()}, {self.cases.__repr__()}, {self.id.__repr__()})"
-
 class Declarator(ASTNode):
     pass
 
@@ -248,3 +212,97 @@ class VarsDecl(ASTStmt):
 
     def __repr__(self):
         return f"VarsDecl({self.init_list.__repr__()}, {self.basetype.__repr__()})"
+
+
+indentation = 0
+
+
+def getSemaAsString(sema):
+    return "\n".join(emitSema(sema))
+
+
+def emitSema(sema):
+    global indentation
+    if isinstance(sema, ASTExpr):
+        return [' '*indentation+emitSemaRV(sema)+";"]
+    if isinstance(sema, list):
+        if len(sema) == 1:
+            return emitSema(sema[0])
+        if len(sema) == 0:
+            return ["{}"]
+        res = [' '*(indentation-4)+'{']
+        for i in sema:
+            res += emitSema(i)
+        res += [' '*(indentation-4)+'}']
+        return res
+    elif isinstance(sema, VarDeclInit):
+        return f'{emitSemaRV(sema.lhs)} = {emitSemaRV(sema.rhs)}'
+    elif isinstance(sema, VarDeclUndef):
+        return f'{emitSemaRV(sema.lhs)}'
+    elif isinstance(sema, VarsDecl):
+        return [' '*indentation+sema.basetype+' '+', '.join([emitSema(i) for i in sema.init_list])+';']
+    elif isinstance(sema, For):
+        res = [
+            ' '*indentation +
+            f'for({emitSemaRV(sema.init)};{emitSemaRV(sema.cond)};{emitSemaRV(sema.step)})',
+        ]
+        indentation += 4
+        res += emitSema(sema.stmts)
+        indentation -= 4
+        return res
+    elif isinstance(sema, While):
+        res = [
+            ' '*indentation +
+            f'while ({emitSemaRV(sema.cond)})',
+        ]
+        indentation += 4
+        res += emitSema(sema.body)
+        indentation -= 4
+        return res
+    elif isinstance(sema, IfElseStmt):
+        res = [
+            ' '*indentation+f'if ({emitSemaRV(sema.cond)})'
+        ]
+        indentation += 4
+        res += emitSema(sema.then)
+        indentation -= 4
+        res += [' '*indentation+f'else']
+        indentation += 4
+        res += emitSema(sema.otherwise)
+        indentation -= 4
+        return res
+    elif isinstance(sema, IfStmt):
+        res = [
+            ' '*indentation+f'if ({emitSemaRV(sema.cond)})'
+        ]
+        indentation += 4
+        res += emitSema(sema.then)
+        indentation -= 4
+        return res
+    else:
+        assert False, f'Unknown sema {sema}'
+
+
+def emitSemaRV(sema):
+    if isinstance(sema, ArrayIndex):
+        return f'{emitSemaRV(sema.obj)}[{emitSemaRV(sema.slices)}]'
+    elif isinstance(sema, ArraySlice):
+        return f'{emitSemaRV(sema.obj)}[{emitSemaRV(sema.hi)}:{emitSemaRV(sema.lo)}]'
+    elif isinstance(sema, Var):
+        return sema.name
+    elif isinstance(sema, Number):
+        return str(sema.val)
+    elif isinstance(sema, Member):
+        return emitSemaRV(sema.obj)+'.'+sema.field
+    elif isinstance(sema, BinaryExpr):
+        return f'({emitSemaRV(sema.a)} {sema.op} {emitSemaRV(sema.b)})'
+    elif isinstance(sema, Update):
+        return f'{emitSemaRV(sema.a)} {sema.op} {emitSemaRV(sema.b)}'
+    elif isinstance(sema, UnaryExpr):
+        return f'({sema.op} {emitSemaRV(sema.a)})'
+    elif isinstance(sema, Call):
+        return f'{sema.funcname}({", ".join([emitSemaRV(i) for i in sema.args])})'
+    elif isinstance(sema, IfElseExpr):
+        return f'({emitSemaRV(sema.cond)} ? {emitSemaRV(sema.then)} : {emitSemaRV(sema.otherwise)})'
+    else:
+        assert False, f'Unknown sema {sema}'

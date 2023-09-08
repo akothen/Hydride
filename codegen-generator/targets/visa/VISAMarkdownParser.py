@@ -1,11 +1,12 @@
 from VISAParser import SimpleParser
+from VISAAST import getSemaAsString
 import os
 import sys
 from pathlib import Path
-from VISAMeta import VISADoc
+from VISAMeta import VISADoc, SuppportedVISA
 VISA_INSTRUCTIONS_DIR = Path(os.getenv('VISA_INSTRUCTIONS_DIR',
-                                       "/home/muchenx2/igc/igc/documentation/visa/instructions"))
-PARSE_ERROR_LIST = ['3D_LOAD', '3D_SAMPLE', '3D_SAMPLE4', 'AVS', 'BARRIER', 'CACHE_FLUSH', 'CALL', 'CMP', 'DPAS', 'DPASW', 'FADDR', 'FBH', 'FCALL', 'FCCALL', 'FENCE', 'FILE', 'FRET', 'GOTO', 'IFCALL', 'INFO', 'JMP', 'LABEL', 'LIFETIME', 'LOC',
+                                       "./docs"))
+PARSE_ERROR_LIST = ['3D_LOAD', '3D_SAMPLE', '3D_SAMPLE4', 'AVS', 'BARRIER', 'CACHE_FLUSH', 'CALL', 'DPAS', 'DPASW', 'FADDR',  'FCALL', 'FCCALL', 'FENCE', 'FILE', 'FRET', 'GOTO', 'IFCALL', 'INFO', 'JMP', 'LABEL', 'LIFETIME', 'LOC',
                     'LSC_FENCE', 'LSC_TYPED', 'LSC_UNTYPED', 'NBARRIER',  'RAW_SEND', 'RAW_SENDS', 'RET', 'RT_READ', 'RT_WRITE', 'SAMPLE_UNORM', 'SBARRIER', 'SUBROUTINE', 'SVM', 'SWITCHJMP', 'TYPED_ATOMIC', 'URB_WRITE', 'VME_FBR', 'VME_IDM', 'VME_IME', 'VME_SIC', 'WAIT', 'YIELD']
 
 
@@ -23,7 +24,7 @@ def parseSemantics(text: str):
             # return text
 
 
-def parseMarkdown(mdname: str):
+def parseMarkdown(mdname: str) -> VISADoc:
     Opcode = None
     Format = None
     Semantics = None
@@ -51,7 +52,8 @@ def parseMarkdown(mdname: str):
             elif part[0] == 'Description':
                 Description = rem
             elif part[0] == 'Text':
-                Text = rem
+                Text = rem.strip().strip("`").strip()
+                # Text = VISATextParse(Text)
             elif part[0] == 'Notes':
                 Notes = rem
             elif part[0].startswith("<!--"):
@@ -64,12 +66,23 @@ def parseMarkdown(mdname: str):
         return VISADoc(opName, Opcode, Format, Semantics, Description, Text, Notes)
 
 
+def collectArithLikeVISA():
+    for insname in SuppportedVISA:
+        mdname = f"{insname}.md"
+        if insname not in PARSE_ERROR_LIST:
+            vsema = parseMarkdown(mdname)
+            print(insname)
+            print(getSemaAsString(vsema.Semantics))
+
+
 if __name__ == "__main__":
-    if 'export' in sys.argv:
+    parseMarkdown("CMP.md")
+    if '--export' in sys.argv or '-e' in sys.argv:
         for mm in PARSE_ERROR_LIST:
             print('##', mm)
             parseMarkdown(f"{mm}.md")
+    elif '--collect' in sys.argv or '-c' in sys.argv:
+        collectArithLikeVISA()
     else:
-        for mdname in os.listdir(VISA_INSTRUCTIONS_DIR):
+        for mdname in sorted(os.listdir(VISA_INSTRUCTIONS_DIR)):
             vsema = parseMarkdown(mdname)
-    # parseMarkdown("CMP.md")

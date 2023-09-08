@@ -30,6 +30,7 @@ SPDX-License-Identifier: MIT
                         else { // dst is general operand
                           dst[i] = src0[i] rel_op src[i] ? -1 : 0;
                         }
+                      }
                     }
 ```
 

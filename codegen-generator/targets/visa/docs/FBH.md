@@ -33,7 +33,8 @@ SPDX-License-Identifier: MIT
                           }
                           dst[i] = src0[i] == 0 ? 0xFFFFFFFF : cnt;
                         }
-                        else { // src0 is signed.
+                        else { 
+                          // src0 is signed.
                           D dScalar = src0[i];
                           bit cval = dScalar[31];
                           while ((dScalar & (1 << 31)) == cval && cnt != 32 ) {
