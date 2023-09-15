@@ -29,7 +29,7 @@ BV_OPS = [
     "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
     "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
     "bvlt", "bvle", "bvgt", "bvge", "bvmulnw",
-    #"bitvector->integer"
+    "bitvector->integer", "integer->bitvector",
 ]
 
 BV_OP_VARIANTS = [
@@ -192,6 +192,9 @@ class Context:
 
         if self.ctx_sema != None:
             return self.ctx_sema
+
+        if self.extensions != None and 'halide' in self.extensions:
+            return self.semantics
 
 
         function_prototype = self.semantics[0].replace("(define", "").lstrip()
@@ -922,6 +925,8 @@ class DSLInstruction(InstructionType):
                 elif bvop in line:
                     operations.append(bvop)
 
+        if "define" not in self.semantics[0]:
+            operations = self.semantics
 
         return operations
 

@@ -1,4 +1,8 @@
 import pprint
+import copy
+import json
+import sys
+
 pp = pprint.PrettyPrinter(indent=1)
 
 simd_sizes = [1024, 2048]
@@ -9,6 +13,18 @@ cast_to_sizes = [1024]
 cast_from_precs = [32, 16]
 cast_to_precs = [16,8]
 
+
+slice_from_sizes = [2048]
+slice_to_sizes = [1024]
+slice_from_precs = [32, 16, 8]
+
+
+
+concat_from_sizes = [1024]
+concat_to_sizes = [2048]
+concat_from_precs = [32, 16, 8]
+
+
 widening_input_sizes = [1024]
 widening_input_precs = [8,16]
 
@@ -16,6 +32,7 @@ input_broadcast_sizes = [32]
 output_broadcast_sizes = [1024, 2048]
 
 
+# Signedness one applies to both
 halide_binary_simd_ops_contexts = [
     {"name": "vec-add", "bvops": ["bvadd", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": None},
     {"name": "vec-sub", "bvops": ["bvsub", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": None},
@@ -41,8 +58,8 @@ halide_binary_simd_ops_contexts = [
     # UnSigned Operations
     {"name": "vec-mul", "bvops": ["bvmul", "extract", "zero-extend"] , "sizes": simd_sizes, "precs": simd_precs , "signedness": 0  },
     {"name": "vec-div", "bvops": ["bvudiv", "extract", "zero-extend"] , "sizes": simd_sizes, "precs": simd_precs , "signedness": 0 },
-    {"name": "vec-sat-add", "bvops": ["bvaddnuw", "extract", "sign-extend"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
-    {"name": "vec-sat-sub", "bvops": ["bvsubnuw", "extract", "sign-extend"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
+    {"name": "vec-sat-add", "bvops": ["bvaddnuw", "extract", "zero-extend"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
+    {"name": "vec-sat-sub", "bvops": ["bvsubnuw", "extract", "zero-extend"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
     {"name": "vec-mod", "bvops": ["bvurem", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
     {"name": "vec-max", "bvops": ["bvumax", "bvugt" , "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
     {"name": "vec-min", "bvops": ["bvumin", "bvult" , "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
@@ -54,6 +71,8 @@ halide_binary_simd_ops_contexts = [
 
 
 ]
+
+
 
 
 halide_cast_ops_contexts = [
@@ -72,18 +91,30 @@ halide_cast_ops_contexts = [
 ]
 
 
+halide_slice_vector_contexts = [
+    {"name": "slice_vectors", "bvops": ["extract",  "concat" ] , "from_sizes": slice_from_sizes, "from_precs": slice_from_precs ,  "to_sizes": slice_to_sizes, "signedness": 1 },
+
+]
+
+
+halide_concat_vector_contexts = [
+    {"name": "concat_vectors", "bvops": ["extract",  "concat" ] , "from_sizes": concat_from_sizes, "from_precs": concat_from_precs ,  "to_sizes": concat_to_sizes, "signedness": 1 },
+
+]
+
+
 
 halide_unary_ops_contexts = [
 
     # Signed only
     {"name": "vec-abs", "bvops": ["abs", "extract", "sign-extend", "bitvector->integer"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 1},
     {"name": "vec-bwnot", "bvops": ["bvnot", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 1},
-    {"name": "vec-bwor", "bvops": ["bvor", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 1},
+    #{"name": "vec-bwor", "bvops": ["bvor", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 1},
 
 
     # Unsigned
     {"name": "vec-bwnot", "bvops": ["bvnot", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
-    {"name": "vec-bwor", "bvops": ["bvor", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
+    #{"name": "vec-bwor", "bvops": ["bvor", "extract"] , "sizes": simd_sizes, "precs": simd_precs  , "signedness": 0},
 
 ]
 
@@ -141,13 +172,13 @@ def create_broadcast_halide_dict_entry(classes):
 
 
 
-                entry = {
+                entry = copy.deepcopy({
                     "args": args,
                     "in_vectsize": input_size,
                     "out_vectsize": output_size,
                     "lanesize": input_size,
                     "in_precision" : input_size,
-                    "out_precision": output_size,
+                    "out_precision": input_size,
                     "in_vectsize_index": None,
                     "out_vectsize_index": None,
                     "in_lanesize_index": None,
@@ -160,7 +191,7 @@ def create_broadcast_halide_dict_entry(classes):
                     "SIMD": "False",
                     "Extensions" : ['halide'],
                     "ctx_sema": desc["bvops"],
-                }
+                })
                 target_desc['target_instructions'][desc['name']+"_is"+str(input_size)+"_os"+str(output_size)+"_signed_"+str(desc['signedness'])] = entry
 
         if desc['name'] in semantics_dict:
@@ -199,7 +230,7 @@ def create_cast_halide_dict_entry(classes):
                     args = ["SYMBOLIC_BV_{}".format(input_size), str(output_size // output_prec), str(output_prec)]
 
 
-                entry = {
+                entry = copy.deepcopy({
                     "args": args,
                     "in_vectsize": input_size,
                     "out_vectsize": output_size,
@@ -218,8 +249,123 @@ def create_cast_halide_dict_entry(classes):
                     "SIMD": "False",
                     "Extensions" : ['halide'],
                     "ctx_sema": desc["bvops"],
-                }
+                })
                 target_desc['target_instructions'][desc['name']+"_ip"+str(input_prec)+"_is"+str(input_size)+ "_op"+str(output_prec)+"_os"+str(output_size)  +"_signed_"+str(desc['signedness'])] = entry
+
+        if desc['name'] in semantics_dict:
+            semantics_dict[desc['name']]['semantics'] += desc['bvops']
+            for key in target_desc['target_instructions']:
+                semantics_dict[desc['name']]['target_instructions'][key] = target_desc['target_instructions'][key]
+        else:
+            semantics_dict[desc['name']] = target_desc
+
+
+    return semantics_dict
+
+
+def create_concat_halide_dict_entry(classes):
+
+    semantics_dict = {}
+
+    for desc in classes:
+
+        target_desc = {"target_instructions": {}, "semantics": desc["bvops"]}
+        for is_idx in range(len(desc['from_sizes'])):
+            for ip_idx in range(len(desc['from_precs'])):
+                input_size = desc['from_sizes'][is_idx]
+                output_size = desc['to_sizes'][is_idx]
+                input_prec = desc['from_precs'][ip_idx]
+                output_prec = desc['from_precs'][ip_idx]
+
+
+
+
+
+
+                args = ["SYMBOLIC_BV_{}".format(input_size)] * (output_size // input_size)
+                entry = copy.deepcopy({
+                    "args": args,
+                    "in_vectsize": input_size,
+                    "out_vectsize": output_size,
+                    "lanesize": input_prec,
+                    "in_precision" : input_prec,
+                    "out_precision": output_prec,
+                    "in_vectsize_index": None,
+                    "out_vectsize_index": None,
+                    "in_lanesize_index": None,
+                    "out_lanesize_index": None,
+                    "in_precision_index": None,
+                    "out_precision_index": None,
+                    "arg_permute_map": [],
+                    "Signedness": desc['signedness'],
+                    "Cost": "None",
+                    "SIMD": "False",
+                    "Extensions" : ['halide'],
+                    "ctx_sema": desc["bvops"],
+                })
+                target_desc['target_instructions'][desc['name']+"_ip"+str(input_prec)+"_is"+str(input_size)+ "_op"+str(output_prec)+"_os"+str(output_size)  +"_signed_"+str(desc['signedness']) ] = entry
+
+        if desc['name'] in semantics_dict:
+            semantics_dict[desc['name']]['semantics'] += desc['bvops']
+            for key in target_desc['target_instructions']:
+                semantics_dict[desc['name']]['target_instructions'][key] = target_desc['target_instructions'][key]
+        else:
+            semantics_dict[desc['name']] = target_desc
+
+
+    return semantics_dict
+
+def create_slice_halide_dict_entry(classes):
+
+    semantics_dict = {}
+
+    for desc in classes:
+
+        target_desc = {"target_instructions": {}, "semantics": desc["bvops"]}
+        for is_idx in range(len(desc['from_sizes'])):
+            for ip_idx in range(len(desc['from_precs'])):
+                input_size = desc['from_sizes'][is_idx]
+                output_size = desc['to_sizes'][is_idx]
+                input_prec = desc['from_precs'][ip_idx]
+                output_prec = desc['from_precs'][ip_idx]
+
+
+
+
+
+
+                # slice vector base stride num elements
+
+                # Assuming stride of one for slicing
+                # Choosing different offsets
+
+                for offset in range(0, input_size // output_size):
+
+                    slice_offset = str((offset * output_size) // input_prec)
+                    slice_stride = str(1)
+                    slice_elems = str(output_size // input_prec)
+                    args = ["SYMBOLIC_BV_{}".format(input_size), slice_offset, slice_stride, slice_elems]
+                    entry = copy.deepcopy({
+                        "args": args,
+                        "in_vectsize": input_size,
+                        "out_vectsize": output_size,
+                        "lanesize": input_prec,
+                        "in_precision" : input_prec,
+                        "out_precision": output_prec,
+                        "in_vectsize_index": None,
+                        "out_vectsize_index": None,
+                        "in_lanesize_index": None,
+                        "out_lanesize_index": None,
+                        "in_precision_index": None,
+                        "out_precision_index": None,
+                        "arg_permute_map": [],
+                        "Signedness": desc['signedness'],
+                        "Cost": "None",
+                        "SIMD": "False",
+                        "Extensions" : ['halide'],
+                        "ctx_sema": desc["bvops"],
+                    })
+                    target_desc['target_instructions'][desc['name']+"_ip"+str(input_prec)+"_is"+str(input_size)+ "_op"+str(output_prec)+"_os"+str(output_size)  +"_signed_"+str(desc['signedness']) + "_{}_{}_{}".format(slice_offset, slice_stride, slice_elems)] = entry
 
         if desc['name'] in semantics_dict:
             semantics_dict[desc['name']]['semantics'] += desc['bvops']
@@ -236,11 +382,10 @@ def create_nary_halide_dict_entry(classes,n = 1):
     semantics_dict = {}
 
     for desc in classes:
-
-        target_desc = {"target_instructions": {}, "semantics": desc["bvops"]}
+        target_desc = {"target_instructions": {}, "semantics": desc["bvops"]}.copy()
         for size in desc['sizes']:
             for prec in desc['precs']:
-                entry = {
+                entry = copy.deepcopy({
                     "args": ["SYMBOLIC_BV_{}".format(size)] * n,
                     "in_vectsize": size,
                     "out_vectsize": size,
@@ -259,15 +404,25 @@ def create_nary_halide_dict_entry(classes,n = 1):
                     "SIMD": "True",
                     "Extensions" : ['halide'],
                     "ctx_sema": desc["bvops"],
-                }
+                })
+
+
                 target_desc['target_instructions'][desc['name']+"_p"+str(prec)+"_s"+str(size)+"_signed_"+str(desc['signedness'])] = entry
+
+
 
         if desc['name'] in semantics_dict:
             semantics_dict[desc['name']]['semantics'] += desc['bvops']
+            semantics_dict[desc['name']]['semantics'] = list(set(semantics_dict[desc['name']]['semantics']))
+
+
+
             for key in target_desc['target_instructions']:
+                assert key not in semantics_dict[desc['name']]['target_instructions'], "Key should not be present in dict"
                 semantics_dict[desc['name']]['target_instructions'][key] = target_desc['target_instructions'][key]
         else:
-            semantics_dict[desc['name']] = target_desc
+            semantics_dict[desc['name']] = target_desc.copy()
+
 
 
     return semantics_dict
@@ -284,7 +439,7 @@ def create_widening_halide_dict_entry(classes):
         target_desc = {"target_instructions": {}, "semantics": desc["bvops"]}
         for size in desc['sizes']:
             for prec in desc['precs']:
-                entry = {
+                entry = copy.deepcopy({
                     "args": ["SYMBOLIC_BV_{}".format(size)] * 2,
                     "in_vectsize": size,
                     "out_vectsize": size * 2,
@@ -303,7 +458,7 @@ def create_widening_halide_dict_entry(classes):
                     "SIMD": "True",
                     "Extensions" : ['halide'],
                     "ctx_sema": desc["bvops"],
-                }
+                })
                 target_desc['target_instructions'][desc['name']+"_p"+str(prec)+"_s"+str(size)+"_signed_"+str(desc['signedness'])] = entry
 
         if desc['name'] in semantics_dict:
@@ -324,8 +479,11 @@ unary_dict = create_nary_halide_dict_entry(halide_unary_ops_contexts, n = 1)
 cast_dict = create_cast_halide_dict_entry(halide_cast_ops_contexts)
 widen_dict = create_widening_halide_dict_entry(halide_widening_ops_contexts)
 broadcast_dict =  create_broadcast_halide_dict_entry(halide_broadcast_contexts)
+slice_dict = create_slice_halide_dict_entry(halide_slice_vector_contexts)
+concat_dict = create_concat_halide_dict_entry(halide_concat_vector_contexts)
 
-halide_dicts = [broadcast_dict, unary_dict ,simd_dict, cast_dict, ternary_dict, widen_dict]
+halide_dicts = [concat_dict ,slice_dict, broadcast_dict, unary_dict ,simd_dict, cast_dict, ternary_dict, widen_dict]
+
 
 
 

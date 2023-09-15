@@ -570,20 +570,20 @@ dummy_vector_swizzle_dsl = create_two_input_swizzle(
 
 
 dummy_vector_two_interleave_dsl = create_interleave_two_dsl(
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes = [128, 1024, 1024, 1024, 2048, 2048, 2048],
+    precisions = [16, 8, 16, 32, 8, 16, 32]
 )
 
 
 dummy_vector_interleave_dsl = create_interleave_dsl(
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes = [128, 1024, 1024, 1024, 2048, 2048, 2048],
+    precisions = [16, 8, 16, 32, 8, 16, 32]
 )
 
 
 dummy_vector_deinterleave_dsl = create_deinterleave_dsl(
-    input_vector_sizes = [128],
-    precisions = [16]
+    input_vector_sizes = [128, 1024, 1024, 1024, 2048, 2048, 2048],
+    precisions = [16, 8, 16, 32, 8, 16, 32]
 )
 
 dummy_llvm_shuffle_dsl = create_llvm_shufflevector_dsl(
