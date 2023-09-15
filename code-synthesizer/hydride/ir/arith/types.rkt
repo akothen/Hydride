@@ -16,6 +16,7 @@
 (struct arith:int-imm (data signed?) #:transparent #:mutable)
 
 (struct arith:tensor (data shape-vector layout-vector  elemT buffSize id) #:transparent #:mutable)
+(struct arith:tensor-index (index shape-vector layout-vector  elemT buffSize id) #:transparent #:mutable)
 
 
 ;; Generalized Cast
