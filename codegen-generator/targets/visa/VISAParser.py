@@ -16,7 +16,6 @@ class SimpleParser(object):
         'ELSE',
         'WHILE',
         'IS',
-        'REL_OP'
     ]
     tokens = [
         'CONSTANT',
@@ -188,7 +187,6 @@ class SimpleParser(object):
         | relational_expression '>' shift_expression
         | relational_expression LE_OP shift_expression
         | relational_expression GE_OP shift_expression
-        | relational_expression REL_OP shift_expression
         equality_expression : relational_expression
         | equality_expression EQ_OP relational_expression
         | equality_expression NE_OP relational_expression

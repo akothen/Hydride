@@ -10,21 +10,24 @@ PARSE_ERROR_LIST = ['3D_LOAD', '3D_SAMPLE', '3D_SAMPLE4', 'AVS', 'BARRIER', 'CAC
                     'LSC_FENCE', 'LSC_TYPED', 'LSC_UNTYPED', 'NBARRIER',  'RAW_SEND', 'RAW_SENDS', 'RET', 'RT_READ', 'RT_WRITE', 'SAMPLE_UNORM', 'SBARRIER', 'SUBROUTINE', 'SVM', 'SWITCHJMP', 'TYPED_ATOMIC', 'URB_WRITE', 'VME_FBR', 'VME_IDM', 'VME_IME', 'VME_SIC', 'WAIT', 'YIELD']
 
 
-def parseSemantics(text: str):
+def parseSemantics(text: str, parseSema=False):
     for t in text.split('```'):
         if t.strip():
-            sp = SimpleParser()
-            sp.build()
-            res = sp.parse(t)
-            if sp.lex_error:
-                raise Exception("Lex error")
-            if sp.parse_error:
-                raise Exception("Parse error")
-            return res
+            if parseSema:
+                sp = SimpleParser()
+                sp.build()
+                res = sp.parse(t)
+                if sp.lex_error:
+                    raise Exception("Lex error")
+                if sp.parse_error:
+                    raise Exception("Parse error")
+                return res
+            else:
+                return t
             # return text
 
 
-def parseMarkdown(mdname: str) -> VISADoc:
+def parseMarkdown(mdname: str, parseSema=False) -> VISADoc:
     Opcode = None
     Format = None
     Semantics = None

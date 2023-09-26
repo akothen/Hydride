@@ -1,20 +1,20 @@
+import os
 import re
 from collections import namedtuple
 VISASema = namedtuple('VISASema', [
     'intrin', 'inst', 'params',
-    'spec', 'rettype', 'ret_is_signed',
+    'spec',
     'inst_form',
-    'extensions',
-    'imm_width',
-    'xed',
-    'elem_type',
-    'preparation',
+    'rettype',
+    'flags',
     'resolving',
 ])
 VISADoc = namedtuple('VISADoc', [
                      'Name', 'Opcode', 'Format', 'Semantics', 'Descritpion', 'Text', 'Notes'])
 VISAText = namedtuple('VISAText',
-                      'text format opname args')
+                      'text format opname args saturable')
+Parameter = namedtuple(
+    'Parameter', ['name', 'type', 'is_signed'])
 
 
 def VISATextIssue(VT: VISAText, args: dict):
@@ -26,7 +26,7 @@ def VISATextParse(text: str):
     [(<P>)] ADD[.sat] (<exec_size>) <dst> <src0> <src1>
     """
     # <P> not supported yet
-    saturable = "False"
+    saturable = False
     args = []
     parts = []
     assert "{" not in text and "}" not in text, text
@@ -35,6 +35,10 @@ def VISATextParse(text: str):
             continue
         if "<" not in token and ">" not in token:
             opname = token
+            if "[.sat]" in opname:
+                opname = opname.replace("[.sat]", "")
+                saturable = True
+            assert "[" not in opname and "]" not in opname and "sat" not in opname, opname
             parts.append(token)
             continue
         if "<" in token and ">" in token:
@@ -55,13 +59,11 @@ def VISATextParse(text: str):
             i += 1
         else:
             break
-    assert i+1 == len(args), (text, args)
+    assert i+2 == len(args), (text, args, i)
 
-    return VISAText(text, opname, args, saturable)
+    return VISAText(text, fmt, opname, args, saturable)
 
 
-Parameter = namedtuple(
-    'Parameter', ['name', 'type', 'is_signed', 'is_imm', 'is_mask'])
 SuppportedVISA = [
     "ADD",
     "ADD3",
@@ -153,7 +155,10 @@ SuppportedVISA = [
     # "SVM_SCATTER",# *addresses
     # "SVM_SCATTER4_SCALED",# *addresses
 ]
-DataType = {
+SupportedTypes = [
+    "UD", "D", "UW", "W", "UB", "B", "UQ", "Q"
+]
+DataTypeBits = {
     "UD": 32,  # unsigned double word
     "D": 32,  # signed double word
     "UW": 16,  # unsigned word
@@ -171,3 +176,5 @@ DataType = {
     "HF": 16,  # half precision floating point
     "BF": 16,  # bfloat16
 }
+
+JSONDIR = os.environ.get("HYDRIDE_ROOT")+"/codegen-generator/targets/visa/"

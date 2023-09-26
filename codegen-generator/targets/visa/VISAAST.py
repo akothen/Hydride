@@ -41,13 +41,13 @@ class Member(ASTExpr):
 
 class ArrayIndex(ASTExpr):
     obj: ASTExpr
-    slices: ASTExpr
+    index: ASTExpr
 
     def __init__(self, obj: ASTExpr, slices: ASTExpr):
-        self.obj, self.slices = obj, slices
+        self.obj, self.index = obj, slices
 
     def __repr__(self):
-        return f"ArrayIndex({self.obj.__repr__()}, {self.slices.__repr__()})"
+        return f"ArrayIndex({self.obj.__repr__()}, {self.index.__repr__()})"
 
 
 class ArraySlice(ASTExpr):
@@ -64,7 +64,6 @@ class ArraySlice(ASTExpr):
 
 class Var(ASTExpr):
     name: str
-    id: str
 
     def __init__(self, name: str):
         self.name = name
@@ -217,6 +216,25 @@ class VarsDecl(ASTStmt):
 indentation = 0
 
 
+class Annotator:
+    def __init__(self):
+        self.ID = 0
+
+    def getID(self):
+        self.ID += 1
+        return str(self.ID-1)
+
+    def AddID(self, sema: ASTNode):
+        if isinstance(sema, list):
+            for i in sema:
+                self.AddID(i)
+        else:
+            sema.id = self.getID()
+            for i in sema.__dict__.values():
+                if isinstance(i, ASTNode):
+                    self.AddID(i)
+
+
 def getSemaAsString(sema):
     return "\n".join(emitSema(sema))
 
@@ -285,7 +303,7 @@ def emitSema(sema):
 
 def emitSemaRV(sema):
     if isinstance(sema, ArrayIndex):
-        return f'{emitSemaRV(sema.obj)}[{emitSemaRV(sema.slices)}]'
+        return f'{emitSemaRV(sema.obj)}[{emitSemaRV(sema.index)}]'
     elif isinstance(sema, ArraySlice):
         return f'{emitSemaRV(sema.obj)}[{emitSemaRV(sema.hi)}:{emitSemaRV(sema.lo)}]'
     elif isinstance(sema, Var):
