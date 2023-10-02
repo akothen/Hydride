@@ -1,40 +1,47 @@
 from VISASemaGenerator import SemaGenerator
 from VISARoseCompiler import VISARoseContext, CompileSemantics
+from VISASupportedIntrinsics import SupportedVISAIntrinsics
 from VISAAST import *
 from VISAMeta import *
 import sys
 from RosetteGen import GenerateRosetteForFunction
-DEBUG = True
+import logging
 
 
-def Compile():
+skip = ParseError + FlowControl + Stateful + Uncommon + CompileIssue
+
+
+def Compile(OnlyCompileSupported=True):
     from RoseFunctionInfo import RoseFunctionInfo
 
     interested = []
-    interested = ['VADD_sat_8_UQ']
+    # interested = ['VDP4A_16_B']
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
         AllSema = {k: v for k, v in AllSema.items(
         ) if k in interested or any(kk in k for kk in interested)}
     # SemaList = [SemaGenerator(deserialize=True).getSemaByName("vand_s8")]
-    SemaList = []
+    SemaList: List[VISASema] = []
     for k, func in AllSema.items():
+        if any(kk in k for kk in skip):
+            continue
+        if OnlyCompileSupported and k not in SupportedVISAIntrinsics:
+            continue
         SemaList.append(func)
     # print(SemaList)
-    print("SemaList length:")
-    print(len(SemaList))
+    Hlog.info("SemaList length:")
+    Hlog.info(len(SemaList))
 
-    if SemaList == None:
-        return [None]
     FunctionInfoList = []
     compiled = []
+    compiledFamily = set()
     for Index, Spec in enumerate(SemaList):
         try:
             RootContext = VISARoseContext()
-            print("RootContext---:")
-            print(RootContext)
-            print("Spec:")
-            print(Spec)
+            Hlog.debug("RootContext---:")
+            Hlog.debug(RootContext)
+            Hlog.debug("Spec:")
+            Hlog.debug(Spec)
             # Spec = pipeline(Spec)
             print(getSemaAsString(Spec.spec))
             FunctionInfo = RoseFunctionInfo()
@@ -42,19 +49,20 @@ def Compile():
             FunctionInfo.addContext(RootContext)
             FunctionInfo.addRawSemantics(Spec)
             FunctionInfo.addFunctionAtNewStage(CompiledFunction)
-            print("Index*****")
-            print(Index)
-            print("CompiledFunction:")
+            Hlog.debug("Index*****")
+            Hlog.debug(Index)
+            Hlog.debug("CompiledFunction:")
             CompiledFunction.print()
-            print(GenerateRosetteForFunction(CompiledFunction, ""))
+            Hlog.debug(GenerateRosetteForFunction(CompiledFunction, ""))
             FunctionInfoList.append(FunctionInfo)
             compiled.append(Spec.intrin)
+            compiledFamily.add(Spec.inst)
         except NotImplementedError as e:
-            print("Failed to compile", Spec.intrin, e, file=sys.stderr)
+            Hlog.warning("Failed to compile for %s: %s", Spec.intrin, e)
             # print(e)
             continue
-    print("FunctionInfoList length:", len(FunctionInfoList))
-    print(compiled)
+    Hlog.info("FunctionInfoList length: %s", len(FunctionInfoList))
+    Hlog.debug(compiledFamily)
     # print(FunctionInfoList[0].getInVectorLength())
     return FunctionInfoList
 
@@ -91,6 +99,22 @@ def TestcaseGen():
         f.write(AllRosetteCode)
 
 
+def TestcaseGen2():
+    from RoseCodeGenerator import RoseCodeGenerator
+    CodeGenerator = RoseCodeGenerator(Target="VISA")
+    FunctionInfoList = CodeGenerator.codeGen(
+        JustGenRosette=False, ExtractConstants=False)
+    AllRosetteCode = "#lang rosette\n(require \"bvops.rkt\")\n"
+    for FunctionInfo in FunctionInfoList:
+        RosetteCode = GenerateRosetteForFunction(
+            FunctionInfo.getLatestFunction(), "")
+        AllRosetteCode += RosetteCode
+    Hlog.INFO("Writing to rosette_test/compiled_new.rkt...")
+    AllRosetteCode += "(provide (all-defined-out))"
+    with open(f'rosette_test/compiled_new.rkt', 'w') as f:
+        f.write(AllRosetteCode)
+
+
 def TestWithTransormation():
     from RoseCodeGenerator import RoseCodeGenerator
     CodeGenerator = RoseCodeGenerator(Target="VISA")
@@ -105,7 +129,10 @@ if __name__ == "__main__":
     DEBUG = True
     if "--gen" in sys.argv:
         TestcaseGen()
+    elif "--gen2" in sys.argv:
+        OnlyCompileSupported = True
+        TestcaseGen2()
     elif "--cdbg" in sys.argv:
-        Compile()
+        Compile(False)
     else:
         TestWithTransormation()

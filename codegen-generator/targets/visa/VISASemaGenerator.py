@@ -8,8 +8,8 @@ from VISAMarkdownParser import parseMarkdown
 from typing import List
 
 
-def NameGen(op, sat, exec_size, Ty):
-    return f"V{op}{'_sat' if sat else ''}_{exec_size}_{Ty}"
+def NameGen(op: VISAText, sat, exec_size, signature):
+    return f"V{op.opname}{'_sat' if sat else ''}_{exec_size}{signature}"
 
 
 def HandleCommon(vdoc: VISADoc) -> List[VISASema]:
@@ -18,29 +18,38 @@ def HandleCommon(vdoc: VISADoc) -> List[VISASema]:
     """
     tmp = []
     T = VISATextParse(vdoc.Text)
+    D = VISADescParse(vdoc.Descritpion, T)
+
     if T.saturable:
         sat = [True, False]
     else:
         sat = [False]
-    exec_size = [1, 2, 4, 8, 16, 32]
-    types = SupportedTypes
-    for Ty in types:
+    exec_size = D.exec_sizes
+    types = D.supported_type_map
+    Hlog.debug(D)
+    # exec_size = [1, 2, 4, 8, 16, 32]
+    # types = SupportedTypes
+    for TyMap in types:
         for sz in exec_size:
             for s in sat:
                 args = []
+                rettype = TyMap['dst']
+                signature = "_"+rettype
                 for i in T.args:
+                    Ty = TyMap[i]
+                    signature += "_"+Ty
                     args.append(Parameter(i, Ty, "U" not in Ty))
                 S = SimpleParser()
                 S.build()
                 tmp.append(VISASema(
-                    intrin=NameGen(T.opname, s, sz, Ty),
+                    intrin=NameGen(T, s, sz, signature),
                     inst=T.opname,
                     params=args,
-                    rettype=Ty,
+                    rettype=rettype,
                     spec=S.parse(vdoc.Semantics),
                     inst_form=vdoc.Text,
                     flags={"sat": s},
-                    resolving={"exec_size": sz}))
+                    resolving={"exec_size": sz, 'type_map': TyMap}))
 
     return tmp
 
@@ -49,8 +58,14 @@ def HandleMIN_MAX(vdoc: VISADoc) -> List[VISASema]:
     text = ["MIN[.sat] (<exec_size>) <dst> <src0> <src1>",
             "MAX[.sat] (<exec_size>) <dst> <src0> <src1>"]
     tmp = []
+    sema = vdoc.Semantics
     for t in text:
-        tmp += HandleCommon(vdoc._replace(Text=t))
+        if "MIN" in t:
+            to_replace = "/max"
+        else:
+            to_replace = "min/"
+        tmp += HandleCommon(vdoc._replace(Text=t,
+                            Semantics=sema.replace(to_replace, "")))
     return tmp
 
 
@@ -83,10 +98,12 @@ class SemaGenerator:
     def serialize(self):
         import pprint
         self.result = self.getResult()
-        with open(JSONDIR+'AllSema.py', 'w') as f:
+        with open(VISADIR+'AllSema.py', 'w') as f:
             f.write("""from VISAAST import *
+from VISAMeta import VISASema, Parameter
 """)
             f.write(f"AllSema = {pprint.pformat(self.result, indent=4)}")
+        Hlog.info("Serialized %s sema", len(self.result))
 
     def getResult(self) -> List[VISASema]:
         '''
@@ -101,6 +118,7 @@ class SemaGenerator:
             return self.result
         AllSemantics = []
         for visa in SuppportedVISA:
+            Hlog.debug(f"Processing {visa}")
             vdoc = parseMarkdown(f"{visa}.md")
             if vdoc.Name == "MIN_MAX":
                 AllSemantics += HandleMIN_MAX(vdoc)

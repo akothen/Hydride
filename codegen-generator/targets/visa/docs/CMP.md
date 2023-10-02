@@ -25,10 +25,10 @@ SPDX-License-Identifier: MIT
                     for (i = 0; i < exec_size; ++i) {
                       if (ChEn[i]) {
                         if (dst is predicate) {
-                          dst[i] = src0[i] rel_op src[i];
+                          dst[i] = src0[i] rel_op src1[i];
                         }
                         else { // dst is general operand
-                          dst[i] = src0[i] rel_op src[i] ? -1 : 0;
+                          dst[i] = src0[i] rel_op src1[i] ? -1 : 0;
                         }
                       }
                     }

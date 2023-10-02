@@ -1,3 +1,5 @@
+import argparse
+import logging
 import os
 import re
 from collections import namedtuple
@@ -13,6 +15,8 @@ VISADoc = namedtuple('VISADoc', [
                      'Name', 'Opcode', 'Format', 'Semantics', 'Descritpion', 'Text', 'Notes'])
 VISAText = namedtuple('VISAText',
                       'text format opname args saturable')
+VISADesc = namedtuple('VISADesc',
+                      'exec_sizes supported_type_map')
 Parameter = namedtuple(
     'Parameter', ['name', 'type', 'is_signed'])
 
@@ -25,6 +29,7 @@ def VISATextParse(text: str):
     """
     [(<P>)] ADD[.sat] (<exec_size>) <dst> <src0> <src1>
     """
+    text = text.split("//")[0].rstrip()
     # <P> not supported yet
     saturable = False
     args = []
@@ -39,7 +44,7 @@ def VISATextParse(text: str):
                 opname = opname.replace("[.sat]", "")
                 saturable = True
             assert "[" not in opname and "]" not in opname and "sat" not in opname, opname
-            parts.append(token)
+            parts.append(token.replace("[.sat]", r"{sat}"))
             continue
         if "<" in token and ">" in token:
             fmt = token.replace("<", "{").replace(">", "}")
@@ -60,9 +65,67 @@ def VISATextParse(text: str):
         else:
             break
     assert i+2 == len(args), (text, args, i)
+    args.remove("exec_size")
+    args.remove("dst")
+    fmt = " ".join(parts)
 
     return VISAText(text, fmt, opname, args, saturable)
 
+
+def VISADescParse(desc: str, T: VISAText):
+    def makeHomogenousType(Ty):
+        d = {i: Ty for i in T.args}
+        d['dst'] = Ty
+        return d
+
+    # assert "1 element" in desc
+    exec_sizes = []
+    spt = []
+    if "1 element" in desc:
+        exec_sizes.append(1)
+    for i in [2, 4, 8, 16, 32]:
+        if f"{i} elements" in desc:
+            exec_sizes.append(i)
+    assert exec_sizes
+    if "Operand type maps" in desc:
+        desc = desc.split(
+            "Operand type maps")[-1].strip().split("#")[0].strip()
+        while "**" in desc:
+            st = desc.find("**")
+            ed = desc.find("**", st+2)
+            desc = desc[:st]+desc[ed+2:]
+        desc = desc.replace("-", "")
+        desc = ",".join(desc.split("\n")).split(",")
+        desc = [i.strip() for i in desc]
+        for i in SupportedTypes:
+            if i in desc:
+                spt.append(makeHomogenousType(i))
+        return VISADesc(exec_sizes, spt)
+    elif "**Supported Types:**" in desc:
+        desc = desc.split(
+            "**Supported Types:**")[-1].strip().split("\n")[0].strip()
+        desc = desc.split(",")
+        desc = [i.strip() for i in desc]
+        for i in SupportedTypes:
+            if i in desc:
+                spt.append(makeHomogenousType(i))
+        return VISADesc(exec_sizes, spt)
+    elif T.opname == "SAD2":
+        spt = [{"src0": 'UB', "src1": 'UB', "dst": 'UW'},
+               {"src0": 'B', "src1": 'B', "dst": 'W'}]
+        return VISADesc(exec_sizes, spt)
+    elif T.opname == "SAD2ADD":
+        spt = [{"src0": 'UB', "src1": 'UB', "dst": 'UW', 'src2': 'UW'},
+               {"src0": 'B', "src1": 'B', "dst": 'W', 'src2': 'W'}]
+        return VISADesc(exec_sizes, spt)
+    assert False
+
+
+ParseError = ["DPAS", "DPASW"]
+FlowControl = ["SEL", "SETP"]
+Stateful = ["ADDC"]
+Uncommon = ["BFREV", "ROL", "ROR"]
+CompileIssue = ["CMP", "PLANE", "SAD2ADD", "SAD2"]
 
 SuppportedVISA = [
     "ADD",
@@ -155,6 +218,8 @@ SuppportedVISA = [
     # "SVM_SCATTER",# *addresses
     # "SVM_SCATTER4_SCALED",# *addresses
 ]
+SuppportedVISA = [i for i in SuppportedVISA if i not in ParseError +
+                  FlowControl+Stateful+Uncommon+CompileIssue]
 SupportedTypes = [
     "UD", "D", "UW", "W", "UB", "B", "UQ", "Q"
 ]
@@ -177,4 +242,45 @@ DataTypeBits = {
     "BF": 16,  # bfloat16
 }
 
-JSONDIR = os.environ.get("HYDRIDE_ROOT")+"/codegen-generator/targets/visa/"
+VISADIR = os.environ.get("HYDRIDE_ROOT")+"/codegen-generator/targets/visa/"
+
+
+class CustomFormatter(logging.Formatter):
+
+    grey = "\x1b[38;20m"
+    yellow = "\x1b[33;20m"
+    red = "\x1b[31;20m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+    format = "%(asctime)s - %(name)s - %(message)s (%(filename)s:%(lineno)d)"
+
+    FORMATS = {
+        logging.DEBUG: grey + format + reset,
+        logging.INFO: grey + format + reset,
+        logging.WARNING: yellow + format + reset,
+        logging.ERROR: red + format + reset,
+        logging.CRITICAL: bold_red + format + reset
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-l',
+                    '--log',
+                    default='warning',
+                    help='Provide logging level. Example --log debug, default=warning')
+args, unknown = parser.parse_known_args()
+Hlog = logging.getLogger("Hydride")
+Hlog.setLevel(args.log.upper())
+
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(args.log.upper())
+
+ch.setFormatter(CustomFormatter())
+
+Hlog.addHandler(ch)

@@ -217,12 +217,13 @@ indentation = 0
 
 
 class Annotator:
-    def __init__(self):
+    def __init__(self, prefix: str = ""):
+        self.prefix = prefix
         self.ID = 0
 
     def getID(self):
         self.ID += 1
-        return str(self.ID-1)
+        return self.prefix+str(self.ID-1)
 
     def AddID(self, sema: ASTNode):
         if isinstance(sema, list):
@@ -231,7 +232,7 @@ class Annotator:
         else:
             sema.id = self.getID()
             for i in sema.__dict__.values():
-                if isinstance(i, ASTNode):
+                if isinstance(i, (ASTNode, List)):
                     self.AddID(i)
 
 
