@@ -133,6 +133,7 @@
     [(vec-widen-mul v1 v2) (handler (vec-widen-mul (visit v1 handler) (visit v2 handler)))]
     [(vec-rounding_shift_right v1 v2) (handler (vec-rounding_shift_right (visit v1 handler) (visit v2 handler)))]
     [(vec-rounding_mul_shift_right v1 v2 v3) (handler (vec-rounding_mul_shift_right (visit v1 handler) (visit v2 handler) (visit v3 handler) ))]
+    [(vec-mul_shift_right v1 v2 v3) (handler (vec-mul_shift_right (visit v1 handler) (visit v2 handler) (visit v3 handler) ))]
     [(vec-rounding_halving_add v1 v2 ) (handler (vec-rounding_halving_add (visit v1 handler) (visit v2 handler)  ))]
     [(vec-halving_add v1 v2 ) (handler (vec-halving_add (visit v1 handler) (visit v2 handler)  ))]
     [(vec-div v1 v2) (handler (vec-div (visit v1 handler) (visit v2 handler)))]

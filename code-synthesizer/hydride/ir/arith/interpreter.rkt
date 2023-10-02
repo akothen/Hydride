@@ -82,6 +82,20 @@
                [(eq? elemT 'uint64) #f]
                )
              ]
+
+            [(arith:tensor-index index shape layout elemT buffsize id) 
+             (cond
+               [(eq? elemT 'int8) #t]
+               [(eq? elemT 'int16) #t]
+               [(eq? elemT 'int32) #t]
+               [(eq? elemT 'int64) #t]
+               [(eq? elemT 'uint1) #f]
+               [(eq? elemT 'uint8) #f]
+               [(eq? elemT 'uint16) #f]
+               [(eq? elemT 'uint32) #f]
+               [(eq? elemT 'uint64) #f]
+               )
+             ]
             [_ (error "Should have passed in buffer" buf)]
             )
   )
@@ -695,6 +709,526 @@
             )
   )
 
+(define (interpret-env p indices env)
+  (destruct p
+
+
+            ;; Constructors
+
+            [(arith:tensor data shape-vector layout-vector elemT buffSize id)
+
+             ;; To account for differing layouts, we can simply sort
+             ;; the indices and the shape vector according to the
+             ;; layout vector.
+
+             (define (sorted-index-shape i)
+               (define layout-index (vector-ref layout-vector i))
+               (vector-ref shape-vector layout-index)
+               )
+
+             (define (sorted-index-indices i)
+               (define layout-index (vector-ref layout-vector i))
+               (vector-ref indices layout-index)
+               )
+
+             (define sorted-shape  (build-vector (vector-length shape-vector) sorted-index-shape ))
+             (define sorted-indices  (build-vector (vector-length indices) sorted-index-indices ))
+
+
+             (cond
+               [(eq? elemT 'int8) (int8_t (index-tensor data sorted-shape layout-vector 8 sorted-indices))]
+               [(eq? elemT 'int16) (int16_t (index-tensor data sorted-shape layout-vector 16 sorted-indices))]
+               [(eq? elemT 'int32) (int32_t (index-tensor data sorted-shape layout-vector 32 sorted-indices))]
+               [(eq? elemT 'int64) (int64_t (index-tensor data sorted-shape layout-vector 64 sorted-indices))]
+               [(eq? elemT 'uint1) (uint1_t (index-tensor data sorted-shape layout-vector 1 sorted-indices))]
+               [(eq? elemT 'uint8) (uint8_t (index-tensor data sorted-shape layout-vector 8 sorted-indices))]
+               [(eq? elemT 'uint16) (uint16_t (index-tensor data sorted-shape layout-vector 16 sorted-indices))]
+               [(eq? elemT 'uint32) (uint32_t (index-tensor data sorted-shape layout-vector 32 sorted-indices))]
+               [(eq? elemT 'uint64) (uint64_t (index-tensor data sorted-shape layout-vector 64 sorted-indices))]
+               [else (error "arith/ir/interpret-enver.rkt: Unexpected element type type in tensor-ref" p)])
+             ]
+
+
+            [(arith:int-imm data signed?)
+             (imm-ref data signed?)
+             ]
+
+            ;; Type Casts
+
+            [(arith:cast-int vec olane oprec) (lambda (i) (cpp:cast ((interpret-env vec env) i)
+                                                                    (cond
+                                                                      [(eq? oprec 8)  'int8]
+                                                                      [(eq? oprec 16)  'int16]
+                                                                      [(eq? oprec 32)  'int32]
+                                                                      [(eq? oprec 64)  'int64]
+                                                                      [else (error "arith/interpret-enver.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+                                                                      )
+                                                                    ))]
+            [(arith:cast-uint vec olane oprec)
+             (lambda (i)
+               (cpp:cast ((interpret-env vec env) i)
+                         (cond
+                           [(eq? oprec 8)  'uint8]
+                           [(eq? oprec 16)  'uint16]
+                           [(eq? oprec 32)  'uint32]
+                           [(eq? oprec 64)  'uint64]
+                           [else (error "arith/interpret-enver.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+                           )
+                         )
+               )
+             ]
+
+            ;; Operations
+
+            [(arith:tensor-add v1 v2) (do-add (interpret-env v1 indices env) (interpret-env v2 indices env))]
+
+            [(arith:tensor-sat-add v1 v2) (do-sat-add (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-sub v1 v2) (do-sub (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-sat-sub v1 v2) (do-sat-sub (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-mul v1 v2) (do-mul (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-div v1 v2) (do-div (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-mod v1 v2) (do-mod (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-min v1 v2) (do-min (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-max v1 v2) (do-max (interpret-env v1 indices env) (interpret-env v2 indices env))]
+
+            [(arith:tensor-if v1 v2 v3) (do-if (interpret-env v1 indices env) (interpret-env v2 indices env) (interpret-env v3 indices env))]
+            [(arith:tensor-eq v1 v2) (do-eq (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-lt v1 v2) (do-lt (interpret-env v1 indices env) (interpret-env v2 indices env) )]
+            [(arith:tensor-le v1 v2) (do-le (interpret-env v1 indices env) (interpret-env v2 indices env ) )]
+
+            [(arith:tensor-abs v1) (do-abs (interpret-env v1 indices env))]
+            [(arith:tensor-shl v1 v2) (do-shl (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-shr v1 v2) (do-shr (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-absd v1 v2)  (do-absd (interpret-env v1 indices env) (interpret-env v2 indices env))]
+            [(arith:tensor-clz v1) (do-clz (interpret-env v1 indices env))]
+
+            [(arith:tensor-bwand v1 v2) (do-bwand (interpret-env v1 indices env) (interpret-env v2 indices env ))]
+
+            [(vector:bitcast v1 signed? out-prec)
+             (cpp:cast
+               (interpret-env v1 indices env)
+               (cond
+                 [(and (eq? out-prec 8) signed?)  'int8]
+                 [(and (eq? out-prec 16) signed?)  'int16]
+                 [(and (eq? out-prec 32) signed?)  'int32]
+                 [(and (eq? out-prec 64) signed?)  'int64]
+                 [(and (eq? out-prec 8) )  'uint8]
+                 [(and (eq? out-prec 16) )  'uint16]
+                 [(and (eq? out-prec 32) )  'uint32]
+                 [(and (eq? out-prec 64) )  'uint64]
+
+                 )
+               )
+             ]
+            [(vector:broadcast v1 output-shape)
+             (define input-shape (tensor-shape v1))
+             (define num-input-dims (vector-length input-shape))
+             (define num-output-dims (vector-length output-shape))
+
+             ;; According to the semantics of the broadcast, the duplication
+             ;; happens along the new leading dimensions, hence for the
+             ;; purposes of interpret-enving the semantics, we can discard
+             ;; the leading dimensions
+
+             (define num-new-leading-dims (- num-output-dims num-input-dims))
+             (cond
+               [(< num-output-dims num-input-dims)
+                (error "Illegal broadcast shape for vector:broadcast")
+                ]
+               [else
+                 (define sliced-indices (vector-take-right indices num-input-dims))
+                 (interpret-env v1 sliced-indices env)
+                 ]
+               )
+             ]
+            [(vector:extract_strided_slice v1 offsets sizes strides)
+             (define input-shape (tensor-shape v1))
+             (define (generate-strided-indices i)
+               (if
+                 (< i (vector-length offsets))
+
+                 ;; Adjusted strided index
+                 (+ (vector-length offsets i) (* strides (vector-ref indices i)))
+
+                 ;; If index along non-strided dimension index regularly
+                 (vector-ref indices i)
+                 )
+               )
+
+             (define actual-indices (build-vector (vector-length indices) generate-strided-indices))
+             (interpret-env v1 actual-indices env)
+
+             ]
+
+            [(vector:extract v1 extract_indices)
+             (define input-shape (tensor-shape v1))
+             (define (generate-extract-indicies i)
+               (if
+                 (< i (vector-length extract_indices))
+
+                 ;; Adjusted strided index
+                 (+ (vector-length extract_indices i) (* 1 (vector-ref indices i)))
+
+                 ;; If index along non-strided dimension index regularly
+                 (vector-ref indices i)
+                 )
+               )
+
+             (define actual-indices (build-vector (vector-length indices) generate-extract-indicies))
+             (interpret-env v1 actual-indices env)
+             ]
+            [(vector:matrix_multiply v1 v2 lhs_rows lhs_cols rhs_cols)
+             ;; interpret-envs the underlying flattened vectors as (lhs_rows, lhs_cols)
+             ;; and (lhs_cols, rhs_cols) tensors. Note that the rank of the result
+             ;; tensor and inputs are 1, they're merely 'interpret-enved' as 2D according
+             ;; to the vector:matrix_multiply semantics.
+             (cond
+               [(equal? (vector-length indices) 1)
+                (define index (vector-ref indices 0))
+                (define out-row (quotient index rhs_cols))
+                (define out-col (- index (* out-row rhs_cols) 1))
+
+                ;; Need to do a dimension along the lhs-cols elements
+                (define partial-products
+                  (for/list ([k (range lhs_cols)])
+                            (define e1 (interpret-env v1 (vector out-row k) env))
+                            (define e2 (interpret-env v2 (vector k out-col) env))
+                            (do-mul e1 e2)
+                            )
+                  )
+
+                ;; Now accumulate partial-products
+                (define acc '())
+                (for/list ([p partial-products])
+                          (if
+                            (equal? acc '())
+                            (set! acc p)
+                            (set! acc (do-add p acc))
+                            )
+                          )
+                acc
+                ]
+
+               [else
+                 (error "arith/interpret-enver.rkt vector:matrix_multiply can only be interpret-enved as a 2D operation")
+                 ]
+               )
+             ]
+             [(vector:transpose v1 rank_perm)
+              (define input-shape (tensor-shape v1))
+              (cond
+                [(equal? (vector-length tensor-shape) (vector-length rank_perm))
+                 (define (index-helper i)
+                   (define current-index-loc (vector-ref rank_perm i))
+                   (define adj-index (vector-ref indices current-index-loc))
+                   adj-index
+                   )
+                 (define new-indices (build-vector (vector-length indices) index-helper))
+                 (interpret-env v1 new-indices env)
+                 ]
+                [else
+                  (error "arith//interpret-enver.rkt vector transpose requires rank permutation match input tensors shape")
+                  ]
+
+                )
+              ]
+             [(vector:flat_transpose v1 trows tcols)
+              (cond
+                [(equal? (vector-length indices) 1)
+                 (define index (vector-ref indices 0))
+                 (define out-row (quotient index tcols))
+                 (define out-col (- index (* out-row tcols) 1))
+
+                 ;; Transpose in 2D simply swaps indexing variable
+                 (define input-row out-col)
+                 (define input-col out-row)
+                 (define num-input-rows tcols)
+                 (define num-input-cols trows)
+
+                 (define adjusted_index (+ (* input-row num-input-cols) input-col))
+
+                 (interpret-env v1 (vector adjusted_index) env)
+
+                 ]
+                [else
+                  (error "arith/interpret-enver.rkt vector:flat_transpose can only be interpret-enved as a 2D operation")
+                  ]
+                )
+              ]
+
+             [(vector:splat v1 out-shape)
+              (cond
+                [(and (equal? (tensor-shape v1) 1) (equal? (vector-ref (tensor-shape v1)) 1))
+                 (interpret-env v1 (vector 0) env)
+                 ]
+                [else
+                  (error "arith/interpret-enver.rkt vector:splat takes a single element as input")
+                  ]
+                )
+              ]
+             [(vector:reduction v1 operation)
+              (define input-shape (tensor-shape v1))
+              (define reduc-op
+                (cond
+                  [(equal? operation 'add) do-add]
+                  [(equal? operation 'mul) do-mul]
+                  [(equal? operation 'min) do-min]
+                  [(equal? operation 'max) do-max]
+                  [(equal? operation 'and) do-bwand]
+                  [else (error "arith/interpret-enver.rkt Unsupported operation in vector:reduction")]
+                  )
+                )
+              (cond
+                [(equal? (vector-length input-shape 1))
+                 (define acc '())
+                 (for/list ([i (range (vector-ref input-shape 0))])
+                           (if (equal? acc '())
+                             (set! acc (interpret-env v1 (vector i) env))
+
+                             (set! acc (reduc-op acc (interpret-env v1 (vector i) env)))
+                             )
+                           )
+                 acc
+                 ]
+                [else
+                  (error "arith/interpret-enver.rkt vector:reduction only supports 1D tensors")
+                  ]
+                )
+              ]
+             [(vector:outer_product v1 v2)
+              (define rows (vector-ref (tensor-shape v1) 0))
+              (define cols (vector-ref (tensor-shape v2) 0))
+              ;; interpret-env outer product as a matrix multiplication
+              ;; for a (rows x 1) and (1 x cols) tensor
+              (interpret-env (vector:matrix_multiply v1 v2 rows 1 cols) indices env)
+              ]
+             [(vector:shape_cast v1 input_shape output_shape)
+              (displayln "interpret-envting shape cast")
+              ;; Methodology for interpret-envting shape_cast:
+              ;; For each input index in index, we define a function which maps
+              ;; an input index to a list of indices for the original shape of v1
+              ;; We append all these indices together and cast back into a vector
+              ;; then we simply interpret-env v1 with the new indices
+
+              ;; "It is currently assumed that this operation does not require moving data, and that it will be folded away before lowering vector operations." // Layout doesn't change
+              (cond
+                [(< (vector-length input_shape) (vector-length output_shape)) ; Rank increases
+
+                 (displayln "Increased Dimensionality")
+                 ;; Multiple output indices map to single v1 index
+
+                 (define expanded-dims-vec (list))
+
+                 (define starting_index 0)
+                 (for/list ([input-dim input_shape])
+                           (define prod 1)
+                           (for/list ([o-dim-idx (range starting_index (vector-length output_shape))])
+                                     (define o-dim (vector-ref output_shape o-dim-idx))
+                                     (set! prod (* prod o-dim))
+
+                                     ;; Fold Degenerate dimensions into current output-dim
+                                     (define next-term-1?
+                                       (cond
+
+                                         ;; If current dimension is the last index, not degenerate
+                                         [(equal? o-dim-idx (- (vector-length output_shape) 1))
+                                          #f
+                                          ]
+                                         ;; If next dimension exent is 1, fold into current output-dim
+                                         [(equal? (vector-ref output_shape (+ 1 o-dim-idx)) 1)
+                                          #t
+                                          ]
+                                         [else
+                                           #f
+                                           ]
+                                         )
+
+                                       )
+
+                                     (cond
+                                       [(and (equal? prod input-dim) (not next-term-1?))
+                                        ;; Contigous collapsing dim gives the required output shape
+
+                                        ;; For the given output-dimension output-dim, the
+                                        ;; input-dimension indices from starting_index to i-idx-idx
+                                        (define mapping (list starting_index o-dim-idx))
+                                        (set! expanded-dims-vec (append expanded-dims-vec (list mapping)))
+                                        (set! starting_index (+ o-dim-idx 1))
+                                        ]
+                                       [(equal? prod input-dim)
+                                        ;; Proceed as normal
+                                        '()
+                                        ]
+                                       [else
+                                         '()
+                                         ]
+                                       )
+                                     )
+
+                           )
+
+
+                 (define list-of-collapsed-indices
+                   ;; Each v1 shape dimension extent maps to potentially multiple output indices after shape cast where rank increases
+                   (for/list ( [i (range (vector-length (tensor-shape v1)))])
+                             (define collapsed-dims-range (list-ref expanded-dims-vec i))
+                             (define dims-start (list-ref collapsed-dims-range 0))
+                             (define dims-end (list-ref collapsed-dims-range 1))
+                             (define collapsed-dims
+                               (for/list ([k (range dims-start (+ 1 dims-end))])
+                                         (vector-ref output_shape k)
+                                         )
+                               )
+
+
+                             (define (stride-helper i)
+                               (define starting-dim (list-ref collapsed-dims i))
+                               (define num-elems 1)
+                               (for/list ([si (range (+ 1 i)(length collapsed-dims))])
+                                         (set! num-elems (* num-elems (list-ref collapsed-dims si)))
+                                         )
+                               num-elems
+                               )
+
+                             (define dim-strides (build-list (length collapsed-dims) stride-helper))
+                             (println dim-strides)
+                             ;(define index-val (vector-ref indices i))
+
+                             (define collapsed-index 0)
+
+
+                              (for/list ([p (range dims-start (+ 1 dims-end))])
+                                        (set! collapsed-index (+ collapsed-index (* (vector-ref indices p)   (list-ref dim-strides p))))
+                                     )
+
+                              collapsed-index
+
+                             )
+                   )
+
+
+                 (define new-indices (list->vector list-of-collapsed-indices))
+                 (interpret-env v1 new-indices env)
+
+                 ]
+                [(> (vector-length input_shape) (vector-length output_shape)) ; Rank decreases
+
+                 (displayln "Reduced Dimensionality")
+                 ;; Each input index maps to multiple v1 indices
+
+                 (define collapsed-dims-vec (list))
+
+                 (define starting_index 0)
+                 (for/list ([output-dim output_shape])
+                           (define prod 1)
+                           (for/list ([i-dim-idx (range starting_index (vector-length input_shape))])
+                                     (define i-dim (vector-ref input_shape i-dim-idx))
+                                     (set! prod (* prod i-dim))
+
+                                     ;; Fold Degenerate dimensions into current output-dim
+                                     (define next-term-1?
+                                       (cond
+
+                                         ;; If current dimension is the last index, not degenerate
+                                         [(equal? i-dim-idx (- (vector-length input_shape) 1))
+                                          #f
+                                          ]
+                                         ;; If next dimension exent is 1, fold into current output-dim
+                                         [(equal? (vector-ref input_shape (+ 1 i-dim-idx)) 1)
+                                          #t
+                                          ]
+                                         [else
+                                           #f
+                                           ]
+                                         )
+
+                                       )
+
+                                     (cond
+                                       [(and (equal? prod output-dim) (not next-term-1?))
+                                        ;; Contigous collapsing dim gives the required output shape
+
+                                        ;; For the given output-dimension output-dim, the
+                                        ;; input-dimension indices from starting_index to i-idx-idx
+                                        (define mapping (list starting_index i-dim-idx))
+                                        (set! collapsed-dims-vec (append collapsed-dims-vec (list mapping)))
+                                        (set! starting_index (+ i-dim-idx 1))
+                                        ]
+                                       [(equal? prod output-dim)
+                                        ;; Proceed as normal
+                                        '()
+                                        ]
+                                       [else
+                                         '()
+                                         ]
+                                       )
+                                     )
+
+                           )
+
+                 ;; collapsed-dims-vec maintains a list of pair of indices for the decreasing rank mapping (start_1, end_1), (end_1+1, end_2), (end_2+1, end_3),...
+                 ;; We now need to each index in the indices vectors by identifying the increased rank index corresponding to it.
+                 ;; e.g. index 10 of output-shape (20) and input-shape (5 x 4 x 1), would correspond to index (2 , 2, 0)
+                 ;; Strides vector : 4, 1, 1
+
+                 (define list-of-expanded-indices
+                   (for/list ( [i (range (vector-length indices))])
+                             (define expanded-dims-range (list-ref collapsed-dims-vec i))
+                             (define dims-start (list-ref expanded-dims-range 0))
+                             (define dims-end (list-ref expanded-dims-range 1))
+                             (define expanded-dims
+                               (for/list ([k (range dims-start (+ 1 dims-end))])
+                                         (vector-ref input_shape k)
+                                         )
+                               )
+
+
+                             (define (stride-helper i)
+                               (define starting-dim (list-ref expanded-dims i))
+                               (define num-elems 1)
+                               (for/list ([si (range (+ 1 i)(length expanded-dims))])
+                                         (set! num-elems (* num-elems (list-ref expanded-dims si)))
+                                         )
+                               num-elems
+                               )
+
+                             (define dim-strides (build-list (length expanded-dims) stride-helper))
+                             (println dim-strides)
+
+                             (define index-val (vector-ref indices i))
+
+                             (define expanded-index
+                               (for/list ([ei dim-strides])
+                                         (define new-idx (quotient index-val ei))
+                                         (set! index-val (remainder index-val ei))
+                                         new-idx
+                                         )
+                               )
+
+
+
+                             expanded-index
+
+
+                             )
+                   )
+
+
+                 (define new-indices (list->vector (apply append list-of-expanded-indices)))
+                 (interpret-env v1 new-indices env)
+                 ]
+                [else
+                  (error "arith/interpret-enver.rkt vector shape cast without change in rank not supported")
+
+                  ]
+
+                )
+              ]
+            ;; Base case
+            [v (error "arith/interpret-enver.rkt Unsupported data type in interpret-enver" v)]
+
+            )
+  )
 
 
 ;; Infer the shape of vector generated by the expression
@@ -704,6 +1238,7 @@
     ;; Constructors
     [(arith:int-imm data signed?) (vector 1)]
     [(arith:tensor data shape layout elemT buffsize id) shape]
+    [(arith:tensor-index index shape layout elemT buffsize id) shape]
 
     ;; Type Casts
 
@@ -804,6 +1339,7 @@
     ;; Constructors
     [(arith:int-imm data signed?) (vector 0)]
     [(arith:tensor data shape layout elemT buffsize id) layout]
+    [(arith:tensor-index index shape layout elemT buffsize id) layout]
 
     ;; Type Casts
 
@@ -912,6 +1448,9 @@
 (define (sub-exprs expr)
   (destruct expr
             [(arith:tensor data shape layout elemT buffsize id)
+             (list expr)
+             ]
+            [(arith:tensor-index index shape layout elemT buffsize id)
              (list expr)
              ]
             [(arith:int-imm data signed?) (list)]

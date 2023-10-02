@@ -19,7 +19,65 @@
 (define (visit expr handler)
   (destruct expr
             [(arith:tensor data shape layout elemT buffsize id) (handler expr)]
+
+            [(arith:tensor-index index shape layout elemT buffsize id) (handler expr)]
+
+            [(arith:int-imm data signed?) (handler expr)]
+
             [(arith:tensor-add v1 v2) (handler (arith:tensor-add (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-sat-add v1 v2) (handler (arith:tensor-sat-add (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-sub v1 v2) (handler (arith:tensor-sub (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-sat-sub v1 v2) (handler (arith:tensor-sat-sub (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-mul v1 v2) (handler (arith:tensor-mul (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-div v1 v2) (handler (arith:tensor-div (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-mod v1 v2) (handler (arith:tensor-mod (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-max v1 v2) (handler (arith:tensor-max (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-min v1 v2) (handler (arith:tensor-min (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-if v1 v2 v3) (handler (arith:tensor-if (visit v1 handler) (visit v2 handler) (visit v3 handler) ))]
+
+            [(arith:tensor-eq v1 v2) (handler (arith:tensor-eq (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-lt v1 v2) (handler (arith:tensor-lt (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-le v1 v2) (handler (arith:tensor-le (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-absd v1 v2) (handler (arith:tensor-absd (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-shr v1 v2) (handler (arith:tensor-shr (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-shl v1 v2) (handler (arith:tensor-shl (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-bwand v1 v2) (handler (arith:tensor-bwand (visit v1 handler) (visit v2 handler)))]
+
+            [(arith:tensor-abs v1 ) (handler (arith:tensor-abs (visit v1 handler) ))]
+
+            [(arith:tensor-clz v1 ) (handler (arith:tensor-clz (visit v1 handler) ))]
+
+            [(arith:cast-int vec olane oprec ) (handler (arith:cast-int (visit vec handler) olane oprec ))]
+
+            [(arith:cast-uint vec olane oprec ) (handler (arith:cast-uint (visit vec handler) olane oprec ))]
+
+            [(vector:bitcast v1 signed? out-prec) (handler (vector:bitcast (visit v1 handler) signed? out-prec))]
+
+            [(vector:broadcast v1 output-shape) (handler (vector:broadcast (visit v1 handler) output-shape))]
+
+            [(vector:extract v1 extract_indices) (handler (vector:extract (visit v1 handler) extract_indices))]
+
+            [(vector:extract_strided_slice v1 offsets sizes strides) (handler (vector:extract_strided_slice (visit v1 handler) offsets sizes strides ))]
+
+            [(vector:matrix_multiply v1 v2 lhs_rows lhs_cols rhs_cols) (handler (vector:matrix_multiply (visit v1 handler) (visit v2 handler)  lhs_rows lhs_cols rhs_cols ))]
+
+            [(vector:splat v1 output-shape) (handler (vector:splat (visit v1 handler) output-shape ))]
+
             [_ (handler expr)]
             )
   )

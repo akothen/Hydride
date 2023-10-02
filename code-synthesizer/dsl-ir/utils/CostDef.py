@@ -21,6 +21,8 @@ class CostDef:
         defaults.append("[(reg id) 1]")
         defaults.append("[(lit v) {} ]".format(LIT_COST))
 
+        defaults.append("[(buffer-index idx type size) idx]")
+
         for struct in default_structs:
             defaults.append(self.emit_dsl_cost_def(
                 struct, struct_definer, use_label=False, cost_name=cost_name)[1])

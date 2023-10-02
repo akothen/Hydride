@@ -197,6 +197,7 @@
 (struct vec-bwand (v1 v2) #:transparent)
 (struct vec-bwnot (v1) #:transparent)
 (struct vec-rounding_mul_shift_right (v1 v2 v3) #:transparent)
+(struct vec-mul_shift_right (v1 v2 v3) #:transparent)
 (struct vec-rounding_shift_right (v1 v2) #:transparent)
 (struct vec-rounding_halving_add (v1 v2) #:transparent)
 (struct vec-halving_add (v1 v2) #:transparent)

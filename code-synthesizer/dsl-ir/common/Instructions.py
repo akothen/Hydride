@@ -29,7 +29,7 @@ BV_OPS = [
     "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
     "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
     "bvlt", "bvle", "bvgt", "bvge", "bvmulnw",
-    # "bitvector->integer"
+    "bitvector->integer", "integer->bitvector",
 ]
 
 BV_OP_VARIANTS = [
@@ -176,13 +176,22 @@ class Context:
         self.create_bounded_args_map()
         self.extensions = extensions
 
-    def __repr__(self):
-        return self.name
+        self.set_scale_factor()
+
+    def set_scale_factor(self):
+
+        if 'hexagon' in self.name:
+            self.sample_scale_factor = 32
+        else:
+            self.sample_scale_factor = 4
 
     def get_bv_ops(self):
 
         if self.ctx_sema != None:
             return self.ctx_sema
+
+        if self.extensions != None and 'halide' in self.extensions:
+            return self.semantics
 
         function_prototype = self.semantics[0].replace("(define", "").lstrip()
 
@@ -428,7 +437,7 @@ class Context:
         assert self.can_scale_context(
         ), "Context must be scalable to perform the operation scaling " + self.name
 
-        sample_scale_factor = 1  # 32
+        sample_scale_factor = self.sample_scale_factor
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
@@ -603,8 +612,7 @@ class Context:
             return "_dsl"
 
     def print_context_expr(self, prefix=""):
-        print("{} ({} ; {}".format(prefix, self.dsl_name +
-              self.dsl_name_suffix(), self.name))
+        print("{} ({} ; {}".format(prefix, self.dsl_name, self.name))
 
         for arg in self.context_args:
             if isinstance(arg, Context):
@@ -615,13 +623,14 @@ class Context:
         print("{} )".format(prefix))
 
     def emit_context_expr_string(self, prefix=""):
-        string = ("{} ({} ; {}".format(
-            prefix, self.dsl_name + self.dsl_name_suffix(), self.name))
+        string = ("{} ({} ; {}".format(prefix, self.dsl_name, self.name))
 
         for arg in self.context_args:
             if isinstance(arg, Context):
                 string += "\n" + \
                     arg.emit_context_expr_string(prefix=prefix + "\t")
+            elif isinstance(arg, Reg) and self.extensions != None and 'halide' in self.extensions:
+                string += "\n" + (prefix + "\t" + arg.get_halide_dsl_value())
             else:
                 string += "\n" + (prefix + "\t" + arg.get_dsl_value())
 
@@ -810,7 +819,7 @@ class DSLInstruction(InstructionType):
             self.add_dsl_to_name = False
 
         self.contexts.append(
-            Context(name=name, dsl_name=self.name, in_vectsize=in_vectsize, out_vectsize=out_vectsize,
+            Context(name=name, dsl_name=self.get_dsl_name(), in_vectsize=in_vectsize, out_vectsize=out_vectsize,
                     lane_size=lane_size, in_precision=in_precision,
                     out_precision=out_precision, SIMD=SIMD, args=args,
                     in_vectsize_index=in_vectsize_index,
@@ -887,6 +896,9 @@ class DSLInstruction(InstructionType):
                         operations.append(bvop)
                 elif bvop in line:
                     operations.append(bvop)
+
+        if "define" not in self.semantics[0]:
+            operations = self.semantics
 
         return operations
 

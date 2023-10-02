@@ -73,6 +73,20 @@
                [(eq? elemT 'uint64) #f]
                )
              ]
+
+            [(buffer-index index elemT buffsize) 
+             (cond
+               [(eq? elemT 'int8) #t]
+               [(eq? elemT 'int16) #t]
+               [(eq? elemT 'int32) #t]
+               [(eq? elemT 'int64) #t]
+               [(eq? elemT 'uint1) #f]
+               [(eq? elemT 'uint8) #f]
+               [(eq? elemT 'uint16) #f]
+               [(eq? elemT 'uint32) #f]
+               [(eq? elemT 'uint64) #f]
+               )
+             ]
             [_ (error "Should have passed in buffer")]
             )
   )
@@ -205,6 +219,7 @@
     [(vec-mul v1 v2) (vec-len v1)]
     [(vec-widen-mul v1 v2) (vec-len v2)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-len v1)]
+    [(vec-mul_shift_right v1 v2 v3) (vec-len v1)]
     [(vec-rounding_shift_right v1 v2) (vec-len v1)]
     [(vec-rounding_halving_add v1 v2) (vec-len v1)]
     [(vec-halving_add v1 v2) (vec-len v1)]
@@ -264,6 +279,7 @@
     [(load-sca buf idx) (list)]
     [(int-imm data signed?) (list )]
     [(buffer data elemT buffsize) (list expr)]
+    [(buffer-index index elemT buffsize) (list expr)]
     [(reg id) (list expr)]
 
     ;; Type Casts
@@ -368,6 +384,7 @@
     [(vec-mul v1 v2) (prune-const-exprs (list v1 v2))]
     ;[(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2 v3)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (prune-const-exprs (list v1 v2))]
+    [(vec-mul_shift_right v1 v2 v3) (prune-const-exprs (list v1 v2))]
     [(vec-rounding_shift_right v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-rounding_halving_add v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-halving_add v1 v2) (prune-const-exprs (list v1 v2))]
@@ -453,7 +470,25 @@
                  )
        )
      ]
-    [_ (error "Unrecognized expression in halide:interpret-env")]
+
+    [(vec-rounding_shift_right v1 v2) 
+     (lambda (i) (do-rounding-shift-right ((interpret-env v1 env) i) ((interpret-env v2 env) i)))
+     ]
+    [(vec-rounding_halving_add v1 v2) 
+     (lambda (i) (do-rounding-halving-add ((interpret-env v1 env) i) ((interpret-env v2 env) i) #t))
+     ]
+    [(vec-halving_add v1 v2) 
+     (lambda (i) (do-rounding-halving-add ((interpret-env v1 env) i) ((interpret-env v2 env) i) #f))
+     ]
+    [(vec-rounding_mul_shift_right v1 v2 v3) 
+     (lambda (i) (do-rounding-mul-shift-right ((interpret-env v1 env) i) ((interpret-env v2 env) i) ((interpret-env v3 env) i) ))
+     ]
+
+    [(vec-mul_shift_right v1 v2 v3) 
+     (lambda (i) (do-mul-shift-right ((interpret-env v1 env) i) ((interpret-env v2 env) i) ((interpret-env v3 env) i) ))
+     ]
+
+    [_ (error "Unrecognized expression in halide:interpret-env" p)]
     )
 
 
@@ -500,6 +535,7 @@
     [(int-imm data signed?) 
             (lambda (i) (imm-ref data signed?) )]
     [(buffer data elemT buffsize) (lambda (i) (buffer-ref p  i))]
+    [(buffer-index index elemT buffsize) (lambda (i) (buffer-ref (create-buffer (bv 0 buffsize) elemT)  i))] ;; Only place-holder, should never be used
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
     ;; Type Casts
@@ -676,6 +712,10 @@
      ]
     [(vec-rounding_mul_shift_right v1 v2 v3) 
      (lambda (i) (do-rounding-mul-shift-right ((interpret v1) i) ((interpret v2) i) ((interpret v3) i) ))
+     ]
+
+    [(vec-mul_shift_right v1 v2 v3) 
+     (lambda (i) (do-mul-shift-right ((interpret v1) i) ((interpret v2) i) ((interpret v3) i) ))
      ]
     [(vec-div v1 v2) (lambda (i) (do-div ((interpret v1) i) ((interpret v2) i)))]
     [(vec-mod v1 v2) (lambda (i) (do-mod ((interpret v1) i) ((interpret v2) i)))]
@@ -912,6 +952,7 @@
 
 
 
+; Compute saturating_narrow(rounding_shift_right(widening_mul(a, b), q))
 (define (do-rounding-mul-shift-right lhs rhs shift)
   (define outT (infer-out-type lhs rhs))
   (define widened-mul (do-widened-mul lhs rhs))
@@ -934,6 +975,28 @@
 
   )
 
+; saturating_narrow(shift_right(widening_mul(a, b), q)) 
+(define (do-mul-shift-right lhs rhs shift)
+  (define outT (infer-out-type lhs rhs))
+  (define widened-mul (do-widened-mul lhs rhs))
+  (define round_shift_right (do-shr widened-mul shift))
+  (define lhs-bv (cpp:eval lhs))
+  (define rhs-bv (cpp:eval rhs))
+  (define size (bvlength lhs-bv))
+  (define widened-size (* 2 size))
+  (define result
+    (cond
+      [(cpp:signed-type? outT)
+       (mk-cpp-expr (bvssat (cpp:eval round_shift_right) widened-size size) outT )
+       ]
+      [else
+       (mk-cpp-expr (bvusat (cpp:eval round_shift_right) widened-size size) outT )
+        ]
+      )
+    )
+  result
+
+  )
 
 ;narrow((widen(a) + widen(b) + 1) / 2)
 (define (do-rounding-halving-add lhs rhs round?)
@@ -1095,8 +1158,10 @@
   ;   (min lhs rhs)]
   ;  [else
      (define outT (infer-out-type lhs rhs))
+     ;(println outT)
      (cond
        [(cpp:signed-type? outT)
+        ;(println "Signed type min")
         (define minF
           (cond
             [(eq? (cpp:type-bw outT) 8) cpp:min8]
@@ -1105,6 +1170,7 @@
             [(eq? (cpp:type-bw outT) 64) cpp:min64]))
         (minF lhs rhs)]
        [else
+        ;(println "unSigned type min")
         (define minF
           (cond
             [(eq? (cpp:type-bw outT) 8) cpp:minu8]
@@ -1243,3 +1309,12 @@
      [(eq? width 4) (op (cpp:eval (vec base)) (cpp:eval (vec (+ base 1))) (cpp:eval (vec (+ base 2))) (cpp:eval (vec (+ base 3))))]
      [else (error "NYI: Halide vector_reduce for reduction factor of:" width)])
    outT))
+
+
+
+;;;;;;
+
+(define (interpret-hydride expr env)
+  (assemble-bitvector (interpret-env expr env) (vec-len expr))
+  
+  )

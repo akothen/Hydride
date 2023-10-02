@@ -301,7 +301,9 @@
     [(vec-widen-mul v1 v2) (append (list extract bvmul ) (if (halide:is-signed-expr? v1 v2) (list  sign-extend  ) (list  zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))] ;; FIXME: add bvshl
 
 
-    [(vec-rounding_mul_shift_right v1 v2 v3) (append (list extract bvmul sign-extend zero-extend) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat ) (list  zero-extend bvlshr bvusat)) (get-bv-ops v1)  (get-bv-ops v2) (get-bv-ops v3))] 
+    [(vec-rounding_mul_shift_right v1 v2 v3) (append (list extract bvmul sign-extend zero-extend) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat bvsdiv) (list  zero-extend bvlshr bvusat bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) (get-bv-ops v3))] 
+
+    [(vec-mul_shift_right v1 v2 v3) (append (list extract bvmul sign-extend zero-extend) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat ) (list  zero-extend bvlshr bvusat)) (get-bv-ops v1)  (get-bv-ops v2) (get-bv-ops v3))] 
 
     [(vec-rounding_shift_right v1 v2) (append (list extract bvshl) (if (halide:is-signed-expr? v1 v2) (list  sign-extend bvashr bvssat bvsdiv) (list  zero-extend bvlshr bvusat bvudiv)) (get-bv-ops v1)  (get-bv-ops v2) )] ;; FIXME: add bvshl
 
@@ -1248,6 +1250,22 @@
                     ]
                   )
                 ]
+
+               [(vec-mul_shift_right v1 v2 v3) 
+                (cond
+                  [is-leaf-depth
+                    (define leaf-expr (vec-mul_shift_right (get-latest-arg v1) (get-latest-arg v2) v3))
+                    (values leaf-expr latest-arg)
+                    ]
+                  [else
+                    (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+                    (define remaining-values (- (vector-length args) args-used1))
+                    (define remaining-args (vector-take-right args remaining-values))
+                    (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+                    (values (vec-mul_shift_right leaf1-sol leaf2-sol v3) (+ args-used1 args-used2))
+                    ]
+                  )
+                ]
                [(vec-div v1 v2)
                 (binary-op-helper vec-div v1 v2)
                 ]
@@ -1620,6 +1638,7 @@
     [(load-sca buf idx) 1]
     [(int-imm data signed?) (bvlength data)]
     [(buffer data elemT buffsize) buffsize]
+    [(buffer-index index elemT buffsize) buffsize]
 
     ;; Type Casts
     [(cast-int vec olane oprec) (* olane oprec)]
@@ -1722,6 +1741,7 @@
     [(vec-sat-sub v1 v2) (vec-size v1)]
     [(vec-mul v1 v2) (vec-size v1)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-size v1)]
+    [(vec-mul_shift_right v1 v2 v3) (vec-size v1)]
     [(vec-rounding_shift_right v1 v2) (vec-size v1)]
     [(vec-rounding_halving_add v1 v2) (vec-size v1)]
     [(vec-halving_add v1 v2) (vec-size v1)]
@@ -2167,7 +2187,7 @@
                e
                ]
               [(vector_reduce op width vec) 
-               (set! imms-vals (append imms-vals (list (bv 1 (bitvector (vec-precision e))))))
+               ;(set! imms-vals (append imms-vals (list (bv 1 (bitvector (vec-precision e)))  (bv 1 (bitvector (/ (vec-precision e) 2)) ))))
                e
                ]
               [(vec-shr v1 v2) 
@@ -2312,6 +2332,7 @@
     [(load-sca buf idx) 'int8]
     [(int-imm data signed?) (size-to-elemT-signed (bvlength data) signed?)]
     [(buffer data elemT buffsize) elemT]
+    [(buffer-index index elemT buffsize) elemT]
 
     ;; Type Casts
     [(cast-int vec olane oprec) (size-to-elemT-signed oprec #t)]
@@ -2412,6 +2433,7 @@
     [(vec-sat-sub v1 v2) (get-elemT v1)]
     [(vec-mul v1 v2) (get-elemT v1)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (get-elemT v1)]
+    [(vec-mul_shift_right v1 v2 v3) (get-elemT v1)]
     [(vec-rounding_shift_right v1 v2) (get-elemT v1)]
     [(vec-rounding_halving_add v1 v2) (get-elemT v1)]
     [(vec-halving_add v1 v2) (get-elemT v1)]
@@ -2474,6 +2496,7 @@
     [(load-sca buf idx) 1]
     [(int-imm data signed?) (bvlength data)]
     [(buffer data elemT buffsize) (elemT-size elemT)]
+    [(buffer-index index elemT buffsize) (elemT-size elemT)]
 
     ;; Type Casts
     [(cast-int vec olane oprec) oprec]
@@ -2576,6 +2599,7 @@
     [(vec-sat-sub v1 v2) (vec-precision v1)]
     [(vec-mul v1 v2) (vec-precision v1)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (vec-precision v1)]
+    [(vec-mul_shift_right v1 v2 v3) (vec-precision v1)]
     [(vec-rounding_shift_right v1 v2) (vec-precision v1)]
     [(vec-rounding_halving_add v1 v2) (vec-precision v1)]
     [(vec-halving_add v1 v2) (vec-precision v1)]
@@ -3418,3 +3442,157 @@
   (halide:visit prog replace-arg)
   )
 
+
+(define (narrow expr sat?)
+
+  (define elemT (get-elemT expr))
+  (define len (halide:vec-len expr))
+
+
+  (define result
+    (cond
+      [sat?
+        (cond
+
+        [(equal? elemT 'int16)  (vec-saturate expr len 8 #t)]
+        [(equal? elemT 'int32)  (vec-saturate expr len 16 #t)]
+        [(equal? elemT 'int64)  (vec-saturate expr len 32 #t)]
+
+        [(equal? elemT 'uint16)  (vec-saturate expr len 8 #f)]
+        [(equal? elemT 'uint32)  (vec-saturate expr len 16 #f)]
+        [(equal? elemT 'uint64)  (vec-saturate expr len 32 #f)]
+          
+          )
+
+
+        ]
+      [else
+        (cond
+
+          [(equal? elemT 'int16)  (cast-int expr len 8)]
+          [(equal? elemT 'int32)  (cast-int expr len 16)]
+          [(equal? elemT 'int64)  (cast-int expr len 32)]
+          [(equal? elemT 'uint16)  (cast-uint expr len 8)]
+          [(equal? elemT 'uint32)  (cast-uint expr len 16)]
+          [(equal? elemT 'uint64)  (cast-uint expr len 32)]
+
+          )
+        ]      
+      )
+
+    )
+
+  result
+  
+  
+  )
+
+
+(define (widen expr)
+  (define elemT (get-elemT expr))
+  (define len (halide:vec-len expr))
+
+  (define result
+    (cond
+      [(equal? elemT 'int8)  (cast-int expr len 16)]
+      [(equal? elemT 'int16)  (cast-int expr len 32)]
+      [(equal? elemT 'int32)  (cast-int expr len 64)]
+      [(equal? elemT 'uint8)  (cast-uint expr len 16)]
+      [(equal? elemT 'uint16)  (cast-uint expr len 32)]
+      [(equal? elemT 'uint32)  (cast-uint expr len 64)]
+      )
+    )
+  result
+  
+  )
+
+(define (create-const value expr)
+
+  (define elemT (get-elemT expr))
+  (define len (halide:vec-len expr))
+  (define size (vec-size expr))
+  (define bw (/ size len))
+
+  (define result
+    (cond
+      [(equal? elemT 'int8)  (xBroadcast (int-imm (bv value bw) #t) len)]
+      [(equal? elemT 'int16)  (xBroadcast (int-imm (bv value bw) #t) len)]
+      [(equal? elemT 'int32)  (xBroadcast (int-imm (bv value bw) #t) len)]
+      [(equal? elemT 'int64)  (xBroadcast (int-imm (bv value bw) #t) len)]
+
+      [(equal? elemT 'uint8)  (xBroadcast (int-imm (bv value bw) #f) len)]
+      [(equal? elemT 'uint16)  (xBroadcast (int-imm (bv value bw) #f) len)]
+      [(equal? elemT 'uint32)  (xBroadcast (int-imm (bv value bw) #f) len)]
+      [(equal? elemT 'uint64)  (xBroadcast (int-imm (bv value bw) #f) len)]
+      )
+    )
+  result
+  
+  )
+
+
+(define (expand-intrinsic intr)
+  (destruct intr
+            [(vec-rounding_halving_add v1 v2)
+             (define wide-v1 (widen v1))
+             (define wide-v2 (widen v2))
+             (define one (create-const 1 wide-v2))
+             (define two (create-const 2 wide-v2))
+
+             (define %0 (vec-add wide-v1 wide-v2))
+             (define %1 (vec-add %0 one))
+             (define %2 (vec-div %1 two))
+             (define %3 (narrow %2 #f))
+             %3
+             ]
+
+            [(vec-halving_add v1 v2)
+             (define wide-v1 (widen v1))
+             (define wide-v2 (widen v2))
+             (define one (create-const 1 wide-v2))
+             (define two (create-const 2 wide-v2))
+
+             (define %0 (vec-add wide-v1 wide-v2))
+             (define %2 (vec-div %0 two))
+             (define %3 (narrow %2 #f))
+             %3
+             ]
+
+            [(vec-rounding_shift_right v1 v2)
+             ;; saturating_narrow(widening_add(a, (1 << max(b, 0)) / 2) >> b).
+             (define one (create-const 1 v1))
+             (define two (create-const 2 v2))
+             (define zero (create-const 0 v2))
+             (define %0 (vec-max v2 zero))
+             (define %1 (vec-shl one %0))
+             (define %2 (vec-div %1 two))
+             (define %3 (widen v1))
+             (define %4 (widen %2))
+             (define %5 (vec-add %3 %4))
+             (define %6 (vec-shr %5 (widen v2)))
+             (define %7 (narrow %6 #t))
+             %7
+             ]
+            [(vec-rounding_mul_shift_right v1 v2 shift)
+             (define %0 (vec-widen-mul v1 v2))
+             (define %1 (widen shift))
+             (define %2 (vec-rounding_shift_right %0 %1))
+             (define %3 (narrow %2 #t))
+             %3
+             ]
+            [_ intr]
+
+            )
+
+  )
+
+
+
+(define (get-prec expr env)
+  (vec-precision expr)
+  )
+
+
+(define (get-length expr env)
+  (vec-size expr)
+  )

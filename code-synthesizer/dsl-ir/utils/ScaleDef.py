@@ -43,12 +43,13 @@ class ScaleDef:
         if conditional:
             clauses = []
             for ctx_idx, ctx in enumerate(dsl_inst.contexts):
-                # Current knobs specific to ARM
-                test_scale_factor = 1
+                # Current knobs specific to X86
+
+                test_scale_factor = 32
                 if ctx.can_scale_context(scale_factor=test_scale_factor):
                     condition = "[(and "
                     scalable_arg_indices = ctx.get_scalable_args_idx(
-                        base_vector_size=1024)
+                        base_vector_size=self.base_vect_size)
                     for idx, arg in enumerate(ctx.context_args):
                         if idx in scalable_arg_indices:
                             condition += " (equal? {} {})".format(
