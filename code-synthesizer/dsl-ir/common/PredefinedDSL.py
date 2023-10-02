@@ -474,8 +474,6 @@ def create_llvm_vect_simd_dsl(op_name, bv_op, input_vector_sizes=[],
     return vec_llvm_simd_dsl
 
 
-
-
 zext_scalar_sema = [
     "(define (scalar-zext a input-size output-size)",
     "(zero-extend a (bitvector output-size))",
@@ -484,38 +482,39 @@ zext_scalar_sema = [
 
 
 def create_llvm_scalar_zext_dsl(
-                                  input_precisions = [],
-                                  output_precisions = []
-                                  ):
+    input_precisions=[],
+    output_precisions=[]
+):
 
-    scalar_llvm_zext_dsl = DSLInstruction(name = "llvm-zext", simd = True,
-                                          operation = True, semantics = zext_scalar_sema)
-
+    scalar_llvm_zext_dsl = DSLInstruction(name="llvm-zext", simd=True,
+                                          operation=True, semantics=zext_scalar_sema)
 
     for i in range(0, len(input_precisions)):
         scalar_llvm_zext_dsl.add_context(
-            name = "llvm-zext-{}-{}".format(input_precisions[i], output_precisions[i]),
-            in_vectsize = input_precisions[i],
-            out_vectsize =  output_precisions[i],
-            lane_size = input_precisions[i],
-            in_precision = input_precisions[i],
-            out_precision = output_precisions[i],
-            SIMD = "True",
-            args = ["SYMBOLIC_BV_{}".format(input_precisions[i]), str(input_precisions[i]), str(output_precisions[i])],
-            in_vectsize_index = 1,
-            out_vectsize_index = 2,
-            in_lanesize_index = 1,
-            out_lanesize_index = 2,
-            in_precision_index = 1,
-            out_precision_index = 2,
-            cost = "1",
+            name="llvm-zext-{}-{}".format(
+                input_precisions[i], output_precisions[i]),
+            in_vectsize=input_precisions[i],
+            out_vectsize=output_precisions[i],
+            lane_size=input_precisions[i],
+            in_precision=input_precisions[i],
+            out_precision=output_precisions[i],
+            SIMD="True",
+            args=["SYMBOLIC_BV_{}".format(input_precisions[i]), str(
+                input_precisions[i]), str(output_precisions[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=2,
+            in_lanesize_index=1,
+            out_lanesize_index=2,
+            in_precision_index=1,
+            out_precision_index=2,
+            cost="1",
         )
 
-    return  scalar_llvm_zext_dsl
+    return scalar_llvm_zext_dsl
 
 
-dummy_scalar_zext = create_llvm_scalar_zext_dsl(input_precisions = [8, 16] , output_precisions = [32, 32])
-
+dummy_scalar_zext = create_llvm_scalar_zext_dsl(
+    input_precisions=[8, 16], output_precisions=[32, 32])
 
 
 splat_scalar_to_word_sema = [
@@ -526,37 +525,39 @@ splat_scalar_to_word_sema = [
 
 
 def create_llvm_scalar_splat_dsl(
-                                  input_precisions = [],
-                                  output_precisions = []
-                                  ):
+    input_precisions=[],
+    output_precisions=[]
+):
 
-    scalar_llvm_splat_dsl = DSLInstruction(name = "scalar_splat", simd = True,
-                                          operation = True, semantics = zext_scalar_sema)
-
+    scalar_llvm_splat_dsl = DSLInstruction(name="scalar_splat", simd=True,
+                                           operation=True, semantics=zext_scalar_sema)
 
     for i in range(0, len(input_precisions)):
         scalar_llvm_splat_dsl.add_context(
-            name = "llvm-splat-{}-{}".format(input_precisions[i], output_precisions[i]),
-            in_vectsize = input_precisions[i],
-            out_vectsize =  output_precisions[i],
-            lane_size = input_precisions[i],
-            in_precision = input_precisions[i],
-            out_precision = output_precisions[i],
-            SIMD = "True",
-            args = ["SYMBOLIC_BV_{}".format(input_precisions[i]), str(input_precisions[i]), str(output_precisions[i])],
-            in_vectsize_index = 1,
-            out_vectsize_index = 2,
-            in_lanesize_index = 1,
-            out_lanesize_index = 2,
-            in_precision_index = 1,
-            out_precision_index = 2,
-            cost = "1",
+            name="llvm-splat-{}-{}".format(
+                input_precisions[i], output_precisions[i]),
+            in_vectsize=input_precisions[i],
+            out_vectsize=output_precisions[i],
+            lane_size=input_precisions[i],
+            in_precision=input_precisions[i],
+            out_precision=output_precisions[i],
+            SIMD="True",
+            args=["SYMBOLIC_BV_{}".format(input_precisions[i]), str(
+                input_precisions[i]), str(output_precisions[i])],
+            in_vectsize_index=1,
+            out_vectsize_index=2,
+            in_lanesize_index=1,
+            out_lanesize_index=2,
+            in_precision_index=1,
+            out_precision_index=2,
+            cost="1",
         )
 
-    return  scalar_llvm_splat_dsl
+    return scalar_llvm_splat_dsl
 
 
-dummy_scalar_splat= create_llvm_scalar_splat_dsl(input_precisions = [8, 16] , output_precisions = [32, 32])
+dummy_scalar_splat = create_llvm_scalar_splat_dsl(
+    input_precisions=[8, 16], output_precisions=[32, 32])
 
 # Place holder DSL object definitions to enable generating
 # the Hydride symbolic interpreter
@@ -573,20 +574,20 @@ dummy_vector_swizzle_dsl = create_two_input_swizzle(
 
 
 dummy_vector_two_interleave_dsl = create_interleave_two_dsl(
-    input_vector_sizes=[128],
-    precisions=[16]
+    input_vector_sizes=[128, 1024, 1024, 1024, 2048, 2048, 2048],
+    precisions=[16, 8, 16, 32, 8, 16, 32]
 )
 
 
 dummy_vector_interleave_dsl = create_interleave_dsl(
-    input_vector_sizes=[128],
-    precisions=[16]
+    input_vector_sizes=[128, 1024, 1024, 1024, 2048, 2048, 2048],
+    precisions=[16, 8, 16, 32, 8, 16, 32]
 )
 
 
 dummy_vector_deinterleave_dsl = create_deinterleave_dsl(
-    input_vector_sizes=[128],
-    precisions=[16]
+    input_vector_sizes=[128, 1024, 1024, 1024, 2048, 2048, 2048],
+    precisions=[16, 8, 16, 32, 8, 16, 32]
 )
 
 dummy_llvm_shuffle_dsl = create_llvm_shufflevector_dsl(

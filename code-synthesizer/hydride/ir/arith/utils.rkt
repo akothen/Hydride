@@ -25,6 +25,10 @@
             [(arith:tensor data shape layout elemT buffsize id)
              (set! depth 0)
              ]
+
+            [(arith:tensor-index index shape layout elemT buffsize id)
+             (set! depth 0)
+             ]
             [_
   (define sub-exp (arith:sub-exprs e))
   (for/list ([se sub-exp])
@@ -66,6 +70,9 @@
 (define (get-elemT expr)
   (destruct expr
             [(arith:tensor data shape layout elemT buffsize id)
+             elemT
+             ]
+            [(arith:tensor-index index shape layout elemT buffsize id)
              elemT
              ]
             [(arith:int-imm data signed?) (size-to-elemT-signed (bvlength data) signed?)]
@@ -241,8 +248,8 @@
             (define sym-bv (vector-ref sym-bvs i))
             (define size (vec-size expr))
             (define expr-elemT (get-elemT expr))
-            (println (arith:tensor-layout expr))
-            (arith:create-tensor sym-bv (arith:tensor-shape expr) (arith:tensor-layout expr) expr-elemT)
+            ;(println (arith:tensor-layout expr))
+            (arith:create-tensor sym-bv (arith:tensor-shape expr) (arith:tensor-layout expr) expr-elemT i)
             )
   )
 )
@@ -257,6 +264,10 @@
 
   (destruct expr
             [(arith:tensor data shape layout elemT buffsize id)
+             (values (arg 0) 1)
+             ]
+
+            [(arith:tensor-index index shape layout elemT buffsize id)
              (values (arg 0) 1)
              ]
             [(arith:tensor-add v1 v2)
@@ -691,6 +702,10 @@
               [(arith:tensor data shape layout elemT buffsize id)               
                 (list 'buf shape layout elemT buffsize)
                ]
+
+              [(arith:tensor-index index shape layout elemT buffsize id)               
+                (list 'buf shape layout elemT buffsize)
+               ]
               [_ e]
               )
     )
@@ -760,8 +775,11 @@
             [(arith:tensor data shape layout elemT buffsize id)
              (list (if (arith:is-buffer-signed expr)  (list sign-extend)  (list zero-extend)))
              ]
-            [(arith:tensor-add v1 v2) (append (list extract bvadd) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
 
+            [(arith:tensor-index index shape layout elemT buffsize id)
+             (list (if (arith:is-buffer-signed expr)  (list sign-extend)  (list zero-extend)))
+             ]
+            [(arith:tensor-add v1 v2) (append (list extract bvadd) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
             [(arith:tensor-mul v1 v2) (append (list extract bvmul) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
             )
 
