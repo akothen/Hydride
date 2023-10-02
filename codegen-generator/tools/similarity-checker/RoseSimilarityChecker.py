@@ -23,7 +23,7 @@ from RoseTransformationsVerifier import *
 from copy import deepcopy
 
 
-NumThreads = 32
+NumThreads = 1
 
 EliminateUnnecessaryArgs = False
 
@@ -1045,10 +1045,8 @@ class RoseSimilarityChecker():
                 CopyFunctionInfo.setInVectorLengthIndex(PermArgIdx)
             if OrgArgIndex == OriginalFunctionInfo.getOutVectorLengthIndex():
                 CopyFunctionInfo.setOutVectorLengthIndex(PermArgIdx)
-            if OrgArgIndex == OriginalFunctionInfo.getOutLaneSizeIndex():
-                CopyFunctionInfo.setOutLaneSizeIndex(PermArgIdx)
-            if OrgArgIndex == OriginalFunctionInfo.getInLaneSizeIndex():
-                CopyFunctionInfo.setInLaneSizeIndex(PermArgIdx)
+            if OrgArgIndex == OriginalFunctionInfo.getLaneSizeIndex():
+                CopyFunctionInfo.setLaneSizeIndex(PermArgIdx)
 
     def reorderArgsAndPerformSimilarityChecking(self):
         # Canonicalize all equivalence classses

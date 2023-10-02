@@ -53,15 +53,15 @@ HYDRIDE_SEMA=$(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm/semantics.rkt
 $(SIMILARITY_SUMMARY_SEMA): $(ALL_ARM_SEMA)
 	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	
-	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
+	(cd $(SIMILARITY_ENV) && $(PYTHON) -m RoseSimilarityChecker)
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 $(HYDRIDE_SEMA): $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
-	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && python3 -m EmitHydridePkgDefs)
+	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && $(PYTHON) -m EmitHydridePkgDefs)
 	raco pkg update $(HYDRIDE_ROOT)/code-synthesizer/hydride/
 $(LEGALIZER_CPP): $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
-	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && python3 RoseARMLegalizerGen.py)
+	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && $(PYTHON) RoseARMLegalizerGen.py)
 $(LEGALIZER): $(LEGALIZER_CPP)
 	make -C $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build
 $(ALL_ARM_SEMA):
@@ -72,25 +72,25 @@ similaritytest:
 	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	
 	
-	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
+	(cd $(SIMILARITY_ENV) && $(PYTHON) -m RoseSimilarityChecker)
 similarity:
 	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	
 	
-	(cd $(SIMILARITY_ENV) && python3 -m RoseSimilarityChecker)
+	(cd $(SIMILARITY_ENV) && $(PYTHON) -m RoseSimilarityChecker)
 	cp --backup=numbered $(SIMILARITY_SUMMARY_SEMA) $(SIMILARITY_SUMMARY)
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 
 hydride_pkg = $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm/get_ops.rkt # 
 $(hydride_pkg): $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
-	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && python3 -m EmitHydridePkgDefs)
+	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && $(PYTHON) -m EmitHydridePkgDefs)
 hydride_sema: 
 	$(MAKE) $(hydride_pkg)
 	raco pkg update $(HYDRIDE_ROOT)/code-synthesizer/hydride/
 legalizer:
 	rm $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/*.cpp
-	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && python3 RoseARMLegalizerGen.py)
+	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ && $(PYTHON) RoseARMLegalizerGen.py)
 	(cd $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build && cmake ..)
 	make -C $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/build -j64
 arm_sema:

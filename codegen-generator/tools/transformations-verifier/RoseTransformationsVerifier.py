@@ -64,9 +64,16 @@ class RoseTransformationVerifier():
           continue
         
   
-  def genSymbolicInput(self, Param : RoseArgument, NameSuffix : str, ArgToDefinitionMap : dict):
-    Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
-                                         str(Param.getType().getBitwidth()))
+  def genSymbolicInput(self, FunctionInfo:RoseFunctionInfo, Param : RoseArgument, NameSuffix : str, ArgToDefinitionMap : dict):
+    Bitwidth = Param.getType().getBitwidth()
+    if isinstance(Bitwidth, RoseValue):
+      if isinstance(Bitwidth, RoseConstant):
+        Bitwidth = Bitwidth.getValue()
+      else:
+        # There better be a concrete value
+        Bitwidth = FunctionInfo.getConcreteValFor(Bitwidth).getValue()
+    Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,
+                                                               str(Bitwidth))
     ArgToDefinitionMap[Param] = Param.getName() + NameSuffix
     return Input
 
@@ -84,7 +91,7 @@ class RoseTransformationVerifier():
     ArgToDefinitionMap = dict()
     for Arg in  ReferenceFunction.getArgs():
       if ReferenceFunctionInfo.argHasConcreteVal(Arg) == False:
-        Code += self.genSymbolicInput(Arg, NameSuffix, ArgToDefinitionMap)
+        Code += self.genSymbolicInput(ReferenceFunctionInfo, Arg, NameSuffix, ArgToDefinitionMap)
       else:
         ConcreteVal = ReferenceFunctionInfo.getConcreteValFor(Arg)
         Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix, ArgToDefinitionMap)
@@ -104,7 +111,7 @@ class RoseTransformationVerifier():
         if Arg in self.CheckArgToRefArg:
           CheckArgToDefinitionMap[Arg] = RefArgToDefinitionMap[self.CheckArgToRefArg[Arg]]
         else:
-          Code += self.genSymbolicInput(Arg, NameSuffix, CheckArgToDefinitionMap)
+          Code += self.genSymbolicInput(CheckFunctionInfo, Arg, NameSuffix, CheckArgToDefinitionMap)
       else:
         ConcreteVal = CheckFunctionInfo.getConcreteValFor(Arg)
         Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix, CheckArgToDefinitionMap)
