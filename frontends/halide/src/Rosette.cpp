@@ -22,6 +22,8 @@
 
 #include <chrono>
 
+#define TRACE debug(0) << __FILE__ << ":" << __LINE__ << "\n"
+
 using namespace std;
 
 namespace Halide {
@@ -42,6 +44,11 @@ std::string target_str = "";
 namespace Internal {
 
 namespace {
+enum HydrideSupportedArchitecture {
+    HVX,
+    ARM,
+    X86
+};
 
 typedef std::map<std::string, VarEncoding> Encoding;
 
@@ -69,6 +76,24 @@ class ReplaceDiv : public IRMutator {
             auto lowered_div = lower_int_uint_div(op->a, op->b);
             debug(0) << "Halide Lowered Div to: " << lowered_div << "\n";
             return mutate(lowered_div);
+        }
+
+        return IRMutator::visit(op);
+    }
+
+    Expr visit(const Call *op) override {
+
+        if (arch == HydrideSupportedArchitecture::ARM && op->is_intrinsic(Call::shift_right)) {
+            debug(0) << "Found shr\n";
+            // if (!op->type.is_float() && op->type.is_vector()) {
+            //     debug(0) << "Lowering armshr to armshl\n";
+            //     return (op->args[0] << simplify(-op->args[1]));
+            // }
+            // Current legalizer doesn't support immediate argument
+            if (!op->type.is_float() && op->type.is_vector() && !is_const(op->args[1])) {
+                debug(0) << "Lowering armshr to armshl\n";
+                return op->args[0] << simplify(-op->args[1]);
+            }
         }
 
         return IRMutator::visit(op);
@@ -162,8 +187,12 @@ class ReplaceDiv : public IRMutator {
     }
 
 public:
-    ReplaceDiv() {
+    ReplaceDiv(HydrideSupportedArchitecture _arch)
+        : arch(_arch) {
     }
+
+private:
+    HydrideSupportedArchitecture arch;
 };
 
 // Takes the input Halide IR and converts it to Rosette syntax
@@ -1594,13 +1623,7 @@ class IROptimizer : public IRMutator {
 public:
     using IRMutator::mutate;
 
-    enum Architecture {
-        HVX,
-        ARM,
-        X86
-    };
-
-    IROptimizer(FuncValueBounds fvb, Architecture _arch, std::set<const BaseExprNode *> &ms, int oid, std::string name)
+    IROptimizer(FuncValueBounds fvb, HydrideSupportedArchitecture _arch, std::set<const BaseExprNode *> &ms, int oid, std::string name)
         : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms), optimizer_id(oid), benchmark_name(name) {
     }
 
@@ -1629,18 +1652,19 @@ public:
     }
 
     Expr mutate(const Expr &expr) override {
-        if (arch == IROptimizer::ARM) {
-            return expr;
-        }
 
         switch (arch) {
-        case IROptimizer::X86:
+        case HydrideSupportedArchitecture::X86:
             // std::cout << "Using X86 Optimizer" <<"\n";
             target_str = "x86";
             break;
-        case IROptimizer::HVX:
+        case HydrideSupportedArchitecture::HVX:
             // std::cout << "Using Hexagon Optimizer" <<"\n";
             target_str = "hvx";
+            break;
+        case HydrideSupportedArchitecture::ARM:
+            // std::cout << "Using ARM Optimizer" <<"\n";
+            target_str = "arm";
             break;
         default:
             break;
@@ -1665,7 +1689,7 @@ public:
         if (expr.type().element_of().is_bool())
             return IRMutator::mutate(expr);
 
-        if (arch == IROptimizer::HVX) {
+        if (arch == HydrideSupportedArchitecture::HVX) {
             // If the expression produces a vector that is not a multiple of the base vector length, ignore it
             if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1)) {
                 debug(0) << "Invalid vector size for hexagon: " << expr.type().bits() * expr.type().lanes() << "\n";
@@ -1676,7 +1700,7 @@ public:
                 debug(0) << "Invalid vector size for HVX: " << expr.type().bits() * expr.type().lanes() << "\n";
                 return IRMutator::mutate(expr);
             }
-        } else if (arch == IROptimizer::X86) {
+        } else if (arch == HydrideSupportedArchitecture::X86) {
             // std::cout << "Using X86 Optimizer" << "\n";
             if ((expr.type().bits() * expr.type().lanes() % 128 != 0) && (expr.type().bits() > 1)) {
                 debug(1) << "Invalid vector size for X86: " << expr.type().bits() * expr.type().lanes() << "\n";
@@ -1685,6 +1709,17 @@ public:
 
             if ((expr.type().bits() * expr.type().lanes() > 512)) {
                 debug(1) << "Invalid vector size for X86: " << expr.type().bits() * expr.type().lanes() << "\n";
+                return IRMutator::mutate(expr);
+            }
+        } else if (arch == HydrideSupportedArchitecture::ARM) {
+            // std::cout << "Using ARM Optimizer" << "\n";
+            if ((expr.type().bits() * expr.type().lanes() % 64 != 0) && (expr.type().bits() > 1)) {
+                debug(1) << "Invalid vector size for ARM: " << expr.type().bits() * expr.type().lanes() << "\n";
+                return IRMutator::mutate(expr);
+            }
+
+            if ((expr.type().bits() * expr.type().lanes() > 128)) {
+                debug(1) << "Invalid vector size for ARM: " << expr.type().bits() * expr.type().lanes() << "\n";
                 return IRMutator::mutate(expr);
             }
         }
@@ -1752,7 +1787,8 @@ public:
             debug(0) << "Encountered shuffle: " << base_e << "\n";
             const Shuffle *shuff = base_e.as<Shuffle>();
 
-            if (arch != IROptimizer::HVX) {
+            if (arch != HydrideSupportedArchitecture::HVX &&
+                arch != HydrideSupportedArchitecture::ARM) {
                 return IRMutator::mutate(expr);
             } else {
                 if (shuff->is_concat()) {
@@ -1775,7 +1811,7 @@ public:
         std::cout << "Expression after lower intrinsic: " << spec_expr << "\n";
 
         // Simplify constants
-        if (arch != IROptimizer::HVX) {
+        if (arch != HydrideSupportedArchitecture::HVX) {
             spec_expr = simplify(spec_expr);
         }
 
@@ -1795,12 +1831,13 @@ public:
             return IRMutator::mutate(spec_expr);
         }
 
-        if (arch == IROptimizer::HVX) {
+        // Both HVX and ARM have no vector division intrinsics
+        if (arch == HydrideSupportedArchitecture::HVX || arch == HydrideSupportedArchitecture::ARM) {
 
             Expr previous_expr = spec_expr;
 
             while (true) {
-                spec_expr = ReplaceDiv().mutate(spec_expr);
+                spec_expr = ReplaceDiv(arch).mutate(spec_expr);
                 // Lowering of division may introduce new intrinsics
                 spec_expr = LowerIntrinsics(arch).mutate(spec_expr);
 
@@ -1809,7 +1846,7 @@ public:
                 previous_expr = spec_expr;
             }
 
-            spec_expr = ReplaceDiv().mutate(spec_expr);
+            spec_expr = ReplaceDiv(arch).mutate(spec_expr);
             // Lowering of division may introduce new intrinsics
             spec_expr = LowerIntrinsics(arch).mutate(spec_expr);
         }
@@ -1891,7 +1928,7 @@ public:
     }
 
 private:
-    Architecture arch;
+    HydrideSupportedArchitecture arch;
     FuncValueBounds func_value_bounds;
     std::set<const BaseExprNode *> &mutated_exprs;
     int optimizer_id;
@@ -1910,9 +1947,9 @@ private:
         using IRMutator::visit;
 
     public:
-        Architecture _arch;
+        HydrideSupportedArchitecture _arch;
 
-        LowerIntrinsics(Architecture _a)
+        LowerIntrinsics(HydrideSupportedArchitecture _a)
             : _arch(_a) {
         }
 
@@ -2005,16 +2042,21 @@ private:
 
                 size_t element_bits = op->args[0].type().bits();
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     if (element_bits < 64) {
                         // lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
                         //     op->args[0].type().min(), op->args[0].type().max()));
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
 
                     if (element_bits >= 32) {
+                        lowered = lower_saturating_add(op->args[0], op->args[1]);
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+
+                    if (element_bits > 64) {
                         lowered = lower_saturating_add(op->args[0], op->args[1]);
                     }
                 }
@@ -2024,12 +2066,12 @@ private:
 
             else if (op->is_intrinsic(Call::saturating_sub)) {
 
-                if (_arch == Architecture::HVX) {
+                size_t element_bits = op->args[0].type().bits();
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     // lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
                     //        op->args[0].type().min(), op->args[0].type().max()));
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
 
-                    size_t element_bits = op->args[0].type().bits();
                     if (element_bits >= 32 && element_bits < 64) {
                         lowered = lower_saturating_sub(op->args[0], op->args[1]);
                         lower_using_halide = false;
@@ -2037,6 +2079,11 @@ private:
                         lower_using_halide = true;
                     }
                     // Map Saturating sub to saturating sub in Rosette.
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+
+                    if (element_bits > 64) {
+                        lowered = lower_saturating_add(op->args[0], op->args[1]);
+                    }
                 }
 
             } else if (op->is_intrinsic(Call::halving_add)) {
@@ -2052,14 +2099,20 @@ private:
 
                 size_t element_bits = op->args[0].type().bits();
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     if (element_bits < 32) {
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     if (element_bits < 64) {
+                        lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    if (element_bits <= 64) {  // All following condition might be discussed
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2078,16 +2131,23 @@ private:
                 }
 
                 size_t element_bits = op->args[0].type().bits();
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
 
                     if (element_bits < 32) {
                         lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
 
                     if (element_bits < 64) {
+                        lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+
+                    if (element_bits <= 64) {
                         lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
@@ -2105,9 +2165,9 @@ private:
                     One = make_const(Int(op->args[1].type().bits()), 1);
                 }
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + One) / Two);
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
 
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
@@ -2115,6 +2175,8 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + One) / Two);
                 }
 
             } else if (op->is_intrinsic(Call::sorted_avg)) {
@@ -2127,28 +2189,32 @@ private:
                     Two = make_const(Int(op->args[1].type().bits() * 2), 2);
                 }
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     if (element_bits < 32) {
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     if (element_bits < 64) {
                         lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / Two);
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    lower_using_halide = true;
                 }
 
             } else if (op->is_intrinsic(Call::absd)) {
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     lower_using_halide = false;
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     if (SIMPLIFY_ABSD) {
                         lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                     }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    lower_using_halide = false;  // vabd does this
                 }
             } else if (op->is_intrinsic(Call::rounding_shift_right)) {
                 Expr Zero, One, Two;
@@ -2165,14 +2231,17 @@ private:
                 } else {
                     One = make_const(Int(op->args[0].type().bits()), 1);
                 }
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     // lowered = saturating_add(op->args[0], (One << max(Zero,op->args[1]))/ Two) >> op->args[1];
                     lower_using_halide = true;
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     lowered = saturating_add(op->args[0], (One << max(Zero, op->args[1])) / Two) >> op->args[1];
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    // Don't want this be lowered for arm
+                    lowered = saturating_add(op->args[0], (One << (op->args[1] - 1))) >> op->args[1];
                 }
             } else if (op->is_intrinsic(Call::widening_mul)) {
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 32 && SIMPLIFY_WIDEN_MUL) {
                         lowered = (widen(op->args[0]) * widen(op->args[1]));
@@ -2184,7 +2253,13 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits < 64) {
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
                     } else {
@@ -2192,7 +2267,7 @@ private:
                     }
                 }
             } else if (op->is_intrinsic(Call::widening_add)) {
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     // lower_using_halide = true;
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 32) {
@@ -2200,16 +2275,23 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
                         lowered = (widen(op->args[0]) + widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits <= 64) {
+                        lowered = (widen(op->args[0]) + widen(op->args[1]));
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
             } else if (op->is_intrinsic(Call::widening_sub)) {
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     // lower_using_halide = true;
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 32) {
@@ -2217,10 +2299,18 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
 
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
+                        lowered = (widen(op->args[0]) - widen(op->args[1]));
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits <= 64) {
                         lowered = (widen(op->args[0]) - widen(op->args[1]));
                     } else {
                         lower_using_halide = true;
@@ -2228,7 +2318,7 @@ private:
                 }
 
             } else if (op->is_intrinsic(Call::widening_shift_left)) {
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     // lower_using_halide = true;
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 32) {
@@ -2236,9 +2326,16 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
+                        lowered = widen(op->args[0]) << op->args[1];
+                    } else {
+                        lower_using_halide = true;
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits <= 64) {
                         lowered = widen(op->args[0]) << op->args[1];
                     } else {
                         lower_using_halide = true;
@@ -2246,7 +2343,7 @@ private:
                 }
             } else if (op->is_intrinsic(Call::widening_shift_right)) {
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     // lower_using_halide = true;
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 32) {
@@ -2254,7 +2351,7 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
 
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
@@ -2262,10 +2359,18 @@ private:
                     } else {
                         lower_using_halide = true;
                     }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits <= 64) {
+                        lowered = widen(op->args[0]) >> op->args[1];
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
 
             } else if (op->is_intrinsic(Call::rounding_mul_shift_right)) {
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     int value = -1;
 
                     if (as_const_uint(op->args[2])) {
@@ -2283,12 +2388,29 @@ private:
                                  << "\n";
                         lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 64) {
                         lowered = saturating_narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     } else {
                         lower_using_halide = true;
+                    }
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    int value = -1;
+                    if (as_const_uint(op->args[2])) {
+                        value = *as_const_uint(op->args[2]);
+                    }
+
+                    if (as_const_int(op->args[2])) {
+                        value = *as_const_int(op->args[2]);
+                    }
+
+                    if (value == 31 || value == 15) {
+                        debug(0) << "Found constant rounding_mul_shift_right with special value 15/31: " << op->args[2] << "\n";
+                    } else {
+                        // debug(0) << "Lowering rounding_mul_shift_right using halide"
+                        //          << "\n";
+                        lowered = saturating_narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
                     }
                 }
 
@@ -2296,14 +2418,14 @@ private:
 
             else if (op->is_intrinsic(Call::mul_shift_right)) {
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     size_t element_bits = op->args[0].type().bits();
                     if (element_bits < 32) {
                         lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
                     } else {
                         // lower_using_halide = true;
                     }
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     /*
                     size_t element_bits = op->args[0].type().bits();
                     if(element_bits < 64){
@@ -2312,6 +2434,13 @@ private:
                         lower_using_halide = true;
                     }
                     */
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    size_t element_bits = op->args[0].type().bits();
+                    if (element_bits <= 64) {
+                        lowered = saturating_narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
+                    } else {
+                        lower_using_halide = true;
+                    }
                 }
             }
 
@@ -2322,10 +2451,18 @@ private:
                 debug(0) << "Falling back onto halide to lower...\n"
                          << "for " << op->name << "\n";
 
-                if (_arch == Architecture::HVX) {
+                if (_arch == HydrideSupportedArchitecture::HVX) {
                     return mutate(lower_intrinsic(op));
-                } else if (_arch == Architecture::X86) {
+                } else if (_arch == HydrideSupportedArchitecture::X86) {
                     return mutate(lower_intrinsic(op));
+                } else if (_arch == HydrideSupportedArchitecture::ARM) {
+                    auto tempExpr = mutate(lower_intrinsic(op));
+                    debug(0) << "Halide lowered " << op->name << "(";
+                    for (auto arg : op->args) {
+                        debug(0) << arg << ", ";
+                    }
+                    debug(0) << ") to " << tempExpr << "\n";
+                    return tempExpr;
                 }
             }
             return IRMutator::visit(op);
@@ -2362,7 +2499,7 @@ private:
         using IRMutator::visit;
 
         std::map<std::string, Expr> &abstractions;
-        Architecture _arch;
+        HydrideSupportedArchitecture _arch;
 
         std::vector<Call::IntrinsicOp> supported_calls = {
             Call::saturating_add,
@@ -2418,24 +2555,24 @@ private:
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
-            } else if (op->is_intrinsic(Call::shift_left) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            } else if (op->is_intrinsic(Call::shift_left) && (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
 
             }
 
-            else if (op->is_intrinsic(Call::shift_right) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            else if (op->is_intrinsic(Call::shift_right) && (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
 
-            } else if (op->is_intrinsic(Call::saturating_add) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            } else if (op->is_intrinsic(Call::saturating_add) && (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
 
-            } else if (op->is_intrinsic(Call::saturating_sub) && (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            } else if (op->is_intrinsic(Call::saturating_sub) && (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2458,7 +2595,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2469,7 +2606,7 @@ private:
 
         Expr visit(const Mod *op) override {
 
-            if ((_arch == Architecture::HVX)) {
+            if ((_arch == HydrideSupportedArchitecture::HVX)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2482,7 +2619,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2495,7 +2632,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2508,7 +2645,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2521,7 +2658,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2534,7 +2671,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 // std::string uname = unique_name('h');
                 // abstractions[uname] = IRMutator::visit(op);
                 // return Variable::make(op->type, uname);
@@ -2547,7 +2684,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2560,7 +2697,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2573,7 +2710,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2586,7 +2723,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2599,7 +2736,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2612,7 +2749,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2625,7 +2762,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2638,7 +2775,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 32)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 32)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2651,7 +2788,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2664,7 +2801,7 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == Architecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2674,7 +2811,9 @@ private:
         }
 
         Expr visit(const Shuffle *op) override {
-            bool disable_shuffles = (_arch != Architecture::HVX);
+            cout << "Shuffle: " << op->type << "\n";
+            bool disable_shuffles = (_arch != HydrideSupportedArchitecture::HVX) &&
+                                    (_arch != HydrideSupportedArchitecture::ARM);
 
             if (op->is_concat() && disable_shuffles) {
                 debug(0) << "Abstracting concat vector!\n";
@@ -2719,17 +2858,18 @@ private:
             std::vector<int> supported_input_sizes;
 
             switch (_arch) {
-            case Architecture::ARM:
+            case HydrideSupportedArchitecture::ARM:
+                supported_input_sizes.push_back(128);
                 supported_input_sizes.push_back(64);
                 break;
-            case Architecture::HVX:
+            case HydrideSupportedArchitecture::HVX:
                 supported_input_sizes.push_back(2048);
                 supported_input_sizes.push_back(1024);
                 supported_input_sizes.push_back(128);
                 supported_input_sizes.push_back(32);
                 supported_input_sizes.push_back(8);
                 break;
-            case Architecture::X86:
+            case HydrideSupportedArchitecture::X86:
                 debug(1) << "Abstraction vector sizes for X86 "
                          << "\n";
                 // Push in vector register sizes in descending order
@@ -2760,7 +2900,7 @@ private:
                 return Broadcast::make(Variable::make(inner_broadcast->type, uname), op->lanes);
             }
 
-            if ((!supported && !is_const(op->value)) || (_arch == Architecture::HVX && op->type.bits() >= 64)
+            if ((!supported && !is_const(op->value)) || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)
                 //|| (_arch == Architecture::HVX && op->type.bits() == 16 && op->type.bits() == 2)
 
             ) {
@@ -2773,17 +2913,19 @@ private:
         }
 
         bool is_length_supported_on_target(size_t length) {
+            debug(0) << "Checking if length is supported on target: " << length << "\n";
 
             std::vector<size_t> vec_lens;
             switch (_arch) {
-            case Architecture::ARM:
+            case HydrideSupportedArchitecture::ARM:
+                vec_lens.push_back(128);
                 vec_lens.push_back(64);
                 break;
-            case Architecture::HVX:
+            case HydrideSupportedArchitecture::HVX:
                 vec_lens.push_back(2048);
                 vec_lens.push_back(1024);
                 break;
-            case Architecture::X86:
+            case HydrideSupportedArchitecture::X86:
                 debug(1) << "Abstraction vector sizes for X86 "
                          << "\n";
                 // Push in vector register sizes in descending order
@@ -2810,14 +2952,15 @@ private:
             std::vector<int> vec_lens;
 
             switch (_arch) {
-            case Architecture::ARM:
+            case HydrideSupportedArchitecture::ARM:
+                vec_lens.push_back(128);
                 vec_lens.push_back(64);
                 break;
-            case Architecture::HVX:
+            case HydrideSupportedArchitecture::HVX:
                 vec_lens.push_back(2048);
                 vec_lens.push_back(1024);
                 break;
-            case Architecture::X86:
+            case HydrideSupportedArchitecture::X86:
                 debug(1) << "Abstraction vector sizes for X86 "
                          << "\n";
                 // Push in vector register sizes in descending order
@@ -2840,7 +2983,7 @@ private:
                 }
             }
 
-            if (_arch == Architecture::HVX && (op->type.bits() >= 64 || v.type().bits() >= 64)) {
+            if (_arch == HydrideSupportedArchitecture::HVX && (op->type.bits() >= 64 || v.type().bits() >= 64)) {
                 supported = false;
             }
 
@@ -2854,7 +2997,7 @@ private:
         }
 
     public:
-        AbstractUnsupportedNodes(Architecture a, std::map<std::string, Expr> &abstrs)
+        AbstractUnsupportedNodes(HydrideSupportedArchitecture a, std::map<std::string, Expr> &abstrs)
             : abstractions(abstrs), _arch(a) {
         }
     };
@@ -3454,7 +3597,7 @@ Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
     const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
     std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
-    auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs, random_seed, name).mutate(distributed);
+    auto Result = Hydride::IROptimizer(fvb, HydrideSupportedArchitecture::HVX, mutated_exprs, random_seed, name).mutate(distributed);
 
     if (mutated_exprs.size()) {
         hydride_generate_llvm_bitcode(Target::Hexagon, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
@@ -3490,10 +3633,66 @@ Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
 
     const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
     std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
-    auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs, random_seed, name).mutate(distributed);
+    auto Result = Hydride::IROptimizer(fvb, HydrideSupportedArchitecture::X86, mutated_exprs, random_seed, name).mutate(distributed);
 
     if (mutated_exprs.size()) {
         hydride_generate_llvm_bitcode(Target::X86, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
+    } else {
+        debug(0) << "[Warning]: No hydride expressions synthesized (Make sure the input program is vectorized)\n";
+    }
+
+    return Result;
+}
+
+Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
+
+    debug(0) << "Hydride Optimize ARM"
+             << "\n";
+
+    Stmt distributed;
+
+    const char *disable_preprocess = getenv("HL_DISABLE_PREPROCESS");
+    if (disable_preprocess) {
+        debug(0) << "Disabling pre-processing pass\n";
+        distributed = s;
+    } else {
+
+        std::set<const IRNode *> DeadStmts;
+        auto FLS = Hydride::FoldLoadStores(DeadStmts);
+        auto folded = FLS.mutate(s);
+        debug(0) << "Printing Folded Stmt:\n";
+        debug(0) << folded << "\n";
+
+        debug(0) << "DEAD STMT SIZE: " << DeadStmts.size() << "\n";
+
+        auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+        debug(0) << "Printing Pruned Stmt:\n";
+        debug(0) << pruned << "\n";
+
+        std::vector<unsigned> arm_vector_sizes = {128, 64};
+
+        bool model_sat_support = true;
+
+        // const char *enable_hydride = getenv("HL_BENCH_MATMUL");
+        // if (enable_hydride) {
+        //     debug(0) << "Setting model saturating support true"
+        //              << "\n";
+        //     model_sat_support = true;
+        // }
+        distributed = distribute_vector_exprs(pruned, arm_vector_sizes, model_sat_support);
+        debug(0) << "Distributed Stmt:\n";
+        debug(0) << distributed << "\n";
+    }
+
+    srand(time(0));
+    int random_seed = rand() % 1024;
+
+    const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
+    std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
+    auto Result = Hydride::IROptimizer(std::move(fvb), HydrideSupportedArchitecture::ARM, mutated_exprs, random_seed, name).mutate(distributed);
+
+    if (!mutated_exprs.empty()) {
+        hydride_generate_llvm_bitcode(Target::ARM, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
     } else {
         debug(0) << "[Warning]: No hydride expressions synthesized (Make sure the input program is vectorized)\n";
     }
@@ -3518,6 +3717,23 @@ Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueB
     debug(0) << "Input Statement to Compile through HVX:\n"
              << s << "\n";
     s = hydride_optimize_hvx(fvb, s, mutated_exprs);
+
+    debug(0) << "Module with hydride calls:"
+             << "\n";
+    debug(0) << s << "\n";
+
+    // s = ReplaceDiv().mutate(s);
+    // debug(0) << "Module with hydride calls (final replace div):" <<s << "\n";
+
+    return common_subexpression_elimination(s);
+}
+
+Stmt optimize_arm_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
+
+    std::set<const BaseExprNode *> mutated_exprs;
+    debug(0) << "Input Statement to Compile through HVX:\n"
+             << s << "\n";
+    s = hydride_optimize_arm(fvb, s, mutated_exprs);
 
     debug(0) << "Module with hydride calls:"
              << "\n";
