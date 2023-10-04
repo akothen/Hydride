@@ -24,31 +24,42 @@ public:
         matrix_mul(x, y) += (cast<int32_t>(A(k, y)) * cast<int32_t>(B(x,k)));
         res(x, y) = matrix_mul(x, y);
 
-        RVar red_dim(matrix_mul.update(0).get_schedule().dims()[0].var);
+        RVar red_loop(matrix_mul.update(0).get_schedule().dims()[0].var);
 
         res
             .compute_root()
             .split(y, y, yi, 4, TailStrategy::ShiftInwards)
-            .split(x, x, xi, 16, TailStrategy::ShiftInwards)
-            .split(xi, xi, xii, 16, TailStrategy::ShiftInwards)
-            .vectorize(xii, 16)
+            .split(x, x, xi, 4, TailStrategy::ShiftInwards)
+            .split(xi, xi, xii, 4, TailStrategy::ShiftInwards)
+            .vectorize(xii, 4)
             .reorder({xii, xi, yi, x, y})
-            .unroll(xi)
-            .unroll(yi);
+            //.reorder({xii, yi, xi, x, y})
+            .unroll(xi);
             //.parallel(y);
         matrix_mul.update(0)
-            .split(x, x, xi, 16, TailStrategy::GuardWithIf)
-            .vectorize(xi, 16)
-            .reorder({xi, x, y, red_dim})
+            .split(x, x, xi, 4, TailStrategy::GuardWithIf)
+            .split(y, y, yi, 4, TailStrategy::GuardWithIf)
+            .reorder({xi, x, yi, y, red_loop})
+            //.reorder({xi, x, y, red_loop})
+            .vectorize(xi, 4)
+            .unroll(y)
+            .unroll(yi)
             .unroll(x)
-            .unroll(y);
+            .unroll(red_loop, 4)
+            ;
         matrix_mul
             .store_in(MemoryType::Stack)
             .compute_at(res, x)
-            .split(x, x, xi, 16, TailStrategy::RoundUp)
-            .vectorize(xi, 16)
-            .unroll(x)
+            //.compute_at(res, xi)
+            //.compute_at(res, yi)
+            .split(x, x, xi, 4, TailStrategy::RoundUp)
+            .reorder({xi, x, y})
+            .vectorize(xi, 4)
             .unroll(y);
+
+        res
+            .bound(x,0, matrix_size)
+            .bound(y, 0, matrix_size);
 
         res.print_loop_nest();
     }   

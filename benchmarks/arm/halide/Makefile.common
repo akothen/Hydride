@@ -16,6 +16,7 @@ benchmarks = gaussian3x3 \
 			 blur5x5 \
 			 blur7x7 \
 			 matmul \
+			 matmul8 \
 			 matmul_simple \
 			 add \
 			 mul \
