@@ -9,8 +9,9 @@ mt19937 mt(time(nullptr));
   void printVector(Type ret) {                                                 \
     cType data[sizeof(ret) / sizeof(cType)];                                   \
     Store(data, ret);                                                          \
-    for (int i = sizeof(ret) / sizeof(cType) - 1; i >= 0; i--)                 \
-      printf(spec, data[i]);                                                   \
+    unsigned char *ptr = (unsigned char *)data;                                \
+    for (int i = sizeof(ret) / sizeof(unsigned char) - 1; i >= 0; i--)         \
+      printf("%02x", ptr[i]);                                                  \
   }
 #define RegisterRandomVector(Type, Load, cType)                                \
   Type random_##Type() {                                                       \
@@ -44,6 +45,12 @@ RegisterPrintVector(int32x2_t, vst1_u32, uint32_t, "%08x");
 RegisterPrintVector(uint32x2_t, vst1_u32, uint32_t, "%08x");
 RegisterPrintVector(int64x1_t, vst1_u64, uint64_t, "%016llx");
 RegisterPrintVector(uint64x1_t, vst1_u64, uint64_t, "%016llx");
+RegisterPrintVector(int8x8x2_t, vst1_s8_x2, int8_t, "%02x");
+RegisterPrintVector(int16x4x2_t, vst1_s16_x2, int16_t, "%04x");
+RegisterPrintVector(int32x2x2_t, vst1_s32_x2, int32_t, "%08x");
+RegisterPrintVector(uint8x8x2_t, vst1_u8_x2, uint8_t, "%02x");
+RegisterPrintVector(uint16x4x2_t, vst1_u16_x2, uint16_t, "%04x");
+RegisterPrintVector(uint32x2x2_t, vst1_u32_x2, uint32_t, "%08x");
 RegisterPrintScalar(uint8_t, uint8_t, "%02x");
 RegisterPrintScalar(uint16_t, uint16_t, "%04x");
 RegisterPrintScalar(uint32_t, uint32_t, "%08x");

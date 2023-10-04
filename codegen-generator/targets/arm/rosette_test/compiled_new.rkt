@@ -26672,4 +26672,112 @@ concat
 )
 )
 result)
+(define (vzip_s16  a b )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 64 64))])
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %9 (+  p0.new  15))
+  (define %10 (extract  %9 p0.new a))
+  (define %23 (extract  %9 p0.new b))
+(concat %23 %10)
+ )
+ )
+)
+)
+)
+result)
+(define (vzip_s32  a b )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 64 64))])
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %9 (+  p0.new  31))
+  (define %10 (extract  %9 p0.new a))
+  (define %23 (extract  %9 p0.new b))
+(concat %23 %10)
+ )
+ )
+)
+)
+)
+result)
+(define (vzip_s8  a b )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 64 64))])
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %9 (+  p0.new  7))
+  (define %10 (extract  %9 p0.new a))
+  (define %23 (extract  %9 p0.new b))
+(concat %23 %10)
+ )
+ )
+)
+)
+)
+result)
+(define (vzip_u16  a b )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 64 64))])
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 16))])
+  (define %9 (+  p0.new  15))
+  (define %10 (extract  %9 p0.new a))
+  (define %23 (extract  %9 p0.new b))
+(concat %23 %10)
+ )
+ )
+)
+)
+)
+result)
+(define (vzip_u32  a b )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 64 64))])
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 32))])
+  (define %9 (+  p0.new  31))
+  (define %10 (extract  %9 p0.new a))
+  (define %23 (extract  %9 p0.new b))
+(concat %23 %10)
+ )
+ )
+)
+)
+)
+result)
+(define (vzip_u8  a b )
+(define result
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 64 64))])
+ (apply
+ concat
+ (for/list ([p0.new (reverse (range 0 64 8))])
+  (define %9 (+  p0.new  7))
+  (define %10 (extract  %9 p0.new a))
+  (define %23 (extract  %9 p0.new b))
+(concat %23 %10)
+ )
+ )
+)
+)
+)
+result)
 (provide (all-defined-out))

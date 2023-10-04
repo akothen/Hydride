@@ -4843,6 +4843,12 @@ TestVV(vzip2q_u16, uint16x8_t, uint16x8_t, uint16x8_t, vzip2q_u16)
 TestVV(vzip2q_u32, uint32x4_t, uint32x4_t, uint32x4_t, vzip2q_u32)
 TestVV(vzip2q_u64, uint64x2_t, uint64x2_t, uint64x2_t, vzip2q_u64)
 TestVV(vzip2q_u8, uint8x16_t, uint8x16_t, uint8x16_t, vzip2q_u8)
+TestVV(vzip_s16, int16x4_t, int16x4_t, int16x4x2_t, vzip_s16)
+TestVV(vzip_s32, int32x2_t, int32x2_t, int32x2x2_t, vzip_s32)
+TestVV(vzip_s8, int8x8_t, int8x8_t, int8x8x2_t, vzip_s8)
+TestVV(vzip_u16, uint16x4_t, uint16x4_t, uint16x4x2_t, vzip_u16)
+TestVV(vzip_u32, uint32x2_t, uint32x2_t, uint32x2x2_t, vzip_u32)
+TestVV(vzip_u8, uint8x8_t, uint8x8_t, uint8x8x2_t, vzip_u8)
     printf("(displayln \"All tests passed\")\n");
     return 0;
 }

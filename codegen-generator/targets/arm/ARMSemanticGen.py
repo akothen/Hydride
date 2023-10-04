@@ -243,7 +243,7 @@ def parse_instr_attr(instr: InstrDesc, assign):
     # - Parse results: [{"Vd.8B": "result"}]
     # print(instr.results)
     preparation = {}
-    assert len(instr.results) == 1
+    assert len(instr.results) == 1, breakpoint()
     assert len(instr.results[0]) == 1
     if "void" not in instr.results[0]:
         reg = parse_reg(list(instr.results[0].keys())[0])

@@ -67,7 +67,7 @@ def Compile(InstName: str = None):
         # interested = ['vtrn1_s8']
         # interested = ['vdot_s32']
         # interested = ["vqmovn_u16"]
-        # interested = ["vc"]
+        # interested = ["vzip_"]
         # interested = ["vqshrun_high_n_s16","vqshrun_high_n_s32"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:
