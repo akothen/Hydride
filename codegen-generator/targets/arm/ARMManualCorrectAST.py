@@ -40,7 +40,7 @@ qrdmulh_common= """        {
                 element1 = SInt(Elem[operand1,e,esize]);
                 element2 = SInt(Elem[operand2,e,esize]);
                 product = (((element1) * element2) + round_const);
-                Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize-1))[0~(esize-1)];
+                Elem[result,e,esize] = SignedSatQ((product >> (esize-1)), esize);
             }
             V[d] = result;
         }"""
@@ -58,7 +58,7 @@ qrdmuh_n_common="""        {
             {
                 element1 = SInt(Elem[operand1,e,esize]);
                 product = (((element1) * element2) + round_const);
-                Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize-1))[0~(esize-1)];
+                Elem[result,e,esize] = SignedSatQ((product >> (esize-1)), esize);
             }
             V[d] = result;
         }"""

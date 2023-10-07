@@ -176,24 +176,6 @@
 )
 
 	]
-	[(vqdmulhq_n_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 0) (equal? num_11 1)); vqdmulhq_n_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhq_n_s32_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 0) (equal? num_11 1)); vqdmulh_n_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhq_n_s32_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqdmulhq_n_s32")]
-)
-
-	]
 	[(vrshrn_n_s64_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 num_14 prec_i num_16)
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 128) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0) (equal? prec_i 64) (equal? num_16 2)); vrshrn_n_s64
@@ -2089,24 +2071,6 @@
 )
 
 	]
-	[(vqrdmulhq_n_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 128) (equal? num_11 0) (equal? num_12 1) (equal? num_13 64) (equal? num_14 -1) (equal? num_15 1)); vqrdmulhq_n_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_n_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 128) (equal? num_11 0) (equal? num_12 1) (equal? num_13 64) (equal? num_14 -1) (equal? num_15 1)); vqrdmulh_n_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_n_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqrdmulhq_n_s32")]
-)
-
-	]
 	[(vshll_n_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11)
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1) (equal? num_11 64)); vshll_n_s8
@@ -2892,30 +2856,6 @@
 )
 
 	]
-	[(vqrdmulh_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 64) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 128) (equal? num_15 1)); vqrdmulh_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulh_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 64) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 128) (equal? num_15 1)); vqrdmulhs_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulh_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 64) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 128) (equal? num_15 1)); vqrdmulhq_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulh_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqrdmulh_s32")]
-)
-
-	]
 	[(vqrshrun_n_s64_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 num_14 prec_i num_16)
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 128) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? prec_i 64) (equal? num_16 2)); vqrshrun_n_s64
@@ -3047,48 +2987,6 @@
  
  (values (vaddw_high_u32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14 ) num-consumed-1)]
 		[else (error "Unable to extract  for vaddw_high_u32")]
-)
-
-	]
-	[(vqrdmulhq_n_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 64) (equal? num_11 0) (equal? num_12 1) (equal? num_13 32) (equal? num_14 -1) (equal? num_15 1)); vqrdmulhq_n_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_n_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 64) (equal? num_11 0) (equal? num_12 1) (equal? num_13 32) (equal? num_14 -1) (equal? num_15 1)); vqrdmulh_n_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_n_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqrdmulhq_n_s16")]
-)
-
-	]
-	[(vqrdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 64) (equal? num_15 1)); vqrdmulhq_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 64) (equal? num_15 1)); vqrdmulh_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 64) (equal? num_15 1)); vqrdmulhh_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
- 
- (values (vqrdmulhq_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqrdmulhq_s16")]
 )
 
 	]
@@ -3377,48 +3275,6 @@
  
  (values (vmull_high_n_s32_dsl expr-0 expr-1 size_o num_3 num_4 num_5 prec_o num_7 num_8 num_9 num_10 num_11 num_12 ) num-consumed-1)]
 		[else (error "Unable to extract  for vmull_high_n_s32")]
-)
-
-	]
-	[(vqdmulhh_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
-		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1)); vqdmulhh_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1)); vqdmulh_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1)); vqdmulhs_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1)); vqdmulhq_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1)); vqdmulhq_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1)); vqdmulh_s32
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulhh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqdmulhh_s16")]
 )
 
 	]
@@ -4352,24 +4208,6 @@
  
  (values (vmlsl_u32_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i prec_o num_9 num_10 num_11 num_12 num_13 num_14 ) num-consumed-2)]
 		[else (error "Unable to extract  for vmlsl_u32")]
-)
-
-	]
-	[(vqdmulh_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
-		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 32) (equal? num_10 0) (equal? num_11 1)); vqdmulh_n_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulh_n_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 32) (equal? num_10 0) (equal? num_11 1)); vqdmulhq_n_s16
- 
- (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
- 
- (values (vqdmulh_n_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
-		[else (error "Unable to extract  for vqdmulh_n_s16")]
 )
 
 	]
@@ -7871,6 +7709,210 @@
  
  (values (vmlsl_n_u16_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i num_8 num_9 prec_o num_11 num_12 num_13 num_14 ) num-consumed-2)]
 		[else (error "Unable to extract  for vmlsl_n_u16")]
+)
+
+	]
+	[(vzip_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 1) (equal? num_9 8) (equal? num_10 2)); vzip_u16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (vzip_u16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 8) (equal? num_8 1) (equal? num_9 4) (equal? num_10 2)); vzip_u8
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (vzip_u16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 1) (equal? num_9 8) (equal? num_10 2)); vzip_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (vzip_u16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 16) (equal? num_10 2)); vzip_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (vzip_u16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 16) (equal? num_10 2)); vzip_u32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (vzip_u16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 8) (equal? num_8 1) (equal? num_9 4) (equal? num_10 2)); vzip_s8
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (vzip_u16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[else (error "Unable to extract  for vzip_u16")]
+)
+
+	]
+	[(vqrdmulhq_n_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 128) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulhq_n_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_n_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 128) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulh_n_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_n_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqrdmulhq_n_s32")]
+)
+
+	]
+	[(vqdmulh_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 1)); vqdmulh_n_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_n_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 1)); vqdmulhq_n_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_n_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqdmulh_n_s16")]
+)
+
+	]
+	[(vqrdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1)); vqrdmulhq_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1)); vqrdmulhh_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1)); vqrdmulh_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqrdmulhq_s16")]
+)
+
+	]
+	[(vqrdmulhq_n_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulhq_n_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_n_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1)); vqrdmulh_n_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulhq_n_s16_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqrdmulhq_n_s16")]
+)
+
+	]
+	[(vqdmulhq_n_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+		(cond 
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 1)); vqdmulhq_n_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulhq_n_s32_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 1)); vqdmulh_n_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulhq_n_s32_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqdmulhq_n_s32")]
+)
+
+	]
+	[(vqrdmulh_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 128) (equal? num_13 1)); vqrdmulh_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulh_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 128) (equal? num_13 1)); vqrdmulhs_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulh_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 128) (equal? num_13 1)); vqrdmulhq_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v2 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v3 num-consumed-0 (- depth 1)))
+ 
+ (values (vqrdmulh_s32_dsl vc_0 vc_1 expr-0 expr-1 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqrdmulh_s32")]
+)
+
+	]
+	[(vqdmulh_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+		(cond 
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1)); vqdmulh_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1)); vqdmulh_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1)); vqdmulhh_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1)); vqdmulhq_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1)); vqdmulhs_s32
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1)); vqdmulhq_s16
+ 
+ (define-values (expr-0 num-consumed-0) (arm:extract-expr v1 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (arm:extract-expr v2 num-consumed-0 (- depth 1)))
+ 
+ (values (vqdmulh_s16_dsl vc_0 expr-0 expr-1 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 ) num-consumed-1)]
+		[else (error "Unable to extract  for vqdmulh_s16")]
 )
 
 	]

@@ -398,33 +398,6 @@
 		(define relavent-indices (filter filter-fn (range 0 12)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog vqdmulhq_n_s32_dsl)
-		(define input-precs-dsl (list  32 32  ))
-		(define input-size-dsl (list   (list 128 32 ) (list 64 32 ) ) )
-		(define variants (list (vqdmulhq_n_s32_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 1 64 0 1 ) 
-(vqdmulhq_n_s32_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 1 64 0 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 2)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
 	[(equal? prog vrshrn_n_s64_dsl)
 		(define input-precs-dsl (list  64 64  ))
 		(define input-size-dsl (list   (list 128 64 ) (list 128 64 ) ) )
@@ -1758,33 +1731,6 @@
 		(define relavent-indices (filter filter-fn (range 0 6)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog vqrdmulhq_n_s32_dsl)
-		(define input-precs-dsl (list  32 32  ))
-		(define input-size-dsl (list   (list 128 32 ) (list 64 32 ) ) )
-		(define variants (list (vqrdmulhq_n_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 1 128 0 1 64 -1 1 ) 
-(vqrdmulhq_n_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 1 128 0 1 64 -1 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 2)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
 	[(equal? prog vshll_n_s8_dsl)
 		(define input-precs-dsl (list  8 16 32 16 32 8  ))
 		(define input-size-dsl (list   (list 64 64 ) (list 64 64 ) (list 64 64 ) (list 64 64 ) (list 64 64 ) (list 64 64 ) ) )
@@ -2373,34 +2319,6 @@
 		(define relavent-indices (filter filter-fn (range 0 4)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog vqrdmulh_s32_dsl)
-		(define input-precs-dsl (list  32 32 32  ))
-		(define input-size-dsl (list   (list 64 64 ) (list 32 32 ) (list 128 128 ) ) )
-		(define variants (list (vqrdmulh_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 0 1 64 -1 1 128 1 ) 
-(vqrdmulh_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 32 32 0 32 32 0 1 64 -1 1 128 1 ) 
-(vqrdmulh_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 0 1 64 -1 1 128 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 3)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
 	[(equal? prog vqrshrun_n_s64_dsl)
 		(define input-precs-dsl (list  64 64 64 64  ))
 		(define input-size-dsl (list   (list 128 64 ) (list 64 64 ) (list 128 64 ) (list 64 64 ) ) )
@@ -2517,61 +2435,6 @@
               )
         
 		(define relavent-indices (filter filter-fn (range 0 6)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog vqrdmulhq_n_s16_dsl)
-		(define input-precs-dsl (list  16 16  ))
-		(define input-size-dsl (list   (list 128 16 ) (list 64 16 ) ) )
-		(define variants (list (vqrdmulhq_n_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 1 64 0 1 32 -1 1 ) 
-(vqrdmulhq_n_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 1 64 0 1 32 -1 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 2)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog vqrdmulhq_s16_dsl)
-		(define input-precs-dsl (list  16 16 16  ))
-		(define input-size-dsl (list   (list 128 128 ) (list 64 64 ) (list 16 16 ) ) )
-		(define variants (list (vqrdmulhq_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 0 1 32 -1 1 64 1 ) 
-(vqrdmulhq_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 0 1 32 -1 1 64 1 ) 
-(vqrdmulhq_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 16 16 0 16 16 0 1 32 -1 1 64 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 3)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog vrshld_s64_dsl)
@@ -2789,37 +2652,6 @@
               )
         
 		(define relavent-indices (filter filter-fn (range 0 2)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog vqdmulhh_s16_dsl)
-		(define input-precs-dsl (list  16 16 32 32 16 32  ))
-		(define input-size-dsl (list   (list 16 16 ) (list 64 64 ) (list 32 32 ) (list 128 128 ) (list 128 128 ) (list 64 64 ) ) )
-		(define variants (list (vqdmulhh_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 16 16 0 16 16 0 1 32 1 ) 
-(vqdmulhh_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 0 1 32 1 ) 
-(vqdmulhh_s16_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 32 32 0 32 32 0 1 64 1 ) 
-(vqdmulhh_s16_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 0 1 64 1 ) 
-(vqdmulhh_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 0 1 32 1 ) 
-(vqdmulhh_s16_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 0 1 64 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 6)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog vsraq_n_s64_dsl)
@@ -3571,33 +3403,6 @@
               )
         
 		(define relavent-indices (filter filter-fn (range 0 6)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog vqdmulh_n_s16_dsl)
-		(define input-precs-dsl (list  16 16  ))
-		(define input-size-dsl (list   (list 64 16 ) (list 128 16 ) ) )
-		(define variants (list (vqdmulh_n_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 1 32 0 1 ) 
-(vqdmulh_n_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 1 32 0 1 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 2)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog vrhadd_s16_dsl)
@@ -5405,6 +5210,232 @@
               )
         
 		(define relavent-indices (filter filter-fn (range 0 2)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vzip_u16_dsl)
+		(define input-precs-dsl (list  16 8 16 32 32 8  ))
+		(define input-size-dsl (list   (list 64 64 ) (list 64 64 ) (list 64 64 ) (list 64 64 ) (list 64 64 ) (list 64 64 ) ) )
+		(define variants (list (vzip_u16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 16 1 8 2 ) 
+(vzip_u16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 8 8 1 4 2 ) 
+(vzip_u16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 16 1 8 2 ) 
+(vzip_u16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 32 1 16 2 ) 
+(vzip_u16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 32 1 16 2 ) 
+(vzip_u16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 8 8 1 4 2 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 6)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqrdmulhq_n_s32_dsl)
+		(define input-precs-dsl (list  32 32  ))
+		(define input-size-dsl (list   (list 128 32 ) (list 64 32 ) ) )
+		(define variants (list (vqrdmulhq_n_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 1 128 1 -1 1 ) 
+(vqrdmulhq_n_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 1 128 1 -1 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 2)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqdmulh_n_s16_dsl)
+		(define input-precs-dsl (list  16 16  ))
+		(define input-size-dsl (list   (list 64 16 ) (list 128 16 ) ) )
+		(define variants (list (vqdmulh_n_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 1 32 1 1 ) 
+(vqdmulh_n_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 1 32 1 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 2)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqrdmulhq_s16_dsl)
+		(define input-precs-dsl (list  16 16 16  ))
+		(define input-size-dsl (list   (list 128 128 ) (list 16 16 ) (list 64 64 ) ) )
+		(define variants (list (vqrdmulhq_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 1 -1 1 64 1 ) 
+(vqrdmulhq_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 16 16 0 16 16 1 -1 1 64 1 ) 
+(vqrdmulhq_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 1 -1 1 64 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 3)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqrdmulhq_n_s16_dsl)
+		(define input-precs-dsl (list  16 16  ))
+		(define input-size-dsl (list   (list 128 16 ) (list 64 16 ) ) )
+		(define variants (list (vqrdmulhq_n_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 1 64 1 -1 1 ) 
+(vqrdmulhq_n_s16_dsl (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64))) (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 1 64 1 -1 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 2)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqdmulhq_n_s32_dsl)
+		(define input-precs-dsl (list  32 32  ))
+		(define input-size-dsl (list   (list 128 32 ) (list 64 32 ) ) )
+		(define variants (list (vqdmulhq_n_s32_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 1 64 1 1 ) 
+(vqdmulhq_n_s32_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 1 64 1 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 2)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqrdmulh_s32_dsl)
+		(define input-precs-dsl (list  32 32 32  ))
+		(define input-size-dsl (list   (list 64 64 ) (list 32 32 ) (list 128 128 ) ) )
+		(define variants (list (vqrdmulh_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 1 -1 1 128 1 ) 
+(vqrdmulh_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128))) (reg (bv 0 8)) (reg (bv 1 8)) 32 32 0 32 32 1 -1 1 128 1 ) 
+(vqrdmulh_s32_dsl (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128))) (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 1 -1 1 128 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 3)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog vqdmulh_s16_dsl)
+		(define input-precs-dsl (list  16 32 16 32 32 16  ))
+		(define input-size-dsl (list   (list 64 64 ) (list 64 64 ) (list 16 16 ) (list 128 128 ) (list 32 32 ) (list 128 128 ) ) )
+		(define variants (list (vqdmulh_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 16 1 1 32 1 ) 
+(vqdmulh_s16_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 64 64 0 64 32 1 1 64 1 ) 
+(vqdmulh_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 16 16 0 16 16 1 1 32 1 ) 
+(vqdmulh_s16_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 32 1 1 64 1 ) 
+(vqdmulh_s16_dsl (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64))) (reg (bv 0 8)) (reg (bv 1 8)) 32 32 0 32 32 1 1 64 1 ) 
+(vqdmulh_s16_dsl (lit (bv #x0000000000000000000000000000000f (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 1 1 32 1 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 6)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
  )

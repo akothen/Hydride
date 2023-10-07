@@ -36,4 +36,7 @@ def ARMSelection(ctx_name):
     if "_n_" in ctx_name:
         if not any(i in ctx_name for i in ["shr", "shl", "dup", "mov", "sra"]):
             return False
+    # Temporary fix for conv_nn
+    if any(i in ctx_name for i in ["vuqadd_s", "vpm"]):
+        return False
     return True

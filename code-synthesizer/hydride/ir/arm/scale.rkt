@@ -340,45 +340,6 @@ num_14
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
-	[ (vqdmulhq_n_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
-		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 4) (equal? num_4 4) (equal? num_5 0) (equal? num_6 4) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 0) (equal? num_11 1))
-(displayln "Scaling case for vqdmulhq_n_s32")
-(vqdmulhq_n_s32_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-num_9
-num_10
-num_11
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 2) (equal? num_4 2) (equal? num_5 0) (equal? num_6 2) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 2) (equal? num_10 0) (equal? num_11 1))
-(displayln "Scaling case for vqdmulh_n_s32")
-(vqdmulhq_n_s32_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-(* scale-factor num_9)
-num_10
-num_11
-)
-]
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
 	[ (vrshrn_n_s64_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 num_14 prec_i num_16)
 		(cond 
 		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 128)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 128)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 4) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 0) (equal? prec_i 64) (equal? num_16 2))
@@ -4714,53 +4675,6 @@ num_6
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
-	[ (vqrdmulhq_n_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 4) (equal? num_5 4) (equal? num_6 0) (equal? num_7 4) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 4) (equal? num_11 0) (equal? num_12 1) (equal? num_13 64) (equal? num_14 -1) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulhq_n_s32")
-(vqrdmulhq_n_s32_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-(* scale-factor num_10)
-num_11
-num_12
-num_13
-num_14
-num_15
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 128) (equal? num_11 0) (equal? num_12 1) (equal? num_13 2) (equal? num_14 -1) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulh_n_s32")
-(vqrdmulhq_n_s32_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-(* scale-factor num_13)
-num_14
-num_15
-)
-]
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
 	[ (vshll_n_s8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i prec_o num_8 num_9 num_10 num_11)
 		(cond 
 		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i 8) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 2) (equal? num_10 1) (equal? num_11 2))
@@ -6656,74 +6570,6 @@ num_10
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
-	[ (vqrdmulh_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 2) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 128) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulh_s32")
-(vqrdmulh_s32_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-(* scale-factor num_11)
-num_12
-num_13
-num_14
-num_15
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 1) (equal? num_5 1) (equal? num_6 0) (equal? num_7 1) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 64) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 128) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulhs_s32")
-(vqrdmulh_s32_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-num_13
-num_14
-num_15
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 4) (equal? num_5 4) (equal? num_6 0) (equal? num_7 4) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 64) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 4) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulhq_s32")
-(vqrdmulh_s32_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-num_13
-(* scale-factor num_14)
-num_15
-)
-]
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
 	[ (vqrshrun_n_s64_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_o num_9 num_10 num_11 num_12 num_13 num_14 prec_i num_16)
 		(cond 
 		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 128)))) (equal? vc_1 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001 (bitvector 128)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_o 32) (equal? num_9 -1) (equal? num_10 0) (equal? num_11 4) (equal? num_12 0) (equal? num_13 -1) (equal? num_14 1) (equal? prec_i 64) (equal? num_16 2))
@@ -7055,58 +6901,6 @@ num_11
 num_12
 num_13
 num_14
-)
-]
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
-	[ (vqrdmulhq_n_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
-	[ (vqrdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13 num_14 num_15)
-		(cond 
-		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? size_i_o 4) (equal? num_5 4) (equal? num_6 0) (equal? num_7 4) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 64) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulhq_s16")
-(vqrdmulhq_s16_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-num_13
-num_14
-num_15
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 32) (equal? num_12 -1) (equal? num_13 1) (equal? num_14 2) (equal? num_15 1))
-(displayln "Scaling case for vqrdmulh_s16")
-(vqrdmulhq_s16_dsl
-vc_0
-vc_1
-(arm:scale-expr v2 scale-factor)
-(arm:scale-expr v3 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_5)
-num_6
-(* scale-factor num_7)
-prec_i_o
-num_9
-num_10
-num_11
-num_12
-num_13
-(* scale-factor num_14)
-num_15
 )
 ]
 		[else (error "Unable to identify how to scale up " prog)]
@@ -7862,96 +7656,6 @@ num_11
 num_12
 num_13
 num_14
-)
-]
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
-	[ (vqdmulhh_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
-		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? size_i_o 2) (equal? num_4 2) (equal? num_5 0) (equal? num_6 2) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1))
-(displayln "Scaling case for vqdmulh_s16")
-(vqdmulhh_s16_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-num_9
-num_10
-num_11
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 1) (equal? num_4 1) (equal? num_5 0) (equal? num_6 1) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1))
-(displayln "Scaling case for vqdmulhs_s32")
-(vqdmulhh_s16_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-num_9
-num_10
-num_11
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 4) (equal? num_4 4) (equal? num_5 0) (equal? num_6 4) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1))
-(displayln "Scaling case for vqdmulhq_s32")
-(vqdmulhh_s16_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-num_9
-num_10
-num_11
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? size_i_o 4) (equal? num_4 4) (equal? num_5 0) (equal? num_6 4) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1))
-(displayln "Scaling case for vqdmulhq_s16")
-(vqdmulhh_s16_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-num_9
-num_10
-num_11
-)
-]
-		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 2) (equal? num_4 2) (equal? num_5 0) (equal? num_6 2) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 1) (equal? num_10 2) (equal? num_11 1))
-(displayln "Scaling case for vqdmulh_s32")
-(vqdmulhh_s16_dsl
-vc_0
-(arm:scale-expr v1 scale-factor)
-(arm:scale-expr v2 scale-factor)
-(* scale-factor size_i_o)
-(* scale-factor num_4)
-num_5
-(* scale-factor num_6)
-prec_i_o
-num_8
-num_9
-(* scale-factor num_10)
-num_11
 )
 ]
 		[else (error "Unable to identify how to scale up " prog)]
@@ -9857,11 +9561,6 @@ num_13
 num_14
 )
 ]
-		[else (error "Unable to identify how to scale up " prog)]
-		)
-	]
-	[ (vqdmulh_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
-		(cond 
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
@@ -17356,6 +17055,394 @@ num_8
 	]
 	[ (vmlsl_n_u16_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i num_8 num_9 prec_o num_11 num_12 num_13 num_14)
 		(cond 
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vzip_u16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
+		(cond 
+		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 1) (equal? num_9 8) (equal? num_10 2))
+(displayln "Scaling case for vzip_u16")
+(vzip_u16_dsl
+(arm:scale-expr v0 scale-factor)
+(arm:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 8) (equal? num_7 8) (equal? num_8 1) (equal? num_9 4) (equal? num_10 2))
+(displayln "Scaling case for vzip_u8")
+(vzip_u16_dsl
+(arm:scale-expr v0 scale-factor)
+(arm:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 1) (equal? num_9 8) (equal? num_10 2))
+(displayln "Scaling case for vzip_s16")
+(vzip_u16_dsl
+(arm:scale-expr v0 scale-factor)
+(arm:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 16) (equal? num_10 2))
+(displayln "Scaling case for vzip_s32")
+(vzip_u16_dsl
+(arm:scale-expr v0 scale-factor)
+(arm:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 16) (equal? num_10 2))
+(displayln "Scaling case for vzip_u32")
+(vzip_u16_dsl
+(arm:scale-expr v0 scale-factor)
+(arm:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 8) (equal? num_7 8) (equal? num_8 1) (equal? num_9 4) (equal? num_10 2))
+(displayln "Scaling case for vzip_s8")
+(vzip_u16_dsl
+(arm:scale-expr v0 scale-factor)
+(arm:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqrdmulhq_n_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128)))) (equal? size_i_o 4) (equal? num_5 4) (equal? num_6 0) (equal? num_7 4) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 4) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulhq_n_s32")
+(vqrdmulhq_n_s32_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+(* scale-factor num_10)
+num_11
+num_12
+num_13
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 128) (equal? num_11 1) (equal? num_12 -1) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulh_n_s32")
+(vqrdmulhq_n_s32_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+num_13
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqdmulh_n_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+		(cond 
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqrdmulhq_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64)))) (equal? size_i_o 4) (equal? num_5 4) (equal? num_6 0) (equal? num_7 4) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulhq_s16")
+(vqrdmulhq_s16_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+num_13
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000000000000000000000000000000004000 (bitvector 64)))) (equal? vc_1 (lit (bv #x000000000000000000000000000000000000000000000000000000000000000f (bitvector 64)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_i_o 16) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 2) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulh_s16")
+(vqrdmulhq_s16_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+(* scale-factor num_12)
+num_13
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqrdmulhq_n_s16_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqdmulhq_n_s32_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 4) (equal? num_4 4) (equal? num_5 0) (equal? num_6 4) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 1))
+(displayln "Scaling case for vqdmulhq_n_s32")
+(vqdmulhq_n_s32_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 2) (equal? num_4 2) (equal? num_5 0) (equal? num_6 2) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 2) (equal? num_10 1) (equal? num_11 1))
+(displayln "Scaling case for vqdmulh_n_s32")
+(vqdmulhq_n_s32_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+(* scale-factor num_9)
+num_10
+num_11
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqrdmulh_s32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 num_11 num_12 num_13)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128)))) (equal? size_i_o 2) (equal? num_5 2) (equal? num_6 0) (equal? num_7 2) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 128) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulh_s32")
+(vqrdmulh_s32_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+num_13
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128)))) (equal? size_i_o 1) (equal? num_5 1) (equal? num_6 0) (equal? num_7 1) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 128) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulhs_s32")
+(vqrdmulh_s32_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+num_12
+num_13
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000 (bitvector 128)))) (equal? vc_1 (lit (bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f (bitvector 128)))) (equal? size_i_o 4) (equal? num_5 4) (equal? num_6 0) (equal? num_7 4) (equal? prec_i_o 32) (equal? num_9 1) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 4) (equal? num_13 1))
+(displayln "Scaling case for vqrdmulhq_s32")
+(vqrdmulh_s32_dsl
+vc_0
+vc_1
+(arm:scale-expr v2 scale-factor)
+(arm:scale-expr v3 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_5)
+num_6
+(* scale-factor num_7)
+prec_i_o
+num_9
+num_10
+num_11
+(* scale-factor num_12)
+num_13
+)
+]
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (vqdmulh_s16_dsl vc_0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11)
+		(cond 
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? size_i_o 2) (equal? num_4 2) (equal? num_5 0) (equal? num_6 2) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1))
+(displayln "Scaling case for vqdmulh_s16")
+(vqdmulh_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 2) (equal? num_4 2) (equal? num_5 0) (equal? num_6 2) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 1) (equal? num_10 2) (equal? num_11 1))
+(displayln "Scaling case for vqdmulh_s32")
+(vqdmulh_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+(* scale-factor num_10)
+num_11
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 4) (equal? num_4 4) (equal? num_5 0) (equal? num_6 4) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1))
+(displayln "Scaling case for vqdmulhq_s32")
+(vqdmulh_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x000000000000000000000000000000000000000000000000000000000000001f (bitvector 64)))) (equal? size_i_o 1) (equal? num_4 1) (equal? num_5 0) (equal? num_6 1) (equal? prec_i_o 32) (equal? num_8 1) (equal? num_9 1) (equal? num_10 64) (equal? num_11 1))
+(displayln "Scaling case for vqdmulhs_s32")
+(vqdmulh_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+)
+]
+		[(and  (equal? vc_0 (lit (bv #x0000000000000000000000000000000f (bitvector 32)))) (equal? size_i_o 4) (equal? num_4 4) (equal? num_5 0) (equal? num_6 4) (equal? prec_i_o 16) (equal? num_8 1) (equal? num_9 1) (equal? num_10 32) (equal? num_11 1))
+(displayln "Scaling case for vqdmulhq_s16")
+(vqdmulh_s16_dsl
+vc_0
+(arm:scale-expr v1 scale-factor)
+(arm:scale-expr v2 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+num_10
+num_11
+)
+]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
