@@ -132,59 +132,53 @@ class ReplaceDiv : public IRMutator {
     // certain sizes, they often padd the bits to fit the word (e.g. 32 bits)
     // Without loss of generality, depending on the target, we modify our broadcasts
     // to accomodate such behavior when needed.
-    Expr visit(const Broadcast *op) override {
+    // Expr visit(const Broadcast *op) override {
 
-        size_t lanes = op->type.lanes();
+    //     size_t lanes = op->type.lanes();
 
-        if (lanes == 1) {
-            return op->value;
-        }
+    //     if (lanes == 1) {
+    //         return op->value;
+    //     }
 
-        if (is_const(op->value)) {
-            return op;
-        }
+    //     if (is_const(op->value)) {
+    //         return op;
+    //     }
 
-        if (!op->type.is_float() && op->type.is_vector()) {
+    //     if (!op->type.is_float() && op->type.is_vector()) {
 
-            /*
-            size_t bits = op->type.bits();
+    //         size_t bits = op->type.bits();
 
-            if(bits == 16 && op->value.type().lanes() != 2){
+    //         if (bits == 16 && op->value.type().lanes() != 2) {
 
+    //             debug(0) << "======"
+    //                      << "\n";
+    //             debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
+    //             Expr Broadcast2 = Broadcast::make(op->value, 2);
+    //             Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
+    //             debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
+    //             debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
+    //             return ModifiedBroadcast;
+    //         }
 
+    //         else if (bits == 8 && op->value.type().lanes() != 4) {
 
-                debug(0) << "======"<<"\n";
-                debug(0) << "Orignal bits: "<<bits << ", Original lanes: "<<lanes <<"\n";
-                Expr Broadcast2 = Broadcast::make(op->value, 2);
-                Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 2);
-                debug(0) << "Modified broadcast to "<< ModifiedBroadcast <<"\n";
-                debug(0) << "Modified broadcast bits  "<< ModifiedBroadcast.type().bits() << " and lanes "<<ModifiedBroadcast.type().lanes() <<"\n";
-                return ModifiedBroadcast;
-            }
+    //             debug(0) << "======"
+    //                      << "\n";
+    //             debug(0) << "Orignal bits: " << bits << ", Original lanes: " << lanes << "\n";
+    //             Expr Broadcast2 = Broadcast::make(op->value, 4);
+    //             Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 4);
+    //             debug(0) << "Modified broadcast to " << ModifiedBroadcast << "\n";
+    //             debug(0) << "Modified broadcast bits  " << ModifiedBroadcast.type().bits() << " and lanes " << ModifiedBroadcast.type().lanes() << "\n";
+    //             return ModifiedBroadcast;
+    //         }
 
-            */
-            /*
-               else if(bits == 8 && op->value.type().lanes() != 4){
+    //         else {
+    //             return op;
+    //         }
+    //     }
 
-
-
-               debug(0) << "======"<<"\n";
-               debug(0) << "Orignal bits: "<<bits << ", Original lanes: "<<lanes <<"\n";
-               Expr Broadcast2 = Broadcast::make(op->value, 4);
-               Expr ModifiedBroadcast = Broadcast::make(Broadcast2, lanes / 4);
-               debug(0) << "Modified broadcast to "<< ModifiedBroadcast <<"\n";
-               debug(0) << "Modified broadcast bits  "<< ModifiedBroadcast.type().bits() << " and lanes "<<ModifiedBroadcast.type().lanes() <<"\n";
-               return ModifiedBroadcast;
-               }*/
-
-            /*
-               else {
-               return op;
-               }*/
-        }
-
-        return op;
-    }
+    //     return op;
+    // }
 
 public:
     ReplaceDiv(HydrideSupportedArchitecture _arch)
@@ -2518,6 +2512,7 @@ private:
             Call::rounding_halving_add};
 
         Expr visit(const Call *op) override {
+            debug(0) << "Abstracting call: " << op->name << "\n";
 
             bool supported = false;
             for (auto IntrinID : supported_calls) {
@@ -2812,8 +2807,8 @@ private:
 
         Expr visit(const Shuffle *op) override {
             cout << "Shuffle: " << op->type << "\n";
-            bool disable_shuffles = (_arch != HydrideSupportedArchitecture::HVX) &&
-                                    (_arch != HydrideSupportedArchitecture::ARM);
+            bool disable_shuffles = (_arch != HydrideSupportedArchitecture::HVX);
+            // &&(_arch != HydrideSupportedArchitecture::ARM);
 
             if (op->is_concat() && disable_shuffles) {
                 debug(0) << "Abstracting concat vector!\n";
@@ -2847,6 +2842,14 @@ private:
                 debug(0) << "Abstracting random access slice vector!\n";
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
+                return Variable::make(op->type, uname);
+            }
+
+            if (op->is_broadcast() && _arch == HydrideSupportedArchitecture::ARM) {  // Temporary support for conv_nn
+                debug(0) << "Abstracting last level broadcast!\n";
+                std::string uname = unique_name('h');
+                abstractions[uname] = IRMutator::visit(op);
+                debug(0) << "TRACCE" << op->vectors[0] << '\n';
                 return Variable::make(op->type, uname);
             }
 
