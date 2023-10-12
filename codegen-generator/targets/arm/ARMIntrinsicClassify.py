@@ -655,6 +655,7 @@ if __name__ == "__main__":
     check = ["vmlal_high_n_s16", "vget_lane_s32__lane_0",
              "vmlal_high_lane_s16__lane_0", "vmul_n_s16", "vmla_lane_s16__lane_0", "vqshrun_n_s64__n_1", "vqshrn_n_u64__n_1", "vqshrn_n_u64__n_1", "vdup_n_s8", "vdup_lane_s8__lane_0"]
     check = ["vaddv_s32", "vaddvq_s32", "vaddvq_s64"]
+    check = ["vzip_s8"]
     for v in check:
         vv, _ = extract_assignment_from_name(v)
         print(vv, IntrinsicsFlags[vv])

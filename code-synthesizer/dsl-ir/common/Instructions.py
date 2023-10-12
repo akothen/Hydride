@@ -178,6 +178,9 @@ class Context:
 
         self.set_scale_factor()
 
+    def __repr__(self):
+        return self.name
+
     def set_scale_factor(self):
 
         if 'hexagon' in self.name:

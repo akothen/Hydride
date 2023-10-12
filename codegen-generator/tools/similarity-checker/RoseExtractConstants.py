@@ -489,9 +489,7 @@ def ExtractConstantsFromBlock(Block: RoseBlock, BVValToBitwidthVal: dict,
                 if Op.getOperand(0) not in BVValToBitwidthVal:
                     UnknownVal.add(Op.getOperand(0))
                 continue
-            if isinstance(Op.getOperand(1), RoseConstant):
-                if Op.getOperand(1).getValue() == 192:  # ARM Saturation specification
-                    continue
+
             print("====SIZE EXTENSION OP:")
             Op.print()
             Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"),

@@ -212,6 +212,12 @@ ReservedVecTypes = {
     "uint16_t",
     "uint32_t",
     "uint64_t",
+    "int8x8x2_t",
+    "int16x4x2_t",
+    "int32x2x2_t",
+    "uint8x8x2_t",
+    "uint16x4x2_t",
+    "uint32x2x2_t",
 }
 
 

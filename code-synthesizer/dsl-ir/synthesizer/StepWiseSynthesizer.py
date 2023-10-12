@@ -873,8 +873,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             return 15
         if ctx.name == "vmull_u8" and self.spec.semantics == ['(extract bvadd sign-extend bvmul zero-extend)']:
             return 15
-        # if self.target == 'arm' and ctx.name == "vget_high_u16":
-        #     return 15
-        # if self.target == 'arm' and ctx.name == "vget_low_u32":
-        #     return 15
+        if self.target == 'arm' and ctx.name == "vzip_u16":
+            return 15
+        if self.target == 'arm' and ctx.name == "vmov_n_u16":
+            return 15
         return super().score_context(dsl_inst, ctx)

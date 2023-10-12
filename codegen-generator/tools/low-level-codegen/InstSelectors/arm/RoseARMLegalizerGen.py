@@ -59,9 +59,9 @@ public:
 
     ARMLegalizationPass() : FunctionPass(ID) {}
 
-    bool runOnFunction(Function &F);
+    bool runOnFunction(Function &F) override;
 
-    void getAnalysisUsage(AnalysisUsage &AU) const {}
+    void getAnalysisUsage(AnalysisUsage &AU) const override {}
 };
 
 }
@@ -101,7 +101,7 @@ public:
             errs() << "INST FUNCTION NAME: " << \"{}\" << \"\\n\"; 
             std::vector<int> Permutation = {{{}}}; 
             std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-            if (Args.size() != 0) {{
+            if (!Args.empty()) {{
             auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
             errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
             InstToInstMap[CI] = NewCallInst; 
@@ -116,7 +116,7 @@ public:
             auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
             std::vector<int> Permutation = {{{}}}; 
             std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-            if (Args.size() != 0) {{
+            if (!Args.empty()) {{
             auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
             errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
             InstToInstMap[CI] = NewCallInst; 
@@ -173,7 +173,7 @@ public:
                 errs() << "INST FUNCTION NAME: " << \"{}\" << \"\\n\"; 
                 std::vector<int> Permutation = {{{}}}; 
                 std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-                if (Args.size() != 0) {{
+                if (!Args.empty()) {{
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
                 errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
                 InstToInstMap[CI] = NewCallInst; 
@@ -188,7 +188,7 @@ public:
                 auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
                 std::vector<int> Permutation = {{{}}}; 
                 std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-                if (Args.size() != 0) {{
+                if (!Args.empty()) {{
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
                 errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
                 InstToInstMap[CI] = NewCallInst; 
@@ -230,7 +230,7 @@ bool ARMLegalizer::legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I){{
         with open(TargetAgnosticInst.capitalize()+"Selector.cpp", "w") as f:
             f.write(FinalPattern)
         print("FinalPattern:")
-        FinalPattern = f"  if (legalize_{TargetAgnosticInst}(CI, I)) return true;"
+        FinalPattern = f"  if (legalize_{TargetAgnosticInst}(CI, I)) {{return true;}}"
         print(FinalPattern)
         return FinalPattern
 
@@ -257,7 +257,7 @@ bool ARMLegalizer::legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I){{
 
     def generateInstSelector(self):
         Content = '''
-virtual bool legalize(Instruction *I) {{
+bool legalize(Instruction *I) override {{
   auto *CI = dyn_cast<CallInst>(I);
   if (CI == nullptr) {{
     return false;

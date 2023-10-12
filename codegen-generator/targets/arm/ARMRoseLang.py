@@ -54,7 +54,8 @@ def Compile(InstName: str = None):
         # interested = ["vbic_u16","vbic_u8",]
         # interested = ["get","combine"]
         # interested = ["paddl"]
-        # interested = ['qrdmulh', 'qdmulh']
+        # interested = ['dmulh']
+        # interested = ['vqrdmulhq_s32']
         # interested = ['vabal_high_s16']
         # interested = ['vshr_n_s16']
         # interested = ['vqdmlal_high_n_s16']
@@ -67,7 +68,7 @@ def Compile(InstName: str = None):
         # interested = ['vtrn1_s8']
         # interested = ['vdot_s32']
         # interested = ["vqmovn_u16"]
-        # interested = ["vc"]
+        # interested = ["vzip_"]
         # interested = ["vqshrun_high_n_s16","vqshrun_high_n_s32"]
         AllSema = SemaGenerator(deserialize=True).getResult()
         if interested:

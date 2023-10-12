@@ -39,4 +39,10 @@ ARMTypes = {
     "uint16_t": RoseBitVectorType(16),
     "uint32_t": RoseBitVectorType(32),
     "uint64_t": RoseBitVectorType(64),
+    "int8x8x2_t": RoseBitVectorType(128),
+    "int16x4x2_t": RoseBitVectorType(128),
+    "int32x2x2_t": RoseBitVectorType(128),
+    "uint8x8x2_t": RoseBitVectorType(128),
+    "uint16x4x2_t": RoseBitVectorType(128),
+    "uint32x2x2_t": RoseBitVectorType(128),
 }

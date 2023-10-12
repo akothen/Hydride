@@ -21,7 +21,7 @@ DEBUG_LIST = [
     # "vpmin_s8",
     # "vmin_s8",
     # "vqadd_s16",
-    "vqmovn_u32",
+    "vzip_u16",
     # "vmovl_s8",
     # "vqmovn_u32",
     # "vdotq_u32",
@@ -816,7 +816,8 @@ class SynthesizerBase:
             # print(ctx.name, self.score_context(op,ctx))
 
             if names.count(op.name) == MAX_OCCURANCES:
-                print(f"Pruning {ctx.name} becuase {ctx.name} has exceeded MAX_OCCURANCES")
+                print(
+                    f"Pruning {ctx.name} becuase {ctx.name} has exceeded MAX_OCCURANCES")
 
             names.append(op.name)
 
@@ -984,7 +985,6 @@ class SynthesizerBase:
                     # ctx: each operatoin in class -> ctx_ops and c_op
                     # spec: halide expr -> spec_ops
                     # variants: similar op with opposite meaning
-                    
 
                     # Flexible accumulation for dot product like operations
                     if v in ctx_ops and v not in spec_ops and "bvmul" in spec_ops and v == "bvadd":
@@ -1179,20 +1179,21 @@ class SynthesizerBase:
                 unique_input_sizes = self.input_sizes
                 score += min(int([ctx.supports_output_size(isize)
                              for isize in unique_input_sizes].count(True)), 3)  # * 2
-            
-            # for saturation we want 
+
+            # for saturation we want
             spec_ops = self.spec.get_semantics_ops_list()
             dsl_ops = ctx.get_bv_ops()
 
-            score += min(len(list(set(spec_ops) & set(dsl_ops) & set(["bvusat","bvssat","sign-extend","zero-extend"]))), 2)*2
+            score += min(len(list(set(spec_ops) & set(dsl_ops) &
+                         set(["bvusat", "bvssat", "sign-extend", "zero-extend"]))), 2)*2
         else:
             score = 0
             score += int(([ctx.supports_input_precision(input_precision)
-                        for input_precision in self.spec.input_precision]).count(True) != 0)
+                           for input_precision in self.spec.input_precision]).count(True) != 0)
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score += int(ctx.supports_output_size(self.output_slice_length))
             score += min(int(([ctx.supports_input_size(input_size)
-                        for input_size in self.input_sizes]).count(True)), 2) #ARM:?
+                               for input_size in self.input_sizes]).count(True)), 2)  # ARM:?
 
             spec_ops = self.spec.get_semantics_ops_list()
             dsl_ops = dsl_inst.get_semantics_ops_list()

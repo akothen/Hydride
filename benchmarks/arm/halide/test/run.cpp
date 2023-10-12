@@ -65,6 +65,8 @@
 #include "softmax.h"
 #elif benchmark_matmul
 #include "matmul.h"
+#elif benchmark_matmul8
+#include "matmul8.h"
 #elif benchmark_matmul_256
 #include "matmul_256.h"
 #elif benchmark_matmul_256_32bit
@@ -969,6 +971,27 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<int16_t> matA((int16_t*)input, dims, shape);
     Halide::Runtime::Buffer<int16_t> matB((int16_t*) input, dims, shape);
     Halide::Runtime::Buffer<int16_t> output_buf((int16_t*)output, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = matmul(matA, matB, output_buf);
+            if (error != 0) {
+            printf("matmul_256 pipeline failed: %d\n", error);
+            }
+            });
+
+
+    printf("AppReported (): Image %dx%d - matmul_256(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+#if benchmark_matmul8
+
+    halide_dimension_t x_dim{ 0, 256, 1 };
+    halide_dimension_t y_dim{ 0, 256, 256 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<int8_t> matA((int8_t*)input, dims, shape);
+    Halide::Runtime::Buffer<int8_t> matB((int8_t*) input, dims, shape);
+    Halide::Runtime::Buffer<int8_t> output_buf((int8_t*)output, dims, shape);
 
     cycles = benchmark([&]() {
             int error = matmul(matA, matB, output_buf);

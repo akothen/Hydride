@@ -2,12 +2,15 @@ from ARMTypes import *
 from ARMSemanticGen import parse_instr_attr
 from ARMParser import SimpleParser
 from ARMManualCorrectAST import ManualAST
+from ARMReadableSemantics import map2Code
 HandCraftedIntrinsics = {"vcombine": ["vcombine_"+i+j for i in ["s", "u"]
                          for j in ["8", "16", "32", "64"]],
                          "vget": ["vget_"+k+i+j for k in ["low_", "high_"] for i in ["s", "u"]
                                   for j in ["8", "16", "32", "64"]],
                          #  "vpad_l": ["vpad"+d+"l"+k+i+j for d in ["a", "d"]for k in ["", "q"] for i in ["_s", "_u"]
                          #             for j in ["8", "16", "32"]],
+                         "vzip": ["vzip_"+i+j for i in ["s", "u"] for j in ["8", "16", "32"]
+                                  ]
                          }
 HandCraftedField = {
     "vcombine": "combine_handcrafted",
@@ -54,6 +57,31 @@ def vgetSema(instr: InstrDesc) -> ARMSema:
                    )
 
 
+def vzipSema(instr: InstrDesc) -> ARMSema:
+    Params, signedness, preparation, imm_width = parse_instr_attr(
+        instr._replace(results=[{"Vd.8B": "result"}]), {})
+    s = SimpleParser()
+    s.build()
+    # breakpoint()
+    esize = int(instr.name.split("_")[-1][1:])
+    return ARMSema(instr.name,
+                   "ZIP1 ZIP2",
+                   Params,
+                   s.parse(
+                       ManualAST["zip_handcrafted"]["execute"]),
+                   instr.return_type["value"],
+                   signedness,
+                   None,
+                   None, imm_width, None, None,
+                   preparation,
+                   {'datasize': 64,
+                    'esize': esize,
+                    'pairs': 64//esize,
+                    },
+                   "get_handcrafted",
+                   )
+
+
 # def vpad_lSema(instr: InstrDesc) -> ARMSema:
 #     Params, signedness, preparation, imm_width = parse_instr_attr(
 #         instr, {})
@@ -84,5 +112,6 @@ def vgetSema(instr: InstrDesc) -> ARMSema:
 HandCraftedSema = {
     "vcombine": vcombineSema,
     "vget": vgetSema,
+    "vzip": vzipSema,
     # "vpad_l": vpad_lSema,
 }

@@ -40,7 +40,7 @@ qrdmulh_common= """        {
                 element1 = SInt(Elem[operand1,e,esize]);
                 element2 = SInt(Elem[operand2,e,esize]);
                 product = (((element1) * element2) + round_const);
-                Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize-1))[0~(esize-1)];
+                Elem[result,e,esize] = SignedSatQ((product >> (esize-1)), esize);
             }
             V[d] = result;
         }"""
@@ -58,7 +58,7 @@ qrdmuh_n_common="""        {
             {
                 element1 = SInt(Elem[operand1,e,esize]);
                 product = (((element1) * element2) + round_const);
-                Elem[result,e,esize] = (SignedSatQ((product), 2*esize) >> (esize-1))[0~(esize-1)];
+                Elem[result,e,esize] = SignedSatQ((product >> (esize-1)), esize);
             }
             V[d] = result;
         }"""
@@ -372,6 +372,21 @@ ManualAST = {
             else {
                 V[d] = operand[0~(datasize - 1)];
             }
+        }"""
+    },
+    "zip_handcrafted": {
+        "decode": """
+        """,
+        "execute": """{
+            bits(datasize) operand1 = V[n];
+            bits(datasize) operand2 = V[m];
+            bits(datasize*2) result;
+
+            for p = 0 to pairs-1 {
+                Elem[result, 2*p+0, esize] = Elem[operand1, p, esize];
+                Elem[result, 2*p+1, esize] = Elem[operand2, p, esize];
+            }
+            V[d] = result;
         }"""
     },
     # "pad_l_handcrafted": {
