@@ -8,6 +8,7 @@
 import x86RoseLang
 import HexRoseLang
 import ARMRoseLang
+import VISARoseLang
 
 import RoseCSE
 import RoseDCE
@@ -34,6 +35,7 @@ class RoseCodeGenerator:
         "x86": x86RoseLang,
         "Hexagon": HexRoseLang,
         "ARM": ARMRoseLang,
+        "VISA": VISARoseLang,
     }
 
     def __init__(self, Target: str):

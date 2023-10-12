@@ -304,7 +304,7 @@ class RoseRegion:
         assert self.isChildValid(Region)
         Region.setParent(self)
         if Key == None:
-            assert Index < len(self.Children)
+            assert Index <= len(self.Children) # VISA Hotfix
             self.Children.insert(Index, Region)
         else:
             assert self.Keys != None

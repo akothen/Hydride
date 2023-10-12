@@ -15,7 +15,7 @@ def Compile(OnlyCompileSupported=True):
     from RoseFunctionInfo import RoseFunctionInfo
 
     interested = []
-    # interested = ['VDP4A_16_B']
+    interested = ['VDP4A_8_D_D_D_D']
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
         AllSema = {k: v for k, v in AllSema.items(

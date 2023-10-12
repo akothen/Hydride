@@ -20,6 +20,7 @@ fi
 
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/arm/:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/codegen-generator/targets/visa/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/hexagon/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/codegen/rosette/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/codegen/llvm/:$PYTHONPATH
