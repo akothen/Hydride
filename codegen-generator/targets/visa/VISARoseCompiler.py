@@ -598,7 +598,7 @@ def CompileBinaryExprRv(Stmt: BinaryExpr, Context: VISARoseContext):
     if Context.compileFlag.get('sat', False) and isinstance(Operation, RoseSaturableBitVectorOp):
 
         Operation = HandleToSatQ(None)(Context.genName(), [
-            Operation, RoseConstant.create(Operation.getOutputBitwidth(), Context.NumberType), RoseConstant.create(Context.isValueSigned(Operation), RoseBooleanType.create())], Context)
+            Operation, RoseConstant.create(Operation.getOutputBitwidth(), Context.NumberType), RoseConstant.create(False, RoseBooleanType.create())], Context)
         Context.addAbstractionToIR(Operation)
         Context.addCompiledAbstraction(Stmt.id+".sat", Operation)
 

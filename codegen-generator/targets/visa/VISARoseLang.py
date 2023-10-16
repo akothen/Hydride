@@ -15,7 +15,7 @@ def Compile(OnlyCompileSupported=True):
     from RoseFunctionInfo import RoseFunctionInfo
 
     interested = []
-    interested = ['VDP4A_8_D_D_D_D']
+    # interested = ['VDP4A_8_D_D_D_D']
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
         AllSema = {k: v for k, v in AllSema.items(
@@ -109,7 +109,7 @@ def TestcaseGen2():
         RosetteCode = GenerateRosetteForFunction(
             FunctionInfo.getLatestFunction(), "")
         AllRosetteCode += RosetteCode
-    Hlog.INFO("Writing to rosette_test/compiled_new.rkt...")
+    Hlog.info("Writing to rosette_test/compiled_new.rkt...")
     AllRosetteCode += "(provide (all-defined-out))"
     with open(f'rosette_test/compiled_new.rkt', 'w') as f:
         f.write(AllRosetteCode)
