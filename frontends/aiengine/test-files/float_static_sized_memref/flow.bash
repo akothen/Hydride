@@ -1,0 +1,8 @@
+#!/bin/bash
+# /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/build/bin/aie-opt /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/test/unit_tests/aievec_tests/float_static_sized_memref/conv2d_uij_f32_noinit.mlir -affine-super-vectorize="virtual-vector-size=8" > conv_vectorized.mlir
+# /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/build/bin/aie-opt /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/test/unit_tests/aievec_tests/float_static_sized_memref/conv_vectorized.mlir -convert-vector-to-aievec -lower-affine > conv_aievector.mlir
+# /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/build/bin/aie-opt /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/test/unit_tests/aievec_tests/float_static_sized_memref/conv_aievector.mlir --convert-aievec-to-llvm -o gen.cc
+# xchesscc_wrapper aie -f -g +s +w work +o work -I/mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/test/unit_tests/aievec_tests/float_static_sized_memref/ /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/test/unit_tests/aievec_tests/float_static_sized_memref/float.cc /mnt/shared/home/baronia3/aiengine-automlir/mlir-aie/test/unit_tests/aievec_tests/float_static_sized_memref/kernel.cc
+# source /opt/xilinx/xrt/setup.sh
+# xbutil validate
+echo "it works"
