@@ -653,11 +653,20 @@ def CompileUpdateRv(Stmt: Update, Context: VISARoseContext):
             # ) == Bitwidth, f"Bitwidth must be {Bitwidth}, but got {RHSExprVal.getType().getBitwidth()}"
             if Bitwidth != RHSExprVal.getType().getBitwidth():
                 Hlog.warning("Implicit cast %s -> %s", RHSExprVal, Bitwidth)
-                breakpoint()
-                RHSExprVal = RoseBVExtractSliceOp.create(
-                    Context.genName(), RHSExprVal, RoseConstant.create(0, Context.NumberType), RoseConstant.create(Bitwidth-1, Context.NumberType), RoseConstant.create(Bitwidth, Context.NumberType))
-                Context.addAbstractionToIR(RHSExprVal)
-                Context.addCompiledAbstraction(Stmt.b.id+".cast", RHSExprVal)
+                if isinstance(RHSExprVal, (RoseBVSSaturateOp, RoseBVUSaturateOp)):
+                    # Ignore the saturate op, create new one.
+                    # Original one will be removed in DCE
+                    RHSExprVal = type(RHSExprVal).create(Context.genName(), RHSExprVal.getOperand(
+                        0), Bitwidth)
+                    Context.addAbstractionToIR(RHSExprVal)
+                    Context.addCompiledAbstraction(
+                        Stmt.b.id+".narrow", RHSExprVal)
+                else:
+                    RHSExprVal = RoseBVExtractSliceOp.create(
+                        Context.genName(), RHSExprVal, RoseConstant.create(0, Context.NumberType), RoseConstant.create(Bitwidth-1, Context.NumberType), RoseConstant.create(Bitwidth, Context.NumberType))
+                    Context.addAbstractionToIR(RHSExprVal)
+                    Context.addCompiledAbstraction(
+                        Stmt.b.id+".cast", RHSExprVal)
 
             if not Context.isValueSignKnown(BitVector):
                 if Context.isValueSignKnown(RHSExprVal):
@@ -979,20 +988,22 @@ UnaryOps = {
 
 
 def TypePromotion(Operand1: RoseValue, Operand2: RoseValue, Context: VISARoseContext):
-    # if isinstance(Operand1.getType(), RoseBitVectorType) \
-    #         and isinstance(Operand2.getType(), RoseBitVectorType):
-    #     if Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
-    #         # Only extends Operand2
-    #         assert not Context.isValueSigned(Operand2)  # unsigned
-    #         Bitwidth = RoseConstant.create(
-    #             Operand1.getType().getBitwidth(), Context.NumberType)
-    #         ID = Context.genName()
-    #         NewOp = HandleToZeroExtend(None)(
-    #             ID, [Operand2, Bitwidth], Context)
-    #         Context.addAbstractionToIR(NewOp)
-    #         Context.addCompiledAbstraction(ID, NewOp)
-    #         return [Operand1, NewOp]
-    #     return [Operand1, Operand2]  # Nothing to do
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+            and isinstance(Operand2.getType(), RoseBitVectorType):
+        if Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+            # Only extends Operand2
+            # assert not Context.isValueSigned(Operand2)  # unsigned
+            # SizeExt=
+
+            Bitwidth = RoseConstant.create(
+                Operand1.getType().getBitwidth(), Context.NumberType)
+            ID = Context.genName()
+            NewOp = HandleToSizeExt(None)(
+                ID, [Operand2, Bitwidth], Context)
+            Context.addAbstractionToIR(NewOp)
+            Context.addCompiledAbstraction(ID, NewOp)
+            return [Operand1, NewOp]
+        return [Operand1, Operand2]  # Nothing to do
     if isinstance(Operand1.getType(), RoseBitVectorType) and isinstance(Operand2.getType(), RoseIntegerType) and isinstance(Operand2, RoseConstant):
         bvliteral = RoseConstant.create(
             Operand2.getValue(), Operand1.getType())
@@ -1324,13 +1335,28 @@ def HandleToLshr():
     return LamdaImplFunc
 
 
+def ShiftTruncate(Operand1: RoseValue, Operand2: RoseValue,
+                  Context: VISARoseContext):
+    if isinstance(Operand2, RoseConstant):
+        return Operand2
+    bw = 6 if Operand1.getType().getBitwidth() == 64 else 5
+    RealShift = RoseBVExtractSliceOp.create(
+        Context.genName(), Operand2, RoseConstant.create(0, Context.NumberType), RoseConstant.create(bw-1, Context.NumberType), RoseConstant.create(bw, Context.NumberType))
+    Context.addSignednessInfoForValue(RealShift, IsSigned=False)
+    Context.addAbstractionToIR(RealShift)
+    Context.addCompiledAbstraction(Context.genName(), RealShift)
+    return RealShift
+
+
 def HandleToShr():
     def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                       Context: VISARoseContext):
-        if Context.isValueSigned(Operand1):
-            return HandleToAshr()(Name, Operand1, Operand2, Context)
-        else:
-            return HandleToLshr()(Name, Operand1, Operand2, Context)
+        # Operand2 = ShiftTruncate(Operand1, Operand2, Context)
+        # Disable above once passed test
+        # if Context.compileFlag.get("asr", False):
+        return HandleToAshr()(Name, Operand1, Operand2, Context)
+        # else:
+        #     return HandleToLshr()(Name, Operand1, Operand2, Context)
 
     return LamdaImplFunc
 
@@ -1338,6 +1364,8 @@ def HandleToShr():
 def HandleToShl():
     def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                       Context: VISARoseContext):
+        # Operand2 = ShiftTruncate(Operand1, Operand2, Context)
+        # Disable above once passed test
         # if (z := ComputeConstant('<<', Operand1, Operand2, Context)) != None:
         #     return z
         Operands = TypePromotion(Operand1, Operand2, Context)
@@ -1512,21 +1540,21 @@ BinaryOps = {
 #     return LamdaImplFunc
 
 
-# def HandleToZeroExtend(_):
-#     def LamdaImplFunc(Name: str, Args: list, Context: VISARoseContext):
-#         [Value, BitwidthValue] = Args
-#         assert isinstance(Value.getType(), RoseBitVectorType)
-#         assert type(BitwidthValue) == RoseConstant
-#         Bitwidth = BitwidthValue.getValue()
-#         if Value.getType().getBitwidth() < Bitwidth:
-#             Op = RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
-#             Context.addSignednessInfoForValue(Op, IsSigned=False)
-#             return Op
-#         else:
-#             assert Value.getType().getBitwidth() == Bitwidth
-#             return Value
+def HandleToZeroExtend(_):
+    def LamdaImplFunc(Name: str, Args: list, Context: VISARoseContext):
+        [Value, BitwidthValue] = Args
+        assert isinstance(Value.getType(), RoseBitVectorType)
+        assert type(BitwidthValue) == RoseConstant
+        Bitwidth = BitwidthValue.getValue()
+        if Value.getType().getBitwidth() < Bitwidth:
+            Op = RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
+            Context.addSignednessInfoForValue(Op, IsSigned=False)
+            return Op
+        else:
+            assert Value.getType().getBitwidth() == Bitwidth
+            return Value
 
-#     return LamdaImplFunc
+    return LamdaImplFunc
 
 
 # def HandleToSignExtend(_):
@@ -1546,17 +1574,16 @@ BinaryOps = {
 #     return LamdaImplFunc
 
 
-# def HandleToSpecialSignExtend(_):
-#     def LamdaImplFunc(Name: str, Args: list, Context: VISARoseContext):
-#         [Value] = Args
-#         assert isinstance(Value.getType(), RoseBitVectorType)
-#         # Increase the bitwidth by 2x.
-#         Bitwidth = 2 * Value.getType().getBitwidth()
-#         Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
-#         Context.addSignednessInfoForValue(Op, IsSigned=True)
-#         return Op
+def HandleToSizeExt(_):
+    def LamdaImplFunc(Name: str, Args: list, Context: VISARoseContext):
+        [Value, Bitwidth] = Args
+        assert isinstance(Value.getType(), RoseBitVectorType)
+        # Increase the bitwidth by 2x.
+        Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+        Context.addSignednessInfoForValue(Op, IsSigned=True)
+        return Op
 
-#     return LamdaImplFunc
+    return LamdaImplFunc
 
 
 def HandleToMin(_):
@@ -1846,7 +1873,7 @@ Builtins = {
     # # above for x86
     # 'Int': HandleToInt(None),
     # 'UInt': HandleToUInt(None),
-    # 'ZeroExtend': HandleToZeroExtend(None),
+    'SizeExt': HandleToSizeExt(None),
     # 'SignExtend': HandleToSignExtend(None),
     # 'SInt': HandleToSInt(None),
     # 'SatQ': HandleToSatQ(None),

@@ -3358,7 +3358,7 @@ concat
  (define %10 (*  i0  8))
  (define %12 (+  %10  7))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3377,7 +3377,7 @@ concat
  (define %10 (*  i0  32))
  (define %12 (+  %10  31))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3396,7 +3396,7 @@ concat
  (define %10 (*  i0  64))
  (define %12 (+  %10  63))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3415,7 +3415,7 @@ concat
  (define %10 (*  i0  16))
  (define %12 (+  %10  15))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3510,7 +3510,7 @@ concat
  (define %10 (*  i0  8))
  (define %12 (+  %10  7))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3529,7 +3529,7 @@ concat
  (define %10 (*  i0  32))
  (define %12 (+  %10  31))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3548,7 +3548,7 @@ concat
  (define %10 (*  i0  64))
  (define %12 (+  %10  63))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3567,7 +3567,7 @@ concat
  (define %10 (*  i0  16))
  (define %12 (+  %10  15))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3662,7 +3662,7 @@ concat
  (define %10 (*  i0  8))
  (define %12 (+  %10  7))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3681,7 +3681,7 @@ concat
  (define %10 (*  i0  32))
  (define %12 (+  %10  31))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3700,7 +3700,7 @@ concat
  (define %10 (*  i0  64))
  (define %12 (+  %10  63))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3719,7 +3719,7 @@ concat
  (define %10 (*  i0  16))
  (define %12 (+  %10  15))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3814,7 +3814,7 @@ concat
  (define %10 (*  i0  8))
  (define %12 (+  %10  7))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3833,7 +3833,7 @@ concat
  (define %10 (*  i0  32))
  (define %12 (+  %10  31))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3852,7 +3852,7 @@ concat
  (define %10 (*  i0  64))
  (define %12 (+  %10  63))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3871,7 +3871,7 @@ concat
  (define %10 (*  i0  16))
  (define %12 (+  %10  15))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3966,7 +3966,7 @@ concat
  (define %10 (*  i0  8))
  (define %12 (+  %10  7))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -3985,7 +3985,7 @@ concat
  (define %10 (*  i0  32))
  (define %12 (+  %10  31))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4004,7 +4004,7 @@ concat
  (define %10 (*  i0  64))
  (define %12 (+  %10  63))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4023,7 +4023,7 @@ concat
  (define %10 (*  i0  16))
  (define %12 (+  %10  15))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4118,7 +4118,7 @@ concat
  (define %10 (*  i0  8))
  (define %12 (+  %10  7))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4137,7 +4137,7 @@ concat
  (define %10 (*  i0  32))
  (define %12 (+  %10  31))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4156,7 +4156,7 @@ concat
  (define %10 (*  i0  64))
  (define %12 (+  %10  63))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4175,7 +4175,7 @@ concat
  (define %10 (*  i0  16))
  (define %12 (+  %10  15))
  (define %13 (extract  %12 %9 src1))
- (define %14 (bvlshr  %8  %13))
+ (define %14 (bvashr  %8  %13))
  %14
 )
 )
@@ -4215,7 +4215,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 8)))
- (define %16 (bvashr  %15  (bv 1 8)))
+ (define %16 (bvlshr  %15  (bv 1 8)))
  %16
 )
 )
@@ -4236,7 +4236,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 32)))
- (define %16 (bvashr  %15  (bv 1 32)))
+ (define %16 (bvlshr  %15  (bv 1 32)))
  %16
 )
 )
@@ -4320,7 +4320,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 16)))
- (define %16 (bvashr  %15  (bv 1 16)))
+ (define %16 (bvlshr  %15  (bv 1 16)))
  %16
 )
 )
@@ -4341,7 +4341,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 8)))
- (define %16 (bvashr  %15  (bv 1 8)))
+ (define %16 (bvlshr  %15  (bv 1 8)))
  %16
 )
 )
@@ -4362,7 +4362,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 32)))
- (define %16 (bvashr  %15  (bv 1 32)))
+ (define %16 (bvlshr  %15  (bv 1 32)))
  %16
 )
 )
@@ -4446,7 +4446,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 16)))
- (define %16 (bvashr  %15  (bv 1 16)))
+ (define %16 (bvlshr  %15  (bv 1 16)))
  %16
 )
 )
@@ -4467,7 +4467,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 8)))
- (define %16 (bvashr  %15  (bv 1 8)))
+ (define %16 (bvlshr  %15  (bv 1 8)))
  %16
 )
 )
@@ -4488,7 +4488,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 32)))
- (define %16 (bvashr  %15  (bv 1 32)))
+ (define %16 (bvlshr  %15  (bv 1 32)))
  %16
 )
 )
@@ -4572,7 +4572,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 16)))
- (define %16 (bvashr  %15  (bv 1 16)))
+ (define %16 (bvlshr  %15  (bv 1 16)))
  %16
 )
 )
@@ -4593,7 +4593,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 8)))
- (define %16 (bvashr  %15  (bv 1 8)))
+ (define %16 (bvlshr  %15  (bv 1 8)))
  %16
 )
 )
@@ -4614,7 +4614,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 32)))
- (define %16 (bvashr  %15  (bv 1 32)))
+ (define %16 (bvlshr  %15  (bv 1 32)))
  %16
 )
 )
@@ -4698,7 +4698,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 16)))
- (define %16 (bvashr  %15  (bv 1 16)))
+ (define %16 (bvlshr  %15  (bv 1 16)))
  %16
 )
 )
@@ -4719,7 +4719,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 8)))
- (define %16 (bvashr  %15  (bv 1 8)))
+ (define %16 (bvlshr  %15  (bv 1 8)))
  %16
 )
 )
@@ -4740,7 +4740,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 32)))
- (define %16 (bvashr  %15  (bv 1 32)))
+ (define %16 (bvlshr  %15  (bv 1 32)))
  %16
 )
 )
@@ -4824,7 +4824,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 16)))
- (define %16 (bvashr  %15  (bv 1 16)))
+ (define %16 (bvlshr  %15  (bv 1 16)))
  %16
 )
 )
@@ -4845,7 +4845,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 8)))
- (define %16 (bvashr  %15  (bv 1 8)))
+ (define %16 (bvlshr  %15  (bv 1 8)))
  %16
 )
 )
@@ -4866,7 +4866,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 32)))
- (define %16 (bvashr  %15  (bv 1 32)))
+ (define %16 (bvlshr  %15  (bv 1 32)))
  %16
 )
 )
@@ -4950,7 +4950,7 @@ concat
  (define %13 (extract  %12 %9 src1))
  (define %14 (bvadd  %8  %13))
  (define %15 (bvadd  %14  (bv 1 16)))
- (define %16 (bvashr  %15  (bv 1 16)))
+ (define %16 (bvlshr  %15  (bv 1 16)))
  %16
 )
 )
@@ -4973,7 +4973,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -4996,7 +4996,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5019,7 +5019,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5042,7 +5042,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5065,7 +5065,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5088,7 +5088,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5111,7 +5111,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5134,7 +5134,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5157,7 +5157,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5180,7 +5180,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5203,7 +5203,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5226,7 +5226,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5249,7 +5249,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5272,7 +5272,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5295,7 +5295,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5318,7 +5318,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5341,7 +5341,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5364,7 +5364,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5387,7 +5387,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5410,7 +5410,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5433,7 +5433,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5456,7 +5456,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5479,7 +5479,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5502,7 +5502,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5525,7 +5525,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5548,7 +5548,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5571,7 +5571,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5594,7 +5594,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5617,7 +5617,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5640,7 +5640,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5663,7 +5663,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5686,7 +5686,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5709,7 +5709,7 @@ concat
  (define %15 (bvssat %14 8 8 ))
  (define %16 (bvadd  %15  (bv 1 8)))
  (define %17 (bvssat %16 8 8 ))
- (define %18 (bvashr  %17  (bv 1 8)))
+ (define %18 (bvlshr  %17  (bv 1 8)))
  %18
 )
 )
@@ -5732,7 +5732,7 @@ concat
  (define %15 (bvssat %14 32 32 ))
  (define %16 (bvadd  %15  (bv 1 32)))
  (define %17 (bvssat %16 32 32 ))
- (define %18 (bvashr  %17  (bv 1 32)))
+ (define %18 (bvlshr  %17  (bv 1 32)))
  %18
 )
 )
@@ -5755,7 +5755,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5778,7 +5778,7 @@ concat
  (define %15 (bvssat %14 16 16 ))
  (define %16 (bvadd  %15  (bv 1 16)))
  (define %17 (bvssat %16 16 16 ))
- (define %18 (bvashr  %17  (bv 1 16)))
+ (define %18 (bvlshr  %17  (bv 1 16)))
  %18
 )
 )
@@ -5803,7 +5803,7 @@ concat
  (define %17 (*  i0  32))
  (define %19 (+  %17  31))
  (define %20 (extract  %19 %16 src2))
- (define %21 (bvashr  %20  %11))
+ (define %21 (bvlshr  %20  %11))
  (define %22 (bvshl  (bv 1 32)  %5))
  (define %23 (bvsub  %22  (bv 1 32)))
  (define %24 (bvand  %21  %23))
@@ -5859,7 +5859,7 @@ concat
  (define %17 (*  i0  32))
  (define %19 (+  %17  31))
  (define %20 (extract  %19 %16 src2))
- (define %21 (bvashr  %20  %11))
+ (define %21 (bvlshr  %20  %11))
  (define %22 (bvshl  (bv 1 32)  %5))
  (define %23 (bvsub  %22  (bv 1 32)))
  (define %24 (bvand  %21  %23))
@@ -5915,7 +5915,7 @@ concat
  (define %17 (*  i0  32))
  (define %19 (+  %17  31))
  (define %20 (extract  %19 %16 src2))
- (define %21 (bvashr  %20  %11))
+ (define %21 (bvlshr  %20  %11))
  (define %22 (bvshl  (bv 1 32)  %5))
  (define %23 (bvsub  %22  (bv 1 32)))
  (define %24 (bvand  %21  %23))
@@ -5971,7 +5971,7 @@ concat
  (define %17 (*  i0  32))
  (define %19 (+  %17  31))
  (define %20 (extract  %19 %16 src2))
- (define %21 (bvashr  %20  %11))
+ (define %21 (bvlshr  %20  %11))
  (define %22 (bvshl  (bv 1 32)  %5))
  (define %23 (bvsub  %22  (bv 1 32)))
  (define %24 (bvand  %21  %23))
@@ -6027,7 +6027,7 @@ concat
  (define %17 (*  i0  32))
  (define %19 (+  %17  31))
  (define %20 (extract  %19 %16 src2))
- (define %21 (bvashr  %20  %11))
+ (define %21 (bvlshr  %20  %11))
  (define %22 (bvshl  (bv 1 32)  %5))
  (define %23 (bvsub  %22  (bv 1 32)))
  (define %24 (bvand  %21  %23))
@@ -6083,7 +6083,7 @@ concat
  (define %17 (*  i0  32))
  (define %19 (+  %17  31))
  (define %20 (extract  %19 %16 src2))
- (define %21 (bvashr  %20  %11))
+ (define %21 (bvlshr  %20  %11))
  (define %22 (bvshl  (bv 1 32)  %5))
  (define %23 (bvsub  %22  (bv 1 32)))
  (define %24 (bvand  %21  %23))

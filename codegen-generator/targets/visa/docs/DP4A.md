@@ -24,7 +24,9 @@ SPDX-License-Identifier: MIT
 
                     for (i = 0; i < exec_size; ++i) {
                       if (ChEn[i]) {
-                        dst[i] = src0[i] + src1[i][7:0]*src2[i][7:0] + src1[i][15:8]*src2[i][15:8] + src1[i][23:16]*src2[i][23:16] + src1[i][31:24]*src2[i][31:24];
+                        // dst[i] = src0[i] + src1[i][7:0]*src2[i][7:0] + src1[i][15:8]*src2[i][15:8] + src1[i][23:16]*src2[i][23:16] + src1[i][31:24]*src2[i][31:24];
+
+                        dst[i] = SizeExt(src1[i][7:0],64)*src2[i][7:0] + SizeExt(src1[i][15:8],64)*src2[i][15:8] + SizeExt(src1[i][23:16],64)*src2[i][23:16] + SizeExt(src1[i][31:24],64)*src2[i][31:24] + src0[i];
                       }
                     }
 ```

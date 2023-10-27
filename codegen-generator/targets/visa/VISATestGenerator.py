@@ -210,11 +210,17 @@ int main(void) {{
 failed = []
 supported = []
 testcode = """#lang rosette
-(require "compiled.rkt")
+(require "compiled_new.rkt")
 """
+
+VISANotTestable = [["VASR", "Q_"], [
+    "VSHL_sat"], ["VASR"], ["VSHR"], ["VSHL"], ["VDIV"], ["VMOD"], ["VMAD_sat", "W_"]]
 
 
 def collect(s: VISASema):
+    if any(all(j in s.intrin for j in i) for i in VISANotTestable):
+        Hlog.warn(f"{s.intrin} not testable")
+        return
     filename = RUN_DIR+s.intrin+".txt"
     global failed
     global supported

@@ -48,7 +48,7 @@ def HandleCommon(vdoc: VISADoc) -> List[VISASema]:
                     rettype=rettype,
                     spec=S.parse(vdoc.Semantics),
                     inst_form=vdoc.Text,
-                    flags={"sat": s},
+                    flags={"sat": s, "asr": "ASR" in T.opname},
                     resolving={"exec_size": sz, 'type_map': TyMap}))
 
     return tmp

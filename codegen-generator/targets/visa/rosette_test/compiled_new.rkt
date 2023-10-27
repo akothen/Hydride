@@ -2052,918 +2052,6 @@ concat
 )
 )
 dst)
-(define (VASR_16_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_Q_Q_Q  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_UQ_UQ_UQ  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_16_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_Q_Q_Q  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_UQ_UQ_UQ  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_1_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_Q_Q_Q  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_UQ_UQ_UQ  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_2_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_Q_Q_Q  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 2048 2048))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 2048 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_UQ_UQ_UQ  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 2048 2048))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 2048 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_32_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_Q_Q_Q  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_UQ_UQ_UQ  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_4_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_Q_Q_Q  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_UQ_UQ_UQ  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 64))])
-  (define %3 (+  i0.new  63))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VASR_8_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvashr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
 (define (VAVG_16_B_B_B  src0 src1 )
 (define dst
 (apply
@@ -2974,11 +2062,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvashr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -2995,11 +2086,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvashr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3016,11 +2110,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvlshr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3037,11 +2134,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvlshr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3058,11 +2158,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvlshr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3079,11 +2182,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvashr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3100,11 +2206,14 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvashr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3121,11 +2230,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvashr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3142,11 +2254,14 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvlshr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3163,11 +2278,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvlshr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3184,11 +2302,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvlshr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3205,11 +2326,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvashr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3226,11 +2350,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvashr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3247,11 +2374,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvashr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3268,11 +2398,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvlshr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3289,11 +2422,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvlshr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3310,11 +2446,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvlshr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3331,11 +2470,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvashr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3352,11 +2494,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvashr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3373,11 +2518,14 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvashr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3394,11 +2542,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvlshr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3415,11 +2566,14 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvlshr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3436,11 +2590,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvlshr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3457,11 +2614,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvashr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3478,11 +2638,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvashr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3499,11 +2662,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvashr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3520,11 +2686,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvlshr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3541,11 +2710,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvlshr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3562,11 +2734,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvlshr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3583,11 +2758,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvashr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3604,11 +2782,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvashr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3625,11 +2806,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvashr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3646,11 +2830,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 8)))
-  (define %16 (bvlshr  %15  (bv 1 8)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  7 0 %18))
+  %19
  )
  )
 )
@@ -3667,11 +2854,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 32)))
-  (define %16 (bvlshr  %15  (bv 1 32)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  31 0 %18))
+  %19
  )
  )
 )
@@ -3688,11 +2878,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvlshr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3709,11 +2902,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvadd  %8  %13))
-  (define %15 (bvadd  %14  (bv 1 16)))
-  (define %16 (bvashr  %15  (bv 1 16)))
-  %16
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvadd  %9  %16))
+  (define %17 (bvadd  %15  (bv 1 64)))
+  (define %18 (bvashr  %17  (bv 1 64)))
+  (define %19 (extract  15 0 %18))
+  %19
  )
  )
 )
@@ -3730,11 +2926,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -3751,11 +2950,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -3772,11 +2974,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -3793,11 +2998,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -3814,11 +3022,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -3835,11 +3046,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -3856,11 +3070,14 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -3877,11 +3094,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -3898,11 +3118,14 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -3919,11 +3142,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -3940,11 +3166,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -3961,11 +3190,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -3982,11 +3214,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4003,11 +3238,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4024,11 +3262,14 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4045,11 +3286,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4066,11 +3310,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4087,11 +3334,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4108,11 +3358,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4129,11 +3382,14 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4150,11 +3406,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4171,11 +3430,14 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4192,11 +3454,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4213,11 +3478,14 @@ concat
  (for/list ([i0.new (reverse (range 0 512 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4234,11 +3502,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4255,11 +3526,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4276,11 +3550,14 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4297,11 +3574,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4318,11 +3598,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4339,11 +3622,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4360,11 +3646,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4381,11 +3670,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4402,11 +3694,14 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 8))
-  (define %16 (bvaddnsw  %14  (bv 1 8) 8))
-  (define %18 (bvashr  %16  (bv 1 8)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  7 0 %20))
+  %21
  )
  )
 )
@@ -4423,11 +3718,14 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 32))
-  (define %16 (bvaddnsw  %14  (bv 1 32) 32))
-  (define %18 (bvashr  %16  (bv 1 32)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  31 0 %20))
+  %21
  )
  )
 )
@@ -4444,11 +3742,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4465,11 +3766,14 @@ concat
  (for/list ([i0.new (reverse (range 0 128 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvaddnsw  %8  %13 16))
-  (define %16 (bvaddnsw  %14  (bv 1 16) 16))
-  (define %18 (bvashr  %16  (bv 1 16)))
-  %18
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvaddnsw  %9  %16 64))
+  (define %18 (bvaddnsw  %15  (bv 1 64) 64))
+  (define %20 (bvashr  %18  (bv 1 64)))
+  (define %21 (extract  15 0 %20))
+  %21
  )
  )
 )
@@ -4494,7 +3798,10 @@ concat
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4515,11 +3822,14 @@ concat
   (define %10 (extract  %3 i0.new src1))
   (define %11 (bvand  %10  (bv 31 32)))
   (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvlshr  %20  %11))
+  (define %21 (bvashr  %20  %11))
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4544,7 +3854,10 @@ concat
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4565,11 +3878,14 @@ concat
   (define %10 (extract  %3 i0.new src1))
   (define %11 (bvand  %10  (bv 31 32)))
   (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvlshr  %20  %11))
+  (define %21 (bvashr  %20  %11))
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4594,7 +3910,10 @@ concat
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4615,11 +3934,14 @@ concat
   (define %10 (extract  %3 i0.new src1))
   (define %11 (bvand  %10  (bv 31 32)))
   (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvlshr  %20  %11))
+  (define %21 (bvashr  %20  %11))
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4644,7 +3966,10 @@ concat
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4665,11 +3990,14 @@ concat
   (define %10 (extract  %3 i0.new src1))
   (define %11 (bvand  %10  (bv 31 32)))
   (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvlshr  %20  %11))
+  (define %21 (bvashr  %20  %11))
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4694,7 +4022,10 @@ concat
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4715,11 +4046,14 @@ concat
   (define %10 (extract  %3 i0.new src1))
   (define %11 (bvand  %10  (bv 31 32)))
   (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvlshr  %20  %11))
+  (define %21 (bvashr  %20  %11))
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4744,7 +4078,10 @@ concat
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -4765,11 +4102,14 @@ concat
   (define %10 (extract  %3 i0.new src1))
   (define %11 (bvand  %10  (bv 31 32)))
   (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvlshr  %20  %11))
+  (define %21 (bvashr  %20  %11))
   (define %22 (bvshl  (bv 1 32)  %5))
   (define %23 (bvsub  %22  (bv 1 32)))
   (define %24 (bvand  %21  %23))
-  %24
+  (define %25 (bvsub  (bv 32 32)  %5))
+  (define %26 (bvshl  %24  %25))
+  (define %28 (bvashr  %26  %25))
+  %28
  )
  )
 )
@@ -5136,690 +4476,6 @@ concat
 )
 )
 dst)
-(define (VDIV_16_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_16_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_16_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_16_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_16_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_16_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_1_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_1_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_1_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_1_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_1_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_1_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_2_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_2_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_2_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_2_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_2_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_2_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_32_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_32_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_32_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_32_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_32_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_32_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_4_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_4_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_4_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_4_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_4_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_4_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_8_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_8_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_8_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_8_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_8_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvudiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VDIV_8_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvsdiv  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
 (define (VDP4A_16_D_D_D_D  src0 src1 src2 )
 (define dst
 (apply
@@ -5830,31 +4486,41 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -5871,31 +4537,41 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -5912,31 +4588,41 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -5953,31 +4639,41 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -5994,31 +4690,41 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6035,31 +4741,41 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6076,31 +4792,41 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6117,31 +4843,41 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6158,31 +4894,41 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6199,31 +4945,41 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6240,31 +4996,41 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6281,31 +5047,41 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmul  %130.new  %190.new))
-  (define %22 (bvadd  %8  %21))
-  (define %28.new.low.idx (+  %0.new0  8))
-  (define %28.new.high.idx0 (+  %28.new.low.idx  7))
-  (define %270.new (extract  %28.new.high.idx0 %28.new.low.idx src1))
-  (define %330.new (extract  %28.new.high.idx0 %28.new.low.idx src2))
-  (define %35 (bvmul  %270.new  %330.new))
-  (define %36 (bvadd  %22  %35))
-  (define %42.new.low.idx (+  %0.new0  16))
-  (define %42.new.high.idx0 (+  %42.new.low.idx  7))
-  (define %410.new (extract  %42.new.high.idx0 %42.new.low.idx src1))
-  (define %470.new (extract  %42.new.high.idx0 %42.new.low.idx src2))
-  (define %49 (bvmul  %410.new  %470.new))
-  (define %50 (bvadd  %36  %49))
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmul  %10  %18))
+  (define %24.new.low.idx (+  %0.new0  8))
+  (define %24.new.high.idx0 (+  %24.new.low.idx  7))
+  (define %230.new (extract  %24.new.high.idx0 %24.new.low.idx src1))
+  (define %25 (sign-extend  %230.new (bitvector 64)))
+  (define %300.new (extract  %24.new.high.idx0 %24.new.low.idx src2))
+  (define %33 (sign-extend  %300.new (bitvector 64)))
+  (define %32 (bvmul  %25  %33))
+  (define %34 (bvadd  %17  %32))
+  (define %40.new.low.idx (+  %0.new0  16))
+  (define %40.new.high.idx0 (+  %40.new.low.idx  7))
+  (define %390.new (extract  %40.new.high.idx0 %40.new.low.idx src1))
+  (define %41 (sign-extend  %390.new (bitvector 64)))
+  (define %460.new (extract  %40.new.high.idx0 %40.new.low.idx src2))
+  (define %49 (sign-extend  %460.new (bitvector 64)))
+  (define %48 (bvmul  %41  %49))
+  (define %50 (bvadd  %34  %48))
   (define %56.new.low.idx (+  %0.new0  24))
   (define %56.new.high.idx0 (+  %56.new.low.idx  7))
   (define %550.new (extract  %56.new.high.idx0 %56.new.low.idx src1))
-  (define %610.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
-  (define %63 (bvmul  %550.new  %610.new))
-  (define %64 (bvadd  %50  %63))
-  %64
+  (define %57 (sign-extend  %550.new (bitvector 64)))
+  (define %620.new (extract  %56.new.high.idx0 %56.new.low.idx src2))
+  (define %65 (sign-extend  %620.new (bitvector 64)))
+  (define %64 (bvmul  %57  %65))
+  (define %66 (bvadd  %50  %64))
+  (define %71 (extract  %3 %0.new0 src0))
+  (define %73 (sign-extend  %71 (bitvector 64)))
+  (define %72 (bvadd  %66  %73))
+  (define %74 (extract  31 0 %72))
+  %74
  )
  )
 )
@@ -6322,31 +5098,41 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6363,31 +5149,41 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6404,31 +5200,41 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6445,31 +5251,41 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6486,31 +5302,41 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6527,31 +5353,41 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6568,31 +5404,41 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6609,31 +5455,41 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6650,31 +5506,41 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6691,31 +5557,41 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6732,31 +5608,41 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6773,31 +5659,41 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %0.new0 (*  i0.new  4))
   (define %3 (+  %0.new0  31))
-  (define %8 (extract  %3 %0.new0 src0))
-  (define %14.new.high.idx0 (+  %0.new0  7))
-  (define %130.new (extract  %14.new.high.idx0 %0.new0 src1))
-  (define %190.new (extract  %14.new.high.idx0 %0.new0 src2))
-  (define %21 (bvmulnsw  %130.new  %190.new 8))
-  (define %23 (bvaddnsw  %8  %21 32))
-  (define %30.new.low.idx (+  %0.new0  8))
-  (define %30.new.high.idx0 (+  %30.new.low.idx  7))
-  (define %290.new (extract  %30.new.high.idx0 %30.new.low.idx src1))
-  (define %350.new (extract  %30.new.high.idx0 %30.new.low.idx src2))
-  (define %37 (bvmulnsw  %290.new  %350.new 8))
-  (define %39 (bvaddnsw  %23  %37 32))
-  (define %46.new.low.idx (+  %0.new0  16))
-  (define %46.new.high.idx0 (+  %46.new.low.idx  7))
-  (define %450.new (extract  %46.new.high.idx0 %46.new.low.idx src1))
-  (define %510.new (extract  %46.new.high.idx0 %46.new.low.idx src2))
-  (define %53 (bvmulnsw  %450.new  %510.new 8))
-  (define %55 (bvaddnsw  %39  %53 32))
-  (define %62.new.low.idx (+  %0.new0  24))
-  (define %62.new.high.idx0 (+  %62.new.low.idx  7))
-  (define %610.new (extract  %62.new.high.idx0 %62.new.low.idx src1))
-  (define %670.new (extract  %62.new.high.idx0 %62.new.low.idx src2))
-  (define %69 (bvmulnsw  %610.new  %670.new 8))
-  (define %71 (bvaddnsw  %55  %69 32))
-  %71
+  (define %9.new.high.idx0 (+  %0.new0  7))
+  (define %80.new (extract  %9.new.high.idx0 %0.new0 src1))
+  (define %10 (sign-extend  %80.new (bitvector 64)))
+  (define %150.new (extract  %9.new.high.idx0 %0.new0 src2))
+  (define %18 (sign-extend  %150.new (bitvector 64)))
+  (define %17 (bvmulnsw  %10  %18 64))
+  (define %25.new.low.idx (+  %0.new0  8))
+  (define %25.new.high.idx0 (+  %25.new.low.idx  7))
+  (define %240.new (extract  %25.new.high.idx0 %25.new.low.idx src1))
+  (define %26 (sign-extend  %240.new (bitvector 64)))
+  (define %310.new (extract  %25.new.high.idx0 %25.new.low.idx src2))
+  (define %34 (sign-extend  %310.new (bitvector 64)))
+  (define %33 (bvmulnsw  %26  %34 64))
+  (define %36 (bvaddnsw  %17  %33 64))
+  (define %43.new.low.idx (+  %0.new0  16))
+  (define %43.new.high.idx0 (+  %43.new.low.idx  7))
+  (define %420.new (extract  %43.new.high.idx0 %43.new.low.idx src1))
+  (define %44 (sign-extend  %420.new (bitvector 64)))
+  (define %490.new (extract  %43.new.high.idx0 %43.new.low.idx src2))
+  (define %52 (sign-extend  %490.new (bitvector 64)))
+  (define %51 (bvmulnsw  %44  %52 64))
+  (define %54 (bvaddnsw  %36  %51 64))
+  (define %61.new.low.idx (+  %0.new0  24))
+  (define %61.new.high.idx0 (+  %61.new.low.idx  7))
+  (define %600.new (extract  %61.new.high.idx0 %61.new.low.idx src1))
+  (define %62 (sign-extend  %600.new (bitvector 64)))
+  (define %670.new (extract  %61.new.high.idx0 %61.new.low.idx src2))
+  (define %70 (sign-extend  %670.new (bitvector 64)))
+  (define %69 (bvmulnsw  %62  %70 64))
+  (define %72 (bvaddnsw  %54  %69 64))
+  (define %78 (extract  %3 %0.new0 src0))
+  (define %80 (sign-extend  %78 (bitvector 64)))
+  (define %79 (bvaddnsw  %72  %80 64))
+  (define %82 (bvssat %79 64 32 ))
+  %82
  )
  )
 )
@@ -6814,11 +5710,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -6835,11 +5735,15 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -6856,11 +5760,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -6877,11 +5785,15 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -6898,11 +5810,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -6919,11 +5835,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -6940,11 +5860,15 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -6961,11 +5885,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -6982,11 +5910,15 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7003,11 +5935,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7024,11 +5960,15 @@ concat
  (for/list ([i0.new (reverse (range 0 16 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7045,11 +5985,15 @@ concat
  (for/list ([i0.new (reverse (range 0 16 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7066,11 +6010,15 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7087,11 +6035,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7108,11 +6060,15 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7129,11 +6085,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7150,11 +6110,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7171,11 +6135,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7192,11 +6160,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7213,11 +6185,15 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7234,11 +6210,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7255,11 +6235,15 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7276,11 +6260,15 @@ concat
  (for/list ([i0.new (reverse (range 0 512 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7297,11 +6285,15 @@ concat
  (for/list ([i0.new (reverse (range 0 512 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7318,11 +6310,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7339,11 +6335,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7360,11 +6360,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7381,11 +6385,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7402,11 +6410,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7423,11 +6435,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7444,11 +6460,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7465,11 +6485,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7486,11 +6510,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  7 0 %22))
+  %24
  )
  )
 )
@@ -7507,11 +6535,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  31 0 %22))
+  %24
  )
  )
 )
@@ -7528,11 +6560,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7549,11 +6585,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 16))])
   (define %3 (+  i0.new  15))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  (define %19 (extract  %3 i0.new src2))
-  (define %20 (bvadd  %14  %19))
-  %20
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %21 (extract  %3 i0.new src2))
+  (define %23 (sign-extend  %21 (bitvector 64)))
+  (define %22 (bvadd  %15  %23))
+  (define %24 (extract  15 0 %22))
+  %24
  )
  )
 )
@@ -7570,11 +6610,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7591,53 +6635,15 @@ concat
  (for/list ([i0.new (reverse (range 0 128 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_16_UW_UW_UW_UW  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_16_W_W_W_W  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7654,11 +6660,15 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7675,53 +6685,15 @@ concat
  (for/list ([i0.new (reverse (range 0 8 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_1_UW_UW_UW_UW  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_1_W_W_W_W  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7738,11 +6710,15 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7759,53 +6735,15 @@ concat
  (for/list ([i0.new (reverse (range 0 16 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_2_UW_UW_UW_UW  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_2_W_W_W_W  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7822,11 +6760,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7843,53 +6785,15 @@ concat
  (for/list ([i0.new (reverse (range 0 256 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_32_UW_UW_UW_UW  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_32_W_W_W_W  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7906,11 +6810,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7927,53 +6835,15 @@ concat
  (for/list ([i0.new (reverse (range 0 32 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_4_UW_UW_UW_UW  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_4_W_W_W_W  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -7990,11 +6860,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -8011,53 +6885,15 @@ concat
  (for/list ([i0.new (reverse (range 0 64 8))])
   (define %3 (+  i0.new  7))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 8))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 8))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_8_UW_UW_UW_UW  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
- )
- )
-)
-)
-)
-dst)
-(define (VMAD_sat_8_W_W_W_W  src0 src1 src2 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmulnsw  %8  %13 16))
-  (define %20 (extract  %3 i0.new src2))
-  (define %21 (bvaddnsw  %14  %20 16))
-  %21
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmulnsw  %9  %16 64))
+  (define %22 (extract  %3 i0.new src2))
+  (define %24 (sign-extend  %22 (bitvector 64)))
+  (define %23 (bvaddnsw  %15  %24 64))
+  (define %26 (bvssat %23 64 8 ))
+  %26
  )
  )
 )
@@ -10390,9 +9226,12 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10409,9 +9248,12 @@ concat
  (for/list ([i0.new (reverse (range 0 512 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10428,9 +9270,12 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10447,9 +9292,12 @@ concat
  (for/list ([i0.new (reverse (range 0 32 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10466,9 +9314,12 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10485,9 +9336,12 @@ concat
  (for/list ([i0.new (reverse (range 0 64 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10504,9 +9358,12 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10523,9 +9380,12 @@ concat
  (for/list ([i0.new (reverse (range 0 1024 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10542,9 +9402,12 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10561,9 +9424,12 @@ concat
  (for/list ([i0.new (reverse (range 0 128 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10580,9 +9446,12 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -10599,9 +9468,12 @@ concat
  (for/list ([i0.new (reverse (range 0 256 32))])
   (define %3 (+  i0.new  31))
   (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvmul  %8  %13))
-  %14
+  (define %9 (sign-extend  %8 (bitvector 64)))
+  (define %14 (extract  %3 i0.new src1))
+  (define %16 (sign-extend  %14 (bitvector 64)))
+  (define %15 (bvmul  %9  %16))
+  (define %17 (extract  63 32 %15))
+  %17
  )
  )
 )
@@ -13073,2058 +11945,6 @@ concat
   (define %8 (extract  %3 i0.new src0))
   (define %13 (extract  %3 i0.new src1))
   (define %14 (bvor  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_16_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_16_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_16_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_16_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_16_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_16_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_1_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_1_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_1_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_1_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_1_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_1_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_2_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_2_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_2_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_2_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_2_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_2_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_32_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_32_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_32_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_32_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_32_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_32_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_4_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_4_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_4_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_4_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_4_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_4_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_8_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_8_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_8_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_8_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_8_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_8_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_16_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_16_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_16_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_16_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_16_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_16_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_1_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_1_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_1_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_1_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_1_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_1_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_2_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_2_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_2_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_2_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_2_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_2_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_32_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_32_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_32_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_32_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_32_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_32_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_4_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_4_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_4_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_4_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_4_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_4_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_8_B_B_B  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_8_D_D_D  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_8_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_8_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_8_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHL_sat_8_W_W_W  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvshl  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_16_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_16_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_16_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_1_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_1_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_1_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_2_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_2_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_2_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_32_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_32_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_32_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_4_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_4_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_4_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_8_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_8_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_8_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_16_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_16_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_16_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_1_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 8 8))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 8 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_1_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_1_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_2_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 16 16))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 16 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_2_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_2_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_32_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_32_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 1024 1024))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 1024 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_32_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 512 512))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 512 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_4_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 32 32))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 32 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_4_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_4_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_8_UB_UB_UB  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 64 64))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 64 8))])
-  (define %3 (+  i0.new  7))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_8_UD_UD_UD  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 256 256))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 256 32))])
-  (define %3 (+  i0.new  31))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
-  %14
- )
- )
-)
-)
-)
-dst)
-(define (VSHR_sat_8_UW_UW_UW  src0 src1 )
-(define dst
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 128 128))])
- (apply
- concat
- (for/list ([i0.new (reverse (range 0 128 16))])
-  (define %3 (+  i0.new  15))
-  (define %8 (extract  %3 i0.new src0))
-  (define %13 (extract  %3 i0.new src1))
-  (define %14 (bvlshr  %8  %13))
   %14
  )
  )

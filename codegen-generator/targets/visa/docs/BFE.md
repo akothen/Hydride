@@ -26,7 +26,9 @@ SPDX-License-Identifier: MIT
                       if (ChEn[i]) {
                         UD width = src0[i] & 0x1F;
                         UD offset = src1[i] & 0x1F;
-                        dst[i] = (src2[i] >> offset) & ((1 << width) - 1);
+                        // dst[i] = (src2[i] >> offset) & ((1 << width) - 1);
+                        dst[i] = (((src2[i] >> offset) & ((1 << width) - 1)) << (32-width) >> (32 - width));
+                        // dst[i] = src2[i][width+offset:offset];
                       }
                     }
 ```
@@ -107,7 +109,8 @@ SPDX-License-Identifier: MIT
 
 ## Notes
 
-
+0 0 0xff -> 0
+0 1
 
 
 

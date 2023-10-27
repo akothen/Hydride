@@ -24,7 +24,7 @@ SPDX-License-Identifier: MIT
 
                     for (i = 0; i < exec_size; ++i){
                       if (ChEn[i]) {
-                        dst[i] = src0[i] * src1[i] + src2[i];
+                        dst[i] = SizeExt(src0[i],64) * src1[i] + src2[i];
                       }
                     }
 ```
