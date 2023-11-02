@@ -1,0 +1,237 @@
+module name=matmul_256_32bit_bias_add_gelu, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func matmul_256_32bit_bias_add_gelu (A, B, bias, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)bias.buffer) != (uint64)0, halide_error_buffer_argument_is_null("bias"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let A.min.2 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 2)
+let A.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 2)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let B.min.2 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 2)
+let B.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 2)
+let bias = (void *)_halide_buffer_get_host((halide_buffer_t *)bias.buffer)
+let bias.min.0 = _halide_buffer_get_min((halide_buffer_t *)bias.buffer, 0)
+let bias.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)bias.buffer, 0)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let output.min.2 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 2)
+let output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 2)
+let output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 2)
+assert(A.stride.0 == 1, 0)
+assert(B.stride.0 == 1, 0)
+assert(bias.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t988 = (int16)rounding_mul_shift_right((int16)31232, (int16)31232, (uint16)15)
+ let t989 = (int16)rounding_mul_shift_right((int16)23249, (int16)31232, (uint16)15)
+ let t987 = (int16)rounding_mul_shift_right((int16)23249, (int16)17496, (uint16)15)
+ let t985 = (int16)rounding_mul_shift_right((int16)23249, (int16)16384, (uint16)15)
+ let t983 = (int16)rounding_mul_shift_right((int16)23249, (int16)0, (uint16)15)
+ let t986 = (int16)rounding_mul_shift_right((int16)17496, (int16)17496, (uint16)15)
+ let t984 = (int16)rounding_mul_shift_right((int16)16384, (int16)16384, (uint16)15)
+ let t982 = (int16)rounding_mul_shift_right((int16)0, (int16)0, (uint16)15)
+ let t977 = (output.extent.2 + 3)/4
+ let t978 = (output.extent.1 + 63)/64
+ let t979 = ((output.min.0 - (B.min.2*B.stride.2)) - (B.min.1*B.stride.1)) - B.min.0
+ let t980 = ((output.min.0 - (A.min.2*A.stride.2)) - (A.min.1*A.stride.1)) - A.min.0
+ let t981 = output.min.0 - bias.min.0
+ let t990 = 0 - ((output.min.2*output.stride.2) + (output.min.1*output.stride.1))
+ for (output.s0.c.rebased, 0, output.extent.0) {
+  let t996 = saturating_add(196608, int32((((int16)rounding_mul_shift_right((int16)-9421, t986, (uint16)15) + ((int16)rounding_mul_shift_right((int16)2555, (int16)rounding_mul_shift_right(t986, (int16)17496, (uint16)15), (uint16)15) + t987)) + (int16)5)))
+  let t997 = saturating_add(147456, int32((((int16)rounding_mul_shift_right((int16)-9421, t988, (uint16)15) + ((int16)rounding_mul_shift_right((int16)2555, (int16)rounding_mul_shift_right(t988, (int16)31232, (uint16)15), (uint16)15) + t989)) + (int16)5)))
+  let t995 = saturating_add(32768, int32((((int16)rounding_mul_shift_right((int16)-9421, t984, (uint16)15) + ((int16)rounding_mul_shift_right((int16)2555, (int16)rounding_mul_shift_right(t984, (int16)16384, (uint16)15), (uint16)15) + t985)) + (int16)5))*2)
+  let t994 = saturating_add(32768, int32((((int16)rounding_mul_shift_right((int16)-9421, t982, (uint16)15) + ((int16)rounding_mul_shift_right((int16)2555, (int16)rounding_mul_shift_right(t982, (int16)0, (uint16)15), (uint16)15) + t983)) + (int16)5))*2)
+  let t998 = output.s0.c.rebased + t990
+  let t993 = output.s0.c.rebased + t981
+  let t992 = output.s0.c.rebased + t980
+  let t991 = output.s0.c.rebased + t979
+  for (output.s0.y.y, 0, t977) {
+   let output.s0.y.yi.base.s = min(output.s0.y.y*4, output.extent.2 + -4)
+   let t1015 = 0 - t994
+   let t1016 = 0 - t995
+   let t1017 = 0 - t996
+   let t1018 = 0 - t997
+   let t1019 = output.min.2 + output.s0.y.yi.base.s
+   let t1020 = t1019 + 1
+   let t1021 = t1019 + 2
+   let t1022 = t1019 + 3
+   let t1009 = shift_left(1, t1018/32768)
+   let t1007 = shift_left(1, t1017/32768)
+   let t1005 = shift_left(1, t1016/32768)
+   let t1003 = shift_left(1, t1015/32768)
+   let t1014 = (output.stride.2*t1022) + t998
+   let t1002 = (A.stride.2*t1022) + t992
+   let t1013 = (output.stride.2*t1021) + t998
+   let t1001 = (A.stride.2*t1021) + t992
+   let t1012 = (output.stride.2*t1020) + t998
+   let t1000 = (A.stride.2*t1020) + t992
+   let t1011 = (output.stride.2*t1019) + t998
+   let t999 = (A.stride.2*t1019) + t992
+   let t1010 = int16((t1018 % 32768))
+   let t1008 = int16((t1017 % 32768))
+   let t1006 = int16((t1016 % 32768))
+   let t1004 = int16((t1015 % 32768))
+   for (output.s0.x.x, 0, t978) {
+    let output.s0.x.xi.base.s = min(output.s0.x.x*64, output.extent.1 + -64)
+    allocate matrix_mul[int32 * 256] in Stack
+    produce matrix_mul {
+     matrix_mul[ramp(0, 1, 16)] = x16(0)
+     matrix_mul[ramp(16, 1, 16)] = x16(0)
+     matrix_mul[ramp(32, 1, 16)] = x16(0)
+     matrix_mul[ramp(48, 1, 16)] = x16(0)
+     matrix_mul[ramp(64, 1, 16)] = x16(0)
+     matrix_mul[ramp(80, 1, 16)] = x16(0)
+     matrix_mul[ramp(96, 1, 16)] = x16(0)
+     matrix_mul[ramp(112, 1, 16)] = x16(0)
+     matrix_mul[ramp(128, 1, 16)] = x16(0)
+     matrix_mul[ramp(144, 1, 16)] = x16(0)
+     matrix_mul[ramp(160, 1, 16)] = x16(0)
+     matrix_mul[ramp(176, 1, 16)] = x16(0)
+     matrix_mul[ramp(192, 1, 16)] = x16(0)
+     matrix_mul[ramp(208, 1, 16)] = x16(0)
+     matrix_mul[ramp(224, 1, 16)] = x16(0)
+     matrix_mul[ramp(240, 1, 16)] = x16(0)
+     let t1027 = output.min.1 + output.s0.x.xi.base.s
+     let t1026 = ((t1027 + 48)*B.stride.1) + t991
+     let t1025 = ((t1027 + 32)*B.stride.1) + t991
+     let t1024 = ((t1027 + 16)*B.stride.1) + t991
+     let t1023 = (B.stride.1*t1027) + t991
+     for (matrix_mul.s1.r11$x, 0, 256) {
+      matrix_mul[ramp(0, 1, 16)] = matrix_mul[ramp(0, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1023, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t999]))
+      matrix_mul[ramp(16, 1, 16)] = matrix_mul[ramp(16, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1024, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t999]))
+      matrix_mul[ramp(32, 1, 16)] = matrix_mul[ramp(32, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1025, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t999]))
+      matrix_mul[ramp(48, 1, 16)] = matrix_mul[ramp(48, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1026, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t999]))
+      matrix_mul[ramp(64, 1, 16)] = matrix_mul[ramp(64, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1023, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1000]))
+      matrix_mul[ramp(80, 1, 16)] = matrix_mul[ramp(80, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1024, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1000]))
+      matrix_mul[ramp(96, 1, 16)] = matrix_mul[ramp(96, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1025, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1000]))
+      matrix_mul[ramp(112, 1, 16)] = matrix_mul[ramp(112, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1026, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1000]))
+      matrix_mul[ramp(128, 1, 16)] = matrix_mul[ramp(128, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1023, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1001]))
+      matrix_mul[ramp(144, 1, 16)] = matrix_mul[ramp(144, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1024, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1001]))
+      matrix_mul[ramp(160, 1, 16)] = matrix_mul[ramp(160, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1025, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1001]))
+      matrix_mul[ramp(176, 1, 16)] = matrix_mul[ramp(176, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1026, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1001]))
+      matrix_mul[ramp(192, 1, 16)] = matrix_mul[ramp(192, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1023, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1002]))
+      matrix_mul[ramp(208, 1, 16)] = matrix_mul[ramp(208, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1024, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1002]))
+      matrix_mul[ramp(224, 1, 16)] = matrix_mul[ramp(224, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1025, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1002]))
+      matrix_mul[ramp(240, 1, 16)] = matrix_mul[ramp(240, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul.s1.r11$x) + t1026, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul.s1.r11$x) + t1002]))
+     }
+    }
+    consume matrix_mul {
+     let t641 = matrix_mul[ramp(0, 1, 16)] + x16(bias[t993])
+     let t646 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t651 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t656 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t661 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t1011, output.stride.1, 16)] = (t641*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t646, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t646, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t641*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t651, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t651, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t656, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t656, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t661, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t661, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t641*t641) + x16(6))) + x16(1))
+     let t662 = matrix_mul[ramp(16, 1, 16)] + x16(bias[t993])
+     let t667 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t672 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t677 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t682 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t1011, output.stride.1, 16)] = (t662*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t667, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t667, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t662*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t672, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t672, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t677, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t677, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t682, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t682, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t662*t662) + x16(6))) + x16(1))
+     let t683 = matrix_mul[ramp(32, 1, 16)] + x16(bias[t993])
+     let t688 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t693 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t698 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t703 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t1011, output.stride.1, 16)] = (t683*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t688, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t688, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t683*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t693, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t693, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t698, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t698, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t703, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t703, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t683*t683) + x16(6))) + x16(1))
+     let t704 = matrix_mul[ramp(48, 1, 16)] + x16(bias[t993])
+     let t709 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t714 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t719 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t724 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t1011, output.stride.1, 16)] = (t704*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t709, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t709, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t704*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t714, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t714, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t719, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t719, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t724, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t724, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t704*t704) + x16(6))) + x16(1))
+     let t725 = matrix_mul[ramp(64, 1, 16)] + x16(bias[t993])
+     let t730 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t735 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t740 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t745 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t1012, output.stride.1, 16)] = (t725*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t730, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t730, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t725*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t735, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t735, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t740, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t740, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t745, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t745, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t725*t725) + x16(6))) + x16(1))
+     let t746 = matrix_mul[ramp(80, 1, 16)] + x16(bias[t993])
+     let t751 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t756 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t761 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t766 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t1012, output.stride.1, 16)] = (t746*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t751, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t751, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t746*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t756, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t756, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t761, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t761, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t766, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t766, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t746*t746) + x16(6))) + x16(1))
+     let t767 = matrix_mul[ramp(96, 1, 16)] + x16(bias[t993])
+     let t772 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t777 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t782 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t787 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t1012, output.stride.1, 16)] = (t767*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t772, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t772, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t767*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t777, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t777, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t782, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t782, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t787, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t787, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t767*t767) + x16(6))) + x16(1))
+     let t788 = matrix_mul[ramp(112, 1, 16)] + x16(bias[t993])
+     let t793 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t798 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t803 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t808 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t1012, output.stride.1, 16)] = (t788*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t793, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t793, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t788*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t798, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t798, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t803, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t803, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t808, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t808, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t788*t788) + x16(6))) + x16(1))
+     let t809 = matrix_mul[ramp(128, 1, 16)] + x16(bias[t993])
+     let t814 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t819 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t824 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t829 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t1013, output.stride.1, 16)] = (t809*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t814, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t814, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t809*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t819, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t819, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t824, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t824, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t829, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t829, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t809*t809) + x16(6))) + x16(1))
+     let t830 = matrix_mul[ramp(144, 1, 16)] + x16(bias[t993])
+     let t835 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t840 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t845 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t850 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t1013, output.stride.1, 16)] = (t830*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t835, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t835, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t830*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t840, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t840, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t845, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t845, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t850, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t850, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t830*t830) + x16(6))) + x16(1))
+     let t851 = matrix_mul[ramp(160, 1, 16)] + x16(bias[t993])
+     let t856 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t861 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t866 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t871 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t1013, output.stride.1, 16)] = (t851*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t856, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t856, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t851*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t861, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t861, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t866, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t866, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t871, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t871, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t851*t851) + x16(6))) + x16(1))
+     let t872 = matrix_mul[ramp(176, 1, 16)] + x16(bias[t993])
+     let t877 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t882 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t887 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t892 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t1013, output.stride.1, 16)] = (t872*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t877, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t877, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t872*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t882, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t882, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t887, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t887, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t892, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t892, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t872*t872) + x16(6))) + x16(1))
+     let t893 = matrix_mul[ramp(192, 1, 16)] + x16(bias[t993])
+     let t898 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t903 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t908 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t913 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t1014, output.stride.1, 16)] = (t893*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t898, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t898, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t893*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t903, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t903, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t908, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t908, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t913, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t913, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t893*t893) + x16(6))) + x16(1))
+     let t914 = matrix_mul[ramp(208, 1, 16)] + x16(bias[t993])
+     let t919 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t924 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t929 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t934 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t1014, output.stride.1, 16)] = (t914*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t919, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t919, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t914*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t924, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t924, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t929, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t929, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t934, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t934, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t914*t914) + x16(6))) + x16(1))
+     let t935 = matrix_mul[ramp(224, 1, 16)] + x16(bias[t993])
+     let t940 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t945 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t950 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t955 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t1014, output.stride.1, 16)] = (t935*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t940, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t940, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t935*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t945, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t945, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t950, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t950, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t955, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t955, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t935*t935) + x16(6))) + x16(1))
+     let t956 = matrix_mul[ramp(240, 1, 16)] + x16(bias[t993])
+     let t961 = (int16)rounding_mul_shift_right(t1004, t1004, (uint16)15)
+     let t966 = (int16)rounding_mul_shift_right(t1006, t1006, (uint16)15)
+     let t971 = (int16)rounding_mul_shift_right(t1008, t1008, (uint16)15)
+     let t976 = (int16)rounding_mul_shift_right(t1010, t1010, (uint16)15)
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t1014, output.stride.1, 16)] = (t956*x16(saturating_add(t1003, rounding_mul_shift_right(t1003, int32(((int16)rounding_mul_shift_right((int16)7363, t961, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1004, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t961, t1004, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((((t956*x16(saturating_add(t1005, rounding_mul_shift_right(t1005, int32(((int16)rounding_mul_shift_right((int16)7363, t966, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1006, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t966, t1006, (uint16)15), (uint16)15))))*65536, (uint32)31))))*x16(saturating_add(t1007, rounding_mul_shift_right(t1007, int32(((int16)rounding_mul_shift_right((int16)7363, t971, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1008, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t971, t1008, (uint16)15), (uint16)15))))*65536, (uint32)31))/saturating_add(t1009, rounding_mul_shift_right(t1009, int32(((int16)rounding_mul_shift_right((int16)7363, t976, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t1010, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t976, t1010, (uint16)15), (uint16)15))))*65536, (uint32)31))))*((t956*t956) + x16(6))) + x16(1))
+     free matrix_mul
+    }
+   }
+  }
+ }
+}
+}
+
+

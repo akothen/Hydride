@@ -1,0 +1,350 @@
+module name=fully_connected, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func fully_connected (input, input_zero, filter, filter_zero, bias, output_zero, output_multiplier, output_shift, output_min, output_max, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+assert((uint64)reinterpret((halide_buffer_t *)filter.buffer) != (uint64)0, halide_error_buffer_argument_is_null("filter"))
+assert((uint64)reinterpret((halide_buffer_t *)bias.buffer) != (uint64)0, halide_error_buffer_argument_is_null("bias"))
+let bias = (void *)_halide_buffer_get_host((halide_buffer_t *)bias.buffer)
+let bias.min.0 = _halide_buffer_get_min((halide_buffer_t *)bias.buffer, 0)
+let bias.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)bias.buffer, 0)
+let filter = (void *)_halide_buffer_get_host((halide_buffer_t *)filter.buffer)
+let filter.min.0 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 0)
+let filter.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 0)
+let filter.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 0)
+let filter.min.1 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 1)
+let filter.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 1)
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(bias.stride.0 == 1, 0)
+assert(filter.stride.0 == 1, 0)
+assert(filter.min.0 == 0, 0)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+let sum_input.b.min_realized.s = select((uint8)filter_zero == (uint8)0, 0, select((4 <= min(output.extent.0, output.extent.1)) && ((uint8)filter_zero != (uint8)0), min(output.extent.1, 4), 4) + -4)
+allocate sum_input[uint32 * (output.extent.1 - sum_input.b.min_realized.s)] if ((uint8)filter_zero != (uint8)0)
+if ((uint8)filter_zero != (uint8)0) {
+ produce sum_input {
+  for (sum_input.s0.b.rebased, 0, output.extent.1) {
+   sum_input[sum_input.s0.b.rebased - sum_input.b.min_realized.s] = (uint32)0
+  }
+  let t644 = filter.extent.0/16
+  let t645 = (input.min.1*input.stride.1) + input.min.0
+  for (sum_input.s1.b.rebased, 0, output.extent.1) {
+   let t647 = ((output.min.1 + sum_input.s1.b.rebased)*input.stride.1) - t645
+   let t646 = sum_input.s1.b.rebased - sum_input.b.min_realized.s
+   for (sum_input.s1.r9$x.r9$x, 0, t644) {
+    sum_input[t646] = (uint32)vector_reduce(Add, uint32x16((uint8x16)input[ramp((sum_input.s1.r9$x.r9$x*16) + t647, 1, 16)])) + sum_input[t646]
+   }
+  }
+ }
+}
+produce output {
+ consume sum_input {
+  if (4 <= min(output.extent.0, output.extent.1)) {
+   let t657 = filter.extent.0/16
+   let t653 = (uint8)filter_zero == (uint8)0
+   let t650 = max(t657, 0)
+   let t649 = (output.extent.1 + 3)/4
+   let t648 = (output.extent.0 + 3)/4
+   let t655 = ((t657*int32((uint8)filter_zero))*int32((uint8)input_zero))*16
+   let t651 = output.min.0 - filter.min.1
+   let t654 = output.min.0 - bias.min.0
+   let t656 = 0 - (output.min.1*output.stride.1)
+   let t652 = (input.min.1*input.stride.1) + input.min.0
+   for (output.s0.c.co, 0, t648) {
+    let output.s0.c.c.base.s = min(output.s0.c.co*4, output.extent.0 + -4)
+    let t664 = output.s0.c.c.base.s + t651
+    let t661 = (t664 + 3)*filter.stride.1
+    let t660 = (t664 + 2)*filter.stride.1
+    let t659 = (t664 + 1)*filter.stride.1
+    let t658 = filter.stride.1*t664
+    let t663 = output.s0.c.c.base.s + t656
+    let t662 = output.s0.c.c.base.s + t654
+    for (output.s0.b.bo, 0, t649) {
+     let output.s0.b.b.base.s = min(output.s0.b.bo*4, output.extent.1 + -4)
+     allocate multiplied_intm[int32 * 4 * 4 * 4]
+     allocate sum_filter_intm[uint32 * 16]
+     produce sum_filter_intm {
+      produce multiplied_intm {
+       sum_filter_intm[ramp(0, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(4, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(8, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(12, 1, 4)] = x4((uint32)0)
+       multiplied_intm[ramp(0, 1, 4)] = x4(0)
+       multiplied_intm[ramp(16, 1, 4)] = x4(0)
+       multiplied_intm[ramp(32, 1, 4)] = x4(0)
+       multiplied_intm[ramp(48, 1, 4)] = x4(0)
+       multiplied_intm[ramp(4, 1, 4)] = x4(0)
+       multiplied_intm[ramp(20, 1, 4)] = x4(0)
+       multiplied_intm[ramp(36, 1, 4)] = x4(0)
+       multiplied_intm[ramp(52, 1, 4)] = x4(0)
+       multiplied_intm[ramp(8, 1, 4)] = x4(0)
+       multiplied_intm[ramp(24, 1, 4)] = x4(0)
+       multiplied_intm[ramp(40, 1, 4)] = x4(0)
+       multiplied_intm[ramp(56, 1, 4)] = x4(0)
+       multiplied_intm[ramp(12, 1, 4)] = x4(0)
+       multiplied_intm[ramp(28, 1, 4)] = x4(0)
+       multiplied_intm[ramp(44, 1, 4)] = x4(0)
+       multiplied_intm[ramp(60, 1, 4)] = x4(0)
+       let t669 = output.min.1 + output.s0.b.b.base.s
+       let t668 = ((t669 + 3)*input.stride.1) - t652
+       let t667 = ((t669 + 2)*input.stride.1) - t652
+       let t666 = ((t669 + 1)*input.stride.1) - t652
+       let t665 = (input.stride.1*t669) - t652
+       for (multiplied_intm.s1.r9$x.r9$x.r60, 0, t650) {
+        multiplied_intm[ramp(0, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t658, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t665, 1, 16)]))) + multiplied_intm[ramp(0, 1, 4)]
+        multiplied_intm[ramp(16, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t659, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t665, 1, 16)]))) + multiplied_intm[ramp(16, 1, 4)]
+        multiplied_intm[ramp(32, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t660, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t665, 1, 16)]))) + multiplied_intm[ramp(32, 1, 4)]
+        multiplied_intm[ramp(48, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t661, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t665, 1, 16)]))) + multiplied_intm[ramp(48, 1, 4)]
+        multiplied_intm[ramp(4, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t658, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t666, 1, 16)]))) + multiplied_intm[ramp(4, 1, 4)]
+        multiplied_intm[ramp(20, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t659, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t666, 1, 16)]))) + multiplied_intm[ramp(20, 1, 4)]
+        multiplied_intm[ramp(36, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t660, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t666, 1, 16)]))) + multiplied_intm[ramp(36, 1, 4)]
+        multiplied_intm[ramp(52, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t661, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t666, 1, 16)]))) + multiplied_intm[ramp(52, 1, 4)]
+        multiplied_intm[ramp(8, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t658, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t667, 1, 16)]))) + multiplied_intm[ramp(8, 1, 4)]
+        multiplied_intm[ramp(24, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t659, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t667, 1, 16)]))) + multiplied_intm[ramp(24, 1, 4)]
+        multiplied_intm[ramp(40, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t660, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t667, 1, 16)]))) + multiplied_intm[ramp(40, 1, 4)]
+        multiplied_intm[ramp(56, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t661, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t667, 1, 16)]))) + multiplied_intm[ramp(56, 1, 4)]
+        multiplied_intm[ramp(12, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t658, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t668, 1, 16)]))) + multiplied_intm[ramp(12, 1, 4)]
+        multiplied_intm[ramp(28, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t659, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t668, 1, 16)]))) + multiplied_intm[ramp(28, 1, 4)]
+        multiplied_intm[ramp(44, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t660, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t668, 1, 16)]))) + multiplied_intm[ramp(44, 1, 4)]
+        multiplied_intm[ramp(60, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t661, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t668, 1, 16)]))) + multiplied_intm[ramp(60, 1, 4)]
+        sum_filter_intm[ramp(0, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t658, 1, 16)])) + sum_filter_intm[ramp(0, 1, 4)]
+        sum_filter_intm[ramp(4, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t659, 1, 16)])) + sum_filter_intm[ramp(4, 1, 4)]
+        sum_filter_intm[ramp(8, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t660, 1, 16)])) + sum_filter_intm[ramp(8, 1, 4)]
+        sum_filter_intm[ramp(12, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t661, 1, 16)])) + sum_filter_intm[ramp(12, 1, 4)]
+       }
+      }
+     }
+     allocate sum_filter[uint32 * 4]
+     produce sum_filter {
+      sum_filter[ramp(0, 1, 4)] = x4((uint32)0)
+      consume sum_filter_intm {
+       sum_filter[0] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(0, 1, 4)]) + sum_filter[0]
+       sum_filter[1] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(4, 1, 4)]) + sum_filter[1]
+       sum_filter[2] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(8, 1, 4)]) + sum_filter[2]
+       sum_filter[3] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(12, 1, 4)]) + sum_filter[3]
+       free sum_filter_intm
+      }
+     }
+     allocate multiplied[int32 * 16]
+     produce multiplied {
+      if (t653) {
+       multiplied[ramp(0, 1, 4)] = bias[ramp(t662, 1, 4)]
+       multiplied[ramp(4, 1, 4)] = bias[ramp(t662, 1, 4)]
+       multiplied[ramp(8, 1, 4)] = bias[ramp(t662, 1, 4)]
+       multiplied[ramp(12, 1, 4)] = bias[ramp(t662, 1, 4)]
+      } else {
+       multiplied[ramp(0, 1, 4)] = bias[ramp(t662, 1, 4)] + x4(t655 - (int32(sum_input[output.s0.b.b.base.s - sum_input.b.min_realized.s])*int32((uint8)filter_zero)))
+       multiplied[ramp(4, 1, 4)] = bias[ramp(t662, 1, 4)] + x4(t655 - (int32(sum_input[(output.s0.b.b.base.s - sum_input.b.min_realized.s) + 1])*int32((uint8)filter_zero)))
+       multiplied[ramp(8, 1, 4)] = bias[ramp(t662, 1, 4)] + x4(t655 - (int32(sum_input[(output.s0.b.b.base.s - sum_input.b.min_realized.s) + 2])*int32((uint8)filter_zero)))
+       multiplied[ramp(12, 1, 4)] = bias[ramp(t662, 1, 4)] + x4(t655 - (int32(sum_input[(output.s0.b.b.base.s - sum_input.b.min_realized.s) + 3])*int32((uint8)filter_zero)))
+      }
+      consume multiplied_intm {
+       for (multiplied.s1.b.rebased, 0, 4) {
+        multiplied[multiplied.s1.b.rebased*4] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(multiplied.s1.b.rebased*4, 1, 4) aligned(4, 0)]) + multiplied[multiplied.s1.b.rebased*4]
+        multiplied[(multiplied.s1.b.rebased*4) + 1] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp((multiplied.s1.b.rebased*4) + 16, 1, 4) aligned(4, 0)]) + multiplied[(multiplied.s1.b.rebased*4) + 1]
+        multiplied[(multiplied.s1.b.rebased*4) + 2] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp((multiplied.s1.b.rebased*4) + 32, 1, 4) aligned(4, 0)]) + multiplied[(multiplied.s1.b.rebased*4) + 2]
+        multiplied[(multiplied.s1.b.rebased*4) + 3] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp((multiplied.s1.b.rebased*4) + 48, 1, 4) aligned(4, 0)]) + multiplied[(multiplied.s1.b.rebased*4) + 3]
+       }
+      }
+      free multiplied_intm
+      consume sum_filter {
+       multiplied[ramp(0, 1, 4)] = multiplied[ramp(0, 1, 4)] - (int32x4(sum_filter[ramp(0, 1, 4)])*x4(int32((uint8)input_zero)))
+       multiplied[ramp(4, 1, 4)] = multiplied[ramp(4, 1, 4)] - (int32x4(sum_filter[ramp(0, 1, 4)])*x4(int32((uint8)input_zero)))
+       multiplied[ramp(8, 1, 4)] = multiplied[ramp(8, 1, 4)] - (int32x4(sum_filter[ramp(0, 1, 4)])*x4(int32((uint8)input_zero)))
+       multiplied[ramp(12, 1, 4)] = multiplied[ramp(12, 1, 4)] - (int32x4(sum_filter[ramp(0, 1, 4)])*x4(int32((uint8)input_zero)))
+       free sum_filter
+      }
+     }
+     consume multiplied {
+      output[ramp(((output.min.1 + output.s0.b.b.base.s)*output.stride.1) + t663, 1, 4)] = max(min(uint8x4(max(min((int16x4)saturating_add(int16x4(max(min((int32x4)rounding_shift_right((int32x4)rounding_mul_shift_right(multiplied[ramp(0, 1, 4)], x4(output_multiplier), x4((uint32)31)), x4(output_shift)), x4(32767)), x4(-32768))), x4(int16((uint8)output_zero))), x4((int16)255)), x4((int16)0))), x4((uint8)output_max)), x4((uint8)output_min))
+      output[ramp((((output.min.1 + output.s0.b.b.base.s) + 1)*output.stride.1) + t663, 1, 4)] = max(min(uint8x4(max(min((int16x4)saturating_add(int16x4(max(min((int32x4)rounding_shift_right((int32x4)rounding_mul_shift_right(multiplied[ramp(4, 1, 4)], x4(output_multiplier), x4((uint32)31)), x4(output_shift)), x4(32767)), x4(-32768))), x4(int16((uint8)output_zero))), x4((int16)255)), x4((int16)0))), x4((uint8)output_max)), x4((uint8)output_min))
+      output[ramp((((output.min.1 + output.s0.b.b.base.s) + 2)*output.stride.1) + t663, 1, 4)] = max(min(uint8x4(max(min((int16x4)saturating_add(int16x4(max(min((int32x4)rounding_shift_right((int32x4)rounding_mul_shift_right(multiplied[ramp(8, 1, 4)], x4(output_multiplier), x4((uint32)31)), x4(output_shift)), x4(32767)), x4(-32768))), x4(int16((uint8)output_zero))), x4((int16)255)), x4((int16)0))), x4((uint8)output_max)), x4((uint8)output_min))
+      output[ramp((((output.min.1 + output.s0.b.b.base.s) + 3)*output.stride.1) + t663, 1, 4)] = max(min(uint8x4(max(min((int16x4)saturating_add(int16x4(max(min((int32x4)rounding_shift_right((int32x4)rounding_mul_shift_right(multiplied[ramp(12, 1, 4)], x4(output_multiplier), x4((uint32)31)), x4(output_shift)), x4(32767)), x4(-32768))), x4(int16((uint8)output_zero))), x4((int16)255)), x4((int16)0))), x4((uint8)output_max)), x4((uint8)output_min))
+      free multiplied
+     }
+    }
+   }
+  } else if (16 <= output.extent.0) {
+   let t678 = filter.extent.0/16
+   let t674 = (uint8)filter_zero == (uint8)0
+   let t671 = max(t678, 0)
+   let t670 = (output.extent.0 + 7)/8
+   let t676 = ((t678*int32((uint8)filter_zero))*int32((uint8)input_zero))*16
+   let t672 = output.min.0 - filter.min.1
+   let t675 = output.min.0 - bias.min.0
+   let t677 = 0 - (output.min.1*output.stride.1)
+   let t673 = (input.min.1*input.stride.1) + input.min.0
+   for (output.s0.c.co, 0, t670) {
+    let output.s0.c.c.base.s = min(output.s0.c.co*8, output.extent.0 + -8)
+    let t689 = output.s0.c.c.base.s + t672
+    let t686 = (t689 + 7)*filter.stride.1
+    let t685 = (t689 + 6)*filter.stride.1
+    let t684 = (t689 + 5)*filter.stride.1
+    let t683 = (t689 + 4)*filter.stride.1
+    let t682 = (t689 + 3)*filter.stride.1
+    let t681 = (t689 + 2)*filter.stride.1
+    let t680 = (t689 + 1)*filter.stride.1
+    let t679 = filter.stride.1*t689
+    let t688 = output.s0.c.c.base.s + t677
+    let t687 = output.s0.c.c.base.s + t675
+    for (output.s0.b.bo, 0, output.extent.1) {
+     allocate multiplied_intm[int32 * 32]
+     allocate sum_filter_intm[uint32 * 32]
+     produce sum_filter_intm {
+      produce multiplied_intm {
+       sum_filter_intm[ramp(0, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(4, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(8, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(12, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(16, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(20, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(24, 1, 4)] = x4((uint32)0)
+       sum_filter_intm[ramp(28, 1, 4)] = x4((uint32)0)
+       multiplied_intm[ramp(0, 1, 4)] = x4(0)
+       multiplied_intm[ramp(4, 1, 4)] = x4(0)
+       multiplied_intm[ramp(8, 1, 4)] = x4(0)
+       multiplied_intm[ramp(12, 1, 4)] = x4(0)
+       multiplied_intm[ramp(16, 1, 4)] = x4(0)
+       multiplied_intm[ramp(20, 1, 4)] = x4(0)
+       multiplied_intm[ramp(24, 1, 4)] = x4(0)
+       multiplied_intm[ramp(28, 1, 4)] = x4(0)
+       let t690 = ((output.min.1 + output.s0.b.bo)*input.stride.1) - t673
+       for (multiplied_intm.s1.r9$x.r9$x.r60, 0, t671) {
+        multiplied_intm[ramp(0, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t679, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(0, 1, 4)]
+        multiplied_intm[ramp(4, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t680, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(4, 1, 4)]
+        multiplied_intm[ramp(8, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t681, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(8, 1, 4)]
+        multiplied_intm[ramp(12, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t682, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(12, 1, 4)]
+        multiplied_intm[ramp(16, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t683, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(16, 1, 4)]
+        multiplied_intm[ramp(20, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t684, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(20, 1, 4)]
+        multiplied_intm[ramp(24, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t685, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(24, 1, 4)]
+        multiplied_intm[ramp(28, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t686, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t690, 1, 16)]))) + multiplied_intm[ramp(28, 1, 4)]
+        sum_filter_intm[ramp(0, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t679, 1, 16)])) + sum_filter_intm[ramp(0, 1, 4)]
+        sum_filter_intm[ramp(4, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t680, 1, 16)])) + sum_filter_intm[ramp(4, 1, 4)]
+        sum_filter_intm[ramp(8, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t681, 1, 16)])) + sum_filter_intm[ramp(8, 1, 4)]
+        sum_filter_intm[ramp(12, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t682, 1, 16)])) + sum_filter_intm[ramp(12, 1, 4)]
+        sum_filter_intm[ramp(16, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t683, 1, 16)])) + sum_filter_intm[ramp(16, 1, 4)]
+        sum_filter_intm[ramp(20, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t684, 1, 16)])) + sum_filter_intm[ramp(20, 1, 4)]
+        sum_filter_intm[ramp(24, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t685, 1, 16)])) + sum_filter_intm[ramp(24, 1, 4)]
+        sum_filter_intm[ramp(28, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t686, 1, 16)])) + sum_filter_intm[ramp(28, 1, 4)]
+       }
+      }
+     }
+     allocate sum_filter[uint32 * 8]
+     produce sum_filter {
+      sum_filter[ramp(0, 1, 8)] = x8((uint32)0)
+      consume sum_filter_intm {
+       sum_filter[0] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(0, 1, 4)]) + sum_filter[0]
+       sum_filter[1] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(4, 1, 4)]) + sum_filter[1]
+       sum_filter[2] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(8, 1, 4)]) + sum_filter[2]
+       sum_filter[3] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(12, 1, 4)]) + sum_filter[3]
+       sum_filter[4] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(16, 1, 4)]) + sum_filter[4]
+       sum_filter[5] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(20, 1, 4)]) + sum_filter[5]
+       sum_filter[6] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(24, 1, 4)]) + sum_filter[6]
+       sum_filter[7] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(28, 1, 4)]) + sum_filter[7]
+       free sum_filter_intm
+      }
+     }
+     allocate multiplied[int32 * 8]
+     produce multiplied {
+      if (t674) {
+       multiplied[ramp(0, 1, 8)] = bias[ramp(t687, 1, 8)]
+      } else {
+       multiplied[ramp(0, 1, 8)] = bias[ramp(t687, 1, 8)] + x8(t676 - (int32(sum_input[output.s0.b.bo - sum_input.b.min_realized.s])*int32((uint8)filter_zero)))
+      }
+      consume multiplied_intm {
+       multiplied[0] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(0, 1, 4)]) + multiplied[0]
+       multiplied[1] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(4, 1, 4)]) + multiplied[1]
+       multiplied[2] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(8, 1, 4)]) + multiplied[2]
+       multiplied[3] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(12, 1, 4)]) + multiplied[3]
+       multiplied[4] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(16, 1, 4)]) + multiplied[4]
+       multiplied[5] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(20, 1, 4)]) + multiplied[5]
+       multiplied[6] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(24, 1, 4)]) + multiplied[6]
+       multiplied[7] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(28, 1, 4)]) + multiplied[7]
+       free multiplied_intm
+      }
+      consume sum_filter {
+       multiplied[ramp(0, 1, 8)] = multiplied[ramp(0, 1, 8)] - (int32x8(sum_filter[ramp(0, 1, 8)])*x8(int32((uint8)input_zero)))
+      }
+      free sum_filter
+     }
+     consume multiplied {
+      output[ramp(((output.min.1 + output.s0.b.bo)*output.stride.1) + t688, 1, 8)] = max(min(uint8x8(max(min((int16x8)saturating_add(int16x8(max(min((int32x8)rounding_shift_right((int32x8)rounding_mul_shift_right(multiplied[ramp(0, 1, 8)], x8(output_multiplier), x8((uint32)31)), x8(output_shift)), x8(32767)), x8(-32768))), x8(int16((uint8)output_zero))), x8((int16)255)), x8((int16)0))), x8((uint8)output_max)), x8((uint8)output_min))
+     }
+     free multiplied
+    }
+   }
+  } else {
+   let t698 = filter.extent.0/16
+   let t694 = (uint8)filter_zero == (uint8)0
+   let t691 = max(t698, 0)
+   let t696 = ((t698*int32((uint8)filter_zero))*int32((uint8)input_zero))*16
+   let t692 = output.min.0 - filter.min.1
+   let t695 = output.min.0 - bias.min.0
+   let t697 = 0 - (output.min.1*output.stride.1)
+   let t693 = (input.min.1*input.stride.1) + input.min.0
+   for (output.s0.c.co, 0, output.extent.0) {
+    let t699 = (output.s0.c.co + t692)*filter.stride.1
+    let t701 = output.s0.c.co + t697
+    let t700 = output.s0.c.co + t695
+    for (output.s0.b.bo, 0, output.extent.1) {
+     allocate multiplied_intm[int32 * 4]
+     allocate sum_filter_intm[uint32 * 4]
+     produce sum_filter_intm {
+      produce multiplied_intm {
+       sum_filter_intm[ramp(0, 1, 4)] = x4((uint32)0)
+       multiplied_intm[ramp(0, 1, 4)] = x4(0)
+       let t702 = ((output.min.1 + output.s0.b.bo)*input.stride.1) - t693
+       for (multiplied_intm.s1.r9$x.r9$x.r60, 0, t691) {
+        multiplied_intm[ramp(0, 1, 4)] = (int32x4)vector_reduce(Add, int32x16((uint16x16)widening_mul((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t699, 1, 16)], (uint8x16)input[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t702, 1, 16)]))) + multiplied_intm[ramp(0, 1, 4)]
+        sum_filter_intm[ramp(0, 1, 4)] = (uint32x4)vector_reduce(Add, uint32x16((uint8x16)filter[ramp((multiplied_intm.s1.r9$x.r9$x.r60*16) + t699, 1, 16)])) + sum_filter_intm[ramp(0, 1, 4)]
+       }
+      }
+     }
+     allocate sum_filter[uint32 * 1]
+     produce sum_filter {
+      sum_filter[0] = (uint32)0
+      consume sum_filter_intm {
+       sum_filter[0] = (uint32)vector_reduce(Add, (uint32x4)sum_filter_intm[ramp(0, 1, 4)]) + sum_filter[0]
+      }
+      free sum_filter_intm
+     }
+     allocate multiplied[int32 * 1]
+     produce multiplied {
+      if (t694) {
+       multiplied[0] = bias[t700]
+      } else {
+       multiplied[0] = (bias[t700] + t696) - (int32(sum_input[output.s0.b.bo - sum_input.b.min_realized.s])*int32((uint8)filter_zero))
+      }
+      consume multiplied_intm {
+       multiplied[0] = (int32)vector_reduce(Add, (int32x4)multiplied_intm[ramp(0, 1, 4)]) + multiplied[0]
+      }
+      free multiplied_intm
+      consume sum_filter {
+       multiplied[0] = multiplied[0] - (int32(sum_filter[0])*int32((uint8)input_zero))
+      }
+      free sum_filter
+     }
+     consume multiplied {
+      output[((output.min.1 + output.s0.b.bo)*output.stride.1) + t701] = max(min((uint8)output_max, uint8(max(min((int16)saturating_add(int16(max(min(rounding_shift_right(rounding_mul_shift_right(multiplied[0], output_multiplier, (uint32)31), output_shift), 32767), -32768)), int16((uint8)output_zero)), (int16)255), (int16)0))), (uint8)output_min)
+     }
+     free multiplied
+    }
+   }
+  }
+ }
+}
+free sum_input
+}
+
+

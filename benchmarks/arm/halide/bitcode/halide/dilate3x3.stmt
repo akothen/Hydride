@@ -1,0 +1,137 @@
+module name=dilate3x3, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func dilate3x3 (input, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input.stride.0 == 1, 0)
+assert(input.min.0 == 0, 0)
+assert(input.min.1 == 0, 0)
+assert(output.stride.0 == 1, 0)
+assert(output.min.0 == 0, 0)
+assert(output.min.1 == 0, 0)
+produce output {
+ let t73 = (output.extent.0 + 63)/64
+ let t74 = (output.extent.0 + 127)/64
+ let t75 = min(t74, 1)
+ let t70 = -64 < output.extent.0
+ let t69 = max((min(output.extent.0 + 126, input.extent.0) + 1)/64, t75)
+ let t67 = max(t73*64, (((output.extent.0 + -1)/64)*64) + 2)
+ let t66 = (output.extent.1 + 7)/8
+ for (output.s0.y.y, 0, t66) {
+  allocate bounded_input[uint8 * (((t67 + 191)/128)*128) * 10]
+  produce bounded_input {
+   let bounded_input.s0.y.prologue.s = min(max(output.s0.y.y*8, 1), (output.s0.y.y*8) + 10)
+   let bounded_input.s0.y.epilogue = max(min((output.s0.y.y*8) + 9, input.extent.1), min(max(output.s0.y.y*8, 1), (output.s0.y.y*8) + 10) + -1)
+   if (output.s0.y.y < 1) {
+    for (bounded_input.s0.x.x, 0, t74) {
+     bounded_input[ramp(bounded_input.s0.x.x*64, 1, 64) aligned(64, 0)] = input[max(min(ramp((bounded_input.s0.x.x*64) + -1, 1, 64), x64(input.extent.0 + -1)), x64(0))]
+    }
+   }
+   let t81 = output.s0.y.y*8
+   let t76 = max(min(t81 + 9, input.extent.1) - min(max(t81, 1), t81 + 10), -1)
+   let t77 = (t67 + 191)/128
+   let t80 = t74 - t69
+   let t78 = 1 - max(min(t81, 1), -9)
+   for (bounded_input.s0.y.rebased, 0, t76 + 1) {
+    if (t70) {
+     bounded_input[ramp(((bounded_input.s0.y.rebased + t78)*t77)*128, 1, 64) aligned(128, 0)] = input[max(min(ramp(-1, 1, 64), x64(input.extent.0 + -1)), x64(0)) + x64(((bounded_input.s0.y.prologue.s + bounded_input.s0.y.rebased) + -1)*input.stride.1)]
+    }
+    let t83 = ((bounded_input.s0.y.prologue.s + bounded_input.s0.y.rebased) + -1)*input.stride.1
+    let t82 = t69 - t75
+    let t84 = (((bounded_input.s0.y.rebased + t78)*t77)*2) + t75
+    for (bounded_input.s0.x.x.rebased, 0, t82) {
+     bounded_input[ramp((bounded_input.s0.x.x.rebased + t84)*64, 1, 64) aligned(64, 0)] = input[ramp((((bounded_input.s0.x.x.rebased + t75)*64) + t83) + -1, 1, 64)]
+    }
+    let t85 = ((bounded_input.s0.y.prologue.s + bounded_input.s0.y.rebased) + -1)*input.stride.1
+    let t86 = (((bounded_input.s0.y.rebased + t78)*t77)*2) + t69
+    for (bounded_input.s0.x.x.rebased, 0, t80) {
+     bounded_input[ramp((bounded_input.s0.x.x.rebased + t86)*64, 1, 64) aligned(64, 0)] = input[max(min(ramp(((bounded_input.s0.x.x.rebased + t69)*64) + -1, 1, 64), x64(input.extent.0 + -1)), x64(0)) + x64(t85)]
+    }
+   }
+   let t90 = output.s0.y.y*8
+   let t91 = max(min(t90 + 9, input.extent.1), min(max(t90, 1), t90 + 10) + -1)
+   let t88 = (t67 + 191)/128
+   let t89 = t91 - t90
+   let t87 = t90 - t91
+   for (bounded_input.s0.y.rebased, 0, t87 + 9) {
+    let t92 = max(min(input.extent.1 + -1, bounded_input.s0.y.epilogue + bounded_input.s0.y.rebased), 0)*input.stride.1
+    let t93 = (((bounded_input.s0.y.rebased + t89) + 1)*t88)*2
+    for (bounded_input.s0.x.x, 0, t74) {
+     bounded_input[ramp((bounded_input.s0.x.x + t93)*64, 1, 64) aligned(64, 0)] = input[max(min(ramp((bounded_input.s0.x.x*64) + -1, 1, 64), x64(input.extent.0 + -1)), x64(0)) + x64(t92)]
+    }
+   }
+  }
+  consume bounded_input {
+   let t112 = output.s0.y.y*8
+   let t113 = (t67 + 191)/128
+   let t110 = t113*18
+   let t108 = t113*16
+   let t106 = t113*14
+   let t104 = t113*12
+   let t102 = t113*10
+   let t100 = t113*8
+   let t98 = t113*6
+   let t94 = t113*4
+   let t96 = t113*2
+   let t111 = (t112 + 7)*output.stride.1
+   let t109 = (t112 + 6)*output.stride.1
+   let t107 = (t112 + 5)*output.stride.1
+   let t105 = (t112 + 4)*output.stride.1
+   let t103 = (t112 + 3)*output.stride.1
+   let t101 = (t112 + 2)*output.stride.1
+   let t99 = (t112 + 1)*output.stride.1
+   let t97 = output.s0.y.y*output.stride.1
+   for (output.s0.x.x, 0, t73) {
+    let t21 = output.s0.x.x + t94
+    let t22 = output.s0.x.x
+    let t58 = output.s0.x.x + t96
+    output[ramp(((output.s0.x.x*8) + t97)*8, 1, 64) aligned(8, 0)] = max(bounded_input[ramp((t21*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t58*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t22*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t22*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t58*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t21*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t22*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t58*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t21*64, 1, 64) aligned(64, 0)]))))))))
+    let t24 = output.s0.x.x + t98
+    let t25 = output.s0.x.x + t96
+    let t59 = output.s0.x.x + t94
+    output[ramp((output.s0.x.x*64) + t99, 1, 64)] = max(bounded_input[ramp((t24*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t59*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t25*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t25*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t59*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t24*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t25*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t59*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t24*64, 1, 64) aligned(64, 0)]))))))))
+    let t27 = output.s0.x.x + t100
+    let t28 = output.s0.x.x + t94
+    let t60 = output.s0.x.x + t98
+    output[ramp((output.s0.x.x*64) + t101, 1, 64) aligned(2, 0)] = max(bounded_input[ramp((t27*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t60*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t28*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t28*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t60*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t27*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t28*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t60*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t27*64, 1, 64) aligned(64, 0)]))))))))
+    let t30 = output.s0.x.x + t102
+    let t31 = output.s0.x.x + t98
+    let t61 = output.s0.x.x + t100
+    output[ramp((output.s0.x.x*64) + t103, 1, 64)] = max(bounded_input[ramp((t30*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t61*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t31*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t31*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t61*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t30*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t31*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t61*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t30*64, 1, 64) aligned(64, 0)]))))))))
+    let t33 = output.s0.x.x + t104
+    let t34 = output.s0.x.x + t100
+    let t62 = output.s0.x.x + t102
+    output[ramp((output.s0.x.x*64) + t105, 1, 64) aligned(4, 0)] = max(bounded_input[ramp((t33*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t62*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t34*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t34*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t62*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t33*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t34*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t62*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t33*64, 1, 64) aligned(64, 0)]))))))))
+    let t36 = output.s0.x.x + t106
+    let t37 = output.s0.x.x + t102
+    let t63 = output.s0.x.x + t104
+    output[ramp((output.s0.x.x*64) + t107, 1, 64)] = max(bounded_input[ramp((t36*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t63*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t37*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t37*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t63*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t36*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t37*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t63*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t36*64, 1, 64) aligned(64, 0)]))))))))
+    let t39 = output.s0.x.x + t108
+    let t40 = output.s0.x.x + t104
+    let t64 = output.s0.x.x + t106
+    output[ramp((output.s0.x.x*64) + t109, 1, 64) aligned(2, 0)] = max(bounded_input[ramp((t39*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t64*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t40*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t40*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t64*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t39*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t40*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t64*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t39*64, 1, 64) aligned(64, 0)]))))))))
+    let t42 = output.s0.x.x + t110
+    let t43 = output.s0.x.x + t106
+    let t65 = output.s0.x.x + t108
+    output[ramp((output.s0.x.x*64) + t111, 1, 64)] = max(bounded_input[ramp((t42*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t65*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t43*64) + 1, 1, 64) aligned(64, 1)], max(bounded_input[ramp((t43*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t65*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp((t42*64) + 2, 1, 64) aligned(64, 2)], max(bounded_input[ramp(t43*64, 1, 64) aligned(64, 0)], max(bounded_input[ramp(t65*64, 1, 64) aligned(64, 0)], bounded_input[ramp(t42*64, 1, 64) aligned(64, 0)]))))))))
+   }
+  }
+  free bounded_input
+ }
+}
+}
+
+
