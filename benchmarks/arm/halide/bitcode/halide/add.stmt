@@ -1,0 +1,52 @@
+module name=add, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func add (input1, input1_zero, input1_multiplier, input2, input2_zero, input2_multiplier, output_zero, output_min, output_max, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input2.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input2"))
+assert((uint64)reinterpret((halide_buffer_t *)input1.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input1"))
+let input1 = (void *)_halide_buffer_get_host((halide_buffer_t *)input1.buffer)
+let input1.min.0 = _halide_buffer_get_min((halide_buffer_t *)input1.buffer, 0)
+let input1.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input1.buffer, 0)
+let input1.min.1 = _halide_buffer_get_min((halide_buffer_t *)input1.buffer, 1)
+let input1.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input1.buffer, 1)
+let input2 = (void *)_halide_buffer_get_host((halide_buffer_t *)input2.buffer)
+let input2.min.0 = _halide_buffer_get_min((halide_buffer_t *)input2.buffer, 0)
+let input2.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input2.buffer, 0)
+let input2.min.1 = _halide_buffer_get_min((halide_buffer_t *)input2.buffer, 1)
+let input2.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input2.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input1.stride.0 == 1, 0)
+assert(input2.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t17 = output.min.1*output.stride.1
+ let t18 = input1.min.1*input1.stride.1
+ let t19 = input2.min.1*input2.stride.1
+ let t20 = max(output.extent.0/64, 0)
+ let t12 = ((output.extent.0 + 63)/64) - t20
+ let t10 = (output.min.0 - t19) - input2.min.0
+ let t9 = (output.min.0 - t18) - input1.min.0
+ let t13 = output.extent.0 + output.min.0
+ for (output.s0.y.rebased, 0, output.extent.1) {
+  let t22 = 0 - t17
+  let t21 = output.min.1 + output.s0.y.rebased
+  for (output.s0.x.x, 0, t20) {
+   output[ramp((output.s0.x.x*64) + ((output.stride.1*t21) + t22), 1, 64)] = max(min(uint8x64(max(min((int16x64)saturating_add(int16x64(max(min((int32x64)rounding_shift_right((int32x64)widening_mul((int16x64)shift_left(int16x64(input1[ramp((output.s0.x.x*64) + ((input1.stride.1*t21) + t9), 1, 64)]), x64((uint16)6)) + x64(int16((uint8)input1_zero)*(int16)-64), x64((int16)input1_multiplier)) + (int32x64)widening_mul((int16x64)shift_left(int16x64(input2[ramp((output.s0.x.x*64) + ((input2.stride.1*t21) + t10), 1, 64)]), x64((uint16)6)) + x64(int16((uint8)input2_zero)*(int16)-64), x64((int16)input2_multiplier)), x64((uint32)16)), x64(32767)), x64(-32768))), x64(int16((uint8)output_zero))), x64((int16)255)), x64((int16)0))), x64((uint8)output_max)), x64((uint8)output_min))
+  }
+  let t25 = (t13 - t19) - input2.min.0
+  let t24 = (t13 - t18) - input1.min.0
+  let t26 = (t13 - t17) - output.min.0
+  let t23 = output.min.1 + output.s0.y.rebased
+  for (output.s0.x.x, 0, t12) {
+   output[ramp(((output.stride.1*t23) + t26) + -64, 1, 64)] = max(min(uint8x64(max(min((int16x64)saturating_add(int16x64(max(min((int32x64)rounding_shift_right((int32x64)widening_mul((int16x64)shift_left(int16x64(input1[ramp(((input1.stride.1*t23) + t24) + -64, 1, 64)]), x64((uint16)6)) + x64(int16((uint8)input1_zero)*(int16)-64), x64((int16)input1_multiplier)) + (int32x64)widening_mul((int16x64)shift_left(int16x64(input2[ramp(((input2.stride.1*t23) + t25) + -64, 1, 64)]), x64((uint16)6)) + x64(int16((uint8)input2_zero)*(int16)-64), x64((int16)input2_multiplier)), x64((uint32)16)), x64(32767)), x64(-32768))), x64(int16((uint8)output_zero))), x64((int16)255)), x64((int16)0))), x64((uint8)output_max)), x64((uint8)output_min))
+  }
+ }
+}
+}
+
+

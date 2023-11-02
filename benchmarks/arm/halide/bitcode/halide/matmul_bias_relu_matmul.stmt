@@ -1,0 +1,312 @@
+module name=matmul_bias_relu_matmul, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func matmul_bias_relu_matmul (A, B, C, bias, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)bias.buffer) != (uint64)0, halide_error_buffer_argument_is_null("bias"))
+assert((uint64)reinterpret((halide_buffer_t *)C.buffer) != (uint64)0, halide_error_buffer_argument_is_null("C"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let A.min.2 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 2)
+let A.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 2)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let B.min.2 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 2)
+let B.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 2)
+let C = (void *)_halide_buffer_get_host((halide_buffer_t *)C.buffer)
+let C.min.0 = _halide_buffer_get_min((halide_buffer_t *)C.buffer, 0)
+let C.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)C.buffer, 0)
+let C.min.1 = _halide_buffer_get_min((halide_buffer_t *)C.buffer, 1)
+let C.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)C.buffer, 1)
+let C.min.2 = _halide_buffer_get_min((halide_buffer_t *)C.buffer, 2)
+let C.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)C.buffer, 2)
+let bias = (void *)_halide_buffer_get_host((halide_buffer_t *)bias.buffer)
+let bias.min.0 = _halide_buffer_get_min((halide_buffer_t *)bias.buffer, 0)
+let bias.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)bias.buffer, 0)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let output.min.2 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 2)
+let output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 2)
+let output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 2)
+assert(A.stride.0 == 1, 0)
+assert(B.stride.0 == 1, 0)
+assert(C.stride.0 == 1, 0)
+assert(bias.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t196 = B.min.2*B.stride.2
+ let t197 = B.min.1*B.stride.1
+ let t174 = (output.extent.2 + 3)/4
+ let t175 = (output.extent.1 + 63)/64
+ let t192 = ((((B.stride.1*240) + output.min.0) - t196) - t197) - B.min.0
+ let t191 = ((((B.stride.1*224) + output.min.0) - t196) - t197) - B.min.0
+ let t190 = ((((B.stride.1*208) + output.min.0) - t196) - t197) - B.min.0
+ let t189 = ((((B.stride.1*192) + output.min.0) - t196) - t197) - B.min.0
+ let t188 = ((((B.stride.1*176) + output.min.0) - t196) - t197) - B.min.0
+ let t187 = ((((B.stride.1*160) + output.min.0) - t196) - t197) - B.min.0
+ let t186 = ((((B.stride.1*144) + output.min.0) - t196) - t197) - B.min.0
+ let t185 = ((((B.stride.1*128) + output.min.0) - t196) - t197) - B.min.0
+ let t184 = ((((B.stride.1*112) + output.min.0) - t196) - t197) - B.min.0
+ let t183 = ((((B.stride.1*96) + output.min.0) - t196) - t197) - B.min.0
+ let t182 = ((((B.stride.1*80) + output.min.0) - t196) - t197) - B.min.0
+ let t181 = ((((B.stride.1*64) + output.min.0) - t196) - t197) - B.min.0
+ let t180 = ((((B.stride.1*48) + output.min.0) - t196) - t197) - B.min.0
+ let t179 = ((((B.stride.1*32) + output.min.0) - t196) - t197) - B.min.0
+ let t178 = ((((B.stride.1*16) + output.min.0) - t196) - t197) - B.min.0
+ let t193 = ((output.min.0 - (C.min.2*C.stride.2)) - (C.min.1*C.stride.1)) - C.min.0
+ let t176 = ((output.min.0 - t196) - t197) - B.min.0
+ let t177 = ((output.min.0 - (A.min.2*A.stride.2)) - (A.min.1*A.stride.1)) - A.min.0
+ let t194 = output.min.0 - bias.min.0
+ let t195 = 0 - ((output.min.2*output.stride.2) + (output.min.1*output.stride.1))
+ for (output.s0.c.rebased, 0, output.extent.0) {
+  let t217 = output.s0.c.rebased + t195
+  let t216 = output.s0.c.rebased + t194
+  let t215 = output.s0.c.rebased + t193
+  let t214 = output.s0.c.rebased + t192
+  let t213 = output.s0.c.rebased + t191
+  let t212 = output.s0.c.rebased + t190
+  let t211 = output.s0.c.rebased + t189
+  let t210 = output.s0.c.rebased + t188
+  let t209 = output.s0.c.rebased + t187
+  let t208 = output.s0.c.rebased + t186
+  let t207 = output.s0.c.rebased + t185
+  let t206 = output.s0.c.rebased + t184
+  let t205 = output.s0.c.rebased + t183
+  let t204 = output.s0.c.rebased + t182
+  let t203 = output.s0.c.rebased + t181
+  let t202 = output.s0.c.rebased + t180
+  let t201 = output.s0.c.rebased + t179
+  let t200 = output.s0.c.rebased + t178
+  let t199 = output.s0.c.rebased + t177
+  let t198 = output.s0.c.rebased + t176
+  for (output.s0.y.y, 0, t174) {
+   let output.s0.y.yi.base.s = min(output.s0.y.y*4, output.extent.2 + -4)
+   let t226 = output.min.2 + output.s0.y.yi.base.s
+   let t227 = t226 + 1
+   let t228 = t226 + 2
+   let t229 = t226 + 3
+   let t225 = (output.stride.2*t229) + t217
+   let t221 = (A.stride.2*t229) + t199
+   let t224 = (output.stride.2*t228) + t217
+   let t220 = (A.stride.2*t228) + t199
+   let t223 = (output.stride.2*t227) + t217
+   let t219 = (A.stride.2*t227) + t199
+   let t222 = (output.stride.2*t226) + t217
+   let t218 = (A.stride.2*t226) + t199
+   for (output.s0.x.x, 0, t175) {
+    let output.s0.x.xi.base.s = min(output.s0.x.x*64, output.extent.1 + -64)
+    allocate matrix_mul1[int32 * 1024] in Stack
+    produce matrix_mul1 {
+     matrix_mul1[ramp(0, 1, 16)] = x16(0)
+     matrix_mul1[ramp(16, 1, 16)] = x16(0)
+     matrix_mul1[ramp(32, 1, 16)] = x16(0)
+     matrix_mul1[ramp(48, 1, 16)] = x16(0)
+     matrix_mul1[ramp(64, 1, 16)] = x16(0)
+     matrix_mul1[ramp(80, 1, 16)] = x16(0)
+     matrix_mul1[ramp(96, 1, 16)] = x16(0)
+     matrix_mul1[ramp(112, 1, 16)] = x16(0)
+     matrix_mul1[ramp(128, 1, 16)] = x16(0)
+     matrix_mul1[ramp(144, 1, 16)] = x16(0)
+     matrix_mul1[ramp(160, 1, 16)] = x16(0)
+     matrix_mul1[ramp(176, 1, 16)] = x16(0)
+     matrix_mul1[ramp(192, 1, 16)] = x16(0)
+     matrix_mul1[ramp(208, 1, 16)] = x16(0)
+     matrix_mul1[ramp(224, 1, 16)] = x16(0)
+     matrix_mul1[ramp(240, 1, 16)] = x16(0)
+     matrix_mul1[ramp(256, 1, 16)] = x16(0)
+     matrix_mul1[ramp(272, 1, 16)] = x16(0)
+     matrix_mul1[ramp(288, 1, 16)] = x16(0)
+     matrix_mul1[ramp(304, 1, 16)] = x16(0)
+     matrix_mul1[ramp(320, 1, 16)] = x16(0)
+     matrix_mul1[ramp(336, 1, 16)] = x16(0)
+     matrix_mul1[ramp(352, 1, 16)] = x16(0)
+     matrix_mul1[ramp(368, 1, 16)] = x16(0)
+     matrix_mul1[ramp(384, 1, 16)] = x16(0)
+     matrix_mul1[ramp(400, 1, 16)] = x16(0)
+     matrix_mul1[ramp(416, 1, 16)] = x16(0)
+     matrix_mul1[ramp(432, 1, 16)] = x16(0)
+     matrix_mul1[ramp(448, 1, 16)] = x16(0)
+     matrix_mul1[ramp(464, 1, 16)] = x16(0)
+     matrix_mul1[ramp(480, 1, 16)] = x16(0)
+     matrix_mul1[ramp(496, 1, 16)] = x16(0)
+     matrix_mul1[ramp(512, 1, 16)] = x16(0)
+     matrix_mul1[ramp(528, 1, 16)] = x16(0)
+     matrix_mul1[ramp(544, 1, 16)] = x16(0)
+     matrix_mul1[ramp(560, 1, 16)] = x16(0)
+     matrix_mul1[ramp(576, 1, 16)] = x16(0)
+     matrix_mul1[ramp(592, 1, 16)] = x16(0)
+     matrix_mul1[ramp(608, 1, 16)] = x16(0)
+     matrix_mul1[ramp(624, 1, 16)] = x16(0)
+     matrix_mul1[ramp(640, 1, 16)] = x16(0)
+     matrix_mul1[ramp(656, 1, 16)] = x16(0)
+     matrix_mul1[ramp(672, 1, 16)] = x16(0)
+     matrix_mul1[ramp(688, 1, 16)] = x16(0)
+     matrix_mul1[ramp(704, 1, 16)] = x16(0)
+     matrix_mul1[ramp(720, 1, 16)] = x16(0)
+     matrix_mul1[ramp(736, 1, 16)] = x16(0)
+     matrix_mul1[ramp(752, 1, 16)] = x16(0)
+     matrix_mul1[ramp(768, 1, 16)] = x16(0)
+     matrix_mul1[ramp(784, 1, 16)] = x16(0)
+     matrix_mul1[ramp(800, 1, 16)] = x16(0)
+     matrix_mul1[ramp(816, 1, 16)] = x16(0)
+     matrix_mul1[ramp(832, 1, 16)] = x16(0)
+     matrix_mul1[ramp(848, 1, 16)] = x16(0)
+     matrix_mul1[ramp(864, 1, 16)] = x16(0)
+     matrix_mul1[ramp(880, 1, 16)] = x16(0)
+     matrix_mul1[ramp(896, 1, 16)] = x16(0)
+     matrix_mul1[ramp(912, 1, 16)] = x16(0)
+     matrix_mul1[ramp(928, 1, 16)] = x16(0)
+     matrix_mul1[ramp(944, 1, 16)] = x16(0)
+     matrix_mul1[ramp(960, 1, 16)] = x16(0)
+     matrix_mul1[ramp(976, 1, 16)] = x16(0)
+     matrix_mul1[ramp(992, 1, 16)] = x16(0)
+     matrix_mul1[ramp(1008, 1, 16)] = x16(0)
+     for (matrix_mul1.s1.r14$x, 0, 256) {
+      matrix_mul1[ramp(0, 1, 16)] = matrix_mul1[ramp(0, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t198, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(16, 1, 16)] = matrix_mul1[ramp(16, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t200, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(32, 1, 16)] = matrix_mul1[ramp(32, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t201, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(48, 1, 16)] = matrix_mul1[ramp(48, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t202, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(64, 1, 16)] = matrix_mul1[ramp(64, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t203, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(80, 1, 16)] = matrix_mul1[ramp(80, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t204, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(96, 1, 16)] = matrix_mul1[ramp(96, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t205, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(112, 1, 16)] = matrix_mul1[ramp(112, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t206, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(128, 1, 16)] = matrix_mul1[ramp(128, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t207, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(144, 1, 16)] = matrix_mul1[ramp(144, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t208, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(160, 1, 16)] = matrix_mul1[ramp(160, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t209, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(176, 1, 16)] = matrix_mul1[ramp(176, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t210, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(192, 1, 16)] = matrix_mul1[ramp(192, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t211, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(208, 1, 16)] = matrix_mul1[ramp(208, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t212, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(224, 1, 16)] = matrix_mul1[ramp(224, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t213, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(240, 1, 16)] = matrix_mul1[ramp(240, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t214, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t218]))
+      matrix_mul1[ramp(256, 1, 16)] = matrix_mul1[ramp(256, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t198, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(272, 1, 16)] = matrix_mul1[ramp(272, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t200, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(288, 1, 16)] = matrix_mul1[ramp(288, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t201, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(304, 1, 16)] = matrix_mul1[ramp(304, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t202, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(320, 1, 16)] = matrix_mul1[ramp(320, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t203, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(336, 1, 16)] = matrix_mul1[ramp(336, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t204, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(352, 1, 16)] = matrix_mul1[ramp(352, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t205, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(368, 1, 16)] = matrix_mul1[ramp(368, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t206, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(384, 1, 16)] = matrix_mul1[ramp(384, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t207, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(400, 1, 16)] = matrix_mul1[ramp(400, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t208, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(416, 1, 16)] = matrix_mul1[ramp(416, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t209, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(432, 1, 16)] = matrix_mul1[ramp(432, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t210, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(448, 1, 16)] = matrix_mul1[ramp(448, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t211, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(464, 1, 16)] = matrix_mul1[ramp(464, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t212, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(480, 1, 16)] = matrix_mul1[ramp(480, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t213, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(496, 1, 16)] = matrix_mul1[ramp(496, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t214, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t219]))
+      matrix_mul1[ramp(512, 1, 16)] = matrix_mul1[ramp(512, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t198, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(528, 1, 16)] = matrix_mul1[ramp(528, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t200, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(544, 1, 16)] = matrix_mul1[ramp(544, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t201, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(560, 1, 16)] = matrix_mul1[ramp(560, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t202, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(576, 1, 16)] = matrix_mul1[ramp(576, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t203, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(592, 1, 16)] = matrix_mul1[ramp(592, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t204, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(608, 1, 16)] = matrix_mul1[ramp(608, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t205, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(624, 1, 16)] = matrix_mul1[ramp(624, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t206, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(640, 1, 16)] = matrix_mul1[ramp(640, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t207, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(656, 1, 16)] = matrix_mul1[ramp(656, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t208, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(672, 1, 16)] = matrix_mul1[ramp(672, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t209, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(688, 1, 16)] = matrix_mul1[ramp(688, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t210, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(704, 1, 16)] = matrix_mul1[ramp(704, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t211, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(720, 1, 16)] = matrix_mul1[ramp(720, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t212, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(736, 1, 16)] = matrix_mul1[ramp(736, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t213, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(752, 1, 16)] = matrix_mul1[ramp(752, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t214, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t220]))
+      matrix_mul1[ramp(768, 1, 16)] = matrix_mul1[ramp(768, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t198, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(784, 1, 16)] = matrix_mul1[ramp(784, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t200, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(800, 1, 16)] = matrix_mul1[ramp(800, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t201, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(816, 1, 16)] = matrix_mul1[ramp(816, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t202, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(832, 1, 16)] = matrix_mul1[ramp(832, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t203, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(848, 1, 16)] = matrix_mul1[ramp(848, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t204, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(864, 1, 16)] = matrix_mul1[ramp(864, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t205, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(880, 1, 16)] = matrix_mul1[ramp(880, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t206, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(896, 1, 16)] = matrix_mul1[ramp(896, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t207, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(912, 1, 16)] = matrix_mul1[ramp(912, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t208, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(928, 1, 16)] = matrix_mul1[ramp(928, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t209, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(944, 1, 16)] = matrix_mul1[ramp(944, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t210, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(960, 1, 16)] = matrix_mul1[ramp(960, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t211, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(976, 1, 16)] = matrix_mul1[ramp(976, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t212, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(992, 1, 16)] = matrix_mul1[ramp(992, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t213, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+      matrix_mul1[ramp(1008, 1, 16)] = matrix_mul1[ramp(1008, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.2*matrix_mul1.s1.r14$x) + t214, B.stride.1, 16)], x16(A[(A.stride.1*matrix_mul1.s1.r14$x) + t221]))
+     }
+    }
+    allocate matrix_mul2[int32 * 256] in Stack
+    produce matrix_mul2 {
+     matrix_mul2[ramp(0, 1, 16)] = x16(0)
+     matrix_mul2[ramp(16, 1, 16)] = x16(0)
+     matrix_mul2[ramp(32, 1, 16)] = x16(0)
+     matrix_mul2[ramp(48, 1, 16)] = x16(0)
+     matrix_mul2[ramp(64, 1, 16)] = x16(0)
+     matrix_mul2[ramp(80, 1, 16)] = x16(0)
+     matrix_mul2[ramp(96, 1, 16)] = x16(0)
+     matrix_mul2[ramp(112, 1, 16)] = x16(0)
+     matrix_mul2[ramp(128, 1, 16)] = x16(0)
+     matrix_mul2[ramp(144, 1, 16)] = x16(0)
+     matrix_mul2[ramp(160, 1, 16)] = x16(0)
+     matrix_mul2[ramp(176, 1, 16)] = x16(0)
+     matrix_mul2[ramp(192, 1, 16)] = x16(0)
+     matrix_mul2[ramp(208, 1, 16)] = x16(0)
+     matrix_mul2[ramp(224, 1, 16)] = x16(0)
+     matrix_mul2[ramp(240, 1, 16)] = x16(0)
+     consume matrix_mul1 {
+      let t234 = output.min.1 + output.s0.x.xi.base.s
+      let t233 = ((t234 + 48)*C.stride.1) + t215
+      let t232 = ((t234 + 32)*C.stride.1) + t215
+      let t231 = ((t234 + 16)*C.stride.1) + t215
+      let t230 = (C.stride.1*t234) + t215
+      for (matrix_mul2.s1.r14$x, 0, 256) {
+       matrix_mul2[ramp(0, 1, 16)] = matrix_mul2[ramp(0, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t230, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x], 0)))
+       matrix_mul2[ramp(16, 1, 16)] = matrix_mul2[ramp(16, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t231, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x], 0)))
+       matrix_mul2[ramp(32, 1, 16)] = matrix_mul2[ramp(32, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t232, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x], 0)))
+       matrix_mul2[ramp(48, 1, 16)] = matrix_mul2[ramp(48, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t233, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x], 0)))
+       matrix_mul2[ramp(64, 1, 16)] = matrix_mul2[ramp(64, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t230, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 256], 0)))
+       matrix_mul2[ramp(80, 1, 16)] = matrix_mul2[ramp(80, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t231, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 256], 0)))
+       matrix_mul2[ramp(96, 1, 16)] = matrix_mul2[ramp(96, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t232, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 256], 0)))
+       matrix_mul2[ramp(112, 1, 16)] = matrix_mul2[ramp(112, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t233, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 256], 0)))
+       matrix_mul2[ramp(128, 1, 16)] = matrix_mul2[ramp(128, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t230, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 512], 0)))
+       matrix_mul2[ramp(144, 1, 16)] = matrix_mul2[ramp(144, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t231, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 512], 0)))
+       matrix_mul2[ramp(160, 1, 16)] = matrix_mul2[ramp(160, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t232, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 512], 0)))
+       matrix_mul2[ramp(176, 1, 16)] = matrix_mul2[ramp(176, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t233, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 512], 0)))
+       matrix_mul2[ramp(192, 1, 16)] = matrix_mul2[ramp(192, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t230, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 768], 0)))
+       matrix_mul2[ramp(208, 1, 16)] = matrix_mul2[ramp(208, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t231, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 768], 0)))
+       matrix_mul2[ramp(224, 1, 16)] = matrix_mul2[ramp(224, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t232, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 768], 0)))
+       matrix_mul2[ramp(240, 1, 16)] = matrix_mul2[ramp(240, 1, 16)] + (int32x16(C[ramp((C.stride.2*matrix_mul2.s1.r14$x) + t233, C.stride.1, 16)])*x16(max(bias[t216] + matrix_mul1[matrix_mul2.s1.r14$x + 768], 0)))
+      }
+     }
+     free matrix_mul1
+    }
+    consume matrix_mul2 {
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t222, output.stride.1, 16)] = matrix_mul2[ramp(0, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t222, output.stride.1, 16)] = matrix_mul2[ramp(16, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t222, output.stride.1, 16)] = matrix_mul2[ramp(32, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t222, output.stride.1, 16)] = matrix_mul2[ramp(48, 1, 16)]
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t223, output.stride.1, 16)] = matrix_mul2[ramp(64, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t223, output.stride.1, 16)] = matrix_mul2[ramp(80, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t223, output.stride.1, 16)] = matrix_mul2[ramp(96, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t223, output.stride.1, 16)] = matrix_mul2[ramp(112, 1, 16)]
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t224, output.stride.1, 16)] = matrix_mul2[ramp(128, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t224, output.stride.1, 16)] = matrix_mul2[ramp(144, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t224, output.stride.1, 16)] = matrix_mul2[ramp(160, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t224, output.stride.1, 16)] = matrix_mul2[ramp(176, 1, 16)]
+     output[ramp(((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + t225, output.stride.1, 16)] = matrix_mul2[ramp(192, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 16)*output.stride.1) + t225, output.stride.1, 16)] = matrix_mul2[ramp(208, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 32)*output.stride.1) + t225, output.stride.1, 16)] = matrix_mul2[ramp(224, 1, 16)]
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s) + 48)*output.stride.1) + t225, output.stride.1, 16)] = matrix_mul2[ramp(240, 1, 16)]
+     free matrix_mul2
+    }
+   }
+  }
+ }
+}
+}
+
+
