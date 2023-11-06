@@ -16,15 +16,15 @@
   ;; Select xoffsets or xoffsets_hi
   (define bvxoffsets
     (if (< lane_number half_num_lanes)
-      (integer->bitvector xoffsets)
-      (integer->bitvector xoffsets_hi)
+      (integer->bitvector xoffsets) ;; needs bitvector length
+      (integer->bitvector xoffsets_hi) ;; needs bitvector length
     )
   )
   ;; Grab the last 4 bits of xoffsets/xoffsets_hi
-  (define low_index (mod lane_number half_num_lanes))
+  (define low_index (modulo lane_number half_num_lanes))
   (define ext_bvxoffsets (extract (+ 4 low_index) low_index bvxoffsets))
   (define offset (bitvector->integer ext_bvxoffsets))
-  (define result (mod (+ lane_number + xstart offset) total_num_lanes))
+  (define result (modulo (+ lane_number + xstart offset) total_num_lanes))
   result
 )
 
@@ -38,10 +38,10 @@
 ;;     )
 ;;   )
 ;;   ;; Grab the last 4 bits of xoffsets/xoffsets_hi
-;;   (define low_index (mod lane_number half_num_lanes))
+;;   (define low_index (modulo lane_number half_num_lanes))
 ;;   (define ext_bvxoffsets (extract (+ 4 low_index) low_index bvxoffsets))
 ;;   (define offset (bitvector->integer ext_bvxoffsets))
-;;   (define result (mod (+ lane_number + xstart offset) total_num_lanes))
+;;   (define result (modulo (+ lane_number + xstart offset) total_num_lanes))
 ;;   result
 ;; )
 
@@ -70,7 +70,7 @@
         (define %ext_xbuff (extract %high %low xbuff))
         (define %int_ext_xbuff (bitvector->integer %ext_xbuff))
         (define %int_o (abs %int_ext_xbuff))
-        (define %o (integer->bivector %int_o))
+        (define %o (integer->bitvector %int_o))
         %o
       )
     )
@@ -103,7 +103,7 @@
         (define %ext_xbuff (extract %high %low xbuff))
         (define %int_ext_xbuff (bitvector->integer %ext_xbuff))
         (define %int_o (abs %int_ext_xbuff))
-        (define %o (integer->bivector %int_o))
+        (define %o (integer->bitvector %int_o))
         %o
       )
     )
@@ -137,7 +137,7 @@
 ;;         (define %ext_xbuff (extract %high %low xbuff))
 ;;         (define %int_ext_xbuff (bitvector->integer %ext_xbuff))
 ;;         (define %int_o (abs %int_ext_xbuff))
-;;         (define %o (integer->bivector %int_o))
+;;         (define %o (integer->bitvector %int_o))
 ;;         %o
 ;;       )
 ;;     )
@@ -171,7 +171,7 @@
 ;;         (define %ext_xbuff (extract %high %low xbuff))
 ;;         (define %int_ext_xbuff (bitvector->integer %ext_xbuff))
 ;;         (define %int_o (abs %int_ext_xbuff))
-;;         (define %o (integer->bivector %int_o))
+;;         (define %o (integer->bitvector %int_o))
 ;;         %o
 ;;       )
 ;;     )
