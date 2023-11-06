@@ -15,21 +15,36 @@
 (define (select_lane1 lane_number total_num_lanes xstart xoffsets xoffsets_hi)
   (define half_num_lanes (/ total_num_lanes 2))
   ;; Select xoffsets or xoffsets_hi
+
+  (pretty-print "lane_number")
+  (pretty-print lane_number)
+
+
+  (pretty-print "half_num_lanes")
+  (pretty-print half_num_lanes)
+  
   (define bvxoffsets
-    (if (< lane_number half_num_lanes)
+    (if (>= lane_number half_num_lanes)
       (integer->bitvector xoffsets (bitvector 16))
       (integer->bitvector xoffsets_hi (bitvector 16))
     )
   )
 
-  ;;(pretty-print bvxoffsets)
+
+  (pretty-print "bvxoffsets")
+  (pretty-print bvxoffsets)
   ;; Grab the last 4 bits of xoffsets/xoffsets_hi
-  (define low_index (modulo lane_number half_num_lanes))
-  (pretty-print low_index)
-  (define ext_bvxoffsets (extract (+ 3 low_index) low_index bvxoffsets))
+  (define hi_index (modulo lane_number half_num_lanes))
+
+  (pretty-print "hi_index")
+  (pretty-print hi_index)
+
+  (define low_index_o (-  half_num_lanes hi_index))
+  (define ext_bvxoffsets (extract (+ 3 low_index_o) low_index_o bvxoffsets))
   (pretty-print ext_bvxoffsets)
-  (define offset (bitvector->integer ext_bvxoffsets))
-  ;;(pretty-print offset)
+  (define offset (bitvector->natural ext_bvxoffsets))
+  (pretty-print "Offset")
+  (pretty-print offset)
   (define result (modulo (+ lane_number (+ xstart offset)) total_num_lanes))
   (pretty-print result)
   result
@@ -56,9 +71,7 @@
 )
 
 (define xbuff (bv -6 512))
-(define offset (bv #x00000800 8))
-(define offset_hi (bv #x00000a02 8))
 
 (pretty-print "v16int32_abs16 w/ offset:")
 (pretty-print xbuff)
-(pretty-print (v16int32_abs16 xbuff 0 #x00000800 #x00000a02)) 
+(pretty-print (v16int32_abs16 xbuff 0 #xECA86420 #xFDB97531)) 
