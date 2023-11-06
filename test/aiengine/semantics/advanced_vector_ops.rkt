@@ -15,16 +15,18 @@
   (define half_num_lanes (/ total_num_lanes 2))
   ;; Select xoffsets or xoffsets_hi
   (define bvxoffsets
-    (if (< lane_number half_num_lanes)
-      (integer->bitvector xoffsets) ;; needs bitvector length
-      (integer->bitvector xoffsets_hi) ;; needs bitvector length
+    (if (>= lane_number half_num_lanes)
+      (integer->bitvector xoffsets (bitvector 32))
+      (integer->bitvector xoffsets_hi (bitvector 32))
     )
   )
-  ;; Grab the last 4 bits of xoffsets/xoffsets_hi
-  (define low_index (modulo lane_number half_num_lanes))
-  (define ext_bvxoffsets (extract (+ 4 low_index) low_index bvxoffsets))
+
+  ;; Grab the 4 bits of xoffsets/xoffsets_hi
+  (define low_index (* 4 (- (- half_num_lanes 1) (modulo lane_number half_num_lanes))))
+  (define high_index (+ low_index 3))
+  (define ext_bvxoffsets (extract high_index low_index bvxoffsets))
   (define offset (bitvector->integer ext_bvxoffsets))
-  (define result (modulo (+ lane_number + xstart offset) total_num_lanes))
+  (define result (modulo (+ lane_number (+ xstart offset)) total_num_lanes))
   result
 )
 
