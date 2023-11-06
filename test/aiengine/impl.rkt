@@ -2,6 +2,7 @@
 
 (require racket/pretty)
 
+
 (define (llvm-vect-add-ra a b start offset num_elems)
   (define dst
     (apply concat
@@ -12,38 +13,36 @@
              (bvadd %exta %extb))))
   dst)
 
+
+;; Lane selection algorithm
 (define (select_lane1 lane_number total_num_lanes xstart xoffsets xoffsets_hi)
   (define half_num_lanes (/ total_num_lanes 2))
   ;; Select xoffsets or xoffsets_hi
-
   (pretty-print "lane_number")
   (pretty-print lane_number)
-
-
   (pretty-print "half_num_lanes")
   (pretty-print half_num_lanes)
-  
   (define bvxoffsets
     (if (>= lane_number half_num_lanes)
-      (integer->bitvector xoffsets (bitvector 16))
-      (integer->bitvector xoffsets_hi (bitvector 16))
+      (integer->bitvector xoffsets (bitvector 32))
+      (integer->bitvector xoffsets_hi (bitvector 32))
     )
   )
-
-
   (pretty-print "bvxoffsets")
   (pretty-print bvxoffsets)
-  ;; Grab the last 4 bits of xoffsets/xoffsets_hi
-  (define hi_index (modulo lane_number half_num_lanes))
-
-  (pretty-print "hi_index")
-  (pretty-print hi_index)
-
-  (define low_index_o (-  half_num_lanes hi_index))
-  (define ext_bvxoffsets (extract (+ 3 low_index_o) low_index_o bvxoffsets))
+  ;; Grab the 4 bits of xoffsets/xoffsets_hi
+  (define low_index (* (- (- half_num_lanes 1) (modulo lane_number half_num_lanes)) 4))
+  ;;(define high_index (- 1 reverse_input_index))
+  (pretty-print "low_index")
+  (pretty-print low_index)
+  (define high_index (+ low_index 3))
+  (pretty-print "high_index")
+  (pretty-print high_index)
+  (define ext_bvxoffsets (extract high_index low_index bvxoffsets))
+  (pretty-print "ext_bvxoffsets")
   (pretty-print ext_bvxoffsets)
-  (define offset (bitvector->natural ext_bvxoffsets))
-  (pretty-print "Offset")
+  (define offset (bitvector->integer ext_bvxoffsets))
+  (pretty-print "offset")
   (pretty-print offset)
   (define result (modulo (+ lane_number (+ xstart offset)) total_num_lanes))
   (pretty-print result)
@@ -71,7 +70,14 @@
 )
 
 (define xbuff (bv -6 512))
+(define xoffset (bitvector->integer (bv #xECA86420 32)))
+(define xoffset_hi (bitvector->integer (bv #xFDB97531 32)))
 
 (pretty-print "v16int32_abs16 w/ offset:")
+(pretty-print "xbuff:")
 (pretty-print xbuff)
-(pretty-print (v16int32_abs16 xbuff 0 #xECA86420 #xFDB97531)) 
+(pretty-print "xoffset:")
+(pretty-print xoffset)
+(pretty-print "xoffset_hi:")
+(pretty-print xoffset_hi)
+(pretty-print (v16int32_abs16 xbuff 0 xoffset xoffset_hi))
