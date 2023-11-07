@@ -11,7 +11,7 @@
 ;; Functions that compute lane numbers for vectors 
 ;; xoffsets, xoffsets_hi have 8 offset values each. 4 bits per offset.
 ;;
-(define (select_lane1 lane_number total_num_lanes xstart xoffsets xoffsets_hi)
+(define (ra_lane_sel lane_number total_num_lanes xstart xoffsets xoffsets_hi)
   (define half_num_lanes (/ total_num_lanes 2))
   ;; Select xoffsets or xoffsets_hi
   (define bvxoffsets
@@ -47,6 +47,7 @@
 ;;   result
 ;; )
 
+;;; Vector Arithmetic
 
 ;;
 ;; v16int32 abs16	(	v32int32 	xbuff,
@@ -66,7 +67,7 @@
   (define dst
     (apply concat
       (for/list ([%i (reverse (range 0 16 1))])
-        (define %lane_number (select_lane1 %i 16 xstart xoffsets xoffsets_hi))
+        (define %lane_number (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
         (define %low (* 32 %lane_number))
         (define %high (+ %low (- 32 1)))
         (define %ext_xbuff (extract %high %low xbuff))
@@ -99,7 +100,7 @@
   (define dst
     (apply concat
       (for/list ([%i (reverse (range 0 16 1))])
-        (define %lane_number (select_lane1 %i 16 xstart xoffsets xoffsets_hi))
+        (define %lane_number (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
         (define %low (* 32 %lane_number))
         (define %high (+ %low (- 32 1)))
         (define %ext_xbuff (extract %high %low xbuff))
@@ -204,11 +205,11 @@
   (define dst
     (apply concat
       (for/list ([%i (reverse (range 0 16 1))])
-        (define %lane_number1 (select_lane1 %i 16 xstart xoffsets xoffsets_hi))
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
         (define %low1 (* 32 %lane_number1))
         (define %high1 (+ %low1 (- 32 1)))
         (define %ext_xbuff1 (extract %high1 %low1 xbuff))
-        (define %lane_number2 (select_lane1 %i 16 ystart yoffsets yoffsets_hi))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
         (define %low2 (* 32 %lane_number2))
         (define %high2 (+ %low2 (- 32 1)))
         (define %ext_xbuff2 (extract %high2 %low2 xbuff))
@@ -243,11 +244,11 @@
   (define dst
     (apply concat
       (for/list ([%i (reverse (range 0 16 1))])
-        (define %lane_number1 (select_lane1 %i 16 xstart xoffsets xoffsets_hi))
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
         (define %low1 (* 32 %lane_number1))
         (define %high1 (+ %low1 (- 32 1)))
         (define %ext_xbuff1 (extract %high1 %low1 xbuff))
-        (define %lane_number2 (select_lane1 %i 16 ystart yoffsets yoffsets_hi))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
         (define %low2 (* 32 %lane_number2))
         (define %high2 (+ %low2 (- 32 1)))
         (define %ext_xbuff2 (extract %high2 %low2 xbuff))
@@ -259,3 +260,388 @@
   dst
 )
 
+;; 
+;; v16int32 add16 	( 	v16int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		v16int32  	ybuff,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Description:	
+;; Performs an addition between lanes of xbuff and ybuff.
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = x[idx] + y[idy]
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_add16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (bvadd %ext_xbuff %ext_ybuff))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; v16int32 sub16	(	v32int32 	xbuff,
+;;                int 	xstart,
+;;                unsigned int 	xoffsets,
+;;                unsigned int 	xoffsets_hi,
+;;                int 	ystart,
+;;                unsigned int 	yoffsets,
+;;                unsigned int 	yoffsets_hi 
+;;               )	
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = x[idx] - x[idy]
+;; 
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+
+(define (v16int32_sub16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsub %ext_xbuff1 %ext_xbuff2))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;;
+;; v16int32 sub16	(	v16int32 	xbuff,
+;;                int 	xstart,
+;;                unsigned int 	xoffsets,
+;;                unsigned int 	xoffsets_hi,
+;;                int 	ystart,
+;;                unsigned int 	yoffsets,
+;;                unsigned int 	yoffsets_hi 
+;;               )	
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = x[idx] - x[idy]
+;; 
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+
+(define (v16int32_sub16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsub %ext_xbuff1 %ext_xbuff2))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; 
+;; v16int32 sub16 	( 	v16int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		v16int32  	ybuff,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = x[idx] - y[idy]
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_sub16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (bvsub %ext_xbuff %ext_ybuff))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;;; Vector Compares
+
+;; v16int32 max16	(	v32int32 	xbuff,
+;;                int 	xstart,
+;;                unsigned int 	xoffsets,
+;;                unsigned int 	xoffsets_hi,
+;;                int 	ystart,
+;;                unsigned int 	yoffsets,
+;;                unsigned int 	yoffsets_hi 
+;;               )	
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = max(x[idx], x[idy])
+;; 
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+
+(define (v16int32_max16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsmax %ext_xbuff1 %ext_xbuff2))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;;
+;; v16int32 max16	(	v16int32 	xbuff,
+;;                int 	xstart,
+;;                unsigned int 	xoffsets,
+;;                unsigned int 	xoffsets_hi,
+;;                int 	ystart,
+;;                unsigned int 	yoffsets,
+;;                unsigned int 	yoffsets_hi 
+;;               )	
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = max(x[idx], x[idy])
+;; 
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+
+(define (v16int32_max16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsmax %ext_xbuff1 %ext_xbuff2))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; 
+;; v16int32 max16 	( 	v16int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		v16int32  	ybuff,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = max(x[idx], y[idy])
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_max16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (bvsmax %ext_xbuff %ext_ybuff))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; v16int32 min16	(	v32int32 	xbuff,
+;;                int 	xstart,
+;;                unsigned int 	xoffsets,
+;;                unsigned int 	xoffsets_hi,
+;;                int 	ystart,
+;;                unsigned int 	yoffsets,
+;;                unsigned int 	yoffsets_hi 
+;;               )	
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = min(x[idx], x[idy])
+;; 
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+
+(define (v16int32_min16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsmin %ext_xbuff1 %ext_xbuff2))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;;
+;; v16int32 min16	(	v16int32 	xbuff,
+;;                int 	xstart,
+;;                unsigned int 	xoffsets,
+;;                unsigned int 	xoffsets_hi,
+;;                int 	ystart,
+;;                unsigned int 	yoffsets,
+;;                unsigned int 	yoffsets_hi 
+;;               )	
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = min(x[idx], x[idy])
+;; 
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+
+(define (v16int32_min16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsmin %ext_xbuff1 %ext_xbuff2))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; 
+;; v16int32 min16 	( 	v16int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		v16int32  	ybuff,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = min(x[idx], y[idy])
+;; xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_min16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (bvsmin %ext_xbuff %ext_ybuff))
+        %o
+      )
+    )
+  )
+  dst
+)
