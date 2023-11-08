@@ -104,26 +104,28 @@
   dst
 )
 
+;; 
+;; (define (v16int32_max16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+;;   (define dst
+;;     (apply concat
+;;       (for/list ([%i (reverse (range 0 16 1))])
+;;         (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+;;         (define %low1 (* 32 %lane_number1))
+;;         (define %high1 (+ %low1 (- 32 1)))
+;;         (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+;;         (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+;;         (define %low2 (* 32 %lane_number2))
+;;         (define %high2 (+ %low2 (- 32 1)))
+;;         (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+;;         (define %o (bvsmax %ext_xbuff1 %ext_xbuff2))
+;;         %o
+;;       )
+;;     )
+;;   )
+;;   dst
+;; )
+;; 
 
-(define (v16int32_max16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
-  (define dst
-    (apply concat
-      (for/list ([%i (reverse (range 0 16 1))])
-        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
-        (define %low1 (* 32 %lane_number1))
-        (define %high1 (+ %low1 (- 32 1)))
-        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
-        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
-        (define %low2 (* 32 %lane_number2))
-        (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
-        (define %o (bvsmax %ext_xbuff1 %ext_xbuff2))
-        %o
-      )
-    )
-  )
-  dst
-)
 
 (define (v16int32_shuffle16 xbuff xstart xoffsets xoffsets_hi)
   (define dst
@@ -171,8 +173,70 @@
   (define selection (if (= sel_idx 0) xbuff ybuff))
   selection
 )
+;; cmp arg should be a pointer to array
+(define (v16int32_maxcmp16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi cmp)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (bvsmax %ext_xbuff1 %ext_xbuff2))
+        (define %cmp_out (if (bveq %o %ext_xbuff1) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %cmp_out
+      )
+    )
+  )
+  dst
+)
 
-(define xbuff_16_32 (bv 76567648678964576846794678987460748508797894 512))
+(define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bveq %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+(define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bveq %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+(define xbuff_16_32 (bv 56 512))
+(define ybuff_16_32 (bv 4 512))
 (define xbuff_32_32 (bv -6 1024))
 (define xbuff_64_16 (bv -1024 1024))
 (define xbuff_32_16 (bv -1024 512))
@@ -189,8 +253,8 @@
 ;; (pretty-print "v16int32_abs16 w/ offset:")
 (pretty-print "xbuff_16_32:")
 (pretty-print xbuff_16_32)
-(pretty-print (v16int32_select16 select_bv xbuff_16_32 0 xoffset xoffset_hi 0 xoffset xoffset_hi))
-;; (pretty-print (v16int32_max16 xbuff_16_32 0 xoffset xoffset_hi 0 yoffset yoffset_hi))
+;; (pretty-print (v16int32_select16 select_bv xbuff_16_32 0 xoffset xoffset_hi 0 xoffset xoffset_hi))
+(pretty-print (v16int32_eq16 xbuff_16_32 0 xoffset xoffset_hi xbuff_16_32 0 xoffset xoffset_hi))
 
 ;; (pretty-print "xbuff_32_32:")
 ;; (pretty-print xbuff_32_32)

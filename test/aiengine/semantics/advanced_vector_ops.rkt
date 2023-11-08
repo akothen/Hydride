@@ -659,6 +659,642 @@
   dst
 )
 
+;;  unsigned int eq16 	( 	v32int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] == x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bveq %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int eq16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] == x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bveq %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int eq16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		v16int32  	ybuff,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] == y[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bveq %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int geq16 	( 	v32int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] >= x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_geq16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvsge %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int geq16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] >= x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_geq16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvsge %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int geq16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		v16int32  	ybuff,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] >= y[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_geq16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bvsge %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int gt16 	( 	v32int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] > x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_gt16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvsgt %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int gt16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] > x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_gt16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvsgt %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int gt16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		v16int32  	ybuff,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] > y[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_gt16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bvsgt %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int le16 	( 	v32int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] <= x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_le16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvsle %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int le16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] <= x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_le16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvsle %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int le16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		v16int32  	ybuff,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] <= y[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_le16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bvsle %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int lt16 	( 	v32int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] < x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_lt16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvslt %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int lt16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] < x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_lt16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (bvslt %ext_xbuff1 %ext_xbuff2) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int lt16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		v16int32  	ybuff,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] < y[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_lt16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (if (bvslt %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int ne16 	( 	v32int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] != x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_ne16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (not (bvseq %ext_xbuff1 %ext_xbuff2)) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int ne16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] != x[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_ne16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %o (if (not (bvseq %ext_xbuff1 %ext_xbuff2)) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
+;;  unsigned int ne16 	( 	v16int32  	xbuff,
+;;  		int  	xstart,
+;;  		unsigned int  	xoffsets,
+;;  		unsigned int  	xoffsets_hi,
+;;  		v16int32  	ybuff,
+;;  		int  	ystart,
+;;  		unsigned int  	yoffsets,
+;;  		unsigned int  	yoffsets_hi 
+;;  	) 		
+;;  
+;;  for (int i = 0; i < 16; i++)
+;;      idx = f( xstart, xoffsets[i]);
+;;      idy = f( ystart, yoffsets[i]);
+;;      cmp[i-th bit] = x[idx] != y[idy]
+;;  xoffsets, xoffsets_hi, yoffsets, yoffsets_hi have 8 offset values each. 4 bits per offset.
+
+(define (v16int32_ne16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply bvand
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low_x (* 32 %lane_number_x))
+        (define %high_x (+ %low_x (- 32 1)))
+        (define %ext_xbuff (extract %high_x %low_x xbuff))
+        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low_y (* 32 %lane_number_y))
+        (define %high_y (+ %low_y (- 32 1)))
+        (define %ext_ybuff (extract %high_y %low_y ybuff))
+        (define %o (not (bvseq %ext_xbuff %ext_ybuff)) (integer->bitvector 1 (bitvector 32)) (integer->bitvector 0 (bitvector 32))))
+        %o
+      )
+    )
+  )
+  (bitvector->integer dst)
+)
+
 ;;; Vector Lane Selection
 ;;
 ;;  v16int32 select16 	( 	unsigned int  	select,
