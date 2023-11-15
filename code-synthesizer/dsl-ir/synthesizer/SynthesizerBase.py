@@ -1147,6 +1147,49 @@ class SynthesizerBase:
 
         return contexts
 
+
+
+    def get_scalar_zexts(self, zext_size = 32):
+
+        input_precs = []
+        output_precs = []
+
+
+        for idx, input_size in enumerate(self.input_sizes + self.spec.scalar_zext_sizes):
+
+            if input_size > 16:
+                continue
+
+
+
+            input_precs.append(input_size)
+            output_precs.append(zext_size)
+
+
+        return create_llvm_scalar_zext_dsl(input_precisions = input_precs,
+                                           output_precisions = output_precs)
+
+
+    def get_scalar_splat(self, zext_size = 32):
+
+        input_precs = []
+        output_precs = []
+
+
+        for idx, input_size in enumerate(self.input_sizes + self.spec.scalar_zext_sizes):
+
+            if input_size > 16:
+                continue
+
+
+
+            input_precs.append(input_size)
+            output_precs.append(zext_size)
+
+
+        return create_llvm_scalar_splat_dsl(input_precisions = input_precs,
+                                           output_precisions = output_precs)
+
     # When limiting contexts, we extract only the first :limit values
     # hence sorting accordingly to 'relavance' is important to keep
     # most useful contexts
