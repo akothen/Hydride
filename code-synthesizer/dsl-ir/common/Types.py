@@ -1,6 +1,5 @@
 from enum import Enum, auto
 
-
 class OperandType:
     class OperandTypeEnum(Enum):
         BitVector = auto()
@@ -19,14 +18,14 @@ class OperandType:
         self.TypeEnum = Enum
         self.is_hole = False
 
-    # def __eq__(self, Other):
+    #def __eq__(self, Other):
     #    if Other == None:
     #        return False
     #
     #    assert isinstance(Other, OperandType)
     #    return self.TypeEnum == Other.TypeEnum
 
-    # def __ne__(self, Other):
+    #def __ne__(self, Other):
     #    if Other == None:
     #        return True
     #    assert isinstance(Other, OperandType)
@@ -38,18 +37,20 @@ class OperandType:
     def get_rkt_comment(self):
         return ";; Base Operand Type"
 
-    def print_operand(self, prefix=""):
+    def print_operand(self, prefix = ""):
         print("{} Base OperandType".format(prefix))
+
 
 
 class BitVector(OperandType):
 
-    def __init__(self, name, size):
+    def __init__(self, name , size):
 
         self.size = size
         self.name = name
         super().__init__(OperandType.OperandTypeEnum.BitVector)
         self.is_hole = True
+
 
     def define_symbolic(self):
         label = "sym_"+self.name
@@ -66,21 +67,23 @@ class BitVector(OperandType):
     def get_dsl_value(self):
         return "(symbolic_bitvector {})".format(self.size)
 
-    def print_operand(self, prefix=""):
-        print("{} {}\t| Symbolic Bitvector {}".format(
-            prefix, self.name, self.size))
+
+    def print_operand(self, prefix = ""):
+        print("{} {}\t| Symbolic Bitvector {}".format(prefix, self.name, self.size))
+
 
 
 # Bitvector type operand which essentially
 # controls the precision on which the operation will be performed
 class BoundedBitVector(OperandType):
 
-    def __init__(self, name, size):
+    def __init__(self, name , size):
 
         self.size = size
         self.name = name
         super().__init__(OperandType.OperandTypeEnum.BoundedBitVector)
         self.is_hole = True
+
 
     def define_symbolic(self):
         label = "sym_"+self.name
@@ -94,19 +97,19 @@ class BoundedBitVector(OperandType):
     def get_rkt_comment(self):
         return ";; {}-bit Bitvector operand".format(self.size)
 
-    def print_operand(self, prefix=""):
-        print("{} {}\t| Bounded Bitvector {}".format(
-            prefix, self.name, self.size))
 
+    def print_operand(self, prefix = ""):
+        print("{} {}\t| Bounded Bitvector {}".format(prefix, self.name, self.size))
 
 class ConstBitVector(OperandType):
 
-    def __init__(self, value, size, name=None):
+    def __init__(self, value , size, name = None):
 
         self.name = name
         self.value = value
         self.size = size
         super().__init__(OperandType.OperandTypeEnum.ConstBitVector)
+
 
     def __eq__(self, Other):
         if Other == None:
@@ -118,7 +121,8 @@ class ConstBitVector(OperandType):
             return False
 
     def get_rkt_value(self):
-        return "(bv {} (bitvector {}))".format(self.value, self.size)
+        return "(bv {} (bitvector {}))".format(self.value , self.size)
+
 
     def get_rkt_definition(self):
         return "(define {} {})".format(self.name, self.get_rkt_value())
@@ -129,25 +133,26 @@ class ConstBitVector(OperandType):
     def get_rkt_comment(self):
         return ";; {}-bit Constant Bitvector operand".format(self.size)
 
-    def print_operand(self, prefix=""):
+    def print_operand(self, prefix = ""):
         trunc_value = self.value
         if len(trunc_value) > 20:
             trunc_value = self.value[:20] + "..."
 
-        print("{} {}\t| Constant Bitvector {}".format(
-            prefix, trunc_value, self.size))
+        print("{} {}\t| Constant Bitvector {}".format(prefix, trunc_value, self.size))
+
 
 
 class LaneSize(OperandType):
 
-    def __init__(self, name, value=None, input_precision=False,
-                 output_precision=False):
+    def __init__(self, name, value = None, input_precision = False,
+                 output_precision = False):
 
         self.name = name
         self.value = value
         self.input_precision = input_precision
         self.output_precision = output_precision
         super().__init__(OperandType.OperandTypeEnum.LaneSize)
+
 
     def __eq__(self, Other):
         if Other == None:
@@ -164,20 +169,22 @@ class LaneSize(OperandType):
         else:
             return str(self.name)
 
+
     def get_dsl_value(self):
         return self.get_rkt_value()
+
 
     def get_rkt_comment(self):
         return ";; Lane Size "
 
-    def print_operand(self, prefix=""):
-        print("{} {} {} \t| Lane Size {}".format(
-            prefix, self.name, self.value, self.value))
+
+    def print_operand(self, prefix = ""):
+        print("{} {} {} \t| Lane Size {}".format(prefix, self.name, self.value, self.value))
 
 
 class Precision(OperandType):
 
-    def __init__(self, name, input_precision=False, output_precision=False,  value=None):
+    def __init__(self, name, input_precision = False, output_precision = False,  value = None):
 
         self.name = name
         self.value = value
@@ -185,11 +192,13 @@ class Precision(OperandType):
         self.output_precision = output_precision
         super().__init__(OperandType.OperandTypeEnum.Precision)
 
+
     def get_rkt_value(self):
         if self.value != None:
             return str(self.value)
         else:
             return str(self.name)
+
 
     def __eq__(self, Other):
         if Other == None:
@@ -206,24 +215,25 @@ class Precision(OperandType):
     def get_dsl_value(self):
         return self.get_rkt_value()
 
-    def print_operand(self, prefix=""):
-        print("{} {}\t| Precision {} bits , Is Input  = {}, Is Output = {}".format(
-            prefix, self.name, self.value, self.input_precision, self.output_precision))
+    def print_operand(self, prefix = ""):
+        print("{} {}\t| Precision {} bits , Is Input  = {}, Is Output = {}".format(prefix, self.name, self.value, self.input_precision, self.output_precision))
 
 
 class Integer(OperandType):
 
-    def __init__(self, name, value=None):
+    def __init__(self, name, value = None):
 
         self.name = name
         self.value = value
         super().__init__(OperandType.OperandTypeEnum.Integer)
+
 
     def get_rkt_value(self):
         if self.value != None:
             return str(self.value)
         else:
             return str(self.name)
+
 
     def get_rkt_comment(self):
         return ";; Integer Operand "
@@ -231,18 +241,19 @@ class Integer(OperandType):
     def get_dsl_value(self):
         return self.get_rkt_value()
 
-    def print_operand(self, prefix=""):
-        print("{} {} {} \t| Integer {}".format(
-            prefix, self.name, self.value,  self.value))
+
+    def print_operand(self, prefix = ""):
+        print("{} {} {} \t| Integer {}".format(prefix, self.name, self.value,  self.value))
 
 
 class Bool(OperandType):
 
-    def __init__(self, name, value=None):
+    def __init__(self, name, value = None):
 
         self.name = name
         self.value = value
         super().__init__(OperandType.OperandTypeEnum.Bool)
+
 
     def get_rkt_value(self):
         if self.value != None:
@@ -250,30 +261,32 @@ class Bool(OperandType):
         else:
             return str(self.name)
 
+
     def get_rkt_comment(self):
         return ";; Boolean Operand "
 
     def get_dsl_value(self):
         return self.get_rkt_value()
 
-    def print_operand(self, prefix=""):
-        print("{} {} {} \t| Boolean {}".format(
-            prefix, self.name, self.value,  self.value))
 
+    def print_operand(self, prefix = ""):
+        print("{} {} {} \t| Boolean {}".format(prefix, self.name, self.value,  self.value))
 
 class IndexVariable(OperandType):
 
-    def __init__(self, name="idx-i"):
+    def __init__(self, name = "idx-i"):
 
         self.name = name
 
-        assert (name == "idx-i" or name ==
-                "idx-j"), "Unsupported Index Variable"
+        assert (name == "idx-i" or name == "idx-j"), "Unsupported Index Variable"
+
 
         super().__init__(OperandType.OperandTypeEnum.IndexVariable)
 
+
     def get_rkt_value(self):
-        assert False, "Index variable has no corresponding racket value"
+        assert False , "Index variable has no corresponding racket value"
+
 
     def get_dsl_value(self):
         if self.name == "idx-i":
@@ -281,26 +294,29 @@ class IndexVariable(OperandType):
         elif self.name == "idx-j":
             return "(idx-j 0)"
 
+
     def get_rkt_comment(self):
         return ";; Loop Index Variable "
 
-    def print_operand(self, prefix=""):
+    def print_operand(self, prefix = ""):
         print("{}\t| Index Variable {}".format(prefix, self.name))
 
 
 class ShapeVariable(OperandType):
 
-    def __init__(self, name="dim-x"):
+    def __init__(self, name = "dim-x"):
 
         self.name = name
 
-        assert (name == "dim-x" or name ==
-                "dim-y"), "Unsupported Index Variable"
+        assert (name == "dim-x" or name == "dim-y"), "Unsupported Index Variable"
+
 
         super().__init__(OperandType.OperandTypeEnum.ShapeVariable)
 
+
     def get_rkt_value(self):
-        assert False, "Shape variable has no corresponding racket value"
+        assert False , "Shape variable has no corresponding racket value"
+
 
     def get_dsl_value(self):
         if self.name == "dim-x":
@@ -308,10 +324,11 @@ class ShapeVariable(OperandType):
         elif self.name == "dim-y":
             return "(dim-y 0)"
 
+
     def get_rkt_comment(self):
         return ";; Shape Variable "
 
-    def print_operand(self, prefix=""):
+    def print_operand(self, prefix = ""):
         print("{}\t| Shape Variable {}".format(prefix, self.name))
 
 
@@ -321,7 +338,7 @@ class IndexExprTypeEnum(Enum):
 
 
 class IndexExpr(OperandType):
-    def __init__(self, lhs, rhs,  expr_type=IndexExprTypeEnum.Add):
+    def __init__(self, lhs, rhs,  expr_type = IndexExprTypeEnum.Add):
         self.expr_type = expr_type
         self.lhs = lhs
         self.rhs = rhs
@@ -330,6 +347,7 @@ class IndexExpr(OperandType):
 
     def get_rkt_value(self):
         assert False, "Index expression has no corresponding racket value"
+
 
     def get_rkt_comment(self):
         return ""
@@ -352,43 +370,45 @@ def create_affine_index_expr(i_coef, j_coef, bias):
     j_expr = None
     bias_expr = None
 
-    i_index = IndexVariable(name="idx-i")
-    j_index = IndexVariable(name="idx-j")
+    i_index = IndexVariable(name = "idx-i")
+    j_index = IndexVariable(name = "idx-j")
 
     if i_coef == "dim-x":
-        dim_x = ShapeVariable(name="dim-x")
-        i_expr = IndexExpr(i_index, dim_x, expr_type=IndexExprTypeEnum.Mul)
+        dim_x = ShapeVariable(name = "dim-x")
+        i_expr = IndexExpr(i_index, dim_x, expr_type = IndexExprTypeEnum.Mul)
     elif i_coef == "dim-y":
-        dim_y = ShapeVariable(name="dim-y")
-        i_expr = IndexExpr(i_index, dim_y, expr_type=IndexExprTypeEnum.Mul)
+        dim_y = ShapeVariable(name = "dim-y")
+        i_expr = IndexExpr(i_index, dim_y, expr_type = IndexExprTypeEnum.Mul)
     elif i_coef == None:
         i_expr = None
     else:
-        integer = Integer("i_coef", value=int(i_coef))
-        i_expr = IndexExpr(i_index, integer, expr_type=IndexExprTypeEnum.Mul)
+        integer = Integer("i_coef", value = int(i_coef))
+        i_expr = IndexExpr(i_index, integer , expr_type = IndexExprTypeEnum.Mul)
+
 
     if j_coef == "dim-x":
-        dim_x = ShapeVariable(name="dim-x")
-        j_expr = IndexExpr(j_index, dim_x, expr_type=IndexExprTypeEnum.Mul)
+        dim_x = ShapeVariable(name = "dim-x")
+        j_expr = IndexExpr(j_index, dim_x, expr_type = IndexExprTypeEnum.Mul)
     elif j_coef == "dim-y":
-        dim_y = ShapeVariable(name="dim-y")
-        j_expr = IndexExpr(j_index, dim_y, expr_type=IndexExprTypeEnum.Mul)
+        dim_y = ShapeVariable(name = "dim-y")
+        j_expr = IndexExpr(j_index, dim_y, expr_type = IndexExprTypeEnum.Mul)
     elif j_coef == None:
         j_expr = None
     else:
-        integer = Integer("j_coef", value=int(j_coef))
-        j_expr = IndexExpr(j_index, integer, expr_type=IndexExprTypeEnum.Mul)
+        integer = Integer("j_coef", value = int(j_coef))
+        j_expr = IndexExpr(j_index, integer , expr_type = IndexExprTypeEnum.Mul)
+
 
     if isinstance(bias, OperandType):
         bias_expr = bias
     elif bias == "dim-x":
-        bias_expr = ShapeVariable(name="dim-x")
+        bias_expr = ShapeVariable(name = "dim-x")
     elif bias == "dim-y":
-        bias_expr = ShapeVariable(name="dim-y")
+        bias_expr = ShapeVariable(name = "dim-y")
     elif bias == None:
         bias_expr = None
     else:
-        bias_expr = Integer("bias", value=int(bias))
+        bias_expr = Integer("bias", value = int(bias))
 
     expr = None
 
@@ -398,26 +418,29 @@ def create_affine_index_expr(i_coef, j_coef, bias):
         else:
             expr = i_expr
 
+
     if j_expr != None:
         if expr == None:
             expr = j_expr
         else:
-            expr = IndexExpr(expr, j_expr, expr_type=IndexExprTypeEnum.Add)
+            expr = IndexExpr(expr, j_expr, expr_type = IndexExprTypeEnum.Add)
+
 
     if bias_expr != None:
         if expr == None:
             expr = bias_expr
         else:
-            expr = IndexExpr(expr, bias_expr, expr_type=IndexExprTypeEnum.Add)
+            expr = IndexExpr(expr, bias_expr, expr_type = IndexExprTypeEnum.Add)
 
     assert expr != None, "Should not be creating a undefined expression"
 
     return expr
 
 
+
 class Reg(OperandType):
 
-    def __init__(self, index, precision, size, signed=False):
+    def __init__(self, index , precision, size, signed = False):
 
         self.index = index
         self.precision = precision
@@ -427,6 +450,7 @@ class Reg(OperandType):
         assert self.precision != None, "precision for reg needs to be provied"
         assert self.size != None, "size for reg needs to be provided"
         super().__init__(OperandType.OperandTypeEnum.Reg)
+
 
     def __eq__(self, Other):
         if Other == None:
@@ -438,7 +462,7 @@ class Reg(OperandType):
             return False
 
     def get_rkt_value(self):
-        return "(reg (bv "+str(self.index) + " (bitvector 8)))"
+        return "(reg (bv "+str(self.index) +" (bitvector 8)))"
 
     def get_halide_dsl_value(self):
         type_prefix = "'"
@@ -448,17 +472,18 @@ class Reg(OperandType):
 
         type_str = type_prefix + type_core
 
-        return "(buffer-index  "+str(self.index) + " "+type_str+" "+str(self.size)+") ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
+        return "(buffer-index  "+str(self.index) +" "+type_str+" "+str(self.size)+") ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
 
     def get_dsl_value(self):
-        return "(reg (bv "+str(self.index) + " (bitvector 8))) ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
+        return "(reg (bv "+str(self.index) +" (bitvector 8))) ; < {} x i{}> {}".format(self.size // self.precision, self.precision, self.signed)
 
     def get_rkt_comment(self):
         return ";; {}-bit reg operand".format(self.size)
 
-    def print_operand(self, prefix=""):
-        print("{} Reg {} \t| <{} x i{}>".format(prefix, self.index,
-              self.size // self.precision, self.precision))
+
+    def print_operand(self, prefix = ""):
+        print("{} Reg {} \t| <{} x i{}>".format(prefix, self.index, self.size // self.precision, self.precision))
+
 
 
 class InstructionType:
@@ -467,6 +492,7 @@ class InstructionType:
         SIMD = auto()
         NON_SIMD = auto()
         Shuffle = auto()
+
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
@@ -481,6 +507,7 @@ class InstructionType:
 
     def __hash__(self):
         return hash(self.TypeEnum)
+
 
 
 def isBitVectorType(arg):
