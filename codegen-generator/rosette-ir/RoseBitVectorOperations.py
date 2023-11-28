@@ -1687,7 +1687,7 @@ class RoseBVPopCntOp(RoseBitVectorOp):
         Name = super().getName()
 
         String = Spaces + "(define " + Name + " "
-        String += "(bvpopcnt " + self.getOperand(0).getName() + " " + str(self.getOperand(0).getOutputBitwidth()) ")"
+        String += "(bvpopcnt " + self.getOperand(0).getName() + " " + str(self.getOperand(0).getOutputBitwidth()) + ")"
         return String
 
     def solve(self):
