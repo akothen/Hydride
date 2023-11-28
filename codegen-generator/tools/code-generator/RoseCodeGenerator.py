@@ -7,7 +7,8 @@
 
 import x86RoseLang
 import HexRoseLang
-import ARMRoseLang
+import DRAMRoseLang
+#import ARMRoseLang
 
 import RoseCSE
 import RoseDCE
@@ -33,7 +34,8 @@ class RoseCodeGenerator:
     TargetAPI = {
         "x86": x86RoseLang,
         "Hexagon": HexRoseLang,
-        "ARM": ARMRoseLang,
+        "DRAMBitSIMD": DRAMRoseLang,
+        #"ARM": ARMRoseLang,
     }
 
     def __init__(self, Target: str):

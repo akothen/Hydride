@@ -398,34 +398,70 @@ def GenerateRosetteForForLoop(Loop: RoseForLoop, RosetteCode: str, NumSpace: int
                         # ReductionOpString = Op.getOpcode().getRosetteOp()
                         if isinstance(Op, RoseSaturableBitVectorOp):
                             ReductionOpString = Op.getOpcode().getRosetteOp()
+                            print("Reduction op string:", ReductionOpString)
+                            ExtractOpName = ExtractOp.getName()
+
+                            if "add" in ReductionOpString and   ExtractOp.getName() == "dst":
+                                InitVal = RoseConstant.create(0, RoseBitVectorType.create(ExtractOp.getType().getBitwidth()))
+                                ExtractOpName = InitVal.to_rosette()
+
+                            if "mul" in ReductionOpString and ExtractOp.getName() == "dst":
+                                InitVal = RoseConstant.create(1, RoseBitVectorType.create(ExtractOp.getType().getBitwidth()))
+                                ExtractOpName = InitVal.to_rosette()
+
                             if Op.getSaturationQualifier() == None:
                                 Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
-                                    + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
+                                    + ReductionVal.getName() + ".red " + ExtractOpName + "))\n"
+                                print("Updated Epilog1: ", Epilogue)
                             else:
                                 Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
                                     + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
-                                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"
+                                    + ExtractOpName + " " + str(Op.getOutputBitwidth()) + "))\n"
                         elif isinstance(Op, RoseGeneralSaturableBitVectorOp):
                             ReductionOpString = Op.getRosetteName()
+                            print("Reduction op string1:", ReductionOpString)
                             print("Op.getSaturationQualifierID():")
                             Op.getSaturationQualifierID().print()
+
+                            ExtractOpName = ExtractOp.getName()
+
+                            if "add" in ReductionOpString and   ExtractOp.getName() == "dst":
+                                InitVal = RoseConstant.create(0, RoseBitVectorType.create(ExtractOp.getType().getBitwidth()))
+                                ExtractOpName = InitVal.to_rosette()
+
+                            if "mul" in ReductionOpString and ExtractOp.getName() == "dst":
+                                InitVal = RoseConstant.create(1, RoseBitVectorType.create(ExtractOp.getType().getBitwidth()))
+                                ExtractOpName = InitVal.to_rosette()
+
                             if isinstance(Op.getSaturationQualifierID(), RoseConstant):
                                 Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
                                     + " " + ReductionVal.getName() + ".red " \
-                                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) \
+                                    + ExtractOpName + " " + str(Op.getOutputBitwidth()) \
                                     + " " + \
                                     str(Op.getSaturationQualifierID(
                                     ).getValue()) + "))\n"
                             else:
                                 Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
                                     + " " + ReductionVal.getName() + ".red " \
-                                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) \
+                                    + ExtractOpName + " " + str(Op.getOutputBitwidth()) \
                                     + " " + Op.getSaturationQualifierID().getName() + "))\n"
                             ReductionOpString = Op.getSimpleRosetteName()
                         else:
+
                             ReductionOpString = Op.getOpcode().getRosetteOp()
+
+                            print("Reduction op string2:", ReductionOpString)
+                            ExtractOpName = ExtractOp.getName()
+
+                            if "add" in ReductionOpString and   ExtractOp.getName() == "dst":
+                                InitVal = RoseConstant.create(0, RoseBitVectorType.create(ExtractOp.getType().getBitwidth()))
+                                ExtractOpName = InitVal.to_rosette()
+
+                            if "mul" in ReductionOpString and ExtractOp.getName() == "dst":
+                                InitVal = RoseConstant.create(1, RoseBitVectorType.create(ExtractOp.getType().getBitwidth()))
+                                ExtractOpName = InitVal.to_rosette()
                             Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
-                                + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
+                                + ReductionVal.getName() + ".red " + ExtractOpName + "))\n"
                         Epilogue += Spaces + Op.getName() + "\n"
                         break
                     if isinstance(Op, RoseBVInsertSliceOp):
@@ -438,12 +474,15 @@ def GenerateRosetteForForLoop(Loop: RoseForLoop, RosetteCode: str, NumSpace: int
         # print("ReductionLoops:")
         # for L in ReductionLoops:
         #  L.print()
+
+        print("TmpRosetteCodePre: \n",TmpRosetteCode )
         TmpRosetteCode = Spaces + "(define " + ReductionVal.getName() + ".red\n" \
             + "(apply\n" + Spaces + ReductionOpString + "\n" + TmpRosetteCode
     else:
         TmpRosetteCode = Spaces + "(apply\n" + \
             Spaces + "concat\n" + TmpRosetteCode
         TmpRosetteCode += (Spaces + ")\n")
+    print("TmpRosetteCode: \n",TmpRosetteCode )
     RosetteCode += TmpRosetteCode
     return RosetteCode
 
