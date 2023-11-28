@@ -131,6 +131,9 @@ class RoseOpcode(Enum):
     # Add an op for absolute value for bitvectors
     bvabs = auto()
 
+    # Add an op for population count for bitvectors
+    bvpopcnt = auto()
+
     # Op useful for code generation. The callee for this
     # does not have to be defined.
     opaquecall = auto()
@@ -394,6 +397,11 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[0].getType(), RoseBooleanType)
             return RoseBooleanType.create()
         if self.value == self.bvabs.value:
+            assert (len(Inputs) == 1)
+            assert isinstance(Inputs[0].getType(), RoseBitVectorType)
+            return RoseBitVectorType.create(Inputs[0].getType().getBitwidth())
+
+        if self.value == self.bvpopcnt.value:
             assert (len(Inputs) == 1)
             assert isinstance(Inputs[0].getType(), RoseBitVectorType)
             return RoseBitVectorType.create(Inputs[0].getType().getBitwidth())
@@ -751,6 +759,15 @@ class RoseOpcode(Enum):
             if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
+
+        if self.value == self.bvpopcnt.value:
+            if len(Inputs) != 1:
+                return False
+            if not isinstance(Inputs[0].getType(), RoseBitVectorType):
+                return False
+            if self.getOutputType(Inputs) != OutputType:
+                return False
+            return True
         if self.value == self.select.value:
             if len(Inputs) != 3:
                 return False
@@ -813,6 +830,7 @@ class RoseOpcode(Enum):
                 or self.value == self.rem.value \
                 or self.value == self.mod.value \
                 or self.value == self.abs.value \
+                or self.value == self.bvpopcnt.value \
                 or self.value == self.bvabs.value:
             return True
         if self.value == self.bvzero.value \
@@ -947,6 +965,7 @@ class RoseOpcode(Enum):
                 or self.value == self.ret.value \
                 or self.value == self.abs.value \
                 or self.value == self.bvabs.value \
+                or self.value == self.bvpopcnt.value \
                 or self.value == self.lsb.value \
                 or self.value == self.msb.value \
                 or self.value == self.bvzero.value \
@@ -1061,6 +1080,8 @@ class RoseOpcode(Enum):
             return (NumInputs == 1)
         if self.value == self.bvabs.value:
             return (NumInputs == 1)
+        if self.value == self.bvpopcnt.value:
+            return (NumInputs == 1)
         if self.value == self.bvgeneraladd.value \
                 or self.value == self.bvgeneralsub.value \
                 or self.value == self.bvgeneralmax.value \
@@ -1118,6 +1139,7 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsge.value \
                 or self.value == self.bvuge.value \
                 or self.value == self.bvabs.value \
+                or self.value == self.bvpopcnt.value \
                 or self.value == self.rotateleft.value \
                 or self.value == self.rotateright.value \
                 or self.value == self.bvextract.value \
@@ -1261,6 +1283,7 @@ class RoseOpcode(Enum):
                 or self.value == self.cast.value \
                 or self.value == self.bvneq.value \
                 or self.value == self.notequal.value \
+                or self.value == self.bvpopcnt.value \
                 or self.value == self.bvabs.value:
             assert False, "No direct conversion to Rosette Ops"
         return None
