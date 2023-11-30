@@ -96,6 +96,10 @@ class TypedSimpleGrammarGenerator:
 
 
     def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
+
+        if self.use_buffer_id:
+            return ""
+
         condition = None
 
         if last_clause:
@@ -120,6 +124,19 @@ class TypedSimpleGrammarGenerator:
             imm_clauses.append(self.emit_lit_imm(imm, bv_size, imm_prec))
 
             self.created_lits.append((imm, bv_size, imm_prec))
+
+
+        for i in range(len(self.imms)):
+            for j in range(len(self.imms)):
+
+                imm_i = self.imms[i]
+                imm_j = self.imms[j]
+
+                if imm_i[1] == imm_j[1]:
+                    # if precs are the same
+
+                    repeated_splat = self.interleave_splat(imm_i, imm_j, fill_size = bv_size)
+                    imm_clauses.append(repeated_splat)
 
 
 
@@ -147,12 +164,42 @@ class TypedSimpleGrammarGenerator:
 
         close = ""
 
-        hole_clause = "" # "\n\t".join([condition, hole, close])
+        hole_clause = ""#hole
+
+        if bv_size > 64:
+            hole_clause = ""
 
         return_clauses =  "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause, ramp_clause] + imm_clauses + imm_log2_clauses)
 
 
         return return_clauses
+
+
+    def interleave_splat(self, imm0, imm1, fill_size = 32):
+
+        precs = imm0[1]
+
+        if fill_size % precs != 0:
+            return ""
+
+
+        lit_clause = "(lit (concat "
+
+        for i in range(fill_size // precs):
+
+            if i % 4 == 0:
+                lit_clause += "(bv {} {}) ".format(imm0[0], imm0[1])
+            #elif i % 4 == 1 :
+            #    lit_clause += "(bv {} {}) ".format(imm0[0], imm0[1])
+            #elif i % 4 == 2 :
+            #    lit_clause += "(bv {} {}) ".format(imm1[0], imm1[1])
+            else:
+                lit_clause += "(bv {} {}) ".format(imm1[0], imm1[1])
+
+        lit_clause += "))"
+
+        return lit_clause
+
 
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
@@ -287,7 +334,26 @@ class TypedSimpleGrammarGenerator:
         return "\n\t".join(joined_clause)
 
 
+    def emit_choose_buffer(self, reg_id):
+
+        assert self.input_signedness != None, "Require type information for choosing buffers"
+
+        type_str = "int"
+
+        prefix = "'"
+        if len(self.input_signedness) > reg_id and self.input_signedness[reg_id] == 0:
+            prefix = "'u"
+
+        size_str = str(self.input_precs[reg_id])
+
+        type_str = prefix + type_str+size_str
+
+        return "(buffer-index {} {} {})".format(reg_id, type_str, self.input_sizes[reg_id])
+
     def emit_choose_reg(self, reg_id):
+        if self.use_buffer_id:
+            return self.emit_choose_buffer(reg_id)
+
         reg_bv = "(bv {} (bitvector 4))".format(reg_id)
         return "(reg  {})".format(reg_bv)
 
@@ -389,11 +455,17 @@ class TypedSimpleGrammarGenerator:
                      return_type = 256,
                      lit_holes = [],
                      input_sizes = [],
+                     input_precs = [],
                      vars_name = "vars",
                      imms = [],
-                     include_ramp_lit = False
+                     include_ramp_lit = False,
+                     input_signedness = None,
+                     use_buffer_id = False
                      ):
 
+        self.input_precs = input_precs
+        self.input_signedness = input_signedness
+        self.use_buffer_id = use_buffer_id
         self.return_type = return_type
         self.operation_layer_name = operation_layer_name
         self.input_sizes = input_sizes

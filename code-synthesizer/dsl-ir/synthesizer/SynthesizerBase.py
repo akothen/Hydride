@@ -135,6 +135,14 @@ class SynthesizerBase:
             self.BASE_VECT_SIZE = None
             self.SWIZZLE_BOUND = 5
 
+        elif self.target == "halide":
+            print("Setting halide target settings")
+            self.FLEXIBLE_CASTING = False
+            self.ENABLE_PRUNING = True
+            self.MAX_BW_SIZE = 1024
+            self.BASE_VECT_SIZE = 1024
+            self.SWIZZLE_BOUND = 0
+
     # Prints the number number of target agnostic
     # classes and the total number of contexts
     # associated with each target agnostic class
@@ -162,6 +170,7 @@ class SynthesizerBase:
         for sc in SPECIAL_CASE:
             if sc in name:
                 return True
+        return True
         return (self.legal_map[name] == 1)
 
     def get_memory_loads(self):

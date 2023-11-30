@@ -856,11 +856,11 @@ class StepWiseSynthesizer(SynthesizerBase):
             lit_holes=lit_holes,
             return_type=self.output_slice_length,
             input_sizes=self.input_sizes,
-            # input_precs = self.spec.input_precision,
+            input_precs = self.spec.input_precision,
             imms=imms,
             include_ramp_lit=include_ramp_lit,
-            # input_signedness =self.spec.input_signedness,
-            # use_buffer_id = self.spec.use_buffer_id()
+            input_signedness =self.spec.input_signedness,
+            use_buffer_id = self.spec.use_buffer_id()
         )
 
     def score_context(self, dsl_inst,  ctx):
