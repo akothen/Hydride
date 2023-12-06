@@ -16,6 +16,7 @@ import sys
 import ast
 import time
 
+DO_ISBL = True
 
 def debug(*args):
     PRINT_DEBUG = True
@@ -68,14 +69,18 @@ class StepWiseSynthesizer(SynthesizerBase):
                  ):
 
         self.scale_factor = scale_factor
+        self.SWIZZLE_BOUND = 0
 
         super().__init__(spec=spec, dsl_operators=dsl_operators,
                          struct_definer=struct_definer, grammar_generator=grammar_generator, vectorization_factor=vectorization_factor, depth=depth,
                          contexts_per_dsl_inst=contexts_per_dsl_inst,
                          is_shuffle=is_shuffle, target=target,
                          legal_map=legal_map)
+        # EXPERIMENT
+        if not DO_ISBL:
+            self.contexts_per_dsl_inst = None
         self.step = step
-        debug("Using Stepwise Synthesizer!")
+        print("Using Stepwise Synthesizer!")
 
         self.set_target_settings()
         self.partition_flexibility = 4
@@ -90,6 +95,7 @@ class StepWiseSynthesizer(SynthesizerBase):
             self.scale_factor = 1
 
         print("Scale factor used in synthesizer: ", self.scale_factor)
+
 
         debug("Pre Scaling")
         self.print_dsl_stats()
@@ -612,7 +618,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return (insts, ctxs)
 
-    def emit_synthesis_grammar(self, main_grammar_name="synth_grammar", use_lit_holes=USE_LIT_HOLES):
+    def emit_synthesis_grammar(self, main_grammar_name="synth_grammar", use_lit_holes=USE_LIT_HOLES, include_manual_swizzles = True):
 
         # Memory loading layer
         spec_memory_loads = self.get_memory_loads()
@@ -633,23 +639,24 @@ class StepWiseSynthesizer(SynthesizerBase):
         memory_shuffle_insts = []
         memory_shuffle_args_list = []
 
-        spec_memory_shuffles = self.get_single_interleave_shuffles()
-        memory_shuffle_insts = [spec_memory_shuffles] * \
-            len(spec_memory_shuffles.contexts)
-        # [ctx.context_args for ctx in spec_memory_shuffles.contexts]
-        memory_shuffle_args_list = spec_memory_shuffles.contexts
+        if include_manual_swizzles:
+            spec_memory_shuffles = self.get_single_interleave_shuffles()
+            memory_shuffle_insts = [spec_memory_shuffles] * \
+                len(spec_memory_shuffles.contexts)
+            # [ctx.context_args for ctx in spec_memory_shuffles.contexts]
+            memory_shuffle_args_list = spec_memory_shuffles.contexts
 
-        spec_memory_shuffles = self.get_single_deinterleave_shuffles()
-        memory_shuffle_insts += [spec_memory_shuffles] * \
-            len(spec_memory_shuffles.contexts)
-        memory_shuffle_args_list += [
-            ctx for ctx in spec_memory_shuffles.contexts]
+            spec_memory_shuffles = self.get_single_deinterleave_shuffles()
+            memory_shuffle_insts += [spec_memory_shuffles] * \
+                len(spec_memory_shuffles.contexts)
+            memory_shuffle_args_list += [
+                ctx for ctx in spec_memory_shuffles.contexts]
 
-        spec_memory_shuffles = self.get_two_interleave_shuffles()
-        memory_shuffle_insts += [spec_memory_shuffles] * \
-            len(spec_memory_shuffles.contexts)
-        memory_shuffle_args_list += [
-            ctx for ctx in spec_memory_shuffles.contexts]
+            spec_memory_shuffles = self.get_two_interleave_shuffles()
+            memory_shuffle_insts += [spec_memory_shuffles] * \
+                len(spec_memory_shuffles.contexts)
+            memory_shuffle_args_list += [
+                ctx for ctx in spec_memory_shuffles.contexts]
 
         # When legalizing target agnostic shuffle operations
         # into target specific shuffles, we don't want to include
@@ -683,6 +690,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 if (not self.is_shuffle) and dsl_inst.name in ShuffleList:
                     continue
 
+                # EXPERIMENT
                 operator_contexts = self.get_supported_context_for_dsl(
                     dsl_inst, limit=self.contexts_per_dsl_inst)
 
@@ -725,13 +733,15 @@ class StepWiseSynthesizer(SynthesizerBase):
             if self.depth <= 2:
                 BOUND = 25
             elif self.depth == 3:
-                BOUND = 20 - delta[len(self.spec.input_precision)]
+                BOUND = 20 - delta[min(len(self.spec.input_precision), len(delta)-1)]
             elif self.depth >= 4:
                 BOUND = 16
         if self.target == "x86":
-            BOUND = 25
+            BOUND = 50
         if self.target == "arm":
             BOUND = 25
+        if self.target == "halide":
+            BOUND = 40
 
         if self.spec.contains_conditional():
             BOUND = 25
@@ -739,8 +749,8 @@ class StepWiseSynthesizer(SynthesizerBase):
         if self.depth >= 4:
             BOUND = 25  # 16 for regular benchmarks, 20 needed for matmul
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.prune_using_hvx_acc_ops(
-            operation_dsl_insts, operation_dsl_args_list)
+        if DO_ISBL:
+            (operation_dsl_insts, operation_dsl_args_list) = self.prune_using_hvx_acc_ops(operation_dsl_insts, operation_dsl_args_list)
 
         if not self.is_shuffle:
             (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(
@@ -761,7 +771,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name)
 
         if not self.is_shuffle:
-            MAX_NUM_CLAUSES = 16
+            MAX_NUM_CLAUSES = 25
 
             if self.target == 'x86':
                 MAX_NUM_CLAUSES = 18
@@ -771,9 +781,15 @@ class StepWiseSynthesizer(SynthesizerBase):
             bucket = self.partition_ops_into_buckets(
                 operation_dsl_insts, operation_dsl_args_list)
 
-            if len(operation_dsl_insts) > 5:
-                (operation_dsl_insts, operation_dsl_args_list) = self.get_ops_from_bucket_at_step_alt(
+            if len(operation_dsl_insts) > 5 and DO_ISBL:
+
+                (operation_dsl_insts_bucketed, operation_dsl_args_list_bucketed) = self.get_ops_from_bucket_at_step_alt(
                     bucket, step=self.step, items_per_bucket=3, max_num_clauses=MAX_NUM_CLAUSES)
+
+                if len(operation_dsl_insts_bucketed) > 6 :
+                    # For properties which may throw most instructions in a single bucket, we avoid using this heuristic
+                    (operation_dsl_insts, operation_dsl_args_list) = (operation_dsl_insts_bucketed, operation_dsl_args_list_bucketed)
+
 
         (scalar_zext_ops, scalar_zext_contexts) = self.get_scalar_casts()
 
@@ -844,8 +860,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         if self.is_shuffle:
             imms.append((0, self.spec.output_precision))
 
-        assert len(operation_dsl_insts) != 0 or imms != [
-        ], "Must have non-empty grammar"
+        #assert len(operation_dsl_insts) != 0 or imms != [], "Must have non-empty grammar"
 
         return self.grammar_generator.emit_grammar(
             operation_layer_name=main_grammar_name,

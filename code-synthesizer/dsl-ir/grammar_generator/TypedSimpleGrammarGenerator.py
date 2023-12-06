@@ -98,7 +98,24 @@ class TypedSimpleGrammarGenerator:
     def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
 
         if self.use_buffer_id:
-            return ""
+            imm = None
+
+            if prec in self.input_sizes:
+                imm = self.emit_choose_buffer(self.input_sizes.index(prec))
+                broadcast_clause =  "(typed:xBroadcast {} {} {} {})".format(imm, prec, prec, bv_size // prec)
+                sext_clause =  "(typed:cast-int {} {} 1  1 {})".format(imm, prec,  bv_size)
+
+                clause = broadcast_clause
+
+                if bv_size in [16, 32]:
+                    clause += "\n"+ sext_clause
+
+
+
+            else:
+                imm = "(typed:int-imm (bv 0 {}) {} #t)".format(prec, prec)
+                clause =  "(typed:xBroadcast {} {} {} {})".format(imm, prec, prec, bv_size // prec)
+            return  clause
 
         condition = None
 
@@ -314,7 +331,7 @@ class TypedSimpleGrammarGenerator:
                             use_clause = False
                             break
 
-                        reg_idx = "(bv {} (bitvector 4))".format(idx)
+                        reg_idx = "(bv {} (bitvector 8))".format(idx)
                         clause.append("(reg {})".format(reg_idx) +" "+ga.get_rkt_comment())
                     else:
                         clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
@@ -354,7 +371,7 @@ class TypedSimpleGrammarGenerator:
         if self.use_buffer_id:
             return self.emit_choose_buffer(reg_id)
 
-        reg_bv = "(bv {} (bitvector 4))".format(reg_id)
+        reg_bv = "(bv {} (bitvector 8))".format(reg_id)
         return "(reg  {})".format(reg_bv)
 
     def emit_choose_lit(self, bv_size, prec):

@@ -21,7 +21,6 @@ DEBUG_LIST = [
     # "vpmin_s8",
     # "vmin_s8",
     # "vqadd_s16",
-    "vzip_u16",
     # "vmovl_s8",
     # "vqmovn_u32",
     # "vdotq_u32",
@@ -40,10 +39,12 @@ DEBUG_LIST = [
     # "hexagon_V6_vassign_128B",
     # "hexagon_V6_lo_128B",
     # "hexagon_V6_pred_and_128B",
-    "hexagon_V6_vmpyih_acc_128B",
-    "_mm512_mulhi_epu16",
     # "hexagon_V6_vmpyih_acc_128B",
-    # "_mm512_mulhi_epu16"
+    # "_mm512_mulhi_epu16",
+    #"_mm512_broadcastq_epi64",
+    #"hvx_swizzle_43",
+    "typed:xBroadcast",
+    "typed:signed-vector_reduce_add",
 ]
 
 
@@ -888,9 +889,9 @@ class SynthesizerBase:
                 globally_sorted_operation_insts.append(ops[idx])
                 globally_sorted_operation_contexts.append(ctxs[idx])
 
-            # print("get top N:")
+            print("get top N:")
             for i, o in enumerate(globally_sorted_operation_contexts):
-                # print(o.name, "score: ", self.score_context(globally_sorted_operation_insts[i], o))
+                print(o.name, "score: ", self.score_context(globally_sorted_operation_insts[i], o))
                 pass
 
             if N < len(ops):
@@ -918,7 +919,9 @@ class SynthesizerBase:
         print("Num Upcasts actual:", len(upcast_ops), upcast_ctxs)
         print("Num Downcasts actual:", len(downcast_ops), downcast_ctxs)
 
+
         upcasts = get_top_N_ops(upcast_ops, upcast_ctxs, num_upcasts)
+        print("Upcast pruned:", [ctx.name for ctx in upcasts[1]])
         downcasts = get_top_N_ops(downcast_ops, downcast_ctxs, num_downcasts)
 
         grammar_ops = computes[0] + upcasts[0] + downcasts[0]
@@ -1099,7 +1102,7 @@ class SynthesizerBase:
             hexagon_precision_cond = hexagon_precision_cond_op or hexagon_precision_cond_br
             hexagon_cond = (hexagon_precision_cond and (
                 supports_input_length or supports_output_length or supports_input_basevect or supports_output_basevect)) and lane_size_cond
-            hexagon_cond = hexagon_cond and (self.target == "hvx")
+            hexagon_cond = hexagon_cond and (self.target in ["hvx", "halide"])
 
             if check:
                 print("Context ops:", ctx_ops)
@@ -1208,7 +1211,9 @@ class SynthesizerBase:
         #     breakpoint()
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
 
-        if is_broadcast_like:
+        is_scalar_like = self.is_scalar_like_context(ctx)
+
+        if is_broadcast_like and (not is_scalar_like):
             score = 0
             score += int(([ctx.supports_input_size(input_size)
                          for input_size in self.input_sizes].count(True)))
@@ -1231,6 +1236,26 @@ class SynthesizerBase:
                 unique_input_sizes = self.input_sizes
                 score += min(int([ctx.supports_output_size(isize)
                              for isize in unique_input_sizes].count(True)), 3)  # * 2
+
+            # for saturation we want
+            spec_ops = self.spec.get_semantics_ops_list()
+            dsl_ops = ctx.get_bv_ops()
+
+            score += min(len(list(set(spec_ops) & set(dsl_ops) &
+                         set(["bvusat", "bvssat", "sign-extend", "zero-extend"]))), 2)*2
+        elif is_scalar_like:
+            score = 0
+            score += int(([ctx.supports_input_size(input_size)
+                         for input_size in self.input_sizes].count(True)))
+
+            score += int(([ctx.supports_output_size(input_size)
+                         for input_size in self.input_sizes].count(True)))
+
+            score += int(ctx.supports_output_size(self.output_slice_length))
+            score += int(ctx.supports_output_precision(self.spec.output_precision))
+            score += int(([ctx.supports_input_precision(input_precision)
+                         for input_precision in self.spec.input_precision]).count(True) != 0)
+
 
             # for saturation we want
             spec_ops = self.spec.get_semantics_ops_list()
@@ -1317,7 +1342,7 @@ class SynthesizerBase:
                 in_cast_set = True
                 for op in ops_list:
                     in_cast_set = in_cast_set and op in [
-                        "sign-extend", "extract", "zero-extend"]
+                        "sign-extend", "extract", "zero-extend", "concat"]
                 return in_cast_set
 
             # Multiplication and division operations can make the
@@ -1360,7 +1385,7 @@ class SynthesizerBase:
                 #    return False
 
                 cond = bv_op in spec_ops and bv_op not in [
-                    "sign-extend", "extract", "zero-extend"]
+                    "sign-extend", "extract", "zero-extend", "concat"]
 
                 overlap = overlap or cond
 
@@ -1448,6 +1473,13 @@ class SynthesizerBase:
             if "movl" in dsl_inst.name:
                 return True
         return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq", "if", "cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
+
+
+    def is_scalar_like_context(self, ctx):
+        input_scalar = (ctx.in_vectsize // ctx.in_precision) == 1
+        output_scalar = (ctx.out_vectsize // ctx.out_precision) == 1
+
+        return input_scalar and output_scalar
 
     # Is the operation either a broadcast operation or an
     # operation which sign/zero extends from a smallar

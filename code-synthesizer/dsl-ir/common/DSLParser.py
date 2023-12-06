@@ -11,7 +11,10 @@ def create_dsl_inst(inst_dict, dsl_name, is_simd):
 
 
 def parse_cost(dsl_inst_cost, hw_name="Skylake"):
-    cost_list = eval(dsl_inst_cost)
+    if isinstance(dsl_inst_cost, str):
+        cost_list = eval(dsl_inst_cost)
+    else:
+        return None
 
     if cost_list == None:
         return None
@@ -48,8 +51,8 @@ def populate_dsl_inst(dsl_inst, sub_inst_dict, keep_duplicate=False):
                 duplicate_context_names.append(other_name)
 
     if duplicate_context_names != []:
-        print("dropping Duplicate contexts:", duplicate_context_names,
-              " belonging to class", dsl_inst.name)
+        #print("dropping Duplicate contexts:", duplicate_context_names," belonging to class", dsl_inst.name)
+        pass
 
     for subinst_name in sub_inst_dict:
 

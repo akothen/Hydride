@@ -165,7 +165,7 @@ class Context:
         self.signedness = signedness
         self.semantics = semantics
         self.precision_scaled = False
-        self.enable_mixed_scaling = False
+        self.enable_mixed_scaling =  True
         self.unscaled_sym_bvs_idx = []
         self.is_bounded = False
         self.ctx_sema = ctx_sema
@@ -176,6 +176,7 @@ class Context:
         self.create_bounded_args_map()
         self.extensions = extensions
 
+        self.scale_lanesize = False
         self.set_scale_factor()
 
     def __repr__(self):
@@ -186,7 +187,8 @@ class Context:
         if 'hexagon' in self.name:
             self.sample_scale_factor = 32
         else:
-            self.sample_scale_factor = 4
+            # TEMP
+            self.sample_scale_factor = 2
 
     def get_bv_ops(self):
 
@@ -364,7 +366,7 @@ class Context:
                     scale_factor, arg.size)
                 scaled_bv_arg = BitVector(
                     arg.name, int(arg.size // scale_factor))
-                if arg.size // scale_factor == 1 and self.enable_mixed_scaling:
+                if arg.size // scale_factor <= 7 and self.enable_mixed_scaling:
                     # For Scalar vector ops, try keeping the scalar args the same size
                     # and hope verification fails any mis-scaling
                     scaled_args.append(arg)
@@ -379,7 +381,8 @@ class Context:
 
             # For scaling down of lane sizes , we only scale down the values if the scaled down lane
             # size is greater than or equal to the input  (output) precisions.
-            elif idx == self.in_lanesize_index and arg.value // scale_factor >= self.in_precision:
+
+            elif self.scale_lanesize and idx == self.in_lanesize_index and arg.value // scale_factor >= self.in_precision:
                 scaled_lanesize_arg = Integer(
                     arg.name, value=int(arg.value // scale_factor))
                 scaled_args.append(scaled_lanesize_arg)
@@ -387,7 +390,7 @@ class Context:
                 lane_size_scaled = True
                 need_to_scale_lanesize = True
 
-            elif idx == self.out_lanesize_index and arg.value // scale_factor >= self.out_precision:
+            elif self.scale_lanesize and idx == self.out_lanesize_index and arg.value // scale_factor >= self.out_precision:
 
                 scaled_lanesize_arg = Integer(
                     arg.name, value=int(arg.value // scale_factor))
@@ -436,6 +439,10 @@ class Context:
 
         self.context_args = scaled_args
 
+        if self.name in ["vzip_u16", "vdotq_s32"]:
+            print("Scaled:\n",self.emit_context_expr_string())
+
+
     def get_scalable_args_idx(self, base_vector_size=None):
         assert self.can_scale_context(
         ), "Context must be scalable to perform the operation scaling " + self.name
@@ -444,7 +451,7 @@ class Context:
         scalable_idx = []
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
-                if arg.size // sample_scale_factor == 1 and self.enable_mixed_scaling:
+                if arg.size // sample_scale_factor <= 7 and self.enable_mixed_scaling:
                     self.unscaled_sym_bvs_idx.append(idx)
                 pass
             elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
@@ -452,9 +459,9 @@ class Context:
 
             # For scaling down of lane sizes , we only scale down the values if the scaled down lane
             # size is greater than or equal to the input  (output) precisions.
-            elif idx == self.in_lanesize_index and arg.value // sample_scale_factor >= self.in_precision:
+            elif self.scale_lanesize and idx == self.in_lanesize_index and arg.value // sample_scale_factor >= self.in_precision:
                 scalable_idx.append(idx)
-            elif idx == self.out_lanesize_index and arg.value // sample_scale_factor >= self.out_precision:
+            elif self.scale_lanesize and idx == self.out_lanesize_index and arg.value // sample_scale_factor >= self.out_precision:
                 scalable_idx.append(idx)
 
             elif isinstance(arg, Precision) and self.is_elementwise_logical_like_operation() and self.precision_scaled:
