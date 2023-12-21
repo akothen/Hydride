@@ -123,6 +123,8 @@ def GenerateRosetteForBlock(Block: RoseBlock, RosetteCode: str,
                     # are zero, in that case the user must be cond region. If so,
                     # do nothing but just emit code for this operation.
                     assert len(Users) == 0
+                    # The bit slice length must be 1.
+                    assert Operation.getOutputBitwidth() == 1
         RosetteCode += Operation.to_rosette(NumSpace)
 
     if len(SkipOps) != 0:
