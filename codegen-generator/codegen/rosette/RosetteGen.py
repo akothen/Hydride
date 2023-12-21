@@ -69,7 +69,6 @@ def GenerateRosetteForBlock(Block: RoseBlock, RosetteCode: str,
     print("GENERATE ROSETTE CODE FOR BLOCK")
     print("BLOCK:")
     print(Block)
-    Block.print()
 
     # Collect the indexing ops of bvinserts. These ops will be skipped
     # when generating Rosette code.
@@ -105,16 +104,25 @@ def GenerateRosetteForBlock(Block: RoseBlock, RosetteCode: str,
         # Skip emitting rosette code for op that pads high bits
         if isinstance(Operation, RoseBVPadHighBitsOp):
             continue
-        # print("Operation:")
-        # Operation.print()
+        print("Operation:")
+        Operation.print()
         # Conditional extracts have to be handled delicately.
         if isinstance(Operation, RoseBVExtractSliceOp):
             # Is this used in a select op?
+            print("Operation.getParent().getFunction().getNumUsersOf(Operation):")
+            print(Operation.getParent().getFunction().getNumUsersOf(Operation))
             if Operation.getParent().getFunction().getNumUsersOf(Operation) == 1:
-                [User] = Operation.getParent().getFunction().getUsersOf(Operation)
-                if isinstance(User, RoseSelectOp):
-                    # This is a conditional extract so we will skip emission of code for this one
-                    continue
+                Users = Operation.getParent().getFunction().getUsersOf(Operation)
+                if len(Users) == 1:
+                    User = Users[0]
+                    if isinstance(User, RoseSelectOp):
+                        # This is a conditional extract so we will skip emission of code for this one
+                        continue
+                else:
+                    # The number of users is 1, but the actual operations that are users
+                    # are zero, in that case the user must be cond region. If so,
+                    # do nothing but just emit code for this operation.
+                    assert len(Users) == 0
         RosetteCode += Operation.to_rosette(NumSpace)
 
     if len(SkipOps) != 0:
@@ -251,19 +259,22 @@ def GenerateRosetteForCondRegion(CondRegion: RoseCond, RosetteCode: str, NumSpac
         for Abstraction in CondRegion.getChildren(Key):
             if isinstance(Abstraction, RoseBlock):
                 if Abstraction in SkipOpsMap:
-                    TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1,
-                                                             SkipOpsMap[Abstraction])
+                    TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, 
+                                                                NumSpace + 1,
+                                                                SkipOpsMap[Abstraction])
                 else:
                     TmpRosetteCode = GenerateRosetteForBlock(
                         Abstraction, TmpRosetteCode, NumSpace + 1)
                 continue
             if isinstance(Abstraction, RoseForLoop):
                 TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode,
-                                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+                                                           NumSpace + 1, VisitedLoop, 
+                                                           ReductionLoops, SkipOpsMap)
                 continue
             if isinstance(Abstraction, RoseCond):
-                TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1,
-                                                              VisitedLoop, ReductionLoops, SkipOpsMap)
+                TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, 
+                                                                NumSpace + 1, VisitedLoop, 
+                                                                ReductionLoops, SkipOpsMap)
                 continue
         TmpRosetteCode += Spaces + " )]\n"
 
