@@ -434,7 +434,9 @@ class RoseOpcode(Enum):
                 return False
             return True
         if self.value == self.call.value:
-            Callee = OpInfoBundle[0]
+            print("OpInfoBundle:")
+            print(OpInfoBundle)
+            Callee = OpInfoBundle#[0]
             if not isinstance(Callee, RoseAbstractions.RoseFunction):
                 return False
             if len(Inputs) != Callee.getNumArgs():
@@ -1195,7 +1197,6 @@ class RoseOpcode(Enum):
                 or self.value == self.bvsmod.value \
                 or self.value == self.bvrol.value \
                 or self.value == self.bvror.value \
-                or self.value == self.bvzero.value \
                 or self.value == self.lsb.value \
                 or self.value == self.msb.value \
                 or self.value == self.bit.value \
@@ -1213,6 +1214,8 @@ class RoseOpcode(Enum):
                 or self.value == self.max.value:
             return self.name
         # Hand code some of the names of rosette ops
+        if self.value == self.bvzero.value:
+            return "bvzero?"
         if self.value == self.not_.value:
             return "not"
         if self.value == self.and_.value:
