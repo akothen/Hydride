@@ -58,8 +58,6 @@
         (fprintf (current-output-port) "o_odd: ~a\n" %o_odd)
         (fprintf (current-output-port) "o_even: ~a\n" %o_even)
 
-
-        ;; getting calculated correctly, need to interleave results properly
         (concat %o_odd %o_even)
       )
     )

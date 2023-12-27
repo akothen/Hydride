@@ -659,6 +659,131 @@
   dst
 )
 
+;; v16int32 maxdiff16 	( 	v32int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Performs a maximum difference computation between lanes of xbuff.
+;; maxdiff(a, b)
+;; {
+;;   d = a - b;
+;;   return max(d, 0);
+;; }
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = maxdiff(x[idx], x[idy])
+
+
+(define (v16int32_maxdiff16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %diff (bvsub %ext_xbuff1 %ext_xbuff2))
+        (define %o (bvsmax %diff 0))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; v16int32 maxdiff16 	( 	v16int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Performs a maximum difference computation between lanes of xbuff.
+;; maxdiff(a, b)
+;; {
+;;   d = a - b;
+;;   return max(d, 0);
+;; }
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = maxdiff(x[idx], x[idy])
+
+(define (v16int32_maxdiff16 xbuff xstart xoffsets xoffsets_hi ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 xbuff))
+        (define %diff (bvsub %ext_xbuff1 %ext_xbuff2))
+        (define %o (bvsmax %diff 0))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+;; v16int32 maxdiff16 	( 	v16int32  	xbuff,
+;; 		int  	xstart,
+;; 		unsigned int  	xoffsets,
+;; 		unsigned int  	xoffsets_hi,
+;; 		v16int32  	ybuff,
+;; 		int  	ystart,
+;; 		unsigned int  	yoffsets,
+;; 		unsigned int  	yoffsets_hi 
+;; 	) 		
+;; 
+;; Performs a maximum difference computation between lanes of xbuff and ybuff.
+;; maxdiff(a, b)
+;; {
+;;   d = a - b;
+;;   return max(d, 0);
+;; }
+;; for (int i = 0; i < 16; i++)
+;;     idx = f( xstart, xoffsets[i]);
+;;     idy = f( ystart, yoffsets[i]);
+;;     o[i] = maxdiff(x[idx], y[idy])
+
+(define (v16int32_maxdiff16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number1 (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low1 (* 32 %lane_number1))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (extract %high1 %low1 xbuff))
+        (define %lane_number2 (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+        (define %low2 (* 32 %lane_number2))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (extract %high2 %low2 ybuff))
+        (define %diff (bvsub %ext_xbuff1 %ext_xbuff2))
+        (define %o (bvsmax %diff 0))
+        %o
+      )
+    )
+  )
+  dst
+)
+
 ;;  unsigned int eq16 	( 	v32int32  	xbuff,
 ;;  		int  	xstart,
 ;;  		unsigned int  	xoffsets,

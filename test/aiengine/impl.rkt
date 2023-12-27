@@ -50,7 +50,6 @@
       (integer->bitvector xoffsets_hi (bitvector 32))
     )
   )
-
   ;; Grab the 4 bits of xoffsets/xoffsets_hi
   (define low_index (* 4 (- (- half_num_lanes 1) (modulo lane_number half_num_lanes))))
   (define high_index (+ low_index 3))
@@ -215,25 +214,90 @@
   (bitvector->integer dst)
 )
 
-(define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
-  (define dst
-    (apply concat
-      (for/list ([%i (reverse (range 0 16 1))])
-        (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
-        (define %low_x (* 32 %lane_number_x))
-        (define %high_x (+ %low_x (- 32 1)))
-        (define %ext_xbuff (extract %high_x %low_x xbuff))
-        (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
-        (define %low_y (* 32 %lane_number_y))
-        (define %high_y (+ %low_y (- 32 1)))
-        (define %ext_ybuff (extract %high_y %low_y ybuff))
-        (define %o (if (bveq %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
-        %o
-      )
-    )
+;; (define (v16int32_eq16 xbuff xstart xoffsets xoffsets_hi ybuff ystart yoffsets yoffsets_hi)
+;;   (define dst
+;;     (apply concat
+;;       (for/list ([%i (reverse (range 0 16 1))])
+;;         (define %lane_number_x (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+;;         (define %low_x (* 32 %lane_number_x))
+;;         (define %high_x (+ %low_x (- 32 1)))
+;;         (define %ext_xbuff (extract %high_x %low_x xbuff))
+;;         (define %lane_number_y (ra_lane_sel %i 16 ystart yoffsets yoffsets_hi))
+;;         (define %low_y (* 32 %lane_number_y))
+;;         (define %high_y (+ %low_y (- 32 1)))
+;;         (define %ext_ybuff (extract %high_y %low_y ybuff))
+;;         (define %o (if (bveq %ext_xbuff %ext_ybuff) (integer->bitvector 1 (bitvector 1)) (integer->bitvector 0 (bitvector 1))))
+;;         %o
+;;       )
+;;     )
+;;   )
+;;   (bitvector->integer dst)
+;; )
+
+
+;; General full-lane algorithm
+;;    //lanes
+;;    lanes = (number of elements in output vector)
+;;
+;;    //multiplications
+;;    int m=1;
+;;    if (data_size  == 32) m*=2;
+;;    if (coeff_size == 32) m*=2;
+;;    if (data_complex)     m*=2;
+;;    if (coeff_complex)    m*=2;
+;;
+;;    //rows and cols
+;;    rows = lanes
+;;    cols = 32/(m*lanes)
+;; General scheme
+;; 
+;;     for i = 0 ; i < rows * cols ; i++
+;;       c = i % cols
+;;       r = i / cols
+;; 
+;;       idx[i] = ( start + offs[r] + step*c ) % (#samples in buffer)
+;; For a v64int16 vector the number of samples would be 64. Whereas for a v4cint16 vector the number of samples would be 4.
+
+(define (gen_scheme_full lane_number total_num_lanes xstart xoffsets xstep data_size coeff_size data_complex coeff_complex)
+  (define half_num_lanes (/ total_num_lanes 2))
+  ;; Select xoffsets or xoffsets_hi
+  (define bvxoffsets
+      (integer->bitvector xoffsets (bitvector 32))
   )
-  (bitvector->integer dst)
+
+  (define m_val 
+  
+  (
+      let ([m 1]) (let ([m (if (= data_size 32) (* m 2) m)]) (let ([m (if (= coeff_size 32) (* m 2) m)]) (let ([m (if data_complex (* m 2) m)]) (let ([m (if coeff_complex (* m 2) m)]) m))))
+  )  
+  )
+
+  (define rows total_num_lanes)
+  (define cols (/ 32 (* m_val total_num_lanes)))
+
+  ;; Grab the 4 bits of xoffsets/xoffsets_hi
+  (define low_index (* 4 (- (- half_num_lanes 1) (modulo r half_num_lanes))))
+  (define high_index (+ low_index 3))
+  (define ext_bvxoffsets (extract high_index low_index bvxoffsets))
+  (define offset (bitvector->integer ext_bvxoffsets))
+
+  (define result (modulo (+ lane_number (+ (* xstep c) (+ xstart offset))) total_num_lanes))
+
+  (fprintf (current-output-port) "lane number: ~a\n" lane_number)
+  (fprintf (current-output-port) "bvxoffsets: ~a\n" bvxoffsets)
+  (fprintf (current-output-port) "high index: ~a\nlow index: ~a\n" high_index low_index)
+  (fprintf (current-output-port) "ext_bvxoffsets: ~a\n" ext_bvxoffsets)
+  (fprintf (current-output-port) "offset: ~a\n" offset)
+  (fprintf (current-output-port) "result: ~a\n" result)
+  (fprintf (current-output-port) "\n\n")
+  result
 )
+
+;; lmul8 pseudoocde
+;; each lane of accumulator uses idx calculated by general scheme to access xbuff and zbuff 
+
+
+
 
 (define xbuff_16_32 (bv 56 512))
 (define ybuff_16_32 (bv 4 512))
@@ -253,8 +317,9 @@
 ;; (pretty-print "v16int32_abs16 w/ offset:")
 (pretty-print "xbuff_16_32:")
 (pretty-print xbuff_16_32)
-;; (pretty-print (v16int32_select16 select_bv xbuff_16_32 0 xoffset xoffset_hi 0 xoffset xoffset_hi))
-(pretty-print (v16int32_eq16 xbuff_16_32 0 xoffset xoffset_hi xbuff_16_32 0 xoffset xoffset_hi))
+
+(pretty-print (v16int32_select16 select_bv xbuff_16_32 0 xoffset xoffset_hi 0 xoffset xoffset_hi))
+;; (pretty-print (v16int32_eq16 xbuff_16_32 0 xoffset xoffset_hi xbuff_16_32 0 xoffset xoffset_hi))
 
 ;; (pretty-print "xbuff_32_32:")
 ;; (pretty-print xbuff_32_32)
