@@ -10,6 +10,7 @@ VISASema = namedtuple('VISASema', [
     'rettype',
     'flags',
     'resolving',
+    'extensions',
 ])
 VISADoc = namedtuple('VISADoc', [
                      'Name', 'Opcode', 'Format', 'Semantics', 'Descritpion', 'Text', 'Notes'])

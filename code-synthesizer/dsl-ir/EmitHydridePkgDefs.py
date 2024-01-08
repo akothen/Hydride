@@ -5,6 +5,7 @@ import subprocess as sb
 from common.DSLParser import parse_dict
 from x86SemanticsAllArgs import semantcs
 from ARMSemantics import semantcs as arm_semantics
+from VISASemantics import semantcs as visa_semantics
 from common.PredefinedDSL import *
 from common.StructDef import StructDef
 from interpreter.InterpreterDef import InterpreterDef
@@ -32,7 +33,7 @@ from utils.ConstFold import ConstFold
 
 dsl_list = []
 
-TARGET = 'arm'
+TARGET = 'visa'
 scd = None
 cost_name = ""
 interpret_name = ""
@@ -103,6 +104,24 @@ elif TARGET == 'arm':
     subexpr_name = "arm:get-sub-exprs"
     extract_names = "arm:extract-expr"
     variant_names = "arm:get-variants"
+elif TARGET == 'visa':
+    dsl_list = parse_dict(visa_semantics, keep_duplicate=True)
+    scd = ScaleDef(base_vect_size=None)
+    cost_name = "visa:cost"
+    cost_name = "visa:cost"
+    interpret_name = "visa:interpret"
+    scale_name = "visa:scale-expr"
+    const_fold_name = "visa:const-fold"
+    visitor_name = "visa:visitor"
+    get_len_name = "visa:get-length"
+    get_prec_name = "visa:get-prec"
+    printer_name = "visa:hydride-printer"
+    get_ops_name = "visa:get-bv-ops"
+    bind_name = "visa:bind-expr"
+    get_target_op_name = "visa:get-target-name"
+    subexpr_name = "visa:get-sub-exprs"
+    extract_names = "visa:extract-expr"
+    variant_names = "visa:get-variants"
 
 
 print("Number of Target Agnostic DSL Instructions:\t", len(dsl_list))
