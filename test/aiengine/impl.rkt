@@ -265,12 +265,7 @@
       (integer->bitvector xoffsets (bitvector 32))
   )
 
-  (define m_val 
-  
-  (
-      let ([m 1]) (let ([m (if (= data_size 32) (* m 2) m)]) (let ([m (if (= coeff_size 32) (* m 2) m)]) (let ([m (if data_complex (* m 2) m)]) (let ([m (if coeff_complex (* m 2) m)]) m))))
-  )  
-  )
+  (define m_val   (let ([m 1]) (let ([m (if (= data_size 32) (* m 2) m)]) (let ([m (if (= coeff_size 32) (* m 2) m)]) (let ([m (if data_complex (* m 2) m)]) (let ([m (if coeff_complex (* m 2) m)]) m))))))
 
   (define rows total_num_lanes)
   (define cols (/ 32 (* m_val total_num_lanes)))
