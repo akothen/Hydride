@@ -111,4 +111,60 @@
   )
 
 
+;; AIEngine Test
+;;
+;; Functions that compute lane numbers for vectors 
+;; xoffsets, xoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+(define (ra_lane_sel lane_number total_num_lanes xstart xoffsets xoffsets_hi)
+  (define half_num_lanes (/ total_num_lanes 2))
+  ;; Select xoffsets or xoffsets_hi
+  (define bvxoffsets
+    (if (>= lane_number half_num_lanes)
+      (integer->bitvector xoffsets (bitvector 32))
+      (integer->bitvector xoffsets_hi (bitvector 32))
+    )
+  )
 
+  ;; Grab the 4 bits of xoffsets/xoffsets_hi
+  (define low_index (* 4 (- (- half_num_lanes 1) (modulo lane_number half_num_lanes))))
+  (define high_index (+ low_index 3))
+  (define ext_bvxoffsets (extract high_index low_index bvxoffsets))
+  (define offset (bitvector->integer ext_bvxoffsets))
+  (define result (modulo (+ lane_number (+ xstart offset)) total_num_lanes))
+  result
+)
+
+;;; Vector Arithmetic
+
+;;
+;; v16int32 abs16	(	v32int32 	xbuff,
+;;                 int 	xstart,
+;;                 unsigned int 	xoffsets,
+;;                 unsigned int 	xoffsets_hi 
+;; )
+;;
+;; Description:	
+;; for (int i = 0; i < 16; i++)
+;;    idx = f( xstart, xoffsets[i]);
+;;    o[i] = abs(x[idx])
+;;
+;; xoffsets, xoffsets_hi have 8 offset values each. 4 bits per offset.
+;;
+(define (v16int32_abs16 xbuff xstart xoffsets xoffsets_hi)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %lane_number (ra_lane_sel %i 16 xstart xoffsets xoffsets_hi))
+        (define %low (* 32 %lane_number))
+        (define %high (+ %low (- 32 1)))
+        (define %ext_xbuff (extract %high %low xbuff))
+        (define %int_ext_xbuff (bitvector->integer %ext_xbuff))
+        (define %int_o (abs %int_ext_xbuff))
+        (define %o (integer->bitvector %int_o (bitvector 32)))
+        %o
+      )
+    )
+  )
+  dst
+)

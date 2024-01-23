@@ -98,7 +98,7 @@
 
   (define dst
     (apply concat
-      (for/list ([%i (reverse (range 0 (* col row) 1))])
+      (for/list ([%i (reverse (range 0 (* cols rows) 1))])
 
         (define c (modulo i cols))
         (define r (/ i cols))
