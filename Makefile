@@ -83,8 +83,8 @@ similarity:
 	cp $(SIMILARITY_SUMMARY_SEMA) $(HYDRIDE_ROOT)/codegen-generator/tools/low-level-codegen/InstSelectors/arm/ARMSemantics.py
 
 hydride_pkg = $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm/get_ops.rkt # 
-$(hydride_pkg): $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/ARMSemantics.py
-	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/arm && $(PYTHON) -m EmitHydridePkgDefs)
+$(hydride_pkg): $(HYDRIDE_ROOT)/code-synthesizer/dsl-ir/VISASemantics.py
+	(cd $(HYDRIDE_ROOT)/code-synthesizer/hydride/ir/visa && $(PYTHON) -m EmitHydridePkgDefs)
 hydride_sema: 
 	$(MAKE) $(hydride_pkg)
 	raco pkg update $(HYDRIDE_ROOT)/code-synthesizer/hydride/

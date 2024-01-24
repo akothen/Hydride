@@ -85,6 +85,21 @@
 (require hydride/ir/arm/get_ops)
 (require hydride/ir/arm/get_name)
 
+;; ARM IR
+(require hydride/ir/visa/semantics)
+(require hydride/ir/visa/definition)
+(require hydride/ir/visa/cost_model)
+(require hydride/ir/visa/length)
+(require hydride/ir/visa/prec)
+(require hydride/ir/visa/printer)
+(require hydride/ir/visa/interpreter)
+(require hydride/ir/visa/binder)
+(require hydride/ir/visa/const_fold)
+(require hydride/ir/visa/visitor)
+(require hydride/ir/visa/scale)
+(require hydride/ir/visa/get_ops)
+(require hydride/ir/visa/get_name)
+
 
 ;; CPP IR
 (require hydride/cpp)
@@ -169,6 +184,20 @@
   (all-from-out hydride/ir/arm/scale)
   (all-from-out hydride/ir/arm/get_ops)
   (all-from-out hydride/ir/arm/get_name)
+
+  (all-from-out hydride/ir/visa/semantics)
+  (all-from-out hydride/ir/visa/definition)
+  (all-from-out hydride/ir/visa/cost_model)
+  (all-from-out hydride/ir/visa/length)
+  (all-from-out hydride/ir/visa/prec)
+  (all-from-out hydride/ir/visa/printer)
+  (all-from-out hydride/ir/visa/interpreter)
+  (all-from-out hydride/ir/visa/binder)
+  (all-from-out hydride/ir/visa/const_fold)
+  (all-from-out hydride/ir/visa/visitor)
+  (all-from-out hydride/ir/visa/scale)
+  (all-from-out hydride/ir/visa/get_ops)
+  (all-from-out hydride/ir/visa/get_name)
 
 
   (all-from-out hydride/cpp)

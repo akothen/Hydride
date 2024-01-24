@@ -41,6 +41,14 @@
 (require hydride/ir/arm/scale)
 (require hydride/ir/arm/interpreter)
 
+(require hydride/ir/visa/definition)
+(require hydride/ir/visa/cost_model)
+(require hydride/ir/visa/const_fold)
+(require hydride/ir/visa/printer)
+(require hydride/ir/visa/binder)
+(require hydride/ir/visa/scale)
+(require hydride/ir/visa/interpreter)
+
 (require hydride/ir/arith/types)
 (require hydride/ir/arith/interpreter)
 (require hydride/ir/arith/utils)
@@ -68,9 +76,9 @@
       [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
        (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n"
                           expr-depth
-                          1)) ;; ARM
-       1] ;;ARM
-      [(halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth)
+                          (max 1 (- expr-depth 1))))
+       (max 1 (- expr-depth 1))]
+      [(and (equal? target 'arm) (halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth))
        (debug-log
         (format
          "Contains shr in arm, at least 2 depth are needed, hence increase depth from ~a to ~a\n"
@@ -190,6 +198,7 @@
       (cond
         [(equal? target 'hvx) (hvx:interpret hydride-expr conc-bvs)]
         [(equal? target 'arm) (arm:interpret hydride-expr conc-bvs)]
+        [(equal? target 'visa) (visa:interpret hydride-expr conc-bvs)]
         [(equal? target 'x86) (hydride:interpret hydride-expr conc-bvs)]))
 
     (define conc-equal? (equal? conc-halide-res conc-hydride-res))
@@ -214,6 +223,7 @@
          (cond
            [(equal? target 'hvx) (hvx:interpret hydride-expr sym-bvs)]
            [(equal? target 'arm) (arm:interpret hydride-expr sym-bvs)]
+           [(equal? target 'visa) (visa:interpret hydride-expr sym-bvs)]
            [(equal? target 'x86) (hydride:interpret hydride-expr sym-bvs)]))
 
        (define verification-timeout? #t)
@@ -323,6 +333,7 @@
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
+            [(equal? target 'visa) 5]
             [(equal? target 'x86) 5]))
         (define optimize? opt?)
         (define symbolic? sym?)
@@ -460,6 +471,7 @@
           (cond
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
+            [(equal? target 'visa) visa:cost]
             [(equal? target 'x86) hydride:cost]))
         (debug-log (cost-functor materialize))
 
@@ -482,6 +494,7 @@
           (cond
             [(equal? target 'hvx) hvx:bind-expr]
             [(equal? target 'arm) arm:bind-expr]
+            [(equal? target 'visa) visa:bind-expr]
             [(equal? target 'x86) bind-expr]))
 
         (define upscaled-mat
@@ -489,6 +502,7 @@
             [(equal? effective-scale-factor 1) materialize]
             [(equal? target 'hvx) (hvx:scale-expr materialize effective-scale-factor)]
             [(equal? target 'arm) (arm:scale-expr materialize effective-scale-factor)]
+            [(equal? target 'visa) (visa:scale-expr materialize effective-scale-factor)]
             [(equal? target 'x86) (hydride:scale-expr materialize effective-scale-factor)]))
 
         (debug-log (format "Upscaled mat: ~a" upscaled-mat))

@@ -39,6 +39,13 @@
 (require hydride/ir/arm/binder)
 (require hydride/ir/arm/scale)
 
+(require hydride/ir/visa/definition)
+(require hydride/ir/visa/cost_model)
+(require hydride/ir/visa/const_fold)
+(require hydride/ir/visa/printer)
+(require hydride/ir/visa/binder)
+(require hydride/ir/visa/scale)
+
 (require hydride/synthesis/scalable_synthesis)
 (require hydride/synthesis/ir_to_ir_transform)
 
@@ -72,6 +79,7 @@
     (cond
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
+      [(equal? target 'visa) visa:hydride-printer]
       [(equal? target 'x86) hydride:hydride-printer]))
 
   (displayln sol)
@@ -99,6 +107,7 @@
   (cond
     [(equal? arch "x86") (set-target-x86)]
     [(equal? arch "arm") (set-target-arm)]
+    [(equal? arch "visa") (set-target-visa)]
     [(equal? arch "hvx") (set-target-hvx)])
 
   (cond
@@ -113,6 +122,7 @@
     (cond
       [(equal? arch "x86") 4]
       [(equal? arch "arm") 1]
+      [(equal? arch "visa") 1]
       [(equal? arch "hvx") 32]))
 
   ;; Halide IR doesn't have operations for saturating cast,
@@ -150,12 +160,14 @@
     (cond
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
+      [(equal? target 'visa) visa:const-fold]
       [(equal? target 'x86) hydride:const-fold]))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
+      [(equal? target 'visa) visa:cost]
       [(equal? target 'x86) hydride:cost]))
 
   (define folded (const-fold-functor synthesized-sol))
@@ -239,6 +251,7 @@
   (cond
     [(equal? arch "x86") (set-target-x86)]
     [(equal? arch "arm") (set-target-arm)]
+    [(equal? arch "visa") (set-target-visa)]
     [(equal? arch "hvx") (set-target-hvx)])
 
   (cond
@@ -265,12 +278,14 @@
     (cond
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
+      [(equal? target 'visa) visa:const-fold]
       [(equal? target 'x86) hydride:const-fold]))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
+      [(equal? target 'visa) visa:cost]
       [(equal? target 'x86) hydride:cost]))
 
   (define folded (const-fold-functor synthesized-sol))
@@ -369,6 +384,7 @@
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
+            [(equal? target 'visa) 5]
             [(equal? target 'x86) 3]))
         (define optimize? opt?)
         (define symbolic? sym?)
@@ -515,6 +531,7 @@
           (cond
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
+            [(equal? target 'visa) visa:cost]
             [(equal? target 'x86) hydride:cost]))
         (debug-log (cost-functor materialize))
 
@@ -536,6 +553,7 @@
           (cond
             [(equal? target 'hvx) hvx:bind-expr]
             [(equal? target 'arm) arm:bind-expr]
+            [(equal? target 'visa) visa:bind-expr]
             [(equal? target 'x86) bind-expr]))
 
         (bind-functor materialize (list->vector synthesized-leaves)))]))
