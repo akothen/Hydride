@@ -816,6 +816,9 @@ def CompileUpdate(Stmt: Update, Context: ARMRoseContext):
                 ]
                 CompileList(inline_list, Context)
                 RHSExprVal = CompileRValueExpr(newVar, Context)
+            NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
+            Operation = RoseBVPadHighBitsOp.create(RHSExprVal, NumPadBits)
+            Context.addAbstractionToIR(Operation)
             RetOp = RoseReturnOp.create(RHSExprVal)
             Context.addAbstractionToIR(RetOp)
             Context.setReturned(RHSExprVal)
