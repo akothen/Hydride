@@ -141,6 +141,7 @@ public:
   std::string define_load_buffer(vector::LoadOp op) {
     // std::string reg_name = "reg_";
     std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
+    std::string id_name = std::to_string(LoadToRegMap[op]);
     size_t bitwidth = 0;
     std::string define_bitvector_str;
     std::string define_buffer_str;
@@ -172,7 +173,8 @@ public:
 
       define_buffer_str += ") ";
 
-      define_buffer_str += elemT + ")" + ")";
+      define_buffer_str += elemT + " ";
+      define_buffer_str += id_name + ")" + ")";
     } else {
       define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
                              "(bv 0 (bitvector " + std::to_string(bitwidth) +
@@ -194,6 +196,7 @@ public:
     // std::string reg_name = "reg_"
 
     std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
+    std::string id_name = std::to_string(TransferReadToRegMap[op]);
     size_t bitwidth = 0;
     std::string define_bitvector_str;
     std::string define_buffer_str;
@@ -228,7 +231,8 @@ public:
 
       define_buffer_str += ") ";
 
-      define_buffer_str += elemT + ")" + ")";
+      define_buffer_str += elemT +  " ";
+      define_buffer_str += id_name +")" + ")";
     } else {
       define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
                              "(bv 0 (bitvector " + std::to_string(bitwidth) +
