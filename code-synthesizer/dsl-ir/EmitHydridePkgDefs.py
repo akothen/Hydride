@@ -5,6 +5,7 @@ import subprocess as sb
 from common.DSLParser import parse_dict
 from x86SemanticsAllArgs import semantcs
 from ARMSemantics import semantcs as arm_semantics
+from AIEngineSema import aie_sema as aie_semantics
 from common.PredefinedDSL import *
 from common.StructDef import StructDef
 from interpreter.InterpreterDef import InterpreterDef
@@ -32,7 +33,7 @@ from utils.ConstFold import ConstFold
 
 dsl_list = []
 
-TARGET = 'arm'
+TARGET = 'aie'
 scd = None
 cost_name = ""
 interpret_name = ""
@@ -103,7 +104,24 @@ elif TARGET == 'arm':
     subexpr_name = "arm:get-sub-exprs"
     extract_names = "arm:extract-expr"
     variant_names = "arm:get-variants"
-
+elif TARGET == 'aie':
+    dsl_list = parse_dict(aie_semantics, keep_duplicate=True)
+    scd = ScaleDef(base_vect_size=None)
+    cost_name = "aie:cost"
+    cost_name = "aie:cost"
+    interpret_name = "aie:interpret"
+    scale_name = "aie:scale-expr"
+    const_fold_name = "aie:const-fold"
+    visitor_name = "aie:visitor"
+    get_len_name = "aie:get-length"
+    get_prec_name = "aie:get-prec"
+    printer_name = "aie:hydride-printer"
+    get_ops_name = "aie:get-bv-ops"
+    bind_name = "aie:bind-expr"
+    get_target_op_name = "aie:get-target-name"
+    subexpr_name = "aie:get-sub-exprs"
+    extract_names = "aie:extract-expr"
+    variant_names = "aie:get-variants"
 
 print("Number of Target Agnostic DSL Instructions:\t", len(dsl_list))
 print("Number of Target Specific Instructions:\t",

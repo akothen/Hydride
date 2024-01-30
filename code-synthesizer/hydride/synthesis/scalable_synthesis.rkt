@@ -597,7 +597,7 @@
       (define steps-per-depth
         (cond
           ;;; [(<= d 3) step-limit]
-          [(<= d 1) 5]
+          [(<= d 1) 2]
           [(<= d 2) step-limit]
           [(<= d 3) 3]
           ;(* 1 step-limit)
@@ -608,9 +608,9 @@
         (cond
           ;;; [(<= d 2) 1]
           ;;; [else 4]))
-          [(<= d 1) 1]
-          [(<= d 2) 2]
-          [(<= d 3) 4]
+          [(<= d 1) 5]
+          [(<= d 2) 5]
+          [(<= d 3) 5]
           [else 8]))
 
       (for/list ([s (range 0 steps-per-depth NUM_THREADS)])
