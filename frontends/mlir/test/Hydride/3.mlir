@@ -1,10 +1,11 @@
+#map = affine_map<(d0, d1) -> (0)>
 module {
   func.func @contraction_matmul(%arg0: memref<1584x1584xi32>, %arg1: memref<1584x1584xi32>, %arg2: memref<1584x1584xi32>) {
     affine.for %arg3 = 0 to 1584 {
       affine.for %arg4 = 0 to 1584 step 8 {
         affine.for %arg5 = 0 to 1584 {
           %c0_i32 = arith.constant 0 : i32
-          %0 = vector.transfer_read %arg0[%arg3, %arg5], %c0_i32 : memref<1584x1584xi32>, vector<8xi32>
+          %0 = vector.transfer_read %arg0[%arg3, %arg5], %c0_i32 {permutation_map = #map} : memref<1584x1584xi32>, vector<8xi32>
           %c0_i32_0 = arith.constant 0 : i32
           %1 = vector.transfer_read %arg1[%arg5, %arg4], %c0_i32_0 : memref<1584x1584xi32>, vector<8xi32>
           %c0_i32_1 = arith.constant 0 : i32

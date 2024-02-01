@@ -83,6 +83,10 @@ def HydrideArith : Pass<"hydride-arith"> {
   let dependentDialects = [
     "LLVM::LLVMDialect",
   ];
+  let options = [
+    Option<"synth_target", "synth_target", "std::string",
+           /*default=*/"", "The default target is x86">,
+  ];
 }
 
 def Inliner : Pass<"inline"> {

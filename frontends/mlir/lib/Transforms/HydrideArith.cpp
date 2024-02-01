@@ -35,15 +35,7 @@
 
 using namespace mlir;
 
-enum MLIRValueEncoding {
-  Bitvector,
-  Integer
-}; // Whether MLIR value should be represented as int or bv
-
-typedef std::map<std::string, MLIRValueEncoding>
-    Encoding; // map for name of encoding
-
-std::map<unsigned, void *> RegToVariableMap;
+/* std::map<unsigned, void *> RegToVariableMap;
 std::map<void *, unsigned> VariableToRegMap;
 
 std::map<unsigned, vector::LoadOp> RegToLoadMap;
@@ -52,9 +44,7 @@ std::map<vector::LoadOp, unsigned> LoadToRegMap;
 std::map<unsigned, vector::TransferReadOp> RegToTransferReadMap;
 std::map<vector::TransferReadOp, unsigned> TransferReadToRegMap;
 
-Encoding encoding;
-
-std::queue<Operation *> RootExprOp;
+std::queue<Operation *> RootExprOp; */
 
 unsigned op_lanes = 0;
 
@@ -69,10 +59,19 @@ public:
 
 class HydrideSynthEmitter {
 public:
-  HydrideSynthEmitter(std::string benchmark_name)
-      : benchmark_name(benchmark_name) {}
+  HydrideSynthEmitter(
+      std::string benchmark_name,
+      std::map<vector::LoadOp, unsigned> &LoadToRegMap,
+      std::map<void *, unsigned> &VariableToRegMap,
+      std::map<vector::TransferReadOp, unsigned> &TransferReadToRegMap)
+      : benchmark_name(benchmark_name), LoadToRegMap(LoadToRegMap),
+        VariableToRegMap(VariableToRegMap),
+        TransferReadToRegMap(TransferReadToRegMap) {}
 
   std::string benchmark_name;
+  std::map<vector::LoadOp, unsigned> LoadToRegMap;
+  std::map<void *, unsigned> VariableToRegMap;
+  std::map<vector::TransferReadOp, unsigned> TransferReadToRegMap;
 
   std::string emit_set_current_bitwidth() {
     const char *bitwidth = getenv("HL_SYNTH_BW");
@@ -231,8 +230,8 @@ public:
 
       define_buffer_str += ") ";
 
-      define_buffer_str += elemT +  " ";
-      define_buffer_str += id_name +")" + ")";
+      define_buffer_str += elemT + " ";
+      define_buffer_str += id_name + ")" + ")";
     } else {
       define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
                              "(bv 0 (bitvector " + std::to_string(bitwidth) +
@@ -376,7 +375,7 @@ public:
                                      size_t VF, std::string id_map_name,
                                      std::string synth_log_path,
                                      std::string synth_log_name,
-                                     std::string target) {
+                                     std::string synth_target) {
 
     std::string solver = "'z3";
     const char *hydride_solver = getenv("HYDRIDE_SOLVER");
@@ -391,7 +390,7 @@ public:
     return "(synthesize-mlir-expr " + expr_name + " " + id_map_name + " " +
            std::to_string(expr_depth) + " " + std::to_string(VF) + " " +
            solver + " " + optimize + " " + symbolic + "  \"" + synth_log_path +
-           "\"  \"" + synth_log_name + "\"  \"" + target + "\")";
+           "\"  \"" + synth_log_name + "\"  \"" + synth_target + "\")";
   }
 
   std::string emit_interpret_expr(std::string expr_name) {
@@ -425,6 +424,23 @@ public:
 // util functions
 
 struct HydrideArithPass : public HydrideArithBase<HydrideArithPass> {
+
+  std::map<unsigned, void *> RegToVariableMap;
+  std::map<void *, unsigned> VariableToRegMap;
+
+  std::map<unsigned, vector::LoadOp> RegToLoadMap;
+  std::map<vector::LoadOp, unsigned> LoadToRegMap;
+
+  std::map<unsigned, vector::TransferReadOp> RegToTransferReadMap;
+  std::map<vector::TransferReadOp, unsigned> TransferReadToRegMap;
+
+  std::queue<Operation *> RootExprOp;
+
+  HydrideArithPass() = default;
+
+  explicit HydrideArithPass(std::string synth_target) {
+    this->synth_target = synth_target;
+  }
 
   // Prints the resultant operation statistics post iterating over the module.
   void runOnOperation() override;
@@ -560,48 +576,46 @@ protected:
     std::string ret_str;
     // signed.unsigned
     switch (pred) {
-    case (arith::CmpIPredicate::eq): {
-      ret_str = print_binary_op("eq", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::ne): {
-      ret_str = print_binary_op("ne", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::uge): {
-      ret_str = print_binary_op("ge", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::ugt): {
-      ret_str = print_binary_op("gt", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::ule): {
-      ret_str = print_binary_op("le", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::ult): {
-      ret_str = print_binary_op("lt", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::sge): {
-      ret_str = print_binary_op("ge", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::sgt): {
-      ret_str = print_binary_op("gt", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::sle): {
-      ret_str = print_binary_op("le", a, b, is_vec);
-      return ret_str;
-    }
-    case (arith::CmpIPredicate::slt): {
-      ret_str = print_binary_op("lt", a, b, is_vec);
-      return ret_str;
-    }
-    default:
-      break;
+      case (arith::CmpIPredicate::eq): {
+        ret_str = print_binary_op("eq", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::ne): {
+        ret_str = print_binary_op("ne", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::uge): {
+        ret_str = print_binary_op("ge", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::ugt): {
+        ret_str = print_binary_op("gt", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::ule): {
+        ret_str = print_binary_op("le", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::ult): {
+        ret_str = print_binary_op("lt", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::sge): {
+        ret_str = print_binary_op("ge", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::sgt): {
+        ret_str = print_binary_op("gt", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::sle): {
+        ret_str = print_binary_op("le", a, b, is_vec);
+        return ret_str;
+      }
+      case (arith::CmpIPredicate::slt): {
+        ret_str = print_binary_op("lt", a, b, is_vec);
+        return ret_str;
+      }
     }
     llvm::errs() << "Unsupported Predicate"
                  << "\n";
@@ -1341,7 +1355,8 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
                                      std::string expr, unsigned expr_id) {
 
   // dummy becnhamrk name
-  HydrideSynthEmitter HSE(benchmark_name);
+  HydrideSynthEmitter HSE(benchmark_name, LoadToRegMap, VariableToRegMap,
+                          TransferReadToRegMap);
   std::string errorMessage;
   std::string out_str;
 
@@ -1377,7 +1392,12 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
     expr_depth = (*expr_depth_var) - '0';
   }
 
-  std::string target_str = "x86";
+  // std::string synth_target_str = "x86";
+  std::string synth_target_str = "x86";
+
+  if (!synth_target.empty()) {
+    synth_target_str = synth_target;
+  }
 
   out_str += "(define synth-res " +
              HSE.emit_hydride_synthesis(
@@ -1385,7 +1405,7 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
                  /* VF*/ op_lanes, /* Reg Hash map name */ "id-map",
                  /* Previous hash file path */ prev_hash_path,
                  /* Previous hash  name */ prev_hash_name,
-                 /* target id */ target_str) +
+                 /* target id */ synth_target_str) +
              ")" + "\n";
   out_str += "(dump-synth-res-with-typeinfo synth-res id-map)\n";
 
@@ -1409,4 +1429,8 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
 
 std::unique_ptr<Pass> mlir::createHydrideArithPass() {
   return std::make_unique<HydrideArithPass>();
+}
+
+std::unique_ptr<Pass> mlir::createHydrideArithPass(std::string synth_target) {
+  return std::make_unique<HydrideArithPass>(synth_target);
 }

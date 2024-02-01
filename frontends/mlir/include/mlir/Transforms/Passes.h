@@ -58,6 +58,9 @@ std::unique_ptr<Pass> createCSEPass();
 /// Hydride Arith dialect frontend pass
 std::unique_ptr<Pass> createHydrideArithPass();
 
+// Specify target, default is x86
+std::unique_ptr<Pass> createHydrideArithPass(std::string synth_target);
+
 /// Creates a loop invariant code motion pass that hoists loop invariant
 /// instructions out of the loop.
 std::unique_ptr<Pass> createLoopInvariantCodeMotionPass();
