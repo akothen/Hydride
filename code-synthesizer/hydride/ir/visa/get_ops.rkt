@@ -44,7 +44,7 @@
 		(remove-duplicates (append (list  'cond) (visa:get-bv-ops v0)))
 	]
 		[(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
-		(remove-duplicates (append (list  'if 'bitvector->integer) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v4)))
+		(remove-duplicates (append (list  'bitvector->integer 'if) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v4)))
 	]
 		[(llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
 		(remove-duplicates (append (list  'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))
@@ -71,40 +71,40 @@
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_2_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_1_B_B_B_B
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_32_B_B_B_B
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_16_B_B_B_B
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_1_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_32_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_8_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_8_B_B_B_B
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_4_B_B_B_B
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_16_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_4_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 8) (equal? num_8 1) (equal? num_9 1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_sat_2_B_B_B_B
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for VMAD_sat_2_UB_UB_UB_UB")]
 )
 
@@ -113,40 +113,40 @@
 		(cond 
 		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_4_UD_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_2_UD_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 256) (equal? num_9 256) (equal? num_10 0) (equal? num_11 256) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_8_D_D_D_D_D
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 1024) (equal? num_9 1024) (equal? num_10 0) (equal? num_11 1024) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_32_D_D_D_D_D
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_2_D_D_D_D_D
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 512) (equal? num_9 512) (equal? num_10 0) (equal? num_11 512) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_16_D_D_D_D_D
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 512) (equal? num_9 512) (equal? num_10 0) (equal? num_11 512) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_16_UD_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 32) (equal? num_9 32) (equal? num_10 0) (equal? num_11 32) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_1_UD_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 256) (equal? num_9 256) (equal? num_10 0) (equal? num_11 256) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_8_UD_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 1024) (equal? num_9 1024) (equal? num_10 0) (equal? num_11 1024) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_32_UD_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 32) (equal? num_9 32) (equal? num_10 0) (equal? num_11 32) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_1_D_D_D_D_D
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 32) (equal? num_13 -1)); VBFI_4_D_D_D_D_D
  
-  (remove-duplicates (append (list  'bvor 'bvnot 'bvand 'bvsub 'bvshl) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvnot 'bvand 'bvshl 'bvor 'bvsub) (visa:get-bv-ops v4) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[else (error "Unable to get ops  for VBFI_4_UD_UD_UD_UD_UD")]
 )
 
@@ -155,40 +155,40 @@
 		(cond 
 		[(and  (equal? size_i_o 1024) (equal? num_9 1024) (equal? num_10 0) (equal? num_11 1024) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_32_D_D_D_D
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 256) (equal? num_9 256) (equal? num_10 0) (equal? num_11 256) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_8_D_D_D_D
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_4_D_D_D_D
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 512) (equal? num_9 512) (equal? num_10 0) (equal? num_11 512) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_16_D_D_D_D
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 512) (equal? num_9 512) (equal? num_10 0) (equal? num_11 512) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_16_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 32) (equal? num_9 32) (equal? num_10 0) (equal? num_11 32) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_1_D_D_D_D
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_2_D_D_D_D
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 256) (equal? num_9 256) (equal? num_10 0) (equal? num_11 256) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_8_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 64) (equal? num_9 64) (equal? num_10 0) (equal? num_11 64) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_2_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 32) (equal? num_9 32) (equal? num_10 0) (equal? num_11 32) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_1_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 128) (equal? num_9 128) (equal? num_10 0) (equal? num_11 128) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_4_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[(and  (equal? size_i_o 1024) (equal? num_9 1024) (equal? num_10 0) (equal? num_11 1024) (equal? prec_i_o 32) (equal? num_13 -1) (equal? num_14 -1)); VBFE_32_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvand 'bvashr 'bvsub 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
+  (remove-duplicates (append (list  'bvsub 'bvashr 'bvand 'bvshl) (visa:get-bv-ops v5) (visa:get-bv-ops v6) (visa:get-bv-ops v7)))]
 		[else (error "Unable to get ops  for VBFE_32_D_D_D_D")]
 )
 
@@ -197,220 +197,220 @@
 		(cond 
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_8_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_1_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_32_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_32_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_32_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_1_D_D_D
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_16_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_1_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_4_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_2_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_1_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_1_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 1024) (equal? num_5 1024) (equal? num_6 0) (equal? num_7 1024) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_32_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_2_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_16_D_D_D
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_16_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_8_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_8_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_16_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_4_W_W_W
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_4_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_2_W_W_W
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_32_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_4_D_D_D
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_1_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 1024) (equal? num_5 1024) (equal? num_6 0) (equal? num_7 1024) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_32_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_8_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_8_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_2_D_D_D
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_4_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_16_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_16_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_4_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_4_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_8_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_4_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_2_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_8_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_1_B_B_B
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_16_W_W_W
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_4_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_2_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_4_B_B_B
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_4_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_32_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_4_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_16_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_32_B_B_B
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_8_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 1024) (equal? num_5 1024) (equal? num_6 0) (equal? num_7 1024) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_32_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_1_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_8_B_B_B
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_8_W_W_W
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_32_W_W_W
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_2_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_2_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_2_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_16_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_16_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_2_B_B_B
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_1_W_W_W
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_1_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_16_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 32) (equal? prec_i_o 16) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_2_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 1024) (equal? num_5 1024) (equal? num_6 0) (equal? num_7 1024) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_32_D_D_D
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_32_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 128) (equal? num_5 128) (equal? num_6 0) (equal? num_7 128) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_16_B_B_B
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_8_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 256) (equal? num_5 256) (equal? num_6 0) (equal? num_7 256) (equal? prec_i_o 32) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_8_D_D_D
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 1) (equal? num_11 1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_sat_1_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvaddnsw) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'bvaddnsw 'sign-extend) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 16) (equal? num_5 16) (equal? num_6 0) (equal? num_7 16) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_2_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[(and  (equal? size_i_o 8) (equal? num_5 8) (equal? num_6 0) (equal? num_7 8) (equal? prec_i_o 8) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 -1) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1) (equal? num_15 64)); VAVG_1_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvashr) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
+  (remove-duplicates (append (list  'bvashr 'sign-extend 'bvadd) (visa:get-bv-ops v2) (visa:get-bv-ops v3)))]
 		[else (error "Unable to get ops  for VAVG_sat_8_UB_UB_UB")]
 )
 
@@ -419,112 +419,112 @@
 		(cond 
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_4_B_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_4_UW_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_2_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_8_UW_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_16_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_4_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_1_W_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 1024) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_32_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_1_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_2_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_16_B_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 512) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_32_W_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_16_W_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 512) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_32_UW_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_8_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_1_UW_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 1024) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_32_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_16_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_8_B_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_2_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_1_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_16_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_8_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_2_UW_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_4_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_32_B_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_32_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 256) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_16_UW_UW_UW_UW
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 8) (equal? num_4 8) (equal? num_5 0) (equal? num_6 8) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_1_B_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_2_W_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_8_UB_UB_UB_UB
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_8_W_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_4_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 16) (equal? num_4 16) (equal? num_5 0) (equal? num_6 16) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_2_B_B_B_B
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 64) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_4_W_W_W_W
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 -1) (equal? num_10 1) (equal? num_11 64) (equal? num_12 1) (equal? num_13 64) (equal? num_14 1)); VMAD_1_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for VMAD_4_B_B_B_B")]
 )
 
@@ -533,40 +533,40 @@
 		(cond 
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_1_D_D_D
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_8_D_D_D
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_1_UD_UD_UD
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_2_D_D_D
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_2_UD_UD_UD
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_8_UD_UD_UD
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_32_UD_UD_UD
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_16_UD_UD_UD
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_16_D_D_D
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_32_D_D_D
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_4_D_D_D
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1)); VMULH_4_UD_UD_UD
  
-  (remove-duplicates (append (list  'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (visa:get-bv-ops v0) (visa:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for VMULH_1_D_D_D")]
 )
 
@@ -1169,40 +1169,40 @@
 		(cond 
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 256) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_32_D_D_D_D
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_4_D_D_D_D
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_1_D_D_D_D
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_8_D_D_D_D
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_2_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 128) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_16_D_D_D_D
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_1_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 128) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_16_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_4_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_8_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_2_D_D_D_D
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 256) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 1) (equal? num_10 1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_sat_32_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvmulnsw 'sign-extend 'bvssat 'bvaddnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvssat 'bvaddnsw 'sign-extend 'bvmulnsw) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for VDP4A_sat_32_D_D_D_D")]
 )
 
@@ -1439,40 +1439,40 @@
 		(cond 
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_1_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_8_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 256) (equal? num_4 256) (equal? num_5 0) (equal? num_6 64) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_8_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_4_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 128) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_16_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 8) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_1_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_2_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 256) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_32_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 32) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_4_UD_UD_UD_UD
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 256) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_32_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 128) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_16_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[(and  (equal? size_i_o 64) (equal? num_4 64) (equal? num_5 0) (equal? num_6 16) (equal? prec_i 8) (equal? prec_o 32) (equal? num_9 0) (equal? num_10 -1) (equal? num_11 1) (equal? num_12 64) (equal? num_13 -1) (equal? num_14 1) (equal? num_15 64) (equal? num_16 1) (equal? num_17 24) (equal? num_18 -1) (equal? num_19 1) (equal? num_20 64) (equal? num_21 1) (equal? num_22 16) (equal? num_23 -1) (equal? num_24 1) (equal? num_25 64) (equal? num_26 1) (equal? num_27 8) (equal? num_28 1) (equal? num_29 64) (equal? num_30 1) (equal? num_31 4)); VDP4A_2_D_D_D_D
  
-  (remove-duplicates (append (list  'bvadd 'sign-extend 'bvmul) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
+  (remove-duplicates (append (list  'bvmul 'sign-extend 'bvadd) (visa:get-bv-ops v0) (visa:get-bv-ops v1) (visa:get-bv-ops v2)))]
 		[else (error "Unable to get ops  for VDP4A_1_UD_UD_UD_UD")]
 )
 

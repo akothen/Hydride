@@ -556,8 +556,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         # traversals from this point onwards to not be visited, saving time from repeating
         # visits. Better approach would be to first query the number of possible combinations
         # and then limit the steps to be within those (if combinations is less than budget steps)
-        assert (step <= len(context_combinations)
-                ), breakpoint()
+        assert (step <= len(context_combinations))
 
         step_combination = context_combinations[step % len(
             context_combinations)]

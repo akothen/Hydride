@@ -31,6 +31,7 @@
 #include "llvm/Support/Format.h"
 #include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Support/raw_ostream.h"
+#include <cstddef>
 #include <queue>
 
 using namespace mlir;
@@ -141,6 +142,7 @@ public:
   std::string define_load_buffer(vector::LoadOp op) {
     // std::string reg_name = "reg_";
     std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
+    std::string id_name = std::to_string(LoadToRegMap[op]);
     size_t bitwidth = 0;
     std::string define_bitvector_str;
     std::string define_buffer_str;
@@ -172,7 +174,8 @@ public:
 
       define_buffer_str += ") ";
 
-      define_buffer_str += elemT + ")" + ")";
+      define_buffer_str += elemT + " ";
+      define_buffer_str += id_name + ")" + ")";
     } else {
       define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
                              "(bv 0 (bitvector " + std::to_string(bitwidth) +
@@ -194,6 +197,7 @@ public:
     // std::string reg_name = "reg_"
 
     std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
+    std::string id_name = std::to_string(TransferReadToRegMap[op]);
     size_t bitwidth = 0;
     std::string define_bitvector_str;
     std::string define_buffer_str;
@@ -228,7 +232,8 @@ public:
 
       define_buffer_str += ") ";
 
-      define_buffer_str += elemT + ")" + ")";
+      define_buffer_str += elemT +  " ";
+      define_buffer_str += id_name +")" + ")";
     } else {
       define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
                              "(bv 0 (bitvector " + std::to_string(bitwidth) +
@@ -1366,6 +1371,7 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
   std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
 
   const char *expr_depth_var = getenv("HL_EXPR_DEPTH");
+  const char *target_var = getenv("HYDRIDE_TARGET");
 
   int expr_depth = 2;
 
@@ -1373,7 +1379,13 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
     expr_depth = (*expr_depth_var) - '0';
   }
 
-  std::string target_str = "x86";
+  std::string target_str;
+  if (!target_var)
+    target_str = "x86";
+  else if (strcmp(target_var,"visa")==0)
+    target_str = "visa";
+  else
+    target_str = "x86";
 
   out_str += "(define synth-res " +
              HSE.emit_hydride_synthesis(

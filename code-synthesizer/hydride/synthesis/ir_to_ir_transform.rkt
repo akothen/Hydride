@@ -57,6 +57,19 @@
 (require hydride/ir/arm/extract)
 (require hydride/ir/arm/sub_expr)
 
+(require hydride/ir/visa/cost_model)
+(require hydride/ir/visa/const_fold)
+(require hydride/ir/visa/printer)
+(require hydride/ir/visa/binder)
+(require hydride/ir/visa/scale)
+(require hydride/ir/visa/get_ops)
+(require hydride/ir/visa/length)
+(require hydride/ir/visa/prec)
+(require hydride/ir/visa/visitor)
+(require hydride/ir/visa/interpreter)
+(require hydride/ir/visa/extract)
+(require hydride/ir/visa/sub_expr)
+
 (require hydride/halide)
 ;(require hydride/synthesis/llvm_codegen)
 
@@ -81,6 +94,9 @@
        ]
       [(equal? target-language "arm")
        'arm
+       ]
+      [(equal? target-language "visa")
+       'visa
        ]
       [(equal? target-language "x86")
        'x86
@@ -205,6 +221,9 @@
       [(equal? target 'arm)
        arm:visitor
       ]
+      [(equal? target 'visa)
+       visa:visitor
+      ]
     )
   )
 
@@ -253,6 +272,9 @@
       [(equal? src-language 'arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
        ]
+      [(equal? src-language 'visa)
+       (values visa:interpret visa:cost visa:visitor visa:get-length visa:get-prec visa:get-bv-ops)
+       ]
       [(equal? src-language 'halide)
        (define (halide-cost-fn e) 1)
        (define (halide-length-fn e env) (halide:vec-size e))
@@ -283,6 +305,10 @@
       [(equal? target-language 'arm)
        (set-target-arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
+       ]
+      [(equal? target-language 'visa)
+       (set-target-visa)
+       (values visa:interpret visa:cost visa:visitor visa:get-length visa:get-prec visa:get-bv-ops)
        ]
       [(equal? target-language 'halide)
        (set-target-halide)
@@ -507,6 +533,9 @@
       [(equal? src-language 'arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
        ]
+      [(equal? src-language 'visa)
+       (values visa:interpret visa:cost visa:visitor visa:get-length visa:get-prec visa:get-bv-ops)
+       ]
       [(equal? src-language 'halide)
        (define (halide-cost-fn e) 1)
        (define (halide-length-fn e env) (halide:vec-size e))
@@ -537,6 +566,10 @@
       [(equal? target-language 'arm)
        (set-target-arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
+       ]
+      [(equal? target-language 'visa)
+       (set-target-visa)
+       (values visa:interpret visa:cost visa:visitor visa:get-length visa:get-prec visa:get-bv-ops)
        ]
       [(equal? target-language 'halide)
        (set-target-halide)
@@ -758,6 +791,9 @@
        ]
       [(equal? target "arm")
        (values arm:extract-expr  arm:get-sub-exprs arm:get-length arm:get-prec arm:bind-expr arm:cost)
+       ]
+      [(equal? target "visa")
+       (values visa:extract-expr  visa:get-sub-exprs visa:get-length visa:get-prec visa:bind-expr visa:cost)
        ]
       [(equal? target "x86")
        (values hydride:extract-expr  hydride:get-sub-exprs hydride:get-length hydride:get-prec bind-expr hydride:cost)

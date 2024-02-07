@@ -68,6 +68,8 @@ $(ALL_ARM_SEMA):
 	make -C $(HYDRIDE_ROOT)/codegen-generator/targets/arm AllSema.pickle
 halide: $(LIB_HALIDE)
 	make -C $(HALIDE_SRC) distrib/lib/libHalide.$(EXT) -j8
+mlir:
+	make -C /home/muchenx2/llvm-15/build -j32
 similaritytest:
 	cp $(HYDRIDE_ROOT)/code-synthesizer/hydride/utils/bvops.rkt $(SIMILARITY_ENV)/RosetteOpsImpl.rkt
 	

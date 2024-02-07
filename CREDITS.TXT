@@ -11,12 +11,19 @@ beautification by scripts.  The fields are: name (N), email (E), web-address
 
 N: Akash Kothari
 E: akashk4@illinois.edu
-W: https://www.linkedin.com/in/akash-kothari-007/
-D: Primary developer of core ideas and architecture of Hydride
+W: https://www.linkedin.com/in/akash-k%C3%B6then
+D: Primary developer of the core ideas and architecture of Hydride
+D: Similarity checker for x86 and HVX
+D: x86 fuzzing support
 
 N: Abdul Rafae Noor
 E: arnoor2@illinois.edu
-D: Halide frontend for Hydride and Hydride Code Synthesizer
+D: Implementation of the Halide frontend for Hydride 
+D: Implementation Hydride's synthesis heuristics
+
+N: Muchen Xu
+E: muchenx2@illinois.edu
+D: ARM support
 
 N: Hassam Uddin
 E: hassamu2@illinois.edu
@@ -25,11 +32,11 @@ D: Parts of Rosette parser and Rosette-to-Hydride IR generator
 
 N: Dhruv Baronia
 E: baronia3@illinois.edu
-D: Installation setup and Halide benchmarks
+D: Installation setup 
 
 N: Kunal Sheth
 E: kunal4@illinois.edu
-D: AMX support
+D: Partial AMX support
 
 N: Vikram Adve
 E: vadve@cs.uiuc.edu
@@ -44,9 +51,6 @@ D: Primary advisor
 N: Sudipta Sengupta
 E: sudipta@amazon.com
 W: https://people.csail.mit.edu/sudipta/
-D: Primary force in motivating development of extensions for modern hardware
+D: Primary force in motivating the designing IR extensions for modern hardware
 
-N: Stefanos Baziotis
-E: sb54@illinois.edu
-D: Halide benchmarks
 

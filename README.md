@@ -43,7 +43,7 @@ bash install.sh
 ```
 Now you are ready to use Hydride!
 
-## Targets Supported (WIP)
-- x86 (SSE, AVX (includes VNNI, AMX, etc.), MMX, FMA)
+## Targets Supported
+- x86 (SSE, SSE2, AVX, AVX2, AVX512 (includes VNNI), MMX, FMA)
 - Hexagon (HVX)
 - AArch64 (Neon)
