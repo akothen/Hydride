@@ -15,6 +15,9 @@
 (define (set-target-hvx)
   (set! target 'hvx))
 
+(define (set-target-bitsimd)
+  (set! target 'dram-bitsimd))
+
 (define (set-target-arm)
   (set! target 'arm))
 

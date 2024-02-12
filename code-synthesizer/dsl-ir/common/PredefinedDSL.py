@@ -423,7 +423,7 @@ llvm_vect_simd_template_sema = [
     "      concat",
     "      (for/list ([%it (reverse (range 0 num_elems 1))])",
     "        (define %low (* precision %it))",
-    "        (define %high (%low (- precision 1)))",
+    "        (define %high (+ %low (- precision 1)))",
     "        (define %exta (extract  %high %low a))",
     "        (define %extb (extract  %high %low b))",
     "        ({} %exta %extb)",

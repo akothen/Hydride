@@ -33,6 +33,16 @@
 (require hydride/ir/hvx/scale)
 (require hydride/ir/hvx/interpreter)
 
+
+
+(require hydride/ir/bitsimd/definition)
+(require hydride/ir/bitsimd/cost_model)
+(require hydride/ir/bitsimd/const_fold)
+(require hydride/ir/bitsimd/printer)
+(require hydride/ir/bitsimd/binder)
+(require hydride/ir/bitsimd/scale)
+(require hydride/ir/bitsimd/interpreter)
+
 (require hydride/ir/arm/definition)
 (require hydride/ir/arm/cost_model)
 (require hydride/ir/arm/const_fold)
@@ -189,6 +199,7 @@
     (define conc-hydride-res
       (cond
         [(equal? target 'hvx) (hvx:interpret hydride-expr conc-bvs)]
+        [(equal? target 'dram-bitsimd) (bitsimd:interpret hydride-expr conc-bvs)]
         [(equal? target 'arm) (arm:interpret hydride-expr conc-bvs)]
         [(equal? target 'x86) (hydride:interpret hydride-expr conc-bvs)]))
 
@@ -213,6 +224,7 @@
        (define hydride-res
          (cond
            [(equal? target 'hvx) (hvx:interpret hydride-expr sym-bvs)]
+           [(equal? target 'dram-bitsimd) (bitsimd:interpret hydride-expr sym-bvs)]
            [(equal? target 'arm) (arm:interpret hydride-expr sym-bvs)]
            [(equal? target 'x86) (hydride:interpret hydride-expr sym-bvs)]))
 
@@ -323,7 +335,10 @@
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
-            [(equal? target 'x86) 5]))
+            [(equal? target 'x86) 5]
+            [else 5]
+            )
+          )
         (define optimize? opt?)
         (define symbolic? sym?)
 
@@ -459,6 +474,7 @@
         (define cost-functor
           (cond
             [(equal? target 'hvx) hvx:cost]
+            [(equal? target 'dram-bitsimd) bitsimd:cost]
             [(equal? target 'arm) arm:cost]
             [(equal? target 'x86) hydride:cost]))
         (debug-log (cost-functor materialize))
@@ -481,6 +497,7 @@
         (define bind-functor
           (cond
             [(equal? target 'hvx) hvx:bind-expr]
+            [(equal? target 'dram-bitsimd) bitsimd:bind-expr]
             [(equal? target 'arm) arm:bind-expr]
             [(equal? target 'x86) bind-expr]))
 
@@ -488,6 +505,7 @@
           (cond
             [(equal? effective-scale-factor 1) materialize]
             [(equal? target 'hvx) (hvx:scale-expr materialize effective-scale-factor)]
+            [(equal? target 'dram-bitsimd) (bitsimd:scale-expr materialize effective-scale-factor)]
             [(equal? target 'arm) (arm:scale-expr materialize effective-scale-factor)]
             [(equal? target 'x86) (hydride:scale-expr materialize effective-scale-factor)]))
 

@@ -46,7 +46,7 @@
     (apply concat
            (for/list ([%it (reverse (range 0 num_elems 1))])
              (define %low (* precision %it))
-             (define %high (%low (- precision 1)))
+             (define %high (+ %low (- precision 1)))
              (define %exta (extract %high %low a))
              (define %extb (extract %high %low b))
              (bvadd %exta %extb))))
@@ -57,7 +57,7 @@
     (apply concat
            (for/list ([%it (reverse (range 0 num_elems 1))])
              (define %low (* precision %it))
-             (define %high (%low (- precision 1)))
+             (define %high (+ %low (- precision 1)))
              (define %exta (extract %high %low a))
              (define %extb (extract %high %low b))
              (bvsub %exta %extb))))
@@ -68,7 +68,7 @@
     (apply concat
            (for/list ([%it (reverse (range 0 num_elems 1))])
              (define %low (* precision %it))
-             (define %high (%low (- precision 1)))
+             (define %high (+ %low (- precision 1)))
              (define %exta (extract %high %low a))
              (define %extb (extract %high %low b))
              (bvmul %exta %extb))))
@@ -79,7 +79,7 @@
     (apply concat
            (for/list ([%it (reverse (range 0 num_elems 1))])
              (define %low (* precision %it))
-             (define %high (%low (- precision 1)))
+             (define %high (+ %low (- precision 1)))
              (define %exta (extract %high %low a))
              (define %extb (extract %high %low b))
              (bvsdiv %exta %extb))))
@@ -91,7 +91,7 @@
       concat
       (for/list ([%it (reverse (range 0 num_elems 1))])
         (define %low (* precision %it))
-        (define %high (%low (- precision 1)))
+        (define %high (+ %low (- precision 1)))
         (define %exta (extract  %high %low a))
         (define %extb (extract  %high %low b))
         (bvudiv %exta %extb)

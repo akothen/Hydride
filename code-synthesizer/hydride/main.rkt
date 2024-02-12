@@ -69,6 +69,24 @@
 (require hydride/ir/hvx/get_variants)
 
 
+;; BitSIMD IR
+(require hydride/ir/bitsimd/semantics)
+(require hydride/ir/bitsimd/definition)
+(require hydride/ir/bitsimd/cost_model)
+(require hydride/ir/bitsimd/length)
+(require hydride/ir/bitsimd/prec)
+(require hydride/ir/bitsimd/printer)
+(require hydride/ir/bitsimd/interpreter)
+(require hydride/ir/bitsimd/binder)
+(require hydride/ir/bitsimd/const_fold)
+(require hydride/ir/bitsimd/visitor)
+(require hydride/ir/bitsimd/scale)
+(require hydride/ir/bitsimd/get_ops)
+(require hydride/ir/bitsimd/get_name)
+(require hydride/ir/bitsimd/sub_expr)
+(require hydride/ir/bitsimd/extract)
+(require hydride/ir/bitsimd/get_variants)
+
 
 ;; ARM IR
 (require hydride/ir/arm/semantics)
@@ -169,6 +187,24 @@
   (all-from-out hydride/ir/arm/scale)
   (all-from-out hydride/ir/arm/get_ops)
   (all-from-out hydride/ir/arm/get_name)
+
+
+
+
+
+  (all-from-out hydride/ir/bitsimd/semantics)
+  (all-from-out hydride/ir/bitsimd/definition)
+  (all-from-out hydride/ir/bitsimd/cost_model)
+  (all-from-out hydride/ir/bitsimd/length)
+  (all-from-out hydride/ir/bitsimd/prec)
+  (all-from-out hydride/ir/bitsimd/printer)
+  (all-from-out hydride/ir/bitsimd/interpreter)
+  (all-from-out hydride/ir/bitsimd/binder)
+  (all-from-out hydride/ir/bitsimd/const_fold)
+  (all-from-out hydride/ir/bitsimd/visitor)
+  (all-from-out hydride/ir/bitsimd/scale)
+  (all-from-out hydride/ir/bitsimd/get_ops)
+  (all-from-out hydride/ir/bitsimd/get_name)
 
 
   (all-from-out hydride/cpp)

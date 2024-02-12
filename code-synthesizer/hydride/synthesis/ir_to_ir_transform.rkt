@@ -44,6 +44,23 @@
 (require hydride/ir/hvx/sub_expr)
 (require hydride/ir/hvx/definition)
 
+
+
+(require hydride/ir/bitsimd/definition)
+(require hydride/ir/bitsimd/cost_model)
+(require hydride/ir/bitsimd/const_fold)
+(require hydride/ir/bitsimd/printer)
+(require hydride/ir/bitsimd/binder)
+(require hydride/ir/bitsimd/scale)
+(require hydride/ir/bitsimd/get_ops)
+(require hydride/ir/bitsimd/length)
+(require hydride/ir/bitsimd/prec)
+(require hydride/ir/bitsimd/visitor)
+(require hydride/ir/bitsimd/interpreter)
+(require hydride/ir/bitsimd/extract)
+(require hydride/ir/bitsimd/sub_expr)
+(require hydride/ir/bitsimd/definition)
+
 (require hydride/ir/arm/cost_model)
 (require hydride/ir/arm/const_fold)
 (require hydride/ir/arm/printer)
@@ -78,6 +95,9 @@
     (cond
       [(equal? target-language "hvx")
        'hvx
+       ]
+      [(equal? target-language "bitsimd")
+       'dram-bitsimd
        ]
       [(equal? target-language "arm")
        'arm
@@ -202,6 +222,9 @@
       [(equal? target 'hvx)
        hvx:visitor
       ]
+      [(equal? target 'dram-bitsimd)
+       bitsimd:visitor
+      ]
       [(equal? target 'arm)
        arm:visitor
       ]
@@ -245,10 +268,13 @@
        ]
 
       [(and (equal? src-language 'hvx) (equal? cost-model-type 'instcombine))
-       (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
       [(equal? src-language 'hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       ]
+      [(equal? src-language 'dram-bitsimd)
+       (values bitsimd:interpret bitsimd:cost bitsimd:visitor bitsimd:get-length bitsimd:get-prec bitsimd:get-bv-ops)
        ]
       [(equal? src-language 'arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
@@ -274,11 +300,15 @@
        (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
        ]
       [(and (equal? target-language 'hvx) (equal? cost-model-type 'instcombine))
-       (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
       [(equal? target-language 'hvx)
        (set-target-hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       ]
+      [(equal? target-language 'dram-bitsimd)
+       (set-target-bitsimd)
+       (values bitsimd:interpret bitsimd:cost bitsimd:visitor bitsimd:get-length bitsimd:get-prec bitsimd:get-bv-ops)
        ]
       [(equal? target-language 'arm)
        (set-target-arm)
@@ -499,10 +529,14 @@
        ]
 
       [(and (equal? src-language 'hvx) (equal? cost-model-type 'instcombine))
-       (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
       [(equal? src-language 'hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       ]
+
+      [(equal? src-language 'dram-bitsimd)
+       (values bitsimd:interpret bitsimd:cost bitsimd:visitor bitsimd:get-length bitsimd:get-prec bitsimd:get-bv-ops)
        ]
       [(equal? src-language 'arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
@@ -528,11 +562,15 @@
        (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
        ]
       [(and (equal? target-language 'hvx) (equal? cost-model-type 'instcombine))
-       (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
       [(equal? target-language 'hvx)
        (set-target-hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
+       ]
+      [(equal? target-language 'dram-bitsimd)
+       (set-target-bitsimd)
+       (values bitsimd:interpret bitsimd:cost bitsimd:visitor bitsimd:get-length bitsimd:get-prec bitsimd:get-bv-ops)
        ]
       [(equal? target-language 'arm)
        (set-target-arm)
@@ -755,6 +793,9 @@
     (cond
       [(equal? target "hvx")
        (values hvx:extract-expr  hvx:get-sub-exprs hvx:get-length hvx:get-prec hvx:bind-expr hvx:cost)
+       ]
+      [(equal? target "bitsimd")
+       (values bitsimd:extract-expr  bitsimd:get-sub-exprs bitsimd:get-length bitsimd:get-prec bitsimd:bind-expr bitsimd:cost)
        ]
       [(equal? target "arm")
        (values arm:extract-expr  arm:get-sub-exprs arm:get-length arm:get-prec arm:bind-expr arm:cost)
