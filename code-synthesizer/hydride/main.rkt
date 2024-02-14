@@ -29,6 +29,7 @@
 (require hydride/utils/misc)
 (require hydride/utils/debug)
 (require hydride/utils/llvm_impl)
+(require hydride/utils/llvm_scale)
 (require hydride/utils/target)
 (require hydride/utils/extract_sub_exprs)
 
@@ -138,6 +139,7 @@
   (all-from-out hydride/utils/misc)
   (all-from-out hydride/utils/debug)
   (all-from-out hydride/utils/llvm_impl)
+  (all-from-out hydride/utils/llvm_scale)
   (all-from-out hydride/utils/target)
   (all-from-out hydride/utils/extract_sub_exprs)
 
