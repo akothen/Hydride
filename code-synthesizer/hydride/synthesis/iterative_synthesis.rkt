@@ -22,6 +22,10 @@
 (require hydride/ir/arm/const_fold)
 (require hydride/ir/arm/visitor)
 
+(require hydride/ir/aie/interpreter)
+(require hydride/ir/aie/const_fold)
+(require hydride/ir/aie/visitor)
+
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
@@ -413,6 +417,7 @@
     (cond
       [(equal? target 'x86) hydride:interpret]
       [(equal? target 'arm) arm:interpret]
+      [(equal? target 'aie) aie:interpret]
       [(equal? target 'hvx) hvx:interpret]))
 
   (for/list ([cex cex-ls])
@@ -601,6 +606,7 @@
        (cond
          [(equal? target 'x86) hydride:visitor]
          [(equal? target 'arm) arm:visitor]
+         [(equal? target 'aie) aie:visitor]
          [(equal? target 'hvx) hvx:visitor]))
 
      (define is-union (not (concrete? materialize)))
@@ -662,6 +668,7 @@
             (cond
               [(equal? target 'x86) hydride:const-fold]
               [(equal? target 'arm) arm:const-fold]
+              [(equal? target 'aie) aie:const-fold]
               [(equal? target 'hvx) hvx:const-fold]))
 
           (if verified? ;; If solution is found to be correct for all possible inputs

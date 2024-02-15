@@ -134,6 +134,13 @@ class SynthesizerBase:
             self.MAX_BW_SIZE = 128
             self.BASE_VECT_SIZE = None
             self.SWIZZLE_BOUND = 5
+        elif self.target == "aie":
+            print("Setting aie target settings")
+            self.FLEXIBLE_CASTING = True
+            self.ENABLE_PRUNING = True
+            self.MAX_BW_SIZE = 128
+            self.BASE_VECT_SIZE = None
+            self.SWIZZLE_BOUND = 5
 
     # Prints the number number of target agnostic
     # classes and the total number of contexts

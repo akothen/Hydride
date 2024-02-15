@@ -99,6 +99,7 @@
   (cond
     [(equal? arch "x86") (set-target-x86)]
     [(equal? arch "arm") (set-target-arm)]
+    [(equal? arch "aie") (set-target-aie)]
     [(equal? arch "hvx") (set-target-hvx)])
 
   (cond
@@ -113,6 +114,7 @@
     (cond
       [(equal? arch "x86") 4]
       [(equal? arch "arm") 1]
+      [(equal? arch "aie") 1]
       [(equal? arch "hvx") 32]))
 
   ;; Halide IR doesn't have operations for saturating cast,
@@ -239,6 +241,7 @@
   (cond
     [(equal? arch "x86") (set-target-x86)]
     [(equal? arch "arm") (set-target-arm)]
+    [(equal? arch "aie") (set-target-aie)]
     [(equal? arch "hvx") (set-target-hvx)])
 
   (cond

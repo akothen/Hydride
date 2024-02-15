@@ -155,6 +155,9 @@ class StepWiseSynthesizer(SynthesizerBase):
         elif self.target == "arm":
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
+        elif self.target == "aie":
+            self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
+            self.SWIZZLE_BOUND = 10
 
     def scale_down_dsl(self, dsl_operators):
         if self.scale_factor == 1:
@@ -731,6 +734,8 @@ class StepWiseSynthesizer(SynthesizerBase):
         if self.target == "x86":
             BOUND = 25
         if self.target == "arm":
+            BOUND = 25
+        if self.target == "aie":
             BOUND = 25
 
         if self.spec.contains_conditional():

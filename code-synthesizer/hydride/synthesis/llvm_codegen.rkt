@@ -18,6 +18,7 @@
 
 (require hydride/ir/hvx/printer)
 (require hydride/ir/arm/printer)
+(require hydride/ir/aie/printer)
 (require hydride/ir/arith/utils)
 
 (provide (all-defined-out))
@@ -44,6 +45,7 @@
     (cond
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
+      [(equal? target 'aie) aie:hydride-printer]
       [(equal? target 'x86) hydride:hydride-printer]))
   (define hydride-str (printer-functor hydride-expr))
 

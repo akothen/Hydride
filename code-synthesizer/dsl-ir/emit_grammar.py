@@ -17,6 +17,7 @@ from Specification import Specification, parse_spec
 
 from hexsemantics_new import semantics as hvx_semantics
 from ARMSemantics import semantcs as arm_semantics
+from AIEngineSema import aie_sema as aie_sema
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
@@ -58,6 +59,8 @@ elif TARGET == 'hvx':
     dsl_list = parse_dict(hvx_semantics)
 elif TARGET == 'arm':
     dsl_list = parse_dict(arm_semantics)
+elif TARGET == 'aie':
+    dsl_list = parse_dict(aie_sema)
 
 
 #print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))

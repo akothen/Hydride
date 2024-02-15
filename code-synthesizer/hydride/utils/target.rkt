@@ -18,6 +18,9 @@
 (define (set-target-arm)
   (set! target 'arm))
 
+(define (set-target-aie)
+  (set! target 'aie))
+
 (define (set-target-x86)
   (set! target 'x86))
 

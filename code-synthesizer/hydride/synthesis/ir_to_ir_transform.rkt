@@ -57,6 +57,19 @@
 (require hydride/ir/arm/extract)
 (require hydride/ir/arm/sub_expr)
 
+(require hydride/ir/aie/cost_model)
+(require hydride/ir/aie/const_fold)
+(require hydride/ir/aie/printer)
+(require hydride/ir/aie/binder)
+(require hydride/ir/aie/scale)
+(require hydride/ir/aie/get_ops)
+(require hydride/ir/aie/length)
+(require hydride/ir/aie/prec)
+(require hydride/ir/aie/visitor)
+(require hydride/ir/aie/interpreter)
+(require hydride/ir/aie/extract)
+(require hydride/ir/aie/sub_expr)
+
 (require hydride/halide)
 ;(require hydride/synthesis/llvm_codegen)
 
@@ -84,6 +97,9 @@
        ]
       [(equal? target-language "x86")
        'x86
+       ]
+      [(equal? target-language "aie")
+       'aie
        ]
       )
     )
@@ -205,6 +221,9 @@
       [(equal? target 'arm)
        arm:visitor
       ]
+      [(equal? target 'aie)
+       aie:visitor
+      ]
     )
   )
 
@@ -253,6 +272,9 @@
       [(equal? src-language 'arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
        ]
+      [(equal? src-language 'aie)
+       (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
+       ]
       [(equal? src-language 'halide)
        (define (halide-cost-fn e) 1)
        (define (halide-length-fn e env) (halide:vec-size e))
@@ -283,6 +305,10 @@
       [(equal? target-language 'arm)
        (set-target-arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
+       ]
+      [(equal? target-language 'aie)
+       (set-target-aie)
+       (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
        ]
       [(equal? target-language 'halide)
        (set-target-halide)
@@ -538,6 +564,10 @@
        (set-target-arm)
        (values arm:interpret arm:cost arm:visitor arm:get-length arm:get-prec arm:get-bv-ops)
        ]
+      [(equal? target-language 'aie)
+       (set-target-aie)
+       (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
+       ]
       [(equal? target-language 'halide)
        (set-target-halide)
        (define (halide-cost-fn e) 1)
@@ -761,6 +791,9 @@
        ]
       [(equal? target "x86")
        (values hydride:extract-expr  hydride:get-sub-exprs hydride:get-length hydride:get-prec bind-expr hydride:cost)
+       ]
+      [(equal? target "aie")
+       (values aie:extract-expr  aie:get-sub-exprs aie:get-length aie:get-prec aie:bind-expr aie:cost)
        ]
       [else
         (error "Unsupported target for inst-combine-hydride-expr " target)
