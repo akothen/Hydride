@@ -41,6 +41,14 @@
 (require hydride/ir/arm/scale)
 (require hydride/ir/arm/interpreter)
 
+(require hydride/ir/aie/definition)
+(require hydride/ir/aie/cost_model)
+(require hydride/ir/aie/const_fold)
+(require hydride/ir/aie/printer)
+(require hydride/ir/aie/binder)
+(require hydride/ir/aie/scale)
+(require hydride/ir/aie/interpreter)
+
 (require hydride/ir/arith/types)
 (require hydride/ir/arith/interpreter)
 (require hydride/ir/arith/utils)
@@ -190,6 +198,7 @@
       (cond
         [(equal? target 'hvx) (hvx:interpret hydride-expr conc-bvs)]
         [(equal? target 'arm) (arm:interpret hydride-expr conc-bvs)]
+        [(equal? target 'aie) (aie:interpret hydride-expr conc-bvs)]
         [(equal? target 'x86) (hydride:interpret hydride-expr conc-bvs)]))
 
     (define conc-equal? (equal? conc-halide-res conc-hydride-res))
@@ -323,6 +332,7 @@
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
+            [(equal? target 'aie) 5]
             [(equal? target 'x86) 5]))
         (define optimize? opt?)
         (define symbolic? sym?)
@@ -460,6 +470,7 @@
           (cond
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
+            [(equal? target 'aie) aie:cost]
             [(equal? target 'x86) hydride:cost]))
         (debug-log (cost-functor materialize))
 
@@ -482,6 +493,7 @@
           (cond
             [(equal? target 'hvx) hvx:bind-expr]
             [(equal? target 'arm) arm:bind-expr]
+            [(equal? target 'aie) aie:bind-expr]
             [(equal? target 'x86) bind-expr]))
 
         (define upscaled-mat
@@ -489,6 +501,7 @@
             [(equal? effective-scale-factor 1) materialize]
             [(equal? target 'hvx) (hvx:scale-expr materialize effective-scale-factor)]
             [(equal? target 'arm) (arm:scale-expr materialize effective-scale-factor)]
+            [(equal? target 'aie) (aie:scale-expr materialize effective-scale-factor)]
             [(equal? target 'x86) (hydride:scale-expr materialize effective-scale-factor)]))
 
         (debug-log (format "Upscaled mat: ~a" upscaled-mat))

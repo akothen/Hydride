@@ -160,6 +160,8 @@ class SynthesizerBase:
     def is_instruction_legal(self, name):
         if self.target == 'hvx':
             return True
+        if self.target == 'aie':
+            return True
         if self.target == 'arm':
             return name in arm_legal_inst
         if self.is_shuffle:
