@@ -26,6 +26,11 @@
 (require hydride/ir/arm/binder)
 (require hydride/ir/arm/interpreter)
 
+(require hydride/ir/aie/definition)
+(require hydride/ir/aie/visitor)
+(require hydride/ir/aie/binder)
+(require hydride/ir/aie/interpreter)
+
 (require hydride/synthesis/synth_main)
 
 (require hydride/synthesis/iterative_synthesis)
@@ -59,6 +64,7 @@
     (cond
       [(equal? target 'hvx) hvx:visitor]
       [(equal? target 'arm) arm:visitor]
+      [(equal? target 'aie) aie:visitor]
       [(equal? target 'x86) hydride:visitor]))
   (visitor-functor hydride-expr swizzle-visitor))
 
@@ -203,6 +209,7 @@
     (cond
       [(equal? target 'hvx) hvx:interpret]
       [(equal? target 'arm) arm:interpret]
+      [(equal? target 'aie) aie:interpret]
       [(equal? target 'x86) hydride:interpret]))
 
   (debug-log swizzle-hash)
@@ -263,6 +270,7 @@
     (cond
       [(equal? target 'hvx) hvx:bind-expr]
       [(equal? target 'arm) arm:bind-expr]
+      [(equal? target 'aie) aie:bind-expr]
       [(equal? target 'x86) bind-expr]))
 
   (define bound-expr

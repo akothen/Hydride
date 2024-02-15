@@ -527,6 +527,9 @@
       [(and (equal? src-language 'hvx) (equal? cost-model-type 'instcombine))
        (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]
+      [(equal? src-language 'aie)
+       (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
+       ]
       [(equal? src-language 'hvx)
        (values hvx:interpret hvx:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
        ]

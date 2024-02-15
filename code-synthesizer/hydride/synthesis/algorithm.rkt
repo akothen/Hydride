@@ -39,6 +39,13 @@
 (require hydride/ir/arm/binder)
 (require hydride/ir/arm/scale)
 
+(require hydride/ir/aie/definition)
+(require hydride/ir/aie/cost_model)
+(require hydride/ir/aie/const_fold)
+(require hydride/ir/aie/printer)
+(require hydride/ir/aie/binder)
+(require hydride/ir/aie/scale)
+
 (require hydride/synthesis/scalable_synthesis)
 (require hydride/synthesis/ir_to_ir_transform)
 
@@ -72,6 +79,7 @@
     (cond
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
+      [(equal? target 'aie) aie:hydride-printer]
       [(equal? target 'x86) hydride:hydride-printer]))
 
   (displayln sol)
@@ -152,12 +160,14 @@
     (cond
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
+      [(equal? target 'aie) aie:const-fold]
       [(equal? target 'x86) hydride:const-fold]))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
+      [(equal? target 'aie) aie:cost]
       [(equal? target 'x86) hydride:cost]))
 
   (define folded (const-fold-functor synthesized-sol))
@@ -268,12 +278,14 @@
     (cond
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
+      [(equal? target 'aie) aie:const-fold]
       [(equal? target 'x86) hydride:const-fold]))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
+      [(equal? target 'aie) aie:cost]
       [(equal? target 'x86) hydride:cost]))
 
   (define folded (const-fold-functor synthesized-sol))
@@ -372,6 +384,7 @@
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
+            [(equal? target 'aie) 5]
             [(equal? target 'x86) 3]))
         (define optimize? opt?)
         (define symbolic? sym?)
@@ -518,6 +531,7 @@
           (cond
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
+            [(equal? target 'aie) aie:cost]
             [(equal? target 'x86) hydride:cost]))
         (debug-log (cost-functor materialize))
 
@@ -539,6 +553,7 @@
           (cond
             [(equal? target 'hvx) hvx:bind-expr]
             [(equal? target 'arm) arm:bind-expr]
+            [(equal? target 'aie) aie:bind-expr]
             [(equal? target 'x86) bind-expr]))
 
         (bind-functor materialize (list->vector synthesized-leaves)))]))

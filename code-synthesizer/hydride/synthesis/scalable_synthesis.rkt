@@ -223,6 +223,7 @@
          (cond
            [(equal? target 'hvx) (hvx:interpret hydride-expr sym-bvs)]
            [(equal? target 'arm) (arm:interpret hydride-expr sym-bvs)]
+           [(equal? target 'aie) (aie:interpret hydride-expr sym-bvs)]
            [(equal? target 'x86) (hydride:interpret hydride-expr sym-bvs)]))
 
        (define verification-timeout? #t)
