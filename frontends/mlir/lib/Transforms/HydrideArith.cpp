@@ -137,147 +137,74 @@ public:
     }
   }
 
-  std::string define_load_buffer(vector::LoadOp op) {
-    // std::string reg_name = "reg_";
-    std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
-    std::string id_name = std::to_string(LoadToRegMap[op]);
-    size_t bitwidth = 0;
-    std::string define_bitvector_str;
-    std::string define_buffer_str;
-    auto vecType = op.getResult().getType().dyn_cast<VectorType>();
-    std::string elemT = "'";
-    if (vecType && vecType.getElementType()) {
-      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
-      elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
-      unsigned rank = vecType.getRank();
-
-      define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
-                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
-                             ")" + "))";
-
-      // todo: mlir interpreter for create-buffer
-      define_buffer_str = "(define " + reg_name + " (arith:create-tensor " +
-                          reg_name + "_tensor " + "(vector";
-
-      for (unsigned d = 0; d < rank; d++) {
-        define_buffer_str += " " + std::to_string(vecType.getShape()[d]);
-      }
-
-      define_buffer_str += ") ";
-      define_buffer_str += "(vector";
-
-      for (unsigned d = 0; d < rank; d++) {
-        define_buffer_str += " " + std::to_string(d);
-      }
-
-      define_buffer_str += ") ";
-
-      define_buffer_str += elemT + " ";
-      define_buffer_str += id_name + ")" + ")";
-    } else {
-      define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
-                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
-                             ")" + "))";
-
-      // todo: mlir interpreter for create-buffer
-      define_buffer_str = "(define " + reg_name + " (arith:create-buffer " +
-                          reg_name + "_bitvector " + elemT + ")" + ")";
-    }
-
-    if (elemT == "'") {
-      return "";
-    }
-
-    return define_bitvector_str + "\n" + define_buffer_str;
-  }
-
-  std::string define_transfer_buffer(vector::TransferReadOp op) {
-    // std::string reg_name = "reg_"
-
-    std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
-    std::string id_name = std::to_string(TransferReadToRegMap[op]);
-    size_t bitwidth = 0;
-    std::string define_bitvector_str;
-    std::string define_buffer_str;
-    auto vecType = op.getVector().getType().dyn_cast<VectorType>();
-    std::string elemT = "'";
-    if (vecType && vecType.getElementType()) {
-      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
-      elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
-      unsigned rank = vecType.getRank();
-
-      define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
-                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
-                             ")" + "))";
-
-      // todo: mlir interpreter for create-buffer
-      define_buffer_str = "(define " + reg_name + " (arith:create-tensor " +
-                          reg_name + "_tensor " + "(vector";
-
-      for (unsigned d = 0; d < rank; d++) {
-
-        define_buffer_str += " " + std::to_string(vecType.getShape()[d]);
-      }
-
-      define_buffer_str += ") ";
-
-      define_buffer_str += "(vector";
-
-      for (unsigned d = 0; d < rank; d++) {
-
-        define_buffer_str += " " + std::to_string(d);
-      }
-
-      define_buffer_str += ") ";
-
-      define_buffer_str += elemT + " ";
-      define_buffer_str += id_name + ")" + ")";
-    } else {
-      define_bitvector_str = "(define " + reg_name + "_bitvector" + " " +
-                             "(bv 0 (bitvector " + std::to_string(bitwidth) +
-                             ")" + "))";
-
-      // todo: mlir interpreter for create-buffer
-      define_buffer_str = "(define " + reg_name + " (arith:create-buffer " +
-                          reg_name + "_bitvector " + elemT + ")" + ")";
-    }
-
-    if (elemT == "'") {
-      return "";
-    }
-
-    return define_bitvector_str + "\n" + define_buffer_str;
-  }
-
-  //>>>>>>>>>>>>>>>>> Hydride Decls
-  std::string define_variable_buffer(void *val_ptr) {
-    // std::string reg_name = "reg_";
-    auto val = Value::getFromOpaquePointer(val_ptr);
-    std::string reg_name = "reg_" + std::to_string(VariableToRegMap[val_ptr]);
-    size_t bitwidth = 0;
-    auto vecType = val.getType().dyn_cast<VectorType>();
-    std::string elemT = "'";
-    if (vecType && vecType.getElementType()) {
-      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
-      elemT = mlir_type_to_synth_elem(vecType.getElementType(), false, true);
-    }
-
-    if (elemT == "'") {
-      /* llvm::errs() << "Define_variable_buffer escaping early for " <<
-         reg_name
-                   << "of bitwidth " << bitwidth << "\n"; */
-      return "";
-    }
-
+  std::string define_buffer(const std::string &reg_name,
+                            const std::string &id_name, size_t bitwidth,
+                            const std::string &elemT, unsigned rank,
+                            const std::vector<unsigned> &shape) {
     std::string define_bitvector_str = "(define " + reg_name + "_tensor" + " " +
                                        "(bv 0 (bitvector " +
                                        std::to_string(bitwidth) + ")" + "))";
 
     std::string define_buffer_str = "(define " + reg_name +
-                                    " (arith:create-buffer " + reg_name +
-                                    "_tensor " + elemT + ")" + ")";
+                                    " (arith:create-tensor " + reg_name +
+                                    "_tensor " + "(vector";
+
+    for (unsigned d = 0; d < rank; d++) {
+      define_buffer_str += " " + std::to_string(shape[d]);
+    }
+
+    define_buffer_str += ") ";
+
+    define_buffer_str += "(vector";
+
+    for (unsigned d = 0; d < rank; d++) {
+      define_buffer_str += " " + std::to_string(d);
+    }
+
+    define_buffer_str += ") ";
+
+    define_buffer_str += elemT + " ";
+    define_buffer_str += id_name + ")" + ")";
 
     return define_bitvector_str + "\n" + define_buffer_str;
+  }
+
+  std::string define_buffer_common(const std::string &reg_name,
+                                   const std::string &id_name, Type type) {
+    std::string elemT = "'";
+    size_t bitwidth = 0;
+    unsigned rank = 0;
+    std::vector<unsigned> shape;
+
+    auto vecType = type.dyn_cast<VectorType>();
+    if (vecType && vecType.getElementType()) {
+      bitwidth = vecType.getElementTypeBitWidth() * vecType.getNumElements();
+      elemT += mlir_type_to_synth_elem(vecType.getElementType(), false, true);
+      rank = vecType.getRank();
+      shape = std::vector<unsigned>(vecType.getShape().begin(),
+                                    vecType.getShape().end());
+    }
+
+    return define_buffer(reg_name, id_name, bitwidth, elemT, rank, shape);
+  }
+
+  std::string define_load_buffer(vector::LoadOp op) {
+    std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
+    std::string id_name = std::to_string(LoadToRegMap[op]);
+    return define_buffer_common(reg_name, id_name, op.getResult().getType());
+  }
+
+  std::string define_transfer_buffer(vector::TransferReadOp op) {
+    std::string reg_name = "reg_" + std::to_string(TransferReadToRegMap[op]);
+    std::string id_name = std::to_string(TransferReadToRegMap[op]);
+    return define_buffer_common(reg_name, id_name, op.getVector().getType());
+  }
+
+  std::string define_variable_buffer(void *val_ptr) {
+    auto val = Value::getFromOpaquePointer(val_ptr);
+    std::string reg_name = "reg_" + std::to_string(VariableToRegMap[val_ptr]);
+    std::string id_name = std::to_string(VariableToRegMap[val_ptr]);
+    return define_buffer_common(reg_name, id_name, val.getType());
   }
 
   std::string get_reg_id(int reg_id) {
