@@ -132,6 +132,22 @@ function _mm256_add_epi16 ( bv256 a, bv256 b ) {
 }
 
 
+(define (_mm256_add_epi16  a b )
+(define  dst
+(apply
+concat
+ (for/list ([%j0.new (reverse (range 0 16 1))])
+  (define %0 (*  %j0  16))
+  (define %1 (+  %0  15))
+  (define %2 (extract  %1 %0 a))
+  (define %3 (extract  %1 %0 b))
+  (define %4 (bvadd  %2  %3))
+  %4
+ )
+ )
+)
+dst
+)
 
 
 
