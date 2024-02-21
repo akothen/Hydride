@@ -125,8 +125,8 @@ function _mm256_add_epi16 ( bv256 a, bv256 b ) {
   %1 = add int32 %0, int32 15
   %2 = bvextract bv256 a, int32 %0, int32 %1, int32 16
   %3 = bvextract bv256 b, int32 %0, int32 %1, int32 16
-  %4 = bvadd bv8 %2, bv8 %3
-  bvinsert bv8 %4, bv64 dst, int32 %0, int32 %1, int32 16
+  %4 = bvadd bv16 %2, bv16 %3
+  bvinsert bv16 %4, bv256 dst, int32 %0, int32 %1, int32 16
  }
  ret bv256 dst
 }
@@ -149,6 +149,33 @@ concat
 dst
 )
 
+
+function hexagon_V6_vaddb_128B ( bv a, bv b, %size) {
+ for ([j0 (range 0 %size 1)]) {
+  %0 = mul int32 j0, int32 %size
+  %width = sub int32 %size, int32 1
+  %1 = add int32 %0, int32 %width
+  %2 = bvextract bv a, int32 %0, int32 %1, int32 %size
+  %3 = bvextract bv b, int32 %0, int32 %1, int32 %size
+  %4 = bvadd bv %2, bv %3
+  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %size
+ }
+ ret bv dst
+}
+
+
+function _mm256_add_epi16 ( bv a, bv b, %size) {
+ for ([j0 (range 0 %size 1)]) {
+  %0 = mul int32 j0, int32 %size
+  %width = sub int32 %size, int32 1
+  %1 = add int32 %0, int32 %width
+  %2 = bvextract bv a, int32 %0, int32 %1, int32 %size
+  %3 = bvextract bv b, int32 %0, int32 %1, int32 %size
+  %4 = bvadd bv %2, bv %3
+  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %size
+ }
+ ret bv dst
+}
 
 
 
