@@ -1,0 +1,555 @@
+(Instructions
+  (Instruction
+    aarch64_system_hints
+    (list
+      (InstructionEncoding
+        aarch64_system_hints
+        A64
+        (list
+          (InstructionField CRm 8 4)
+          (InstructionField op2 5 3))
+        '11010101 00000011 0010xxxx xxx11111'
+        (Just
+          (ExprVarRef
+            (QualifiedIdentifier Any TRUE)))
+        (list)
+        (Just
+          (StmtBlock
+            (list
+              (StmtVarsDecl
+                (list op)
+                (TypeRef
+                  (QualifiedIdentifier Any SystemHintOp)))
+              (StmtCase
+                (ExprBinOp
+                  ":"
+                  (ExprVarRef
+                    (QualifiedIdentifier Any CRm))
+                  (ExprVarRef
+                    (QualifiedIdentifier Any op2)))
+                (list
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 000'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_NOP))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 001'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_YIELD))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 010'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_WFE))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 011'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_WFI))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 100'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_SEV))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 101'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_SEVL))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0000 111'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtSee "SEE XPACLRI"))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternMask '0001 xxx'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtSee "SEE PACIA1716, PACIB1716, AUTIA1716, AUTIB1716"))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0010 000'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtIf
+                          (ExprUnOp
+                            "!"
+                            (ExprCall
+                              (QualifiedIdentifier Any HaveRASExt)
+                              (list)))
+                          (StmtBlock
+                            (list
+                              (StmtCall
+                                (QualifiedIdentifier Any EndOfInstruction)
+                                (list))))
+                          (list)
+                          Nothing)
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_ESB))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0010 001'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtIf
+                          (ExprUnOp
+                            "!"
+                            (ExprCall
+                              (QualifiedIdentifier Any HaveStatisticalProfiling)
+                              (list)))
+                          (StmtBlock
+                            (list
+                              (StmtCall
+                                (QualifiedIdentifier Any EndOfInstruction)
+                                (list))))
+                          (list)
+                          Nothing)
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_PSB))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0010 010'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtIf
+                          (ExprUnOp
+                            "!"
+                            (ExprCall
+                              (QualifiedIdentifier Any HaveSelfHostedTrace)
+                              (list)))
+                          (StmtBlock
+                            (list
+                              (StmtCall
+                                (QualifiedIdentifier Any EndOfInstruction)
+                                (list))))
+                          (list)
+                          Nothing)
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_TSB))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternBin '0010 100'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_CSDB))))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternMask '0011 xxx'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtSee "SEE PACIAZ, PACIASP, PACIBZ, PACIBSP, AUTIAZ, AUTIASP, AUTIBZ, AUTIBSP"))))
+                  (CaseAltWhen
+                    (list
+                      (CasePatternMask '0100 xx0'))
+                    Nothing
+                    (StmtBlock
+                      (list
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any op))
+                          (ExprVarRef
+                            (QualifiedIdentifier Any SystemHintOp_BTI)))
+                        (StmtAssign
+                          (LValVarRef
+                            (QualifiedIdentifier Any BTypeCompatible))
+                          (ExprCall
+                            (QualifiedIdentifier Any BTypeCompatible_BTI)
+                            (list
+                              (ExprSlice
+                                (ExprVarRef
+                                  (QualifiedIdentifier Any op2))
+                                (list
+                                  (SliceRange
+                                    (ExprLitNat 2)
+                                    (ExprLitNat 1))))))))))
+                  (CaseAltOtherwise
+                    (StmtBlock
+                      (list
+                        (StmtCall
+                          (QualifiedIdentifier Any EndOfInstruction)
+                          (list))))))))))))
+    Nothing
+    (Just
+      (StmtBlock
+        (list
+          (StmtCase
+            (ExprVarRef
+              (QualifiedIdentifier Any op))
+            (list
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_YIELD))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any Hint_Yield)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_WFE))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtIf
+                      (ExprCall
+                        (QualifiedIdentifier Any IsEventRegisterSet)
+                        (list))
+                      (StmtBlock
+                        (list
+                          (StmtCall
+                            (QualifiedIdentifier Any ClearEventRegister)
+                            (list))))
+                      (list)
+                      (Just
+                        (StmtBlock
+                          (list
+                            (StmtIf
+                              (ExprBinOp
+                                "=="
+                                (ExprMember
+                                  (ExprVarRef
+                                    (QualifiedIdentifier Any PSTATE))
+                                  EL)
+                                (ExprVarRef
+                                  (QualifiedIdentifier Any EL0)))
+                              (StmtBlock
+                                (list
+                                  (StmtCall
+                                    (QualifiedIdentifier AArch64 CheckForWFxTrap)
+                                    (list
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any EL1))
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any TRUE))))))
+                              (list)
+                              Nothing)
+                            (StmtIf
+                              (ExprBinOp
+                                "&&"
+                                (ExprBinOp
+                                  "&&"
+                                  (ExprCall
+                                    (QualifiedIdentifier Any EL2Enabled)
+                                    (list))
+                                  (ExprInSet
+                                    (ExprMember
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any PSTATE))
+                                      EL)
+                                    (Set
+                                      (list
+                                        (SetElementSingle
+                                          (ExprVarRef
+                                            (QualifiedIdentifier Any EL0)))
+                                        (SetElementSingle
+                                          (ExprVarRef
+                                            (QualifiedIdentifier Any EL1)))))))
+                                (ExprUnOp
+                                  "!"
+                                  (ExprCall
+                                    (QualifiedIdentifier Any IsInHost)
+                                    (list))))
+                              (StmtBlock
+                                (list
+                                  (StmtCall
+                                    (QualifiedIdentifier AArch64 CheckForWFxTrap)
+                                    (list
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any EL2))
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any TRUE))))))
+                              (list)
+                              Nothing)
+                            (StmtIf
+                              (ExprBinOp
+                                "&&"
+                                (ExprCall
+                                  (QualifiedIdentifier Any HaveEL)
+                                  (list
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any EL3))))
+                                (ExprBinOp
+                                  "!="
+                                  (ExprMember
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any PSTATE))
+                                    EL)
+                                  (ExprVarRef
+                                    (QualifiedIdentifier Any EL3))))
+                              (StmtBlock
+                                (list
+                                  (StmtCall
+                                    (QualifiedIdentifier AArch64 CheckForWFxTrap)
+                                    (list
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any EL3))
+                                      (ExprVarRef
+                                        (QualifiedIdentifier Any TRUE))))))
+                              (list)
+                              Nothing)
+                            (StmtCall
+                              (QualifiedIdentifier Any WaitForEvent)
+                              (list)))))))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_WFI))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtIf
+                      (ExprUnOp
+                        "!"
+                        (ExprCall
+                          (QualifiedIdentifier Any InterruptPending)
+                          (list)))
+                      (StmtBlock
+                        (list
+                          (StmtIf
+                            (ExprBinOp
+                              "=="
+                              (ExprMember
+                                (ExprVarRef
+                                  (QualifiedIdentifier Any PSTATE))
+                                EL)
+                              (ExprVarRef
+                                (QualifiedIdentifier Any EL0)))
+                            (StmtBlock
+                              (list
+                                (StmtCall
+                                  (QualifiedIdentifier AArch64 CheckForWFxTrap)
+                                  (list
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any EL1))
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any FALSE))))))
+                            (list)
+                            Nothing)
+                          (StmtIf
+                            (ExprBinOp
+                              "&&"
+                              (ExprBinOp
+                                "&&"
+                                (ExprCall
+                                  (QualifiedIdentifier Any EL2Enabled)
+                                  (list))
+                                (ExprInSet
+                                  (ExprMember
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any PSTATE))
+                                    EL)
+                                  (Set
+                                    (list
+                                      (SetElementSingle
+                                        (ExprVarRef
+                                          (QualifiedIdentifier Any EL0)))
+                                      (SetElementSingle
+                                        (ExprVarRef
+                                          (QualifiedIdentifier Any EL1)))))))
+                              (ExprUnOp
+                                "!"
+                                (ExprCall
+                                  (QualifiedIdentifier Any IsInHost)
+                                  (list))))
+                            (StmtBlock
+                              (list
+                                (StmtCall
+                                  (QualifiedIdentifier AArch64 CheckForWFxTrap)
+                                  (list
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any EL2))
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any FALSE))))))
+                            (list)
+                            Nothing)
+                          (StmtIf
+                            (ExprBinOp
+                              "&&"
+                              (ExprCall
+                                (QualifiedIdentifier Any HaveEL)
+                                (list
+                                  (ExprVarRef
+                                    (QualifiedIdentifier Any EL3))))
+                              (ExprBinOp
+                                "!="
+                                (ExprMember
+                                  (ExprVarRef
+                                    (QualifiedIdentifier Any PSTATE))
+                                  EL)
+                                (ExprVarRef
+                                  (QualifiedIdentifier Any EL3))))
+                            (StmtBlock
+                              (list
+                                (StmtCall
+                                  (QualifiedIdentifier AArch64 CheckForWFxTrap)
+                                  (list
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any EL3))
+                                    (ExprVarRef
+                                      (QualifiedIdentifier Any FALSE))))))
+                            (list)
+                            Nothing)
+                          (StmtCall
+                            (QualifiedIdentifier Any WaitForInterrupt)
+                            (list))))
+                      (list)
+                      Nothing))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_SEV))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any SendEvent)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_SEVL))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any SendEventLocal)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_ESB))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any SynchronizeErrors)
+                      (list))
+                    (StmtCall
+                      (QualifiedIdentifier AArch64 ESBOperation)
+                      (list))
+                    (StmtIf
+                      (ExprBinOp
+                        "&&"
+                        (ExprCall
+                          (QualifiedIdentifier Any EL2Enabled)
+                          (list))
+                        (ExprInSet
+                          (ExprMember
+                            (ExprVarRef
+                              (QualifiedIdentifier Any PSTATE))
+                            EL)
+                          (Set
+                            (list
+                              (SetElementSingle
+                                (ExprVarRef
+                                  (QualifiedIdentifier Any EL0)))
+                              (SetElementSingle
+                                (ExprVarRef
+                                  (QualifiedIdentifier Any EL1)))))))
+                      (StmtBlock
+                        (list
+                          (StmtCall
+                            (QualifiedIdentifier AArch64 vESBOperation)
+                            (list))))
+                      (list)
+                      Nothing)
+                    (StmtCall
+                      (QualifiedIdentifier Any TakeUnmaskedSErrorInterrupts)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_PSB))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any ProfilingSynchronizationBarrier)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_TSB))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any TraceSynchronizationBarrier)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_CSDB))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtCall
+                      (QualifiedIdentifier Any ConsumptionOfSpeculativeDataBarrier)
+                      (list)))))
+              (CaseAltWhen
+                (list
+                  (CasePatternIdentifier SystemHintOp_BTI))
+                Nothing
+                (StmtBlock
+                  (list
+                    (StmtAssign
+                      (LValVarRef
+                        (QualifiedIdentifier Any BTypeNext))
+                      (ExprLitBin '00')))))
+              (CaseAltOtherwise
+                (StmtBlock (list))))))))
+    (Conditional False)))

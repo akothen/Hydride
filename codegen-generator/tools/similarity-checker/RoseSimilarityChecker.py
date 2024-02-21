@@ -2723,12 +2723,10 @@ class RoseSimilarityChecker():
 
 
 if __name__ == '__main__':
-    # SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
     if ParallelChecker:
-        SimilarityChecker = RoseSimilarityCheckerParallel(["ARM"])
+        SimilarityChecker = RoseSimilarityCheckerParallel(["x86", "Hexagon", "ARM"])
     else:
-        SimilarityChecker = RoseSimilarityChecker(["ARM"])
-    # SimilarityChecker = RoseSimilarityChecker(["x86"])
+        SimilarityChecker = RoseSimilarityChecker(["x86", "Hexagon", "ARM"])
     import sys
     sys.stdout = sys.__stderr__
     SimilarityChecker.performSimilarityChecking()

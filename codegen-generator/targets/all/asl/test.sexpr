@@ -1,0 +1,6 @@
+(StmtAssign
+            (LValMember
+            (LValVarRef
+                (QualifiedIdentifier Any PSTATE))
+            N)
+            (ExprLitBin '1'))

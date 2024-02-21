@@ -1,0 +1,9 @@
+(ExprIf
+    (ExprBinOp
+        "=="
+        (ExprVarRef
+        (QualifiedIdentifier Any size))
+        (ExprLitBin '11'))
+    (ExprLitNat 64)
+    (list)
+    (ExprLitNat 32))
