@@ -204,6 +204,6 @@ function _mm256_add_epi16 ( bv a, bv b, int32 %elem_size, int32 %length) {
 (verify (assert (equal? (_mm256_adds_epi16 Vu Vv %elem_size_2 %length_2) (hexagon_V6_vaddb_128B Vu Vv %elem_size_2 %length_2 ))))
 
 
-<size x width> @autollvm.add (<size x width> %operand1, <size x width> %operand2)
+<length x elem_size> @autollvm.add (<length x elem_size> %operand1, <length x elem_size> %operand2)
 
 
