@@ -189,5 +189,16 @@ function _mm256_add_epi16 ( bv a, bv b, %size) {
  ret bv dst
 }
 
+(define-symbolic a (bitvector 256))
+(define-symbolic b (bitvector 256))
+(define %size_1 16)
+
+(verify (assert (equal? (_mm256_adds_epi16 a b %size_1 ) (hexagon_V6_vaddb_128B a b %size_1 ))))
+
+(define-symbolic Vu (bitvector 1024))
+(define-symbolic Vv (bitvector 1024))
+(define %size_2 8)
+
+(verify (assert (equal? (_mm256_adds_epi16 Vu Vv %size_2 ) (hexagon_V6_vaddb_128B Vu Vv %size_2 ))))
 
 
