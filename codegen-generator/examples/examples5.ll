@@ -120,7 +120,7 @@ function _mm256_mask_cvtsepi32_epi8 ( bv128 src, bv8 k, bv256 a ) {
 
 
 function _mm256_add_epi16 ( bv256 a, bv256 b ) {
- for ([j0 (range 0 8 1)]) {
+ for ([j0 (range 0 16 1)]) {
   %0 = mul int32 j0, int32 16
   %1 = add int32 %0, int32 15
   %2 = bvextract bv256 a, int32 %0, int32 %1, int32 16
