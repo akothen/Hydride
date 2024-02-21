@@ -149,6 +149,18 @@ concat
 dst
 )
 
+function hexagon_V6_vaddb_128B ( bv1024 a, bv1024 b ) {
+ for ([j0 (range 0 128 1)]) {
+  %0 = mul int32 j0, int32 8
+  %1 = add int32 %0, int32 7
+  %2 = bvextract bv1024 a, int32 %0, int32 %1, int32 8
+  %3 = bvextract bv1024 b, int32 %0, int32 %1, int32 8
+  %4 = bvadd bv8 %2, bv8 %3
+  bvinsert bv8 %4, bv1024 dst, int32 %0, int32 %1, int32 8
+ }
+ ret bv1024 dst
+}
+
 
 function hexagon_V6_vaddb_128B ( bv a, bv b, %size) {
  for ([j0 (range 0 %size 1)]) {
