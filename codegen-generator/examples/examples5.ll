@@ -162,43 +162,48 @@ function hexagon_V6_vaddb_128B ( bv1024 a, bv1024 b ) {
 }
 
 
-function hexagon_V6_vaddb_128B ( bv a, bv b, %size) {
- for ([j0 (range 0 %size 1)]) {
-  %0 = mul int32 j0, int32 %size
-  %width = sub int32 %size, int32 1
-  %1 = add int32 %0, int32 %width
-  %2 = bvextract bv a, int32 %0, int32 %1, int32 %size
-  %3 = bvextract bv b, int32 %0, int32 %1, int32 %size
+function hexagon_V6_vaddb_128B ( bv Vu, bv Vv, int32 %elem_size, int32 %length) {
+ for ([j0 (range 0 %length 1)]) {
+  %0 = mul int32 j0, int32 %elem_size
+  %offset = sub int32 %elem_size, int32 1
+  %1 = add int32 %0, int32 %offset
+  %2 = bvextract bv Vu, int32 %0, int32 %1, int32 %elem_size
+  %3 = bvextract bv Vv, int32 %0, int32 %1, int32 %elem_size
   %4 = bvadd bv %2, bv %3
-  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %size
+  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %elem_size
  }
  ret bv dst
 }
 
 
-function _mm256_add_epi16 ( bv a, bv b, %size) {
- for ([j0 (range 0 %size 1)]) {
-  %0 = mul int32 j0, int32 %size
-  %width = sub int32 %size, int32 1
-  %1 = add int32 %0, int32 %width
-  %2 = bvextract bv a, int32 %0, int32 %1, int32 %size
-  %3 = bvextract bv b, int32 %0, int32 %1, int32 %size
+function _mm256_add_epi16 ( bv a, bv b, int32 %elem_size, int32 %length) {
+ for ([j0 (range 0 %length 1)]) {
+  %0 = mul int32 j0, int32 %elem_size
+  %offset = sub int32 %elem_size, int32 1
+  %1 = add int32 %0, int32 %offset
+  %2 = bvextract bv a, int32 %0, int32 %1, int32 %elem_size
+  %3 = bvextract bv b, int32 %0, int32 %1, int32 %elem_size
   %4 = bvadd bv %2, bv %3
-  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %size
+  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %elem_size
  }
  ret bv dst
 }
 
 (define-symbolic a (bitvector 256))
 (define-symbolic b (bitvector 256))
-(define %size_1 16)
+(define %elem_size_1 16)
+(define %length_1 16)
 
-(verify (assert (equal? (_mm256_adds_epi16 a b %size_1 ) (hexagon_V6_vaddb_128B a b %size_1 ))))
+(verify (assert (equal? (_mm256_adds_epi16 a b %elem_size_1 %length_1) (hexagon_V6_vaddb_128B a b %elem_size_1 %length_1))))
 
 (define-symbolic Vu (bitvector 1024))
 (define-symbolic Vv (bitvector 1024))
-(define %size_2 8)
+(define %elem_size_2 128)
+(define %length_2 8)
 
-(verify (assert (equal? (_mm256_adds_epi16 Vu Vv %size_2 ) (hexagon_V6_vaddb_128B Vu Vv %size_2 ))))
+(verify (assert (equal? (_mm256_adds_epi16 Vu Vv %elem_size_2 %length_2) (hexagon_V6_vaddb_128B Vu Vv %elem_size_2 %length_2 ))))
+
+
+<size x width> @autollvm.add (<size x width> %operand1, <size x width> %operand2)
 
 
