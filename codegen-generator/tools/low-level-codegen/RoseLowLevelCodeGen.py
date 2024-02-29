@@ -37,8 +37,15 @@ def HandleLowLevelCodegenVISA(RosetteFileName: str, PathToLegalizerLib: str,
   LegalizeLLVMModuleName= LLVMIRModule.name + ".legalize.ll"
   LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
   with open(LinkedLLVMModuleName, "w") as Module, open(PathToWrapperFile, "r") as Declarations:
+    # Also a quick hack: turn @hydride.node.forward_kernel.0 to @hydride_node_forward_kernel_0 (replace . with _)
+    # Module.write(LLVMIRModule.__repr__())
+    tmpLLVMIR = LLVMIRModule.__repr__()
+    import re
+    for g in re.finditer(r"(@hydride[\w.]*)", tmpLLVMIR):
+      tmpLLVMIR= tmpLLVMIR[:g.start()] + g.group(0).replace(".", "_") + tmpLLVMIR[g.end():]
+    Module.write(tmpLLVMIR)
+    
     # Brutally link the wrapper functions back to the module by appending them
-    Module.write(LLVMIRModule.__repr__())
     Module.write(Declarations.read())
   Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
       PathToLegalizerLib, LegalizationFlag,
@@ -105,7 +112,7 @@ if __name__ == '__main__':
     HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, LegalizationFlag, PathToWrapperFile)
   else:
     LLVMModuleName = sys.argv[5]
-    if os.getenv("HYDRIDE_VISA_FLAG"):
+    if "visa" in LegalizationFlag.lower():
       # Different handling for VISA
       HandleLowLevelCodegenVISA(RosetteFileName, PathToLegalizerLib,
                 PathToWrapperFile, LegalizationFlag, LLVMModuleName)

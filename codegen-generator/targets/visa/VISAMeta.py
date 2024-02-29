@@ -128,7 +128,7 @@ Stateful = ["ADDC"]
 Uncommon = ["BFREV", "ROL", "ROR"]
 CompileIssue = ["CMP", "PLANE", "SAD2ADD", "SAD2"]
 
-SuppportedVISA = [
+SupportedVISA = [
     "ADD",
     "ADD3",
     "AND",
@@ -219,7 +219,7 @@ SuppportedVISA = [
     # "SVM_SCATTER",# *addresses
     # "SVM_SCATTER4_SCALED",# *addresses
 ]
-SuppportedVISA = [i for i in SuppportedVISA if i not in ParseError +
+SupportedVISA = [i for i in SupportedVISA if i not in ParseError +
                   FlowControl+Stateful+Uncommon+CompileIssue]
 SupportedTypes = [
     "UD", "D", "UW", "W", "UB", "B", "UQ", "Q"

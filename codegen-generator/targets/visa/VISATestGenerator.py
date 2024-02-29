@@ -245,7 +245,7 @@ def collect(s: VISASema):
             Hlog.warning(f"{filename} not parsable")
             failed.append(s.intrin + " \tnot parsable")
             return
-    if s.inst not in SuppportedVISA:
+    if s.inst not in SupportedVISA:
         Hlog.warn(f"{s.inst} not supported but result available")
         failed.append(s.intrin + " \tnot supported")
         return

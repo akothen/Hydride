@@ -118,7 +118,7 @@ from VISAMeta import VISASema, Parameter
         if self.result:
             return self.result
         AllSemantics = []
-        for visa in SuppportedVISA:
+        for visa in SupportedVISA:
             Hlog.debug(f"Processing {visa}")
             vdoc = parseMarkdown(f"{visa}.md")
             if vdoc.Name == "MIN_MAX":

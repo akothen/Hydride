@@ -3,7 +3,7 @@ from VISAAST import getSemaAsString
 import os
 import sys
 from pathlib import Path
-from VISAMeta import VISADoc, SuppportedVISA
+from VISAMeta import VISADoc, SupportedVISA
 VISA_INSTRUCTIONS_DIR = Path(os.getenv('VISA_INSTRUCTIONS_DIR',
                                        "./docs"))
 PARSE_ERROR_LIST = ['3D_LOAD', '3D_SAMPLE', '3D_SAMPLE4', 'AVS', 'BARRIER', 'CACHE_FLUSH', 'CALL', 'DPAS', 'DPASW', 'FADDR',  'FCALL', 'FCCALL', 'FENCE', 'FILE', 'FRET', 'GOTO', 'IFCALL', 'INFO', 'JMP', 'LABEL', 'LIFETIME', 'LOC',
@@ -70,7 +70,7 @@ def parseMarkdown(mdname: str, parseSema=False) -> VISADoc:
 
 
 def collectArithLikeVISA():
-    for insname in SuppportedVISA:
+    for insname in SupportedVISA:
         mdname = f"{insname}.md"
         if insname not in PARSE_ERROR_LIST:
             vsema = parseMarkdown(mdname)

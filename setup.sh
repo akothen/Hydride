@@ -1,5 +1,11 @@
 CUR_DIR=$(pwd)
 
+# check if directory code-synthesizer exists:
+if [ ! -d "code-synthesizer" ]; then
+    echo "Please run the setup file at the root folder of the project"
+    return
+fi
+
 export HYDRIDE_ROOT=$CUR_DIR
 export LLVM_ROOT=$CUR_DIR/frontends/halide/llvm-build
 export LLVM_DIS_ROOT=$LLVM_ROOT
@@ -11,12 +17,34 @@ export SIMILARITY_SUMMARY=$CUR_DIR/codegen-generator/tools/similarity-checker/su
 
 # export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/x86/x86_wrappers.c.ll
 # export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libX86Legalizer.so
-export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
-if [ $(uname -s) = "Darwin" ]; then
-    export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.dylib
-else
-    export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.so
-fi
+
+# check first argument in a switch statement
+case $1 in
+    "x86")
+        export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/x86/x86_wrappers.c.ll
+        export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libX86Legalizer.so
+        ;;
+    "arm")
+        export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
+        if [ $(uname -s) = "Darwin" ]; then
+            export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.dylib
+        else
+            export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.so
+        fi
+        ;;
+    "hexagon")
+        # Nothing to do because hvx supports every instruction (?)
+        ;;
+    "visa")
+        export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/visa/visa_wrapper.ll
+        export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/visa/build/libVISALegalizer.so
+        ;;
+    *)
+        echo "Please provide a valid target: x86, arm, hexagon, visa"
+        return
+        ;;
+esac
+
 
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/arm/:$PYTHONPATH
