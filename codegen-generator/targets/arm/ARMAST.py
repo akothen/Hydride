@@ -316,13 +316,14 @@ class VarDeclUndef(ASTNode):
     def __repr__(self):
         return f"VarDeclUndef({self.lhs.__repr__()}, {self.id.__repr__()})"
 
+from typing import Union
 
 class VarsDecl(ASTStmt):
-    init_list: List[VarDeclInit | VarDeclUndef]
+    init_list: List[Union[VarDeclInit, VarDeclUndef]]
     basetype: Tuple[str, ASTExpr]
     id: str
 
-    def __init__(self, init_list: List[VarDeclInit | VarDeclUndef], basetype: Tuple[str, ASTNode], id: str):
+    def __init__(self, init_list: List[Union[VarDeclInit, VarDeclUndef]], basetype: Tuple[str, ASTNode], id: str):
         self.init_list, self.basetype, self.id = init_list, basetype, id
 
     def __repr__(self):
