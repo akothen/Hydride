@@ -21,9 +21,10 @@ if(APPLE)
 endif()
 
 # add_library(X86Legalizer SHARED InstSelectors/x86/x86LegalizerAllArgs.cpp)
-file(GLOB legalizer_sources InstSelectors/arm/**.cpp)
+file(GLOB legalizer_sources InstSelectors/aievec/**.cpp)
 file(GLOB legalizer_header InstSelectors/common/**.cpp)
 
 SET(legalizer ${legalizer_sources} ${legalizer_header})  
 # add_library(ARMLegalizer SHARED InstSelectors/arm/ARMLegalizer.cpp)
 add_library(ARMLegalizer SHARED ${legalizer})
+add_library(AIEVecLegalizer SHARED ${legalizer})

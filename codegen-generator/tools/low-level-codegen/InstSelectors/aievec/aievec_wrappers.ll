@@ -1,0 +1,1 @@
+declare <16 x i32> @llvm.aie.add16.v16int32(<16 x i32>, <16 x i32>, <16 x i32>)
