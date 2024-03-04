@@ -16,6 +16,36 @@ import os
 # x86_wrappers.c.ll
 # -x86-hydride-legalize
 
+def HandleLowLevelCodegenAIEVec(RosetteFileName: str, PathToLegalizerLib: str,
+             PathToWrapperFile: str, LegalizationFlag: str,
+             LLVMModuleName: str = None):
+  RosetteFile = open(RosetteFileName, "r")
+  RosetteCode = list()
+  Line = RosetteFile.readline()
+  while Line != "":
+    RosetteCode.append(Line)
+    Line = RosetteFile.readline()
+  RosetteFile.close()
+  Lifter = RosetteLifter()
+  RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
+  assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
+
+  # Now generate LLVM module with the functions in it
+  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
+  print("LLVM MODULE")
+  print(LLVMIRModule)
+  LegalizeLLVMModuleName= LLVMIRModule.name + ".legalize.ll"
+  LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
+  with open(LinkedLLVMModuleName, "w") as Module, open(PathToWrapperFile, "r") as Declarations:
+    # Brutally link the wrapper functions back to the module by appending them
+    Module.write(LLVMIRModule.__repr__())
+    Module.write(Declarations.read())
+  Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
+      PathToLegalizerLib, LegalizationFlag,
+      LinkedLLVMModuleName, LegalizeLLVMModuleName)
+  print(Command)
+  os.system(Command)
+
 def HandleLowLevelCodeGen(RosetteFileName : str, PathToLegalizerLib : str, \
                           PathToWrapperFile : str, LegalizationFlag : str, \
                           LLVMModuleName : str = None):
@@ -74,6 +104,11 @@ if __name__ == '__main__':
     HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, LegalizationFlag, PathToWrapperFile)
   else:
     LLVMModuleName = sys.argv[5]
-    HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, PathToWrapperFile, \
-                        LegalizationFlag, LLVMModuleName)
+    if "aievec" in LegalizationFlag:
+      # Different handling for AIEVec
+      HandleLowLevelCodegenAIEVec(RosetteFileName, PathToLegalizerLib,
+                PathToWrapperFile, LegalizationFlag, LLVMModuleName)
+    else:
+      HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, PathToWrapperFile,
+                            LegalizationFlag, LLVMModuleName)
 
