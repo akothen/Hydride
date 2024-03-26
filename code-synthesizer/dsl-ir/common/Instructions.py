@@ -647,6 +647,17 @@ class Context:
         string += "\n" + ("{} )".format(prefix))
         return string
 
+    def emit_context_expr_string_compact(self, prefix=""):
+        string = self.name
+
+        for arg in self.context_args:
+            if isinstance(arg, Context):
+                string += " " + arg.emit_context_expr_string_compact(prefix=prefix)
+            elif isinstance(arg, Reg):
+                string += " " + arg.get_rkt_value()
+
+        return "("+ string +")"
+
     def specialize_context_bounded(self, prec):
         new_context_args = []
 
