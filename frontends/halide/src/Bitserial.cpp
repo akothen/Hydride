@@ -37,6 +37,7 @@ namespace Internal {
         if(E.node_type() == IRNodeType::Load){
             const Load* LI = E.as<Load>();
 
+
             int bits = LI->type.bits();
             int lanes = LI->type.lanes();
 
@@ -140,6 +141,60 @@ namespace Internal {
 
         return Copy;
 
+    }
+
+    Expr PimHandleLoad(const Load* LI){
+        
+        Expr PimAllocation;
+
+        Expr LoadExpr = Load::make(LI->type, LI->name, LI->index, LI->image, LI->param, LI->predicate, LI->alignment);
+        if(LoadToPimIDMap.find(LI) != LoadToPimIDMap.end()){
+            PimAllocation = LoadToPimIDMap[LI];
+        } else {
+            PimAllocation = PIMAllocate(LoadExpr);
+        }
+
+        Expr Copy = PimCopyHostToDevice(PimAllocation, LoadExpr);
+
+        return Copy;
+
+    }
+
+    Expr PimHandleLoadAssoc(Expr ObjId, const Load* LI){
+        
+        Expr PimAllocation;
+
+        Expr LoadExpr = Load::make(LI->type, LI->name, LI->index, LI->image, LI->param, LI->predicate, LI->alignment);
+        if(LoadToPimIDMap.find(LI) != LoadToPimIDMap.end()){
+            PimAllocation = LoadToPimIDMap[LI];
+        } else {
+            PimAllocation = PIMAllocateAssociated(ObjId, LoadExpr);
+        }
+
+        Expr Copy = PimCopyHostToDevice(PimAllocation, LoadExpr);
+
+        return Copy;
+
+    }
+
+    std::vector<Expr> PimHandleLoad(std::vector<const Load*> Loads){
+        std::vector<Expr> Allocations;
+
+        if(Loads.size() > 0){
+            Expr Alloc0 = PimHandleLoad(Loads[0]);
+            Allocations.push_back(Alloc0);
+
+            for(int i = 1; i < Loads.size(); i++){
+                Allocations.push_back(
+                        PimHandleLoadAssoc(Alloc0,Loads[i])
+                        );
+            }
+
+        }
+
+
+        return Allocations;
+        
     }
 
 }  // namespace Internal
