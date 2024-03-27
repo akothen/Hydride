@@ -526,6 +526,7 @@ SOURCE_FILES = \
   HydrideCodeGen.cpp \
   DistributeVec.cpp \
   Rosette.cpp \
+  Bitserial.cpp \
   Schedule.cpp \
   ScheduleFunctions.cpp \
   SelectGPUAPI.cpp \
@@ -712,6 +713,7 @@ HEADER_FILES = \
   HydrideCodeGen.h \
   DistributeVec.h \
   Rosette.h \
+  Bitserial.h \
   Schedule.h \
   ScheduleFunctions.h \
   Scope.h \
