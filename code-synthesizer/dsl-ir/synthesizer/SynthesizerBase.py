@@ -22,6 +22,9 @@ DEBUG_LIST = [
     # "vmin_s8",
     # "vqadd_s16",
     "vzip_u16",
+    "v8acc80_mul32",
+    "srs",
+    "v8int32_add8",
     # "vmovl_s8",
     # "vqmovn_u32",
     # "vdotq_u32",
@@ -1170,7 +1173,7 @@ class SynthesizerBase:
             score += int(([ctx.supports_input_size(input_size)
                          for input_size in self.input_sizes].count(True)))
             score += int(ctx.supports_output_size(self.output_slice_length))
-            score += int(ctx.supports_output_precision(self.spec.output_precision))
+            # score += int(ctx.supports_output_precision(self.spec.output_precision))
             score += int(([ctx.supports_input_precision(input_precision)
                          for input_precision in self.spec.input_precision]).count(True) != 0)
             # score -= int(max(self.input_sizes + [self.output_slice_length]) > (ctx.out_vectsize))
@@ -1179,15 +1182,15 @@ class SynthesizerBase:
             # For targets which prefer distributing computation
             # over a base vector size
             if self.BASE_VECT_SIZE != None:
-                score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 2
+                # score += int(ctx.supports_output_size(self.BASE_VECT_SIZE)) * 2
                 score += int(([ctx.supports_input_size(input_size)
                              for input_size in [self.MAX_BW_SIZE]].count(True)))
 
             if not self.is_shuffle:
                 # In the case where we have inputs of varying sizes, we want also want
                 unique_input_sizes = self.input_sizes
-                score += min(int([ctx.supports_output_size(isize)
-                             for isize in unique_input_sizes].count(True)), 3)  # * 2
+                # score += min(int([ctx.supports_output_size(isize)
+                #             for isize in unique_input_sizes].count(True)), 3)  # * 2
 
             # for saturation we want
             spec_ops = self.spec.get_semantics_ops_list()

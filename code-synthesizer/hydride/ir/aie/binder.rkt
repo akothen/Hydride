@@ -89,6 +89,18 @@
 	[ (v16int32_add16_dsl v0 v1)
 		(v16int32_add16_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env))
 	]
+	[ (v8int32_add8_dsl v0 v1)
+		(v8int32_add8_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env))
+	]
+	[ (v16int32_sub16_dsl v0 v1)
+		(v16int32_sub16_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env))
+	]
+	[ (v8acc80_mul32_dsl v0 v1)
+		(v8acc80_mul32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env))
+	]
+	[ (srs_dsl v0)
+		(srs_dsl (aie:bind-expr v0 env))
+	]
 	[v v]
  )
 )

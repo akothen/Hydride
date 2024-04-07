@@ -21,7 +21,7 @@ reg_0
 )
 
 (clear-vc!)
-(define synth-res (synthesize-mlir-expr mlir-expr id-map 2 64 'z3 #t #f  ""  ""  "X86"))
+(define synth-res (synthesize-mlir-expr mlir-expr id-map 2 64 'z3 #t #f  ""  ""  "hvx"))
 (dump-synth-res-with-typeinfo synth-res id-map)
 ; Translate synthesized hydride-expression into LLVM-IR
 (compile-to-llvm synth-res id-map "hydride.node.benchmark.0" "benchmark")

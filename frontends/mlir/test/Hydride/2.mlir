@@ -1,18 +1,20 @@
-module {
-  func.func @contraction_matmul(%arg0: memref<1584x1584xi32>, %arg1: memref<1584x1584xi32>, %arg2: memref<1584x1584xi32>) {
-    affine.for %arg3 = 0 to 1584 {
-      affine.for %arg4 = 0 to 1584 {
-        affine.for %arg5 = 0 to 1584 {
-          %0 = affine.load %arg0[%arg3, %arg5] : memref<1584x1584xi32>
-          %1 = affine.load %arg1[%arg5, %arg4] : memref<1584x1584xi32>
-          %2 = affine.load %arg2[%arg3, %arg4] : memref<1584x1584xi32>
-          %3 = arith.muli %0, %1 : i32
-          %4 = arith.addi %2, %3 : i32
-          affine.store %4, %arg2[%arg3, %arg4] : memref<1584x1584xi32>
+func.func @conv2d (%A: memref<18x288xi8>, %B: memref<48xi8>, %C: memref<16x256xi8>) {
+    affine.for %arg3 = 0 to 16 {
+        affine.for %arg4 = 0 to 256 {
+            //3x3 stencil 
+            affine.for %arg5 = 0 to 3 {
+                affine.for %arg6 = 0 to 3 {   
+                    //Load the output point
+                    %ci = affine.load %C[%arg3, %arg4] : memref<16x256xi8>
+                     %a11 = affine.load %A[%arg3+%arg5, %arg4+%arg6] : memref<18x288xi8>
+                     %b11 = affine.load %B[16*%arg5 + 2*%arg6] : memref<48xi8>
+                     %p11 = arith.muli %a11, %b11 : i8
+                     %c11 = arith.addi %ci, %p11 : i8
+                     //Store accumulated sum
+                     affine.store %c11, %C[%arg3, %arg4] : memref<16x256xi8>
+                }
+            }
         }
-      }
     }
     return
-  }
 }
-

@@ -33,3 +33,27 @@
   )
   dst
 )
+
+;; v8acc80_mul 	( 	v8int32  	a,
+;; 		v8int32  	b 
+;; 	) 		
+;; 
+;; Lane by lane 32-bit real multiply.
+
+(define (v8acc80_mul xbuff ybuff)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 8 1))])
+        (define %low1 (* 32 %i))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff1 (sign-extend (extract %high1 %low1 xbuff) (bitvector 48)))
+        (define %low2 (* 32 %i))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_xbuff2 (sign-extend (extract %high2 %low2 ybuff) (bitvector 48)))
+        (define %o (zero-extend (bvmul %ext_xbuff1 %ext_xbuff2) (bitvector 80)))
+        %o
+      )
+    )
+  )
+  dst 
+)

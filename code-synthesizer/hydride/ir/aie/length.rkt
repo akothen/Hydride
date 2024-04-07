@@ -55,6 +55,34 @@
 )
 
 	]
+	[(v8int32_add8_dsl v0 v1)
+		(cond 
+		[(and ) 256]
+		[else (error "Unable to infer length for v8int32_add8: "  prog)]
+)
+
+	]
+	[(v16int32_sub16_dsl v0 v1)
+		(cond 
+		[(and ) 512]
+		[else (error "Unable to infer length for v16int32_sub16: "  prog)]
+)
+
+	]
+	[(v8acc80_mul32_dsl v0 v1)
+		(cond 
+		[(and ) 640]
+		[else (error "Unable to infer length for v8acc80_mul32: "  prog)]
+)
+
+	]
+	[(srs_dsl v0)
+		(cond 
+		[(and ) 256]
+		[else (error "Unable to infer length for srs: "  prog)]
+)
+
+	]
  )
 )
 ;; ================================================================================

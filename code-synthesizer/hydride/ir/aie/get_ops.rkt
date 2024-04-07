@@ -44,7 +44,7 @@
 		(remove-duplicates (append (list  'cond) (aie:get-bv-ops v0)))
 	]
 		[(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
-		(remove-duplicates (append (list  'bitvector->integer 'if) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v4)))
+		(remove-duplicates (append (list  'if 'bitvector->integer) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v4)))
 	]
 		[(llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
 		(remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))
@@ -73,6 +73,42 @@
  
   (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for v16int32_add16")]
+)
+
+	]
+	[(v8int32_add8_dsl v0 v1)
+		(cond 
+		[(and ); v8int32_add8
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for v8int32_add8")]
+)
+
+	]
+	[(v16int32_sub16_dsl v0 v1)
+		(cond 
+		[(and ); v16int32_sub16
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for v16int32_sub16")]
+)
+
+	]
+	[(v8acc80_mul32_dsl v0 v1)
+		(cond 
+		[(and ); v8acc80_mul32
+ 
+  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for v8acc80_mul32")]
+)
+
+	]
+	[(srs_dsl v0)
+		(cond 
+		[(and ); srs
+ 
+  (remove-duplicates (append (list  ) (aie:get-bv-ops v0)))]
+		[else (error "Unable to get ops  for srs")]
 )
 
 	]

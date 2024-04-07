@@ -72,6 +72,42 @@
 )
 
 	]
+	[(v8int32_add8_dsl v0 v1)
+		(cond 
+		[(and ); v8int32_add8
+ 
+  (list v0 v1)]
+		[else (error "Unable to get ops  for v8int32_add8")]
+)
+
+	]
+	[(v16int32_sub16_dsl v0 v1)
+		(cond 
+		[(and ); v16int32_sub16
+ 
+  (list v0 v1)]
+		[else (error "Unable to get ops  for v16int32_sub16")]
+)
+
+	]
+	[(v8acc80_mul32_dsl v0 v1)
+		(cond 
+		[(and ); v8acc80_mul32
+ 
+  (list v0 v1)]
+		[else (error "Unable to get ops  for v8acc80_mul32")]
+)
+
+	]
+	[(srs_dsl v0)
+		(cond 
+		[(and ); srs
+ 
+  (list v0)]
+		[else (error "Unable to get ops  for srs")]
+)
+
+	]
  )
 )
 ;; ================================================================================

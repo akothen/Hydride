@@ -75,6 +75,38 @@
 )
 
 	]
+	[(v8int32_add8_dsl v0 v1)
+		(cond 
+		[(and ) 
+   (append (list  "v8int32_add8") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for v8int32_add8")]
+)
+
+	]
+	[(v16int32_sub16_dsl v0 v1)
+		(cond 
+		[(and ) 
+   (append (list  "v16int32_sub16") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for v16int32_sub16")]
+)
+
+	]
+	[(v8acc80_mul32_dsl v0 v1)
+		(cond 
+		[(and ) 
+   (append (list  "v8acc80_mul32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for v8acc80_mul32")]
+)
+
+	]
+	[(srs_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "srs") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for srs")]
+)
+
+	]
  )
 )
 ;; ================================================================================

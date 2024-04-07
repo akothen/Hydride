@@ -98,6 +98,25 @@
 		(define v1-visited (aie:visitor v1 fn))
 		(fn ( v16int32_add16_dsl v0-visited v1-visited ))
 	]
+	[ (v8int32_add8_dsl v0 v1)
+		(define v0-visited (aie:visitor v0 fn))
+		(define v1-visited (aie:visitor v1 fn))
+		(fn ( v8int32_add8_dsl v0-visited v1-visited ))
+	]
+	[ (v16int32_sub16_dsl v0 v1)
+		(define v0-visited (aie:visitor v0 fn))
+		(define v1-visited (aie:visitor v1 fn))
+		(fn ( v16int32_sub16_dsl v0-visited v1-visited ))
+	]
+	[ (v8acc80_mul32_dsl v0 v1)
+		(define v0-visited (aie:visitor v0 fn))
+		(define v1-visited (aie:visitor v1 fn))
+		(fn ( v8acc80_mul32_dsl v0-visited v1-visited ))
+	]
+	[ (srs_dsl v0)
+		(define v0-visited (aie:visitor v0 fn))
+		(fn ( srs_dsl v0-visited ))
+	]
 	[_ (error "Unrecognized expression in visitor")]
  )
 )

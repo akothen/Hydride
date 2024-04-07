@@ -164,6 +164,45 @@
 		[else ( v16int32_add16_dsl v0-folded v1-folded )]
 		)
 	]
+	[ (v8int32_add8_dsl v0 v1)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( v8int32_add8_dsl v0-folded v1-folded ) (vector)))
+]
+		[else ( v8int32_add8_dsl v0-folded v1-folded )]
+		)
+	]
+	[ (v16int32_sub16_dsl v0 v1)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( v16int32_sub16_dsl v0-folded v1-folded ) (vector)))
+]
+		[else ( v16int32_sub16_dsl v0-folded v1-folded )]
+		)
+	]
+	[ (v8acc80_mul32_dsl v0 v1)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( v8acc80_mul32_dsl v0-folded v1-folded ) (vector)))
+]
+		[else ( v8acc80_mul32_dsl v0-folded v1-folded )]
+		)
+	]
+	[ (srs_dsl v0)
+		(define v0-folded (aie:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( srs_dsl v0-folded ) (vector)))
+]
+		[else ( srs_dsl v0-folded )]
+		)
+	]
 	[v (error "Unrecognized expression" v)]
  )
 )

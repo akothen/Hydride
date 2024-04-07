@@ -56,6 +56,34 @@
 )
 
 	]
+	[(v8int32_add8_dsl v0 v1)
+		(cond 
+		[(and ) 32]
+		[else (error "Unable to infer prec for v8int32_add8")]
+)
+
+	]
+	[(v16int32_sub16_dsl v0 v1)
+		(cond 
+		[(and ) 32]
+		[else (error "Unable to infer prec for v16int32_sub16")]
+)
+
+	]
+	[(v8acc80_mul32_dsl v0 v1)
+		(cond 
+		[(and ) 80]
+		[else (error "Unable to infer prec for v8acc80_mul32")]
+)
+
+	]
+	[(srs_dsl v0)
+		(cond 
+		[(and ) 32]
+		[else (error "Unable to infer prec for srs")]
+)
+
+	]
 	
 [
 v

@@ -29,6 +29,10 @@
 ;;                                DSL Cost Model
 ;; ================================================================================
 (define cost_v16int32_add16_dsl 1)
+(define cost_v8int32_add8_dsl 1)
+(define cost_v16int32_sub16_dsl 1)
+(define cost_v8acc80_mul32_dsl 1)
+(define cost_srs_dsl 1)
 
 (define (aie:cost prog)
  (destruct prog
@@ -81,6 +85,18 @@
 	]
 	[ (v16int32_add16_dsl v0 v1)
 		(+ cost_v16int32_add16_dsl (aie:cost  v0)  (aie:cost  v1) )
+	]
+	[ (v8int32_add8_dsl v0 v1)
+		(+ cost_v8int32_add8_dsl (aie:cost  v0)  (aie:cost  v1) )
+	]
+	[ (v16int32_sub16_dsl v0 v1)
+		(+ cost_v16int32_sub16_dsl (aie:cost  v0)  (aie:cost  v1) )
+	]
+	[ (v8acc80_mul32_dsl v0 v1)
+		(+ cost_v8acc80_mul32_dsl (aie:cost  v0)  (aie:cost  v1) )
+	]
+	[ (srs_dsl v0)
+		(+ cost_srs_dsl (aie:cost  v0) )
 	]
 	[v  (error "Unrecognized Term in cost model" v)]
  )

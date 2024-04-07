@@ -110,6 +110,53 @@
 )
 
 	]
+	[(v8int32_add8_dsl v0 v1)
+		(cond 
+		[(and ); v8int32_add8
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (v8int32_add8_dsl expr-0 expr-1 ) num-consumed-1)]
+		[else (error "Unable to extract  for v8int32_add8")]
+)
+
+	]
+	[(v16int32_sub16_dsl v0 v1)
+		(cond 
+		[(and ); v16int32_sub16
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (v16int32_sub16_dsl expr-0 expr-1 ) num-consumed-1)]
+		[else (error "Unable to extract  for v16int32_sub16")]
+)
+
+	]
+	[(v8acc80_mul32_dsl v0 v1)
+		(cond 
+		[(and ); v8acc80_mul32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (v8acc80_mul32_dsl expr-0 expr-1 ) num-consumed-1)]
+		[else (error "Unable to extract  for v8acc80_mul32")]
+)
+
+	]
+	[(srs_dsl v0)
+		(cond 
+		[(and ); srs
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (srs_dsl expr-0 ) num-consumed-0)]
+		[else (error "Unable to extract  for srs")]
+)
+
+	]
  )
 ]
 ) 
