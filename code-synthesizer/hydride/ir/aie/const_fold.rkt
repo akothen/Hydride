@@ -194,13 +194,22 @@
 		[else ( v8acc80_mul32_dsl v0-folded v1-folded )]
 		)
 	]
-	[ (srs_dsl v0)
+	[ (srs_8_80_to_8_32_dsl v0)
 		(define v0-folded (aie:const-fold v0))
 		(cond
 		[(and (lit? v0-folded))
-(lit (aie:interpret ( srs_dsl v0-folded ) (vector)))
+(lit (aie:interpret ( srs_8_80_to_8_32_dsl v0-folded ) (vector)))
 ]
-		[else ( srs_dsl v0-folded )]
+		[else ( srs_8_80_to_8_32_dsl v0-folded )]
+		)
+	]
+	[ (ups_8_32_to_8_80_dsl v0)
+		(define v0-folded (aie:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( ups_8_32_to_8_80_dsl v0-folded ) (vector)))
+]
+		[else ( ups_8_32_to_8_80_dsl v0-folded )]
 		)
 	]
 	[v (error "Unrecognized expression" v)]

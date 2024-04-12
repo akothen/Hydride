@@ -146,14 +146,25 @@
 )
 
 	]
-	[(srs_dsl v0)
+	[(srs_8_80_to_8_32_dsl v0)
 		(cond 
-		[(and ); srs
+		[(and ); srs_8_80_to_8_32
  
  (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
  
- (values (srs_dsl expr-0 ) num-consumed-0)]
-		[else (error "Unable to extract  for srs")]
+ (values (srs_8_80_to_8_32_dsl expr-0 ) num-consumed-0)]
+		[else (error "Unable to extract  for srs_8_80_to_8_32")]
+)
+
+	]
+	[(ups_8_32_to_8_80_dsl v0)
+		(cond 
+		[(and ); ups_8_32_to_8_80
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (ups_8_32_to_8_80_dsl expr-0 ) num-consumed-0)]
+		[else (error "Unable to extract  for ups_8_32_to_8_80")]
 )
 
 	]

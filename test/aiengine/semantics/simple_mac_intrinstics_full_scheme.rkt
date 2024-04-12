@@ -50,7 +50,7 @@
         (define %low2 (* 32 %i))
         (define %high2 (+ %low2 (- 32 1)))
         (define %ext_xbuff2 (sign-extend (extract %high2 %low2 ybuff) (bitvector 48)))
-        (define %o (zero-extend (bvmul %ext_xbuff1 %ext_xbuff2) (bitvector 80)))
+        (define %o (sign-extend (bvmul %ext_xbuff1 %ext_xbuff2) (bitvector 80)))
         %o
       )
     )

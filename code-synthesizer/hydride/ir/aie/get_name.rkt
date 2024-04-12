@@ -99,11 +99,19 @@
 )
 
 	]
-	[(srs_dsl v0)
+	[(srs_8_80_to_8_32_dsl v0)
 		(cond 
 		[(and ) 
-   (append (list  "srs") (aie:get-target-name v0))]
-		[else (error "Unable to get name  for srs")]
+   (append (list  "srs_8_80_to_8_32") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for srs_8_80_to_8_32")]
+)
+
+	]
+	[(ups_8_32_to_8_80_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "ups_8_32_to_8_80") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for ups_8_32_to_8_80")]
 )
 
 	]

@@ -465,10 +465,36 @@
 		(define relavent-indices (filter filter-fn (range 0 1)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog srs_dsl)
+	[(equal? prog srs_8_80_to_8_32_dsl)
 		(define input-precs-dsl (list  80  ))
 		(define input-size-dsl (list   (list 640 ) ) )
-		(define variants (list (srs_dsl (reg (bv 0 8)) ) 
+		(define variants (list (srs_8_80_to_8_32_dsl (reg (bv 0 8)) ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 1)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog ups_8_32_to_8_80_dsl)
+		(define input-precs-dsl (list  32  ))
+		(define input-size-dsl (list   (list 256 ) ) )
+		(define variants (list (ups_8_32_to_8_80_dsl (reg (bv 0 8)) ) 
 ))
 		
             (define (filter-fn i)

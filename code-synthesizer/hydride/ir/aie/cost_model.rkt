@@ -32,7 +32,8 @@
 (define cost_v8int32_add8_dsl 1)
 (define cost_v16int32_sub16_dsl 1)
 (define cost_v8acc80_mul32_dsl 1)
-(define cost_srs_dsl 1)
+(define cost_srs_8_80_to_8_32_dsl 1)
+(define cost_ups_8_32_to_8_80_dsl 1)
 
 (define (aie:cost prog)
  (destruct prog
@@ -95,8 +96,11 @@
 	[ (v8acc80_mul32_dsl v0 v1)
 		(+ cost_v8acc80_mul32_dsl (aie:cost  v0)  (aie:cost  v1) )
 	]
-	[ (srs_dsl v0)
-		(+ cost_srs_dsl (aie:cost  v0) )
+	[ (srs_8_80_to_8_32_dsl v0)
+		(+ cost_srs_8_80_to_8_32_dsl (aie:cost  v0) )
+	]
+	[ (ups_8_32_to_8_80_dsl v0)
+		(+ cost_ups_8_32_to_8_80_dsl (aie:cost  v0) )
 	]
 	[v  (error "Unrecognized Term in cost model" v)]
  )

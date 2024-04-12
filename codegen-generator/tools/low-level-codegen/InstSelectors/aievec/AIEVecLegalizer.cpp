@@ -71,6 +71,111 @@ virtual bool legalize(Instruction *I) {
       } 
     }
     
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.v8int32_add8_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("v8int32_add8_wrapper"); 
+              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.v16int32_sub16_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("v16int32_sub16_wrapper"); 
+              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.v8acc80_mul32_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("v8acc80_mul32_wrapper"); 
+              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.srs_8_80_to_8_32_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("srs_8_80_to_8_32_wrapper"); 
+              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.ups_8_32_to_8_80_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("ups_8_32_to_8_80_wrapper"); 
+              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
 }
     
 

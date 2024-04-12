@@ -99,12 +99,21 @@
 )
 
 	]
-	[(srs_dsl v0)
+	[(srs_8_80_to_8_32_dsl v0)
 		(cond 
-		[(and ); srs
+		[(and ); srs_8_80_to_8_32
  
   (list v0)]
-		[else (error "Unable to get ops  for srs")]
+		[else (error "Unable to get ops  for srs_8_80_to_8_32")]
+)
+
+	]
+	[(ups_8_32_to_8_80_dsl v0)
+		(cond 
+		[(and ); ups_8_32_to_8_80
+ 
+  (list v0)]
+		[else (error "Unable to get ops  for ups_8_32_to_8_80")]
 )
 
 	]

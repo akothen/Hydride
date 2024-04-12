@@ -93,8 +93,11 @@
 	[ (v8acc80_mul32_dsl v0 v1)
 		(v8acc80_mul32 (aie:interpret v0 env) (aie:interpret v1 env))
 	]
-	[ (srs_dsl v0)
-		(srs (aie:interpret v0 env))
+	[ (srs_8_80_to_8_32_dsl v0)
+		(srs_8_80_to_8_32 (aie:interpret v0 env))
+	]
+	[ (ups_8_32_to_8_80_dsl v0)
+		(ups_8_32_to_8_80 (aie:interpret v0 env))
 	]
 	[v (error "Unrecognized Term in Interpreter" v)]
  )

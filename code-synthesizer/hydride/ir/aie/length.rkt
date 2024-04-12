@@ -76,10 +76,17 @@
 )
 
 	]
-	[(srs_dsl v0)
+	[(srs_8_80_to_8_32_dsl v0)
 		(cond 
 		[(and ) 256]
-		[else (error "Unable to infer length for srs: "  prog)]
+		[else (error "Unable to infer length for srs_8_80_to_8_32: "  prog)]
+)
+
+	]
+	[(ups_8_32_to_8_80_dsl v0)
+		(cond 
+		[(and ) 640]
+		[else (error "Unable to infer length for ups_8_32_to_8_80: "  prog)]
 )
 
 	]

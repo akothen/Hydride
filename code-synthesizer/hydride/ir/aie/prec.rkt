@@ -77,10 +77,17 @@
 )
 
 	]
-	[(srs_dsl v0)
+	[(srs_8_80_to_8_32_dsl v0)
 		(cond 
 		[(and ) 32]
-		[else (error "Unable to infer prec for srs")]
+		[else (error "Unable to infer prec for srs_8_80_to_8_32")]
+)
+
+	]
+	[(ups_8_32_to_8_80_dsl v0)
+		(cond 
+		[(and ) 80]
+		[else (error "Unable to infer prec for ups_8_32_to_8_80")]
 )
 
 	]
