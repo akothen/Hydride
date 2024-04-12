@@ -141,7 +141,7 @@ aie_sema = {
             },
 
         },
-        "semantics": ["(define (srs xbuff)","(define dst","(apply concat","(for/list ([%i (reverse (range 0 8 1))])","(define %low1 (* 32 %i))","(define %high1 (+ %low1 (- 32 1)))","(define %o (extract %high1 %low1 xbuff))","%o",")",")",")","dst ",")"]
+        "semantics": ["(define (srs xbuff)","(define dst","(apply concat","(for/list ([%i (reverse (range 0 8 1))])","(define %low1 (* 80 %i))","(define %high1 (+ %low1 (- 32 1)))","(define %o (extract %high1 %low1 xbuff))","%o",")",")",")","dst ",")"]
     },
 
 }

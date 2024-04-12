@@ -702,7 +702,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         debug("Number of possible instructions in Grammar before pruning:",
               len(operation_dsl_insts), operation_dsl_args_list)
-
+        self.ENABLE_PRUNING = False
         if self.ENABLE_PRUNING and not self.is_shuffle:
             # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
             if self.target not in ["hvx", "arm"]:

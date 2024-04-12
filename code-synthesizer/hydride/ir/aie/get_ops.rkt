@@ -44,7 +44,7 @@
 		(remove-duplicates (append (list  'cond) (aie:get-bv-ops v0)))
 	]
 		[(llvm_shuffle_vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
-		(remove-duplicates (append (list  'if 'bitvector->integer) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v4)))
+		(remove-duplicates (append (list  'bitvector->integer 'if) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v4)))
 	]
 		[(llvm-vect-add_dsl v0 v1 num_2 prec_i_o)
 		(remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))
@@ -98,7 +98,7 @@
 		(cond 
 		[(and ); v8acc80_mul32
  
-  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'sign-extend 'bvmul) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for v8acc80_mul32")]
 )
 
