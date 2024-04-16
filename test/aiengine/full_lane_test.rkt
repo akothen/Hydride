@@ -98,7 +98,7 @@
 
   (define dst
     (apply concat
-      (for/list ([%i (reverse (range 0 (* cols rows) 1))])
+      (for/list ([i (reverse (range 0 (* cols rows) 1))])
 
         (define c (modulo i cols))
         (define r (/ i cols))
@@ -112,14 +112,14 @@
         )
 
         (define low_index_r (* 4 (- (- half_num_lanes_buf 1) (modulo r half_num_lanes_buf))))
-        (define high_index_r (+ low_index 3))
-        (define ext_bvxoffsets_r (extract high_index low_index bvzoffsets))
-        (define offset_r (bitvector->integer ext_bvxoffsets))
+        (define high_index_r (+ low_index_r 3))
+        (define ext_bvxoffsets_r (extract high_index_r low_index_r bvzoffsets))
+        (define offset_r (bitvector->integer ext_bvxoffsets_r))
 
         (define low_index_r_1 (* 4 (- (- half_num_lanes_buf 1) (modulo (- r 1) half_num_lanes_buf))))
-        (define high_index_r_1 (+ low_index 3))
-        (define ext_bvxoffsets_r_1 (extract high_index low_index bvzoffsets))
-        (define offset_r_1 (bitvector->integer ext_bvxoffsets))
+        (define high_index_r_1 (+ low_index_r_1 3))
+        (define ext_bvxoffsets_r_1 (extract high_index_r_1 low_index_r_1 bvzoffsets))
+        (define offset_r_1 (bitvector->integer ext_bvxoffsets_r_1))
 
         (define offset_16_16
           (if (eq? (modulo r 2) 0)
@@ -128,19 +128,18 @@
           )
         )
 
-
         ;; idx for z buffer
         (define gen_idx (modulo (+ i (+ (* zstep c) (+ zstart offset_r))) total_num_lanes_buf))
 
         ;; idx for x buffer
-        (define 16_16_idx (modulo (+ i (modulo (+ xstep offset_16_16 xstart) 64)) total_num_lanes_buf))
+        (define 16_16_idx (modulo (+ i (modulo (+ 1 offset_16_16 xstart) 64)) total_num_lanes_buf))
     
-        (define %low1 (* 16 %i))
+        (define %low1 (* 16 i))
         (define %high1 (+ %low1 (- 16 1)))
         (define %ext_xbuff1 (sign-extend (extract %high1 %low1 xbuff) (bitvector 32)))
-        (define %low2 (* 16 %i))
+        (define %low2 (* 16 i))
         (define %high2 (+ %low2 (- 16 1)))
-        (define %ext_xbuff2 (sign-extend (extract %high2 %low2 ybuff) (bitvector 32)))
+        (define %ext_xbuff2 (sign-extend (extract %high2 %low2 zbuff) (bitvector 32)))
         ;; todo each out in loop in acc
         (define %o (zero-extend (bvmul %ext_xbuff1 %ext_xbuff2) (bitvector 48)))
         %o
