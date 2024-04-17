@@ -95,7 +95,6 @@
 
   ;; Select xoffsets or xoffsets_hi
 
-
   (define dst
     (apply concat
       (for/list ([i (reverse (range 0 (* cols rows) 1))])
@@ -132,12 +131,12 @@
         (define gen_idx (modulo (+ i (+ (* zstep c) (+ zstart offset_r))) total_num_lanes_buf))
 
         ;; idx for x buffer
-        (define 16_16_idx (modulo (+ i (modulo (+ 1 offset_16_16 xstart) 64)) total_num_lanes_buf))
+        (define 16_16_idx (modulo (+ i (modulo (+ 2 offset_16_16 xstart) 64)) total_num_lanes_buf))
     
-        (define %low1 (* 16 i))
+        (define %low1 (* 16 16_16_idx))
         (define %high1 (+ %low1 (- 16 1)))
         (define %ext_xbuff1 (sign-extend (extract %high1 %low1 xbuff) (bitvector 32)))
-        (define %low2 (* 16 i))
+        (define %low2 (* 16 gen_idx))
         (define %high2 (+ %low2 (- 16 1)))
         (define %ext_xbuff2 (sign-extend (extract %high2 %low2 zbuff) (bitvector 32)))
         ;; todo each out in loop in acc
@@ -149,9 +148,9 @@
   dst
 )
 
-(define xbuff_16_16 (bv #xa40893f80d007117bae366feb4673c6daad71b6842f0cd8e6f69967856ddf28e 256))
+(define xbuff_64_16 (bv #x80ecdc1b732d594fd8c415b9d8c6ad013bf522b837e25ad7d685aa6d3e6e74342d093619d85a6c4fc5bed844d1743d45ea14e07fcba46210fe00d1a8b525b55627e820b8320480a34df211015380c3517462889d2210d78bf2328e9c4b97ca0e01796933e37761b955f5eaa10a10dd4e3ec6765ab2bb4d51051a79f3cb7f68df 1024))
 (define ybuff_16_16 (bv #xbac1fd5a5c9cc5a5cde2903c0c62085b504c9acdb653e4175430738aebd1d496 256))
 
 (pretty-print (bv #x7 4))
 (pretty-print (bvmul (bv #x7 4) (bv #x7 4)))
-(pretty-print (v16acc48_mul xbuff_16_16 ybuff_16_16))
+(pretty-print (v16acc48_mul xbuff_64_16 ybuff_16_16))
