@@ -1,5 +1,6 @@
 #include "Rosette.h"
 #include "DistributeVec.h"
+#include "Bitserial.h"
 
 #include "Bounds.h"
 #include "CSE.h"
@@ -47,7 +48,8 @@ namespace {
 enum HydrideSupportedArchitecture {
     HVX,
     ARM,
-    X86
+    X86,
+    BitSerial
 };
 
 typedef std::map<std::string, VarEncoding> Encoding;
@@ -1660,6 +1662,10 @@ public:
             // std::cout << "Using ARM Optimizer" <<"\n";
             target_str = "arm";
             break;
+        case HydrideSupportedArchitecture::BitSerial:
+            // std::cout << "Using ARM Optimizer" <<"\n";
+            target_str = "BitSerial";
+            break;
         default:
             break;
         }
@@ -1716,6 +1722,10 @@ public:
                 debug(1) << "Invalid vector size for ARM: " << expr.type().bits() * expr.type().lanes() << "\n";
                 return IRMutator::mutate(expr);
             }
+        } else if (arch == HydrideSupportedArchitecture::BitSerial) {
+            if (expr.type().bits() != 32) {
+                return IRMutator::mutate(expr);
+            }
         }
 
         // If the expression is a dynamic shuffle, ignore it
@@ -1728,8 +1738,9 @@ public:
 
         /* Ignore some qualifying but trivial expressions to reduce noise in the results */
         Expr base_e = expr;
-        while (base_e.node_type() == IRNodeType::Let)
+        while (base_e.node_type() == IRNodeType::Let){
             base_e = base_e.as<Let>()->body;
+        }
 
         // If the expression is just a single ramp instruction, ignore it
         if (base_e.node_type() == IRNodeType::Ramp) {
@@ -1848,7 +1859,7 @@ public:
         std::cout << "Expression after legalizing division operations to target: " << spec_expr << "\n";
 
         std::cout << "Expression before InlineLets: " << spec_expr << "\n";
-        spec_expr = InlineLets().mutate(spec_expr);
+        // spec_expr = InlineLets().mutate(spec_expr);
         std::cout << "Expression after InlineLets: " << spec_expr << "\n";
 
         const char *decompose_let = getenv("HYDRIDE_DECOMPOSE_LET");
@@ -1905,7 +1916,7 @@ public:
         if (!skipped_synthesis) {
 
             std::string fn_name = "hydride.node." + benchmark_name + "." + std::to_string(expr_id);
-            Expr call_expr = ExtractIntoCall().generate_call(fn_name, final_expr, abstractions);
+            Expr call_expr = ExtractIntoCall(arch).generate_call(fn_name, final_expr, abstractions);
 
             std::cout << "Ending synthesis for expr: " << expr_id << "\n";
 
@@ -1915,7 +1926,12 @@ public:
             mutated_exprs.insert(call_expr.get());
             return_expr = call_expr;
 
+
             debug(0) << "\nOptimized expression: " << call_expr << "\n";
+
+            if(arch == HydrideSupportedArchitecture::BitSerial){
+                return return_expr;
+            }
         }
 
         return IRMutator::mutate(return_expr);
@@ -3008,6 +3024,8 @@ private:
     class ExtractIntoCall : public IRMutator {
         using IRMutator::visit;
 
+    HydrideSupportedArchitecture _arch;
+
     public:
         // Populate a std::vector with Halide expressions  correpsonding to load instructions
         // and Variable instructions. The index into the vector is determined by the
@@ -3016,12 +3034,41 @@ private:
 
             std::map<std::string, Expr> let_vars;
             auto RAN = ReplaceAbstractedNodes(abstractions, let_vars);
-            for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
-                const Load *op = bi->first;
-                unsigned idx = bi->second;
-                Expr OriginalLoad = Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment);
-                args[idx] = RAN.mutate(OriginalLoad);
+            
+            if(_arch == HydrideSupportedArchitecture::BitSerial){
+
+                std::vector<const Load*> Loads;
+                std::vector<unsigned> indicies;
+
+                for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
+                    const Load *op = bi->first;
+                    unsigned idx = bi->second;
+
+                    Loads.push_back(op);
+                    indicies.push_back(idx);
+                }
+
+                std::vector<Expr> PimLoads = PimHandleLoads(Loads);
+
+                for(int i =0; i < indicies.size(); i++){
+                    unsigned index = indicies[i];
+                    debug(0) << "Generated Load: "<< PimLoads[i] << "\n";
+                    args[index] = PimLoads[i];
+                }
+
+                    
+            } else {
+
+                for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
+                    const Load *op = bi->first;
+                    unsigned idx = bi->second;
+                    Expr OriginalLoad = Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment);
+                    Expr MutatedLoad = RAN.mutate(OriginalLoad);
+                    args[idx] = MutatedLoad;
+                }
+
             }
+
 
             for (auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++) {
                 // For variables we may have abstracted out the calculation before synthesis,
@@ -3033,17 +3080,100 @@ private:
             }
         }
 
-        Expr generate_call(std::string function_name, const Expr &x, std::map<std::string, Expr> &abstractions) {
-            size_t num_arguments = LoadToRegMap.size() + VariableToRegMap.size();
-            std::vector<Expr> args(num_arguments);
+        Expr bitserial_create_let_allocations(Expr body, std::vector<Expr> &args){
 
-            get_call_args(x, args, abstractions);
+                std::vector<const Load*> OrderedLoads(args.size());
+                for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
+                    const Load *op = bi->first;
+                    unsigned idx = bi->second;
+                    OrderedLoads[idx] = op;
+                }
 
-            std::cout << "Generating Call with type: " << x.type() << " and lanes " << x.type().lanes() << "\n";
-            return Call::make(x.type(), function_name, args, Call::Extern);
+                Expr LetExpr = body;
+
+                // Align everything with allocation 0 name
+                Expr Alloc0_var = get_pim_alloc_variable(0);
+                for(int i = OrderedLoads.size()-1; i >= 0; i--){
+                    if(i == 0){
+                        LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoad(OrderedLoads[i]) , LetExpr);
+                    } else {
+                        LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoadAssoc(Alloc0_var, OrderedLoads[i]) , LetExpr);
+                    }
+                    debug(0) << "Let Expression: "<< LetExpr << "\n";
+
+                }
+
+                return LetExpr;
+
         }
 
-        ExtractIntoCall() {
+        void get_call_args_bitserial(const Expr &x, std::vector<Expr> &args, std::map<std::string, Expr> &abstractions) {
+
+            std::map<std::string, Expr> let_vars;
+            auto RAN = ReplaceAbstractedNodes(abstractions, let_vars);
+
+            std::vector<const Load*> Loads;
+            std::vector<unsigned> indicies;
+
+            for (auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++) {
+                const Load *op = bi->first;
+                unsigned idx = bi->second;
+
+                Loads.push_back(op);
+                indicies.push_back(idx);
+            }
+
+            // Naming convention: Load_{idx} is copied into OperandAlloc_{idx}
+
+
+            // std::vector<Expr> PimLoads = PimHandleLoads(Loads);
+
+            for(int i =0; i < indicies.size(); i++){
+                unsigned index = indicies[i];
+                // debug(0) << "Generated Load: "<< PimLoads[i] << "\n";
+                args[index] =  get_pim_alloc_variable(index);// PimLoads[i];
+            }
+
+
+
+
+
+        }
+
+        std::string get_pim_alloc_name(int idx){
+            return "OperandAlloc_"+ std::to_string(idx);
+        }
+
+        Expr get_pim_alloc_variable(int idx){
+            Type i32Ty = Int(32);
+            return Variable::make(i32Ty, get_pim_alloc_name(idx));
+        }
+
+        Expr generate_call(std::string function_name, const Expr &x, std::map<std::string, Expr> &abstractions) {
+            size_t num_arguments = LoadToRegMap.size() + VariableToRegMap.size();
+                std::vector<Expr> args(num_arguments);
+            if(_arch == HydrideSupportedArchitecture::BitSerial) {
+                get_call_args_bitserial(x, args, abstractions);
+
+                std::cout << "Generating Call with type: " << x.type() << " and lanes " << x.type().lanes() << "\n";
+
+                Expr LetBody = Call::make(x.type(), function_name, args, Call::Extern);
+
+
+                Expr PimAllocated = bitserial_create_let_allocations(LetBody, args);
+
+                return PimAllocated;
+
+            } else {
+                get_call_args(x, args, abstractions);
+
+                std::cout << "Generating Call with type: " << x.type() << " and lanes " << x.type().lanes() << "\n";
+                return Call::make(x.type(), function_name, args, Call::Extern);
+            }
+        }
+
+        ExtractIntoCall(HydrideSupportedArchitecture arch) {
+            _arch = arch;
         }
     };
 
@@ -3469,6 +3599,7 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
     std::string cmd = "racket " + file_name;
 
+    /*
     auto start = std::chrono::system_clock::now();
     int ret_code = system(cmd.c_str());
     auto end = std::chrono::system_clock::now();
@@ -3480,6 +3611,7 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
     std::cout << "Synthesis took " << elapsed_seconds.count() << "seconds ..."
               << "\n";
+              */
 
     SkipNodes.clear();
 
@@ -3647,6 +3779,46 @@ Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const Bas
     return Result;
 }
 
+Stmt hydride_optimize_bitserial(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
+    debug(0) << "Hydride Optimize Bitserial"
+             << "\n";
+    std::set<const IRNode *> DeadStmts;
+    auto FLS = Hydride::FoldLoadStores(DeadStmts);
+    auto folded = FLS.mutate(s);
+    debug(1) << "Printing Folded Stmt:\n";
+    debug(1) << folded << "\n";
+
+    debug(1) << "DEAD STMT SIZE: " << DeadStmts.size() << "\n";
+
+    auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+    debug(1) << "Printing Pruned Stmt:\n";
+    debug(1) << pruned << "\n";
+
+    auto distributed = pruned;
+    debug(0) << "Distributed Stmt:\n";
+    debug(0) << distributed << "\n";
+
+    srand(time(0));
+    int random_seed = rand() % 1024;
+
+    const char *benchmark_name = getenv("HYDRIDE_BENCHMARK");
+    std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
+    auto Result = Hydride::IROptimizer(fvb, HydrideSupportedArchitecture::BitSerial, mutated_exprs, random_seed, name).mutate(distributed);
+
+    /*
+    if (mutated_exprs.size()) {
+        hydride_generate_llvm_bitcode(Target::X86, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
+    } else {
+        debug(0) << "[Warning]: No hydride expressions synthesized (Make sure the input program is vectorized)\n";
+    }*/
+
+    debug(0) << "After Bitserial" << "\n";
+    debug(0) << Result << "\n";
+
+    return Result;
+}
+
+
 Stmt hydride_optimize_arm(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
 
     debug(0) << "Hydride Optimize ARM"
@@ -3709,6 +3881,14 @@ Stmt optimize_x86_instructions_synthesis(Stmt s, const Target &t, FuncValueBound
     s = hydride_optimize_x86(fvb, s, mutated_exprs);
 
     return s;
+}
+
+Stmt optimize_bitserial_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
+
+    std::set<const BaseExprNode *> mutated_exprs;
+    s = hydride_optimize_bitserial(fvb, s, mutated_exprs);
+
+    return common_subexpression_elimination(s);
 }
 
 Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
