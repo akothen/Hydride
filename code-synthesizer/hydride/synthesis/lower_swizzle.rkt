@@ -26,6 +26,12 @@
 (require hydride/ir/arm/binder)
 (require hydride/ir/arm/interpreter)
 
+
+(require hydride/ir/bitsimd/definition)
+(require hydride/ir/bitsimd/visitor)
+(require hydride/ir/bitsimd/binder)
+(require hydride/ir/bitsimd/interpreter)
+
 (require hydride/synthesis/synth_main)
 
 (require hydride/synthesis/iterative_synthesis)
@@ -59,7 +65,10 @@
     (cond
       [(equal? target 'hvx) hvx:visitor]
       [(equal? target 'arm) arm:visitor]
-      [(equal? target 'x86) hydride:visitor]))
+      [(equal? target 'x86) hydride:visitor]
+      [(equal? target 'dram-bitsimd) bitsimd:visitor]
+      )
+    )
   (visitor-functor hydride-expr swizzle-visitor))
 
 ;; Generate LLVM Permute with mask vector. A quick way of
@@ -203,7 +212,10 @@
     (cond
       [(equal? target 'hvx) hvx:interpret]
       [(equal? target 'arm) arm:interpret]
-      [(equal? target 'x86) hydride:interpret]))
+      [(equal? target 'x86) hydride:interpret]
+      [(equal? target 'dram-bitsimd) bitsimd:interpret]
+      
+      ))
 
   (debug-log swizzle-hash)
 
@@ -263,7 +275,10 @@
     (cond
       [(equal? target 'hvx) hvx:bind-expr]
       [(equal? target 'arm) arm:bind-expr]
-      [(equal? target 'x86) bind-expr]))
+      [(equal? target 'x86) bind-expr]
+      [(equal? target 'dram-bitsimd) bitsimd:bind-expr]
+      
+      ))
 
   (define bound-expr
     (destruct lowered-expression

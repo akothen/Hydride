@@ -24,6 +24,11 @@
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/printer)
 
+
+(require hydride/ir/bitsimd/cost_model)
+(require hydride/ir/bitsimd/const_fold)
+(require hydride/ir/bitsimd/printer)
+
 (require hydride/ir/hvx/definition)
 (require hydride/ir/hvx/cost_model)
 (require hydride/ir/hvx/const_fold)
@@ -72,7 +77,11 @@
     (cond
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
-      [(equal? target 'x86) hydride:hydride-printer]))
+      [(equal? target 'x86) hydride:hydride-printer]
+      [(equal? target 'dram-bitsimd) bitsimd:hydride-printer]
+      
+      
+      ))
 
   (displayln sol)
   (displayln (printer-functor sol)))
@@ -99,7 +108,9 @@
   (cond
     [(equal? arch "x86") (set-target-x86)]
     [(equal? arch "arm") (set-target-arm)]
-    [(equal? arch "hvx") (set-target-hvx)])
+    [(equal? arch "hvx") (set-target-hvx)]
+    [(equal? arch "BitSerial") (set-target-bitsimd)]
+    )
 
   (cond
     [(equal? solver 'boolector) (current-solver (boolector))]
@@ -111,9 +122,12 @@
   ;(define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver opt? sym?))
   (define scale-factor
     (cond
-      [(equal? arch "x86") 4]
+      [(equal? arch "x86") 1]
       [(equal? arch "arm") 1]
-      [(equal? arch "hvx") 32]))
+      [(equal? arch "hvx") 1]
+      [(equal? arch "BitSerial") 1]
+      
+      )) ; 32
 
   ;; Halide IR doesn't have operations for saturating cast,
   ;; so it lowers into redudnant opts. Recover saturating casts
@@ -150,13 +164,21 @@
     (cond
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
-      [(equal? target 'x86) hydride:const-fold]))
+      [(equal? target 'x86) hydride:const-fold]
+      [(equal? target 'dram-bitsimd) bitsimd:const-fold]
+      
+      
+      ))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
-      [(equal? target 'x86) hydride:cost]))
+      [(equal? target 'x86) hydride:cost]
+      [(equal? target 'dram-bitsimd) bitsimd:cost]
+      
+      
+      ))
 
   (define folded (const-fold-functor synthesized-sol))
 
@@ -239,7 +261,11 @@
   (cond
     [(equal? arch "x86") (set-target-x86)]
     [(equal? arch "arm") (set-target-arm)]
-    [(equal? arch "hvx") (set-target-hvx)])
+    [(equal? arch "hvx") (set-target-hvx)]
+    [(equal? arch "hvx") (set-target-bitsimd)]
+    
+    
+    )
 
   (cond
     [(equal? solver 'boolector) (current-solver (boolector))]

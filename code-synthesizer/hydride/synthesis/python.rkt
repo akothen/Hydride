@@ -42,6 +42,7 @@
       [(equal? target 'x86) "x86"]
       [(equal? target 'hvx) "hvx"]
       [(equal? target 'arm) "arm"]
+      [(equal? target 'dram-bitsimd) "bitsimd"]
       [(equal? target 'halide) "halide"]
       [else (error "Unsupported target string for grammar generation" target)]))
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))

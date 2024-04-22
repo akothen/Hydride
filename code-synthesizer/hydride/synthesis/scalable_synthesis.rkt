@@ -525,7 +525,11 @@
                (cond
                  [hashed-sol? #t]
                  [(lit? upscaled-mat) #t]
-                 [else (verify-upscaled-equal? upscaled-mat)]))
+                 [else 
+                   (verify-upscaled-equal? upscaled-mat)
+                   ]
+                 
+                 ))
 
              (define use-expr
                (cond
@@ -602,7 +606,8 @@
 
   ;; Set timeout for overall time spent trying the synthesize any one query
   (set-start-time-global-timeout)
-  (set-global-timeout #t)
+  ;; DISABLE TIMEOUT
+  (set-global-timeout #f)
 
   (define solutions
 
@@ -624,12 +629,10 @@
 
       (define NUM_THREADS
         (cond
-          ;;; [(<= d 2) 1]
-          ;;; [else 4]))
           [(<= d 1) 1]
-          [(<= d 2) 2]
-          [(<= d 3) 4]
-          [else 8]))
+          [(<= d 2) 1]
+          [(<= d 3) 1]
+          [else 1]))
 
       (for/list ([s (range 0 steps-per-depth NUM_THREADS)])
 
@@ -670,7 +673,7 @@
                    (clear-vc!)
                    (clear-terms!)
                    (collect-garbage)
-                   ;    (custodian-limit-memory (current-custodian) (* 7000 1024 1024))
+                    ;(custodian-limit-memory (current-custodian) (* 30000 1024 1024))
                    ;; if solution already found in previous
                    ;; iteration, do nothing.
                    (cond

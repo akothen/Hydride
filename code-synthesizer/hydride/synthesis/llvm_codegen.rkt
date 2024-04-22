@@ -18,6 +18,7 @@
 
 (require hydride/ir/hvx/printer)
 (require hydride/ir/arm/printer)
+(require hydride/ir/bitsimd/printer)
 (require hydride/ir/arith/utils)
 
 (provide (all-defined-out))
@@ -44,7 +45,10 @@
     (cond
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
-      [(equal? target 'x86) hydride:hydride-printer]))
+      [(equal? target 'x86) hydride:hydride-printer]
+      [(equal? target 'dram-bitsimd) bitsimd:hydride-printer]
+      
+      ))
   (define hydride-str (printer-functor hydride-expr))
 
   (string-append (apply string-append string-list) "\n" hydride-str "\n"))

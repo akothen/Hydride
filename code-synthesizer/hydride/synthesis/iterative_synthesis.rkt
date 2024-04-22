@@ -298,7 +298,6 @@
 (define (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin
     (debug-log "*********** z3-optimize *****************")
-
     (define synthesis-timeout? #f)
     (define sol?
       (cond
@@ -540,30 +539,50 @@
      ;; in the assertion. We'll verify over all
      ;; lanes
      (define (assert-query-synth-fn env random-idx)
+       (debug-log "Interpreting on single lane")
 
        (define full-interpret-res (interpreter-fn grammar env))
-       (debug-log "Lane Index")
+       (debug-log full-interpret-res)
+       (debug-log "Lane Index for grammar")
        (debug-log random-idx)
 
        (define low (* word-size random-idx))
        (define high (+ low (- word-size 1)))
 
-       (define interpret-res (extract high low full-interpret-res))
 
        (define halide-res (invoke_ref_lane (+ random-idx 0) env))
 
        (debug-log "Spec Produced:")
        (debug-log halide-res)
 
+        (debug-log "Spec Produced (full):")
+        (define full-spec-res (invoke_ref env))
+        (debug-log full-spec-res)
+
        (if synthesize-by-lane
            (debug-log "Synthesize by lane...")
            (debug-log "Synthesize by entire vector size..."))
 
+
+       (debug-log "Full-interpret-res")
+       (debug-log full-interpret-res)
+
+       (debug-log (equal? full-spec-res full-interpret-res) )
        (define condition
          (if synthesize-by-lane
-             (equal? halide-res interpret-res)
-             (equal? (invoke_ref env) full-interpret-res)))
-       (assert condition))
+             (equal? halide-res (extract high low full-interpret-res) )
+             (equal? full-spec-res full-interpret-res)
+             
+             ))
+
+       (println (bvlength full-interpret-res))
+       (println (bvlength full-spec-res))
+
+
+       (debug-log "Condition")
+       (debug-log condition)
+       (assert condition)
+       )
 
      (define start_time (current-seconds))
      (define sol?

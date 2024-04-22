@@ -361,10 +361,16 @@
 		(define relavent-indices (filter filter-fn (range 0 2)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimcpy_v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 ) ) )
-		(define variants (list (dram_pimcpy_v16384_e8__v16384_e8_dsl (reg (bv 0 8)) 131072 131072 0 131072 8 0 ) 
+	[(equal? prog pimMax_v16384_e8__v16384_e8__v16384_e8_dsl)
+		(define input-precs-dsl (list  8 8 16 32 8 32 16  ))
+		(define input-size-dsl (list   (list 131072 131072 ) (list 1024 1024 ) (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) (list 512 512 ) (list 512 512 ) ) )
+		(define variants (list (pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 0 ) 
+(pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 1 0 ) 
+(pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 1 0 ) 
+(pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 1 0 ) 
+(pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 1 0 ) 
+(pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 1 0 ) 
+(pimMax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 1 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -384,13 +390,19 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimmax_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimmax_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 0 ) 
+	[(equal? prog pimXor_v16384_e8__v16384_e8__v16384_e8_dsl)
+		(define input-precs-dsl (list  8 8 32 16 8 16 32  ))
+		(define input-size-dsl (list   (list 131072 131072 ) (list 512 512 ) (list 512 512 ) (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) ) )
+		(define variants (list (pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+(pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 0 ) 
+(pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 0 ) 
+(pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 0 ) 
+(pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 0 ) 
+(pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 0 ) 
+(pimXor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -410,170 +422,14 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimeq_v16384_e1__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimeq_v16384_e1__v16384_e8__v16384_e8_dsl (lit (bv #b0 (bitvector 1))) (lit (bv #b1 (bitvector 1))) (reg (bv 0 8)) (reg (bv 1 8)) 16384 16384 0 16384 1 8 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimvar_rshift_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimvar_rshift_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimor_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimnot_v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 ) ) )
-		(define variants (list (dram_pimnot_v16384_e8__v16384_e8_dsl (reg (bv 0 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimvar_lshift_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimvar_lshift_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimbitcount_v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 ) ) )
-		(define variants (list (dram_pimbitcount_v16384_e8__v16384_e8_dsl (reg (bv 0 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimsearch_v16384_e1__v16384_e8__v1_e8_dsl)
-		(define input-precs-dsl (list  8 8  ))
-		(define input-size-dsl (list   (list 131072 8 ) (list 131072 8 ) ) )
-		(define variants (list (dram_pimsearch_v16384_e1__v16384_e8__v1_e8_dsl (lit (bv #b1 (bitvector 1))) (lit (bv #b0 (bitvector 1))) (reg (bv 0 8)) (reg (bv 1 8)) 16384 16384 0 16384 1 8 0 8 0 ) 
-(dram_pimsearch_v16384_e1__v16384_e8__v1_e8_dsl (lit (bv #b1 (bitvector 1))) (lit (bv #b0 (bitvector 1))) (reg (bv 0 8)) (reg (bv 1 8)) 16384 16384 0 16384 1 8 0 8 0 ) 
+	[(equal? prog pimDiv_v512_e16__v512_e16__v512_e16_dsl)
+		(define input-precs-dsl (list  16 16  ))
+		(define input-size-dsl (list   (list 512 512 ) (list 1024 1024 ) ) )
+		(define variants (list (pimDiv_v512_e16__v512_e16__v512_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 1 1 32 1 32 0 ) 
+(pimDiv_v512_e16__v512_e16__v512_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 1 1 32 1 32 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -596,10 +452,16 @@
 		(define relavent-indices (filter filter-fn (range 0 2)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimxor_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimxor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+	[(equal? prog pimEQ_v512_e8__v512_e8__v512_e8_dsl)
+		(define input-precs-dsl (list  8 8 8 32 16 32 16  ))
+		(define input-size-dsl (list   (list 512 512 ) (list 1024 1024 ) (list 131072 131072 ) (list 512 512 ) (list 512 512 ) (list 1024 1024 ) (list 1024 1024 ) ) )
+		(define variants (list (pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x00000001 (bitvector 8))) (lit (bv #x00000000 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 0 ) 
+(pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x00000001 (bitvector 8))) (lit (bv #x00000000 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 0 ) 
+(pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x00000001 (bitvector 8))) (lit (bv #x00000000 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+(pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x00000000000000000000000000000001 (bitvector 32))) (lit (bv #x00000000000000000000000000000000 (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 0 ) 
+(pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x0000000000000001 (bitvector 16))) (lit (bv #x0000000000000000 (bitvector 16))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 0 ) 
+(pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x00000000000000000000000000000001 (bitvector 32))) (lit (bv #x00000000000000000000000000000000 (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 0 ) 
+(pimEQ_v512_e8__v512_e8__v512_e8_dsl (lit (bv #x0000000000000001 (bitvector 16))) (lit (bv #x0000000000000000 (bitvector 16))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -619,13 +481,19 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimabs_v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 ) ) )
-		(define variants (list (dram_pimabs_v16384_e8__v16384_e8_dsl (reg (bv 0 8)) 131072 131072 0 131072 8 0 ) 
+	[(equal? prog pimMin_v512_e8__v512_e8__v512_e8_dsl)
+		(define input-precs-dsl (list  8 32 32 8 16 16 8  ))
+		(define input-size-dsl (list   (list 512 512 ) (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 131072 131072 ) ) )
+		(define variants (list (pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 1 0 ) 
+(pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 1 0 ) 
+(pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 1 0 ) 
+(pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 1 0 ) 
+(pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 1 0 ) 
+(pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 1 0 ) 
+(pimMin_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -645,13 +513,15 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimpopcount_v1_e16__v16384_e1_dsl)
-		(define input-precs-dsl (list  16384  ))
-		(define input-size-dsl (list   (list 16384 ) ) )
-		(define variants (list (dram_pimpopcount_v1_e16__v16384_e1_dsl (reg (bv 0 8)) 16384 16384 0 16384 1 16 0 -1 0 0 0 ) 
+	[(equal? prog pimDiv_v512_e8__v512_e8__v512_e8_dsl)
+		(define input-precs-dsl (list  8 8 8  ))
+		(define input-size-dsl (list   (list 512 512 ) (list 1024 1024 ) (list 131072 131072 ) ) )
+		(define variants (list (pimDiv_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 1 1 16 1 16 0 ) 
+(pimDiv_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 1 1 16 1 16 0 ) 
+(pimDiv_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 1 16 1 16 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -671,14 +541,110 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 3)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimlt_v16384_e1__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8 8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) (list 131072 131072 ) ) )
-		(define variants (list (dram_pimlt_v16384_e1__v16384_e8__v16384_e8_dsl (lit (bv #b0 (bitvector 1))) (lit (bv #b1 (bitvector 1))) (reg (bv 0 8)) (reg (bv 1 8)) 16384 16384 0 16384 1 1 8 8 0 ) 
-(dram_pimlt_v16384_e1__v16384_e8__v16384_e8_dsl (lit (bv #b0 (bitvector 1))) (lit (bv #b1 (bitvector 1))) (reg (bv 0 8)) (reg (bv 1 8)) 16384 16384 0 16384 1 1 8 8 0 ) 
+	[(equal? prog pimOr_v1024_e32__v1024_e32__v1024_e32_dsl)
+		(define input-precs-dsl (list  32 32 8 16 16 8 8  ))
+		(define input-size-dsl (list   (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 512 512 ) (list 131072 131072 ) ) )
+		(define variants (list (pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 0 ) 
+(pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 0 ) 
+(pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 0 ) 
+(pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 0 ) 
+(pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 0 ) 
+(pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 0 ) 
+(pimOr_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 7)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog pimSub_v512_e8__v512_e8__v512_e8_dsl)
+		(define input-precs-dsl (list  8 16 8 16 32 8 32  ))
+		(define input-size-dsl (list   (list 512 512 ) (list 512 512 ) (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) (list 131072 131072 ) (list 1024 1024 ) ) )
+		(define variants (list (pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 -1 0 ) 
+(pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 -1 0 ) 
+(pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 -1 0 ) 
+(pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 -1 0 ) 
+(pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 -1 0 ) 
+(pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 -1 0 ) 
+(pimSub_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 -1 0 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 7)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog pimMul_v1024_e16__v1024_e16__v1024_e16_dsl)
+		(define input-precs-dsl (list  16 32 32 8 16 8 8  ))
+		(define input-size-dsl (list   (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) (list 512 512 ) (list 131072 131072 ) ) )
+		(define variants (list (pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 1 32 1 0 ) 
+(pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 1 64 1 0 ) 
+(pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 1 64 1 0 ) 
+(pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 1 16 1 0 ) 
+(pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 1 32 1 0 ) 
+(pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 1 16 1 0 ) 
+(pimMul_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 16 1 0 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 7)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog pimDiv_v1024_e32__v1024_e32__v1024_e32_dsl)
+		(define input-precs-dsl (list  32 32  ))
+		(define input-size-dsl (list   (list 1024 1024 ) (list 512 512 ) ) )
+		(define variants (list (pimDiv_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 1 1 64 1 64 0 ) 
+(pimDiv_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 1 1 64 1 64 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -701,10 +667,23 @@
 		(define relavent-indices (filter filter-fn (range 0 2)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimnand_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimnand_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+	[(equal? prog pimGT_v1024_e8__v1024_e8__v1024_e8_dsl)
+		(define input-precs-dsl (list  8 32 16 8 8 16 8 32 8 8 16 32 16 32  ))
+		(define input-size-dsl (list   (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) (list 512 512 ) (list 131072 131072 ) (list 512 512 ) (list 512 512 ) (list 1024 1024 ) (list 131072 131072 ) (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 512 512 ) ) )
+		(define variants (list (pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000 (bitvector 8))) (lit (bv #x00000001 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000000000000000000000000000 (bitvector 32))) (lit (bv #x00000000000000000000000000000001 (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x0000000000000000 (bitvector 16))) (lit (bv #x0000000000000001 (bitvector 16))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000 (bitvector 8))) (lit (bv #x00000001 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000 (bitvector 8))) (lit (bv #x00000001 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x0000000000000000 (bitvector 16))) (lit (bv #x0000000000000001 (bitvector 16))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000 (bitvector 8))) (lit (bv #x00000001 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000000000000000000000000000 (bitvector 32))) (lit (bv #x00000000000000000000000000000001 (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000 (bitvector 8))) (lit (bv #x00000001 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000 (bitvector 8))) (lit (bv #x00000001 (bitvector 8))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x0000000000000000 (bitvector 16))) (lit (bv #x0000000000000001 (bitvector 16))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000000000000000000000000000 (bitvector 32))) (lit (bv #x00000000000000000000000000000001 (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x0000000000000000 (bitvector 16))) (lit (bv #x0000000000000001 (bitvector 16))) (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 1 0 ) 
+(pimGT_v1024_e8__v1024_e8__v1024_e8_dsl (lit (bv #x00000000000000000000000000000000 (bitvector 32))) (lit (bv #x00000000000000000000000000000001 (bitvector 32))) (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 1 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -724,13 +703,19 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 14)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimdiv_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimdiv_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 1 16 1 16 0 ) 
+	[(equal? prog pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl)
+		(define input-precs-dsl (list  16 16 8 32 8 8 32  ))
+		(define input-size-dsl (list   (list 1024 1024 ) (list 512 512 ) (list 131072 131072 ) (list 1024 1024 ) (list 512 512 ) (list 1024 1024 ) (list 512 512 ) ) )
+		(define variants (list (pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 -1 0 ) 
+(pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 -1 0 ) 
+(pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 -1 0 ) 
+(pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 -1 0 ) 
+(pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 -1 0 ) 
+(pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 -1 0 ) 
+(pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 -1 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -750,14 +735,19 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_vadd_v16384_e8_dsl)
-		(define input-precs-dsl (list  8 8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) (list 131072 131072 ) ) )
-		(define variants (list (dram_vadd_v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 16384 8 -1 0 ) 
-(dram_vadd_v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 -1 0 ) 
+	[(equal? prog pimBroadCast_v512_e8__v8_e8_dsl)
+		(define input-precs-dsl (list  8 16 32 32 16 8 8  ))
+		(define input-size-dsl (list   (list 8 ) (list 16 ) (list 32 ) (list 512 ) (list 512 ) (list 8 ) (list 8 ) ) )
+		(define variants (list (pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 8 8 0 512 8 0 0 ) 
+(pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 16 16 0 1024 16 0 0 ) 
+(pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 32 32 0 1024 32 0 0 ) 
+(pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 512 512 0 512 32 0 0 ) 
+(pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 512 512 0 512 16 0 0 ) 
+(pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 8 8 0 131072 8 0 0 ) 
+(pimBroadCast_v512_e8__v8_e8_dsl (reg (bv 0 8)) 8 8 0 1024 8 0 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -777,13 +767,19 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 2)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog dram_pimxnor_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimxnor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+	[(equal? prog pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl)
+		(define input-precs-dsl (list  8 16 8 16 32 8 32  ))
+		(define input-size-dsl (list   (list 131072 131072 ) (list 512 512 ) (list 512 512 ) (list 1024 1024 ) (list 1024 1024 ) (list 1024 1024 ) (list 512 512 ) ) )
+		(define variants (list (pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
+(pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 16 0 ) 
+(pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 8 0 ) 
+(pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 16 0 ) 
+(pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 0 ) 
+(pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 8 0 ) 
+(pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 512 512 0 512 32 0 ) 
 ))
 		
             (define (filter-fn i)
@@ -803,267 +799,7 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimand_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimand_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimmin_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimmin_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimmul_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimmul_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 1 16 1 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimif_else_v16384_e8__v16384_e8__v16384_e8__v16384_e1_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 16384 131072 131072 ) ) )
-		(define variants (list (dram_pimif_else_v16384_e8__v16384_e8__v16384_e8__v16384_e1_dsl (reg (bv 0 8)) (lit (bv #b1 (bitvector 1))) (reg (bv 1 8)) (reg (bv 2 8)) 131072 131072 0 131072 8 1 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimsub_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimsub_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 -1 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimrem_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimrem_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimReLU_v16384_e8__v16384_e8__v1_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 ) ) )
-		(define variants (list (dram_pimReLU_v16384_e8__v16384_e8__v1_e8_dsl (lit (bv #x00000000 (bitvector 8))) (reg (bv 0 8)) (lit (bv #x00000000 (bitvector 8))) 131072 131072 0 131072 8 1 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimredsum_v1_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 ) ) )
-		(define variants (list (dram_pimredsum_v1_e8__v16384_e8_dsl (reg (bv 0 8)) 8 8 0 131072 8 0 -1 0 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimbrdcst_v16384_e8__v1_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 8 ) ) )
-		(define variants (list (dram_pimbrdcst_v16384_e8__v1_e8_dsl (reg (bv 0 8)) 8 8 0 131072 8 0 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
-		(for/list ([i relavent-indices]) (list-ref variants i))
-	]
-	[(equal? prog dram_pimnor_v16384_e8__v16384_e8__v16384_e8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 131072 131072 ) ) )
-		(define variants (list (dram_pimnor_v16384_e8__v16384_e8__v16384_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 131072 131072 0 131072 8 0 ) 
-))
-		
-            (define (filter-fn i)
-              (define length-condition #f)
-              (define prec-condition #f)
-
-              (for/list ([l input-sizes])
-                        (for/list ([l_ (list-ref input-size-dsl i)])
-                                  (cond [(equal? l l_) (set! length-condition #t)] )
-                                  )
-                        )
-
-              (for/list ([p input-precs])
-                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
-                        )
-
-              (and length-condition prec-condition)
-              )
-        
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 7)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
  )
