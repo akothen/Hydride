@@ -3095,9 +3095,9 @@ private:
                 Expr Alloc0_var = get_pim_alloc_variable(0);
                 for(int i = OrderedLoads.size()-1; i >= 0; i--){
                     if(i == 0){
-                        LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoad(OrderedLoads[i]) , LetExpr);
+                        LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoadWrapper(OrderedLoads[i]) , LetExpr);
                     } else {
-                        LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoadAssoc(Alloc0_var, OrderedLoads[i]) , LetExpr);
+                        LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoadAssocWrapper(Alloc0_var, OrderedLoads[i]) , LetExpr);
                     }
                     debug(0) << "Let Expression: "<< LetExpr << "\n";
 

@@ -15,7 +15,9 @@ namespace Halide {
 namespace Internal {
 
     const std::string pimAllocName = "pimAlloc";
+    const std::string pimAllocWrapperName = "pimAllocWrapper";
     const std::string pimAllocAssocName = "pimAllocAssociated";
+    const std::string pimAllocAssocWrapperName = "pimAllocAssociatedWrapper";
     const std::string pimCopyHostToDeviceName = "pimCopyHostToDevice";
     const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
     const std::string pimBroadCastName = "pimBroadCast";
