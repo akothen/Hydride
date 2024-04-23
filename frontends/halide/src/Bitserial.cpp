@@ -120,13 +120,14 @@ namespace Internal {
 
             int AllocationTy = PIM_ALLOC_V1;
             int  PimDataType = PIM_INT32;
-            args.push_back(E);
             args.push_back(AllocationTy);
             args.push_back(lanes);
             args.push_back(bits);
             args.push_back(PimDataType);
+            args.push_back(E);
+            debug(0)  << E << " Argument type: "<< E.type() << "\n";
 
-            Allocation = Call::make(i32Ty, pimAllocWrapperName, args, Call::Extern);
+            Allocation = Call::make(E.type(), pimAllocWrapperName, args, Call::Extern);
 
             
             LoadToPimIDMap[LI] = Allocation.as<Call>();
@@ -144,8 +145,9 @@ namespace Internal {
             args.push_back(lanes);
             args.push_back(bits);
             args.push_back(PimDataType);
+            args.push_back(SI->value);
 
-            Allocation = Call::make(i32Ty, pimAllocWrapperName, args, Call::Extern);
+            Allocation = Call::make(SI->value.type(), pimAllocWrapperName, args, Call::Extern);
             StoreToPimIDMap[SI] = Allocation.as<Call>();
 
         }
@@ -166,14 +168,14 @@ namespace Internal {
 
             int AllocationTy = PIM_ALLOC_V1;
             int  PimDataType = PIM_INT32;
-            args.push_back(E);
             args.push_back(AllocationTy);
             args.push_back(lanes);
             args.push_back(bits);
             args.push_back(ObjId);
             args.push_back(PimDataType);
+            args.push_back(E);
 
-            Allocation = Call::make(i32Ty, pimAllocAssocWrapperName, args, Call::Extern);
+            Allocation = Call::make(E.type(), pimAllocAssocWrapperName, args, Call::Extern);
             
             LoadToPimIDMap[LI] = Allocation.as<Call>();
         }

@@ -3092,7 +3092,7 @@ private:
                 Expr LetExpr = body;
 
                 // Align everything with allocation 0 name
-                Expr Alloc0_var = get_pim_alloc_variable(0);
+                Expr Alloc0_var = get_pim_alloc_variable_typed(0, OrderedLoads[0]->type);
                 for(int i = OrderedLoads.size()-1; i >= 0; i--){
                     if(i == 0){
                         LetExpr = Let::make(get_pim_alloc_name(i),PimHandleLoadWrapper(OrderedLoads[i]) , LetExpr);
@@ -3131,7 +3131,8 @@ private:
             for(int i =0; i < indicies.size(); i++){
                 unsigned index = indicies[i];
                 // debug(0) << "Generated Load: "<< PimLoads[i] << "\n";
-                args[index] =  get_pim_alloc_variable(index);// PimLoads[i];
+                args[index] =  get_pim_alloc_variable_typed(index, Loads[i]->type);// PimLoads[i];
+                // args[index] =   Loads[i];
             }
 
 
@@ -3147,6 +3148,10 @@ private:
         Expr get_pim_alloc_variable(int idx){
             Type i32Ty = Int(32);
             return Variable::make(i32Ty, get_pim_alloc_name(idx));
+        }
+
+        Expr get_pim_alloc_variable_typed(int idx, Type t){
+            return Variable::make(t, get_pim_alloc_name(idx));
         }
 
         Expr generate_call(std::string function_name, const Expr &x, std::map<std::string, Expr> &abstractions) {
@@ -3599,7 +3604,6 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
     std::string cmd = "racket " + file_name;
 
-    /*
     auto start = std::chrono::system_clock::now();
     int ret_code = system(cmd.c_str());
     auto end = std::chrono::system_clock::now();
@@ -3611,7 +3615,6 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
     std::cout << "Synthesis took " << elapsed_seconds.count() << "seconds ..."
               << "\n";
-              */
 
     SkipNodes.clear();
 
