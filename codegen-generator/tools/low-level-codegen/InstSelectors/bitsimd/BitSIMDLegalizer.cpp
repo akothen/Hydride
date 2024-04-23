@@ -63,7 +63,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -94,7 +95,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -125,7 +127,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -156,7 +159,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -187,7 +191,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -218,7 +223,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -249,7 +255,8 @@
             std::string base_name = "pimMax";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -293,7 +300,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -323,7 +331,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -353,7 +362,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -383,7 +393,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -413,7 +424,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -443,7 +455,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -473,7 +486,8 @@
             std::string base_name = "pimXor";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -517,7 +531,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -552,7 +567,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -598,7 +614,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -630,7 +647,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -662,7 +680,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -694,7 +713,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -726,7 +746,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -758,7 +779,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -790,7 +812,8 @@
             std::string base_name = "pimEQ";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -835,7 +858,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -866,7 +890,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -897,7 +922,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -928,7 +954,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -959,7 +986,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -990,7 +1018,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1021,7 +1050,8 @@
             std::string base_name = "pimMin";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1066,7 +1096,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1101,7 +1132,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1136,7 +1168,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1180,7 +1213,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1210,7 +1244,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1240,7 +1275,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1270,7 +1306,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1300,7 +1337,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1330,7 +1368,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1360,7 +1399,8 @@
             std::string base_name = "pimOr";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1405,7 +1445,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1436,7 +1477,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1467,7 +1509,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1498,7 +1541,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1529,7 +1573,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1560,7 +1605,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1591,7 +1637,8 @@
             std::string base_name = "pimSub";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1638,7 +1685,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1671,7 +1719,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1704,7 +1753,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1737,7 +1787,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1770,7 +1821,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1803,7 +1855,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1836,7 +1889,8 @@
             std::string base_name = "pimMul";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1880,7 +1934,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1915,7 +1970,8 @@
             std::string base_name = "pimDiv";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -1969,7 +2025,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2002,7 +2059,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2035,7 +2093,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2068,7 +2127,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2101,7 +2161,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2134,7 +2195,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2167,7 +2229,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2200,7 +2263,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2233,7 +2297,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2266,7 +2331,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2299,7 +2365,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2332,7 +2399,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2365,7 +2433,8 @@
             std::string base_name = "pimGT";
             std::vector<int> Permutation = {-1,-1,0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2398,7 +2467,8 @@
             std::string base_name = "pimLT";
             std::vector<int> Permutation = {-1,-1,1,0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2443,7 +2513,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2474,7 +2545,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2505,7 +2577,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2536,7 +2609,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2567,7 +2641,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2598,7 +2673,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2629,7 +2705,8 @@
             std::string base_name = "pimAdd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2674,7 +2751,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2705,7 +2783,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2736,7 +2815,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2767,7 +2847,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2798,7 +2879,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2829,7 +2911,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2860,7 +2943,8 @@
             std::string base_name = "pimBroadCast";
             std::vector<int> Permutation = {0,-1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2904,7 +2988,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2934,7 +3019,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2964,7 +3050,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -2994,7 +3081,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -3024,7 +3112,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -3054,7 +3143,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
@@ -3084,7 +3174,8 @@
             std::string base_name = "pimAnd";
             std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {CI->getArgOperand(0), CI->getArgOperand(1)} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist

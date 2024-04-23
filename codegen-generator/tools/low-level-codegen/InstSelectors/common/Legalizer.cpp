@@ -8,6 +8,7 @@
 #include "libpimsim.h"
 #include "llvm/IR/IRBuilder.h"
 
+
 namespace llvm {
 bool Legalizer::legalize(Function &F) {
     SmallVector<Instruction *, 16> TargetAgnosticInstructions;
@@ -32,14 +33,22 @@ bool Legalizer::legalize(Function &F) {
     errs() << "AFTER LEGALIZATION FUNCTION:\n";
     errs() << F << "\n";
 
+    bool IS_BITSIMD = true;
     // Remove all the target-agnostic intrinsics / function calls
     for (auto *I : ToBeRemoved) {
-        if (InstToInstMap[I]->getType() == I->getType()) {
-            I->replaceAllUsesWith(InstToInstMap[I]);  // UndefValue::get(I->getType()));
+        errs() << "Instruction to remove: "<< * I << "\n";
+        if(!IS_BITSIMD){
+            errs() << "Found in map!\n";
+            if (InstToInstMap[I]->getType() == I->getType()) {
+                I->replaceAllUsesWith(InstToInstMap[I]);  // UndefValue::get(I->getType()));
+            } else {
+                errs() << "I->getType():" << *I->getType() << "\n";
+                errs() << "InstToInstMap[I]:" << *InstToInstMap[I] << "\n";
+                I->replaceAllUsesWith(new BitCastInst(InstToInstMap[I], I->getType(), "", I));
+            }
         } else {
-            errs() << "I->getType():" << *I->getType() << "\n";
-            errs() << "InstToInstMap[I]:" << *InstToInstMap[I] << "\n";
-            I->replaceAllUsesWith(new BitCastInst(InstToInstMap[I], I->getType(), "", I));
+            errs() << "Not found in map!\n";
+            I->replaceAllUsesWith(UndefValue::get(I->getType()));
         }
         I->eraseFromParent();
     }
@@ -281,6 +290,7 @@ bool Legalizer::isAMatch(CallInst *OriginalInst, unsigned Idx, const int512_t &O
 // Generate any bitserial Allocation for operands
 // If they do not exist
 void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* InsertBefore){
+    errs() << "Inserting BitSIMD allocations for "<<Args.size()<<" Bitvectors\n";
 
     LLVMContext& ctx = InsertBefore->getContext();
     Type* i8PTy = Type::getInt8PtrTy(ctx);
@@ -298,7 +308,7 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
     }
     
     for(Value* Arg : Args){
-        if(InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end()){
+        if(InstToObjectIDMap.find(Arg) == InstToObjectIDMap.end()){
             Type* ArgTy = Arg->getType();
             FixedVectorType* FVTy = dyn_cast<FixedVectorType>(ArgTy);
             assert(FVTy && "Operand must be a fixed vector llvm type");
@@ -317,6 +327,7 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
             CallInst* AllocationCall = CallInst::Create(AllocFunc, AllocationParams, "pimAlloc", InsertBefore);
 
             InstToObjectIDMap[Arg] = AllocationCall;
+            errs() << "PimAllocation for "<< *Arg << ", AllocationCall: "<< *AllocationCall<<"\n";
 
             // For vectors coming in through arguments, we need to generate the appropriate copy to host function
             if(isa<Argument>(Arg)){
@@ -374,10 +385,18 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
     
     std::vector<Value*> ObjIDs;
     for(auto* Arg: Args){
+        assert(InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end() && "PimArg not in InstToObjectIDMap");
         ObjIDs.push_back(InstToObjectIDMap[Arg]);
     }
 
-    ObjIDs.push_back(InstToObjectIDMap[PimInst]);
+    assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
+    ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
+    errs()<< "Calling function: "<< *InstFunction <<"\n"; 
+    
+    for(auto* Arg : ObjIDs){
+        errs() <<"Arg: "<< *Arg <<"\n";
+    }
+
 
     CallInst::Create(InstFunction, ObjIDs, "pimInst", InsertBefore);
 
@@ -442,7 +461,8 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
 }
 
 Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
-    unsigned num_symbolic_args = 0;
+    // 1 for return argument
+    unsigned num_symbolic_args = 1;
 
     for(int i =0; i < CI->getNumArgOperands(); i++){
         Value* arg = CI->getArgOperand(i);

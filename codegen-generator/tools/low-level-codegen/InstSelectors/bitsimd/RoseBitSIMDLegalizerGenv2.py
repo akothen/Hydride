@@ -94,7 +94,8 @@ class RoseInstSelectorGenerator():
             std::string base_name = \"{}\";
             std::vector<int> Permutation = {{{}}};
             auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+            std::vector<Value *> Args = {{CI->getArgOperand(0), CI->getArgOperand(1)}} ;
 
             // Generate any bitserial Allocation for operands
             // If they do not exist
