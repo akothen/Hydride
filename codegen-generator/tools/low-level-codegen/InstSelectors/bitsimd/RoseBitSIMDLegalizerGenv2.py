@@ -100,11 +100,13 @@ class RoseInstSelectorGenerator():
             // If they do not exist
             InsertBitSIMDAllocations(Args, CI);
 
+            std::vector<Value*> Temp;
+            Temp.push_back(CI);
             // Generate any bitserial Allocation for result
-            InsertBitSIMDAllocation(CI, CI);
+            InsertBitSIMDAllocations(Temp, CI);
 
             // Replace vectorized call to call PIM ISA Directly
-            InsertBitSIMDCall(InstFunction, Args, CI);
+            InsertBitSIMDCall(InstFunction, Args,CI,  CI);
 
             ReplaceReturn(CI);
 

@@ -337,7 +337,7 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
 
     IRBuilder<> Builder(InsertBefore);
     // Generate an alloca and store value into alloca
-    AllocaInst* HostAlloc = Builder.CreateAlloc(FVTy);
+    AllocaInst* HostAlloc = Builder.CreateAlloca(FVTy);
     Builder.CreateStore(Arg, HostAlloc);
 
 
@@ -370,7 +370,7 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
 
 
 // Replace vectorized call to call PIM ISA Directly
-void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Callinst* PimInst,  Instruction* InsertBefore){
+void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Instruction* PimInst,  Instruction* InsertBefore){
     
     std::vector<Value*> ObjIDs;
     for(auto* Arg: Args){
@@ -415,7 +415,7 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
 
         IRBuilder<> Builder(PimInst);
         // Generate an alloca and store value into alloca
-        AllocaInst* HostAlloc = Builder.CreateAlloc(PimInst->getType());
+        AllocaInst* HostAlloc = Builder.CreateAlloca(PimInst->getType());
 
 
         Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
@@ -428,7 +428,7 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
         CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimDeviceToHost", PimInst);
 
         Builder.SetInsertPoint(PimInst);
-        Value *LoadInst = Builder.CreateLoad(PimInst-getType(), HostAlloc, "load.buffer");
+        Value *LoadInst = Builder.CreateLoad(PimInst->getType(), HostAlloc, "load.buffer");
         PimInst->replaceAllUsesWith(LoadInst);
 
 
@@ -444,7 +444,8 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
 Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
     unsigned num_symbolic_args = 0;
 
-    for(auto arg : CI->args()){
+    for(int i =0; i < CI->getNumArgOperands(); i++){
+        Value* arg = CI->getArgOperand(i);
         if(isa<FixedVectorType>(arg->getType())){
             num_symbolic_args++;
         }

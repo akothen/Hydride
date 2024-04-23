@@ -4,8 +4,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef HYDRIDE_LEGALIZER_H
-#define HYDRIDE_LEGALIZER_H
+#ifndef HYDRIDE_BITSIMD_LEGALIZER_H
+#define HYDRIDE_BITSIMD_LEGALIZER_H
 
 #include "llvm/ADT/PostOrderIterator.h"
 #include "llvm/ADT/SmallVector.h"
@@ -89,4 +89,4 @@ public:
 
 }  // end of namespace llvm
 
-#endif  // HYDRIDE_LEGALIZER_H
+#endif  // HYDRIDE_BITSIMD_LEGALIZER_H
