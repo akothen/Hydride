@@ -1,7 +1,8 @@
 CUR_DIR=$(pwd)
 
 export HYDRIDE_ROOT=$CUR_DIR
-export LLVM_ROOT=$CUR_DIR/frontends/halide/llvm-build
+#export LLVM_ROOT=$CUR_DIR/frontends/halide/llvm-build
+export LLVM_ROOT=/home/arnoor2/temp/llvm-build/
 export LLVM_DIS_ROOT=$LLVM_ROOT
 export LLVM_CONFIG=$LLVM_DIS_ROOT/bin/llvm-config
 export HALIDE_SRC=$CUR_DIR/frontends/halide
@@ -19,6 +20,7 @@ else
 fi
 
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/codegen-generator/targets/bitsimd/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/arm/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/hexagon/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/codegen/rosette/:$PYTHONPATH
