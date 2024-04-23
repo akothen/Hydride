@@ -3035,7 +3035,7 @@ private:
             std::map<std::string, Expr> let_vars;
             auto RAN = ReplaceAbstractedNodes(abstractions, let_vars);
             
-            if(_arch == HydrideSupportedArchitecture::BitSerial){
+            if(false && _arch == HydrideSupportedArchitecture::BitSerial){
 
                 std::vector<const Load*> Loads;
                 std::vector<unsigned> indicies;
@@ -3157,7 +3157,7 @@ private:
         Expr generate_call(std::string function_name, const Expr &x, std::map<std::string, Expr> &abstractions) {
             size_t num_arguments = LoadToRegMap.size() + VariableToRegMap.size();
                 std::vector<Expr> args(num_arguments);
-            if(_arch == HydrideSupportedArchitecture::BitSerial) {
+            if(false  && _arch == HydrideSupportedArchitecture::BitSerial) {
                 get_call_args_bitserial(x, args, abstractions);
 
                 std::cout << "Generating Call with type: " << x.type() << " and lanes " << x.type().lanes() << "\n";
@@ -3808,12 +3808,11 @@ Stmt hydride_optimize_bitserial(FuncValueBounds fvb, const Stmt &s, std::set<con
     std::string name = benchmark_name ? std::string(benchmark_name) : "hydride";
     auto Result = Hydride::IROptimizer(fvb, HydrideSupportedArchitecture::BitSerial, mutated_exprs, random_seed, name).mutate(distributed);
 
-    /*
     if (mutated_exprs.size()) {
-        hydride_generate_llvm_bitcode(Target::X86, "/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
+        hydride_generate_bitserial_llvm_bitcode("/tmp/" + name + ".rkt", "/tmp/" + name + ".ll", name);
     } else {
         debug(0) << "[Warning]: No hydride expressions synthesized (Make sure the input program is vectorized)\n";
-    }*/
+    }
 
     debug(0) << "After Bitserial" << "\n";
     debug(0) << Result << "\n";

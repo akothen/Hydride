@@ -35,6 +35,8 @@ namespace Halide {
 
         void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::string output_file, std::string benchmark_name);
 
+        void hydride_generate_bitserial_llvm_bitcode(std::string input_file, std::string output_file, std::string benchmark_name);
+
 
     }  // namespace Internal
 

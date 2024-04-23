@@ -29,7 +29,7 @@ using namespace boost::multiprecision;
 namespace llvm {
 
     const std::string pimAllocName = "pimAlloc";
-    const std::string pimAllocWrapperName = "pimAllocWrapper";
+    const std::string pimAllocAssocName = "pimAllocAssociated";
     const std::string pimCopyHostToDeviceName = "pimCopyHostToDevice";
     const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
     const std::string pimBroadCastName = "pimBroadCast";
@@ -67,6 +67,10 @@ public:
     // Map BitSIMD operations to the Allocation ObjectID
     // where the result is stored
     DenseMap<Value *, Value *> InstToObjectIDMap;
+
+    // Maintains Map of parent function to contained PIM allocation
+    // which can be used to allocate all other operations
+    DenseMap<Function *, Value *> AlignmentMap;
 
 
     // Copy LLVM value to it's corresponding BitSIMD allocation

@@ -298,7 +298,10 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
     Type* i32Ty = Type::getInt32Ty(ctx);
 
     Module* M = InsertBefore->getModule();
+    Function* ParentFn = InsertBefore->getParent()->getParent();
     Function* AllocFunc = M->getFunction(pimAllocName);
+
+    Function* AlignedAllocFunc = M->getFunction(pimAllocAssocName);
 
     if(!AllocFunc){
         std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty, i32Ty, i32Ty};
@@ -306,6 +309,14 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
 
         AllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocName , M);
     }
+
+    if(!AlignedAllocFunc){
+        // Second last parameter is reference objected id
+        std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty, i32Ty, i32Ty , i32Ty};
+        FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
+        AlignedAllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocAssocName , M);
+    }
+
     
     for(Value* Arg : Args){
         if(InstToObjectIDMap.find(Arg) == InstToObjectIDMap.end()){
@@ -322,10 +333,15 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
             Value* Lanes = ConstantInt::get(i32Ty, num_elements);
             Value* Bits = ConstantInt::get(i32Ty, 32);
 
-            std::vector<Value*> AllocationParams = {AllocationTy, Lanes, Bits, PimDataType};
-
-            CallInst* AllocationCall = CallInst::Create(AllocFunc, AllocationParams, "pimAlloc", InsertBefore);
-
+            CallInst* AllocationCall = nullptr;
+            if(AlignmentMap.find(ParentFn) != AlignmentMap.end()){
+                std::vector<Value*> AllocationParams = {AllocationTy, Lanes, Bits, AlignmentMap[ParentFn] , PimDataType};
+                AllocationCall = CallInst::Create(AlignedAllocFunc, AllocationParams, "pimAssocAlloc", InsertBefore);
+            } else {
+                std::vector<Value*> AllocationParams = {AllocationTy, Lanes, Bits, PimDataType};
+                AllocationCall = CallInst::Create(AllocFunc, AllocationParams, "pimAlloc", InsertBefore);
+                AlignmentMap[ParentFn] = AllocationCall;
+            }
             InstToObjectIDMap[Arg] = AllocationCall;
             errs() << "PimAllocation for "<< *Arg << ", AllocationCall: "<< *AllocationCall<<"\n";
 

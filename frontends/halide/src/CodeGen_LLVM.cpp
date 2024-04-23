@@ -751,6 +751,8 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::compile(const Module &input) {
         });
     }
 
+    debug(0) << "All functions seperately defined!" << "\n";
+
     const char *enable_hydride = getenv("HL_ENABLE_HYDRIDE");
     if (enable_hydride && strcmp(enable_hydride, "0") != 0)
         add_hydride_code();
@@ -878,6 +880,7 @@ void CodeGen_LLVM::compile_func(const LoweredFunc &f, const std::string &simple_
             body = optimize_arm_instructions_synthesis(body, target, this->func_value_bounds);
         }
     }
+
     body.accept(this);
 
     // Clean up and return.

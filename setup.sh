@@ -12,11 +12,14 @@ export SIMILARITY_SUMMARY=$CUR_DIR/codegen-generator/tools/similarity-checker/su
 
 # export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/x86/x86_wrappers.c.ll
 # export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libX86Legalizer.so
-export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
+#export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
+
+export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/bitsimd/bitsimd_wrappers.ll
+
 if [ $(uname -s) = "Darwin" ]; then
     export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.dylib
 else
-    export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.so
+    export LEGALIZER_PATH=/shared/hydride/LLVMBitSIMDLegalizer.so
 fi
 
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
