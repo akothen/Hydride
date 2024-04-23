@@ -106,6 +106,8 @@ class RoseInstSelectorGenerator():
             // Replace vectorized call to call PIM ISA Directly
             InsertBitSIMDCall(InstFunction, Args, CI);
 
+            ReplaceReturn(CI);
+
             ToBeRemoved.insert(CI);
 
 
@@ -172,7 +174,7 @@ class RoseInstSelectorGenerator():
   def generateCodeForRegisteringPass(self):
     String = '''
     char BitSIMDLegalizationPass::ID = 0;
-    static RegisterPass<BitSIMDLegalizationPass> X("hex-hydride-legalize",
+    static RegisterPass<BitSIMDLegalizationPass> X("bitsimd-hydride-legalize",
                                               "Pass to legalize tensor intrinsics");
     '''
     return String

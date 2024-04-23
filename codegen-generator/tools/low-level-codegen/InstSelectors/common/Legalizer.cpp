@@ -377,11 +377,68 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
         ObjIDs.push_back(InstToObjectIDMap[Arg]);
     }
 
-    ObjIDs.push_back(InstToObjectIDMap[Arg]);
+    ObjIDs.push_back(InstToObjectIDMap[PimInst]);
 
-    CallInst* PimInst = CallInst::Create(InstFunction, ObjIDs, "pimInst", InsertBefore);
+    CallInst::Create(InstFunction, ObjIDs, "pimInst", InsertBefore);
 
 
+
+
+}
+
+bool Legalizer::ReplaceReturn(CallInst* PimInst){
+
+
+
+    // Insert call to copy host memory to device
+
+    LLVMContext& ctx = PimInst->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = PimInst->getModule();
+    Function* CopyFunc = M->getFunction(pimCopyDeviceToHostName);
+
+    if(!CopyFunc){
+        std::vector<Type*>  CopyArgsTy = {i32Ty, i32Ty,i8PTy};
+        FunctionType* CopyFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
+        CopyFunc = Function::Create(CopyFuncTy, Function::ExternalLinkage ,pimCopyDeviceToHostName , M);
+    }
+
+
+    // If a user of this instruction is the return instruction then generate allocation and copy memory from device to host
+    for(auto* User: PimInst->users()){
+
+        ReturnInst* RI = dyn_cast<ReturnInst>(User);
+        if(!RI) continue;
+
+        IRBuilder<> Builder(PimInst);
+        // Generate an alloca and store value into alloca
+        AllocaInst* HostAlloc = Builder.CreateAlloc(PimInst->getType());
+
+
+        Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
+        Value* MemoryRef = BitCastInst::CreatePointerCast(HostAlloc, i8PTy, "", PimInst);
+
+        Value* ObjectID = InstToObjectIDMap[PimInst];
+        std::vector<Value*> Args = {CopyTy,  ObjectID, MemoryRef };
+
+
+        CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimDeviceToHost", PimInst);
+
+        Builder.SetInsertPoint(PimInst);
+        Value *LoadInst = Builder.CreateLoad(PimInst-getType(), HostAlloc, "load.buffer");
+        PimInst->replaceAllUsesWith(LoadInst);
+
+
+        return true;
+
+    }
+
+
+
+    return false;
 }
 
 Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){

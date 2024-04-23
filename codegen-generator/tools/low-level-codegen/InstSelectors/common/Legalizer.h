@@ -80,7 +80,11 @@ public:
     // Replace vectorized call to call PIM ISA Directly
     void InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Instruction* PimInst,  Instruction* InsertBefore);
 
+    // Declare the PIM ISA methods
     Function* CreateFunctionDecl(std::string name, CallInst* CI);
+
+    // If a PIM operation is used in an LLVM return we update the operation accordingly. Returns true if replaced the return instruction
+    bool ReplaceReturn(CallInst* PimInst);
 };
 
 }  // end of namespace llvm
