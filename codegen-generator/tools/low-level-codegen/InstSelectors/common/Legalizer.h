@@ -28,6 +28,12 @@ using namespace boost::multiprecision;
 
 namespace llvm {
 
+    const std::string pimAllocName = "pimAlloc";
+    const std::string pimAllocWrapperName = "pimAllocWrapper";
+    const std::string pimCopyHostToDeviceName = "pimCopyHostToDevice";
+    const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
+    const std::string pimBroadCastName = "pimBroadCast";
+    
 class Legalizer {
 public:
     // Map the target-agnostic intrinsics with target-specific ones
@@ -56,6 +62,25 @@ public:
     bool isAMatch(CallInst *OriginalInst, unsigned Idx, const int512_t &OperandValue);
 
     bool isNameMatch(CallInst *TargetAgnoticInst, std::vector<std::string> &NameList);
+
+    
+    // Map BitSIMD operations to the Allocation ObjectID
+    // where the result is stored
+    DenseMap<Value *, Value *> InstToObjectIDMap;
+
+
+    // Copy LLVM value to it's corresponding BitSIMD allocation
+    void InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore);
+
+    // Generate any bitserial Allocation for operands
+    // If they do not exist
+    void InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* InsertBefore);
+
+
+    // Replace vectorized call to call PIM ISA Directly
+    void InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Instruction* PimInst,  Instruction* InsertBefore);
+
+    Function* CreateFunctionDecl(std::string name, CallInst* CI);
 };
 
 }  // end of namespace llvm

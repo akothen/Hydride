@@ -5,6 +5,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "Legalizer.h"
+#include "libpimsim.h"
+#include "llvm/IR/IRBuilder.h"
 
 namespace llvm {
 bool Legalizer::legalize(Function &F) {
@@ -273,6 +275,144 @@ bool Legalizer::isAMatch(CallInst *OriginalInst, unsigned Idx, const int512_t &O
         }
     }
     return false;
+}
+
+
+// Generate any bitserial Allocation for operands
+// If they do not exist
+void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* InsertBefore){
+
+    LLVMContext& ctx = InsertBefore->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = InsertBefore->getModule();
+    Function* AllocFunc = M->getFunction(pimAllocName);
+
+    if(!AllocFunc){
+        std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty, i32Ty, i32Ty};
+        FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
+
+        AllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocName , M);
+    }
+    
+    for(Value* Arg : Args){
+        if(InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end()){
+            Type* ArgTy = Arg->getType();
+            FixedVectorType* FVTy = dyn_cast<FixedVectorType>(ArgTy);
+            assert(FVTy && "Operand must be a fixed vector llvm type");
+            Type* ElementType = FVTy->getElementType();
+            unsigned num_elements = FVTy->getNumElements();
+
+            
+            Value* AllocationTy = ConstantInt::get(i32Ty, PIM_ALLOC_V1);
+            // TODO: Replace with switch statement. Hard coded for now
+            Value* PimDataType = ConstantInt::get(i32Ty, PIM_INT32);
+            Value* Lanes = ConstantInt::get(i32Ty, num_elements);
+            Value* Bits = ConstantInt::get(i32Ty, 32);
+
+            std::vector<Value*> AllocationParams = {AllocationTy, Lanes, Bits, PimDataType};
+
+            CallInst* AllocationCall = CallInst::Create(AllocFunc, AllocationParams, "pimAlloc", InsertBefore);
+
+            InstToObjectIDMap[Arg] = AllocationCall;
+
+            // For vectors coming in through arguments, we need to generate the appropriate copy to host function
+            if(isa<Argument>(Arg)){
+                InsertBitSIMDCopyToDevice(Arg, InsertBefore);
+            }
+        }
+    }
+
+
+}
+
+void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore){
+    Type* ArgTy = Arg->getType();
+    FixedVectorType* FVTy = dyn_cast<FixedVectorType>(ArgTy);
+    assert(FVTy && "Operand must be a fixed vector llvm type");
+    Type* ElementType = FVTy->getElementType();
+    unsigned num_elements = FVTy->getNumElements();
+
+    IRBuilder<> Builder(InsertBefore);
+    // Generate an alloca and store value into alloca
+    AllocaInst* HostAlloc = Builder.CreateAlloc(FVTy);
+    Builder.CreateStore(Arg, HostAlloc);
+
+
+    // Insert call to copy host memory to device
+
+    LLVMContext& ctx = InsertBefore->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = InsertBefore->getModule();
+    Function* CopyFunc = M->getFunction(pimCopyHostToDeviceName);
+
+    if(!CopyFunc){
+        std::vector<Type*>  CopyArgsTy = {i32Ty, i8PTy, i32Ty};
+        FunctionType* CopyFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
+        CopyFunc = Function::Create(CopyFuncTy, Function::ExternalLinkage ,pimCopyHostToDeviceName , M);
+    }
+
+    Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
+    Value* MemoryRef = BitCastInst::CreatePointerCast(HostAlloc, i8PTy, "", InsertBefore);
+
+    Value* Bytes = ConstantInt::get(i32Ty, num_elements);
+    Value* ObjectID = InstToObjectIDMap[Arg];
+    std::vector<Value*> Args = {CopyTy, MemoryRef, ObjectID};
+
+    CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimHostToDevice", InsertBefore);
+}
+
+
+
+// Replace vectorized call to call PIM ISA Directly
+void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Callinst* PimInst,  Instruction* InsertBefore){
+    
+    std::vector<Value*> ObjIDs;
+    for(auto* Arg: Args){
+        ObjIDs.push_back(InstToObjectIDMap[Arg]);
+    }
+
+    ObjIDs.push_back(InstToObjectIDMap[Arg]);
+
+    CallInst* PimInst = CallInst::Create(InstFunction, ObjIDs, "pimInst", InsertBefore);
+
+
+}
+
+Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
+    unsigned num_symbolic_args = 0;
+
+    for(auto arg : CI->args()){
+        if(isa<FixedVectorType>(arg->getType())){
+            num_symbolic_args++;
+        }
+    }
+
+    LLVMContext& ctx = CI->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = CI->getModule();
+    Function* PimFunc = M->getFunction(name);
+
+    if(!PimFunc){
+        std::vector<Type*>  CopyArgsTy;
+        for(int i = 0; i < num_symbolic_args ; i++){
+            CopyArgsTy.push_back(i32Ty);
+        }
+        FunctionType* PimFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
+        PimFunc = Function::Create(PimFuncTy, Function::ExternalLinkage ,name , M);
+    }
+
+    return PimFunc;
+
+
 }
 
 bool Legalizer::isNameMatch(CallInst *TargetAgnoticInst, std::vector<std::string> &NameList) {
