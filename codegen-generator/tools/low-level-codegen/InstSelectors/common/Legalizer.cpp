@@ -21,6 +21,7 @@ bool Legalizer::legalize(Function &F) {
         }
     }
 
+
     errs() << "BEFORE LEGALIZATION:\n";
     errs() << F << "\n";
 
@@ -33,7 +34,7 @@ bool Legalizer::legalize(Function &F) {
     errs() << "AFTER LEGALIZATION FUNCTION:\n";
     errs() << F << "\n";
 
-    bool IS_BITSIMD = true;
+    bool IS_BITSIMD = bitsimd;
     // Remove all the target-agnostic intrinsics / function calls
     for (auto *I : ToBeRemoved) {
         errs() << "Instruction to remove: "<< * I << "\n";
@@ -51,6 +52,28 @@ bool Legalizer::legalize(Function &F) {
             I->replaceAllUsesWith(UndefValue::get(I->getType()));
         }
         I->eraseFromParent();
+    }
+
+    if(!inserted_pim_init and bitsimd){
+
+        Function* ParentFn = &F;
+        BasicBlock& EntryBlock = ParentFn->getEntryBlock();
+
+        InsertPimInitCall(/* numCores */ 4, /* numRows*/ 64, /* numCols */ 64, EntryBlock.getFirstNonPHI());
+        inserted_pim_init = true;
+#if 0
+        for(auto* User: F.users()){
+            CallInst* CI = dyn_cast<CallInst>(User);
+            if(!CI) continue;
+
+            Function* ParentFn = CI->getParent()->getParent();
+            BasicBlock& EntryBlock = ParentFn->getEntryBlock();
+
+            InsertPimInitCall(/* numCores */ 4, /* numRows*/ 64, /* numCols */ 64, EntryBlock.getTerminator());
+            inserted_pim_init = true;
+            break;
+        }
+#endif
     }
 
     // bool BrokenDebugInfo = true;
@@ -505,6 +528,37 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
     }
 
     return PimFunc;
+
+
+}
+
+
+// PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numCores, numRows, numCols);
+void Legalizer::InsertPimInitCall(int numCores, int numRows, int numCols, Instruction* InsertBefore){
+
+    LLVMContext& ctx = InsertBefore->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = InsertBefore->getModule();
+    Function* InitFunc = M->getFunction(pimInitDeviceName);
+
+    if(!InitFunc){
+        std::vector<Type*>  InitArgsTy = {i32Ty, i32Ty,i32Ty, i32Ty};
+        FunctionType* InitFuncTy = FunctionType::get(i32Ty, InitArgsTy, /* isVarArgs */ false);
+        InitFunc = Function::Create(InitFuncTy, Function::ExternalLinkage ,pimInitDeviceName , M);
+    }
+
+    Value* DeviceSetting = ConstantInt::get(i32Ty, PIM_FUNCTIONAL);
+    Value* NumCores = ConstantInt::get(i32Ty, numCores);
+    Value* NumRows = ConstantInt::get(i32Ty, numRows);
+    Value* NumCols = ConstantInt::get(i32Ty, numCols);
+
+    std::vector<Value*> Args = {DeviceSetting, NumCores, NumRows, NumCols };
+
+
+    CallInst* InitCall = CallInst::Create(InitFunc, Args, "pimInit", InsertBefore);
 
 
 }

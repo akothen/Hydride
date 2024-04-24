@@ -33,11 +33,15 @@ namespace llvm {
     const std::string pimCopyHostToDeviceName = "pimCopyHostToDevice";
     const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
     const std::string pimBroadCastName = "pimBroadCast";
+    const std::string pimInitDeviceName = "pimCreateDevice";
     
 class Legalizer {
 public:
     // Map the target-agnostic intrinsics with target-specific ones
     DenseMap<Value *, Value *> InstToInstMap;
+
+    bool bitsimd = true;
+    bool inserted_pim_init = false;
 
     // Track instructions to be removed
     SmallPtrSet<Instruction *, 16> ToBeRemoved;
@@ -89,6 +93,11 @@ public:
 
     // If a PIM operation is used in an LLVM return we update the operation accordingly. Returns true if replaced the return instruction
     bool ReplaceReturn(CallInst* PimInst);
+
+    // Generate pimCreateDevice call
+    //
+    // PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numCores, numRows, numCols);
+    void InsertPimInitCall(int numCores, int numRows, int numCols, Instruction* InsertBefore);
 };
 
 }  // end of namespace llvm
