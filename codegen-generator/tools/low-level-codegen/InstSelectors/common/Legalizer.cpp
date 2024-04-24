@@ -11,10 +11,18 @@
 
 namespace llvm {
 bool Legalizer::legalize(Function &F) {
+    InstToObjectIDMap.clear();  
+
+
     SmallVector<Instruction *, 16> TargetAgnosticInstructions;
     ReversePostOrderTraversal<Function *> RPOT(&F);
+
+    Instruction* RetInst = nullptr;
     for (auto *BB : RPOT) {
         for (Instruction &I : *BB) {
+            if(isa<ReturnInst>(&I)){
+                RetInst = &I;
+            }
             auto *CI = dyn_cast<CallInst>(&I);
             if (CI != nullptr)
                 TargetAgnosticInstructions.push_back(CI);
@@ -59,7 +67,7 @@ bool Legalizer::legalize(Function &F) {
         Function* ParentFn = &F;
         BasicBlock& EntryBlock = ParentFn->getEntryBlock();
 
-        InsertPimInitCall(/* numCores */ 4, /* numRows*/ 64, /* numCols */ 64, EntryBlock.getFirstNonPHI());
+        InsertPimInitCall(/* numCores */ 4, /* numRows*/ 512, /* numCols */ 512, EntryBlock.getFirstNonPHI());
         inserted_pim_init = true;
 #if 0
         for(auto* User: F.users()){
@@ -75,6 +83,8 @@ bool Legalizer::legalize(Function &F) {
         }
 #endif
     }
+
+    InsertPimFreeCalls(RetInst);
 
     // bool BrokenDebugInfo = true;
     // if (verifyModule(*(F.getParent()), errs(), &BrokenDebugInfo) == false):
@@ -559,6 +569,32 @@ void Legalizer::InsertPimInitCall(int numCores, int numRows, int numCols, Instru
 
 
     CallInst* InitCall = CallInst::Create(InitFunc, Args, "pimInit", InsertBefore);
+
+
+}
+
+void Legalizer::InsertPimFreeCalls(Instruction* InsertBefore){
+    LLVMContext& ctx = InsertBefore->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = InsertBefore->getModule();
+    Function* FreeFunc = M->getFunction(pimFreeName);
+
+    if(!FreeFunc){
+        std::vector<Type*>  FreeArgsTy = {i32Ty};
+        FunctionType* FreeFuncTy = FunctionType::get(i32Ty, FreeArgsTy, /* isVarArgs */ false);
+        FreeFunc = Function::Create(FreeFuncTy, Function::ExternalLinkage ,pimFreeName , M);
+    }
+
+    for(auto iter = InstToObjectIDMap.begin(); iter != InstToObjectIDMap.end(); iter++){
+        Value* PimAlloc = iter->second;
+        std::vector<Value*> Args = {PimAlloc};
+        CallInst* FreeCall = CallInst::Create(FreeFunc, Args, "pimFree", InsertBefore);
+
+    }
+
 
 
 }

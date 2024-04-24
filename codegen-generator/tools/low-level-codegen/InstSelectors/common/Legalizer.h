@@ -34,6 +34,8 @@ namespace llvm {
     const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
     const std::string pimBroadCastName = "pimBroadCast";
     const std::string pimInitDeviceName = "pimCreateDevice";
+
+    const std::string pimFreeName = "pimFree";
     
 class Legalizer {
 public:
@@ -98,6 +100,9 @@ public:
     //
     // PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numCores, numRows, numCols);
     void InsertPimInitCall(int numCores, int numRows, int numCols, Instruction* InsertBefore);
+
+
+    void InsertPimFreeCalls(Instruction* InsertBefore);
 };
 
 }  // end of namespace llvm
