@@ -47,3 +47,20 @@ Now you are ready to use Hydride!
 - x86 (SSE, SSE2, AVX, AVX2, AVX512 (includes VNNI), MMX, FMA)
 - Hexagon (HVX)
 - AArch64 (Neon)
+
+# Publication
+
+The first paper on Hydride was published at ASPLOS '24. You can download the
+paper [from ACM Digital Library](https://dl.acm.org/doi/abs/10.1145/3620665.3640385).
+If you use Hydride, please cite both the compiler and the paper!
+
+```
+@inproceedings{kothari2024hydride,
+  title={Hydride: A Retargetable and Extensible Synthesis-based Compiler for Modern Hardware Architectures},
+  author={Kothari, Akash and Noor, Abdul Rafae and Xu, Muchen and Uddin, Hassam and Baronia, Dhruv and Baziotis, Stefanos and Adve, Vikram and Mendis, Charith and Sengupta, Sudipta},
+  booktitle={Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2},
+  pages={514--529},
+  year={2024}
+}
+```
+
