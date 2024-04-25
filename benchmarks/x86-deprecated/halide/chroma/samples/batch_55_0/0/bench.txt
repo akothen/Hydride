@@ -1,2 +1,0 @@
-Benchmark for chroma_batch_0055_sample_0000 produces best case of 0.00138633 sec/iter (over 9 samples, 252 iterations, accuracy 1.7%).
-Best output throughput is 3.6e+02 mpix/sec.

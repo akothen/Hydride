@@ -1,2 +1,0 @@
-Benchmark for conv_nn_batch_0035_sample_0009 produces best case of 0.00024113 sec/iter (over 10 samples, 1450 iterations, accuracy 14%).
-Best output throughput is 16 mpix/sec.
