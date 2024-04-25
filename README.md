@@ -1,6 +1,6 @@
 # Hydride
 
-Hydride is a retargetable and extensible synthesis-based compiler for modern hardware architectures. Checkout the [wiki page](https://github.com/akothen/Hydride/wiki) for details.
+Hydride is a retargetable and extensible synthesis-based compiler for modern hardware architectures. 
 
 Hydride has two major components:
 - Automatic IR Generator - It is responsible for automatically designing and generating code generation support for language- and target-independent, retargetable compiler IR that we call AutoLLVM IR. 
@@ -48,7 +48,7 @@ Now you are ready to use Hydride!
 - Hexagon (HVX)
 - AArch64 (Neon)
 
-# Publication
+## Publication
 
 The first paper on Hydride was published at ASPLOS '24. You can download the
 paper [from ACM Digital Library](https://dl.acm.org/doi/abs/10.1145/3620665.3640385).
