@@ -323,6 +323,15 @@ bool Legalizer::isAMatch(CallInst *OriginalInst, unsigned Idx, const int512_t &O
 // Generate any bitserial Allocation for operands
 // If they do not exist
 void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* InsertBefore){
+
+    if(CallInst* CI = dyn_cast<CallInst>(InsertBefore)){
+        Function* CF = CI->getCalledFunction();
+        if(CF && CF->getName().startswith(StringRef("pimBroadCast"))){
+            return;
+        }
+
+    }
+
     errs() << "Inserting BitSIMD allocations for "<<Args.size()<<" Bitvectors\n";
 
     LLVMContext& ctx = InsertBefore->getContext();
@@ -353,7 +362,10 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
     
     for(Value* Arg : Args){
         if(InstToObjectIDMap.find(Arg) == InstToObjectIDMap.end()){
+
+            errs () << "Argument: "<< *Arg << "\n";
             Type* ArgTy = Arg->getType();
+            errs () << "Argument Type: "<< *ArgTy << "\n";
             FixedVectorType* FVTy = dyn_cast<FixedVectorType>(ArgTy);
             assert(FVTy && "Operand must be a fixed vector llvm type");
             Type* ElementType = FVTy->getElementType();
@@ -432,14 +444,43 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
 // Replace vectorized call to call PIM ISA Directly
 void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Instruction* PimInst,  Instruction* InsertBefore){
     
+    LLVMContext& ctx = PimInst->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+    Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
+    Value* Zero = ConstantInt::get(i32Ty, 0);
+
     std::vector<Value*> ObjIDs;
-    for(auto* Arg: Args){
-        assert(InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end() && "PimArg not in InstToObjectIDMap");
-        ObjIDs.push_back(InstToObjectIDMap[Arg]);
+    if(InstFunction->getName().startswith(StringRef("pimBroadCast"))){
+        errs () << "Processing broadcast instruction: "<< "\n";
+        ObjIDs.push_back(CopyTy);
+
+        assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
+        ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
+        Value* BroadcastedValue = Args[0];
+        if(FixedVectorType* FVTy = dyn_cast<FixedVectorType>(BroadcastedValue->getType())){
+            errs() << "Need to extract value from "<< *BroadcastedValue << "\n";
+            unsigned num_elements = FVTy->getNumElements();
+            assert(num_elements == 1 && "Expected to broadcast scalar values");
+            BroadcastedValue = ExtractElementInst::Create(BroadcastedValue, Zero, "ext.0", InsertBefore);
+            errs() << "New Broadcasted value: "<< * BroadcastedValue << "\n";
+        } 
+
+        ObjIDs.push_back(BroadcastedValue);
+
+    } else {
+
+        for(auto* Arg: Args){
+            assert(InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end() && "PimArg not in InstToObjectIDMap");
+            ObjIDs.push_back(InstToObjectIDMap[Arg]);
+        }
+
+        assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
+        ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
+
     }
 
-    assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
-    ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
     errs()<< "Calling function: "<< *InstFunction <<"\n"; 
     
     for(auto* Arg : ObjIDs){
@@ -529,9 +570,16 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
     Function* PimFunc = M->getFunction(name);
 
     if(!PimFunc){
+
         std::vector<Type*>  CopyArgsTy;
-        for(int i = 0; i < num_symbolic_args ; i++){
+        if(name == "pimBroadCast"){
             CopyArgsTy.push_back(i32Ty);
+            CopyArgsTy.push_back(i32Ty);
+            CopyArgsTy.push_back(i32Ty);
+        } else {
+            for(int i = 0; i < num_symbolic_args ; i++){
+                CopyArgsTy.push_back(i32Ty);
+            }
         }
         FunctionType* PimFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
         PimFunc = Function::Create(PimFuncTy, Function::ExternalLinkage ,name , M);
