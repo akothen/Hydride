@@ -52,7 +52,8 @@ class GetBVOps:
 
         predicate = "(and " + predicate + ")" + "; " + ctx.name + "\n"
 
-        ctx_ops = "(list  "+" ".join(["'"+op for op in ctx.get_bv_ops()]) + ")"
+        # Canonicalize the list
+        ctx_ops = "(list  "+" ".join(sorted(["'"+op for op in ctx.get_bv_ops()])) + ")"
 
         ops_expr = "(remove-duplicates (append {} {}))".format(ctx_ops,
                                                                " ".join(recursive_calls))
