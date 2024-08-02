@@ -175,6 +175,25 @@
 
   (define dummy-args (create-buffers scaled-leaves scaled-bvs))
 
+  ;; Produce a vector from dummy-args such that, everytime we encounter a leaf id we
+  ;; have seen before, we use the previous dummy-arg, otherwise we preserve what 
+  ;; in the list
+  (define (update-arg-by-leaves leaves dummy-args) 
+    (let ([tmp (make-hash)])
+      (list->vector (for/list ([i (in-range (length leaves))])
+        (let ([a_id (destruct (list-ref leaves i)
+                              [(arith:tensor data shape layout elemT buffsize id)
+                               id]
+                              ;; TODO for halide reg
+                              [_ (- i (length leaves))] ;; for non-reg-like leaves
+                              ;; give it a unique id, i-n is collision free in this way
+                              )])
+          (if (hash-has-key? tmp a_id)
+              (vector-ref dummy-args (hash-ref tmp a_id))
+              (begin
+                (hash-set! tmp a_id i)
+                (vector-ref dummy-args i))))))))
+  (set! dummy-args (update-arg-by-leaves scaled-leaves dummy-args))
   (debug-log "created dummy args!")
 
   ;; Helper for verification of later up-scaled versions
@@ -287,6 +306,7 @@
         (debug-log (format "Vectorization factor for sub expression ~a\n" expr-VF))
 
         (define (invoke-spec env-full)
+          (set! env-full (update-arg-by-leaves scaled-leaves env-full))
           (debug-log (format "invoke-spec with env: ~a\n" env-full))
           (define synth-buffers-full (create-buffers scaled-leaves env-full))
           ;(debug-log scaled-leaves)
@@ -309,6 +329,7 @@
 
         ;; Calculate result for last most lane
         (define (invoke-spec-lane lane-idx env-lane)
+          (set! env-lane (update-arg-by-leaves scaled-leaves env-lane))
           (debug-log (format "invoke-spec-lane with env: ~a\n" env-lane))
           (define synth-buffers-lane (create-buffers scaled-leaves env-lane))
 
