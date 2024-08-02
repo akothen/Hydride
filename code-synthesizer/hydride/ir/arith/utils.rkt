@@ -8,16 +8,32 @@
   (only-in racket/base error bitwise-and)
   rosette/lib/destruct
   hydride/cpp
-  hydride/utils/bvops
   hydride/ir/arith/types
   hydride/ir/arith/interpreter
   hydride/ir/arith/visitor
+  hydride/utils/debug
+  hydride/utils/misc
+  hydride/utils/bvops
+  hydride/synthesis/symbolic_synthesis
   
   )
-
+(require hydride/ir/hydride/definition)
+(require racket/match)
 (provide (prefix-out arith: (all-defined-out)))
 
+;;below
 
+(define signed-casting-list (list extract sign-extend bvssat))
+(define unsigned-casting-list (list extract zero-extend bvusat))
+
+
+(define signed-upcasting-list (list extract sign-extend ))
+(define unsigned-upcasting-list (list extract zero-extend ))
+
+(define signed-downcasting-list (list extract))
+(define unsigned-downcasting-list (list extract))
+
+;;above
 
 (define (get-expr-depth e)
   (define depth 1)
@@ -781,8 +797,42 @@
              ]
             [(arith:tensor-add v1 v2) (append (list extract bvadd) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
             [(arith:tensor-mul v1 v2) (append (list extract bvmul) (if (arith:is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
-            )
+            [(arith:tensor-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
+            ;; below not verified
+            [(arith:cast-int vec olane oprec) 
+              (cond
+                ;; Upcast
+                [(> (vec-size expr) (vec-size vec))
+                      (append signed-upcasting-list (get-bv-ops vec))
+                  ] 
+                ;; Downcast
+                [(< (vec-size expr) (vec-size vec))
+                      (append signed-downcasting-list (get-bv-ops vec))
+                  ] 
+                ;; Same length -> reinterpret cast between signedness
+                [else 
+                      (append signed-casting-list (get-bv-ops vec))
+                  ] 
+                )
+              ]
+            [(arith:cast-uint vec olane oprec) 
+            (cond
+              ;; Upcast
+              [(> (vec-size expr) (vec-size vec))
+                    (append unsigned-upcasting-list (get-bv-ops vec))
+                ] 
+              ;; Downcast
+              [(< (vec-size expr) (vec-size vec))
+                    (append unsigned-downcasting-list (get-bv-ops vec))
+                ] 
+              ;; Same length -> reinterpret cast between signedness
+              [else 
+                    (append unsigned-casting-list (get-bv-ops vec))
+                ] 
+              )
 
+            ]
+            )
 
   )
 
