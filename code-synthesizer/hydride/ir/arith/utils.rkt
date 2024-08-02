@@ -816,21 +816,24 @@
                 )
               ]
             [(arith:cast-uint vec olane oprec) 
-            (cond
-              ;; Upcast
-              [(> (vec-size expr) (vec-size vec))
-                    (append unsigned-upcasting-list (get-bv-ops vec))
-                ] 
-              ;; Downcast
-              [(< (vec-size expr) (vec-size vec))
-                    (append unsigned-downcasting-list (get-bv-ops vec))
-                ] 
-              ;; Same length -> reinterpret cast between signedness
-              [else 
-                    (append unsigned-casting-list (get-bv-ops vec))
-                ] 
-              )
+              (cond
+                ;; Upcast
+                [(> (vec-size expr) (vec-size vec))
+                      (append unsigned-upcasting-list (get-bv-ops vec))
+                  ] 
+                ;; Downcast
+                [(< (vec-size expr) (vec-size vec))
+                      (append unsigned-downcasting-list (get-bv-ops vec))
+                  ] 
+                ;; Same length -> reinterpret cast between signedness
+                [else 
+                      (append unsigned-casting-list (get-bv-ops vec))
+                  ] 
+                )
 
+            ]
+            [(vector:extract_strided_slice v1 offsets sizes strides) 
+              (get-bv-ops v1); for now, we only pass on the input vector 
             ]
             )
 
