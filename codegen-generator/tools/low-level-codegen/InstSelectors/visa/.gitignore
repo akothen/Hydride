@@ -1,4 +1,3 @@
-*.cpp
-*.h
+*Selector.cpp
 *.bak
 build

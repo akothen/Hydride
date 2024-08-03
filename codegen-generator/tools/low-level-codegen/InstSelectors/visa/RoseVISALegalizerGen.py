@@ -49,26 +49,9 @@ class RoseInstSelectorGenerator():
         ]
         return String + "\n".join(Content)
 
-    def generateLegalizerPassDeclaration(self):
-        String = '''
-namespace llvm {
 
-class VISALegalizationPass : public FunctionPass {
-public:
-    static char ID;
 
-    VISALegalizationPass() : FunctionPass(ID) {}
-
-    bool runOnFunction(Function &F) override;
-
-    void getAnalysisUsage(AnalysisUsage &AU) const override {}
-};
-
-}
-    '''
-        return String
-
-    def generateNormalPattern(self, InstName: str, InstInfo: dict):
+    def generateNormalPattern(self, InstName: str, InstInfo: dict, className: str):
         Checks = list()
         for Idx, ArgVal in enumerate(InstInfo["args"]):
             if "SYMBOLIC_BV" not in ArgVal and InstInfo["arg_permute_map"][Idx] == -1:
@@ -102,6 +85,7 @@ public:
             std::vector<int> Permutation = {{{}}}; 
             std::vector<Value *> Args = getPermutedArgVISA(CI, Permutation, CI); 
             if (!Args.empty()) {{
+                customPermute("{}", Args, CI);
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
                 errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
                 InstToInstMap[CI] = NewCallInst; 
@@ -109,7 +93,7 @@ public:
                 return true; 
             }}
         }} 
-        '''.format("\n".join(Checks), InstName + "_wrapper", InstName + "_wrapper", ",".join(Permutation))
+        '''.format("\n".join(Checks), InstName + "_wrapper", InstName + "_wrapper", ",".join(Permutation), className)
             else:
                 Pattern = '''
         {{ 
@@ -117,6 +101,7 @@ public:
             std::vector<int> Permutation = {{{}}}; 
             std::vector<Value *> Args = getPermutedArgVISA(CI, Permutation, CI); 
             if (!Args.empty()) {{
+                customPermute("{}", Args, CI);
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
                 errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
                 InstToInstMap[CI] = NewCallInst; 
@@ -124,7 +109,7 @@ public:
                 return true;
             }}
         }} 
-        '''.format(InstName + "_wrapper", ",".join(Permutation))
+        '''.format(InstName + "_wrapper", ",".join(Permutation), className)
         return Pattern
 
     def generateImmPatterns(self, InstName: str, InstInfo: dict):
@@ -213,7 +198,7 @@ public:
             # if self.rawSemantics[InstName].imm_width:
             #     String += self.generateImmPatterns(InstName, InstInfo)
             # else:
-            String += self.generateNormalPattern(InstName, InstInfo)
+            String += self.generateNormalPattern(InstName, InstInfo, TargetAgnosticInst)
 
         FinalPattern = GenHeadersForAutoGenFiles("//") + f'''
 #include "VISALegalizer.h"
@@ -230,22 +215,24 @@ bool VISALegalizer::legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I){
         with open(TargetAgnosticInst.capitalize()+"Selector.cpp", "w") as f:
             f.write(FinalPattern)
         print("FinalPattern:")
-        FinalPattern = f"  if (legalize_{TargetAgnosticInst}(CI, I)) {{return true;}}"
-        print(FinalPattern)
+        FinalPattern = f"if (legalize_{TargetAgnosticInst}(CI, I)) {{return true;}}\n"
+        # with open("VISALegalizer.cpp.inc", "w") as f:
+        #     f.write(FinalPattern)
         return FinalPattern
 
     def generateInstSelectorDecl(self):
-        Content = list()
+        Content = list(GenHeadersForAutoGenFiles("//"))
         for TargetAgnosticInst, InstList in self.ISASemantics.items():
             # print("TargetAgnosticInst:")
             # print(TargetAgnosticInst)
             # print("InstList:")
             # print(InstList)
-            Content.append(f"bool legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I);")
-        return "\n".join(Content)
+            Content.append(f"bool legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I);\n")
+        with open("VISALegalizer.h.inc", "w") as f:
+            f.write("".join(Content))
     
     def generateInstSelectorForAllInsts(self):
-        Content = list()
+        Content = list(GenHeadersForAutoGenFiles("//"))
         for TargetAgnosticInst, InstList in self.ISASemantics.items():
             # print("TargetAgnosticInst:")
             # print(TargetAgnosticInst)
@@ -253,7 +240,8 @@ bool VISALegalizer::legalize_{TargetAgnosticInst}(CallInst *CI, Instruction *I){
             # print(InstList)
             Content.append(self.generatePatternSet(
                 TargetAgnosticInst, InstList["target_instructions"]))
-        return "\n".join(Content)
+        with open("VISALegalizer.cpp.inc", "w") as f:
+            f.write("".join(Content))
 
     def generateInstSelector(self):
         Content = '''
@@ -271,39 +259,6 @@ bool legalize(Instruction *I) override {{
     '''.format(self.generateInstSelectorForAllInsts())
         return Content
 
-    def generatePassToRunOnFunctionAndUtils(self):
-        String = '''
-bool VISALegalizationPass::runOnFunction(Function &F) {
-  if (F.getName().contains("hydride") == false) {
-    return false;
-  }
-  // Initialize the legalizer
-  errs() << "LEGALIZATION BEGIN\\n";
-  Legalizer *L = new VISALegalizer();
-  return L->legalize(F);
-}
-
-std::vector<Value *> VISALegalizer::getPermutedArgVISA(CallInst *OriginalInst,
-                                                       std::vector<int> &Permutation,
-                                                       Instruction *InsertBefore) {
-    std::vector<Value *> NewArgs;
-    for (auto idx : Permutation) {
-        if (idx != -1) {
-            NewArgs.push_back(nullptr);
-        }
-    }
-    for (unsigned Idx = 0; Idx < Permutation.size(); Idx++) {
-        if (Permutation[Idx] != -1) {
-            auto PermIdx = Permutation[Idx];
-            assert(PermIdx < NewArgs.size() && "Invalid permutation index");
-            NewArgs[PermIdx] = OriginalInst->getArgOperand(Idx);
-        }
-    }
-    return NewArgs;
-}
-    '''
-        return String
-
     def generateLegalizerPassDefinition(self):
         String = '''
 using namespace llvm;
@@ -319,34 +274,9 @@ public:
     '''.format(self.generateInstSelector(), self.generateInstSelectorDecl())
         return String
 
-    def generateCodeForRegisteringPass(self):
-        String = '''
-char VISALegalizationPass::ID = 0;
-static RegisterPass<VISALegalizationPass> X("visa-hydride-legalize", 
-                                          "Pass to legalize tensor intrinsics");
-    '''
-        return String
 
     def generateFileWithInstSelector(self):
-        Content = self.genHeader()
-        Content += self.generatePassToRunOnFunctionAndUtils()
-        Content += self.generateCodeForRegisteringPass()
-        FileName = "VISALegalizer.cpp"
-        try:
-            File = open(FileName, "w")
-            File.write(Content)
-            print("Content:")
-            print(Content)
-            File.close()
-        except IOError:
-            print("Error making: {}".format(FileName))
-            assert False
-        Content = self.genHeaderHeader()
-        Content += self.generateLegalizerPassDeclaration()
-        Content += self.generateLegalizerPassDefinition()
-        FileName = "VISALegalizer.h"
-        with open(FileName, "w") as f:
-            f.write(Content)
+        self.generateLegalizerPassDefinition()
 
 
 if __name__ == '__main__':
