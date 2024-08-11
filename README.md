@@ -45,7 +45,7 @@ Now you are ready to use Hydride!
 
 ## Targets Supported
 
-Hydride, as a vectorizaer supports the following instruction sets:
+Hydride, as a vectorizer supports the following instruction sets:
 
 - x86 (SSE, SSE2, AVX, AVX2, AVX512 (includes VNNI), MMX, FMA)
 - Hexagon (HVX)
@@ -53,7 +53,7 @@ Hydride, as a vectorizaer supports the following instruction sets:
 
 ## Publication
 
-The first paper on Hydride was published at ASPLOS '24. You can download the
+The first paper on Hydride was published at ASPLOS 2024. In this paper we demonstrate Hydride's powerful vectorization capabilities and competitive performance of the code it generates for a variety of vector instruction sets. You can download the
 paper [from ACM Digital Library](https://dl.acm.org/doi/abs/10.1145/3620665.3640385).
 If you use Hydride, please cite both the compiler and the paper!
 
