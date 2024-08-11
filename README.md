@@ -44,6 +44,9 @@ bash install.sh
 Now you are ready to use Hydride!
 
 ## Targets Supported
+
+Hydride, as a vectorizaer supports the following instruction sets:
+
 - x86 (SSE, SSE2, AVX, AVX2, AVX512 (includes VNNI), MMX, FMA)
 - Hexagon (HVX)
 - AArch64 (Neon)
