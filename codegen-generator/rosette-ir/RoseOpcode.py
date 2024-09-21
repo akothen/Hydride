@@ -284,20 +284,17 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[4], RoseValues.RoseConstant)
             return RoseVoidType.create()
         if self.value == self.mtxinsertel.value:
-            # `mtxinsertel <elements> <tile> <r1> <c1> <r2> <c2>`
-            assert self.inputsAreValid(Inputs)
+            # `mtxinsertel <Elements> <Tile> <r1> <c1> <r2> <c2>`
             return RoseVoidType.create()
         if self.value == self.mtxinsertrow.value:
-            # `mtxinsertrow <elements> <tile> <idx>`
-            assert self.inputsAreValid(Inputs)
+            # `mtxinsertrow <Elements> <Tile> <idx>`
             return RoseVoidType.create()
         if self.value == self.mtxextractrow.value:
-            # `mtxextractrow <tile> <idx>`
-            assert self.inputsAreValid(Inputs)
-            tile, idx = Inputs
-            tile_t = tile.getType()
+            # `mtxextractrow <Tile> <idx>`
+            Tile, idx = Inputs
+            TileType = Tile.getType()
             return RoseBitVectorType.create(
-                tile_t.getElementBitwidth() * tile_t.getMaxCols())
+                TileType.getElementBitwidth() * TileType.getMaxCols())
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert (len(BVInputs) == 1)
@@ -810,47 +807,47 @@ class RoseOpcode(Enum):
                 return False
             return True
         if self.value == self.mtxinsertel.value:
-            # `mtxinsertel <elements> <tile> <r1> <c1> <r2> <c2>`
+            # `mtxinsertel <Elements> <Tile> <r1> <c1> <r2> <c2>`
             Valid = True
-            element, tile, r1, c1, r2, c2 = Inputs
-            idxs = [r1, c1, r2, c2]
-            tile_t = tile.getType()
-            Valid &= isinstance(element.getType(), RoseBitVectorType)
-            Valid &= isinstance(tile_t, RoseMatrixType)
-            Valid &= all(isinstance(idx.getType(), RoseIntegerType) for idx in idxs)
-            Valid &= element.getType() == RoseBitVectorType.create(tile_t.getElementBitwidth())
-            if all(isinstance(idx, RoseValues.RoseConstant) for idx in idxs):
+            Element, Tile, r1, c1, r2, c2 = Inputs
+            Idxs = [r1, c1, r2, c2]
+            TileType = Tile.getType()
+            Valid &= isinstance(Element.getType(), RoseBitVectorType)
+            Valid &= isinstance(TileType, RoseMatrixType)
+            Valid &= all(isinstance(idx.getType(), RoseIntegerType) for idx in Idxs)
+            Valid &= Element.getType() == RoseBitVectorType.create(TileType.getElementBitwidth())
+            if all(isinstance(idx, RoseValues.RoseConstant) for idx in Idxs):
                 Valid &= r1.getValue() <= r2.getValue()
                 Valid &= c1.getValue() <= c2.getValue()
-                Valid &= all(0 <= r < tile_t.getMaxRows() for r in [r1, r2])
-                Valid &= all(0 <= c < tile_t.getMaxCols() for c in [c1, c2])
+                Valid &= all(0 <= r < TileType.getMaxRows() for r in [r1, r2])
+                Valid &= all(0 <= c < TileType.getMaxCols() for c in [c1, c2])
             return Valid
         if self.value == self.mtxinsertrow.value:
-            # `mtxinsertrow <elements> <tile> <idx>`
+            # `mtxinsertrow <Elements> <Tile> <idx>`
             Valid = True
-            elements, tile, idx = Inputs
-            tile_t = tile.getType()
-            Valid &= isinstance(elements.getType(), RoseBitVectorType)
-            Valid &= isinstance(tile_t, RoseMatrixType)
+            Elements, Tile, idx = Inputs
+            TileType = Tile.getType()
+            Valid &= isinstance(Elements.getType(), RoseBitVectorType)
+            Valid &= isinstance(TileType, RoseMatrixType)
             Valid &= isinstance(idx.getType(), RoseIntegerType)
-            Valid &= elements.getType() == RoseBitVectorType.create(
-                tile_t.getElementBitwidth() * tile_t.getMaxCols()
+            Valid &= Elements.getType() == RoseBitVectorType.create(
+                TileType.getElementBitwidth() * TileType.getMaxCols()
             )
             if isinstance(idx, RoseValues.RoseConstant):
                 Valid &= 0 <= idx.getValue()
-                Valid &= idx.getValue() < tile_t.getMaxRows()
+                Valid &= idx.getValue() < TileType.getMaxRows()
             return Valid
         if self.value == self.mtxextractrow.value:
-            # `mtxextractrow <tile> <idx>`
+            # `mtxextractrow <Tile> <idx>`
             Valid = True
-            tile, idx = Inputs
-            tile_t = tile.getType()
-            Valid &= isinstance(tile_t, RoseMatrixType)
+            Tile, idx = Inputs
+            TileType = Tile.getType()
+            Valid &= isinstance(TileType, RoseMatrixType)
             if isinstance(idx, RoseValues.RoseConstant):
                 Valid &= 0 <= idx.getValue()
-                Valid &= idx.getValue() < tile_t.getMaxRows()
+                Valid &= idx.getValue() < TileType.getMaxRows()
             return RoseBitVectorType.create(
-                tile_t.getElementBitwidth() * tile_t.getMaxCols())
+                TileType.getElementBitwidth() * TileType.getMaxCols())
         return None
 
     def typesOfInputsAndOutputEqual(self):
