@@ -1,2 +1,0 @@
-Benchmark for gaussian7x7_batch_0029_sample_0005 produces best case of 0.000281933 sec/iter (over 9 samples, 1170 iterations, accuracy 16%).
-Best output throughput is 7e+03 mpix/sec.

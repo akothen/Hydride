@@ -142,6 +142,11 @@ class RoseOpcode(Enum):
     # zeros. This is important for semantics represented
     # using Rose IR.
     bvpadhighbits = auto()
+    
+    # todo: col-based counterparts?
+    mtxinsertel = auto()
+    mtxinsertrow = auto()
+    mtxextractrow = auto()
 
     def __str__(self):
         return self.name
@@ -278,6 +283,18 @@ class RoseOpcode(Enum):
             # The bitwidth inserted by is a constant value
             assert isinstance(Inputs[4], RoseValues.RoseConstant)
             return RoseVoidType.create()
+        if self.value == self.mtxinsertel.value:
+            # `mtxinsertel <Elements> <Tile> <r1> <c1> <r2> <c2>`
+            return RoseVoidType.create()
+        if self.value == self.mtxinsertrow.value:
+            # `mtxinsertrow <Elements> <Tile> <idx>`
+            return RoseVoidType.create()
+        if self.value == self.mtxextractrow.value:
+            # `mtxextractrow <Tile> <idx>`
+            Tile, idx = Inputs
+            TileType = Tile.getType()
+            return RoseBitVectorType.create(
+                TileType.getElementBitwidth() * TileType.getMaxCols())
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert (len(BVInputs) == 1)
@@ -416,7 +433,7 @@ class RoseOpcode(Enum):
                 return False
             if not isinstance(Inputs[0], RoseValue):
                 return False
-            # If the types of inputs are equal, then this operation is not valid
+            # If the types of inputs are equal, then this operation is not Valid
             if Inputs[0].getType() == OutputType:
                 return False
             # Valid input types are integers, bitvectors and booleans
@@ -761,7 +778,6 @@ class RoseOpcode(Enum):
             if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
-
         if self.value == self.bvpopcnt.value:
             if len(Inputs) != 1:
                 return False
@@ -790,6 +806,48 @@ class RoseOpcode(Enum):
             if self.getOutputType(Inputs) != OutputType:
                 return False
             return True
+        if self.value == self.mtxinsertel.value:
+            # `mtxinsertel <Elements> <Tile> <r1> <c1> <r2> <c2>`
+            Valid = True
+            Element, Tile, r1, c1, r2, c2 = Inputs
+            Idxs = [r1, c1, r2, c2]
+            TileType = Tile.getType()
+            Valid &= isinstance(Element.getType(), RoseBitVectorType)
+            Valid &= isinstance(TileType, RoseMatrixType)
+            Valid &= all(isinstance(idx.getType(), RoseIntegerType) for idx in Idxs)
+            Valid &= Element.getType() == RoseBitVectorType.create(TileType.getElementBitwidth())
+            if all(isinstance(idx, RoseValues.RoseConstant) for idx in Idxs):
+                Valid &= r1.getValue() <= r2.getValue()
+                Valid &= c1.getValue() <= c2.getValue()
+                Valid &= all(0 <= r < TileType.getMaxRows() for r in [r1, r2])
+                Valid &= all(0 <= c < TileType.getMaxCols() for c in [c1, c2])
+            return Valid
+        if self.value == self.mtxinsertrow.value:
+            # `mtxinsertrow <Elements> <Tile> <idx>`
+            Valid = True
+            Elements, Tile, idx = Inputs
+            TileType = Tile.getType()
+            Valid &= isinstance(Elements.getType(), RoseBitVectorType)
+            Valid &= isinstance(TileType, RoseMatrixType)
+            Valid &= isinstance(idx.getType(), RoseIntegerType)
+            Valid &= Elements.getType() == RoseBitVectorType.create(
+                TileType.getElementBitwidth() * TileType.getMaxCols()
+            )
+            if isinstance(idx, RoseValues.RoseConstant):
+                Valid &= 0 <= idx.getValue()
+                Valid &= idx.getValue() < TileType.getMaxRows()
+            return Valid
+        if self.value == self.mtxextractrow.value:
+            # `mtxextractrow <Tile> <idx>`
+            Valid = True
+            Tile, idx = Inputs
+            TileType = Tile.getType()
+            Valid &= isinstance(TileType, RoseMatrixType)
+            if isinstance(idx, RoseValues.RoseConstant):
+                Valid &= 0 <= idx.getValue()
+                Valid &= idx.getValue() < TileType.getMaxRows()
+            return RoseBitVectorType.create(
+                TileType.getElementBitwidth() * TileType.getMaxCols())
         return None
 
     def typesOfInputsAndOutputEqual(self):
@@ -882,7 +940,10 @@ class RoseOpcode(Enum):
                 or self.value == self.bvgeneralle.value \
                 or self.value == self.bvgeneralgt.value \
                 or self.value == self.bvgeneralge.value \
-                or self.value == self.ret.value:
+                or self.value == self.ret.value \
+                or self.value == self.mtxextractrow.value \
+                or self.value == self.mtxinsertrow.value \
+                or self.value == self.mtxinsertel.value:
             return False
         return None
 
@@ -976,7 +1037,10 @@ class RoseOpcode(Enum):
                 or self.value == self.not_.value \
                 or self.value == self.cast.value \
                 or self.value == self.rotateleft.value \
-                or self.value == self.rotateright.value:
+                or self.value == self.rotateright.value \
+                or self.value == self.mtxextractrow.value \
+                or self.value == self.mtxinsertrow.value \
+                or self.value == self.mtxinsertel.value:
             return False
         return None
 
@@ -1089,6 +1153,12 @@ class RoseOpcode(Enum):
                 or self.value == self.bvgeneralmax.value \
                 or self.value == self.bvgeneralmin.value:
             return (NumInputs >= 3)
+        if self.value == self.mtxinsertel.value: 
+            return NumInputs == 6 
+        if self.value == self.mtxinsertrow.value: 
+            return NumInputs == 3 
+        if self.value == self.mtxextractrow.value: 
+            return NumInputs == 2 
         return None
 
     def isBitVectorOpcode(self):
@@ -1155,7 +1225,10 @@ class RoseOpcode(Enum):
                 or self.value == self.bvtrunclow.value \
                 or self.value == self.bvtrunchigh.value \
                 or self.value == self.bvconcat.value \
-                or self.value == self.bvpadhighbits.value:
+                or self.value == self.bvpadhighbits.value \
+                or self.value == self.mtxextractrow.value \
+                or self.value == self.mtxinsertrow.value \
+                or self.value == self.mtxinsertel.value:
             return True
         return False
 

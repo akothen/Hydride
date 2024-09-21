@@ -1,2 +1,0 @@
-Benchmark for max_pool_batch_0086_sample_0002 produces best case of 0.000257124 sec/iter (over 11 samples, 1199 iterations, accuracy 7.9%).
-Best output throughput is 2.3e+02 mpix/sec.

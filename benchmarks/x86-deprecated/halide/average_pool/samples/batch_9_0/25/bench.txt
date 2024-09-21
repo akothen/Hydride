@@ -1,2 +1,0 @@
-Benchmark for average_pool_batch_0009_sample_0025 produces best case of 0.000338623 sec/iter (over 4 samples, 712 iterations, accuracy 2.2%).
-Best output throughput is 1.7e+02 mpix/sec.

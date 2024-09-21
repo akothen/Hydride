@@ -1,3 +1,10 @@
+################################################################
+#
+# This file contains matrix operations modeled as bitvector ops.
+#
+#################################################################
+
+
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
@@ -8,12 +15,9 @@ from RoseBitVectorOperation import RoseBitVectorOp
 # `mtxextractrow <tile> <idx>`
 # originally: `class RoseMatrixInsertRowOp(RoseBitVectorOp):`
 # however:    `assert len(Opcode.getBVOpInputs(Operands)) > 0`
-
-
 class RoseMatrixExtractRowOp(RoseOperation):
     def __init__(self, name: str, tile: RoseValue, idx: RoseValue, parentblock):
         inputs = [tile, idx]
-        assert RoseOpcode.mtxextractrow.inputsAreValid(inputs)
         super().__init__(RoseOpcode.mtxextractrow, name, inputs, parentblock)
 
     @staticmethod
@@ -40,7 +44,6 @@ class RoseMatrixExtractRowOp(RoseOperation):
 class RoseMatrixInsertRowOp(RoseBitVectorOp):
     def __init__(self, elements: RoseValue, tile: RoseValue, idx: RoseValue, parentblock):
         inputs = [elements, tile, idx]
-        assert RoseOpcode.mtxinsertrow.inputsAreValid(inputs)
         super().__init__(RoseOpcode.mtxinsertrow, "", inputs, parentblock)
 
     @staticmethod
@@ -67,7 +70,6 @@ class RoseMatrixInsertRowOp(RoseBitVectorOp):
 class RoseMatrixInsertElementOp(RoseBitVectorOp):
     def __init__(self, element: RoseValue, tile: RoseValue, r1: RoseValue, c1: RoseValue, r2: RoseValue, c2: RoseValue, parentblock):
         inputs = [element, tile, r1, c1, r2, c2]
-        assert RoseOpcode.mtxinsertel.inputsAreValid(inputs)
         super().__init__(RoseOpcode.mtxinsertel, "", inputs, parentblock)
 
     @staticmethod

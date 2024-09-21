@@ -2723,7 +2723,6 @@ class RoseSimilarityChecker():
 
 
 if __name__ == '__main__':
-    # SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
     if ParallelChecker:
         SimilarityChecker = RoseSimilarityCheckerParallel(["VISA"])
     else:

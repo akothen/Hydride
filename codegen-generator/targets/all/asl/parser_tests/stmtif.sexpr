@@ -1,0 +1,13 @@
+(StmtIf
+    (ExprUnOp
+    "!"
+    (ExprCall
+        (QualifiedIdentifier Any HaveRASExt)
+        (list)))
+    (StmtBlock
+    (list
+        (StmtCall
+        (QualifiedIdentifier Any EndOfInstruction)
+        (list))))
+    (list)
+    Nothing)

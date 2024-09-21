@@ -3,27 +3,48 @@ project. If you have contributed a patch or made some other contribution to
 Hydride, please submit a patch to this file to add yourself, and it will be
 done!
 
-The list is sorted by surname and formatted to allow easy grepping and
-beautification by scripts.  The fields are: name (N), email (E), web-address
+The fields are: name (N), email (E), web-address
 (W), PGP key ID and fingerprint (P), description (D), snail-mail address
 (S), and (I) IRC handle.
 
+N: Vikram Adve
+E: vadve@cs.uiuc.edu
+W: http://www.cs.uiuc.edu/~vadve/
+D: Primary advisor
+D: Great source of support (both moral and technical), wisdom, advice
+
+N: Charith Mendis
+E: charithm@illinois.edu
+W: https://charithmendis.com/
+D: Primary advisor
+D: Great source of support (both moral and technical), wisdom, advice
+
+N: Sudipta Sengupta
+E: sudipta@amazon.com
+W: https://people.csail.mit.edu/sudipta/
+D: Primary force in motivating the designing IR extensions for emerging hardware
+D: Great source of support, wisdom (both moral and technical), advice
+D: Source of insights into the latest challenges modern compilers should address
 
 N: Akash Kothari
 E: akashk4@illinois.edu
 W: https://www.linkedin.com/in/akash-k%C3%B6then
-D: Primary developer of the core ideas and architecture of Hydride
-D: Similarity checker for x86 and HVX
+D: Primary developer of the core ideas, design and architecture of Hydride
+D: Hydride IR design, implementation and transformations
+D: General similarity checking support
 D: x86 fuzzing support
+D: Implementation and performance-tuning of benchmarks
 
 N: Abdul Rafae Noor
 E: arnoor2@illinois.edu
-D: Implementation of the Halide frontend for Hydride 
-D: Implementation Hydride's synthesis heuristics
+D: Implementation heuristics for program synthesis
+D: Evaluation of Hydride on x86 and HVX
 
 N: Muchen Xu
 E: muchenx2@illinois.edu
-D: ARM support
+D: Parser for ARM pseudocode and necessary transformation for similarity checking
+D: Evaluation of Hydride on ARM
+D: Adding GPU support
 
 N: Hassam Uddin
 E: hassamu2@illinois.edu
@@ -38,19 +59,6 @@ N: Kunal Sheth
 E: kunal4@illinois.edu
 D: Partial AMX support
 
-N: Vikram Adve
-E: vadve@cs.uiuc.edu
-W: http://www.cs.uiuc.edu/~vadve/
-D: Primary advisor 
-
-N: Charith Mendis
-E: charithm@illinois.edu
-W: https://charithmendis.com/
-D: Primary advisor
-
-N: Sudipta Sengupta
-E: sudipta@amazon.com
-W: https://people.csail.mit.edu/sudipta/
-D: Primary force in motivating the designing IR extensions for modern hardware
-
-
+N: Stefanos Baziotis
+E: sb54@illinois.edu
+D: Attempted using Halide's ML-based models to autotune Halide benchmarks for performance
