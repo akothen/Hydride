@@ -181,8 +181,7 @@ class GetLengthDef:
 
         sufix = "\n;; "+"="*80 + "\n"
 
-        print("Unable to infer lengths for {} DSL Instructions: ".format(
-            len(self.unclear_lengths)))
+        #print("Unable to infer lengths for {} DSL Instructions: ".format(len(self.unclear_lengths)))
 
         get_len = "(define ({} prog {})\n (destruct prog\n{}\n )\n)".format(
             self.get_len_name, env_name, "\n".join(length_clauses))

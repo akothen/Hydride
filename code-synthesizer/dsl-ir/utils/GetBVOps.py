@@ -16,6 +16,7 @@ class GetBVOps:
         defaults = []
 
         defaults.append("[(reg id) '()]")
+        defaults.append("[(buffer-index id type size) '()]")
 
         defaults.append("[(lit v) '()]")
 

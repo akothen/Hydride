@@ -325,6 +325,9 @@ class Context:
                     scale_factor_cond = scale_factor_cond and (
                         arg.size % scale_factor == 0)
 
+
+        conds = [has_defined_io, (self.in_vectsize_index != None), (self.out_vectsize_index != None), has_defined_lanesize, scale_factor_cond]
+        #print(conds)
         return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize and scale_factor_cond
 
     def is_broadcast_like_operation(self):
@@ -632,14 +635,14 @@ class Context:
 
         print("{} )".format(prefix))
 
-    def emit_context_expr_string(self, prefix=""):
+    def emit_context_expr_string(self, prefix="", use_reg_only = False):
         string = ("{} ({} ; {}".format(prefix, self.dsl_name, self.name))
 
         for arg in self.context_args:
             if isinstance(arg, Context):
                 string += "\n" + \
-                    arg.emit_context_expr_string(prefix=prefix + "\t")
-            elif isinstance(arg, Reg) and self.extensions != None and 'halide' in self.extensions:
+                    arg.emit_context_expr_string(prefix=prefix + "\t", use_reg_only = use_reg_only)
+            elif not use_reg_only and isinstance(arg, Reg) and self.extensions != None and 'halide' in self.extensions:
                 string += "\n" + (prefix + "\t" + arg.get_halide_dsl_value())
             else:
                 string += "\n" + (prefix + "\t" + arg.get_dsl_value())

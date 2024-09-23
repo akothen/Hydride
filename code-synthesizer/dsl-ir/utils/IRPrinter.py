@@ -119,6 +119,7 @@ class IRPrinter:
 
         return "(begin "+ str_expr +")\n"
 
+
     def emit_base_print_expr(self, dsl_inst):
 
         if dsl_inst.has_bounded_behavior():
@@ -196,7 +197,7 @@ class IRPrinter:
 
 
     def emit_fallback_def(self):
-        return "\t[v (~s v)]"
+        return "\t[v (pretty-format v)]"
 
 
 

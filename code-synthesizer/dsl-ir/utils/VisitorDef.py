@@ -16,6 +16,7 @@ class VisitorDef:
         defaults.append("[(idx-i id) (fn prog)]")
         defaults.append("[(idx-j id) (fn prog)]")
         defaults.append("[(reg id) (fn prog) ]")
+        defaults.append("[(buffer-index id type size) (fn prog) ]")
 
         defaults.append("[(lit v) (fn prog)]")
 

@@ -5,13 +5,13 @@ import sys
 
 pp = pprint.PrettyPrinter(indent=1)
 
-simd_sizes = [1024, 2048]
-simd_precs = [8, 16, 32]
+simd_sizes = [8, 16, 32, 64, 128, 256, 512, 1024, 2048, 2048*2]
+simd_precs = [8, 16, 32, 64]
 
-cast_from_sizes = [2048]
-cast_to_sizes = [1024]
-cast_from_precs = [32, 16]
-cast_to_precs = [16, 8]
+cast_from_sizes = [2048, 1024, 512, 256, 128, 64, 32, 16]
+cast_to_sizes = [1024, 512, 256, 128, 64, 32, 16, 8]
+cast_from_precs = [64, 32, 16]
+cast_to_precs = [32,16, 8]
 
 
 slice_from_sizes = [2048]
@@ -24,11 +24,11 @@ concat_to_sizes = [2048]
 concat_from_precs = [32, 16, 8]
 
 
-widening_input_sizes = [1024]
-widening_input_precs = [8, 16]
+widening_input_sizes = [8, 16, 32, 64, 128, 256, 512,1024, 2048]
+widening_input_precs = [8, 16, 32]
 
-input_broadcast_sizes = [32]
-output_broadcast_sizes = [1024, 2048]
+input_broadcast_sizes = [8,16,32]
+output_broadcast_sizes = [16,32,64,128, 256, 512,1024, 2048]
 
 
 # Signedness one applies to both
@@ -501,6 +501,73 @@ def create_widening_halide_dict_entry(classes):
     return semantics_dict
 
 
+repair_reduce_contexts = [
+
+    {"name": "typed:signed-vector_reduce_add", "bvops": ["bvadd", "extract"],
+     "sizes": simd_sizes, "precs": simd_precs, "signedness": None, "reduce_factors": reduce_factors},
+
+]
+
+
+
+def create_reduce_repair_dict_entry(classes):
+
+    semantics_dict = {}
+
+    for desc in classes:
+        target_desc = {"target_instructions": {},
+                       "semantics": desc["bvops"]}.copy()
+        for size in desc['sizes']:
+            for prec in desc['precs']:
+                for reduce_factor in desc['reduce_factors']:
+
+                    if prec > size:
+                        continue
+
+                    if size // reduce_factor != prec:
+                        continue
+
+                    entry = copy.deepcopy({
+                        "args": [str(reduce_factor), "SYMBOLIC_BV_{}".format(size), str(prec), str(size)] ,
+                        "in_vectsize": size,
+                        "out_vectsize": prec,
+                        "lanesize": prec,
+                        "in_precision": prec,
+                        "out_precision": prec,
+                        "in_vectsize_index": 3,
+                        "out_vectsize_index": 2,
+                        "in_lanesize_index": 2,
+                        "out_lanesize_index": 2,
+                        "in_precision_index": 2,
+                        "out_precision_index": 2,
+                        "arg_permute_map": [],
+                        "Signedness": desc['signedness'],
+                        "Cost": "None",
+                        "SIMD": "True",
+                        "Extensions": ['repair'],
+                        "ctx_sema": desc["bvops"],
+                    })
+
+                    target_desc['target_instructions'][desc['name']+"_p" +
+                                                       str(prec)+"_s"+str(size)+"_signed_"+str(desc['signedness'])] = entry
+
+        if desc['name'] in semantics_dict:
+            semantics_dict[desc['name']]['semantics'] += desc['bvops']
+            semantics_dict[desc['name']]['semantics'] = list(
+                set(semantics_dict[desc['name']]['semantics']))
+
+            for key in target_desc['target_instructions']:
+                assert key not in semantics_dict[desc['name']
+                                                 ]['target_instructions'], "Key should not be present in dict"
+                semantics_dict[desc['name']
+                               ]['target_instructions'][key] = target_desc['target_instructions'][key]
+        else:
+            semantics_dict[desc['name']] = target_desc.copy()
+
+    return semantics_dict
+
+reduce_dicts = create_reduce_repair_dict_entry(repair_reduce_contexts)
+
 ternary_dict = create_nary_halide_dict_entry(halide_ternary_ops_contexts, n=3)
 simd_dict = create_nary_halide_dict_entry(halide_binary_simd_ops_contexts, n=2)
 unary_dict = create_nary_halide_dict_entry(halide_unary_ops_contexts, n=1)
@@ -511,7 +578,7 @@ slice_dict = create_slice_halide_dict_entry(halide_slice_vector_contexts)
 concat_dict = create_concat_halide_dict_entry(halide_concat_vector_contexts)
 
 halide_dicts = [concat_dict, slice_dict, broadcast_dict,
-                unary_dict, simd_dict, cast_dict, ternary_dict, widen_dict]
+                unary_dict, simd_dict, cast_dict, ternary_dict, widen_dict, reduce_dicts]
 
 
 combined_dict = {}

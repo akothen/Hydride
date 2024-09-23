@@ -26,6 +26,17 @@ class ContainsDef:
         for idx, dsl_inst in enumerate(dsl_list):
             dsl_inst.dsl_id = idx
 
+    def can_allow_identity(self, dsl_inst):
+        bv_ops = []
+        for ctx in dsl_inst.contexts:
+            bv_ops += ctx.get_bv_ops()
+        bv_ops = list(set(bv_ops))
+        VALID_IDENTITY_OPS = ["extract", "concat", "bvsmax", "bvumax", "bvsmin", "bvumin", "bvand", "bvor", "bvsgt", "bvugt",
+                              "bvslt", "bvult"]
+        for op in bv_ops:
+            if op not in VALID_IDENTITY_OPS:
+                return False
+        return True
     def emit_dsl_contains_def(self, dsl_inst, struct_definer,  contains_name="repair:contains" , interpreter_name = "repair:interpret", env_name = "env"):
 
         clause = [struct_definer.emit_dsl_struct_use(dsl_inst)]
@@ -39,6 +50,8 @@ class ContainsDef:
         sub_clause = []
         sub_defs = []
         operand_contains_def = []
+        all_lits_constraint = []
+        inputs_symbolics_constraint = []
 
         interpret_expr = "({} {} {})".format(interpreter_name , "prog", env_name)
         interpret_expr_def = "(define prog-interpret {})".format(interpret_expr)
@@ -50,15 +63,29 @@ class ContainsDef:
                 sub_clause.append(interpret_def)
                 sub_defs.append("{}-interpret".format(arg.name))
 
+                is_symbolic = "(symbolic? {}-interpret)".format(arg.name)
+                inputs_symbolics_constraint.append(is_symbolic)
                 operand_contains = "({} {} query-ref env)".format(contains_name, arg.name)
                 operand_contains_def.append(operand_contains)
 
+                is_lit = "(lit? {})".format(arg.name)
+                all_lits_constraint.append(is_lit)
+
         clause += sub_clause
 
+        result_concrete = " (symbolic? {})".format("prog-interpret")
+        # If any input is symbolic, but the output is always concrete, then we don't want this case either
+        symbolic_const = "" #"(and {} (or {}))".format(result_concrete, " ".join(inputs_symbolics_constraint))
         contains_assertion = self.emit_dsl_contains_assert(sub_defs, "prog-interpret",dsl_inst.dsl_id)
         not_equal_assertions = self.emit_dsl_operands_not_equal_result(sub_defs, "prog-interpret",dsl_inst.dsl_id)
+        not_equal_assertions = "\n".join(not_equal_assertions)
+        not_lit_assert = "(not (and {}))".format(" ".join(all_lits_constraint))
+        assertions = [contains_assertion,  not_lit_assert, symbolic_const]
 
-        check = "(and \n{} \n{})".format(contains_assertion, "\n".join(not_equal_assertions))
+        if False and not self.can_allow_identity(dsl_inst):
+            assertions.append(not_equal_assertions)
+
+        check = "(and \n{}\n)".format("\n".join(assertions))
         check = "(or \n{} \n{})".format(check, "\n".join(operand_contains_def))
         clause.append(check)
 

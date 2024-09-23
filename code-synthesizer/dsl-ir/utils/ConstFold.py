@@ -5,7 +5,12 @@ from common.PredefinedDSL import *
 
 class ConstFold:
 
-    def __init__(self):
+    def __init__(self, aggressive = False):
+
+        # When enabled, the constant folding
+        # aggressively simplies cases where
+        # some of the operands are constant
+        self.aggressive = aggressive
         return
 
     def emit_default_def(self, struct_definer,  const_fold_name="hydride:const-fold", interpret_name="hydride:interpret"):
@@ -16,6 +21,7 @@ class ConstFold:
         defaults.append("[(idx-i id) (idx-i id)]")
         defaults.append("[(idx-j id) (idx-j id)]")
         defaults.append("[(reg id) (reg id) ]")
+        defaults.append("[(buffer-index id type size) (buffer-index id type size) ]")
 
         defaults.append("[(lit v) (lit v)]")
 
@@ -75,6 +81,74 @@ class ConstFold:
         # but with the (possibly simplified) arguments
         not_all_const_clause = "[else " + new_expr + "]"
 
+        partial_const_clauses = []
+        # Insert aggressive simplification clauses
+        if self.aggressive:
+
+            # As we want to create symbolic holes we'll need to
+            # the size of the symbolic arguments
+            size_arg = None
+            for idx, arg in enumerate(sample_ctx.context_args):
+                if isinstance(arg, Integer) and "size_i" in arg.name:
+                    size_arg = arg
+                    break
+            if size_arg != None:
+                for idx, arg in enumerate(sample_ctx.context_args):
+                    if isBitVectorType(arg):
+                        reg_counter = 0
+                        new_context = []
+                        other_args_folded = []
+                        for idx2, arg2 in enumerate(sample_ctx.context_args):
+                            if idx2 == idx:
+                                new_context.append(arg.name+"-folded")
+                            elif isBitVectorType(arg2):
+                                new_context.append("(reg (bv {} 4))".format(reg_counter))
+                                other_args_folded.append(arg2.name+"-folded")
+                                reg_counter += 1
+                            else:
+                                new_context.append(arg2.name)
+                        partial_list_clause = ["[(lit? {})".format(arg.name+"-folded")]
+                        holes = ["(?? (bitvector {}))".format(size_arg.name)] * reg_counter
+                        test_env = "(define test-env (vector {}))".format(" ".join(holes))
+
+                        test_expr = "(define test-expr ({} {}))".format(dsl_inst.get_dsl_name(), " ".join(new_context))
+
+                        partial_list_clause.append(test_env)
+                        partial_list_clause.append(test_expr)
+
+                        test_result = "(define test-result ({} test-expr test-env))".format(interpret_name)
+
+                        partial_list_clause.append(test_result)
+
+                        condition_clauses = []
+
+                        concrete_case = "[(concrete? test-result) (lit test-result)]"
+                        condition_clauses.append(concrete_case)
+
+                        for r in range(reg_counter):
+                            equal_operand_case = "[(equal? test-result (vector-ref test-env {}))  {}]".format(r, other_args_folded[r])
+                            condition_clauses.append(equal_operand_case)
+                        else_case = "[else {}]".format(new_expr)
+                        condition_clauses.append(else_case)
+
+                        condition_stmt = "(cond {})".format("\n".join(condition_clauses))
+                        partial_list_clause.append(condition_stmt)
+                        partial_list_clause.append("]")
+                        partial_const_clauses.append("\n".join(partial_list_clause))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         # In the case where all inputs are constant
         # we can evaluate the result of the computation
         # and create a 'lit'. Any expression consuming
@@ -91,6 +165,7 @@ class ConstFold:
 
         interpret.append("(cond")
         interpret.append(all_const_clause)
+        interpret += partial_const_clauses
         interpret.append(not_all_const_clause)
         interpret.append(")")
 

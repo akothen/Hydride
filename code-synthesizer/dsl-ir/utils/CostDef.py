@@ -19,6 +19,7 @@ class CostDef:
         defaults = []
 
         defaults.append("[(reg id) 1]")
+        defaults.append("[(buffer-index id ty size) 1]")
         defaults.append("[(lit v) {} ]".format(LIT_COST))
 
         # defaults.append("[(buffer-index idx type size) idx]")
