@@ -67,6 +67,51 @@
 )
 
 
+(define
+    (shuffle_T16_32x2_lo v32int16_a v32int16_b)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 1024 1024))])
+                (apply
+                  concat
+                  (for/list ([%inner.it (reverse (range 0 512 16))])
+                            (define %low %inner.it)
+                            (define %high (+ %inner.it (- 16 1)))
+                            (define %a (extract  %high %low v32int16_a))
+                            (define %b (extract  %high %low v32int16_b))
+                            (concat %b %a)
+                            )
+                  )
+                )
+      )
+    )
+   (extract (- 512 1) 0 out_vec) 
+)
+
+(define
+    (shuffle_T16_32x2_hi v32int16_a v32int16_b)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 1024 1024))])
+                (apply
+                  concat
+                  (for/list ([%inner.it (reverse (range 0 512 16))])
+                            (define %low %inner.it)
+                            (define %high (+ %inner.it (- 16 1)))
+                            (define %a (extract  %high %low v32int16_a))
+                            (define %b (extract  %high %low v32int16_b))
+                            (concat %b %a)
+                            )
+                  )
+                )
+      )
+    )
+   (extract (- 1024 1) 512 out_vec) 
+)
+
+
 (define Rt_int (bitvector->integer (bv #xfffffffc 32)))
 (define %elem_size (* (- 0 Rt_int) 2))
 
@@ -76,6 +121,8 @@
 
 (pretty-print (shuffle_T8_64x2_lo xbuff_64_8 ybuff_64_8))
 (pretty-print (shuffle_T8_64x2_hi xbuff_64_8 ybuff_64_8))
+(pretty-print (shuffle_T16_32x2_lo xbuff_64_8 ybuff_64_8))
+(pretty-print (shuffle_T16_32x2_hi xbuff_64_8 ybuff_64_8))
 ;; (pretty-print Rt_int)
 ;; (pretty-print %elem_size)
 ;; 
