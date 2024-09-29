@@ -2,6 +2,8 @@
 
 (require racket/pretty)
 
+;; Forward Ops
+
 ;; Transpose 64x2 matrix of 8 bit values. Extract low 512 bits of result. 
 (define
     (shuffle_T8_64x2_lo v64int8_a v64int8_b)
@@ -397,4 +399,109 @@
       )
     )
     out_vec 
+)
+
+
+;; Backward Ops
+
+;; Transpose 2x32 matrix of 16 bit values. Extract high 512 bits of result.
+(define
+    (shuffle_T16_2x32_lo v32int16_a v32int16_b)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 1024 1024))])
+                (concat
+                  (apply
+                    concat
+                    (for/list ([%inner.it.0 (reverse (range 0 256 16))])
+                              (define %low.0 (+ 16 (* 2 %inner.it.0)))
+                              (define %high.0 (+ %low.0 (- 16 1)))
+                              (define %ext.v32int16_a.0 (extract  %high.0 %low.0 v32int16_a))
+                              %ext.v32int16_a.0
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([%inner.it.1 (reverse (range 0 256 16))])
+                              (define %low.1 (+ 16 (* 2 %inner.it.1)))
+                              (define %high.1 (+ %low.1 (- 16 1)))
+                              (define %ext.v32int16_b.0 (extract  %high.1 %low.1 v32int16_b))
+                              %ext.v32int16_b.0
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([%inner.it.2 (reverse (range 0 256 16))])
+                              (define %low.2 (* 2 %inner.it.2))
+                              (define %high.2 (+ %low.2 (- 16 1)))
+                              (define %ext.v32int16_a.1 (extract  %high.2 %low.2 v32int16_a))
+                              %ext.v32int16_a.1
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([%inner.it.3 (reverse (range 0 256 16))])
+                              (define %low.3 (* 2 %inner.it.3))
+                              (define %high.3 (+ %low.3 (- 16 1)))
+                              (define %ext.v32int16_b.1 (extract  %high.3 %low.3 v32int16_b))
+                              %ext.v32int16_b.1
+                              )
+                    )
+                  )
+                )
+      )
+    )
+   (extract (- 512 1) 0 out_vec) 
+)
+
+;; Transpose 2x32 matrix of 16 bit values. Extract high 512 bits of result.
+(define
+    (shuffle_T16_2x32_hi v32int16_a v32int16_b)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 1024 1024))])
+                (concat
+                  (apply
+                    concat
+                    (for/list ([%inner.it.0 (reverse (range 0 256 16))])
+                              (define %low.0 (+ 16 (* 2 %inner.it.0)))
+                              (define %high.0 (+ %low.0 (- 16 1)))
+                              (define %ext.v32int16_a.0 (extract  %high.0 %low.0 v32int16_a))
+                              %ext.v32int16_a.0
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([%inner.it.1 (reverse (range 0 256 16))])
+                              (define %low.1 (+ 16 (* 2 %inner.it.1)))
+                              (define %high.1 (+ %low.1 (- 16 1)))
+                              (define %ext.v32int16_b.0 (extract  %high.1 %low.1 v32int16_b))
+                              %ext.v32int16_b.0
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([%inner.it.2 (reverse (range 0 256 16))])
+                              (define %low.2 (* 2 %inner.it.2))
+                              (define %high.2 (+ %low.2 (- 16 1)))
+                              (define %ext.v32int16_a.1 (extract  %high.2 %low.2 v32int16_a))
+                              %ext.v32int16_a.1
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([%inner.it.3 (reverse (range 0 256 16))])
+                              (define %low.3 (* 2 %inner.it.3))
+                              (define %high.3 (+ %low.3 (- 16 1)))
+                              (define %ext.v32int16_b.1 (extract  %high.3 %low.3 v32int16_b))
+                              %ext.v32int16_b.1
+                              )
+                    )
+                  )
+                )
+      )
+    )
+   (extract (- 1024 1) 512 out_vec) 
 )
