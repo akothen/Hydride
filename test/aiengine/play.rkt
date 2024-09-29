@@ -35,7 +35,7 @@
                             (define %high (+ %inner.it (- 8 1)))
                             (define %a (extract  %high %low v64int8_a))
                             (define %b (extract  %high %low v64int8_b))
-                            (concat %b %a)
+                            (concat %a %b)
                             )
                   )
                 )
@@ -57,7 +57,7 @@
                             (define %high (+ %inner.it (- 8 1)))
                             (define %a (extract  %high %low v64int8_a))
                             (define %b (extract  %high %low v64int8_b))
-                            (concat %b %a)
+                            (concat %a %b)
                             )
                   )
                 )
@@ -80,7 +80,7 @@
                             (define %high (+ %inner.it (- 16 1)))
                             (define %a (extract  %high %low v32int16_a))
                             (define %b (extract  %high %low v32int16_b))
-                            (concat %b %a)
+                            (concat %a %b)
                             )
                   )
                 )
@@ -102,7 +102,7 @@
                             (define %high (+ %inner.it (- 16 1)))
                             (define %a (extract  %high %low v32int16_a))
                             (define %b (extract  %high %low v32int16_b))
-                            (concat %b %a)
+                            (concat %a %b)
                             )
                   )
                 )
@@ -112,6 +112,78 @@
 )
 
 
+(define
+    (shuffle_T16_16x4_lo v16int8_a v16int8_b v16int8_c v16int8_d)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 1024 1024))])
+                (apply
+                  concat
+                  (for/list ([%inner.it (reverse (range 0 256 16))])
+                            (define %low %inner.it)
+                            (define %high (+ %inner.it (- 16 1)))
+                            (define %a (extract  %high %low v16int8_a))
+                            (define %b (extract  %high %low v16int8_b))
+                            (define %c (extract  %high %low v16int8_c))
+                            (define %d (extract  %high %low v16int8_d))
+                            (concat %a %b %c %d)
+                            )
+                  )
+                )
+      )
+    )
+   (extract (- 512 1) 0 out_vec) 
+)
+
+(define
+    (shuffle_T16_16x4_hi v16int8_a v16int8_b v16int8_c v16int8_d)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 1024 1024))])
+                (apply
+                  concat
+                  (for/list ([%inner.it (reverse (range 0 256 16))])
+                            (define %low %inner.it)
+                            (define %high (+ %inner.it (- 16 1)))
+                            (define %a (extract  %high %low v16int8_a))
+                            (define %b (extract  %high %low v16int8_b))
+                            (define %c (extract  %high %low v16int8_c))
+                            (define %d (extract  %high %low v16int8_d))
+                            (concat %a %b %c %d)
+                            )
+                  )
+                )
+      )
+    )
+   (extract (- 1024 1) 512 out_vec) 
+)
+
+(define
+    (shuffle_T16_8x4 v8int16_a v8int16_b v8int16_c v8int16_d)
+    (define out_vec
+    (apply
+      concat
+      (for/list ([%outer.it (reverse (range 0 512 512))])
+                (apply
+                  concat
+                  (for/list ([%inner.it (reverse (range 0 128 16))])
+                            (define %low %inner.it)
+                            (define %high (+ %inner.it (- 16 1)))
+                            (define %a (extract  %high %low v8int16_a))
+                            (define %b (extract  %high %low v8int16_b))
+                            (define %c (extract  %high %low v8int16_c))
+                            (define %d (extract  %high %low v8int16_d))
+                            (concat %a %b %c %d)
+                            )
+                  )
+                )
+      )
+    )
+    out_vec 
+)
+
 (define Rt_int (bitvector->integer (bv #xfffffffc 32)))
 (define %elem_size (* (- 0 Rt_int) 2))
 
@@ -119,10 +191,24 @@
 (define xbuff_64_8 (bv #x45a0d919bc9d4bdbd8637303e721d570d0b2d5f8e42ba6fd16ddbf52b6b0542ebdc759304154e6e7d373322428835cc7a8f52d42a4ca6bf04d0eda561598c273 512))
 (define ybuff_64_8 (bv #x1249fa9a217c482218ff269eeec77185a6df74e05f9e7d35c5bdca571d748398f2a01bb768f1d7f3b29fa03db08315f8dd5ee30e6a631f1962a68be5eb53365d 512))
 
+
+(define xbuff_16_4 (bv #x388c8adce58e9da953d6aa597fa64bd9147a88e9aee84f15ec539ae2d3b22ef3 256))
+(define ybuff_16_4 (bv #xca04fd81922b627d014d828508b1d6fb7c9d35a32e70adef311be6ecec7b5989 256))
+(define zbuff_16_4 (bv #x97d1130ad5136f69793aa3e10c6e33ddd37a2cf29a69a6cae2cf0fcdbe091afd 256))
+(define abuff_16_4 (bv #x081940f96afb1fccd0b01c6091cfb46bf74aa4c9d9c6c0f3f0de59fba7162145 256))
+
+(define xbuff_8_4 (bv #x147a88e9aee84f15ec539ae2d3b22ef3 128))
+(define ybuff_8_4 (bv #x7c9d35a32e70adef311be6ecec7b5989 128))
+(define zbuff_8_4 (bv #xd37a2cf29a69a6cae2cf0fcdbe091afd 128))
+(define abuff_8_4 (bv #xf74aa4c9d9c6c0f3f0de59fba7162145 128))
+
 (pretty-print (shuffle_T8_64x2_lo xbuff_64_8 ybuff_64_8))
 (pretty-print (shuffle_T8_64x2_hi xbuff_64_8 ybuff_64_8))
 (pretty-print (shuffle_T16_32x2_lo xbuff_64_8 ybuff_64_8))
 (pretty-print (shuffle_T16_32x2_hi xbuff_64_8 ybuff_64_8))
+(pretty-print (shuffle_T16_16x4_lo xbuff_16_4 ybuff_16_4 zbuff_16_4 abuff_16_4))
+(pretty-print (shuffle_T16_16x4_hi xbuff_16_4 ybuff_16_4 zbuff_16_4 abuff_16_4))
+(pretty-print (shuffle_T16_8x4 xbuff_8_4 ybuff_8_4 zbuff_8_4 abuff_8_4))
 ;; (pretty-print Rt_int)
 ;; (pretty-print %elem_size)
 ;; 
