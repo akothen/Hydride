@@ -1502,8 +1502,8 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
       Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
     else:
-      if Context.getElemTypeOfVariable(FoundValue.getName()) != x86Types[LookupExpr.key]:
-        Context.updateElemTypeOfVariable(FoundValue.getName(), x86Types[LookupExpr.key])
+      if Context.getElemTypeOfVariable(CompiledValue.getName()) != x86Types[LookupExpr.key]:
+        Context.updateElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
   
   # Add the typelookup to context
   Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
