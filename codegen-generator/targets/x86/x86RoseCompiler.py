@@ -277,8 +277,6 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
   if isinstance(Low, RoseConstant):
     assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
   if isinstance(High, RoseConstant):
-    # todo: KUNAL — This breaks on _mm256_alignr_epi8 because of `((a[i+127:i] << 128)[255:0]`
-    #  `[255:0]` is really used as a type specifier for `a[i+127:i]`... not a bit slice
     assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
   if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
     assert High.getValue() >= Low.getValue()
@@ -323,8 +321,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     Vector = CompileExpression(IndexExpr.obj, Context)
     # Get the high index
     assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
-    # ElemType = Context.getElemTypeOfVariable(Vector.getName())  # todo: Kunal — No??  this makes tile.rows return bv8192 which is WRONG
-    assert isinstance(Context.getElemTypeOfVariable(Vector.getName()), RoseBitVectorType)
+    ElemType = Context.getElemTypeOfVariable(Vector.getName())  
+    assert isinstance(ElemType, RoseBitVectorType)
     IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
     HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
     Context.addAbstractionToIR(HighIndex)
@@ -861,12 +859,11 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
    and BinaryExpr.b.funcname in ZeroExtendsSize:
       # Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
-      # todo: KUNAL — this breaks my first-draft amx implementation because AMX does 32-bit X 32-bit => 32-bit multiplications, not ... => 64-bit
-      # OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      # Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
-      #                     Operand1, OperandBitwidth)
-      # Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
-      #                     Operand2, OperandBitwidth)
+      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                          Operand1, OperandBitwidth)
+      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                          Operand2, OperandBitwidth)    
       # Add signedness info
       Context.addSignednessInfoForValue(Operand1, IsSigned=False)
       Context.addSignednessInfoForValue(Operand2, IsSigned=False)
@@ -881,10 +878,6 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # There are cases where bitvectors are multiplied to larger numbers
   # TODO: Make this more general if need be. Right now, we deal with this
   # as a special case.
-  # todo: KUNAL — don't use type(BinaryExpr.a) ??  Should instead use OperandX.getType()
-    #  Otherwise we break e.g. _mm256_mpsadbw_epu8 and a bunch of other instructions where
-    #  an integer (e.g. RoseMulOp) is multiplied by a bitvector (e.g. RoseBVZeroExtendOp)
-    #  but in the AST they are both Vars
   if type(BinaryExpr.a) == Number \
   and (type(BinaryExpr.b) == BitSlice or type(BinaryExpr.b) == BitIndex):
     NumIntBits = BinaryExpr.a.val.bit_length()
@@ -1088,6 +1081,7 @@ def PreCompileBuiltin(CallStmt, Context : x86RoseContext):
 
   # Add the division operation to the context as well
   Context.addCompiledAbstraction(RightShiftExpr.id, Operation)
+
   return Operation
 
 
@@ -1130,12 +1124,13 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   # Check if this is a call to a builtin function
   Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList, Context)
 
-  if not isinstance(Operation, list): Operation = [Operation]
-  for op in Operation:
+  if not isinstance(Operation, list): 
+    Operation = [Operation]
+  for Op in Operation:
     # Add the operation to the IR
-    Context.addAbstractionToIR(op)
+    Context.addAbstractionToIR(Op)
     # Add the operation to the context
-    Context.addCompiledAbstraction(CallStmt.id, op)
+    Context.addCompiledAbstraction(CallStmt.id, Op)
 
   return Operation[-1] if Operation else None
 
@@ -1284,16 +1279,8 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     return
 
   # Compile the loop bounds and step
-  print("COMPILING FOR LOOP")
-  print(ForStmt)
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
-  print("Begin:")
-  Begin.print()
-  Begin.getType().print()
-  print("End:")
-  End.print()
-  End.getType().print()
   assert Begin.getType() == End.getType()
   One = RoseConstant.create(1, Begin.getType())
   MinusOne = RoseConstant.create(-1, Begin.getType())
@@ -1311,6 +1298,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     Context.addAbstractionToIR(End)
     # Add this updated value to the context
     Context.addCompiledAbstraction(ForStmt.end, End)
+    #Context.updateCompiledAbstraction(ForStmt.end, End)
 
   # Generate the loop
   Loop = RoseForLoop.create(Context.genName(ForStmt.iterator.name), Begin, End, Step)
@@ -1486,6 +1474,9 @@ def CompileIfElseIfElse(IfStmt, Context : x86RoseContext):
 
 
 def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
+  print("COMPILE TYPE LOOKUP")
+  print("LookupExpr:")
+  print(LookupExpr)
   # LookupExpr tracks types of variables
   if type(LookupExpr.obj) == Var:
     # Check if the variable is already defined and cached. If so, just return that.
@@ -1495,6 +1486,9 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
       # See if the element type of this variable is known, if not add it.
       if Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False:
         Context.addElemTypeOfVariable(FoundValue.getName(), x86Types[LookupExpr.key])
+      else:
+        if Context.getElemTypeOfVariable(FoundValue.getName()) != x86Types[LookupExpr.key]:
+          Context.updateElemTypeOfVariable(FoundValue.getName(), x86Types[LookupExpr.key])
       return FoundValue
     # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
     CompiledValue = RoseValue.create(LookupExpr.obj.name, Context.getMaxVectorLength())
@@ -1504,16 +1498,19 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
     # Add the variable info to the context
     Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
   else:
-    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice or type(LookupExpr.obj) == MatrixRowLookup
+    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice \
+        or type(LookupExpr.obj) == MatrixRowLookup
     # Compile the bit slice
     CompiledValue = CompileExpression(LookupExpr.obj, Context)
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
       Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
+    else:
+      if Context.getElemTypeOfVariable(CompiledValue.getName()) != x86Types[LookupExpr.key]:
+        Context.updateElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
   
   # Add the typelookup to context
   Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
   return CompiledValue
-
 
 
 def CompileMatrixDimLookup(expr, Context: x86RoseContext):
@@ -1581,6 +1578,7 @@ def CompileMatrixRowLookup(expr, Context: x86RoseContext):
   Context.addAbstractionToIR(op)
   Context.addCompiledAbstraction(expr.id, op)
   return op
+
 
 def CompileMatch(MatchExpr, Context: x86RoseContext):
   assert type(MatchExpr.val) == BitIndex or type(MatchExpr.val) == BitSlice
@@ -1792,6 +1790,7 @@ CompileAbstractions = {
 
 
 def HandleToSignExtend(Bitwidth : int):
+  print("Handle sign extension")
   def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
@@ -1957,7 +1956,6 @@ def HandleAmxWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
   assert isinstance(nbytes, RoseArgument)
 
   _name = Context.genName
-
   _type = RoseIntegerType.create(32)
   assert nbytes.getType() == _type
   assert r.getType() == _type
@@ -1983,12 +1981,10 @@ def HandleAmxZeroUpperRows(Name: str, Args: list, Context: x86RoseContext):
   #       ENDFOR
   #   }
   [treg, r] = Args
-
   assert isinstance(treg.getType(), RoseMatrixType)
   assert isinstance(r, RoseArgument)
 
   _name = Context.genName
-
   _type = RoseIntegerType.create(32)
   assert r.getType() == _type
 
@@ -2008,6 +2004,7 @@ def HandleAmxZeroTileConfigStart(Name : str, Args : list, Context : x86RoseConte
   #   // no-op
   #   }
   return []  # return void
+
 
 # Builtin functions
 Builtins = {
@@ -2048,6 +2045,7 @@ Builtins = {
   'zero_tileconfig_start': HandleAmxZeroTileConfigStart
 }
 
+
 # Extends size
 BuiltinExtendsSize = {
    'ZeroExtend16' : 16, 
@@ -2057,6 +2055,7 @@ BuiltinExtendsSize = {
    'SignExtend32' : 32, 
    'SignExtend64' : 64, 
 }
+
 
 ZeroExtendsSize = [ 'ZeroExtend16', 'ZeroExtend32', 'ZeroExtend64' ]
 
@@ -2361,16 +2360,13 @@ BinaryOps = {
     'XOR' : HandleToXor,
 }
 
+
 def NeedToExtendOperandSize(Op):
   if Op == "*" or Op == '/':
     return True
   return False
 
+
 # These are binary ops whose output type is not the same
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
-
-
-
-
-
