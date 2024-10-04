@@ -193,11 +193,11 @@ int main(int argc, char **argv) {
   /* -----------------------------------------------------*/
 
   unsigned char *input = (unsigned char *)aligned_malloc(
-      width * height * sizeof(unsigned char),
+      width * height * sizeof(unsigned int),
       1 << LOG2VLEN); // memalign(1 << LOG2VLEN, width*height*sizeof(unsigned
                       // char));
   unsigned char *output = (unsigned char *)aligned_malloc(
-      width * height * 4 * sizeof(unsigned char),
+      width * height * 4 * sizeof(unsigned int),
       1 << LOG2VLEN); // memalign(1 << LOG2VLEN, width*height*4*sizeof(unsigned
                       // char));
 
@@ -380,8 +380,8 @@ int main(int argc, char **argv) {
   halide_dimension_t b_dim{0, 1, 128 * (width / 32) * (height / 32)};
   halide_dimension_t shape[4] = {c_dim, x_dim, y_dim, b_dim};
 
-  Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
-  Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
+  Halide::Runtime::Buffer<int32_t> input_buf((int32_t*)input, 4, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)output, 4, shape);
 
   benchmark([&]() {
     int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
