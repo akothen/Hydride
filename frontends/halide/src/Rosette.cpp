@@ -2812,7 +2812,9 @@ private:
 
             // Abstract scalar arithmetic
             // operations.
-            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)) {
+            if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)
+                    || (_arch == HydrideSupportedArchitecture::BitSerial)
+                    ) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -2888,6 +2890,9 @@ private:
                 supported_input_sizes.push_back(32);
                 supported_input_sizes.push_back(8);
                 break;
+            case HydrideSupportedArchitecture::BitSerial:
+                supported_input_sizes.push_back(32);
+                break;
             case HydrideSupportedArchitecture::X86:
                 debug(1) << "Abstraction vector sizes for X86 "
                          << "\n";
@@ -2942,6 +2947,9 @@ private:
                 break;
             case HydrideSupportedArchitecture::HVX:
                 vec_lens.push_back(2048);
+                vec_lens.push_back(1024);
+                break;
+            case HydrideSupportedArchitecture::BitSerial:
                 vec_lens.push_back(1024);
                 break;
             case HydrideSupportedArchitecture::X86:

@@ -35,7 +35,8 @@ benchmarks = gaussian3x3 \
 			 batched_matmul_256_32bit\
 			 matmul_256_32bit_bias_add\
 			 matmul_256_32bit_bias_add_add\
-			 matmul_256_32bit_bias_add_relu
+			 matmul_256_32bit_bias_add_relu \
+			 bitsimd_matmul
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 

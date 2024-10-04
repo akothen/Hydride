@@ -802,8 +802,8 @@ int main(int argc, char **argv) {
   halide_dimension_t y_dim{0, height, width / 2};
   halide_dimension_t shape[2] = {x_dim, y_dim};
 
-  Halide::Runtime::Buffer<uint16_t> input_buf((uint16_t *)input, dims, shape);
-  Halide::Runtime::Buffer<uint16_t> output_buf((uint16_t *)output, dims, shape);
+  Halide::Runtime::Buffer<int32_t> input_buf((int32_t *)input, dims, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t *)output, dims, shape);
 
   cycles = benchmark([&]() {
     int error = blur3x3(input_buf, output_buf);
@@ -1739,8 +1739,8 @@ int main(int argc, char **argv) {
 
 #if benchmark_simple_add
   printf("Testing With Simple Add!\n");
-  int simple_width = 1024;
-  int simple_height = 1024;
+  int simple_width = 32;
+  int simple_height = 32;
 
   halide_dimension_t x_dim{0, simple_width, 1};
   halide_dimension_t y_dim{0, simple_height, simple_width};
@@ -1771,8 +1771,8 @@ int main(int argc, char **argv) {
   });
 
   printf("Completed executing simple_add!\n");
-  for (int x = 0; x < 10; x++)
-    for (int y = 0; y < 10; y++)
+  for (int x = 0; x < std::min(10, simple_width); x++)
+    for (int y = 0; y < std::min(10, simple_height); y++)
       printf("(x: %d, y: %d) ==> input-vals: (%d,%d),   output-val: %d\n", x, y,
              input_buf_1(x, y), input_buf_2(x, y),output_buf(x, y));
 
