@@ -5,11 +5,41 @@
 //===----------------------------------------------------------------------===//
 
 #include "Legalizer.h"
-#include "libpimsim.h"
+#include "libpimeval.h"
 #include "llvm/IR/IRBuilder.h"
 
 
 namespace llvm {
+
+    PimDataType Legalizer::convertLLVMTyToPIMTy(Type* Ty){
+        Type* ElemTy = Ty;
+
+        if(auto* VectorTy = dyn_cast<VectorType>(ElemTy)){
+            ElemTy = VectorTy->getElementType();
+        }
+
+        if(ElemTy->isIntegerTy(8)){
+            return PIM_INT8;
+        }
+
+        if(ElemTy->isIntegerTy(16)){
+            return PIM_INT16;
+        }
+
+        if(ElemTy->isIntegerTy(32)){
+            return PIM_INT32;
+        }
+
+        if(ElemTy->isIntegerTy(64)){
+            return PIM_INT64;
+        }
+
+
+        assert(false && "Unsupported element type in Hydride Bitserial legalizer");
+        return PIM_INT8;
+    }
+
+
 bool Legalizer::legalize(Function &F) {
     InstToObjectIDMap.clear();  
 
@@ -67,21 +97,10 @@ bool Legalizer::legalize(Function &F) {
         Function* ParentFn = &F;
         BasicBlock& EntryBlock = ParentFn->getEntryBlock();
 
-        InsertPimInitCall(/* numCores */ 4, /* numRows*/ 512, /* numCols */ 512, EntryBlock.getFirstNonPHI());
+        //InsertPimInitCall(/* numCores */ 4, /* numRows*/ 512, /* numCols */ 512, EntryBlock.getFirstNonPHI());
+
+        InsertPimInitCall(/* numRanks */ 4, /*numBankPerRank */ 128, /* numSubarrayPerBank */ 32  , /* numRows*/ 1024, /* numCols */ 1024, EntryBlock.getFirstNonPHI());
         inserted_pim_init = true;
-#if 0
-        for(auto* User: F.users()){
-            CallInst* CI = dyn_cast<CallInst>(User);
-            if(!CI) continue;
-
-            Function* ParentFn = CI->getParent()->getParent();
-            BasicBlock& EntryBlock = ParentFn->getEntryBlock();
-
-            InsertPimInitCall(/* numCores */ 4, /* numRows*/ 64, /* numCols */ 64, EntryBlock.getTerminator());
-            inserted_pim_init = true;
-            break;
-        }
-#endif
     }
 
     InsertPimFreeCalls(RetInst);
@@ -338,23 +357,24 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
     Type* i8PTy = Type::getInt8PtrTy(ctx);
     Type* voidTy = Type::getVoidTy(ctx);
     Type* i32Ty = Type::getInt32Ty(ctx);
+    Type* i64Ty = Type::getInt64Ty(ctx);
 
     Module* M = InsertBefore->getModule();
     Function* ParentFn = InsertBefore->getParent()->getParent();
     Function* AllocFunc = M->getFunction(pimAllocName);
 
     Function* AlignedAllocFunc = M->getFunction(pimAllocAssocName);
-
+    // pimAlloc(PimAllocEnum allocType, uint64_t numElements, PimDataType dataType)
     if(!AllocFunc){
-        std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty, i32Ty, i32Ty};
+        std::vector<Type*>  AllocArgsTy = {i32Ty i64Ty, i32Ty};
         FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
 
         AllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocName , M);
     }
 
+    // pimAllocAssociated(PimObjId assocId, PimDataType dataType)
     if(!AlignedAllocFunc){
-        // Second last parameter is reference objected id
-        std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty, i32Ty, i32Ty , i32Ty};
+        std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty};
         FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
         AlignedAllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocAssocName , M);
     }
@@ -372,18 +392,17 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
             unsigned num_elements = FVTy->getNumElements();
 
             
-            Value* AllocationTy = ConstantInt::get(i32Ty, PIM_ALLOC_V1);
+            Value* AllocationTy = ConstantInt::get(i32Ty, PIM_ALLOC_AUTO);
             // TODO: Replace with switch statement. Hard coded for now
-            Value* PimDataType = ConstantInt::get(i32Ty, PIM_INT32);
-            Value* Lanes = ConstantInt::get(i32Ty, num_elements);
-            Value* Bits = ConstantInt::get(i32Ty, 32);
+            Value* PimDataType = ConstantInt::get(i32Ty, convertLLVMTyToPIMTy(ElementType));
+            Value* Lanes = ConstantInt::get(i64Ty, num_elements);
 
             CallInst* AllocationCall = nullptr;
             if(AlignmentMap.find(ParentFn) != AlignmentMap.end()){
-                std::vector<Value*> AllocationParams = {AllocationTy, Lanes, Bits, AlignmentMap[ParentFn] , PimDataType};
+                std::vector<Value*> AllocationParams = {AlignmentMap[ParentFn] , PimDataType};
                 AllocationCall = CallInst::Create(AlignedAllocFunc, AllocationParams, "pimAssocAlloc", InsertBefore);
             } else {
-                std::vector<Value*> AllocationParams = {AllocationTy, Lanes, Bits, PimDataType};
+                std::vector<Value*> AllocationParams = {AllocationTy, Lanes, PimDataType};
                 AllocationCall = CallInst::Create(AllocFunc, AllocationParams, "pimAlloc", InsertBefore);
                 AlignmentMap[ParentFn] = AllocationCall;
             }
@@ -422,19 +441,18 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
 
     Module* M = InsertBefore->getModule();
     Function* CopyFunc = M->getFunction(pimCopyHostToDeviceName);
-
+    // pimCopyHostToDevice(void* src, PimObjId dest)
     if(!CopyFunc){
-        std::vector<Type*>  CopyArgsTy = {i32Ty, i8PTy, i32Ty};
+        std::vector<Type*>  CopyArgsTy = {i8PTy, i32Ty};
         FunctionType* CopyFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
         CopyFunc = Function::Create(CopyFuncTy, Function::ExternalLinkage ,pimCopyHostToDeviceName , M);
     }
 
-    Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
     Value* MemoryRef = BitCastInst::CreatePointerCast(HostAlloc, i8PTy, "", InsertBefore);
 
     Value* Bytes = ConstantInt::get(i32Ty, num_elements);
     Value* ObjectID = InstToObjectIDMap[Arg];
-    std::vector<Value*> Args = {CopyTy, MemoryRef, ObjectID};
+    std::vector<Value*> Args = {ObjectID, MemoryRef};
 
     CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimHostToDevice", InsertBefore);
 }
@@ -527,11 +545,10 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
         AllocaInst* HostAlloc = Builder.CreateAlloca(PimInst->getType());
 
 
-        Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
         Value* MemoryRef = BitCastInst::CreatePointerCast(HostAlloc, i8PTy, "", PimInst);
 
         Value* ObjectID = InstToObjectIDMap[PimInst];
-        std::vector<Value*> Args = {CopyTy,  ObjectID, MemoryRef };
+        std::vector<Value*> Args = {ObjectID, MemoryRef };
 
 
         CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimDeviceToHost", PimInst);
@@ -591,8 +608,9 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
 }
 
 
-// PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numCores, numRows, numCols);
-void Legalizer::InsertPimInitCall(int numCores, int numRows, int numCols, Instruction* InsertBefore){
+
+// PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numRanks, numBankPerRank, numSubarrayPerBank, numRows, numCols);
+void Legalizer::InsertPimInitCall(int numRanks, int numBankPerRank, int numSubarrayPerBank , int numRows, int numCols, Instruction* InsertBefore){
 
     LLVMContext& ctx = InsertBefore->getContext();
     Type* i8PTy = Type::getInt8PtrTy(ctx);
@@ -603,17 +621,19 @@ void Legalizer::InsertPimInitCall(int numCores, int numRows, int numCols, Instru
     Function* InitFunc = M->getFunction(pimInitDeviceName);
 
     if(!InitFunc){
-        std::vector<Type*>  InitArgsTy = {i32Ty, i32Ty,i32Ty, i32Ty};
+        std::vector<Type*>  InitArgsTy = {i32Ty, i32Ty,i32Ty, i32Ty, i32Ty, i32Ty};
         FunctionType* InitFuncTy = FunctionType::get(i32Ty, InitArgsTy, /* isVarArgs */ false);
         InitFunc = Function::Create(InitFuncTy, Function::ExternalLinkage ,pimInitDeviceName , M);
     }
 
     Value* DeviceSetting = ConstantInt::get(i32Ty, PIM_FUNCTIONAL);
-    Value* NumCores = ConstantInt::get(i32Ty, numCores);
+    Value* NumRanks = ConstantInt::get(i32Ty, numRanks);
+    Value* NumBankPerRank = ConstantInt::get(i32Ty, numBankPerRank);
+    Value* NumSubarrayPerBank = ConstantInt::get(i32Ty, numSubarrayPerBank);
     Value* NumRows = ConstantInt::get(i32Ty, numRows);
     Value* NumCols = ConstantInt::get(i32Ty, numCols);
 
-    std::vector<Value*> Args = {DeviceSetting, NumCores, NumRows, NumCols };
+    std::vector<Value*> Args = {DeviceSetting, NumRanks, NumBankPerRank, NumSubarrayPerBank, NumRows, NumCols };
 
 
     CallInst* InitCall = CallInst::Create(InitFunc, Args, "pimInit", InsertBefore);

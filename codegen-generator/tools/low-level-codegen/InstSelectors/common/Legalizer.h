@@ -16,6 +16,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Verifier.h"
+#include "libpimeval.h"
 
 #include <iomanip>
 #include <iostream>
@@ -69,6 +70,9 @@ public:
 
     bool isNameMatch(CallInst *TargetAgnoticInst, std::vector<std::string> &NameList);
 
+    // Type conversion to get enum for PIM types required with allocation
+    PimDataType Legalizer::convertLLVMTyToPIMTy(Type* Ty);
+
     
     // Map BitSIMD operations to the Allocation ObjectID
     // where the result is stored
@@ -98,8 +102,9 @@ public:
 
     // Generate pimCreateDevice call
     //
-    // PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numCores, numRows, numCols);
-    void InsertPimInitCall(int numCores, int numRows, int numCols, Instruction* InsertBefore);
+
+    // PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numRanks, numBankPerRank, numSubarrayPerBank, numRows, numCols);
+    void InsertPimInitCall(int numRanks, int numBankPerRank, int numSubarrayPerBank , int numRows, int numCols, Instruction* InsertBefore);
 
 
     void InsertPimFreeCalls(Instruction* InsertBefore);
