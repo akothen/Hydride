@@ -71,7 +71,7 @@ public:
     bool isNameMatch(CallInst *TargetAgnoticInst, std::vector<std::string> &NameList);
 
     // Type conversion to get enum for PIM types required with allocation
-    PimDataType Legalizer::convertLLVMTyToPIMTy(Type* Ty);
+    PimDataType convertLLVMTyToPIMTy(Type* Ty);
 
     
     // Map BitSIMD operations to the Allocation ObjectID

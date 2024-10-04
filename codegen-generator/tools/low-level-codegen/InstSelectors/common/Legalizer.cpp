@@ -366,7 +366,7 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
     Function* AlignedAllocFunc = M->getFunction(pimAllocAssocName);
     // pimAlloc(PimAllocEnum allocType, uint64_t numElements, PimDataType dataType)
     if(!AllocFunc){
-        std::vector<Type*>  AllocArgsTy = {i32Ty i64Ty, i32Ty};
+        std::vector<Type*>  AllocArgsTy = {i32Ty , i64Ty, i32Ty};
         FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
 
         AllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocName , M);
