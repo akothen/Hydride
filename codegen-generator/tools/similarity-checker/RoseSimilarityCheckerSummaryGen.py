@@ -62,6 +62,8 @@ class RoseSimilarityCheckerSummaryGen():
         ArgPermuteMap = list()
         for Idx in self.FunctionToArgPermuteMap[Function]:
             ArgPermuteMap.append(str(Idx))
+        print("Function Info: \n")
+        FunctionInfo.print()
         TempEntryString = f'''
                   "args" : {"[" + ",".join(ArgList) + "]"},
                   "in_vectsize" : {str(FunctionInfo.getInVectorLength())},
@@ -108,7 +110,7 @@ class RoseSimilarityCheckerSummaryGen():
                 RosetteCodeList[Index] = "\"" + Line + "\""
             String = f'''
               "target_instructions" : {EntryString},
-              "semantics" : {RosetteCodeList}, 
+              "semantics" : {RosetteCodeList},
         '''
             String = "{" + String + "}"
             return String

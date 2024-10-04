@@ -1,3 +1,4 @@
+
 #############################################################
 #
 # A dictionary of types for x86.
@@ -14,15 +15,36 @@ FloatTyBitwidth = FloatTy.getBitwidth()
 DoubleTy = RoseDoubleType.create()
 DoubleTyBitwidth = DoubleTy.getBitwidth()
 
+DRAM_MAX_BW = 131072
+DRAM_MIN_BW = 16384
+
+DRAM_Type_Map = {
+    str(DRAM_MAX_BW) : "__dram_full",
+    str(DRAM_MIN_BW) : "__dram_min",
+    "32" : "int",
+    "8": "char",
+    "16": "short",
+    "1024" : "__dram_1024",
+    "512" : "__dram_512",
+}
+
 
 # Define types used in x86 pseudocodes
-x86Types = {
+DRAMTypes = {
+    '__dram_full': RoseBitVectorType.create(DRAM_MAX_BW),
+    '__dram_min': RoseBitVectorType.create(DRAM_MIN_BW),
+    '__dram_1024': RoseBitVectorType.create(1024),
+    '__dram_512': RoseBitVectorType.create(512),
+
+
+
+
+
+
+
     '__tile': RoseMatrixType.create(16, 64, 8),
     # 'row': RoseBitVectorType.create(64 * 8),
 
-
-    '__m2048i': RoseBitVectorType.create(2048),
-    '__m1024i': RoseBitVectorType.create(1024),
     '_m512i': RoseBitVectorType.create(512),
     '__m512i': RoseBitVectorType.create(512),
     '__m256i': RoseBitVectorType.create(256),
@@ -90,5 +112,3 @@ x86Types = {
     "M256": RoseBitVectorType.create(256),
     "M512": RoseBitVectorType.create(512),
 }
-
-

@@ -71,7 +71,7 @@ def GetSemaFromXML(node, InstName : str = None):
     if '/' in CPUID:
         return CPUID.split('/')[0]
     return CPUID
-  
+
   CheckInstName = node.attrib['name']
   print(CheckInstName)
   if InstName != None:
@@ -116,7 +116,7 @@ precedence = None
 
 
 def InitX86Parser():
-  global Parser 
+  global Parser
   global lexer
   global binary_regexp
   global tokens
@@ -232,7 +232,7 @@ x86BinaryOps = {
 
 def t_pseudo(t):
   r'\n\s*//.*'
-  lexed = t.value 
+  lexed = t.value
   t.value = lexed[lexed.index('/') + 2:]
   t.type = 'PSEUDO'
   return t

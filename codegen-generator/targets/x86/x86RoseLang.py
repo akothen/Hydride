@@ -8,16 +8,17 @@
 from PseudoCodeParser import ParseX86Intructions, ParseX86Instruction
 from x86RoseCompiler import CompileSemantics, x86RoseContext
 
+xml_name = "arm_swizzles.xml" # "test.xml"
 
 def Compile(InstName: str = None):
     from RoseFunctionInfo import RoseFunctionInfo
     if InstName == None:
-        SemaList = ParseX86Intructions("test.xml")
+        SemaList = ParseX86Intructions(xml_name)
         print("SemaList lngth:")
         print(len(SemaList))
     else:
         print("PARSING INSTRUCTION")
-        SemaList = ParseX86Instruction(InstName, "test.xml")
+        SemaList = ParseX86Instruction(InstName, xml_name)
         print("SemaList lngth:")
         print(len(SemaList))
     if SemaList == None:

@@ -1,6 +1,6 @@
 #############################################################
 #
-# This helps check if an instuction is valid on the given 
+# This helps check if an instuction is valid on the given
 # target.
 #
 #############################################################
@@ -23,7 +23,7 @@ class RoseISAValidityChecker:
   TargetAPI = {
     "x86" : x86RoseLang,
     #"Hexagon" : HexRoseLang,
-    "ARM": ARMRoseLang,
+    #"ARM": ARMRoseLang,
   }
 
   def genRandomInputs(self, Function : RoseFunction):
@@ -56,7 +56,7 @@ class RoseISAValidityChecker:
     return self.isInstValid(TestDirName, FunctionInfo)
 
   def isInstValid(self, TestDirName : str, FunctionInfo : RoseFunctionInfo):
-    # Emit C code, compile and execute this instuction and check 
+    # Emit C code, compile and execute this instuction and check
     # if the error is fatal.
     Function = FunctionInfo.getLatestFunction()
     CEmitter = Rosex86CCodeEmitter.CCodeEmitter(FunctionInfo)

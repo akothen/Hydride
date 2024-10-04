@@ -24,8 +24,8 @@ from RoseSimilarityCheckerParallel import RoseSimilarityCheckerParallel
 from copy import deepcopy
 
 
-NumThreads = 96
-ParallelChecker = 1 # Enable by default
+NumThreads = 16
+ParallelChecker = True # Enable by default
 
 EliminateUnnecessaryArgs = False
 
@@ -370,6 +370,7 @@ class RoseSimilarityChecker():
             return False
 
     def summarize(self):
+        print("Summarizing!")
         print(len(self.EquivalenceClasses))
         for EquivalentClass in self.EquivalenceClasses:
             print("*********EQUIVALENT FUNCTIONS:")
@@ -392,10 +393,12 @@ class RoseSimilarityChecker():
             print("Error making: {}.rkt".format(FileName))
             return False
         # Generate an elaborate summary
+        print("Generating semantics file!")
         SummaryFileName = "semantics.py"
         SummaryGen = RoseSimilarityCheckerSummaryGen(self.FunctionToFunctionInfo,
                                                      self.FunctionToRosetteCodeMap, self.FunctionToArgPermutationMap,
                                                      self.EquivalenceClasses)
+        print("Generating semantics file content!")
         SummaryGen.summarize(SummaryFileName)
         return True
 
@@ -566,6 +569,7 @@ class RoseSimilarityChecker():
         else:
             self.genArgPermuatationsForEquivalenceClasses()
         # Summmarize
+
         self.summarize()
         # Generate LLVM intrinsics
         # self.genLLVMIntrinsics()
@@ -2725,9 +2729,9 @@ class RoseSimilarityChecker():
 if __name__ == '__main__':
     # SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
     if ParallelChecker:
-        SimilarityChecker = RoseSimilarityCheckerParallel(["ARM"])
+        SimilarityChecker = RoseSimilarityCheckerParallel(["x86"])
     else:
-        SimilarityChecker = RoseSimilarityChecker(["ARM"])
+        SimilarityChecker = RoseSimilarityChecker(["x86"])
     # SimilarityChecker = RoseSimilarityChecker(["x86"])
     import sys
     sys.stdout = sys.__stderr__

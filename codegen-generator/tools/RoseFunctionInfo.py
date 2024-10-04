@@ -13,6 +13,7 @@ from RoseContext import *
 from RoseBitVectorOperations import *
 from RoseUtilities import *
 from RoseCodeGenerator import RoseCodeGenerator
+import traceback
 
 import uuid
 
@@ -375,7 +376,10 @@ class RoseFunctionInfo():
         return
 
     def print(self):
-        print("******* Printing Function Info ********")
+        print("TRACE")
+        for line in traceback.format_stack():
+            print(line.strip())
+        print("******* Printing Function Info ******** [TESTING]")
         print("Function:")
         self.getLatestFunction().print()
         print("Semantics Info:")

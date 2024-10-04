@@ -1,0 +1,2471 @@
+import string
+import toml
+from DRAM_PseudoCode_Parser import Parse
+from DRAM_AST import *
+
+
+
+from RoseTypes import *
+from RoseValue import RoseValue
+from RoseAbstractions import *
+from RoseValues import *
+from RoseOperations import *
+from RoseBitVectorOperations import *
+from RoseMatrixOperations import *
+from RoseContext import *
+
+from DRAM_AST import *
+from DRAMTypes import DRAMTypes, DRAM_Type_Map
+
+import math
+
+
+
+def GetSemaFromTOML(inst_desc, InstName : str = None):
+    Params = []
+    imm_width = None
+    ID = 0
+
+    alphabets = string.ascii_lowercase
+    for idx in range(0, len(inst_desc['operand_sizes'])):
+        name = alphabets[idx]
+        type = DRAM_Type_Map[str(inst_desc['operand_sizes'][idx])]
+        layout = inst_desc['operand_layouts'][idx]
+        is_signed = inst_desc['signedness']
+        is_imm = False
+        imm_width = 8
+
+        is_mask = False
+
+        id = "param"+"."+name+"."+str(ID)
+        Params.append(Parameter(name, type, layout, is_signed, is_imm, id ))
+        ID += 1
+
+    InstName = inst_desc['name']
+    print(InstName)
+    print(inst_desc)
+
+    return Sema(
+        intrin = InstName,
+        inst = None,
+        spec = Parse(inst_desc['semantics']),
+        params = Params,
+        rettype = DRAM_Type_Map[str(inst_desc['result_size'])],
+        ret_layout = inst_desc['result_layout'],
+        inst_form = None,
+        elem_type = inst_desc['result_elem_bw'],
+        extensions = [],
+        ret_is_signed = inst_desc['signedness']
+    )
+
+
+
+
+
+
+
+
+class DRAMRoseContext(RoseContext):
+  def __init__(self):
+    # Maximum vector length
+    self.MaxVectorLength = 131072
+    # Cache function definitions. This is needed because functions are
+    # compiled when a call is compiled.
+    self.FunctionDefs = dict()  # Function name --> FuncDef
+    # Track the ids that have been extended.
+    self.SizeExtended = dict()
+    # Integer constant length can change depending on the context in which
+    # is used.
+    self.NumberType = RoseIntegerType.create(32)
+    #self.IndexNumberType = RoseIntegerType.create(32)
+    self.CompileIndexFlag = False
+    super().__init__()
+
+  def getMaxVectorLength(self):
+    return self.MaxVectorLength
+
+  def setMaxVectorLength(self, Length : int):
+    self.MaxVectorLength = Length
+
+  def addFunctionDef(self, FunctionDef):
+    assert(type(FunctionDef) == FuncDef)
+    self.FunctionDefs[FunctionDef.name] = FunctionDef
+
+  def getFunctionDef(self, Name : str):
+    return self.FunctionDefs[Name]
+
+  def addSizeExtended(self, Operation : RoseValue, Bitwidth : int):
+    self.SizeExtended[Operation] = Bitwidth
+
+  def getExtendedSize(self, Operation : str):
+    assert Operation in self.SizeExtended
+    return self.SizeExtended[Operation]
+
+  def isSizeExtended(self, Operation : str):
+    return Operation in self.SizeExtended
+
+  def setNumberType(self, Type : RoseType):
+    self.NumberType = Type
+
+  def getNumberType(self):
+    return self.NumberType
+
+  def setCompileIndexFlag(self, Flag : bool):
+    self.CompileIndexFlag = Flag
+
+  #def setIndexNumberType(self, Type : RoseType):
+  #  self.IndexNumberType = Type
+
+  #def getIndexNumberType(self):
+  #  return self.IndexNumberType
+
+  def isCompileIndexFlagSet(self):
+    return self.CompileIndexFlag == True
+
+  def createContext(self, ID : str, ChildContext):
+    assert isinstance(ChildContext, DRAMRoseContext)
+    assert self.isCompiledAbstraction(ID)
+    Abstraction = self.getCompiledAbstractionForID(ID)
+    if isinstance(Abstraction, RoseFunction):
+      # A function accepts no external variables besides arguments
+      super().createContext(ID, ChildContext)
+    elif isinstance(Abstraction, RoseForLoop) \
+      or isinstance(Abstraction, RoseCond):
+      # Copy all the compiled abstractions from this context to the child
+      ChildContext.setParentContext(self)
+      ChildContext.copyAbstractionsFromParent()
+      super().createContext(ID, ChildContext)
+      # Add function definitions from the parent into the child context
+      for _, FuncDef in self.FunctionDefs.items():
+        ChildContext.addFunctionDef(FuncDef)
+
+  def destroyContext(self, ContextName : str):
+    ChildContext = self.getChildContext(ContextName)
+    if isinstance(ChildContext.getRootAbstraction(), RoseFunction):
+      super().destroyContext(ContextName)
+    elif isinstance(ChildContext.getRootAbstraction(), RoseForLoop) \
+       or isinstance(ChildContext.getRootAbstraction(), RoseCond):
+      ChildContext.replaceParentAbstractionsWithChild()
+      # There are times when temporary variables are written to (using bvinsert)
+      # so we will need to get those variables.
+      BlockList = list()
+      if ChildContext.getRootAbstraction().getKeys() == None:
+        BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
+      else:
+        for Key in ChildContext.getRootAbstraction().getKeys():
+          BlockList.extend(ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock, Key=Key))
+      _, ParentFunction = self.getFirsRootAbstractionsOfType(RoseFunction)
+      for Block in BlockList:
+        for Op in Block:
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if Op.getInputBitVector() != ParentFunction.getReturnValue():
+              # Add the new variable
+              VariableName = Op.getInputBitVector().getName()
+              self.addVariable(VariableName, ChildContext.getVariableID(VariableName))
+              # Add signedness information
+              assert ChildContext.isValueSignKnown(Op.getInputBitVector())
+              Signedness = ChildContext.isValueSigned(Op.getInputBitVector())
+              self.addSignednessInfoForValue(Op.getInputBitVector(), Signedness)
+              # Add this variable as an abstraction
+              self.addCompiledAbstraction(ChildContext.getVariableID(VariableName), \
+                                          Op.getInputBitVector())
+      super().destroyContext(ContextName)
+
+
+
+def CompileNumber(Num, Context : DRAMRoseContext):
+  if Context.isCompileIndexFlagSet():
+    ConstantVal = RoseConstant.create(Num.val, RoseIntegerType.create(32))
+    #Context.getIndexNumberType())
+  else:
+    ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
+  Context.addSignednessInfoForValue(ConstantVal, IsSigned=(ConstantVal.getValue() < 0))
+  return ConstantVal
+
+
+def CompileVariable(Variable, Context):
+  # Check if the variable is already defined and cached. If yes, just return that.
+  if Context.isVariableDefined(Variable.name):
+    ID = Context.getVariableID(Variable.name)
+    print("Variable ID for ",Variable.name, ":", ID)
+    print("[Returning]",Context.getCompiledAbstractionForID(ID)
+, "for", Variable.name)
+    if Variable.name == "dst":
+        ID = "return.dst"
+
+    return Context.getCompiledAbstractionForID(ID)
+
+  # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+  Var = RoseValue.create(Variable.name, \
+          RoseBitVectorType.create(Context.getMaxVectorLength()))
+
+  print("Creating new Var for ",Variable.name, ":", Var)
+  # Add the variable info to the context
+  Context.addVariable(Variable.name, Variable.id)
+  Context.addCompiledAbstraction(Variable.id, Var)
+
+  return Var
+
+
+# Always assume that the bitwidth returned by this function is a constant
+def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int = None):
+  print("ComputeBitSliceWidth with low:", Low, "and high:", High)
+  # Strip any casts and size extensions away
+  if isinstance(Low, RoseCastOp) \
+  or isinstance(Low, RoseBVSignExtendOp) \
+  or isinstance(Low, RoseBVZeroExtendOp):
+    Low = Low.getOperand(0)
+  if isinstance(High, RoseCastOp) \
+  or isinstance(High, RoseBVSignExtendOp) \
+  or isinstance(High, RoseBVZeroExtendOp):
+    High = High.getOperand(0)
+
+  # Handle easiest case first
+  if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
+    if TotalBitwidth != None:
+      assert Low.getValue() >= 0 and Low.getValue() < TotalBitwidth
+      assert High.getValue() >= 0 and High.getValue() < TotalBitwidth
+    assert High.getValue() >= Low.getValue()
+    return (High.getValue() - Low.getValue() + 1)
+
+  # Either both high and low are constants or both are variables/operations.
+  # Other cases are not taken into account.
+  assert not isinstance(Low, RoseConstant)
+  assert not isinstance(High, RoseConstant)
+
+  # Just handle one _very_ common case where high = i + some_constant
+  # Strip away any cast first
+  assert isinstance(High, RoseAddOp)
+  print("High", High)
+  print("High Op 0", High.getOperand(0)) #i0
+  print("High Op 1", High.getOperand(1)) # 8
+  if isinstance(High.getOperand(0), RoseConstant):
+    print("High Val Then")
+    HighIndexValue = High.getOperand(1)
+    ConstantHighIndex = High.getOperand(0)
+  else:
+    print("High Val Else")
+    assert isinstance(High.getOperand(1), RoseConstant)
+    HighIndexValue = High.getOperand(0) #i0
+    ConstantHighIndex = High.getOperand(1) #i1
+
+  # Strip any casts away
+  if isinstance(HighIndexValue, RoseCastOp) \
+  or isinstance(HighIndexValue, RoseBVSignExtendOp) \
+  or isinstance(HighIndexValue, RoseBVZeroExtendOp):
+    HighIndexValue = HighIndexValue.getOperand(0)
+  # High index is expressed in terms of low index
+  # TODO: Make this more general.
+
+  # Just handle one _very_ common case where low = i
+  print(HighIndexValue)
+  print(type(HighIndexValue))
+
+  print(Low)
+  print(type(Low))
+
+  if Low == HighIndexValue:
+      return (ConstantHighIndex.getValue() + 1)
+
+  assert isinstance(HighIndexValue, RoseOperation)
+  assert isinstance(Low, RoseOperation)
+  if Low.isSameAs(HighIndexValue):
+    return (ConstantHighIndex.getValue() + 1)
+
+  # Now handle a rare case where low = i + some_constant
+  assert isinstance(Low, RoseAddOp)
+  if isinstance(Low.getOperand(0), RoseConstant):
+    LowIndexValue = Low.getOperand(1)
+    ConstantLowIndex = Low.getOperand(0)
+  else:
+    assert isinstance(Low.getOperand(1), RoseConstant)
+    LowIndexValue = Low.getOperand(0)
+    ConstantLowIndex = Low.getOperand(1)
+  # Strip any casts away
+  if isinstance(LowIndexValue, RoseCastOp) \
+  or isinstance(LowIndexValue, RoseBVSignExtendOp) \
+  or isinstance(LowIndexValue, RoseBVZeroExtendOp):
+    LowIndexValue = LowIndexValue.getOperand(0)
+  assert LowIndexValue.isSameAs(HighIndexValue)
+  assert ConstantHighIndex.getValue() >= ConstantLowIndex.getValue()
+  return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
+
+
+def CompileIndex(IndexExpr, Context : DRAMRoseContext):
+  Context.setCompileIndexFlag(True)
+  CompiledIndex = CompileExpression(IndexExpr, Context)
+  Context.setCompileIndexFlag(False)
+  # The compiled indices are supposed to be integer values
+  # and not bitvectors. However, in some cases it can be a bitvector
+  # where indices are in a bitvector. We just change cast the index value.
+  if isinstance(CompiledIndex.getType(), RoseBitVectorType):
+    # Indices can only be variables for them to be cast
+    assert type(IndexExpr) == Var
+    assert Context.isVariableDefined(IndexExpr.name)
+    ID = Context.getVariableID(IndexExpr.name)
+    assert Context.getCompiledAbstractionForID(ID) == CompiledIndex
+    # Consider any zero extension that may be needed. We allow indices that
+    # are only 32-bits long.
+    if CompiledIndex.getType().getBitwidth() < 32:
+      OpName = Context.genName()
+      CompiledIndex = RoseBVZeroExtendOp.create(OpName, CompiledIndex, 32)
+      # Add this op to the IR and to the context
+      Context.addAbstractionToIR(CompiledIndex)
+      Context.addCompiledAbstraction(OpName, CompiledIndex)
+    # Generate the casting op
+    CompiledIndex = RoseCastOp.create(Context.genName(), CompiledIndex, \
+                  RoseIntegerType.create(CompiledIndex.getType().getBitwidth()))
+    # Add this op to the IR and to the context
+    Context.addAbstractionToIR(CompiledIndex)
+    Context.addCompiledAbstraction(ID, CompiledIndex)
+  return CompiledIndex
+
+
+def CompileBitSlice(BitSliceExpr, Context : DRAMRoseContext):
+  # First compile low and high expressions
+  Low = CompileIndex(BitSliceExpr.lo, Context)
+
+  # Special case for the magic variable 'MAX'
+  # Set the new index number type for the high index since
+  # it should have the same type as the low index.
+  #OriginalNumberTy = Context.getIndexNumberType()
+  #Context.setIndexNumberType(Low.getType())
+  if (type(BitSliceExpr.hi) == Var and BitSliceExpr.hi.name == 'MAX'):
+    MaxVectorLength = Context.getMaxVectorLength()
+    High = RoseConstant.create(MaxVectorLength - 1, RoseIntegerType.create(32))
+  else:
+    High = CompileIndex(BitSliceExpr.hi, Context)
+  #Context.setIndexNumberType(OriginalNumberTy)
+  BitVector = CompileExpression(BitSliceExpr.bv, Context)
+  assert isinstance(BitVector.getType(), RoseBitVectorType)
+
+  # Do some sanity check if possible
+  if isinstance(Low, RoseConstant):
+    assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
+  if isinstance(High, RoseConstant):
+    # todo: KUNAL — This breaks on _mm256_alignr_epi8 because of `((a[i+127:i] << 128)[255:0]`
+    #  `[255:0]` is really used as a type specifier for `a[i+127:i]`... not a bit slice
+    assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
+  if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
+    assert High.getValue() >= Low.getValue()
+
+  # Compute the bitwidth that is extracted in this slice
+  Bitwidth = ComputeBitSliceWidth(Low, High, BitVector.getType().getBitwidth())
+  BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
+
+  # Add an bitslice operation
+  Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, Low, High, BitwidthValue)
+
+  # Add signedness info on the op
+  if Context.isValueSignKnown(BitVector):
+    Context.addSignednessInfoForValue(Operation, Context.isValueSigned(BitVector))
+
+  # Add the op to the IR
+  Context.addAbstractionToIR(Operation)
+
+  # Add the operation to the context
+  Context.addCompiledAbstraction(BitSliceExpr.id, Operation)
+
+  return Operation
+
+
+def CompileBitIndex(IndexExpr, Context : DRAMRoseContext):
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(IndexExpr.id):
+    return Context.getCompiledAbstractionForID(IndexExpr.id)
+
+  if type(IndexExpr.obj) == TypeLookup:
+    # Compile the low index first
+    ElemType =DRAMTypes[IndexExpr.obj.key]
+    IndexVal = CompileIndex(IndexExpr.idx, Context)
+    CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                  IndexVal.getType())
+    LowIndex = RoseMulOp.create(Context.genName(), \
+                              [CoFactor, IndexVal])
+    Context.addAbstractionToIR(LowIndex)
+    Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+
+    # Compile the vector object
+    Vector = CompileExpression(IndexExpr.obj, Context)
+    # Get the high index
+    assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
+    # ElemType = Context.getElemTypeOfVariable(Vector.getName())  # todo: Kunal — No??  this makes tile.rows return bv8192 which is WRONG
+    assert isinstance(Context.getElemTypeOfVariable(Vector.getName()), RoseBitVectorType)
+    IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+    HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
+    Context.addAbstractionToIR(HighIndex)
+    Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+    # Get the bitwdith value
+    BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
+    # Now, generate the extract op.
+    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, LowIndex,\
+                                            HighIndex, BitwidthValue)
+  else:
+    # Compile the index first
+    IndexVal = CompileIndex(IndexExpr.idx, Context)
+    # Compile the vector object
+    Vector = CompileExpression(IndexExpr.obj, Context)
+    # The bit slice size here is 1 bit
+    BitwidthValue = RoseConstant.create(1, IndexVal.getType())
+    # Now, generate the extract op.
+    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
+                                    IndexVal, IndexVal, BitwidthValue)
+
+  # Add signedness info
+  Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Vector))
+
+  # Add the op to the IR
+  Context.addAbstractionToIR(Operation)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(IndexExpr.id, Operation)
+
+  return Operation
+
+
+def GetBitSliceIndex(ExprIndex, Context : DRAMRoseContext):
+  # The given bitslice index could be a number
+  if type(ExprIndex) == Number:
+    return RoseConstant.create(ExprIndex.val, RoseIntegerType.create(32))
+
+  # The given bitslice index could be a variable
+  if type(ExprIndex) == Var:
+    if Context.isVariableDefined(ExprIndex.name):
+      ID = Context.getVariableID(ExprIndex.name)
+      Index = Context.getCompiledAbstractionForID(ID)
+      if isinstance(Index.getType(), RoseBitVectorType):
+        return RoseCastOp.create(Context.genName(), Index, \
+                            RoseIntegerType.create(Index.getType().getBitwidth()))
+      return Index
+    return RoseUndefValue()
+
+  # The given bitslice index could be a binary operation
+  if type(ExprIndex) == BinaryExpr:
+    # Try the first operand
+    if type(ExprIndex.a) == Var:
+      if Context.isVariableDefined(ExprIndex.a.name):
+        ID = Context.getVariableID(ExprIndex.a.name)
+        Operand1 = Context.getCompiledAbstractionForID(ID)
+        if isinstance(Operand1.getType(), RoseBitVectorType):
+          Operand1 = RoseCastOp.create(Context.genName(), Operand1, \
+                              RoseIntegerType.create(Operand1.getType().getBitwidth()))
+      else:
+        return RoseUndefValue()
+    elif type(ExprIndex.a) == Number:
+      Operand1 = RoseConstant.create(ExprIndex.a.val, RoseIntegerType.create(32))
+    elif Context.isCompiledAbstraction(ExprIndex.a.id):
+      Operand1 = Context.getCompiledAbstractionForID(ExprIndex.a.id)
+    else:
+      return RoseUndefValue()
+    # Try the second operand
+    if type(ExprIndex.b) == Var:
+      if Context.isVariableDefined(ExprIndex.b.name):
+        ID = Context.getVariableID(ExprIndex.b.name)
+        Operand2 = Context.getCompiledAbstractionForID(ID)
+        if isinstance(Operand2.getType(), RoseBitVectorType):
+          Operand2 = RoseCastOp.create(Context.genName(), Operand2, \
+                              RoseIntegerType.create(Operand2.getType().getBitwidth()))
+      else:
+        return RoseUndefinedType.create()
+    elif type(ExprIndex.b) == Number:
+      Operand2 = RoseConstant.create(ExprIndex.b.val, RoseIntegerType.create(32))
+    elif Context.isCompiledAbstraction(ExprIndex.b.id):
+      Operand2 = Context.getCompiledAbstractionForID(ExprIndex.b.id)
+    else:
+      return RoseUndefValue()
+    # Generate the index
+    # Account for all special cases
+    # The operands of a binary op may need some fixing up
+    if type(ExprIndex.a) == Number \
+    and (type(ExprIndex.b) == BitSlice or type(ExprIndex.b) == BitIndex):
+      NumIntBits = ExprIndex.a.val.bit_length()
+      if NumIntBits > Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                              Operand2, NumIntBits)
+    if type(ExprIndex.b) == Number \
+    and (type(ExprIndex.a) == BitSlice or type(ExprIndex.a) == BitIndex):
+      NumIntBits = ExprIndex.b.val.bit_length()
+      if NumIntBits > Operand1.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                              Operand1, NumIntBits)
+    # Fix the constants' bitwidths
+    if Operand1.getType() != Operand2.getType():
+      if isinstance(Operand1, RoseConstant):
+        Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
+      elif isinstance(Operand2, RoseConstant):
+        Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
+      elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                        Operand1, Operand2.getType().getBitwidth())
+      elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                        Operand2, Operand1.getType().getBitwidth())
+    # Perform the binary operation
+    return BinaryOps[ExprIndex.op]()(Context.genName(), Operand1, Operand2, Context)
+
+  # The given bitslice index could be a compiled expression
+  if Context.isCompiledAbstraction(ExprIndex.id):
+    return Context.getCompiledAbstractionForID(ExprIndex.id)
+
+  return RoseUndefValue()
+
+
+def GetExpressionType(Expr, Context : DRAMRoseContext):
+  # First try to get the type of the Expr
+  if type(Expr) == Var:
+      if Context.isVariableDefined(Expr.name):
+        ID = Context.getVariableID(Expr.name)
+        return Context.getCompiledAbstractionForID(ID).getType()
+      else:
+        return RoseUndefinedType.create()
+
+  if type(Expr) == BitIndex:
+    if type(Expr.obj) != TypeLookup:
+      return RoseBitVectorType.create(1)
+    else:
+      # Bitindex could be indexing into a variable or another bitslice
+      if type(Expr.obj.obj) == Var:
+        Variable = Expr.obj.obj
+        if not Context.isVariableDefined(Variable.name):
+          return RoseUndefinedType.create()
+        assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+        ID = Context.getVariableID(Variable.name)
+        BitVector = Context.getCompiledAbstractionForID(ID)
+      else:
+        assert type(Expr.obj.obj) == BitIndex
+        BitIndexVar = Expr.obj.obj
+        assert type(BitIndexVar.obj) == TypeLookup
+        assert type(BitIndexVar.obj.obj) == Var
+        Variable = BitIndexVar.obj.obj
+        if not Context.isVariableDefined(Variable.name):
+          return RoseUndefinedType.create()
+        assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+        ID = Context.getVariableID(Variable.name)
+        BitVector = Context.getCompiledAbstractionForID(ID)
+      if Context.isElemTypeOfVariableKnown(BitVector.getName()) == False:
+        return RoseUndefinedType.create()
+      ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+      assert isinstance(ElemType, RoseBitVectorType)
+      return ElemType
+
+  if type(Expr) == BitSlice:
+    Low = GetBitSliceIndex(Expr.lo, Context)
+    if Low == RoseUndefValue():
+      return RoseUndefinedType.create()
+    High = GetBitSliceIndex(Expr.hi, Context)
+    if High == RoseUndefValue():
+      return RoseUndefinedType.create()
+    Bitwidth = ComputeBitSliceWidth(Low, High)
+    return RoseBitVectorType.create(Bitwidth)
+
+  return RoseUndefinedType.create()
+
+
+def GetRHSTypeForSpecialCases(RHS, Context : DRAMRoseContext):
+  assert type(RHS) == BinaryExpr
+  # Check if the operands size is extended. If yes, we return
+  # the type with extended size.
+  if (((type(RHS.a) == BitSlice and type(RHS.b) == BitSlice) \
+  or (type(RHS.a) == BitIndex and type(RHS.b) == BitIndex)) \
+  and NeedToExtendOperandSize(RHS.op)) \
+  or (type(RHS.a) == Call and type(RHS.b) == Call \
+  and RHS.a.funcname in ZeroExtendsSize \
+   and RHS.b.funcname in ZeroExtendsSize):
+      RHSType = GetExpressionType(RHS.a, Context)
+      if not isinstance(RHSType, RoseUndefinedType):
+        return RoseBitVectorType.create(RHSType.getBitwidth() * 2)
+      RHSType = GetExpressionType(RHS.b, Context)
+      if not isinstance(RHSType, RoseUndefinedType):
+        return RoseBitVectorType.create(RHSType.getBitwidth() * 2)
+
+  # Now if we have a binary op performed with constant (integer),
+  # we must take into account the minimum bitwidth required to
+  # represent that constant.
+  if type(RHS.a) == Number \
+  and (type(RHS.b) == BitSlice or type(RHS.b) == BitIndex):
+    RHSType = GetExpressionType(RHS.b, Context)
+    if isinstance(RHSType, RoseUndefinedType):
+      return RoseUndefinedType.create()
+    # Binary operation can only be performed on bitvectors and integers
+    # so getting bitwidth is OK.
+    NumIntBits = RHS.a.val.bit_length()
+    if NumIntBits > RHSType.getBitwidth():
+      # We need to extend the size of the other operand
+      if isinstance(RHSType, RoseBitVectorType):
+        return RoseBitVectorType.create(NumIntBits)
+      assert isinstance(RHSType, RoseIntegerType)
+      return RoseIntegerType.create(NumIntBits)
+  # Handle the other case
+  if type(RHS.b) == Number \
+   and (type(RHS.a) == BitSlice or type(RHS.a) == BitIndex):
+    RHSType = GetExpressionType(RHS.a, Context)
+    if isinstance(RHSType, RoseUndefinedType):
+      return RoseUndefinedType.create()
+    # Binary operation can only be performed on bitvectors and integers
+    # so getting bitwidth is OK.
+    NumIntBits = RHS.b.val.bit_length()
+    if NumIntBits > RHSType.getBitwidth():
+      # We need to extend the size of the other operand
+      if isinstance(RHSType, RoseBitVectorType):
+        return RoseBitVectorType.create(NumIntBits)
+      assert isinstance(RHSType, RoseIntegerType)
+      return RoseIntegerType.create(NumIntBits)
+
+  # Account for the operands' bitwidths
+  RHSAType = GetExpressionType(RHS.a, Context)
+  if RHSAType == RoseUndefinedType.create():
+    return RoseUndefinedType.create()
+  RHSBType = GetExpressionType(RHS.b, Context)
+  if RHSBType == RoseUndefinedType.create():
+    return RoseUndefinedType.create()
+  # Shorter type will be extended
+  if RHSAType.getBitwidth() < RHSBType.getBitwidth():
+    return RHSBType
+  if RHSAType.getBitwidth() > RHSBType.getBitwidth():
+    return RHSAType
+
+  return RoseUndefinedType.create()
+
+
+# We try to work out the type of the numbers in RHS.
+# This is not meant to be deep. We will extend this
+# if we need to.
+def GetRHSNumberType(Update, Context : DRAMRoseContext):
+  RHS = Update.rhs
+  LHS = Update.lhs
+
+  # If the RHS is just a number, use the LHS type.
+  if type(RHS) == Number:
+    return GetExpressionType(LHS, Context)
+
+  # If the RHS is just a variable or a bitslice,
+  # Just get its type
+  if type(RHS) == Var or type(RHS) == BitIndex \
+  or type(RHS) == BitSlice:
+    RHSType = GetExpressionType(RHS, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    return GetExpressionType(LHS, Context)
+
+  if type(RHS) == UnaryExpr:
+    RHSType = GetExpressionType(RHS.a, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    return GetExpressionType(LHS, Context)
+
+  if type(RHS) == BinaryExpr:
+    RHSType = GetRHSTypeForSpecialCases(RHS, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    RHSType = GetExpressionType(RHS.a, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    RHSType = GetExpressionType(RHS.b, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    # Binary ops outside of comparison ops have the
+    # same type as operands, so we could try that.
+    if RHS.op not in ComparisonOps:
+      return GetExpressionType(LHS, Context)
+    return RoseUndefinedType.create()
+
+  # See if the RHS is a select op
+  if type(RHS) == Select:
+    # The condition cannot be a number. Assert that here.
+    assert type(RHS.cond) != Number
+    RHSType = GetExpressionType(RHS.then, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    RHSType = GetExpressionType(RHS.otherwise, Context)
+    if not isinstance(RHSType, RoseUndefinedType):
+      return RHSType
+    return GetExpressionType(LHS, Context)
+
+  # If we do not know what the RHS is, we just give up.
+  return RoseUndefinedType.create()
+
+
+def CompileUpdate(Update, Context : DRAMRoseContext):
+  print("Compile Update!")
+  print("LHS:", Update.lhs)
+  # We need to get the type of numbers on the RHS
+  OriginalNumberTy = Context.getNumberType()
+  PredictedType = GetRHSNumberType(Update, Context)
+  if not isinstance(PredictedType, RoseUndefinedType):
+    Context.setNumberType(PredictedType)
+
+  RHSExprVal = CompileExpression(Update.rhs, Context)
+  Context.setNumberType(OriginalNumberTy)
+
+  # There are some cases where RHS is just a constant value.
+  # This has to handled especially because constants' IDs are not
+  # cached into the context, but here we have to.
+  #if isinstance(RHSExprVal, RoseConstant):
+  # We add this assignment to the
+  # Add the constant ID to the context
+  #Context.addCompiledAbstraction(Update.rhs.id, RHSExprVal)
+
+  if type(Update.lhs) == Var:
+    # Get the ID associated with the RHS value
+    ID = Update.rhs.id
+    # Update the ID associated with this variable name
+    Context.addVariable(Update.lhs.name, ID)
+    return RHSExprVal
+
+  if type(Update.lhs) == TypeLookup and type(Update.lhs.obj) == Var:
+    # Get the ID associated with the RHS value
+    ID = Update.rhs.id
+    # Update the ID associated with this variable name
+    Context.addVariable(Update.lhs.obj.name, ID)
+    return RHSExprVal
+
+  # We should be compiling the bitslice as LHS now
+  if type(Update.lhs) == BitSlice:
+    # Compile the LHS Bitslice
+    # Compile the low index
+    Low = CompileIndex(Update.lhs.lo, Context)
+    # Compile the high index
+    #OriginalNumberTy = Context.getIndexNumberType()
+    #Context.setIndexNumberType(Low.getType())
+    if (type(Update.lhs.hi) == Var and Update.lhs.hi.name == 'MAX'):
+      MaxVectorLength = Context.getMaxVectorLength()
+      High = RoseConstant.create(MaxVectorLength - 1, RoseIntegerType.create(32))
+    else:
+      High = CompileIndex(Update.lhs.hi, Context)
+    #Context.setIndexNumberType(OriginalNumberTy)
+    # Somtimes the maximum allowable vector length has to be increased
+    if isinstance(High, RoseConstant):
+      if High.getValue() > Context.getMaxVectorLength():
+        NewLength = Context.getMaxVectorLength() \
+                * math.ceil(High.getValue() / Context.getMaxVectorLength())
+        Context.setMaxVectorLength(NewLength)
+    # Compile the bitvector
+    BitVector = CompileExpression(Update.lhs.bv, Context)
+    print("Update.lhs.bv: ", Update.lhs.bv)
+    print("Compiled bitvector: ", BitVector)
+    # Do some sanity check if possible
+    if isinstance(Low, RoseConstant):
+      assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
+    if isinstance(High, RoseConstant):
+      assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
+    if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
+      assert High.getValue() >= Low.getValue()
+    # Compute the bitwidth that is inserted in this slice
+    Bitwidth = ComputeBitSliceWidth(Low, High, BitVector.getType().getBitwidth())
+    BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
+    # Add an bitslice operation
+    if RHSExprVal.getType().getBitwidth() < Bitwidth:
+      # Let's size-extend
+      if Context.isValueSignKnown(RHSExprVal):
+        if Context.isValueSigned(RHSExprVal) == True:
+           RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                RHSExprVal, Bitwidth)
+        else:
+           RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
+                                                RHSExprVal, Bitwidth)
+      else:
+        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                              RHSExprVal, Bitwidth)
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    elif RHSExprVal.getType().getBitwidth() > Bitwidth:
+      # Truncate the undesirable high bits
+      RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
+                          RHSExprVal, Bitwidth)
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    # Add signedness info
+    if not Context.isValueSignKnown(BitVector):
+      if Context.isValueSignKnown(RHSExprVal):
+        Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
+    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
+    print("LHSOp:", LHSOp)
+  else:
+    # This could be a mask generator
+    assert type(Update.lhs) == BitIndex
+    if type(Update.lhs.obj) == TypeLookup:
+      # Compile the low index
+      ElemType =DRAMTypes[Update.lhs.obj.key]
+      IndexVal = CompileIndex(Update.lhs.idx, Context)
+      CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                    IndexVal.getType())
+      LowIndex = RoseMulOp.create(Context.genName(), \
+                                [CoFactor, IndexVal])
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+      # Compile the vector object
+      BitVector = CompileExpression(Update.lhs.obj, Context)
+      # Get the high index
+      assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
+      if not Context.isValueSignKnown(BitVector):
+        if Context.isValueSignKnown(RHSExprVal):
+          Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
+      ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+      assert isinstance(ElemType, RoseBitVectorType)
+      IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+      HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+      # Get the bitwdith value
+      BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
+      # Compile the op
+      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
+    else:
+      # Compile the LHS mask
+      IndexVal = CompileExpression(Update.lhs.idx, Context)
+      # Compile the vector
+      BitVector = CompileExpression(Update.lhs.obj, Context)
+      if not Context.isValueSignKnown(BitVector):
+        if Context.isValueSignKnown(RHSExprVal):
+          Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
+      # The bit slice size here is 1 bit
+      BitwidthValue = RoseConstant.create(1, IndexVal.getType())
+      # Compile the op
+      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, IndexVal, IndexVal, BitwidthValue)
+
+  # Add signedness info
+  if Context.isValueSignKnown(BitVector) == False \
+  and Context.isValueSignKnown(RHSExprVal) == True:
+    Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
+
+  # Add the op to the IR
+  Context.addAbstractionToIR(LHSOp)
+
+  # Add the operation to the context
+  Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
+  Context.addCompiledAbstraction(Update.lhs.id, LHSOp)
+
+  return LHSOp
+
+
+def CompileSelect(Select, Context : DRAMRoseContext):
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(Select.id):
+    return Context.getCompiledAbstractionForID(Select.id)
+
+  # Compile the operation
+  Cond = CompileExpression(Select.cond, Context)
+  Then = CompileExpression(Select.then, Context)
+  Otherwise = CompileExpression(Select.otherwise, Context)
+  Operation = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
+
+  # If the operation is of bitvector type, add signedness info
+  if isinstance(Operation.getType(), RoseBitVectorType):
+    Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Then))
+
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(Select.id, Operation)
+  return Operation
+
+
+def CompileUnaryExpr(UnaryExpr, Context : DRAMRoseContext):
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(UnaryExpr.id):
+    return Context.getCompiledAbstractionForID(UnaryExpr.id)
+
+  # Compile the operation
+  Value = CompileExpression(UnaryExpr.a, Context)
+  Operation = UnaryOps[UnaryExpr.op]()(Context.genName(), Value, Context)
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(UnaryExpr.id, Operation)
+  return Operation
+
+
+def CompileBinaryExpr(BinaryExpr, Context : DRAMRoseContext):
+    # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(BinaryExpr.id):
+    return Context.getCompiledAbstractionForID(BinaryExpr.id)
+
+  # Compile the operands
+  Operand1 = CompileExpression(BinaryExpr.a, Context)
+  Operand2 = CompileExpression(BinaryExpr.b, Context)
+
+  # We have to deal with the special case
+  ExtendOperandSize = False
+  OperandBitwidth = None
+  if (type(BinaryExpr.a) == BitSlice and type(BinaryExpr.b) == BitSlice) \
+  or (type(BinaryExpr.a) == BitIndex and type(BinaryExpr.b) == BitIndex):
+    if NeedToExtendOperandSize(BinaryExpr.op):
+      # We need to sign extend the operands first. Double the operands' bitwidths
+      assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
+      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      if Context.isValueSigned(Operand1) == True:
+        Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand1, IsSigned=True)
+      else:
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      if Context.isValueSigned(Operand2) == True:
+        Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
+                          Operand2, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand2, IsSigned=True)
+      else:
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                          Operand2, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand2, IsSigned=False)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+
+  # There are cases where zero_extend(x) * zero_extend(y) need to be extended further.
+  if type(BinaryExpr.a) == Call and type(BinaryExpr.b) == Call:
+    if BinaryExpr.a.funcname in ZeroExtendsSize \
+   and BinaryExpr.b.funcname in ZeroExtendsSize:
+      # Double the operands' bitwidths
+      assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
+      # todo: KUNAL — this breaks my first-draft amx implementation because AMX does 32-bit X 32-bit => 32-bit multiplications, not ... => 64-bit
+      # OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      # Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+      #                     Operand1, OperandBitwidth)
+      # Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+      #                     Operand2, OperandBitwidth)
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      Context.addSignednessInfoForValue(Operand2, IsSigned=False)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+
+  # There are cases where bitvectors are multiplied to larger numbers
+  # TODO: Make this more general if need be. Right now, we deal with this
+  # as a special case.
+  # todo: KUNAL — don't use type(BinaryExpr.a) ??  Should instead use OperandX.getType()
+    #  Otherwise we break e.g. _mm256_mpsadbw_epu8 and a bunch of other instructions where
+    #  an integer (e.g. RoseMulOp) is multiplied by a bitvector (e.g. RoseBVZeroExtendOp)
+    #  but in the AST they are both Vars
+  if type(BinaryExpr.a) == Number \
+  and (type(BinaryExpr.b) == BitSlice or type(BinaryExpr.b) == BitIndex):
+    NumIntBits = BinaryExpr.a.val.bit_length()
+    if NumIntBits > Operand2.getType().getBitwidth():
+      # We need to extend the size of the other operand
+      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), Operand2, NumIntBits)
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand2, IsSigned=False)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+  if type(BinaryExpr.b) == Number \
+  and (type(BinaryExpr.a) == BitSlice or type(BinaryExpr.a) == BitIndex):
+    NumIntBits = BinaryExpr.b.val.bit_length()
+    if NumIntBits > Operand1.getType().getBitwidth():
+      # We need to extend the size of the other operand
+      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), Operand1, NumIntBits)
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      ExtendOperandSize = True
+
+  # Fix the operands' bitwidths
+  if Operand1.getType() != Operand2.getType():
+    if isinstance(Operand1, RoseConstant):
+      Operand1.setType(Operand2.getType())
+    elif isinstance(Operand2, RoseConstant):
+      Operand2.setType(Operand1.getType())
+
+    elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
+      # We need to extend the size of the other operand
+      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                      Operand1, Operand2.getType().getBitwidth())
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      ExtendOperandSize = True
+    elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+      # We need to extend the size of the other operand
+      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                      Operand2, Operand1.getType().getBitwidth())
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand2, IsSigned=False)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+
+  # Compile the binary operation
+  Operation = BinaryOps[BinaryExpr.op]()(Context.genName(), \
+                                  Operand1, Operand2, Context)
+
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+
+  # Add the operation to the context
+  Context.addCompiledAbstraction(BinaryExpr.id, Operation)
+
+  # Now add the operation as an op that has already extended operand sizes
+  if ExtendOperandSize == True:
+    Context.addSizeExtended(Operation, OperandBitwidth)
+  return Operation
+
+
+def CompileReturn(ReturnStmt, Context : DRAMRoseContext):
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(ReturnStmt.id):
+    return Context.getCompiledAbstractionForID(ReturnStmt.id)
+
+  # Compile the return op
+  Operand = CompileExpression(ReturnStmt.val, Context)
+  Operation = RoseReturnOp.create(Operand)
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  # Add the operation to the context (although this is unnecessary)
+  Context.addCompiledAbstraction(ReturnStmt.id, Operation)
+  return Operation
+
+
+# Checks if extension has been performed already
+# sign_extend(x * y) = sign_extend(x) * sign_extend(y)
+def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : DRAMRoseContext):
+  if CallStmt.funcname not in BuiltinExtendsSize:
+    return False
+  # Builtin extends size. Check if we have already done that.
+  [Operation] = ArgValuesList
+
+  # If the operation extends the size, if the bitwidth is already large enough,
+  # it needs not extension, in which case there is nothing to do.
+  BuiltinExtendSize = BuiltinExtendsSize[CallStmt.funcname]
+  if Operation.getType().getBitwidth() >= BuiltinExtendSize:
+    return True
+
+  if not Context.isSizeExtended(Operation):
+    return False
+  # So the operands have alrady been extended.
+  # Now we need to ensure the size of operation is the same
+  # as what we intend to extend using the builtin.
+  if BuiltinExtendSize != Context.getExtendedSize(Operation):
+    # The size to which the builtin will extend has to be greater
+    # than the size to which extension has already taken place.
+    assert BuiltinExtendSize > Context.getExtendedSize(Operation)
+    return False
+  # So there is nothing to do
+  return True
+
+
+# Builtin computing remainder must be compiled fully on its own.
+def PreCompileBuiltin(CallStmt, Context : DRAMRoseContext):
+  if CallStmt.funcname != "REMAINDER" \
+    and CallStmt.funcname not in ZeroExtendsSize:
+    return RoseUndefValue()
+
+  if CallStmt.funcname == "REMAINDER":
+    assert len(CallStmt.args) == 1
+    DivExpr = CallStmt.args[0]
+    assert DivExpr.op == "/"
+    NumeratorExpr = DivExpr.a
+    DenominatorExpr = DivExpr.b
+
+    # Compile the numerator and denominator first
+    Numerator = CompileExpression(NumeratorExpr, Context)
+    Denominator = CompileExpression(DenominatorExpr, Context)
+
+    # Now compile the builtin
+    if isinstance(Numerator.getType(), RoseBitVectorType) \
+    and isinstance(Denominator.getType(), RoseBitVectorType):
+      Operation = RoseBVSremOp.create(Context.genName(), Numerator, Denominator)
+      Context.addSignednessInfoForValue(Operation, IsSigned=True)
+    else:
+      Operation = RoseRemOp.create(Context.genName(), [Numerator, Denominator])
+
+    # Add the operation to the IR
+    Context.addAbstractionToIR(Operation)
+    # Add the operation to the context
+    Context.addCompiledAbstraction(CallStmt.id, Operation)
+
+    # Add the division operation to the context as well
+    Context.addCompiledAbstraction(DivExpr.id, Operation)
+    return Operation
+
+  # Now we deal with the case where we are performing a logical
+  # right shift.
+  assert CallStmt.funcname in ZeroExtendsSize
+  assert len(CallStmt.args) == 1
+  if type(CallStmt.args[0]) != BinaryExpr:
+    return RoseUndefValue()
+  RightShiftExpr = CallStmt.args[0]
+  # Only support the right shift case.
+  if RightShiftExpr.op != ">>":
+    return RoseUndefValue()
+  Expr1 = RightShiftExpr.a
+  Expr2 = RightShiftExpr.b
+
+  CompiledExpr1 = CompileExpression(Expr1, Context)
+  CompiledExpr2 = CompileExpression(Expr2, Context)
+
+  # Add signedness info
+  Context.addSignednessInfoForValue(CompiledExpr1, IsSigned=False)
+  Context.addSignednessInfoForValue(CompiledExpr2, IsSigned=False)
+
+  assert isinstance(CompiledExpr1.getType(), RoseBitVectorType)
+  assert isinstance(CompiledExpr2.getType(), RoseBitVectorType)
+  if CompiledExpr1.getType().getBitwidth() \
+      > CompiledExpr2.getType().getBitwidth():
+    CompiledExpr2 = RoseBVZeroExtendOp.create(Context.genName(), \
+            CompiledExpr2, CompiledExpr1.getType().getBitwidth())
+    # Add signedness info
+    Context.addSignednessInfoForValue(CompiledExpr2, IsSigned=False)
+    # Add this operation to the IR and the context
+    Context.addAbstractionToIR(CompiledExpr2)
+    Context.addCompiledAbstraction(CompiledExpr2.getName(), CompiledExpr2)
+  elif CompiledExpr1.getType().getBitwidth() \
+      < CompiledExpr2.getType().getBitwidth():
+    CompiledExpr1 = RoseBVZeroExtendOp.create(Context.genName(), \
+            CompiledExpr1, CompiledExpr2.getType().getBitwidth())
+    # Add signedness info
+    Context.addSignednessInfoForValue(CompiledExpr1, IsSigned=False)
+    # Add this operation to the IR and the context
+    Context.addAbstractionToIR(CompiledExpr1)
+    Context.addCompiledAbstraction(CompiledExpr1.getName(), CompiledExpr1)
+
+  assert isinstance(CompiledExpr1.getType(), RoseBitVectorType) == True
+  assert isinstance(CompiledExpr2.getType(), RoseBitVectorType) == True
+  Operation = RoseBVLshrOp.create(Context.genName(), CompiledExpr1, CompiledExpr2)
+  Context.addSignednessInfoForValue(Operation, IsSigned=False)
+
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(CallStmt.id, Operation)
+
+  # Add the division operation to the context as well
+  Context.addCompiledAbstraction(RightShiftExpr.id, Operation)
+  return Operation
+
+
+def CompileBuiltIn(CallStmt, Context : DRAMRoseContext):
+  # If the call is compiled, no need to recompile
+  if Context.isCompiledAbstraction(CallStmt.id):
+    return Context.getCompiledAbstractionForID(CallStmt.id)
+
+  # Function name has to be one of the bultins
+  assert CallStmt.funcname in Builtins
+
+  # Sometimes the whole builtin has to be pre-compiled at once
+  PreCompiledOp = PreCompileBuiltin(CallStmt, Context)
+  if PreCompiledOp != RoseUndefValue():
+    return PreCompiledOp
+
+  # Compile function call arguments first
+  ArgValuesList = list()
+  for Arg in CallStmt.args:
+    CompiledArg = CompileExpression(Arg, Context)
+    # Argument type cannot be undefined or void
+    assert not isinstance(CompiledArg.getType(), RoseVoidType) \
+      and not isinstance(CompiledArg.getType(), RoseUndefinedType)
+    ArgValuesList.append(CompiledArg)
+
+  # Now we have to deal with one special case
+  # where we hvae already performed the buitin operation.
+  if BuiltinOpPerformed(CallStmt, ArgValuesList, Context) == True:
+    # Nothing to do. Just map this operation id to its operand's operation.
+    # There is nothing new to add to the IR.
+    [Operation] = ArgValuesList
+    Context.addCompiledAbstraction(CallStmt.id, Operation)
+    return Operation
+
+  # Int function does nothing. So just return the operand.
+  if CallStmt.funcname == "Int":
+      [Operation] = ArgValuesList
+      return Operation
+
+  # Check if this is a call to a builtin function
+  Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList, Context)
+
+  if not isinstance(Operation, list): Operation = [Operation]
+  for op in Operation:
+    # Add the operation to the IR
+    Context.addAbstractionToIR(op)
+    # Add the operation to the context
+    Context.addCompiledAbstraction(CallStmt.id, op)
+
+  return Operation[-1] if Operation else None
+
+
+def CompileCall(CallStmt, Context : DRAMRoseContext):
+  # If this is a builtin function call, just compile it.
+  if CallStmt.funcname in Builtins:
+    return CompileBuiltIn(CallStmt, Context)
+
+   # If the call is compiled, no need to recompile
+  if Context.isCompiledAbstraction(CallStmt.id):
+    return Context.getCompiledAbstractionForID(CallStmt.id)
+
+  # Compile the arguments (we have no other choice)
+  ArgValuesList = list()
+  #if ArgTypesUndefined == True:
+  for Arg in CallStmt.args:
+    CompiledArg = CompileExpression(Arg, Context)
+    # Argument type cannot be undefined or void
+    assert not isinstance(CompiledArg.getType(), RoseVoidType)  \
+      and not isinstance(CompiledArg.getType(), RoseUndefinedType)
+    ArgValuesList.append(CompiledArg)
+  ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
+
+  # This is a function call
+  FunctionDef = Context.getFunctionDef(CallStmt.funcname)
+  assert len(FunctionDef.params) == len(CallStmt.args)
+
+  # Check if we are compiling this function for the first time
+  if Context.isCompiledAbstraction(FunctionDef.id) == False:
+    ChildContext = DRAMRoseContext()
+    FuncArgList = []
+    for Index  in range(len(FunctionDef.params)):
+      Param = FunctionDef.params[Index]
+      ArgType = ArgsTypeList[Index]
+      if type(Param) == BitSlice:
+        # Some sanity checks
+        assert type(Param.bv) == Var
+        assert type(Param.lo) == Number
+        assert type(Param.hi) == Number
+        assert Param.lo.val == 0
+        ParamName = Param.bv.name
+        ParamWidth = Param.hi.val + 1
+      else:
+        assert type(Param) == Var
+        ParamName = Param.name
+        ParamWidth = ArgType.getBitwidth()
+      assert ArgType.getBitwidth() == ParamWidth
+      ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue())
+      ChildContext.addVariable(ParamName, Param.id)
+      ChildContext.addElemTypeOfVariable(ParamName, ArgType)
+      FuncArgList.append(ArgVal)
+
+    # Compile the function and its arguments
+    Function = RoseFunction.create(CallStmt.funcname, FuncArgList, RoseUndefinedType.create())
+
+    # Add arguments to the child context
+    for Index  in range(len(FunctionDef.params)):
+      Param = FunctionDef.params[Index]
+      Arg = Function.getArg(Index)
+      ChildContext.addCompiledAbstraction(Param.id, Arg)
+      if Context.isValueSignKnown(ArgValuesList[Index]) == True:
+        ChildContext.addSignednessInfoForValue(Arg, Context.isValueSigned(ArgValuesList[Index]))
+
+    RootAbstraction = Context.getRootAbstraction()
+    if isinstance(RootAbstraction, RoseFunction):
+      RegionContext = Context
+      RootFunction = RootAbstraction
+    else:
+      RegionContext, RootFunction = Context.getFirsRootAbstractionsOfType(RoseFunction)
+      assert not isinstance(RootFunction, RoseUndefRegion)
+
+    # Empty the function first. We want to make sure that the nested function
+    # is the first child of the root abstraction.
+    SubAbstractionList = list()
+    SubAbstractionList.extend(RootFunction.getChildren())
+    for Child in SubAbstractionList:
+      RootFunction.eraseChild(Child)
+
+    # Add the generated function to the current context
+    RegionContext.addCompiledAbstraction(FunctionDef.id, Function)
+
+    # Add this function as the root abstraction for this this child context
+    ChildContext.pushRootAbstraction(Function)
+
+    # Create a new context for this funtcion
+    RegionContext.createContext(FunctionDef.id, ChildContext)
+
+    # Compile the function body
+    ReturnValue = RoseUndefValue()
+    for Stmt in FunctionDef.body:
+      if type(Stmt) == Return:
+        ReturnValue = CompileExpression(Stmt, ChildContext)
+        break
+      CompileStatement(Stmt, ChildContext)
+    assert ReturnValue != RoseUndefValue()
+
+    # Pop the root function from the child context
+    CompiledFunction = ChildContext.getRootAbstraction()
+
+    # Set the return value for this function
+    CompiledFunction.setRetVal(ReturnValue.getOperand(0))
+
+    # Add this function to the root abstraction and update context
+    RegionContext.addAbstractionToIR(CompiledFunction)
+
+    # Update the compiled function in this context now
+    RegionContext.updateCompiledAbstraction(FunctionDef.id, CompiledFunction)
+
+    # Add all the removed regions back to the root function
+    for Child in SubAbstractionList:
+      RootFunction.addAbstraction(Child)
+
+    # Destroy the child context now. But copy the context over for this function.
+    RegionContext.copyContext(FunctionDef.id, CompiledFunction)
+    RegionContext.destroyContext(FunctionDef.id)
+
+  # Compile call statement now.
+  RootAbstraction = Context.getRootAbstraction()
+  if isinstance(RootAbstraction, RoseFunction):
+    RegionContext = Context
+  else:
+    RegionContext, Region = Context.getFirsRootAbstractionsOfType(RoseFunction)
+    assert not isinstance(Region, RoseUndefRegion)
+  Function = RegionContext.getCompiledAbstractionForID(FunctionDef.id)
+  FunctionCall = RoseCallOp.create(Context.genName(), Function, ArgValuesList)
+  # Add the op to the IR
+  Context.addAbstractionToIR(FunctionCall)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(CallStmt.id, FunctionCall)
+
+  return FunctionCall
+
+
+# Function will be compiled later
+def CompileFunction(FunctionDef, Context : DRAMRoseContext):
+  assert(type(FunctionDef) == FuncDef)
+  # Add the function definiton to the current context
+  # This function will be compiled later.
+  Context.addFunctionDef(FunctionDef)
+
+
+def CompileForLoop(ForStmt, Context : DRAMRoseContext):
+  print("CompileForLoop invoked!")
+  # If the loop has been compiled already, no need to recomplie
+  if Context.isCompiledAbstraction(ForStmt.id):
+    return
+
+  # Compile the loop bounds and step
+  print("COMPILING FOR LOOP")
+  print(ForStmt)
+  Begin = CompileExpression(ForStmt.begin, Context)
+  End = CompileExpression(ForStmt.end, Context)
+  Step = CompileExpression(ForStmt.step, Context)
+  print("Begin:")
+  Begin.print()
+  Begin.getType().print()
+  print("End:")
+  End.print()
+  End.getType().print()
+  print("Step:")
+  Step.print()
+  Step.getType().print()
+  assert Step.getType() == End.getType()
+
+  One = RoseConstant.create(1, Begin.getType())
+  MinusOne = RoseConstant.create(-1, Begin.getType())
+  #Step = One if ForStmt.inc else MinusOne
+
+  # Modify the end bound of the loop by adding 1 to it.
+  # This is because of the way loop bounds are expressed in
+  # in x86 pseudocode and rosette.
+  if isinstance(End, RoseConstant):
+    End = RoseConstant.create(End.getValue() , End.getType())
+  else:
+    # Add an add instruction
+    End = RoseAddOp.create(Context.genName(), [End, Step])
+    # Add this op to the IR
+    Context.addAbstractionToIR(End)
+    # Add this updated value to the context
+    Context.addCompiledAbstraction(ForStmt.end, End)
+
+  # Generate the loop
+  Loop = RoseForLoop.create(Context.genName(ForStmt.iterator.name), Begin, End, Step)
+
+  # Add loop as root abstraction
+  ChildContext = DRAMRoseContext()
+  ChildContext.pushRootAbstraction(Loop)
+
+  # Add the generated loop to the current context
+  Context.addCompiledAbstraction(ForStmt.id, Loop)
+
+  # Add a new context for this loop
+  Context.createContext(ForStmt.id, ChildContext)
+
+  # Add the iterator to the child context
+  ChildContext.addVariable(ForStmt.iterator.name, ForStmt.iterator.id)
+  ChildContext.addCompiledAbstraction(ForStmt.iterator.id, Loop.getIterator())
+
+  # Comoile all the statements in this loop
+  for Stmt in ForStmt.body:
+    CompileStatement(Stmt, ChildContext)
+
+  # Pop the root loop from the child context
+  CompiledLoop = ChildContext.getRootAbstraction()
+
+  # Add loop to the root abstraction
+  Context.addAbstractionToIR(CompiledLoop)
+
+  # Update the compiled loop to the current context
+  Context.updateCompiledAbstraction(ForStmt.id, CompiledLoop)
+
+  # Remove the child context now
+  Context.destroyContext(ForStmt.id)
+
+
+def CompileIf(IfStmt, Context : DRAMRoseContext):
+  # Generate a cond region
+  Cond = CompileExpression(IfStmt.cond, Context)
+  #CondRegion = RoseCond(Cond, [], [], RoseUndefRegion())
+  CondRegion = RoseCond.create([Cond], 1)
+
+  # Add cond region as root abstraction
+  ChildContext = DRAMRoseContext()
+  ChildContext.pushRootAbstraction(CondRegion)
+
+  # Add the then key for this cond region
+  ThenRegionKey = CondRegion.getKeyForThenRegion()
+  ChildContext.addKeyForCompiledAbstraction(ThenRegionKey, CondRegion)
+
+  # Add the generated cond region to the current context
+  Context.addCompiledAbstraction(IfStmt.id, CondRegion)
+
+  # Add a new context for this cond region
+  Context.createContext(IfStmt.id, ChildContext)
+
+  # Compile all the statements in then cond region
+  for Stmt in IfStmt.then:
+    CompileStatement(Stmt, ChildContext)
+
+  # Pop the root cond region from the child context
+  CompiledCondRegion = ChildContext.getRootAbstraction()
+
+  # Add cond region to the root abstraction
+  Context.addAbstractionToIR(CompiledCondRegion)
+
+  # Update the compiled cond region to the current context
+  Context.updateCompiledAbstraction(IfStmt.id, CompiledCondRegion)
+
+  # Remove the child context now
+  Context.destroyContext(IfStmt.id)
+
+
+def CompileIfElse(IfStmt, Context : DRAMRoseContext):
+  # Generate a cond region
+  Cond = CompileExpression(IfStmt.cond, Context)
+  #CondRegion = RoseCond(Cond, [], [], RoseUndefRegion())
+  CondRegion = RoseCond.create([Cond], 2)
+
+  # Add cond region as root abstraction
+  ChildContext = DRAMRoseContext()
+  ChildContext.pushRootAbstraction(CondRegion)
+
+  # Add the then key for this cond region
+  ThenRegionKey = CondRegion.getKeyForThenRegion()
+  ChildContext.addKeyForCompiledAbstraction(ThenRegionKey, CondRegion)
+
+  # Add the generated cond region to the current context
+  Context.addCompiledAbstraction(IfStmt.id, CondRegion)
+
+  # Add a new context for this cond region
+  Context.createContext(IfStmt.id, ChildContext)
+
+  # Compile all the statements in then cond region
+  for Stmt in IfStmt.then:
+    CompileStatement(Stmt, ChildContext)
+
+  # Update the key for the cond key
+  UpdatedCondRegion = ChildContext.getRootAbstraction()
+  ElseRegionKey = CondRegion.getKeyForElseRegion()
+  ChildContext.addKeyForCompiledAbstraction(ElseRegionKey, UpdatedCondRegion)
+
+  # Compile all the statement in the otherwise cond region
+  for Stmt in IfStmt.otherwise:
+    CompileStatement(Stmt, ChildContext)
+
+  # Pop the root cond region from the child context
+  CompiledCondRegion = ChildContext.getRootAbstraction()
+
+  # Add cond region to the root abstraction
+  Context.addAbstractionToIR(CompiledCondRegion)
+
+  # Update the compiled cond region to the current context
+  Context.updateCompiledAbstraction(IfStmt.id, CompiledCondRegion)
+
+  # Remove the child context now
+  Context.destroyContext(IfStmt.id)
+
+
+def CompileIfElseIfElse(IfStmt, Context : DRAMRoseContext):
+  # Generate a cond region
+  Cond1 = CompileExpression(IfStmt.cond1, Context)
+  Cond2 = CompileExpression(IfStmt.cond2, Context)
+  #CondRegion = RoseCond(Cond, [], [], RoseUndefRegion())
+  CondRegion = RoseCond.create([Cond1, Cond2], 3)
+
+  # Add cond region as root abstraction
+  ChildContext = DRAMRoseContext()
+  ChildContext.pushRootAbstraction(CondRegion)
+
+  # Add the then key for this cond region
+  ThenRegionKey = CondRegion.getKeyForThenRegion()
+  ChildContext.addKeyForCompiledAbstraction(ThenRegionKey, CondRegion)
+
+  # Add the generated cond region to the current context
+  Context.addCompiledAbstraction(IfStmt.id, CondRegion)
+
+  # Add a new context for this cond region
+  Context.createContext(IfStmt.id, ChildContext)
+
+  # Compile all the statements in then cond region
+  for Stmt in IfStmt.then:
+    CompileStatement(Stmt, ChildContext)
+
+  # Update the key for the cond key
+  UpdatedCondRegion = ChildContext.getRootAbstraction()
+  ElseRegionKey = CondRegion.getKeyForElseRegion()
+  ChildContext.addKeyForCompiledAbstraction(ElseRegionKey, UpdatedCondRegion)
+
+  # Compile all the statement in the otherwise cond region
+  for Stmt in IfStmt.elseif:
+    CompileStatement(Stmt, ChildContext)
+
+  # Update the key for the cond key
+  UpdatedCondRegion = ChildContext.getRootAbstraction()
+  ElseRegionKey = CondRegion.getKeyForElseRegion()
+  ChildContext.addKeyForCompiledAbstraction(ElseRegionKey, UpdatedCondRegion)
+
+  # Compile all the statement in the otherwise cond region
+  for Stmt in IfStmt.otherwise:
+    CompileStatement(Stmt, ChildContext)
+
+  # Pop the root cond region from the child context
+  CompiledCondRegion = ChildContext.getRootAbstraction()
+
+  # Add cond region to the root abstraction
+  Context.addAbstractionToIR(CompiledCondRegion)
+
+  # Update the compiled cond region to the current context
+  Context.updateCompiledAbstraction(IfStmt.id, CompiledCondRegion)
+
+  # Remove the child context now
+  Context.destroyContext(IfStmt.id)
+
+
+def CompileTypeLookup(LookupExpr, Context : DRAMRoseContext):
+  # LookupExpr tracks types of variables
+  if type(LookupExpr.obj) == Var:
+    # Check if the variable is already defined and cached. If so, just return that.
+    if Context.isVariableDefined(LookupExpr.obj.name):
+      ID = Context.getVariableID(LookupExpr.obj.name)
+      FoundValue = Context.getCompiledAbstractionForID(ID)
+      # See if the element type of this variable is known, if not add it.
+      if Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False:
+        Context.addElemTypeOfVariable(FoundValue.getName(), DRAMTypes[LookupExpr.key])
+      return FoundValue
+    # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+    CompiledValue = RoseValue.create(LookupExpr.obj.name, Context.getMaxVectorLength())
+    # Add the element type info to the context
+    assert Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False
+    Context.addElemTypeOfVariable(CompiledValue.getName(), DRAMTypes[LookupExpr.key])
+    # Add the variable info to the context
+    Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
+  else:
+    assert type(LookupExpr.obj) == BitIndex or type(LookupExpr.obj) == BitSlice or type(LookupExpr.obj) == MatrixRowLookup
+    # Compile the bit slice
+    CompiledValue = CompileExpression(LookupExpr.obj, Context)
+    if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
+      Context.addElemTypeOfVariable(CompiledValue.getName(), DRAMTypes[LookupExpr.key])
+
+  # Add the typelookup to context
+  Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
+  return CompiledValue
+
+
+
+def CompileMatrixDimLookup(expr, Context: DRAMRoseContext):
+  assert type(expr.obj) == Var
+  obj = RoseValue.create(expr.obj.name, DRAMTypes['__tile'])
+  # Check if the tile object is already defined and cached. If yes, just use that.
+  if not Context.isVariableDefined(obj.getName()):
+    Context.addVariable(obj.getName(), expr.obj.id)
+    Context.addCompiledAbstraction(expr.obj.id, obj)
+  abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+  if not Context.isElemTypeOfVariableKnown(obj.getName()):
+    Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+    Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
+
+  param_name = f'{expr.obj.name}_{expr.key}'
+  # Check if the variable is already defined and cached. If yes, just return that.
+  if Context.isVariableDefined(param_name):
+    ID = Context.getVariableID(param_name)
+    return Context.getCompiledAbstractionForID(ID)
+
+  assert not Context.isElemTypeOfVariableKnown(param_name)
+
+  RootContext, root_function = Context.getFirsRootAbstractionsOfType(RoseFunction)
+
+  # From old x86Dims.py:
+  #   'rows': RoseConstant.create(10, RoseIntegerType.create(8)),  # for testing...
+  #   'colsb': RoseConstant.create(10, RoseIntegerType.create(16)),  # for testing...
+  # param_type = RoseIntegerType.create({'rows': 8, 'colsb': 16}[expr.key])
+  param_type = RoseIntegerType.create(32)  # todo: Kunal — yeah.. not to spec but whatever, makes everything easier..
+  param_value = RoseArgument.create(param_name, param_type, root_function)
+
+  # Add the variable to the parent function definition
+  assert isinstance(root_function.Type, RoseFunctionType)
+  root_function.ArgList.append(param_value)  # todo: Kunal — should the order of rows and colsb params be deterministic?
+  root_function.Type.SubClassData['arglist'].append(param_type)
+
+  # Add the variables to all the parent contexts as if its been there the whole time
+  ctx = Context
+  while ctx is not None:
+    ctx.addSignednessInfoForValue(param_value, False)
+    ctx.addVariable(param_name, param_value.ID)
+    ctx.addElemTypeOfVariable(param_name, param_type)
+    ctx.addCompiledAbstraction(param_value.ID, param_value)
+    ctx = None if ctx == RootContext else ctx.ParentContext
+
+  return param_value
+
+
+def CompileMatrixRowLookup(expr, Context: DRAMRoseContext):
+  assert type(expr.obj) == Var
+  obj = RoseValue.create(expr.obj.name, DRAMTypes['__tile'])
+  # Check if the tile object is already defined and cached. If yes, just use that.
+  if not Context.isVariableDefined(obj.getName()):
+    Context.addVariable(obj.getName(), expr.obj.id)
+    Context.addCompiledAbstraction(expr.obj.id, obj)
+  abstraction = Context.getCompiledAbstractionForID(Context.getVariableID(obj.getName()))
+  if not Context.isElemTypeOfVariableKnown(obj.getName()):
+    Context.addElemTypeOfVariable(obj.getName(), obj.getType())
+    Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
+
+  idx = CompileIndex(expr.idx, Context)
+  op = RoseMatrixExtractRowOp.create(Context.genName(), obj, idx)
+  Context.addElemTypeOfVariable(op.getName(), RoseBitVectorType.create(op.getOutputBitwidth()))
+  Context.addSignednessInfoForValue(op, False)
+  Context.addAbstractionToIR(op)
+  Context.addCompiledAbstraction(expr.id, op)
+  return op
+
+def CompileMatch(MatchExpr, Context: DRAMRoseContext):
+  assert type(MatchExpr.val) == BitIndex or type(MatchExpr.val) == BitSlice
+  # Compile the bit slice
+  CompiledValue = CompileExpression(MatchExpr.val, Context)
+  # Compile the cases
+  Conditions = list()
+  for Case in MatchExpr.cases:
+    # Compile case value
+    assert type(Case.val) == Number
+    # Generate a bitvector
+    ConstantVal = RoseConstant.create(Case.val.val, CompiledValue.getType())
+    Condition = RoseBVEQOp.create(Context.genName("%cond"), CompiledValue, ConstantVal)
+    # Add the op to the IR
+    Context.addAbstractionToIR(Condition)
+    # Add the operation to the context
+    Context.addCompiledAbstraction(Case.id, Condition)
+    Conditions.append(Condition)
+
+  # Generate a cond region
+  CondRegion = RoseCond.create(Conditions, len(MatchExpr.cases))
+
+  # Add cond region as root abstraction
+  ChildContext = DRAMRoseContext()
+  ChildContext.pushRootAbstraction(CondRegion)
+
+  # Add the generated cond region to the current context
+  Context.addCompiledAbstraction(MatchExpr.id, CondRegion)
+
+  # Add a new context for this cond region
+  Context.createContext(MatchExpr.id, ChildContext)
+
+  # Now compile all the case statements
+  for Idx, Key in enumerate(CondRegion.getKeys()):
+    # Add key to this cond region
+    ChildContext.addKeyForCompiledAbstraction(Key, CondRegion)
+    # Compile the case statements
+    for Stmt in MatchExpr.cases[Idx].stmts:
+      CompileStatement(Stmt, ChildContext)
+    CondRegion = ChildContext.getRootAbstraction()
+
+  # Pop the root cond region from the child context
+  CompiledCondRegion = ChildContext.getRootAbstraction()
+
+  # Add cond region to the root abstraction
+  Context.addAbstractionToIR(CompiledCondRegion)
+
+  # Update the compiled cond region to the current context
+  Context.updateCompiledAbstraction(MatchExpr.id, CompiledCondRegion)
+
+  # Remove the child context now
+  Context.destroyContext(MatchExpr.id)
+
+
+def CompileExpression(Expr, Context : DRAMRoseContext):
+  ExprTy = type(Expr)
+  CompiledExpr = CompileAbstractions[ExprTy](Expr, Context)
+  return CompiledExpr
+
+
+def CompileStatement(Stmt, Context : DRAMRoseContext):
+  StmtTy = type(Stmt)
+  if Stmt == None:
+    return None
+  return CompileAbstractions[StmtTy](Stmt, Context)
+
+
+def CompileUpdatePaddingHighBits(Stmt, Context : DRAMRoseContext):
+  assert type(Stmt) == Update and type(Stmt.lhs) == BitSlice \
+    and type(Stmt.lhs.hi) == Var and Stmt.lhs.hi.name == "MAX"
+  # Add an opaque call instruction
+  Bitvector = CompileExpression(Stmt.lhs.bv, Context)
+  assert type(Stmt.lhs.lo) == Number
+  assert type(Stmt.rhs) == Number
+  assert Stmt.rhs.val == 0
+  NumPadBits = RoseConstant.create(Bitvector.getType().getBitwidth() - Stmt.lhs.lo.val, \
+                                  RoseIntegerType.create(32))
+  Operation = RoseBVPadHighBitsOp.create(Bitvector, NumPadBits)
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  return Operation
+
+
+def CompileSemantics(Sema, RootContext : DRAMRoseContext):
+  OutParams = []
+  ParamValues = []
+  ParamsIDs = []
+  for Index, Param in enumerate(Sema.params):
+    IsOutParam = False
+    if Param.type.endswith('*'):
+      ParamType = DRAMTypes[Param.type[:-1].strip()]
+      OutParams.append(Param.name)
+      IsOutParam = True
+    else:
+      if Param.is_imm:
+        ParamType = RoseBitVectorType.create(Sema.imm_width)
+      else:
+        ParamType = DRAMTypes[Param.type]
+    # Create a new rosette value
+    ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue())
+    RootContext.addSignednessInfoForValue(ParamVal, Param.is_signed)
+    if not IsOutParam:
+      ParamsIDs.append(Param.id)
+      ParamValues.append(ParamVal)
+
+  ReturnsMask = Sema.rettype.startswith('__mmask')
+  if Sema.rettype != 'void':
+    RetType = DRAMTypes[Sema.rettype]
+    if not ReturnsMask:
+      RetValue = RoseValue.create('dst', RetType)
+    else:
+      RetValue = RoseValue.create('k', RetType)
+  else:
+    RetType = RoseVoidType.create()
+    RetValue = RoseValue.create("", RetType)
+
+  # Define a Rose function
+  RootFunction = RoseFunction.create(Sema.intrin, ParamValues, RetType)
+  RootFunction.setRetValName(RetValue.getName())
+
+  # Add return value to the root context
+  ReturnID = "return." + RootFunction.getReturnValue().getName()
+  RootContext.addVariable(RootFunction.getReturnValue().getName(), ReturnID)
+  RootContext.addCompiledAbstraction(ReturnID, RootFunction.getReturnValue())
+  RootContext.addSignednessInfoForValue(RetValue, Sema.ret_is_signed)
+
+  # Add the parameter values to the root context
+  assert len(ParamsIDs) == RootFunction.getNumArgs()
+  for Index in range(RootFunction.getNumArgs()):
+    RootContext.addVariable(RootFunction.getArg(Index).getName(), ParamsIDs[Index])
+    RootContext.addCompiledAbstraction(ParamsIDs[Index], RootFunction.getArg(Index))
+
+  # Add the function to the context
+  RootContext.addCompiledAbstraction(Sema.intrin, RootFunction)
+
+  # Add the root function now
+  RootContext.pushRootAbstraction(RootFunction)
+
+  # Compile all the statements
+  CompiledRetVal = RoseUndefValue()
+  PaddingHandled = False
+
+  # TEMP Modified
+  #Sema.spec = Sema.spec[0].body
+  Sema_spec = Sema.spec[0].body
+  for Index, Stmt in enumerate(Sema_spec):
+    if Index == len(Sema.spec) - 1:
+      if type(Stmt) == Update:
+        if type(Stmt.lhs) == BitSlice:
+          if type(Stmt.lhs.hi) == Var:
+            if Stmt.lhs.hi.name == "MAX":
+              CompileUpdatePaddingHighBits(Stmt, RootContext)
+              PaddingHandled = True
+              continue
+
+    if type(Stmt) == Return:
+      CompiledRetVal = CompileStatement(Stmt, RootContext)
+      break
+    CompileStatement(Stmt, RootContext)
+
+  # Add padding handling call if not already added
+  if PaddingHandled == False and not isinstance(RetType, RoseVoidType):
+    NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
+    Operation = RoseBVPadHighBitsOp.create(RootFunction.getReturnValue(), NumPadBits)
+    RootContext.addAbstractionToIR(Operation)
+
+  # Get the compiled function
+  CompiledFunction = RootContext.getRootAbstraction()
+
+  # See if the function returns anything, if not add a return op
+  if CompiledRetVal == RoseUndefValue():
+    Op = RoseReturnOp.create(CompiledFunction.getReturnValue())
+    # NO meed to add this operation to the context but add it to the function
+    CompiledFunction.addAbstraction(Op)
+
+  print("\n\n\n\n\nFunction:")
+  CompiledFunction.print()
+
+  # Replace the uses of arguments
+  BlockList = CompiledFunction.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    for Op in Block:
+      for OperandIndex, Operand in enumerate(Op.getOperands()):
+        if isinstance(Operand, RoseArgument):
+          for Arg in CompiledFunction.getArgs():
+            if Arg == Operand:
+              Op.setOperand(OperandIndex, Arg)
+              break
+
+  return CompiledFunction
+
+
+CompileAbstractions = {
+  For: CompileForLoop,
+  Number: CompileNumber,
+  Var: CompileVariable,
+  Return : CompileReturn,
+  FuncDef: CompileFunction,
+  Call: CompileCall,
+  BitSlice: CompileBitSlice,
+  Update: CompileUpdate,
+  UnaryExpr: CompileUnaryExpr,
+  Select: CompileSelect,
+  If: CompileIf,
+  IfElse: CompileIfElse,
+  IfElseIfElse: CompileIfElseIfElse,
+  BinaryExpr: CompileBinaryExpr,
+  BitIndex: CompileBitIndex,
+  #TypeLookup: CompileTypeLookup,
+  #MatrixDimLookup: CompileMatrixDimLookup,
+  #MatrixRowLookup: CompileMatrixRowLookup,
+  #Match: CompileMatch,
+}
+
+
+def HandleToSignExtend(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    assert Value.getType().getBitwidth() < Bitwidth
+    Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToSpecialSignExtend(_):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    # Increase the bitwidth by 2x.
+    Bitwidth = 2 * Value.getType().getBitwidth()
+    Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToZeroExtend(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    assert Value.getType().getBitwidth() < Bitwidth
+    Op = RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToMin(_):
+  def LamdaImplFunc(Name : str, Operands : list, Context : DRAMRoseContext):
+    assert len(Operands) == 2
+    if isinstance(Operands[0].getType(), RoseBitVectorType) \
+    and isinstance(Operands[1].getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operands[0]) == True \
+      or Context.isValueSigned(Operands[1]) == True:
+        Op = RoseBVSminOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=True)
+      else:
+        Op = RoseBVUminOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseMinOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToMax(_):
+  def LamdaImplFunc(Name : str, Operands : list, Context : DRAMRoseContext):
+    assert len(Operands) == 2
+    if isinstance(Operands[0].getType(), RoseBitVectorType) \
+    and isinstance(Operands[1].getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operands[0]) == True \
+      or Context.isValueSigned(Operands[1]) == True:
+        Op = RoseBVSmaxOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=True)
+      else:
+        Op = RoseBVUmaxOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseMaxOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToSSaturate(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    assert Value.getType().getBitwidth() >= Bitwidth
+    Op = RoseBVSSaturateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToUSaturate(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    assert Value.getType().getBitwidth() >= Bitwidth
+    Op = RoseBVUSaturateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToTruncate(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    assert Value.getType().getBitwidth() > Bitwidth
+    Op = RoseBVTruncateLowOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToSpecialTruncate(_):
+  def LamdaImplFunc(Name : str, Args : list, Context : DRAMRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    Bitwidth = int(Value.getType().getBitwidth() / 2)
+    assert Value.getType().getBitwidth() > Bitwidth
+    Op = RoseBVTruncateLowOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToAbs(_):
+  def LamdaImplFunc(Name : str, Operands : list, Context : DRAMRoseContext):
+    assert len(Operands) == 1
+    [Value] = Operands
+    if isinstance(Value.getType(), RoseBitVectorType):
+      Op = RoseBVAbsOp.create(Name, Value)
+    else:
+      Op = RoseAbsOp.create(Name, Value)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToBVPopCnt(_):
+  def LamdaImplFunc(Name : str, Operands : list, Context : DRAMRoseContext):
+    assert len(Operands) == 1
+    [Value] = Operands
+    Op = RoseBVPopCntOp.create(Name, Value)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
+
+  return LamdaImplFunc
+
+def HandleToRemainder(_):
+  def LamdaImplFunc(Name : str, Operands : list, Context : DRAMRoseContext):
+    assert len(Operands) == 2
+    if isinstance(Operands[0].getType(), RoseBitVectorType) \
+    and isinstance(Operands[1].getType(), RoseBitVectorType):
+      Op = RoseBVSremOp.create(Name, Operands[0], Operands[1])
+      Context.addSignednessInfoForValue(Op, IsSigned=True)
+      return Op
+    return RoseRemOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleAmxWriteRowAndZero(Name: str, Args: list, Context: DRAMRoseContext):
+  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
+  #   DEFINE write_row_and_zero(treg, r, data, nbytes) {
+  #       FOR j := 0 TO nbytes - 1
+  #           treg.row[r].byte[j] := data.byte[j]
+  #       ENDFOR
+  #       FOR j := nbytes TO treg.colsb - 1
+  #           treg.row[r].byte[j] := 0
+  #       ENDFOR
+  #   }
+  [treg, r, data, nbytes] = Args
+
+  assert isinstance(treg.getType(), RoseMatrixType)
+  assert isinstance(data.getType(), RoseBitVectorType)
+  assert isinstance(nbytes, RoseArgument)
+
+  _name = Context.genName
+
+  _type = RoseIntegerType.create(32)
+  assert nbytes.getType() == _type
+  assert r.getType() == _type
+
+  mtx_insert_row = RoseMatrixInsertRowOp.create(data, treg, r)
+  mtx_insert_zeros = RoseMatrixInsertElementOp.create(
+    RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
+    treg,
+    r, nbytes,
+    r, RoseConstant.create(treg.getType().getMaxCols() - 1, _type)
+  )
+
+  return [mtx_insert_row, mtx_insert_zeros]
+
+
+def HandleAmxZeroUpperRows(Name: str, Args: list, Context: DRAMRoseContext):
+  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
+  #   DEFINE zero_upper_rows(treg, r) {
+  #       FOR i := r TO treg.max_rows - 1
+  #           FOR j := 0 TO treg.colsb - 1
+  #               treg.row[i].byte[j] := 0
+  #           ENDFOR
+  #       ENDFOR
+  #   }
+  [treg, r] = Args
+
+  assert isinstance(treg.getType(), RoseMatrixType)
+  assert isinstance(r, RoseArgument)
+
+  _name = Context.genName
+
+  _type = RoseIntegerType.create(32)
+  assert r.getType() == _type
+
+  mtx_insert_zeros = RoseMatrixInsertElementOp.create(
+    RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
+    treg,
+    r, RoseConstant.create(0, _type),
+    RoseConstant.create(treg.getType().getMaxRows()-1, _type), RoseConstant.create(treg.getType().getMaxCols()-1, _type)
+  )
+
+  return [mtx_insert_zeros]
+
+
+def HandleAmxZeroTileConfigStart(Name : str, Args : list, Context : DRAMRoseContext):
+  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
+  #   DEFINE zero_tileconfig_start() {
+  #   // no-op
+  #   }
+  return []  # return void
+
+# Builtin functions
+Builtins = {
+  'Saturate32': HandleToSSaturate(32),
+  'Saturate16': HandleToSSaturate(16),
+  'Saturate8': HandleToSSaturate(8),
+
+  'SaturateU32': HandleToUSaturate(32),
+  'SaturateU16': HandleToUSaturate(16),
+  'SaturateU8': HandleToUSaturate(8),
+
+  'ZeroExtend16': HandleToZeroExtend(16),
+  'ZeroExtend32': HandleToZeroExtend(32),
+  'ZeroExtend64': HandleToZeroExtend(64),
+
+  'SignExtend16': HandleToSignExtend(16),
+  'SignExtend32': HandleToSignExtend(32),
+  'SignExtend64': HandleToSignExtend(64),
+  'Signed' : HandleToSpecialSignExtend(None),
+
+  'Truncate8' : HandleToTruncate(8),
+  'Truncate16': HandleToTruncate(16),
+  'Truncate32' : HandleToTruncate(32),
+  'Truncate64' : HandleToTruncate(64),
+  'TRUNCATE' : HandleToSpecialTruncate(None),
+
+  'MIN' : HandleToMin(None),
+  'MAX' : HandleToMax(None),
+
+  'ABS' : HandleToAbs(None),
+
+
+  'BITCOUNT' : HandleToBVPopCnt(None),
+
+  'Int' : None,
+
+  'REMAINDER': None,
+
+  'write_row_and_zero': HandleAmxWriteRowAndZero,
+  'zero_upper_rows': HandleAmxZeroUpperRows,
+  'zero_tileconfig_start': HandleAmxZeroTileConfigStart
+}
+
+# Extends size
+BuiltinExtendsSize = {
+   'ZeroExtend16' : 16,
+   'ZeroExtend32' : 32,
+   'ZeroExtend64' : 64,
+   'SignExtend16' : 16,
+   'SignExtend32' : 32,
+   'SignExtend64' : 64,
+}
+
+ZeroExtendsSize = [ 'ZeroExtend16', 'ZeroExtend32', 'ZeroExtend64' ]
+
+
+def HandleToNot():
+  def LamdaImplFunc(Name : str, Value : RoseValue, Context : DRAMRoseContext):
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    Op = RoseBVNotOp.create(Name, Value)
+    Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToNeg():
+  def LamdaImplFunc(Name : str, Value : RoseValue, Context : DRAMRoseContext):
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    Op = RoseBVNegOp.create(Name, Value)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
+
+  return LamdaImplFunc
+
+
+# Some unary oprations
+UnaryOps = {
+    'NOT': HandleToNot,
+    '-': HandleToNeg,
+    '~': HandleToNot,
+}
+
+
+def HandleToAdd():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                    Context : DRAMRoseContext):
+    Operands = [Operand1, Operand2]
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVAddOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseAddOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToSub():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    Operands = [Operand1, Operand2]
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVSubOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseSubOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToMul():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    Operands = [Operand1, Operand2]
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVMulOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseMulOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToDiv():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        Op = RoseBVSdivOp.create(Name, Operand1, Operand2)
+      else:
+        Op = RoseBVUdivOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, \
+          Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseDivOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToMod():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVSmodOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=True)
+      return Op
+    return RoseModOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToOr():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    Operands = [Operand1, Operand2]
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVOrOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseOrOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToXor():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Operands = [Operand1, Operand2]
+      Op = RoseBVXorOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseXorOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToAnd():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    Operands = [Operand1, Operand2]
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVAndOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
+    return RoseAndOp.create(Name, Operands)
+
+  return LamdaImplFunc
+
+
+def HandleToEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVEQOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseEQOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToNotEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      Op = RoseBVNEQOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseNEQOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToLessThan():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        Op = RoseBVSLTOp.create(Name, Operand1, Operand2)
+      else:
+        Op = RoseBVULTOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseLTOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToLessThanEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        Op = RoseBVSLEOp.create(Name, Operand1, Operand2)
+      else:
+        Op = RoseBVULEOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseLEOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToGreaterThan():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        Op = RoseBVSGTOp.create(Name, Operand1, Operand2)
+      else:
+        Op = RoseBVUGTOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseGTOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToGreaterThanEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    if isinstance(Operand1.getType(), RoseBitVectorType) \
+    and isinstance(Operand2.getType(), RoseBitVectorType):
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        Op = RoseBVSGEOp.create(Name, Operand1, Operand2)
+      else:
+        Op = RoseBVUGEOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
+    return RoseGEOp.create(Name, Operand1, Operand2)
+
+  return LamdaImplFunc
+
+
+def HandleToAshr():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    assert isinstance(Operand1.getType(), RoseBitVectorType) == True
+    assert isinstance(Operand2.getType(), RoseBitVectorType) == True
+    Op = RoseBVAshrOp.create(Name, Operand1, Operand2)
+    Context.addSignednessInfoForValue(Op, Context.isValueSigned(Operand1))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToLshr():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    assert isinstance(Operand1.getType(), RoseBitVectorType) == True
+    assert isinstance(Operand2.getType(), RoseBitVectorType) == True
+    Op = RoseBVLshrOp.create(Name, Operand1, Operand2)
+    Context.addSignednessInfoForValue(Op, Context.isValueSigned(Operand1))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToShl():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : DRAMRoseContext):
+    assert isinstance(Operand1.getType(), RoseBitVectorType) == True
+    assert isinstance(Operand2.getType(), RoseBitVectorType) == True
+    Op = RoseBVShlOp.create(Name, Operand1, Operand2)
+    Context.addSignednessInfoForValue(Op, Context.isValueSigned(Operand1))
+    return Op
+
+  return LamdaImplFunc
+
+
+BinaryOps = {
+    '+': HandleToAdd,
+    '-' : HandleToSub,
+    '*' : HandleToMul,
+    '/' : HandleToDiv,
+    '%' : HandleToMod,
+    '<' : HandleToLessThan,
+    '<=' : HandleToLessThanEqual,
+    '>' : HandleToGreaterThan,
+    '>=' : HandleToGreaterThanEqual,
+    '==' : HandleToEqual,
+    '!=' : HandleToNotEqual,
+    '>>' : HandleToAshr,
+    '<<' : HandleToShl,
+    '&' : HandleToAnd,
+    '|' : HandleToOr,
+    'AND' : HandleToAnd,
+    'OR' : HandleToOr,
+    'XOR' : HandleToXor,
+}
+
+def NeedToExtendOperandSize(Op):
+  if Op == "*" or Op == '/':
+    return True
+  return False
+
+# These are binary ops whose output type is not the same
+# as the operand types.
+ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
+
+
+
+
+

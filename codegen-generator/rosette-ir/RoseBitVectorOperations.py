@@ -923,6 +923,80 @@ class RoseBVAshrOp(RoseBitVectorOp):
         return IRBuilder.ashr(Operand1, Operand2, self.getName())
 
 
+class RoseBVLeftRotateOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
+        assert isinstance(Operand1.getType(), RoseBitVectorType)
+        assert isinstance(Operand2.getType(), RoseBitVectorType)
+        OperandList = [Operand1, Operand2]
+        super().__init__(RoseOpcode.rotateleft, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+               ParentBlock=RoseUndefRegion()):
+        return RoseBVLeftRotateOp(Name, Operand1, Operand2, ParentBlock)
+
+    def getInputBitVector(self):
+        return self.getOperand(0)
+
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+
+        String = Spaces + "(define " + Name + " "
+        String += "(bvrol " + self.getOperand(0).getName() + " " +self.getOperand(1).getName()  + ")"
+        String += ")"
+        return String
+
+    def to_llvm_ir(self, Context: RoseLLVMContext):
+        assert len(self.getOperands()) == 2
+        Operand1 = Context.getLLVMValueFor(self.getOperand(0))
+        assert Operand1 != LLVMUndefined
+        Operand2 = Context.getLLVMValueFor(self.getOperand(1))
+        assert Operand2 != LLVMUndefined
+        IRBuilder = Context.getLLVMBuilder()
+        return IRBuilder.ashr(Operand1, Operand2, self.getName())
+
+
+class RoseBVRightRotateOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand1: RoseValue, Operand2: RoseValue, ParentBlock):
+        assert isinstance(Operand1.getType(), RoseBitVectorType)
+        assert isinstance(Operand2.getType(), RoseBitVectorType)
+        OperandList = [Operand1, Operand2]
+        super().__init__(RoseOpcode.rotateright, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand1: RoseValue, Operand2: RoseValue,
+               ParentBlock=RoseUndefRegion()):
+        return RoseBVRightRotateOp(Name, Operand1, Operand2, ParentBlock)
+
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+
+        String = Spaces + "(define " + Name + " "
+        String += "(bvror " + self.getOperand(0).getName() + " " +self.getOperand(1).getName()  + ")"
+        String += ")"
+        return String
+
+    def getInputBitVector(self):
+        return self.getOperand(0)
+
+    def to_llvm_ir(self, Context: RoseLLVMContext):
+        assert len(self.getOperands()) == 2
+        Operand1 = Context.getLLVMValueFor(self.getOperand(0))
+        assert Operand1 != LLVMUndefined
+        Operand2 = Context.getLLVMValueFor(self.getOperand(1))
+        assert Operand2 != LLVMUndefined
+        IRBuilder = Context.getLLVMBuilder()
+        return IRBuilder.ashr(Operand1, Operand2, self.getName())
+
+
 ######################################## ARITHMETIC OPERATORS ###########################
 
 
@@ -1687,7 +1761,11 @@ class RoseBVPopCntOp(RoseBitVectorOp):
         Name = super().getName()
 
         String = Spaces + "(define " + Name + " "
-        String += "(bvpopcnt " + self.getOperand(0).getName() + " " + str(self.getOperand(0).getOutputBitwidth()) + ")"
+        print("bvpopcnt operand 0",self.getOperand(0))
+        if isinstance(self.getOperand(0), RoseArgument):
+            String += "(bvpopcnt " + self.getOperand(0).getName() + " " + str(self.getOperand(0).getType().getBitwidth()) + ")"
+        else:
+            String += "(bvpopcnt " + self.getOperand(0).getName() + " " + str(self.getOperand(0).getOutputBitwidth()) + ")"
         String += ")"
         return String
 

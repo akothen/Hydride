@@ -86,7 +86,10 @@ class RoseBVGeneralSaturationOp(RoseBitVectorOp):
         String = Spaces + "(define " + Name + " ("
         String += ("bvsaturate ")
         String += " " + self.getInputBitVector().getName()
-        String += " " + str(self.getInputBitVector().getOutputBitwidth())
+        if isinstance(self.getInputBitVector(), RoseArgument):
+            String += " " + str(self.getInputBitVector().getType().getBitwidth())
+        else:
+            String += " " + str(self.getInputBitVector().getOutputBitwidth())
         String += " " + str(self.getOutputBitwidth())
         if isinstance(self.getSaturationKind(), RoseConstant):
             if self.getSaturationKind().getValue() == 1:

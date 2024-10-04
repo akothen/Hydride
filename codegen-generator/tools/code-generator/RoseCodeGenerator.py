@@ -8,6 +8,7 @@
 import x86RoseLang
 import HexRoseLang
 import DRAMRoseLang
+#import UPMEMRoseLang
 #import ARMRoseLang
 
 import RoseCSE
@@ -35,6 +36,7 @@ class RoseCodeGenerator:
         "x86": x86RoseLang,
         "Hexagon": HexRoseLang,
         "DRAMBitSIMD": DRAMRoseLang,
+        #"UPMEM": UPMEMRoseLang,
         #"ARM": ARMRoseLang,
     }
 
