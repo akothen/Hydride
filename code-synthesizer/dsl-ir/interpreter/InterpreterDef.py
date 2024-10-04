@@ -13,6 +13,7 @@ class InterpreterDef:
         defaults = []
 
         defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
+        defaults.append("[(buffer-index id ty size) (vector-ref {} id)]".format(env_name))
 
         defaults.append("[(lit v) v]")
 
@@ -32,7 +33,10 @@ class InterpreterDef:
 
 
     def emit_interpret_def(self, dsl_inst, struct_definer  , add_assertions = True,  env_name = "env", interpret_name = "hydride:interpret"):
+        interpret = []
+
         interpret = [struct_definer.emit_dsl_struct_use(dsl_inst)]
+
 
         assertions = []
         if add_assertions:
@@ -54,8 +58,12 @@ class InterpreterDef:
             else:
                 sub_interpret.append("{}".format(arg.name))
 
+        interpret_fn_name = dsl_inst.name
+        if not (sample_ctx.extensions is None) and 'halide' in sample_ctx.extensions:
+            interpret_fn_name = "do-"+dsl_inst.name.replace("-vec","")
 
-        interpret_cmd = "({} {})".format(dsl_inst.name, " ".join(sub_interpret))
+
+        interpret_cmd = "({} {})".format(interpret_fn_name, " ".join(sub_interpret))
 
         interpret.append(interpret_cmd)
 

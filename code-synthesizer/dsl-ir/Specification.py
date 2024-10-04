@@ -17,6 +17,15 @@ class Specification:
         self.imms = imms
         self.input_signedness = input_signedness
         self.scalar_zext_sizes = []
+        self.target = ""
+
+    def print_spec(self):
+        print("Input Shapes: ", self.input_shapes)
+        print("Output Shape: ", self.output_shape)
+        print("Input Precision: ", self.input_precision)
+        print("Output Precision: ", self.output_precision)
+
+        print("Args : ", self.args)
 
 
     def use_buffer_id(self):
@@ -154,6 +163,7 @@ class Specification:
         prefix = ";; "+"="*80 + "\n"
         prefix += ";; "+" "*30 +" Reference Specification"+'\n'
         prefix += ";; "+"="*80 + "\n"
+
 
         sufix = "\n;; "+"="*80 + "\n"
 

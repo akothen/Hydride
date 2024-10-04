@@ -115,6 +115,9 @@ class TypedSimpleGrammarGenerator:
             else:
                 imm = "(typed:int-imm (bv 0 {}) {} #t)".format(prec, prec)
                 clause =  "(typed:xBroadcast {} {} {} {})".format(imm, prec, prec, bv_size // prec)
+
+                imm = "(typed:int-imm (bv 1 {}) {} #t)".format(prec, prec)
+                clause +=  "\n(typed:xBroadcast {} {} {} {})".format(imm, prec, prec, bv_size // prec)
             return  clause
 
         condition = None
@@ -171,7 +174,7 @@ class TypedSimpleGrammarGenerator:
             zero_clause = ""
 
 
-        one_clause =   ""#"{}".format(one)
+        one_clause =   "{}".format(one)
         neg_one_clause = " " #"{}".format(neg_one)
 
         ramp_clause = "{}".format(ramp)
@@ -480,6 +483,9 @@ class TypedSimpleGrammarGenerator:
                      use_buffer_id = False
                      ):
 
+        print("Return type:", return_type)
+        print("Input sizes:", input_sizes)
+        print("Input precs:", input_precs)
         self.input_precs = input_precs
         self.input_signedness = input_signedness
         self.use_buffer_id = use_buffer_id

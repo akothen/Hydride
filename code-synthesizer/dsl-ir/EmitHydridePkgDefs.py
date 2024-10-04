@@ -6,10 +6,12 @@ from common.DSLParser import parse_dict
 from x86SemanticsAllArgs import semantcs
 from ARMSemantics import semantcs as arm_semantics
 from AIEngineSema import ai_sema as aie_semantics
+from repairs_sema import repair_semantics
 from common.PredefinedDSL import *
 from common.StructDef import StructDef
 from interpreter.InterpreterDef import InterpreterDef
 from utils.CostDef import CostDef
+from utils.ContainsDef import ContainsDef
 from utils.GetLengthDef import GetLengthDef
 from utils.GetOutPrecDef import GetOutPrecDef
 from utils.IRPrinter import IRPrinter
@@ -50,6 +52,7 @@ get_target_op_name = ""
 subexpr_name = ""
 extract_names = ""
 variant_names = ""
+contains_name = ""
 
 
 if TARGET == 'x86':
@@ -69,6 +72,7 @@ if TARGET == 'x86':
     subexpr_name = "hydride:get-sub-exprs"
     extract_names = "hydride:extract-expr"
     variant_names = "hydride:get-variants"
+    contains_name = "hydride:contains"
 elif TARGET == 'hvx':
     dsl_list = parse_dict(hvx_semantics, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=1024)
@@ -87,6 +91,7 @@ elif TARGET == 'hvx':
     subexpr_name = "hvx:get-sub-exprs"
     extract_names = "hvx:extract-expr"
     variant_names = "hvx:get-variants"
+    contains_name = "hvx:contains"
 elif TARGET == 'arm':
     dsl_list = parse_dict(arm_semantics, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=None)
@@ -105,6 +110,7 @@ elif TARGET == 'arm':
     subexpr_name = "arm:get-sub-exprs"
     extract_names = "arm:extract-expr"
     variant_names = "arm:get-variants"
+    contains_name = "arm:contains"
 elif TARGET == 'aie':
     dsl_list = parse_dict(aie_semantics, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=None)
@@ -123,6 +129,7 @@ elif TARGET == 'aie':
     subexpr_name = "aie:get-sub-exprs"
     extract_names = "aie:extract-expr"
     variant_names = "aie:get-variants"
+    contains_name = "aie:contains"
 elif TARGET == 'bitsimd':
     dsl_list = parse_dict(bitsimd_sema, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=None)
@@ -141,6 +148,25 @@ elif TARGET == 'bitsimd':
     subexpr_name = "bitsimd:get-sub-exprs"
     extract_names = "bitsimd:extract-expr"
     variant_names = "bitsimd:get-variants"
+    contains_name = "bitsimd:contains"
+elif TARGET == 'repair':
+    dsl_list = parse_dict(repair_semantics, keep_duplicate=True)
+    scd = ScaleDef(base_vect_size=None)
+    cost_name = "repair:cost"
+    interpret_name = "repair:interpret"
+    scale_name = "repair:scale-expr"
+    const_fold_name = "repair:const-fold"
+    visitor_name = "repair:visitor"
+    get_len_name = "repair:get-length"
+    get_prec_name = "repair:get-prec"
+    printer_name = "repair:hydride-printer"
+    get_ops_name = "repair:get-bv-ops"
+    bind_name = "repair:bind-expr"
+    get_target_op_name = "repair:get-target-name"
+    subexpr_name = "repair:get-sub-exprs"
+    extract_names = "repair:extract-expr"
+    variant_names = "repair:get-variants"
+    contains_name = "repair:contains"
 
 
 
@@ -148,10 +174,11 @@ print("Number of Target Agnostic DSL Instructions:\t", len(dsl_list))
 print("Number of Target Specific Instructions:\t",
       sum([len(inst.contexts) for inst in dsl_list]))
 
-
+sys.exit(0)
 sd = StructDef()
 idd = InterpreterDef()
 cd = CostDef()
+con_d = ContainsDef()
 # sp = parse_spec(specification)
 gl = GetLengthDef(get_len_name=get_len_name)
 gp = GetOutPrecDef(get_prec_name=get_prec_name)
@@ -344,4 +371,10 @@ if __name__ == "__main__":
         write_to_file(hydride_header)
         write_to_file(variant_header.format(target=TARGET))
         write_to_file(gv.emit_get_names(dsl_list, sd))
+
+    with open("contains.rkt", "w+") as RacketFile:
+        def write_to_file(line):
+            RacketFile.write(line + "\n")
+        write_to_file(hydride_header)
+        write_to_file(con_d.emit_contains(dsl_list, sd, contains_name = contains_name, interpreter_name = interpret_name))
     # TODO

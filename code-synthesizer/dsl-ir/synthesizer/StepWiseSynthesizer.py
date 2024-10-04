@@ -41,7 +41,7 @@ through the grammar.
 
 DEBUG = True
 DEBUG_LIST = ["hexagon_V6_vcombine_128B"]
-SKIP_LIST = []
+SKIP_LIST = ["dram_pimpopcount_v1_e16__v16384_e1"]
 
 MUST_INCLUDE = []
 USE_BW_ALGO = False
@@ -96,6 +96,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         print("Scale factor used in synthesizer: ", self.scale_factor)
 
+        self.dsl_operators = [d for d in self.dsl_operators if d.name not in SKIP_LIST]
 
         debug("Pre Scaling")
         self.print_dsl_stats()
@@ -161,6 +162,9 @@ class StepWiseSynthesizer(SynthesizerBase):
         elif self.target == "arm":
             self.MAX_BW_SIZE = self.MAX_BW_SIZE // self.scale_factor
             self.SWIZZLE_BOUND = 10
+        else:
+            self.MAX_BW_SIZE = None
+            self.SWIZZLE_BOUND = 0
 
     def scale_down_dsl(self, dsl_operators):
         if self.scale_factor == 1:
@@ -618,7 +622,7 @@ class StepWiseSynthesizer(SynthesizerBase):
 
         return (insts, ctxs)
 
-    def emit_synthesis_grammar(self, main_grammar_name="synth_grammar", use_lit_holes=USE_LIT_HOLES, include_manual_swizzles = True):
+    def emit_synthesis_grammar(self, main_grammar_name="synth_grammar", use_lit_holes=USE_LIT_HOLES, include_manual_swizzles = False):
 
         # Memory loading layer
         spec_memory_loads = self.get_memory_loads()

@@ -48,7 +48,7 @@ DEBUG_LIST = [
 ]
 
 
-SKIP_LIST = []
+SKIP_LIST = ["dram_pimpopcount_v1_e16__v16384_e1"]
 
 MUST_INCLUDE = []
 USE_BW_ALGO = False
@@ -135,7 +135,6 @@ class SynthesizerBase:
             self.MAX_BW_SIZE = 128
             self.BASE_VECT_SIZE = None
             self.SWIZZLE_BOUND = 5
-
         elif self.target == "halide":
             print("Setting halide target settings")
             self.FLEXIBLE_CASTING = False
@@ -143,6 +142,13 @@ class SynthesizerBase:
             self.MAX_BW_SIZE = 1024
             self.BASE_VECT_SIZE = 1024
             self.SWIZZLE_BOUND = 0
+        else:
+            self.FLEXIBLE_CASTING = False
+            self.ENABLE_PRUNING = True
+            self.MAX_BW_SIZE = None
+            self.BASE_VECT_SIZE = None
+            self.SWIZZLE_BOUND = 0
+
 
     # Prints the number number of target agnostic
     # classes and the total number of contexts
@@ -319,7 +325,7 @@ class SynthesizerBase:
             if number_elems == 1:
                 continue
 
-            if input_size * 2 > self.MAX_BW_SIZE:
+            if not (self.MAX_BW_SIZE is None) and input_size * 2 > self.MAX_BW_SIZE:
                 continue
 
             datum = (input_size, precision)

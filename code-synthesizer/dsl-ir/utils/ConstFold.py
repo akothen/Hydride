@@ -93,6 +93,8 @@ class ConstFold:
                     size_arg = arg
                     break
             if size_arg != None:
+
+
                 for idx, arg in enumerate(sample_ctx.context_args):
                     if isBitVectorType(arg):
                         reg_counter = 0
@@ -135,6 +137,7 @@ class ConstFold:
                         partial_list_clause.append(condition_stmt)
                         partial_list_clause.append("]")
                         partial_const_clauses.append("\n".join(partial_list_clause))
+
 
 
 

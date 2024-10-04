@@ -8258,7 +8258,7 @@ semantcs = {
             "target_instructions" : {
               "_mm_movemask_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","32","32","0","16","1","7","8","16"],
-                  "in_vectsize" : None,
+                  "in_vectsize" : 128,
                   "out_vectsize" : 32,
                   "lanesize" : 32,
                   "in_precision" : None,
@@ -8278,7 +8278,7 @@ semantcs = {
 
               "_mm256_movemask_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","32","32","0","32","1","7","8","0"],
-                  "in_vectsize" : None,
+                  "in_vectsize" : 256,
                   "out_vectsize" : 32,
                   "lanesize" : 32,
                   "in_precision" : None,
@@ -8298,7 +8298,7 @@ semantcs = {
 
               "_m_pmovmskb" : {
                   "args" : ["SYMBOLIC_BV_64","32","32","0","8","1","7","8","24"],
-                  "in_vectsize" : None,
+                  "in_vectsize" : 64,
                   "out_vectsize" : 32,
                   "lanesize" : 32,
                   "in_precision" : None,
@@ -21448,8 +21448,8 @@ semantcs = {
                   "lanesize" : 16,
                   "in_precision" : 16,
                   "out_precision" : 16,
-                  "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "in_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "in_lanesize_index" : 4,
                   "out_lanesize_index" : 2,
                   "in_precision_index" : 5,

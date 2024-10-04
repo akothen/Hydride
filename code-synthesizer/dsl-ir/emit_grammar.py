@@ -16,13 +16,16 @@ from Specification import Specification, parse_spec
 
 
 from hexsemantics_new import semantics as hvx_semantics
+from halide_sema import halide_semantics
 from ARMSemantics import semantcs as arm_semantics
+from BitSIMDsema import bitsimd_sema
 
 
 from grammar_generator.TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
 
 from synthesizer.Synthesizer import Synthesizer
 from synthesizer.StepWiseSynthesizer import StepWiseSynthesizer
+from synthesizer.AllInstructionsSynthesizer import AllInstructionsSynthesizer
 
 INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
@@ -58,6 +61,12 @@ elif TARGET == 'hvx':
     dsl_list = parse_dict(hvx_semantics)
 elif TARGET == 'arm':
     dsl_list = parse_dict(arm_semantics)
+elif TARGET == 'bitsimd':
+    dsl_list = parse_dict(bitsimd_sema)
+elif TARGET == 'halide':
+    dsl_list = parse_dict(halide_semantics, keep_duplicate = True)
+else:
+    assert False, "Unsupported target in emit_grammar.py"
 
 
 #print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
@@ -93,6 +102,7 @@ rosette_imports = """
 (require rosette/lib/destruct)
 (require rosette/solver/smt/boolector)
 (require hydride)
+(require misaal)
 
 
 ;(provide {}_grammar_operations)
@@ -119,7 +129,9 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
     write_to_file(hydride_header)
 
 
-    syn = StepWiseSynthesizer(spec = sp, dsl_operators = dsl_list,
+    syn_class =  [StepWiseSynthesizer, AllInstructionsSynthesizer][0]
+
+    syn = syn_class(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
                   contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
