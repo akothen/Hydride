@@ -125,39 +125,22 @@ class RoseConstant(RoseValue):
                     NumElem = LLVMType.count
                     Precision = LLVMType.element
                     ElemBitwidth = Precision.width
-                    print("--HexValStr:")
-                    print(HexValStr)
                     Diff = (ElemBitwidth * NumElem) - (4 * len(HexValStr[2:]))
                     if Diff != 0:
                         Zeros = ""
                         for _ in range(int(Diff / 4)):
                             Zeros += "0"
                         HexValStr = HexValStr[:2] + Zeros + HexValStr[2:]
-                    print("HexValStr:")
-                    print(HexValStr)
                     ElemList = list()
                     HexValStr = HexValStr[2:]
-                    print("NumElem:")
-                    print(NumElem)
                     for Idx in range(NumElem):
                         Index = Idx * int(ElemBitwidth / 4)
-                        print("INDEX:")
-                        print(Index)
-                        print("ElemBitwidth:")
-                        print(ElemBitwidth)
-                        print("(Index + int(ElemBitwidth / 4)):")
-                        print(Index + int(ElemBitwidth / 4))
                         if Index != (Index + int(ElemBitwidth / 4)):
                             ElemStr = HexValStr[Index: (
                                 Index + int(ElemBitwidth / 4))]
                         else:
                             ElemStr = HexValStr[Index]
-                        print("org ElemStr:")
-                        print(ElemStr)
                         ElemStr = "0x" + ElemStr
-                        print("ElemStr:")
-                        print(ElemStr)
-                        print(int(ElemStr, 16))
                         ElemList.append(int(ElemStr, 16))
                     # Reverse the list of elements in elemlist because
                     # indexing in rosette works in reverse order.
@@ -503,23 +486,6 @@ class RoseOperation(RoseValue):
         String += "))\n"
         return String
 
-    def print(self, NumSpace=0):
-        Spaces = ""
-        for _ in range(NumSpace):
-            Spaces += " "
-        Name = super().getName()
-        String = ""
-        if Name != "":
-            String = Spaces + Name + " = "
-        else:
-            String = Spaces
-        String += str(self.Opcode)
-        for Index, Operand in enumerate(self.getOperands()):
-            String += " " + str(Operand.getType()) + " " + Operand.getName()
-            if Index != len(self.getOperands()) - 1:
-                String += ","
-        print(String)
-
     def __str__(self, NumSpace=0):
         Spaces = ""
         for _ in range(NumSpace):
@@ -537,3 +503,6 @@ class RoseOperation(RoseValue):
                 String += ","
         String += "\n"
         return String
+    
+    def print(self, NumSpace=0):
+        print(self.__str__(NumSpace))
