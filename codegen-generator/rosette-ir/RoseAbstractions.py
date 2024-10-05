@@ -12,8 +12,6 @@ from RoseValue import RoseValue
 from RoseRegion import RoseRegion
 
 
-####################################### ROSE UNDEF REGION #######################################
-
 class RoseUndefRegion(RoseRegion):
     def __init__(self):
         super().__init__(None, None)
@@ -25,20 +23,14 @@ class RoseUndefRegion(RoseRegion):
         print("undef_region")
 
 
-# autopep8: off
 from RoseValues import RoseUndefValue, RoseOperation, RoseArgument, RoseConstant
 from RoseOperations import RoseReturnOp
-# autopep8: on
 
-
-####################################### ROSE FUNCTION ############################################
 
 # This is need to track the lower-level regions,
 # blocks, operations, etc. This does not inherit
 # any other class for now.
 # A function is a region and a value
-
-
 class RoseFunction(RoseValue, RoseRegion):
     def __init__(self, Name: str, ArgsList: list, RetType: RoseType,
                  RegionList: list, ParentRegion: RoseRegion):
@@ -79,7 +71,8 @@ class RoseFunction(RoseValue, RoseRegion):
                     # All arguments start out unmaed
                     ArgsList.append(RoseArgument.create(
                         "", ArgTy, RoseUndefValue()))
-                return RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], RoseUndefRegion())
+                return RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), \
+                                    [], RoseUndefRegion())
         assert (False)
 
     def __eq__(self, Other):
@@ -89,22 +82,14 @@ class RoseFunction(RoseValue, RoseRegion):
                 or isinstance(Other, RoseForLoop) \
                 or isinstance(Other, RoseCond):
             return False
-        assert isinstance(Other, RoseFunction)
+        if not isinstance(Other, RoseFunction):
+            return False
         return self.RetVal == Other.RetVal and self.ArgList == Other.ArgList \
             and RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
 
     def __ne__(self, Other):
-        if isinstance(Other, RoseUndefRegion) \
-                or isinstance(Other, RoseUndefValue) \
-                or isinstance(Other, RoseBlock) \
-                or isinstance(Other, RoseForLoop) \
-                or isinstance(Other, RoseCond):
-            return True
-        assert isinstance(Other, RoseFunction)
-        return self.RetVal != Other.RetVal or self.ArgList != Other.ArgList \
-            or RoseValue.__ne__(self, Other) or RoseRegion.__ne__(self, Other)
+        return not self.__eq__(Other)
 
-    # Make rose functions hashable
     def __hash__(self):
         return hash(self.getRegionID())
         # return hash((self.getName(), self.getType(), self.getRegionID()))
@@ -317,21 +302,6 @@ class RoseFunction(RoseValue, RoseRegion):
                     break
         return True
 
-    def print(self, NumSpace=0):
-        Spaces = ""
-        for _ in range(NumSpace):
-            Spaces += " "
-        # Print function signature first
-        Func_Sig = Spaces + "function " + self.getName() + " ("
-        for Index, Arg in enumerate(self.ArgList):
-            Func_Sig += (" " + str(Arg.getType()) + " " + Arg.getName())
-            if Index != len(self.ArgList) - 1:
-                Func_Sig += ","
-        Func_Sig += " ) {"
-        print(Func_Sig)
-        RoseRegion.print(self, NumSpace + 1)
-        print(Spaces + "}")
-
     def __str__(self, NumSpace=0):
         String = ""
         Spaces = ""
@@ -374,19 +344,13 @@ class RoseBlock(RoseRegion):
                 or isinstance(Other, RoseForLoop) \
                 or isinstance(Other, RoseCond):
             return False
-        assert isinstance(Other, RoseBlock)
+        if not isinstance(Other, RoseBlock):
+            return False
         return super().__eq__(Other)
 
     def __ne__(self, Other):
-        if isinstance(Other, RoseUndefRegion) \
-                or isinstance(Other, RoseFunction) \
-                or isinstance(Other, RoseForLoop) \
-                or isinstance(Other, RoseCond):
-            return True
-        assert isinstance(Other, RoseBlock)
-        return super().__ne__(Other)
+        return not self.__eq__(Other)
 
-    # Make rose blocks hashable
     def __hash__(self):
         return super().__hash__()
 
@@ -395,8 +359,7 @@ class RoseBlock(RoseRegion):
             return self.cloneRegion()
         ClonedBlock = RoseBlock.create()
         for Operation in self:
-            ClonedOperation = Operation.cloneOperation(
-                Suffix, ValueToValueMap, ChangeID)
+            ClonedOperation = Operation.cloneOperation(Suffix, ValueToValueMap, ChangeID)
             ClonedBlock.addRegion(ClonedOperation)
         return ClonedBlock
 
@@ -409,8 +372,7 @@ class RoseBlock(RoseRegion):
             self.eraseOperation(Op)
         # Add ops from the given block to this block
         for Operation in Block.getOperations():
-            ClonedOperation = Operation.cloneOperation(
-                "", ValueToValueMap, ChangeID)
+            ClonedOperation = Operation.cloneOperation("", ValueToValueMap, ChangeID)
             Block.addRegion(ClonedOperation)
         return
 
@@ -506,8 +468,6 @@ class RoseBlock(RoseRegion):
         return Operation
 
 
-####################################### ROSE LOOP ############################################
-
 # Class representing loops
 # Loops have headers and region list for body
 class RoseForLoop(RoseRegion):
@@ -571,21 +531,14 @@ class RoseForLoop(RoseRegion):
                 or isinstance(Other, RoseBlock) \
                 or isinstance(Other, RoseCond):
             return False
-        assert isinstance(Other, RoseForLoop)
+        if not isinstance(Other, RoseForLoop):
+            return False
         return self.Iterator == Other.Iterator and self.Start == Other.Start \
             and self.End == Other.End and self.Step == Other.Step and super().__eq__(Other)
 
     def __ne__(self, Other):
-        if isinstance(Other, RoseUndefRegion) \
-                or isinstance(Other, RoseFunction) \
-                or isinstance(Other, RoseBlock) \
-                or isinstance(Other, RoseCond):
-            return True
-        assert isinstance(Other, RoseForLoop)
-        return self.Iterator != Other.Iterator or self.Start != Other.Start \
-            or self.End != Other.End or self.Step != Other.Step or super().__ne__(Other)
+        return not self.__eq__(Other)
 
-    # Make rose loops hashable
     def __hash__(self):
         return super().__hash__()
 
@@ -761,18 +714,6 @@ class RoseForLoop(RoseRegion):
             return False
         return True
 
-    def print(self, NumSpace=0):
-        Spaces = ""
-        for _ in range(NumSpace):
-            Spaces += " "
-        LoopHeader = Spaces + "for ([" + self.Iterator.getName() + " (range " \
-            + self.getStartIndex().getName() + " " + self.getEndIndex().getName() \
-            + " " + self.getStep().getName() + ")]) {"
-        print(LoopHeader)
-        # Print regions in this loop
-        super().print(NumSpace + 1)
-        print(Spaces + "}")
-
     def __str__(self, NumSpace=0):
         String = ""
         Spaces = ""
@@ -787,8 +728,6 @@ class RoseForLoop(RoseRegion):
         String += (Spaces + "}\n")
         return String
 
-
-####################################### ROSE IF-ELSE ############################################
 
 # Class representing If-else blocks
 class RoseCond(RoseRegion):
@@ -844,19 +783,13 @@ class RoseCond(RoseRegion):
                 or isinstance(Other, RoseBlock) \
                 or isinstance(Other, RoseForLoop):
             return False
-        assert isinstance(Other, RoseCond)
+        if not isinstance(Other, RoseCond):
+            return False
         return self.Conditions == Other.Conditions and super().__eq__(Other)
 
     def __ne__(self, Other):
-        if isinstance(Other, RoseUndefRegion) \
-                or isinstance(Other, RoseFunction) \
-                or isinstance(Other, RoseBlock) \
-                or isinstance(Other, RoseForLoop):
-            return True
-        assert isinstance(Other, RoseCond)
-        return self.Conditions != Other.Conditions or super().__ne__(Other)
+        return not self.__eq__(Other)
 
-    # Make rose cond regions hashable
     def __hash__(self):
         return super().__hash__()
 
@@ -988,43 +921,6 @@ class RoseCond(RoseRegion):
             if Condition.getType().getBitwidth() != 1:
                 return False
         return True
-
-    def print(self, NumSpace=0):
-        Spaces = ""
-        for _ in range(NumSpace):
-            Spaces += " "
-        Condition = Spaces + "if (" + str(self.Conditions[0].getType()) \
-                           + " " + self.Conditions[0].getName() + ") {"
-        print(Condition)
-        # Print regions in this then regions
-        for Region in self.getChildren(self.getKeyForThenRegion()):
-            assert Region.getParent() == self
-            Region.print(NumSpace + 1)
-        # Printing other cond regions
-        if len(self.getConditions()) >= 1:
-            if len(self.getConditions()) >= 2:
-                if len(self.getChildren()) > len(self.getConditions()):
-                    assert len(self.getChildren()) - \
-                        1 == len(self.getConditions())
-                    Conditions = self.Conditions[1:-1]
-                else:
-                    assert len(self.getChildren()) == len(self.getConditions())
-                    Conditions = self.Conditions[1:]
-                for Index, ConditionVal in enumerate(Conditions):
-                    Condition = Spaces + "} elif (" + str(ConditionVal.getType()) \
-                        + " " + ConditionVal.getName() + ") {"
-                    print(Condition)
-                    # Print regions in this then regions
-                    for Region in self.getChildren(self.getKeys()[Index + 1]):
-                        assert Region.getParent() == self
-                        Region.print(NumSpace + 1)
-            if len(self.getChildren()) > len(self.getConditions()):
-                assert len(self.getChildren()) - 1 == len(self.getConditions())
-                print(Spaces + "} else {")
-                for Region in self.getChildren(self.getKeyForElseRegion()):
-                    assert Region.getParent() == self
-                    Region.print(NumSpace + 1)
-        print(Spaces + "}")
 
     def __str__(self, NumSpace=0):
         String = ""
