@@ -147,7 +147,8 @@ def GetSemanticsFor(Name : str, Inst : str, Pseudocode : str):
   print(param_sizes)
   retsize = GetVariableSize(retname, Pseudocode)
   sema = Sema(intrin=Name, inst=name, params=param_args, spec=Parse(Pseudocode), \
-    retname =retname, retsize=retsize, paramsizes=param_sizes, scalarregs=scalarregs)
+              retname =retname, retsize=retsize, paramsizes=param_sizes, \
+              extensions=None, scalarregs=scalarregs)
   return sema
 
 
@@ -794,8 +795,3 @@ def p_expr_var(p):
 def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
-
-
-
-
-
