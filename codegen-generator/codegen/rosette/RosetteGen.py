@@ -18,15 +18,17 @@ def GetSkippedBVInsertIndexingOps(Operation: RoseBVInsertSliceOp):
     assert isinstance(Operation, RoseBVInsertSliceOp)
     Worklist = list()
     ToBeSkipped = list()
-    # print("Operation:")
-    # Operation.print()
+    print("Operation:")
+    Operation.print()
     if isinstance(Operation.getLowIndex(), RoseOperation):
-        # print("Operation.getLowIndex()")
-        # Operation.getLowIndex().print()
+        print("Operation.getLowIndex()")
+        Operation.getLowIndex().print()
         if Operation.getLowIndex().getNumUsers() == 1:
             Worklist.append(Operation.getLowIndex())
             ToBeSkipped.append(Operation.getLowIndex())
     if isinstance(Operation.getHighIndex(), RoseOperation):
+        print("Operation.getHighIndex()")
+        Operation.getHighIndex().print()
         if Operation.getHighIndex().getNumUsers() == 1:
             Worklist.append(Operation.getHighIndex())
             ToBeSkipped.append(Operation.getHighIndex())
@@ -57,10 +59,10 @@ def GetSkippedBVInsertIndexingOps(Operation: RoseBVInsertSliceOp):
                         ToBeSkipped.append(Operand)
                     Worklist.append(Operand)
     ToBeSkipped.reverse()
-    # print("ToBeSkipped:")
-    # for Op in ToBeSkipped:
-    #  Op.print()
-    # print("++++++++++++++++++++++++")
+    print("ToBeSkipped:")
+    for Op in ToBeSkipped:
+      Op.print()
+    print("++++++++++++++++++++++++")
     return ToBeSkipped
 
 
@@ -83,11 +85,15 @@ def GenerateRosetteForBlock(Block: RoseBlock, RosetteCode: str,
         Spaces += " "
     LastOp = RoseUndefValue()
     for Operation in Block:
+        print("Operation:")
+        Operation.print()
         # Skip certain ops
         if Operation in SkipOps:
+            print("SKIPPING OP")
             continue
         # May need to skip indexing op
         if Operation in SkippedIndexingOps:
+            print("SKIPPING INDEX OP")
             continue
         # Ignore return ops
         if isinstance(Operation, RoseReturnOp):
@@ -104,67 +110,37 @@ def GenerateRosetteForBlock(Block: RoseBlock, RosetteCode: str,
         # Skip emitting rosette code for op that pads high bits
         if isinstance(Operation, RoseBVPadHighBitsOp):
             continue
-        print("Operation:")
+        print("--Operation:")
         Operation.print()
         # Conditional extracts have to be handled delicately.
         if isinstance(Operation, RoseBVExtractSliceOp):
-            # Is this used in a select op?
-            print("Operation.getParent().getFunction().getNumUsersOf(Operation):")
-            print(Operation.getParent().getFunction().getNumUsersOf(Operation))
-            if Operation.getParent().getFunction().getNumUsersOf(Operation) == 1:
-                Users = Operation.getParent().getFunction().getUsersOf(Operation)
-                if len(Users) == 1:
-                    User = Users[0]
-                    if isinstance(User, RoseSelectOp):
-                        # This is a conditional extract so we will skip emission of code for this one
-                        continue
-                else:
-                    # The number of users is 1, but the actual operations that are users
-                    # are zero, in that case the user must be cond region. If so,
-                    # do nothing but just emit code for this operation.
-                    assert len(Users) == 0
-                    # The bit slice length must be 1.
-                    assert Operation.getOutputBitwidth() == 1
+          # Is this used in a select op?
+          print("Operation.getParent().getFunction().getNumUsersOf(Operation):")
+          print(Operation.getParent().getFunction().getNumUsersOf(Operation))
+          if Operation.getParent().getFunction().getNumUsersOf(Operation) == 1:
+            Users = Operation.getParent().getFunction().getUsersOf(Operation)
+            if len(Users) == 1:
+              User = Users[0]
+              if isinstance(User, RoseSelectOp):
+                # If the use is in the condition, we generate the extract op
+                if User.getCondition() != Operation:
+                # This is a conditional extract so we will skip emission of code for this one
+                  continue
+            else:
+              # The number of users is 1, but the actual operations 
+              # that are users are zero, in that case the user must 
+              # be cond region. If so, do nothing but just emit code 
+              # for this operation.
+              assert len(Users) == 0
+              # The bit slice length must be 1.
+              assert Operation.getOutputBitwidth() == 1
         RosetteCode += Operation.to_rosette(NumSpace)
 
     if len(SkipOps) != 0:
         # print("SKIP SOME OPS")
         RosetteCode += Spaces + LastOp.getName() + "\n"
         return RosetteCode
-
-    # if not (len(BVInsertOpsList) > 1):
-    #   if len(BVInsertOpsList) == 1:
-    #     if isinstance(BVInsertOpsList[0].getInsertValue(), RoseConstant):
-    #       Result = bin(BVInsertOpsList[0].getInsertValue().getValue()).replace("0b", "#b")
-    #       # If the block is in the cond region, we do not need to define a variable
-    #       ParentCondRegion = Block.getParentOfType(RoseCond)
-    #       if type(BVInsertOpsList[0].getOutputBitwidth()) == int:
-    #         if isinstance(ParentCondRegion, RoseUndefRegion):
-    #           RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
-    #                 + " (bv " + Result + " " + str(BVInsertOpsList[0].getOutputBitwidth()) + "))\n"
-    #         else:
-    #           print("BUGGER1")
-    #           RosetteCode += Spaces + "(bv " + Result + " " \
-    #                           + str(BVInsertOpsList[0].getOutputBitwidth()) + ")\n"
-    #       else:
-    #         if isinstance(ParentCondRegion, RoseUndefRegion):
-    #           RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
-    #                     + " (bv " + Result + " " + BVInsertOpsList[0].getOutputBitwidth().getName() + "))\n"
-    #         else:
-    #           print("BUGGER2")
-    #           RosetteCode += Spaces + "(bv " + Result + " " \
-    #                       + BVInsertOpsList[0].getOutputBitwidth().getName() + ")\n"
-    #     else:
-    #       print("NON CONSTANT BITVECTOR")
-    #       # If the bvinsert is in the preheader, we do not need to return anything.
-    #       Block = BVInsertOpsList[0].getParent()
-    #       if IsBlockPreheader(Block) == False:
-    #         RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
-    #       else:
-    #         RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
-    #                         + " " + BVInsertOpsList[0].getInsertValue().getName() + ")\n"
-    #   return RosetteCode
-
+    
     if not (len(BVInsertOpsList) > 1):
         if len(BVInsertOpsList) == 1:
             Block = BVInsertOpsList[0].getParent()
@@ -322,9 +298,9 @@ def GenerateRosetteForForLoop(Loop: RoseForLoop, RosetteCode: str, NumSpace: int
     # print(range(NumSpace))
     for _ in range(NumSpace):
         Spaces += " "
-    TmpRosetteCode = Spaces + "(for/list ([" + Loop.getIterator().getName() + " (reverse (range " \
-        + Loop.getStartIndex().getName() + " " + Loop.getEndIndex().getName() \
-        + " " + Loop.getStep().getName() + "))])\n"
+    TmpRosetteCode = Spaces + "(for/list ([" + Loop.getIterator().getName() \
+        + " (reverse (range " + Loop.getStartIndex().getName() + " " \
+        + Loop.getEndIndex().getName() + " " + Loop.getStep().getName() + "))])\n"
     # print("TmpRosetteCode:")
     # print(TmpRosetteCode)
     # We also keep track of whether this loop has multiple children loops,
@@ -338,11 +314,13 @@ def GenerateRosetteForForLoop(Loop: RoseForLoop, RosetteCode: str, NumSpace: int
         for Abstraction in reversed(Loop.getChildren()):
             if isinstance(Abstraction, RoseForLoop):
                 TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode,
-                                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+                                                           NumSpace + 1, VisitedLoop, 
+                                                           ReductionLoops, SkipOpsMap)
                 continue
             if isinstance(Abstraction, RoseCond):
-                TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1,
-                                                              VisitedLoop, ReductionLoops, SkipOpsMap)
+                TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, 
+                                                              NumSpace + 1, VisitedLoop, 
+                                                              ReductionLoops, SkipOpsMap)
                 continue
             if isinstance(Abstraction, RoseBlock):
                 if Abstraction in SkipOpsMap:
@@ -356,11 +334,13 @@ def GenerateRosetteForForLoop(Loop: RoseForLoop, RosetteCode: str, NumSpace: int
         for Abstraction in Loop:
             if isinstance(Abstraction, RoseForLoop):
                 TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode,
-                                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+                                                           NumSpace + 1, VisitedLoop, 
+                                                           ReductionLoops, SkipOpsMap)
                 continue
             if isinstance(Abstraction, RoseCond):
-                TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1,
-                                                              VisitedLoop, ReductionLoops, SkipOpsMap)
+                TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, 
+                                                              NumSpace + 1, VisitedLoop, 
+                                                              ReductionLoops, SkipOpsMap)
                 continue
             if isinstance(Abstraction, RoseBlock):
                 if Abstraction in SkipOpsMap:
@@ -412,33 +392,36 @@ def GenerateRosetteForForLoop(Loop: RoseForLoop, RosetteCode: str, NumSpace: int
                         if isinstance(Op, RoseSaturableBitVectorOp):
                             ReductionOpString = Op.getOpcode().getRosetteOp()
                             if Op.getSaturationQualifier() == None:
-                                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
-                                    + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
+                                Epilogue += Spaces + "(define " + Op.getName() \
+                                  + " (" + ReductionOpString + " " \
+                                  + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
                             else:
-                                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
-                                    + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
-                                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"
+                                Epilogue += Spaces + "(define " + Op.getName() \
+                                  + " (" + ReductionOpString  \
+                                  + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
+                                  + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"
                         elif isinstance(Op, RoseGeneralSaturableBitVectorOp):
                             ReductionOpString = Op.getRosetteName()
                             print("Op.getSaturationQualifierID():")
                             Op.getSaturationQualifierID().print()
                             if isinstance(Op.getSaturationQualifierID(), RoseConstant):
-                                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
-                                    + " " + ReductionVal.getName() + ".red " \
-                                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) \
-                                    + " " + \
-                                    str(Op.getSaturationQualifierID(
-                                    ).getValue()) + "))\n"
+                                Epilogue += Spaces + "(define " + Op.getName() \
+                                  + " (" + ReductionOpString  \
+                                  + " " + ReductionVal.getName() + ".red " \
+                                  + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) \
+                                  + " " + str(Op.getSaturationQualifierID().getValue()) + "))\n"
                             else:
-                                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
-                                    + " " + ReductionVal.getName() + ".red " \
-                                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) \
-                                    + " " + Op.getSaturationQualifierID().getName() + "))\n"
+                                Epilogue += Spaces + "(define " + Op.getName() \
+                                  + " (" + ReductionOpString  \
+                                  + " " + ReductionVal.getName() + ".red " \
+                                  + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) \
+                                  + " " + Op.getSaturationQualifierID().getName() + "))\n"
                             ReductionOpString = Op.getSimpleRosetteName()
                         else:
                             ReductionOpString = Op.getOpcode().getRosetteOp()
-                            Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
-                                + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
+                            Epilogue += Spaces + "(define " + Op.getName() \
+                              + " (" + ReductionOpString + " " \
+                              + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
                         Epilogue += Spaces + Op.getName() + "\n"
                         break
                     if isinstance(Op, RoseBVInsertSliceOp):

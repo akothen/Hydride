@@ -764,7 +764,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   Context.addAbstractionToIR(LHSOp)
   
   # Add the operation to the context
-  Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
+  #Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
   Context.addCompiledAbstraction(Update.lhs.id, LHSOp)
 
   return LHSOp
@@ -1081,7 +1081,7 @@ def PreCompileBuiltin(CallStmt, Context : x86RoseContext):
 
   # Add the division operation to the context as well
   Context.addCompiledAbstraction(RightShiftExpr.id, Operation)
-
+  
   return Operation
 
 
@@ -1474,9 +1474,6 @@ def CompileIfElseIfElse(IfStmt, Context : x86RoseContext):
 
 
 def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
-  print("COMPILE TYPE LOOKUP")
-  print("LookupExpr:")
-  print(LookupExpr)
   # LookupExpr tracks types of variables
   if type(LookupExpr.obj) == Var:
     # Check if the variable is already defined and cached. If so, just return that.
@@ -1790,7 +1787,6 @@ CompileAbstractions = {
 
 
 def HandleToSignExtend(Bitwidth : int):
-  print("Handle sign extension")
   def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True

@@ -1,4 +1,3 @@
-
 from collections import namedtuple
 
 Number = namedtuple('Number', ['val'])
@@ -29,7 +28,5 @@ ElemTypeInfo = namedtuple('ElemTypeInfo', ['obj', 'elemtype'])
 Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params', 'spec', 
   'retname', 'retsize',
-  'paramsizes', "scalarregs"
+  'paramsizes', "scalarregs", 'extensions'
   ])
-
-
