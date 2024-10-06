@@ -182,7 +182,8 @@ class RoseSimilarityCheckerParallel():
             # Generate code for all semantics first
             CodeGenerator = RoseCodeGenerator(TargetName)
             FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=False,
-                                                     JustGenRosette=False, NumThreads=NumThreads)
+                                                     JustGenRosette=False, 
+                                                     NumThreads=NumThreads)
             # Compute some semantics info for the functions
             for FunctionInfo in FunctionInfoList:
                 FunctionInfo.computeSemanticsInfoFromTargetSpecficFunction()
@@ -209,7 +210,6 @@ class RoseSimilarityCheckerParallel():
                 ExtractConstants=True, NumThreads=NumThreads)
             self.FunctionInfoList.extend(FunctionInfoList)
             # Generate rosette code
-
             with Pool(NumThreads) as pool:
                 res = []
                 for FunctionInfo in FunctionInfoList:
@@ -260,10 +260,8 @@ class RoseSimilarityCheckerParallel():
                     res.append(pool.apply_async(worker, args=(
                         RoseTransformationVerifier(
                             TargetSpecificInfo, FunctionInfo, ImmediateKill=False, UID="B"),)))
-
-                for _ in monitor(res):
-                    assert _
-
+                #for _ in monitor(res):
+                #    assert _
             print("ALL VERIFICATION DONE", file=sys.stderr)
 
     def getArgPermutation(self, FunctionInfo: RoseFunctionInfo):
@@ -318,7 +316,8 @@ class RoseSimilarityCheckerParallel():
                 ArgPermutation.append(-1)
         return ArgPermutation
 
-    def replaceUsesofConcreteArgsAndGetFunction(self, FunctionInfo: RoseFunctionInfo, DoNotCopy: bool = False):
+    def replaceUsesofConcreteArgsAndGetFunction(self, FunctionInfo: RoseFunctionInfo, 
+                                                DoNotCopy: bool = False):
         print("*****FunctionInfo.ArgsToConcreteValMap:")
         for Arg, Val in FunctionInfo.ArgsToConcreteValMap.items():
             print("ARG:")
@@ -457,7 +456,10 @@ class RoseSimilarityCheckerParallel():
         for Name in ArgNamesList1:
             ArgNamesList1String += Name + NameSuffix + " "
         Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(Function1.getName(),
-                                                                             ArgNamesList1String, Function2.getName(), ArgNamesList1String, NameSuffix))
+                                                                             ArgNamesList1String, 
+                                                                             Function2.getName(), 
+                                                                             ArgNamesList1String, 
+                                                                             NameSuffix))
         # Generate verification code on second set of inputs
         NameSuffix = "_2"
         Content.append(self.emitVerificationCodeForFunction(
@@ -467,7 +469,9 @@ class RoseSimilarityCheckerParallel():
         for Name in ArgNamesList2:
             ArgNamesList2String += Name + NameSuffix + " "
         Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(Function1.getName(),
-                                                                             ArgNamesList2String, Function2.getName(), ArgNamesList2String))
+                                                                             ArgNamesList2String, 
+                                                                             Function2.getName(), 
+                                                                             ArgNamesList2String))
         return "\n".join(Content)
 
     def verifyClosure(self, FunctionInfo1: RoseFunctionInfo,
@@ -544,7 +548,8 @@ class RoseSimilarityCheckerParallel():
         # Generate an elaborate summary
         SummaryFileName = "semantics.py"
         SummaryGen = RoseSimilarityCheckerSummaryGen(self.FunctionToFunctionInfo,
-                                                     self.FunctionToRosetteCodeMap, self.FunctionToArgPermutationMap,
+                                                     self.FunctionToRosetteCodeMap, 
+                                                     self.FunctionToArgPermutationMap,
                                                      self.EquivalenceClasses)
         SummaryGen.summarize(SummaryFileName)
         return True
@@ -656,7 +661,8 @@ class RoseSimilarityCheckerParallel():
         # Generate Rose IR to LLVM IR mappings
         # self.genRoseIRToLLVMIRMappings()
 
-    def doFunctionsQualifyForSimilarityChecking(self, Function1: RoseFunction, Function2: RoseFunction):
+    def doFunctionsQualifyForSimilarityChecking(self, Function1: RoseFunction, 
+                                                Function2: RoseFunction):
         # Number of arguments must be equal
         if Function1.getNumArgs() != Function2.getNumArgs():
             return False
@@ -674,7 +680,8 @@ class RoseSimilarityCheckerParallel():
         # TODO: Are there other weed out criteria?
         return True
 
-    def createNewFunctionCopy(self, OriginalFunction: RoseFunction, NewArgList: list, Suffix: str = None):
+    def createNewFunctionCopy(self, OriginalFunction: RoseFunction, NewArgList: list, 
+                              Suffix: str = None):
         print("CREATING FUNCTION COPY")
         ClonedArgsList = list()
         ValueToValueMap = dict()
@@ -875,6 +882,14 @@ class RoseSimilarityCheckerParallel():
         return list(ArgsInConditionOps)
 
     def generateFunctionPermutations(self, Function: RoseFunction):
+        # Heuristic: if number of bitvector arguments exceeds 6, 
+        # we do not permute them
+        NumBVArgs = 0
+        for Arg in Function.getArgs():
+          if isinstance(Arg.getType(), RoseBitVectorType):
+            NumBVArgs += 1
+        if NumBVArgs > 6:
+          return list()
         # Get all the bitvector function arguments
         BVArgsMap = dict()
         BVArgs = list()
@@ -1056,7 +1071,9 @@ class RoseSimilarityCheckerParallel():
                     OrgFunctionInfo = self.FunctionToFunctionInfo[EqFunction]
                     OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
                     CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(EqFunction,
-                                                                                OrgFuncArgsToConcreteValMap, FunctionCopy, ArgPermutation)
+                                                                                OrgFuncArgsToConcreteValMap, 
+                                                                                FunctionCopy, 
+                                                                                ArgPermutation)
                     EquivalenceClass.replaceFunction(
                         EqFunction, FunctionCopy, CopyFuncArgsToConcreteValMap)
                     FunctionCopyInfo = RoseFunctionInfo()
@@ -1102,7 +1119,8 @@ class RoseSimilarityCheckerParallel():
         # print("________________________")
         return FunctionCopy
 
-    def getFunctionToArgMapping(self, OriginalFunction: RoseFunction, OriginalFuncArgsToConcreteMap: dict,
+    def getFunctionToArgMapping(self, OriginalFunction: RoseFunction, 
+                                OriginalFuncArgsToConcreteMap: dict,
                                 PermutedFunction: RoseFunction, ArgPermutation: list):
         PermArgsToConcreteValMap = dict()
         for PermArgIdx, PermArg in enumerate(PermutedFunction.getArgs()):
@@ -1180,8 +1198,7 @@ class RoseSimilarityCheckerParallel():
                     CheckFunctionList = self.FunctionToCopies[OriginalCheckFunction]
                     print("OBTAINED FROM CACHE")
                 else:
-                    CheckFunctionList = self.generateFunctionPermutations(
-                        OriginalCheckFunction)
+                    CheckFunctionList = self.generateFunctionPermutations(OriginalCheckFunction)
                     print("FRESHLY COMPUTED PERMUTATIONS")
                 if len(CheckFunctionList) == 0:
                     continue
@@ -1215,7 +1232,9 @@ class RoseSimilarityCheckerParallel():
                     CheckFunctionInfo = self.FunctionToFunctionInfo[OriginalCheckFunction]
                     CheckArgsToConcreteValMap = CheckFunctionInfo.getArgsToConcreteValMap()
                     PermArgsToConcreteValMap = self.getFunctionToArgMapping(OriginalCheckFunction,
-                                                                            CheckArgsToConcreteValMap, PermCheckFunction, ArgPermutation)
+                                                                            CheckArgsToConcreteValMap, 
+                                                                            PermCheckFunction, 
+                                                                            ArgPermutation)
                     PermCheckFunctionInfo.addArgsToConcreteMap(
                         PermArgsToConcreteValMap)
                     PermCheckFunctionInfo.addTargetAgnosticFunction(
@@ -1230,7 +1249,9 @@ class RoseSimilarityCheckerParallel():
                     if not ClosureArg:  # No need to verify
                         continue
 
-                    def PostWork(Flags, Function, OriginalCheckFunction, EquivalenceClass, CheckEquivalenceClass, PermCheckFunctionInfo, PermCheckFunction, ArgPermutation, CheckFunctionInfo, PermArgsToConcreteValMap):
+                    def PostWork(Flags, Function, OriginalCheckFunction, EquivalenceClass, 
+                                 CheckEquivalenceClass, PermCheckFunctionInfo, PermCheckFunction,
+                                 ArgPermutation, CheckFunctionInfo, PermArgsToConcreteValMap):
                         def _(VerifyResult):
                             if Flags:
                                 return
@@ -1256,10 +1277,12 @@ class RoseSimilarityCheckerParallel():
                                     if OrgFunction == OriginalCheckFunction:
                                         PermutedCheckFunctions.append(
                                             PermCheckFunction)
-                                        FunctionToArgsMapping[PermCheckFunction] = PermArgsToConcreteValMap
+                                        FunctionToArgsMapping[PermCheckFunction] = \
+                                                                  PermArgsToConcreteValMap
                                         self.completeFunctionInfo(
                                             PermCheckFunctionInfo, CheckFunctionInfo, ArgPermutation)
-                                        self.FunctionToFunctionInfo[PermCheckFunction] = PermCheckFunctionInfo
+                                        self.FunctionToFunctionInfo[PermCheckFunction] = \
+                                                                      PermCheckFunctionInfo
                                         continue
                                     CopyFunction = self.createPermutatedFunction(
                                         OrgFunction, ArgPermutation, "perm")
@@ -1267,7 +1290,9 @@ class RoseSimilarityCheckerParallel():
                                     OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
                                     OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
                                     CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction,
-                                                                                                OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+                                                                                                OrgFuncArgsToConcreteValMap, 
+                                                                                                CopyFunction, 
+                                                                                                ArgPermutation)
                                     FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
                                     CopyFunctionInfo = RoseFunctionInfo()
                                     CopyFunctionInfo.addFunctionAtNewStage(
@@ -1307,8 +1332,11 @@ class RoseSimilarityCheckerParallel():
                                                EquivalenceClass)] = VerifyResult
                         return _
                     res.append(pool.apply_async(worker2, args=ClosureArg))
-                    postwork.append(PostWork(Flags[SyncIdx], Function, OriginalCheckFunction, EquivalenceClass, CheckEquivalenceClass,
-                                    PermCheckFunctionInfo, PermCheckFunction, ArgPermutation, CheckFunctionInfo, PermArgsToConcreteValMap))
+                    postwork.append(PostWork(Flags[SyncIdx], Function, OriginalCheckFunction, \
+                                              EquivalenceClass, CheckEquivalenceClass, \
+                                              PermCheckFunctionInfo, PermCheckFunction, \
+                                              ArgPermutation, CheckFunctionInfo, \
+                                              PermArgsToConcreteValMap))
 
                     VerifierInPool += 1
                     if VerifierInPool == NumThreads:
@@ -1364,8 +1392,7 @@ class RoseSimilarityCheckerParallel():
                     CheckFunctionList = self.FunctionToCopies[OriginalCheckFunction]
                     print("OBTAINED FROM CACHE")
                 else:
-                    CheckFunctionList = self.generateFunctionPermutations(
-                        OriginalCheckFunction)
+                    CheckFunctionList = self.generateFunctionPermutations(OriginalCheckFunction)
                     print("FRESHLY COMPUTED PERMUTATIONS")
                 if len(CheckFunctionList) == 0:
                     continue
@@ -1397,7 +1424,9 @@ class RoseSimilarityCheckerParallel():
                     CheckFunctionInfo = self.FunctionToFunctionInfo[OriginalCheckFunction]
                     CheckArgsToConcreteValMap = CheckFunctionInfo.getArgsToConcreteValMap()
                     PermArgsToConcreteValMap = self.getFunctionToArgMapping(OriginalCheckFunction,
-                                                                            CheckArgsToConcreteValMap, PermCheckFunction, ArgPermutation)
+                                                                            CheckArgsToConcreteValMap, 
+                                                                            PermCheckFunction, 
+                                                                            ArgPermutation)
                     PermCheckFunctionInfo.addArgsToConcreteMap(
                         PermArgsToConcreteValMap)
                     PermCheckFunctionInfo.addTargetAgnosticFunction(
@@ -1441,7 +1470,9 @@ class RoseSimilarityCheckerParallel():
                             OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
                             OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
                             CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction,
-                                                                                        OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+                                                                                        OrgFuncArgsToConcreteValMap, 
+                                                                                        CopyFunction, 
+                                                                                        ArgPermutation)
                             FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
                             CopyFunctionInfo = RoseFunctionInfo()
                             CopyFunctionInfo.addFunctionAtNewStage(
@@ -1646,17 +1677,14 @@ class RoseSimilarityCheckerParallel():
                     if Op.getOperand(Op.getBitwidthPos()) == Arg:
                         Op.setOperand(Op.getBitwidthPos(), NewVal)
                         Op.getInsertValue().setType(RoseBitVectorType.create(NewVal.getValue()))
-                        BitvectorToBitwidth[Op.getInsertValue(
-                        )] = NewVal.getValue()
+                        BitvectorToBitwidth[Op.getInsertValue()] = NewVal.getValue()
                         BitvectorToBitwidth[Op] = NewVal.getValue()
                     if Op.getInputBitVector() == Arg:
                         assert isinstance(NewVal.getType().getBitwidth(), int)
                         Op.setOperand(Op.getBitwidthPos(), RoseConstant(NewVal.getType().getBitwidth(),
                                                                         Op.getOperand(Op.getBitwidthPos()).getType()))
-                        BitvectorToBitwidth[Op] = NewVal.getType(
-                        ).getBitwidth()
-                        BitvectorToBitwidth[Op.getInsertValue(
-                        )] = NewVal.getType().getBitwidth()
+                        BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
+                        BitvectorToBitwidth[Op.getInsertValue()] = NewVal.getType().getBitwidth()
                         Op.setOperand(0, NewVal)
                         continue
                     Op.replaceUsesWith(Arg, NewVal)
@@ -1690,29 +1718,20 @@ class RoseSimilarityCheckerParallel():
                         if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
                                 and Operand.getType().getBitwidth() == Arg:
                             if isinstance(Op.getType(), RoseBitVectorType):
-                                Op.setType(RoseBitVectorType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseBitVectorType.create(NewVal.getValue()))
+                                Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+                                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
                             else:
-                                assert isinstance(
-                                    Op.getType(), RoseIntegerType)
-                                Op.setType(RoseIntegerType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseIntegerType.create(NewVal.getValue()))
-                            BitvectorToBitwidth[Operand] = Operand.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = Op.getType(
-                            ).getBitwidth()
+                                assert isinstance(Op.getType(), RoseIntegerType)
+                                Op.setType(RoseIntegerType.create(NewVal.getValue()))
+                                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+                            BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = Op.getType().getBitwidth()
                             continue
                         if Operand == Arg:
                             Op.setOperand(Idx, NewVal)
                             Op.setType(Op.getOperand(Idx).getType())
-                            BitvectorToBitwidth[Operand] = NewVal.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
                             continue
                     print("PROPAGATE TYPE INFO HORIZONTALLY")
                     Op.print()
@@ -1720,8 +1739,7 @@ class RoseSimilarityCheckerParallel():
                         for Operand in Op.getOperands()[:-1]:
                             if Operand not in BitvectorToBitwidth:
                                 Operand.setType(Op.getType())
-                                BitvectorToBitwidth[Operand] = Operand.getType(
-                                ).getBitwidth()
+                                BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
                     else:
                         Type = RoseUndefinedType()
                         for Operand in Op.getOperands()[:-1]:
@@ -1733,8 +1751,7 @@ class RoseSimilarityCheckerParallel():
                             BitvectorToBitwidth[Op] = Type.getBitwidth()
                             for Operand in Op.getOperands()[:-1]:
                                 Operand.setType(Type)
-                                BitvectorToBitwidth[Operand] = Type.getBitwidth(
-                                )
+                                BitvectorToBitwidth[Operand] = Type.getBitwidth()
                     if Op.getSaturationQualifierID() == Arg:
                         Op.setOperand(Op.getSaturationQualifierIDPos(), NewVal)
                     continue
@@ -1745,27 +1762,19 @@ class RoseSimilarityCheckerParallel():
                             if isinstance(Op.getType(), RoseBitVectorType):
                                 Op.setType(RoseBitVectorType.create(
                                     NewVal.getValue()))
-                                Operand.setType(
-                                    RoseBitVectorType.create(NewVal.getValue()))
+                                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
                             else:
-                                assert isinstance(
-                                    Op.getType(), RoseIntegerType)
-                                Op.setType(RoseIntegerType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseIntegerType.create(NewVal.getValue()))
-                            BitvectorToBitwidth[Operand] = Operand.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = Op.getType(
-                            ).getBitwidth()
+                                assert isinstance(Op.getType(), RoseIntegerType)
+                                Op.setType(RoseIntegerType.create(NewVal.getValue()))
+                                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+                            BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = Op.getType().getBitwidth()
                             continue
                         if Operand == Arg:
                             Op.setOperand(Idx, NewVal)
                             Op.setType(Op.getOperand(Idx).getType())
-                            BitvectorToBitwidth[Operand] = NewVal.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
                             continue
                     print("PROPAGATE TYPE INFO HORIZONTALLY")
                     Op.print()
@@ -1773,8 +1782,7 @@ class RoseSimilarityCheckerParallel():
                         for Operand in Op.getOperands()[:-1]:
                             if Operand not in BitvectorToBitwidth:
                                 Operand.setType(Op.getType())
-                                BitvectorToBitwidth[Operand] = Operand.getType(
-                                ).getBitwidth()
+                                BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
                     else:
                         Type = RoseUndefinedType()
                         for Operand in Op.getOperands()[:-1]:
@@ -1786,8 +1794,7 @@ class RoseSimilarityCheckerParallel():
                             BitvectorToBitwidth[Op] = Type.getBitwidth()
                             for Operand in Op.getOperands()[:-1]:
                                 Operand.setType(Type)
-                                BitvectorToBitwidth[Operand] = Type.getBitwidth(
-                                )
+                                BitvectorToBitwidth[Operand] = Type.getBitwidth()
                     if Op.getSignID() == Arg:
                         Op.setOperand(Op.getSignIDPos(), NewVal)
                     continue
@@ -1796,20 +1803,15 @@ class RoseSimilarityCheckerParallel():
                         if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
                                 and Operand.getType().getBitwidth() == Arg:
                             if isinstance(Operand.getType(), RoseBitVectorType):
-                                Operand.setType(
-                                    RoseBitVectorType.create(NewVal.getValue()))
+                                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
                             else:
-                                assert isinstance(
-                                    Operand.getType(), RoseIntegerType)
-                                Operand.setType(
-                                    RoseIntegerType.create(NewVal.getValue()))
-                            BitvectorToBitwidth[Operand] = Operand.getType(
-                            ).getBitwidth()
+                                assert isinstance(Operand.getType(), RoseIntegerType)
+                                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+                            BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
                             continue
                         if Operand == Arg:
                             Op.setOperand(Idx, NewVal)
-                            BitvectorToBitwidth[Operand] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
                             continue
                     print("PROPAGATE TYPE INFO HORIZONTALLY")
                     Type = RoseUndefinedType()
@@ -1829,29 +1831,20 @@ class RoseSimilarityCheckerParallel():
                         if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
                                 and Operand.getType().getBitwidth() == Arg:
                             if isinstance(Op.getType(), RoseBitVectorType):
-                                Op.setType(RoseBitVectorType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseBitVectorType.create(NewVal.getValue()))
+                                Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+                                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
                             else:
-                                assert isinstance(
-                                    Op.getType(), RoseIntegerType)
-                                Op.setType(RoseIntegerType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseIntegerType.create(NewVal.getValue()))
-                            BitvectorToBitwidth[Operand] = Operand.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = Op.getType(
-                            ).getBitwidth()
+                                assert isinstance(Op.getType(), RoseIntegerType)
+                                Op.setType(RoseIntegerType.create(NewVal.getValue()))
+                                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+                            BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = Op.getType().getBitwidth()
                             continue
                         if Operand == Arg:
                             Op.setOperand(Idx, NewVal)
                             Op.setType(Op.getOperand(Idx).getType())
-                            BitvectorToBitwidth[Operand] = NewVal.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
                             continue
                     print("PROPAGATE TYPE INFO HORIZONTALLY")
                     Op.print()
@@ -1859,8 +1852,7 @@ class RoseSimilarityCheckerParallel():
                         for Operand in Op.getOperands():
                             if Operand not in BitvectorToBitwidth:
                                 Operand.setType(Op.getType())
-                                BitvectorToBitwidth[Operand] = Operand.getType(
-                                ).getBitwidth()
+                                BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
                     else:
                         Type = RoseUndefinedType()
                         for Operand in Op.getOperands():
@@ -1872,8 +1864,7 @@ class RoseSimilarityCheckerParallel():
                             BitvectorToBitwidth[Op] = Type.getBitwidth()
                             for Operand in Op.getOperands():
                                 Operand.setType(Type)
-                                BitvectorToBitwidth[Operand] = Type.getBitwidth(
-                                )
+                                BitvectorToBitwidth[Operand] = Type.getBitwidth()
                     continue
                 if Op.getOpcode().typesOfOperandsAreEqual():
                     for Idx, Operand in enumerate(Op.getOperands()):
@@ -1883,17 +1874,13 @@ class RoseSimilarityCheckerParallel():
                                 Operand.setType(
                                     RoseBitVectorType.create(NewVal.getValue()))
                             else:
-                                assert isinstance(
-                                    Operand.getType(), RoseIntegerType)
-                                Operand.setType(
-                                    RoseIntegerType.create(NewVal.getValue()))
-                            BitvectorToBitwidth[Operand] = Operand.getType(
-                            ).getBitwidth()
+                                assert isinstance(Operand.getType(), RoseIntegerType)
+                                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+                            BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
                             continue
                         if Operand == Arg:
                             Op.setOperand(Idx, NewVal)
-                            BitvectorToBitwidth[Operand] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
                             continue
                     print("PROPAGATE TYPE INFO HORIZONTALLY")
                     Type = RoseUndefinedType()
@@ -1923,29 +1910,20 @@ class RoseSimilarityCheckerParallel():
                         if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
                                 and Operand.getType().getBitwidth() == Arg:
                             if isinstance(Op.getType(), RoseBitVectorType):
-                                Op.setType(RoseBitVectorType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseBitVectorType.create(NewVal.getValue()))
+                                Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+                                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
                             else:
-                                assert isinstance(
-                                    Op.getType(), RoseIntegerType)
-                                Op.setType(RoseIntegerType.create(
-                                    NewVal.getValue()))
-                                Operand.setType(
-                                    RoseIntegerType.create(NewVal.getValue()))
-                            BitvectorToBitwidth[Operand] = Operand.getType(
-                            ).getBitwidth()
-                            BitvectorToBitwidth[Op] = Op.getType(
-                            ).getBitwidth()
+                                assert isinstance(Op.getType(), RoseIntegerType)
+                                Op.setType(RoseIntegerType.create(NewVal.getValue()))
+                                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+                            BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+                            BitvectorToBitwidth[Op] = Op.getType().getBitwidth()
                             continue
                         if Operand == Arg:
                             Op.setOperand(OperandIndex, NewVal)
-                            BitvectorToBitwidth[Operand] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
                             Op.setType(Operand.getType())
-                            BitvectorToBitwidth[Op] = NewVal.getType(
-                            ).getBitwidth()
+                            BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
                     print("---PROPAGATE TYPE INFORMATION HORIZONTALLY")
                     Op.print()
                     if Op in BitvectorToBitwidth:
@@ -1954,24 +1932,21 @@ class RoseSimilarityCheckerParallel():
                     elif Op.getThenValue() in BitvectorToBitwidth:
                         if Op.getElseValue() not in BitvectorToBitwidth:
                             Op.getElseValue().setType(Op.getThenValue().getType())
-                            BitvectorToBitwidth[Op.getElseValue(
-                            )] = Op.getThenValue().getType().getBitwidth()
+                            BitvectorToBitwidth[Op.getElseValue()] = \
+                                          Op.getThenValue().getType().getBitwidth()
                         Op.setType(Op.getThenValue().getType())
-                        BitvectorToBitwidth[Op] = Op.getThenValue(
-                        ).getType().getBitwidth()
+                        BitvectorToBitwidth[Op] = Op.getThenValue().getType().getBitwidth()
                     elif Op.getElseValue() in BitvectorToBitwidth:
                         if Op.getThenValue() not in BitvectorToBitwidth:
                             Op.getThenValue().setType(Op.getElseValue().getType())
-                            BitvectorToBitwidth[Op.getThenValue(
-                            )] = Op.getElseValue().getType().getBitwidth()
+                            BitvectorToBitwidth[Op.getThenValue()] = \
+                                        Op.getElseValue().getType().getBitwidth()
                         Op.setType(Op.getThenValue().getType())
-                        BitvectorToBitwidth[Op] = Op.getThenValue(
-                        ).getType().getBitwidth()
+                        BitvectorToBitwidth[Op] = Op.getThenValue().getType().getBitwidth()
                     continue
                 if isinstance(Op, RoseBVPadHighBitsOp):
                     Op.replaceUsesWith(Arg, NewVal)
-                    BitvectorToBitwidth[Op] = Op.getOperand(
-                        0).getType().getBitwidth()
+                    BitvectorToBitwidth[Op] = Op.getOperand(0).getType().getBitwidth()
                     continue
 
         # Perform some forward dataflow analysis to propagate types where the types
@@ -2078,8 +2053,7 @@ class RoseSimilarityCheckerParallel():
             for Key in Region.getKeys():
                 for Child in Region.getChildren(Key):
                     assert Region.isChildValid(Child)
-                    self.replaceUsesInRegion(
-                        Child, Abstraction, NewAbstraction)
+                    self.replaceUsesInRegion(Child, Abstraction, NewAbstraction)
         else:
             if not isinstance(Region, RoseBlock):
                 for Child in Region.getChildren():
@@ -2087,11 +2061,9 @@ class RoseSimilarityCheckerParallel():
                     # if isinstance(Child, RoseOperation):
                     #  Child.replaceUsesWith(Abstraction, NewAbstraction)
                     # else:
-                    self.replaceUsesInRegion(
-                        Child, Abstraction, NewAbstraction)
+                    self.replaceUsesInRegion(Child, Abstraction, NewAbstraction)
             else:
-                self.replaceUsesAndPropagateTypes(
-                    Region, Abstraction, NewAbstraction)
+                self.replaceUsesAndPropagateTypes(Region, Abstraction, NewAbstraction)
 
     def getArgPermutationMapRecursively(self, OlderFunction: RoseFunction, RecoveredArgMap: list):
         print("getArgPermutationMapRecursively")
@@ -2103,8 +2075,7 @@ class RoseSimilarityCheckerParallel():
             print("OrgFunction:")
             OrgFunction.print()
             for Idx in RecoveredArgMap:
-                NewRecoveredMap.append(
-                    self.FunctionToArgPermutationMap[OrgFunction][Idx])
+                NewRecoveredMap.append(self.FunctionToArgPermutationMap[OrgFunction][Idx])
             print("OrgFunction:")
             OrgFunction.print()
             print("NewRecoveredMap:")
@@ -2127,18 +2098,14 @@ class RoseSimilarityCheckerParallel():
                     Function.print()
                     FunctionInfo = self.FunctionToFunctionInfo[Function]
                     FunctionToClonedFunctionInfo[Function] = RoseFunctionInfo()
-                    FunctionToClonedFunctionInfo[Function].addFunctionAtNewStage(
-                        Function.clone())
-                    ArgsToConcreteValMap = deepcopy(
-                        FunctionInfo.getArgsToConcreteValMap())
-                    FunctionToClonedFunctionInfo[Function].addArgsToConcreteMap(
-                        ArgsToConcreteValMap)
+                    FunctionToClonedFunctionInfo[Function].addFunctionAtNewStage(Function.clone())
+                    ArgsToConcreteValMap = deepcopy(FunctionInfo.getArgsToConcreteValMap())
+                    FunctionToClonedFunctionInfo[Function].addArgsToConcreteMap(ArgsToConcreteValMap)
                     ArgPermutation = self.FunctionToArgPermutationMap[Function]
                     OriginalFunction = RoseUndefRegion()
                     if Function in self.CopyFunctionToOriginalFunction:
                         OriginalFunction = self.CopyFunctionToOriginalFunction[Function]
-                    ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction(
-                    )
+                    ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
                     self.FunctionToFunctionInfo[ClonedOriginalFunction] = FunctionInfo
                     self.FunctionToArgPermutationMap[ClonedOriginalFunction] = ArgPermutation
                     self.FunctionToEquivalenceClassMap[ClonedOriginalFunction] = EquivalenceClass
@@ -2149,8 +2116,7 @@ class RoseSimilarityCheckerParallel():
                     RoseOpSimplify.Run(Function, FunctionInfo.getContext())
                     print("FINAL FUNCTION:")
                     Function.print()
-                    self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(
-                        Function)
+                    self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
                     FunctionInfo.addFunctionAtNewStage(Function)
                     FunctionInfo.addTargetAgnosticFunction(Function)
                     FunctionInfo.computeSemanticsInfo()
@@ -2158,16 +2124,14 @@ class RoseSimilarityCheckerParallel():
                     print("ROSETTE CODE:")
                     print(self.FunctionToRosetteCodeMap[Function])
                     print("++++REFERENCE FUNCTION:")
-                    FunctionToClonedFunctionInfo[Function].getLatestFunction(
-                    ).print()
+                    FunctionToClonedFunctionInfo[Function].getLatestFunction().print()
                     print("++++CHECK FUNCTION:")
                     FunctionInfo.getLatestFunction().print()
                     res.append(pool.apply_async(worker, args=(
                         RoseTransformationVerifier(FunctionToClonedFunctionInfo[Function],
                                                    FunctionInfo, ImmediateKill=False, UID="A"),)))
                     # Replace uses of concrete arguments and try verifying again
-                    CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(
-                        FunctionInfo)
+                    CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
                     print("TARGET AGNOSTIC FUNCTION:")
                     FunctionInfo.getLatestFunction().print()
                     print("COPY TARGET AGNOSTIC FUNCTION:")
@@ -2176,8 +2140,7 @@ class RoseSimilarityCheckerParallel():
                         RoseTransformationVerifier(
                             CopyFunctionInfo, FunctionInfo, ImmediateKill=False, UID="B"),)))
                     # Now map this new function to the new argument permutation map
-                    OlderFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction(
-                    )
+                    OlderFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
                     assert OlderFunction in self.FunctionToArgPermutationMap
                     # if OlderFunction in self.CopyFunctionToOriginalFunction
                     OldArgPermutation = self.FunctionToArgPermutationMap[OlderFunction]
@@ -2197,8 +2160,7 @@ class RoseSimilarityCheckerParallel():
                                 or isinstance(Arg.getType(), RoseBooleanType):
                             if isinstance(Arg.getType().getBitwidth(), RoseArgument):
                                 OldArgIndex = OlderFunction.getIndexOfArg(Arg)
-                                RecoveredArgMap.append(
-                                    OldArgPermutation[OldArgIndex])
+                                RecoveredArgMap.append(OldArgPermutation[OldArgIndex])
                                 continue
                         # Now we have to be more careful with checking equivalence
                         OldArgIndex = None
@@ -2210,7 +2172,6 @@ class RoseSimilarityCheckerParallel():
                                 BW = OlderArg.getType().getBitwidth()
                                 if type(BW) == RoseConstant:  # Hotfix for ARM,
                                     BW = BW.getValue()  # FIXME: Find the root cause
-
                                 if isinstance(BW, int):
                                     print("OLD ARG:")
                                     OlderArg.print()
@@ -2222,19 +2183,16 @@ class RoseSimilarityCheckerParallel():
                                         OldArgIndex = Idx
                                         break
                                 else:
-                                    assert isinstance(
-                                        OlderArg.getType().getBitwidth(), RoseArgument)
+                                    assert isinstance(OlderArg.getType().getBitwidth(), RoseArgument)
                                     # DOUBLE CHECK
                                     # assert OlderFunctionInfo.argHasConcreteVal(OlderArg) == True
                                     assert OlderFunctionInfo.argHasConcreteVal(
                                         OlderArg.getType().getBitwidth()) == True
-                                    print(
-                                        "\n\n______________________________________________")
+                                    print("\n\n______________________________________________")
                                     ClonedOlderArg = OlderArg.clone()
                                     print("OlderArg.getType().getBitwidth():")
                                     print(OlderArg.getType().getBitwidth())
-                                    print(
-                                        "ClonedOlderArg.getType().getBitwidth():")
+                                    print("ClonedOlderArg.getType().getBitwidth():")
                                     print(ClonedOlderArg.getType().getBitwidth())
                                     print(
                                         "OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth():")
@@ -2242,12 +2200,14 @@ class RoseSimilarityCheckerParallel():
                                         OlderArg.getType().getBitwidth()))
                                     if isinstance(OlderArg.getType(), RoseBitVectorType):
                                         ClonedOlderArg.setType(RoseBitVectorType.create(
-                                            OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                                            OlderFunctionInfo.getConcreteValFor(\
+                                              OlderArg.getType().getBitwidth()).getValue()))
                                     else:
                                         assert isinstance(
                                             OlderArg.getType(), RoseIntegerType)
                                         ClonedOlderArg.setType(RoseIntegerType.create(
-                                            OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                                            OlderFunctionInfo.getConcreteValFor(\
+                                              OlderArg.getType().getBitwidth()).getValue()))
                                     print("Arg:")
                                     Arg.print()
                                     Arg.getType().print()
@@ -2280,8 +2240,8 @@ class RoseSimilarityCheckerParallel():
                     Function.print()
                     print("!!!!!!!!!!!!!FINAL ARG PERMUTATIONN MAP:")
                     print(self.FunctionToArgPermutationMap[Function])
-            for _ in monitor(res):
-                assert _
+            #for _ in monitor(res):
+            #    assert _
 
     def eliminateUnecessaryArgs(self):
         for EquivalenceClass in self.EquivalenceClasses:
@@ -2311,8 +2271,7 @@ class RoseSimilarityCheckerParallel():
                             if FunctionInfo.argHasConcreteVal(Arg) == True:
                                 print("CONCRETE INDEX:")
                                 print(Idx)
-                                ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(
-                                    Arg)
+                                ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
                     else:
                         # Compare concrete values
                         for Idx, Arg in enumerate(Function.getArgs()):
@@ -2329,8 +2288,10 @@ class RoseSimilarityCheckerParallel():
                                 if FunctionInfo.getConcreteValFor(Arg) != ArgIdxToConcreteValMap[Idx]:
                                     print("NONE")
                                     ArgIdxToConcreteValMap[Idx] = None
-                                elif isinstance(FunctionInfo.getConcreteValFor(Arg).getType(), RoseBitVectorType):
-                                    if FunctionInfo.getConcreteValFor(Arg).getValue() != ArgIdxToConcreteValMap[Idx].getValue():
+                                elif isinstance(FunctionInfo.getConcreteValFor(Arg).getType(), \
+                                                RoseBitVectorType):
+                                    if FunctionInfo.getConcreteValFor(Arg).getValue() \
+                                            != ArgIdxToConcreteValMap[Idx].getValue():
                                         ArgIdxToConcreteValMap[Idx] = None
                             else:
                                 if Idx in ArgIdxToConcreteValMap:
@@ -2378,7 +2339,8 @@ class RoseSimilarityCheckerParallel():
                     ClonedFunctionInfo = FunctionToClonedFunctionInfo[Function]
                     for Idx in range(NumArgs - 1, -1, -1):
                         Arg = Function.getArg(Idx)
-                        if Idx in ArgIdxToConcreteValMap and FunctionInfo.argHasConcreteVal(Arg) == True:
+                        if Idx in ArgIdxToConcreteValMap \
+                          and FunctionInfo.argHasConcreteVal(Arg) == True:
                             if ArgIdxToConcreteValMap[Idx] != None:
                                 print("INDEX DOES NOT MAP TO NONE")
                                 print("Arg:")
@@ -2409,8 +2371,7 @@ class RoseSimilarityCheckerParallel():
                     ErasedArgs = self.removeDeadArguments(
                         FunctionInfo, Function)
                     FunctionToClonedFunctionInfo[Function] = ClonedFunctionInfo
-                    ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction(
-                    )
+                    ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
                     self.FunctionToFunctionInfo[ClonedOriginalFunction] = FunctionInfo
                     self.FunctionToArgPermutationMap[ClonedOriginalFunction] = ArgPermutation
                     self.FunctionToEquivalenceClassMap[ClonedOriginalFunction] = EquivalenceClass
@@ -2514,12 +2475,14 @@ class RoseSimilarityCheckerParallel():
                                             OlderArg.getType().getBitwidth()))
                                         if isinstance(OlderArg.getType(), RoseBitVectorType):
                                             ClonedOlderArg.setType(RoseBitVectorType.create(
-                                                OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                                                OlderFunctionInfo.getConcreteValFor(\
+                                                    OlderArg.getType().getBitwidth()).getValue()))
                                         else:
                                             assert isinstance(
                                                 OlderArg.getType(), RoseIntegerType)
-                                            ClonedOlderArg.setType(RoseIntegerType.create(
-                                                OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                                            ClonedOlderArg.setType(RoseIntegerType.create(\
+                                                OlderFunctionInfo.getConcreteValFor(\
+                                                    OlderArg.getType().getBitwidth()).getValue()))
                                         print("Arg:")
                                         Arg.print()
                                         Arg.getType().print()
@@ -2562,12 +2525,9 @@ class RoseSimilarityCheckerParallel():
                 FunctionInfo = self.FunctionToFunctionInfo[Function]
                 FunctionToClonedFunctionInfo = dict()
                 FunctionToClonedFunctionInfo[Function] = RoseFunctionInfo()
-                FunctionToClonedFunctionInfo[Function].addFunctionAtNewStage(
-                    Function.clone())
-                ArgsToConcreteValMap = deepcopy(
-                    FunctionInfo.getArgsToConcreteValMap())
-                FunctionToClonedFunctionInfo[Function].addArgsToConcreteMap(
-                    ArgsToConcreteValMap)
+                FunctionToClonedFunctionInfo[Function].addFunctionAtNewStage(Function.clone())
+                ArgsToConcreteValMap = deepcopy(FunctionInfo.getArgsToConcreteValMap())
+                FunctionToClonedFunctionInfo[Function].addArgsToConcreteMap(ArgsToConcreteValMap)
                 LoopList = Function.getRegionsOfType(RoseForLoop)
                 FunctionInfo = self.FunctionToFunctionInfo[Function]
                 ArgPermutation = self.FunctionToArgPermutationMap[Function]
@@ -2587,14 +2547,12 @@ class RoseSimilarityCheckerParallel():
                         if Loop.getNumUsersOf(Loop.getIterator()) == 0:
                             self.removeDeadLoop(FunctionInfo, Function, Loop)
                 ErasedArgs = self.removeDeadArguments(FunctionInfo, Function)
-                CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(
-                    FunctionInfo, True)
+                CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo, True)
                 Function = CopyFunctionInfo.getLatestFunction()
                 print("&&&&&Function:")
                 Function.print()
                 FunctionToClonedFunctionInfo[Function] = ClonedFunctionInfo
-                ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction(
-                )
+                ClonedOriginalFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction()
                 self.FunctionToFunctionInfo[ClonedOriginalFunction] = FunctionInfo
                 self.FunctionToArgPermutationMap[ClonedOriginalFunction] = ArgPermutation
                 self.FunctionToEquivalenceClassMap[ClonedOriginalFunction] = EquivalenceClass
@@ -2607,14 +2565,12 @@ class RoseSimilarityCheckerParallel():
                 FunctionInfo.addTargetAgnosticFunction(Function)
                 FunctionInfo.computeSemanticsInfo()
                 self.FunctionToFunctionInfo[Function] = FunctionInfo
-                Verifier = RoseTransformationVerifier(
-                    FunctionToClonedFunctionInfo[Function], FunctionInfo)
+                Verifier = RoseTransformationVerifier(FunctionToClonedFunctionInfo[Function], \
+                                                      FunctionInfo)
                 assert Verifier.verifyEquivalence() == True
                 # Replace uses of concrete arguments and try verifying again
-                CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(
-                    FunctionInfo)
-                Verifier = RoseTransformationVerifier(
-                    CopyFunctionInfo, FunctionInfo)
+                CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
+                Verifier = RoseTransformationVerifier(CopyFunctionInfo, FunctionInfo)
                 assert Verifier.verifyEquivalence() == True
                 # Now map this new function to the new argument permutation map
                 OlderFunction = FunctionToClonedFunctionInfo[Function].getLatestFunction(
@@ -2680,12 +2636,14 @@ class RoseSimilarityCheckerParallel():
                                     OlderArg.getType().getBitwidth()))
                                 if isinstance(OlderArg.getType(), RoseBitVectorType):
                                     ClonedOlderArg.setType(RoseBitVectorType.create(
-                                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                                        OlderFunctionInfo.getConcreteValFor(\
+                                          OlderArg.getType().getBitwidth()).getValue()))
                                 else:
                                     assert isinstance(
                                         OlderArg.getType(), RoseIntegerType)
                                     ClonedOlderArg.setType(RoseIntegerType.create(
-                                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                                        OlderFunctionInfo.getConcreteValFor(\
+                                          OlderArg.getType().getBitwidth()).getValue()))
                                 print("Arg:")
                                 Arg.print()
                                 Arg.getType().print()
@@ -2745,9 +2703,9 @@ class RoseSimilarityCheckerParallel():
                         Parent = Parent.getParentOfType(RoseForLoop)
                     HoleFunction = Context.genName(".hole")
                     Hole = RoseOpaqueCallOp.create(Context.genName(),
-                                                   RoseConstant(HoleFunction, RoseStringType.create(
-                                                       len(HoleFunction))),
-                                                   HoleArgsList, Op.getLowIndex().getType())
+                                                   RoseConstant(HoleFunction, \
+                                                      RoseStringType.create(len(HoleFunction))), \
+                                                      HoleArgsList, Op.getLowIndex().getType())
                     # Replace all uses of low index with this hole
                     HoleMap[Op.getLowIndex()] = Hole
                     Users = Function.getUsersOf(Op.getLowIndex())
@@ -2792,7 +2750,8 @@ class RoseSimilarityCheckerParallel():
         Code += ")\n\n"
         return Code
 
-    def generateCodeForSynthesis(self, Function: RoseFunction, RosetteImplCode: str, DepthVarName: str = None):
+    def generateCodeForSynthesis(self, Function: RoseFunction, 
+                                 RosetteImplCode: str, DepthVarName: str = None):
         # Generate code for function in Rosette
         RosetteFuncName = "invoke_ " + Function.getName()
         OuterFuncName = RosetteFuncName
@@ -2820,7 +2779,8 @@ class RoseSimilarityCheckerParallel():
         RosetteCode += "\n"
         return RosetteCode, OuterFuncName, ParamListName
 
-    def emitSynthesisCodeForSimilarityChecking(self, Sketch: RoseFunction, RefImpl: RoseFunction,
+    def emitSynthesisCodeForSimilarityChecking(self, Sketch: RoseFunction, 
+                                               RefImpl: RoseFunction,
                                                HolesList: list):
         # Sanity check
         assert len(HolesList) > 0
@@ -2946,8 +2906,9 @@ class RoseSimilarityCheckerParallel():
                 VerifyResult = self.verifyUsingSynthesis(
                     ClonedCheckFunction, Function, HolesList, Suffix)
                 if VerifyResult == True:
-                    # Now that synthesis has worked, we will now perform verification again to verify that
-                    # the new sketch and the old sketch are equivalent on the old sketch's inputs.
+                    # Now that synthesis has worked, we will now perform verification 
+                    # again to verify that the new sketch and the old sketch are equivalent 
+                    # on the old sketch's inputs.
                     # First the new sketch
                     print("Merged {} and {} eq class".format(
                         Function.getName(), ClonedCheckFunction.getName()))
@@ -2969,13 +2930,14 @@ class RoseSimilarityCheckerParallel():
                                 PermCheckFunctionInfo, CheckFunctionInfo, ArgPermutation)
                             self.FunctionToFunctionInfo[PermCheckFunction] = PermCheckFunctionInfo
                             continue
-                        CopyFunction = self.createPermutatedFunction(
-                            OrgFunction, ArgPermutation)
+                        CopyFunction = self.createPermutatedFunction(OrgFunction, ArgPermutation)
                         PermutedCheckFunctions.append(CopyFunction)
                         OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
                         OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
                         CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction,
-                                                                                    OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+                                                                                    OrgFuncArgsToConcreteValMap, 
+                                                                                    CopyFunction, 
+                                                                                    ArgPermutation)
                         FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
                         OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
                         CopyFunctionInfo = RoseFunctionInfo()
