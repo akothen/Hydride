@@ -222,8 +222,8 @@ SupportedVISA = [
 SupportedVISA = [i for i in SupportedVISA if i not in ParseError +
                   FlowControl+Stateful+Uncommon+CompileIssue]
 SupportedTypes = [
-    "UD", "D", "UW", "W", "UB", "B", "UQ", "Q", "M"
-    # M denotes matrix for compile use, while document doesn't account for
+    "UD", "D", "UW", "W", "UB", "B", "UQ", "Q", "M", "UM"
+    # M and UM denote matrix for compile use, while document doesn't account for
 ]
 DataTypeBits = {
     "UD": 32,  # unsigned double word

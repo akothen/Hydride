@@ -47,7 +47,7 @@ class VISARoseContext(RoseContext):
 
     def getTypeForVar(self, qid: str):
         if qid not in self.varType:
-            assert False, (qid, self.varType[qid])
+            assert False, (qid, self.varType)
         return self.varType[qid]
 
     def createContext(self, ID: str, ChildContext):
@@ -114,7 +114,7 @@ class VISARoseContext(RoseContext):
 
     def registerVISAVecType(self, Name: str, Type: str):
         assert Type in SupportedTypes, f"Unsupported type: {Type}"
-        if Type != "M":
+        if Type not in ["M", "UM"]:
             bits = DataTypeBits[Type]
             self.setTypeForVar(Name, bits*self.getConstexprFor('exec_size'))
             # We use a[0] to denote the element width of vector inside a
@@ -987,8 +987,8 @@ def CompileCallRv(Stmt: Call, Context: VISARoseContext):
     #     CompileStatement(s, Context)
     if Stmt.funcname in Builtins:
         return CompileBuiltIn(Stmt, Context)
-    # if Stmt.funcname in InlineBuiltinsd:
-    #     return InlinedBuiltins[Stmt.funcname](Stmt, Context)
+    if Stmt.funcname in InlinedBuiltins:
+        return InlinedBuiltins[Stmt.funcname](Stmt, Context)
     assert False, f"Function {Stmt.funcname} not found"
 
 
@@ -1955,6 +1955,38 @@ def HandleToSatQ(_):
 
 #     return LamdaImplFunc
 
+def InlineVNNIDot(Stmt: Call, Context: VISARoseContext):
+    """
+    vnnidot(const int OPS_PER_CHAN, bit32 a, bit32 b):
+
+    Inline to
+    SizeExt(a[0],32)*sizeExt(b[0],32) + SizeExt(a[1],32)*sizeExt(b[1],32) + ... + SizeExt(a[OPS_PER_CHAN-1],32)*sizeExt(b[OPS_PER_CHAN-1],32)
+    """
+    assert len(Stmt.args) == 3
+    ops_per_chan = CompileRValueExpr(Stmt.args[0], Context)
+    a = Stmt.args[1]
+    b = Stmt.args[2]
+    assert isinstance(ops_per_chan, RoseConstant)
+    ops_per_chan = ops_per_chan.getValue()
+    bits_per_op = 32//ops_per_chan
+    assert ops_per_chan in [2, 4, 8]
+    a = Update('=', Var('op1'), a)
+    b = Update('=', Var('op2'), b)
+    for i in range(ops_per_chan):
+        a_i = ArraySlice(Var('op1'), lo=Number(i*bits_per_op),
+                         hi=Number((i+1)*bits_per_op-1))
+        b_i = ArraySlice(Var('op2'), lo=Number(i*bits_per_op),
+                         hi=Number((i+1)*bits_per_op-1))
+        a_i = Call('SizeExt', [a_i, Number(32)])
+        b_i = Call('SizeExt', [b_i, Number(32)])
+        if i == 0:
+            res = BinaryExpr('*', a_i,  b_i)
+        else:
+            res = BinaryExpr('+', res, BinaryExpr('*', a_i, b_i))
+    Annotator(Stmt.id+"VNNIDot").AddID(res)
+    CompileList([a, b], Context)
+    return CompileRValueExpr(res, Context)
+
 
 # # Builtin functions
 Builtins = {
@@ -2013,6 +2045,6 @@ Builtins = {
     # 'LSL': NotImplemented('LSL'),
     # 'LSR': NotImplemented('LSR'),
 }
-# InlinedBuiltins = {
-#     'Reduce': InlineReduce
-# }
+InlinedBuiltins = {
+    'vnnidot': InlineVNNIDot
+}

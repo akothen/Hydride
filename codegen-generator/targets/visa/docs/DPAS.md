@@ -22,130 +22,31 @@ SPDX-License-Identifier: MIT
 
 
 ```
-   DPAS is a matrix multiply-add operation as follows:
+// Modified heavily to make it consistent with VISARoseCompiler
 
-       D = C + A x B
+if (Src1Precision == 16) {
+  OPS_PER_CHAN = 2;
+} else if (Src1Precision == 8 || Src2Precision == 8) {
+  OPS_PER_CHAN = 4;
+} else {
+  OPS_PER_CHAN = 8;
+}
 
-       where
-          D (Dst)  : MxN
-          C (Src0) : MxN
-          A (Src2) : MxK
-          B (Src1) : KxN
+SRC1_OPERANDS_PER_CHAN = 32 / (OPS_PER_CHAN * Src1Precision);
 
-          M : repeat count
-          N : fixed execution size, either 8 or 16
-          K : depth * OPS_PER_CHAN
-              OPS_PER_CHAN
-                 1 : for TF32
-                 2 : for 16-bit precision(BF, HF)
-                 4 : for 8-bit precision (FP8, UB, B)
-                 8 : for less-then 8 bit precision (U4/S4, U2/S2).
-
-              If depth is 8, K would be 8, 16, 32, or 64 (basd on OPS_PER_CHAN).
-
-       Note that Src2 is A, and Src1 is B.
-
-   Conceptually, DPAS instruction is simple. As it requires its operands to have a special layout in GRF
-   for matrix B, this makes DPAS a little complicated to understand. The following might help undertand
-   it better.
-
-       If we view GRFs as a 1-D memory space in the increasing order of GRF numbers, Dst, Src0, Src2
-       are laid out in row-major in this 1-D memory space. But Src1 needs a special layout, neither
-       row-major nor column major. To visualize the layout for Src1,  we can view entire GRFs as a 2-D
-       memory space with each row being an exactly one whole GRF. For example,  128 GRFs of 16 DWs each
-       can be viewed as 128x16 of DW (it would be 128x8 if GRF size is 8 DWs), which means N must be 16.
-       Under this view, each column of Src1 (matrix B) of total 16 columns are packed into its corresponding
-       column of this 2-D memory space, that is, Column 0 of Src1 to Column 0 of 2-D memory space, column 1
-       of Src1 to Column 1 of 2-D memory space, and so on. Take 8-bit precision for example, K is 32. This
-       32 elements of 8-bit precision data is packed into 8 DWs (4 for each DW). For all 16 columns, it
-       takes 8 rows in this 2-D memory space, which is 8 GRFs.
-
-   With this, the following detailed description will be not hard to follow.
-
-    1) The semantics for interger DPAS and float(bf/hf) DPAS:
-
-       The semantics is described using the following notation:
-
-           Let dot4(X.a[3:0], Y.b[3:0]) be a 4-element dot product of X and Y, starting
-           at element offset a and b respectively. Similary, let dot2(X.a[1:0], Y.b[1:0])
-           be a 2-element dot product of X and Y, and dot8(X.a[7:0], Y.b[7:0]) be a 8-element
-           dot product of X and Y. Note that the size of element in X and Y may be different.
-           For example, if X's precision is 4 bit, Y's 8 bits, X's element
-           size shall be 4 bits, y's shall be 8 bits. Also, X.DW[j] is used to denote
-           the j+1'th DW of X; X.R[j] for denoting the j+1'th GRF. Similarly, X.R[1].DW[2]
-           will refer to the 3rd DW of the 2nd GRF of X. Note that index always starts from zero.
-           GRF size would be 8 pre PVC and 16 DW in PVC or later.
-
-
-       // 1) Src1PrecisionInBits and Src2PrecisionInBits are 16 for both bfloat(bf) and half(hf) dpas.
-       // 2) Element size for Src0 and Dst are 4 bytes (either int or fp32)
-       // 3) Element size for src1 and src2 could be 2 bits, 4 bits, 8 bits, or 16 bits (bf/hf),
-       //    which are given as precisons.
-
-       // OPS_PER_CHAN
-       if (Src1PrecisionInBits == 16) {
-         // BF/HF dpas. Src2PrecisionInBits must be 16
-         OPS_PER_CHAN = 2;
-       } else if (Src1Precision == 8 || Src2Precision == 8) {
-         // integer dpas : dot4 per DW
-         OPS_PER_CHAN = 4;
-       } else {
-         // integer dpas : dot8 per DW
-         OPS_PER_CHAN = 8;
-       }
-
-       // Src1's DW of each channel might be used in more than one depth (based on its precision).
-       // For example, an integer dpas with src1's precision being 2-bits, one DW has data for
-       // 4 depths (assuming dot4 per DW. Each dot4 consumes 8 bits, a DW can do 4 dot4 operations).
-       // Under SD=8, the first four depths will use the entire DW of the first GRF holding src1;
-       // and the second 4 depths will use the entire DW of the second GRF. If src1's precision is
-       // 8 bits (dot4 per DW), each DW will be used in an exact one depth; and the next depth will
-       // use the DW of the next GRF. The following variable is used in the pseudo code:
-       //   SRC1_OPERANDS_PER_CHAN :
-       //     how many operands per each DW (each channel is DW-wide) for src1.
-       //     Each operand is defined as data that is used for a single dot4/dot8(int) or dot2(bf/bf).
-       //     This means that for float DPAS, SRC1_OPERANDS_PER_CHAN = 1; and for int DPAS,
-       //       if OPS_PER_CHAN = 4
-       //          SRC1_OPERANDS_PER_CHAN = 1 (8-bit precision), 2 (4-bit), or 4 (2-bit)
-       //       else // OPS_PER_CHAN = 8
-       //          SRC1_OPERANDS_PER_CHAN = 1 (4-bit), or 2 (2-bit)
-       SRC1_OPERANDS_PER_CHAN = 32 / (OPS_PER_CHAN * Src1PrecisionInBits)
-
-       Exec_size = isPrePVC ? 8 : 16;
-
-       k = 0;
-       for (r = 0; i < RC; ++r)
-       {
-         temp = Src0.R[r];
-         for (d = 0; d < SD; ++d )
-         {
-           m = d / SRC1_OPERANDS_PER_CHAN;  // to select GRF
-           n = (d % SRC1_OPERANDS_PER_CHAN) * OPS_PER_CHAN; // in unit of element
-           for ( i = 0; i < Exec_size; i++ )
-           { // for each channel
-             if OPS_PER_CHAN == 4  // int dpas
-                temp.DW[i] += dot4(Src1.R[m].DW[i].n[3:0], Src2.k[3:0]);
-             else if OPS_PER_CHAN == 8 // int dpas
-                temp.DW[i] += dot8(Src1.R[m].DW[i].n[7:0], Src2.k[7:0]);
-             else // float DPAS
-                temp.F[i] += dot2(Src1.R[m].DW[i].n[1:0], Src2.k[1:0]);
-           }
-           k += OPS_PER_CHAN;
-         }
-
-         // update dst
-         dst.R[r] = temp;
-       }
-
-       Dst, Src0 are advanced one GRF for each repeat advance; Src2 is advanced 8*OPS_PER_CHAN for
-       each repeat advance. Src1 stays the same for each repeat count advance.
-
-
-
-
-
-
-
+k = 0;
+for (r = 0; r < RC; ++r)
+{
+  temp = src0.R[r];
+  for ( i = 0; i < exec_size; ++i )
+  { // for each channel
+    for (d = 0; d < SD; ++d )
+    {
+      temp.DW[i] = temp.DW[i] + vnnidot(OPS_PER_CHAN, src2.R[r].DW[d], src1.R[d].DW[i]);
+    }
+  }
+  dst.R[r] = temp;
+}
 
 ```
 
@@ -310,7 +211,7 @@ SPDX-License-Identifier: MIT
 
 
 
-      DPAS.W.A.SD.RC    (Exec_size) <dst> <src0> <src1> <src2>
+      DPAS.W.A.SD.RC    (<exec_size>) <dst> <src0> <src1> <src2>
 ```
 ## Notes
 

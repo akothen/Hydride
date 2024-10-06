@@ -33,6 +33,7 @@ class Member(ASTExpr):
     field: str
 
     def __init__(self, obj: ASTExpr, field: str):
+        assert isinstance(obj, ASTExpr)
         self.obj, self.field = obj, field
 
     def __repr__(self):
@@ -44,6 +45,8 @@ class ArrayIndex(ASTExpr):
     index: ASTExpr
 
     def __init__(self, obj: ASTExpr, slices: ASTExpr):
+        assert isinstance(obj, ASTExpr)
+        assert isinstance(slices, ASTExpr)
         self.obj, self.index = obj, slices
 
     def __repr__(self):
@@ -56,6 +59,9 @@ class ArraySlice(ASTExpr):
     lo: ASTExpr
 
     def __init__(self, obj: ASTExpr, hi: ASTExpr, lo: ASTExpr):
+        assert isinstance(obj, ASTExpr)
+        assert isinstance(hi, ASTExpr)
+        assert isinstance(lo, ASTExpr)
         self.obj, self.hi, self.lo = obj, hi, lo
 
     def __repr__(self):
@@ -162,6 +168,8 @@ class BinaryExpr(ASTExpr):
     b: ASTExpr
 
     def __init__(self, op: str, a: ASTExpr, b: ASTExpr):
+        assert isinstance(a, ASTExpr)
+        assert isinstance(b, ASTExpr)
         self.op, self.a, self.b = op, a, b
 
     def __repr__(self):
@@ -173,6 +181,7 @@ class UnaryExpr(ASTExpr):
     a: ASTExpr
 
     def __init__(self, op: str, a: ASTExpr):
+        assert isinstance(a, ASTExpr)
         self.op, self.a = op, a
 
     def __repr__(self):
@@ -188,6 +197,8 @@ class VarDeclInit(Declarator):
     rhs: ASTExpr
 
     def __init__(self, lhs: Var, expr: ASTExpr):
+        assert isinstance(lhs, Var)
+        assert isinstance(expr, ASTExpr)
         self.lhs, self.rhs = lhs, expr
 
     def __repr__(self):
