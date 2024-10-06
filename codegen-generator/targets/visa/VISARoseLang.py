@@ -23,6 +23,7 @@ def Compile(OnlyCompileSupported=True):
     # interested = ['MAD_sat']
     # interested = ['MULH']
     # interested = ['DP4A']
+    # interested = ['DPAS']
     AllSema = SemaGenerator(deserialize=True).getResult()
     if interested:
         AllSema = {k: v for k, v in AllSema.items(
@@ -32,13 +33,45 @@ def Compile(OnlyCompileSupported=True):
     for k, func in AllSema.items():
         if any(kk in k for kk in skip):
             continue
-        if OnlyCompileSupported and k not in SupportedVISAIntrinsics:
-            continue
+        # if OnlyCompileSupported and k not in SupportedVISAIntrinsics:
+        #     continue
         SemaList.append(func)
     # print(SemaList)
     Hlog.info("SemaList length:")
     Hlog.info(len(SemaList))
+    
+    from VISAParser import SimpleParser
+    S = SimpleParser()
+    S.build()
+    
+    SemaList=[
+        VISASema(intrin='VDPAS.W.A.SD.RC_16_D_D_D_D', inst='DPAS.W.A.SD.RC', params=[Parameter(name='src0', type='M', is_signed=True), Parameter(name='src1', type='M', is_signed=True), Parameter(name='src2', type='M', is_signed=True)], spec=S.parse(
+"""
+  if (Src1Precision == 16) {
+        OPS_PER_CHAN = 2;
+      } else if (Src1Precision == 8 || Src2Precision == 8) {
+        OPS_PER_CHAN = 4;
+      } else {
+        OPS_PER_CHAN = 8;
+      }
+      
+      SRC1_OPERANDS_PER_CHAN = 32 / (OPS_PER_CHAN * Src1Precision);
 
+      k = 0;
+      for (r = 0; r < RC; ++r)
+      {
+        temp = src0.R[r];
+        for ( i = 0; i < exec_size; ++i )
+        { // for each channel
+          for (d = 0; d < SD; ++d )
+          {
+            temp.DW[i] = temp.DW[i];// + dot(OPS_PER_CHAN, src2.R[r].DW[d], src1.R[d].DW[i]);
+          }
+        }
+        dst.R[r] = temp;
+      }
+"""), inst_form='DPAS.W.A.SD.RC    (<exec_size>) <dst> <src0> <src1> <src2>', rettype='M', flags={'sat': False, 'asr': False}, resolving={'exec_size': 16, 'type_map': {'src0': 'M', 'src1': 'M', 'src2': 'M', 'dst': 'M'}, 'Src0Precision': 32, 'Src1Precision': 8, 'Src2Precision': 8, 'DstPrecision': 32, 'RC':8, 'SD':8}, extensions=None),
+    ]
     FunctionInfoList = []
     compiled = []
     compiledFamily = set()
@@ -60,7 +93,7 @@ def Compile(OnlyCompileSupported=True):
             Hlog.debug(Index)
             Hlog.debug("CompiledFunction:")
             CompiledFunction.print()
-            Hlog.debug(GenerateRosetteForFunction(CompiledFunction, ""))
+            # Hlog.debug(GenerateRosetteForFunction(CompiledFunction, ""))
             FunctionInfoList.append(FunctionInfo)
             compiled.append(Spec.intrin)
             compiledFamily.add(Spec.inst)
@@ -127,8 +160,8 @@ def TestWithTransormation():
     CodeGenerator = RoseCodeGenerator(Target="VISA")
     FunctionInfoList = CodeGenerator.codeGen(
         JustGenRosette=False, ExtractConstants=False)
-    for FunctionInfo in FunctionInfoList:
-        print(GenerateRosetteForFunction(FunctionInfo.getLatestFunction(), ""))
+    # for FunctionInfo in FunctionInfoList:
+    #     print(GenerateRosetteForFunction(FunctionInfo.getLatestFunction(), ""))
 
 
 if __name__ == "__main__":

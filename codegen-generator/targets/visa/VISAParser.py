@@ -6,7 +6,7 @@ from VISAAST import *
 visa_type = ['UD', 'D', 'bit']
 reserved_types = []
 
-
+listize = lambda x: x if isinstance(x, list) else [x]
 class SimpleParser(object):
     # List of token names.   This is always required
 
@@ -241,7 +241,7 @@ class SimpleParser(object):
         | IF '(' expression ')' statement ELSE statement
         '''
         if len(p) == 8:
-            p[0] = IfElseStmt(p[3], p[5], p[7])
+            p[0] = IfElseStmt(p[3], listize(p[5]), listize(p[7]))
         else:
             p[0] = IfStmt(p[3], p[5])
 

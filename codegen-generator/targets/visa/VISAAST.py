@@ -114,6 +114,8 @@ class IfElseStmt(ASTStmt):
     otherwise: List[ASTStmt]
 
     def __init__(self, cond: ASTExpr, then: List[ASTStmt], otherwise: List[ASTStmt]):
+        assert type(then) == list
+        assert type(otherwise) == list
         self.cond, self.then, self.otherwise = cond, then, otherwise
 
     def __repr__(self):

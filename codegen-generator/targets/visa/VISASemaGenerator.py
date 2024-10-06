@@ -41,6 +41,9 @@ def HandleCommon(vdoc: VISADoc) -> List[VISASema]:
                     args.append(Parameter(i, Ty, "U" not in Ty))
                 S = SimpleParser()
                 S.build()
+                resolving = {"exec_size": sz, 'type_map': TyMap}
+                for Reg,Ty in TyMap.items():
+                    resolving[Reg.capitalize()+"Precision"]=DataTypeBits[Ty]
                 tmp.append(VISASema(
                     intrin=NameGen(T, s, sz, signature),
                     inst=T.opname,
@@ -49,7 +52,7 @@ def HandleCommon(vdoc: VISADoc) -> List[VISASema]:
                     spec=S.parse(vdoc.Semantics),
                     inst_form=vdoc.Text,
                     flags={"sat": s, "asr": "ASR" in T.opname},
-                    resolving={"exec_size": sz, 'type_map': TyMap},
+                    resolving=resolving,
                     extensions=None))
 
     return tmp
@@ -87,7 +90,7 @@ def HandleCMP(vdoc: VISADoc) -> List[VISASema]:
 
 
 class SemaGenerator:
-    def __init__(self, deserialize=False) -> None:
+    def __init__(self, deserialize=True) -> None:
         self.result = {}
         if deserialize:
             self.deserialize()
@@ -133,5 +136,5 @@ from VISAMeta import VISASema, Parameter
 
 
 if __name__ == "__main__":
-    S = SemaGenerator()
+    S = SemaGenerator(deserialize=False)
     S.serialize()

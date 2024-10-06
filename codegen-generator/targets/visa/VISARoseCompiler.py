@@ -4,6 +4,7 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseMatrixOperations import *
 from RoseContext import *
 
 from VISAAST import *
@@ -18,6 +19,11 @@ class VISARoseContext(RoseContext):
         self.Number64Type = RoseIntegerType.create(64)
         self.varType = {}
         super().__init__()
+
+    def addSignednessInfoForValue(self, Value: RoseValue, IsSigned: bool):
+        # override the output
+        assert not isinstance(Value, RoseUndefValue)
+        self.CompiledValToSignedness[Value] = IsSigned
 
     def setConstexpr(self, constexpr):
         Hlog.debug("Setting constexpr", constexpr)
@@ -36,6 +42,7 @@ class VISARoseContext(RoseContext):
 
     def setTypeForVar(self, qid: str, Type: int):
         assert qid not in self.varType, "Giving width for a variable twice"
+        Hlog.debug("Setting varType", qid, Type)
         self.varType[qid] = Type
 
     def getTypeForVar(self, qid: str):
@@ -84,20 +91,22 @@ class VISARoseContext(RoseContext):
                 for Op in Block:
                     if isinstance(Op, RoseBVInsertSliceOp):
                         if Op.getInputBitVector() != ParentFunction.getReturnValue():
+                            # FIXME: Are these even needed?
+                            pass
                             # Add the new variable
-                            VariableName = Op.getInputBitVector().getName()
-                            self.addVariable(
-                                VariableName, ChildContext.getVariableID(VariableName))
-                            # Add signedness information
-                            assert ChildContext.isValueSignKnown(
-                                Op.getInputBitVector())
-                            Signedness = ChildContext.isValueSigned(
-                                Op.getInputBitVector())
-                            self.addSignednessInfoForValue(
-                                Op.getInputBitVector(), Signedness)
-                            # Add this variable as an abstraction
-                            self.addCompiledAbstraction(ChildContext.getVariableID(VariableName),
-                                                        Op.getInputBitVector())
+                            # VariableName = Op.getInputBitVector().getName()
+                            # self.addVariable(
+                            #     VariableName, ChildContext.getVariableID(VariableName))
+                            # # Add signedness information
+                            # assert ChildContext.isValueSignKnown(
+                            #     Op.getInputBitVector())
+                            # Signedness = ChildContext.isValueSigned(
+                            #     Op.getInputBitVector())
+                            # self.addSignednessInfoForValue(
+                            #     Op.getInputBitVector(), Signedness)
+                            # # Add this variable as an abstraction
+                            # self.addCompiledAbstraction(ChildContext.getVariableID(VariableName),
+                            # Op.getInputBitVector())
 
             super().destroyContext(ContextName)
         else:
@@ -105,10 +114,15 @@ class VISARoseContext(RoseContext):
 
     def registerVISAVecType(self, Name: str, Type: str):
         assert Type in SupportedTypes, f"Unsupported type: {Type}"
-        bits = DataTypeBits[Type]
-        self.setTypeForVar(Name, bits*self.getConstexprFor('exec_size'))
-        self.setTypeForVar("*"+Name, bits)
-        return RoseBitVectorType(bits*self.getConstexprFor('exec_size'))
+        if Type != "M":
+            bits = DataTypeBits[Type]
+            self.setTypeForVar(Name, bits*self.getConstexprFor('exec_size'))
+            # We use a[0] to denote the element width of vector inside a
+            self.setTypeForVar(Name+"[0]", bits)
+            return RoseBitVectorType(bits*self.getConstexprFor('exec_size'))
+        else:
+            # FIXME: decide args here
+            return RoseMatrixType.create(16, 64, 8)
 
 
 def makeVISAType(Type: str):
@@ -248,10 +262,7 @@ def CompileVarRv(Variable: Var, Context: VISARoseContext):
         constval = Context.getConstexprFor(Variable.name)
         if type(constval) == int:
             return RoseConstant(constval, Context.NumberType)
-        # if type(constval) == bool:
-        #     return RoseConstant(constval, RoseBooleanType.create())
-        # if type(constval) == str:
-        #     return RoseConstant(int(constval, 2), RoseBitVectorType.create(len(constval)))
+
         raise NotImplementedError(
             f"Unsupported type of constant: {type(constval)}")
     # Check if the variable is already defined and cached. If yes, just return that.
@@ -272,6 +283,41 @@ def CompileVarRv(Variable: Var, Context: VISARoseContext):
     Context.addCompiledAbstraction(Variable.id, var)
 
     return var
+
+
+def CompileMemberRv(Stmt: Member, Context: VISARoseContext):
+    '''
+    a   .  b
+    -----------
+    obj    field
+    '''
+    # Compile the object
+    Obj = CompileRValueExpr(Stmt.obj, Context)
+    if Stmt.field == "DW":
+        # Extract
+        Context.setTypeForVar(Stmt.id+"[0]", 32)
+        return Obj
+    elif Stmt.field == "R":
+        return Obj
+
+
+def CompileMtxExtractCommon(Stmt, MI, Context: VISARoseContext):
+    (Matrix, Index) = MI
+    Operation = RoseMatrixExtractRowOp.create(
+        Context.genName(), Matrix, Index)
+
+    # # Add signedness info on the op
+    Context.addElemTypeOfVariable(
+        Operation.getName(), RoseBitVectorType.create(Operation.getOutputBitwidth()))
+    Context.addSignednessInfoForValue(Operation, False)
+
+    # Add the op to the IR
+    Context.addAbstractionToIR(Operation)
+
+    # Add the operation to the context
+    Context.addCompiledAbstraction(Stmt.id, Operation)
+
+    return Operation
 
 
 def CompileExtractCommon(Stmt, BLHB, Context: VISARoseContext):
@@ -296,9 +342,9 @@ def CompileExtractCommon(Stmt, BLHB, Context: VISARoseContext):
 
 def CompileArraySlice(Stmt: ArraySlice, Context: VISARoseContext):
     '''
-    ChEn  [i]
+    ChEn  [i:j]
     ---- =====
-    obj  index
+    obj  lo  hi
     '''
     if type(Stmt.obj) == Var and Stmt.obj.name == 'ChEn':
         return RoseConstant(1, RoseBooleanType.create())
@@ -314,6 +360,12 @@ def CompileArraySlice(Stmt: ArraySlice, Context: VISARoseContext):
 
 
 def CompileArrayIndexRv(Stmt: ArrayIndex, Context: VISARoseContext):
+    # Case 1: a[i] where a is a vector like object
+    #            treat as a[i*sizeof(a[0]):i*sizeof(a[0])+sizeof(a[0])-1]
+    #         This case also work for a.DW[i], where sizeof a[0] is fixed to be 32 (DW)
+    # Case 2: a.R[i] where a is a matrix like object
+    #         This is going to be mtxextractrow a, int32 i
+    # Currently we don't support nested member access like a.R[i].DW[j] for LValue
     '''
     ChEn  [i]
     ---- =====
@@ -321,6 +373,10 @@ def CompileArrayIndexRv(Stmt: ArrayIndex, Context: VISARoseContext):
     '''
     if type(Stmt.obj) == Var and Stmt.obj.name == 'ChEn':
         return RoseConstant(1, RoseBooleanType.create())
+    if type(Stmt.obj) == Member and Stmt.obj.field == "R":
+        return CompileMtxExtractCommon(Stmt,
+                                       (CompileRValueExpr(Stmt.obj.obj, Context),
+                                        CompileRValueExpr(Stmt.index, Context)), Context)
     # (BitVector, Low, High, BitwidthValue) = MakeSlice(Stmt, Context)
 
     return CompileExtractCommon(Stmt, MakeSlice(Stmt, Context), Context)
@@ -415,7 +471,13 @@ def MakeSliceAST(Stmt: ArrayIndex, Context: VISARoseContext):
     # a[1]->a[1*sizeof(a[0]):1*sizeof(a[0])+sizeof(a[0])-1]
     v = Stmt.obj
     idx = Stmt.index
-    wid = Context.getTypeForVar("*"+v.name)
+    Hlog.debug(v)
+    if isinstance(v, Var):
+        wid = Context.getTypeForVar(v+"[0]".name)
+    else:
+        pass
+    # else:
+    #     wid =
     Nwid = Number(wid)
     lo = BinaryExpr('*', idx, Nwid)
     hi = BinaryExpr('+', BinaryExpr('*', idx, Nwid), BinaryExpr(
@@ -425,9 +487,38 @@ def MakeSliceAST(Stmt: ArrayIndex, Context: VISARoseContext):
     return v, lo, hi, wid
 
 
-def MakeSlice(Stmt: ArrayIndex, Context: VISARoseContext):
+def MakeSlice_old(Stmt: ArrayIndex, Context: VISARoseContext):
     v, lo, hi, wid = MakeSliceAST(Stmt, Context)
     BitVector = CompileRValueExpr(v, Context)
+    Low = CompileRValueExpr(lo, Context)
+    High = CompileRValueExpr(hi, Context)
+    BitwidthValue = RoseConstant.create(wid, Low.getType())
+
+    return BitVector, Low, High, BitwidthValue
+
+
+def MakeSlice(Stmt: ArrayIndex, Context: VISARoseContext):
+
+    v = Stmt.obj
+    if isinstance(v, Var):
+        BitVector = CompileRValueExpr(v, Context)
+        wid = Context.getTypeForVar(v+"[0]".name)
+    elif isinstance(v, Member):
+        BitVector = CompileRValueExpr(v.obj, Context)
+        if v.field == "DW":
+            wid = 32
+        else:
+            assert False,  breakpoint()
+    idx = Stmt.index
+    Hlog.debug(v)
+    Hlog.debug(BitVector)
+
+    Nwid = Number(wid)
+    lo = BinaryExpr('*', idx, Nwid)
+    hi = BinaryExpr('+', BinaryExpr('*', idx, Nwid), BinaryExpr(
+        '-', Nwid, Number(1)))
+    Annotator(Stmt.id+".lo").AddID(lo)
+    Annotator(Stmt.id+".hi").AddID(hi)
     Low = CompileRValueExpr(lo, Context)
     High = CompileRValueExpr(hi, Context)
     BitwidthValue = RoseConstant.create(wid, Low.getType())
@@ -587,8 +678,12 @@ def CompileBinaryExprRv(Stmt: BinaryExpr, Context: VISARoseContext):
     Operand2 = CompileRValueExpr(Stmt.b, Context)
     # if isinstance(Stmt, SatBinaryExpr):
     #     op += "Q"
-    Operation = BinaryOps[Stmt.op]()(
-        Context.genName(),  Operand1, Operand2, Context)
+    Operation = None
+    if Stmt.op in BinOpsTryFolding:
+        Operation = ComputeConstant(Stmt.op, Operand1, Operand2, Context)
+    if not Operation:
+        Operation = BinaryOps[Stmt.op]()(
+            Context.genName(),  Operand1, Operand2, Context)
     if type(Operation) == RoseConstant or Operation == Operand1 or Operation == Operand2:
         return Operation
     Context.addAbstractionToIR(Operation)
@@ -637,7 +732,7 @@ def CompileUpdateRv(Stmt: Update, Context: VISARoseContext):
         return RHSExprVal
     elif type(Stmt.a) == ArrayIndex:
         LVal = Stmt.a
-        if type(LVal) == ArrayIndex:
+        if type(LVal.obj) == Var or (type(LVal.obj) == Member and LVal.obj.field == "DW"):
             # dst[1] -> dst[1*sizeof(dst[0]):2*sizeof(dst[0])-1]
             # Add an bitslice operation
             (BitVector, Low, High, BitwidthValue) = MakeSlice(LVal, Context)
@@ -674,7 +769,16 @@ def CompileUpdateRv(Stmt: Update, Context: VISARoseContext):
                         BitVector, Context.isValueSigned(RHSExprVal))
             LHSOp = RoseBVInsertSliceOp.create(
                 RHSExprVal, BitVector, Low, High, BitwidthValue)
-
+        elif type(LVal.obj) == Member:
+            assert LVal.obj.field == "R"
+            # dst.R[1] -> mtxinsertrow dst, 1, rhs
+            # Compile the object
+            BitVector = CompileRValueExpr(LVal.obj.obj, Context)
+            Index = CompileRValueExpr(LVal.index, Context)
+            RHSExprVal = CompileRValueExpr(Stmt.b, Context)
+            # Add an mtxinsertrow operation
+            LHSOp = RoseMatrixInsertRowOp.create(
+                RHSExprVal, BitVector, Index)
         else:
             breakpoint()
             raise NotImplementedError(
@@ -926,13 +1030,14 @@ CompileAbstractions = {
     # While: CompileWhile,
     IfElseStmt: CompileIfElseStmt,
     IfStmt: CompileIf,
+    list: CompileList,
 }
 CompileAbstractionsRV = {
     ArrayIndex: CompileArrayIndexRv,
     ArraySlice: CompileArraySlice,
     Update: CompileUpdateRv,
     Var: CompileVarRv,
-    # Member: CompileMember,
+    Member: CompileMemberRv,
     Number: CompileNumberRv,
     BinaryExpr: CompileBinaryExprRv,
     UnaryExpr: CompileUnaryExpr,
@@ -1033,38 +1138,44 @@ def TypePromotion(Operand1: RoseValue, Operand2: RoseValue, Context: VISARoseCon
 #     return [Operand1, Operand2]
 
 
-# def ComputeConstant(op: str, Operand1: RoseValue, Operand2: RoseValue,
-#                     Context: VISARoseContext):
-#     if isinstance(Operand1, RoseConstant) and isinstance(Operand2, RoseConstant):
-#         if op in ['+', '-', '*', '<<', '>>']:
-#             assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
-#                 Operand2.getType(), RoseIntegerType)
-#             val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
-#             if val.bit_length() > 32:
-#                 return RoseConstant.create(val, Context.Number64Type)
-#             return RoseConstant.create(val, Context.NumberType)
-#         if op == "<<<":  # VISAShl, intentionally contrary to keys of BinaryOps
-#             val = Operand1.getValue() << Operand2.getValue() if Operand2.getValue(
-#             ) >= 0 else Operand1.getValue() >> -Operand2.getValue()
-#             if val.bit_length() > 32:
-#                 return RoseConstant.create(val, Context.Number64Type)
-#             return RoseConstant.create(val, Context.NumberType)
-#         if op == "//":
-#             assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
-#                 Operand2.getType(), RoseIntegerType)
-#             assert Operand2.getValue() != 0
-#             assert Operand1.getValue() % Operand2.getValue() == 0
-#             val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
-#             return RoseConstant.create(val, Context.NumberType)
-#         if op in ['>=', '>', '<', '<=', '==', '!=']:
-#             assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
-#                 Operand2.getType(), RoseIntegerType)
-#             val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
-#             return RoseConstant.create(val, RoseBooleanType.create())
-#     elif isinstance(Operand2, RoseConstant):
-#         if (op in ["<<<", "+", '-', ">>", "<<"]) and Operand2.getValue() == 0:
-#             return Operand1
-#     return None
+def ComputeConstant(op: str, Operand1: RoseValue, Operand2: RoseValue,
+                    Context: VISARoseContext):
+    if isinstance(Operand1, RoseConstant) and isinstance(Operand2, RoseConstant):
+        if op in ['+', '-', '*', '<<', '>>']:
+            assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
+                Operand2.getType(), RoseIntegerType)
+            val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
+            if val.bit_length() > 32:
+                return RoseConstant.create(val, Context.Number64Type)
+            return RoseConstant.create(val, Context.NumberType)
+        if op == "<<<":  # VISAShl, intentionally contrary to keys of BinaryOps
+            val = Operand1.getValue() << Operand2.getValue() if Operand2.getValue(
+            ) >= 0 else Operand1.getValue() >> -Operand2.getValue()
+            if val.bit_length() > 32:
+                return RoseConstant.create(val, Context.Number64Type)
+            return RoseConstant.create(val, Context.NumberType)
+        if op == "//":
+            assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
+                Operand2.getType(), RoseIntegerType)
+            assert Operand2.getValue() != 0
+            assert Operand1.getValue() % Operand2.getValue() == 0
+            val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
+            return RoseConstant.create(val, Context.NumberType)
+        if op in ['>=', '>', '<', '<=', '==', '!=']:
+            assert isinstance(Operand1.getType(), RoseIntegerType) and isinstance(
+                Operand2.getType(), RoseIntegerType)
+            val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
+            return RoseConstant.create(val, RoseBooleanType.create())
+        if op in ['||', '&&']:
+            assert isinstance(Operand1.getType(), RoseBooleanType) and isinstance(
+                Operand2.getType(), RoseBooleanType)
+            op = {'||': 'or', '&&': 'and'}[op]
+            val = eval(f"{Operand1.getValue()} {op} {Operand2.getValue()}")
+            return RoseConstant.create(val, RoseBooleanType.create())
+    elif isinstance(Operand2, RoseConstant):
+        if (op in ["<<<", "+", '-', ">>", "<<"]) and Operand2.getValue() == 0:
+            return Operand1
+    return None
 
 
 def HandleToAdd():
@@ -1161,6 +1272,8 @@ def HandleToMod():
 def HandleToOr():
     def LamdaImplFunc(Name: str, Operand1: RoseValue, Operand2: RoseValue,
                       Context: VISARoseContext):
+        if (z := ComputeConstant('||', Operand1, Operand2, Context)) != None:
+            return z
         Operands = TypePromotion(Operand1, Operand2, Context)
         [Operand1, Operand2] = Operands
         if isinstance(Operand1.getType(), RoseBitVectorType) \
@@ -1455,6 +1568,9 @@ def HandleToIs():
     return LamdaImplFunc
 
 
+BinOpsTryFolding = {
+    '==', '+', '||'
+}
 BinaryOps = {
     '+': HandleToAdd,
     '-': HandleToSub,
@@ -1473,8 +1589,8 @@ BinaryOps = {
     # # '<<<': HandleToShl,  # real shift left
     '&': HandleToAnd,
     '|': HandleToOr,
-    'AND': HandleToAnd,
-    'OR': HandleToOr,
+    '&&': HandleToAnd,
+    '||': HandleToOr,
     '^': HandleToXor,
     # ':': HandleToConcat,
     'is': HandleToIs,

@@ -58,7 +58,7 @@ def VISATextParse(text: str):
         assert False
     # sanity check
     assert "dst" in args
-    assert "exec_size" in args
+    assert "exec_size" in args, breakpoint()
     i = 0
     while True:
         if f"src{i}" in args:
@@ -122,7 +122,7 @@ def VISADescParse(desc: str, T: VISAText):
     assert False
 
 
-ParseError = ["DPAS", "DPASW"]
+ParseError = []
 FlowControl = ["SEL", "SETP"]
 Stateful = ["ADDC"]
 Uncommon = ["BFREV", "ROL", "ROR"]
@@ -141,7 +141,7 @@ SupportedVISA = [
     "DIV",
     "DIVM",
     "DP4A",
-    # "DPAS",  # Semantic too complicated
+    "DPAS",  # Semantic too complicated
     # "DPASW",  # Semantic too complicated
     "MAD",
     "MIN_MAX",
@@ -222,7 +222,8 @@ SupportedVISA = [
 SupportedVISA = [i for i in SupportedVISA if i not in ParseError +
                   FlowControl+Stateful+Uncommon+CompileIssue]
 SupportedTypes = [
-    "UD", "D", "UW", "W", "UB", "B", "UQ", "Q"
+    "UD", "D", "UW", "W", "UB", "B", "UQ", "Q", "M"
+    # M denotes matrix for compile use, while document doesn't account for
 ]
 DataTypeBits = {
     "UD": 32,  # unsigned double word
