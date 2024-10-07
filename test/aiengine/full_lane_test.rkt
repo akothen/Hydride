@@ -148,27 +148,30 @@
   dst
 )
 
-(define (v16acc48_mac16 acc xbuff zbuff)
+(define (v16acc32_mac16 acc xbuff zbuff)
 
   (define dst
     (apply concat
       (for/list ([%i (reverse (range 0 16 1))])
         ;; extract acc element
-        (define %low1_acc (* 48 %i))
-        (define %high1_acc (+ %low1_acc (- 48 1)))
-        (define %ext_acc (sign-extend (extract %high1_acc %low1_acc acc) (bitvector 48)))
+        (define %low1_acc (* 32 %i))
+        (define %high1_acc (+ %low1_acc (- 32 1)))
+        (define %ext_acc (sign-extend (extract %high1_acc %low1_acc acc) (bitvector 32)))
+        (fprintf (current-output-port) "ext_acc: ~a\n" %ext_acc)
 
         ;; extract xbuff element
-        (define %low2_x (* 32 %i))
-        (define %high2_x (+ %low2_x (- 32 1)))
-        (define %ext_xbuff (sign-extend (extract %high2_x %low2_x xbuff) (bitvector 32)))
+        (define %low2_x (* 16 %i))
+        (define %high2_x (+ %low2_x (- 16 1)))
+        (define %ext_xbuff (extract %high2_x %low2_x xbuff))
+        (fprintf (current-output-port) "ext_xbuff: ~a\n" %ext_xbuff)
 
         ;; extract zbuff element
         (define %low2_z (* 16 %i))
         (define %high2_z (+ %low2_z (- 16 1)))
-        (define %ext_zbuff (sign-extend (extract %high2_z %low2_z zbuff) (bitvector 32)))
+        (define %ext_zbuff (extract %high2_z %low2_z zbuff))
+        (fprintf (current-output-port) "ext_zbuff: ~a\n\n\n" %ext_zbuff)
 
-        (define %o (bvadd %ext_acc (zero-extend (bvmul %ext_xbuff %ext_zbuff) (bitvector 48))))
+        (define %o (bvadd %ext_acc (zero-extend (bvmul %ext_xbuff %ext_zbuff) (bitvector 32))))
         %o
       )
     )
@@ -179,11 +182,11 @@
 (define xbuff_64_16 (bv #x80ecdc1b732d594fd8c415b9d8c6ad013bf522b837e25ad7d685aa6d3e6e74342d093619d85a6c4fc5bed844d1743d45ea14e07fcba46210fe00d1a8b525b55627e820b8320480a34df211015380c3517462889d2210d78bf2328e9c4b97ca0e01796933e37761b955f5eaa10a10dd4e3ec6765ab2bb4d51051a79f3cb7f68df 1024))
 (define ybuff_16_16 (bv #xbac1fd5a5c9cc5a5cde2903c0c62085b504c9acdb653e4175430738aebd1d496 256))
 
-(define acc_16_48 (bv #xc35c199ca4f4ecb097be5b9c07f08c05464fee1e05c094f021a09539b95475c30670f9794dcb2e122dc10df4bcca5e2b295088158aecfaa39a0817190fe0edee444ebb5df6ce7ac3ed8843ef6ebfd8e0c29f165705589e2371c81c1a41600194 768))
-(define xbuff_32_32 (bv #x8d3cb669f3bad88b6860e6f9ba93289b8c108750dde8aef45811cf4dcc761853548b281e13aa29ad4ece2613b1b64b04123ee062cac038d663f8c47b4aa5f2a7933761769123750f7ecdbdda212aa33743a451a4b7cbe851f34c096188fd54d78e9c04dead157e1a7fea1fc59dd14adbdc411c5853246397dfa4366ebe0d76ea 1024))
+(define acc_16_32 (bv #x5c6f30bf8ced6e1467cead702d4a12f454dbf4213c636fefd352df46bd24af54f878f3c1333cd6b9cfd4f209c273340c292c295baf4a0b3e3d99a12fdcf47758 512))
+(define xbuff_16_16 (bv #x696fd46a736c0c2e14b662224092ef6e7e30bba29d37606a54703e2604199881 256))
 (define zbuff_16_16 (bv #x8d623fc10be6232639111fba61d748cd4248caba9f2bc54ddc3833217d4a7a0f 256))
 
 (pretty-print (bv #x7 4))
 (pretty-print (bvmul (bv #x7 4) (bv #x7 4)))
 (pretty-print (v16acc48_mul xbuff_64_16  ybuff_16_16))
-(pretty-print (v16acc48_mac16 acc_16_48 xbuff_32_32 zbuff_16_16))
+(pretty-print (v16acc32_mac16 acc_16_32 xbuff_16_16 zbuff_16_16))
