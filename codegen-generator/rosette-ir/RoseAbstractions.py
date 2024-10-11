@@ -318,6 +318,9 @@ class RoseFunction(RoseValue, RoseRegion):
         String += RoseRegion.__str__(self, NumSpace + 1)
         String += (Spaces + "}\n")
         return String
+    
+    def print(self, NumSpace=0):
+        print(self.__str__(NumSpace))
 
 
 ####################################### ROSE BLOCK ############################################
