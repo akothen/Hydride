@@ -21,6 +21,10 @@ namespace Internal {
     const std::string pimCopyHostToDeviceName = "pimCopyHostToDevice";
     const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
     const std::string pimBroadCastName = "pimBroadCast";
+
+    const std::string pimShowStatsWrapperName = "pimShowStatsWrapper";
+
+    const std::string pimInitDeviceWrapperName = "pimInitDeviceWrapper";
     
 
 
@@ -52,6 +56,11 @@ namespace Internal {
 
     /* ================ Helper Routines ================ */
     
+
+
+
+
+
 
 
 

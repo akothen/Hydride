@@ -414,6 +414,8 @@ void CodeGen_LLVM::add_hydride_code() {
     llvm::SMDiagnostic error;
     std::unique_ptr<llvm::Module> hydride_module = llvm::parseIRFile(sb, error, *context);
 
+    const char *enable_hydride_pim = getenv("HL_ENABLE_HYDRIDE_PIM");
+
     if (!hydride_module) {
         internal_error << "Failure parsing " << hydride_bitcode_name << " \n";
     }
@@ -435,8 +437,9 @@ void CodeGen_LLVM::add_hydride_code() {
     // of these calls.
     llvm::InlineFunctionInfo ifi;
 
-    // Inline wrapper functions inside the hydride methods
+    llvm::Function* EnclosingFunction = nullptr;
 
+    // Inline wrapper functions inside the hydride methods
     // First inline hydride functions
     for (llvm::Function &Fn : *module) {
         std::vector<llvm::CallInst *> ToInline;
@@ -453,6 +456,7 @@ void CodeGen_LLVM::add_hydride_code() {
             for (auto *User : Fn.users()) {
                 if (llvm::CallInst *CI = llvm::dyn_cast<llvm::CallInst>(User)) {
                     llvm::errs() << "Found User of hydride node method:" << *CI << "\n";
+                    EnclosingFunction = CI->getParent()->getParent();
                     ToInline.push_back(CI);
                 }
             }
@@ -523,7 +527,71 @@ void CodeGen_LLVM::add_hydride_code() {
         Fn->eraseFromParent();
     }
 
+    if(enable_hydride_pim && EnclosingFunction){
+        debug(0) << "Creating PIM Init device and show stats function" << "\n";
+        insertPIMInit(EnclosingFunction);
+        insertPIMPrintStats(EnclosingFunction);
+    }
+
+
     // llvm::errs()<<"Printing Module: <START>\n" << *module << "\n<END>"<<"\n";
+}
+
+void CodeGen_LLVM::insertPIMInit(llvm::Function* EnclosingFunction){
+    auto& EntryBB = EnclosingFunction->getEntryBlock();
+
+    llvm::Instruction* InsertBefore = EntryBB.getFirstNonPHI();
+    llvm::LLVMContext& ctx = InsertBefore->getContext();
+    llvm::Type* i8PTy = llvm::Type::getInt8PtrTy(ctx);
+    llvm::Type* voidTy = llvm::Type::getVoidTy(ctx);
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(ctx);
+
+    std::string pimInitDeviceName = "pimInitDeviceWrapper";
+    llvm::Module* M = InsertBefore->getModule();
+    llvm::Function* InitFunc = M->getFunction(pimInitDeviceName);
+
+    if(!InitFunc){
+        std::vector<llvm::Type*>  InitArgsTy = {};
+        llvm::FunctionType* InitFuncTy = FunctionType::get(voidTy, InitArgsTy, /* isVarArgs */ false);
+        InitFunc = llvm::Function::Create(InitFuncTy, llvm::Function::ExternalLinkage ,pimInitDeviceName , M);
+    }
+    std::vector<llvm::Value*> Args = {};
+    llvm::CallInst* InitCall = CallInst::Create(InitFunc, Args, "", InsertBefore);
+}
+
+void CodeGen_LLVM::insertPIMPrintStats(llvm::Function* EnclosingFunction){
+
+    auto& EntryBB = EnclosingFunction->getEntryBlock();
+
+    std::vector<llvm::BasicBlock*> ReturnBlocks;
+
+    for (llvm::BasicBlock &BB : *EnclosingFunction){
+        if(isa<llvm::ReturnInst>(BB.getTerminator())){
+            ReturnBlocks.push_back(&BB);
+        }
+    }
+
+    llvm::Instruction* InsertBefore = EntryBB.getFirstNonPHI();
+    llvm::LLVMContext& ctx = InsertBefore->getContext();
+    llvm::Type* i8PTy = llvm::Type::getInt8PtrTy(ctx);
+    llvm::Type* voidTy = llvm::Type::getVoidTy(ctx);
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(ctx);
+
+    std::string pimInitDeviceName = "pimInitDeviceWrapper";
+    llvm::Module* M = InsertBefore->getModule();
+    llvm::Function* InitFunc = M->getFunction(pimInitDeviceName);
+
+    if(!InitFunc){
+        std::vector<llvm::Type*>  InitArgsTy = {};
+        llvm::FunctionType* InitFuncTy = FunctionType::get(voidTy, InitArgsTy, /* isVarArgs */ false);
+        InitFunc = llvm::Function::Create(InitFuncTy, llvm::Function::ExternalLinkage ,pimInitDeviceName , M);
+    }
+    std::vector<llvm::Value*> Args = {};
+    for(llvm::BasicBlock* BB : ReturnBlocks){
+        InsertBefore = BB->getTerminator();
+        llvm::CallInst* InitCall = CallInst::Create(InitFunc, Args, "", InsertBefore);
+    }
+
 }
 
 CodeGen_LLVM::~CodeGen_LLVM() {

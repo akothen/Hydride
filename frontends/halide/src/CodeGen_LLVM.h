@@ -169,6 +169,9 @@ protected:
     /** Add hydride_code entries to llvm module. */
     void add_hydride_code();
 
+    void insertPIMInit(llvm::Function* Func);
+    void insertPIMPrintStats(llvm::Function* Func);
+
     /** Run all of llvm's optimization passes on the module. */
     void optimize_module();
 
