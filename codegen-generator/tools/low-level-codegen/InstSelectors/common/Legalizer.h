@@ -36,6 +36,11 @@ namespace llvm {
     const std::string pimBroadCastName = "pimBroadCast";
     const std::string pimInitDeviceName = "pimCreateDevice";
 
+    const std::string pimInitDeviceWrapperName = "pimInitDeviceWrapper";
+
+    const std::string pimShowStatsName = "pimShowStats";
+    const std::string pimShowStatsWrapperName = "pimShowStatsWrapper";
+
     const std::string pimFreeName = "pimFree";
     
 class Legalizer {
@@ -106,8 +111,15 @@ public:
     // PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numRanks, numBankPerRank, numSubarrayPerBank, numRows, numCols);
     void InsertPimInitCall(int numRanks, int numBankPerRank, int numSubarrayPerBank , int numRows, int numCols, Instruction* InsertBefore);
 
+    // Create Wrapper to declare PIM Device. This is called once at the top of the frontend kernel.
+    void DeclarePIMInitWrapper(Module* M);
+
+    void DeclarePIMPrintStatsWrapper(Module* M);
+
 
     void InsertPimFreeCalls(Instruction* InsertBefore);
+
+    void InsertPimPrintStatsCall(Instruction* InsertBefore);
 };
 
 }  // end of namespace llvm

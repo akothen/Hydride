@@ -74,6 +74,11 @@ bool Legalizer::legalize(Function &F) {
 
     bool IS_BITSIMD = bitsimd;
     // Remove all the target-agnostic intrinsics / function calls
+    if(IS_BITSIMD){
+        Module* M = F.getParent();
+        DeclarePIMInitWrapper(M);
+        DeclarePIMPrintStatsWrapper(M);
+    }
     for (auto *I : ToBeRemoved) {
         errs() << "Instruction to remove: "<< * I << "\n";
         if(!IS_BITSIMD){
@@ -92,16 +97,6 @@ bool Legalizer::legalize(Function &F) {
         I->eraseFromParent();
     }
 
-    if(!inserted_pim_init and bitsimd){
-
-        Function* ParentFn = &F;
-        BasicBlock& EntryBlock = ParentFn->getEntryBlock();
-
-        //InsertPimInitCall(/* numCores */ 4, /* numRows*/ 512, /* numCols */ 512, EntryBlock.getFirstNonPHI());
-
-        InsertPimInitCall(/* numRanks */ 4, /*numBankPerRank */ 128, /* numSubarrayPerBank */ 32  , /* numRows*/ 1024, /* numCols */ 1024, EntryBlock.getFirstNonPHI());
-        inserted_pim_init = true;
-    }
 
     InsertPimFreeCalls(RetInst);
 
@@ -607,6 +602,71 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
 
 }
 
+void Legalizer::DeclarePIMInitWrapper(Module* M){
+    LLVMContext& ctx = M->getContext();
+    Type* voidTy = Type::getVoidTy(ctx);
+
+    Function* InitFunc = M->getFunction(pimInitDeviceWrapperName);
+
+    if(!InitFunc){
+        std::vector<Type*>  InitArgsTy = {};
+        FunctionType* InitFuncTy = FunctionType::get(voidTy, InitArgsTy, /* isVarArgs */ false);
+        InitFunc = Function::Create(InitFuncTy, Function::ExternalLinkage ,pimInitDeviceWrapperName , M);
+
+        // Add an entry basic block to function and call PIM Init
+        BasicBlock *BB = BasicBlock::Create(ctx, "entry", InitFunc);
+        // Create return void
+        ReturnInst::Create(ctx, BB);
+
+        InsertPimInitCall(/* numRanks */ 4, /*numBankPerRank */ 128, /* numSubarrayPerBank */ 32  , /* numRows*/ 1024, /* numCols */ 1024, BB->getFirstNonPHI());
+    }
+}
+
+
+void Legalizer::DeclarePIMPrintStatsWrapper(Module* M){
+    LLVMContext& ctx = M->getContext();
+    Type* voidTy = Type::getVoidTy(ctx);
+
+    Function* PrintFunc = M->getFunction(pimShowStatsWrapperName);
+
+    if(!PrintFunc){
+        std::vector<Type*>  PrintArgsTy = {};
+        FunctionType* PrintFuncTy = FunctionType::get(voidTy, PrintArgsTy, /* isVarArgs */ false);
+        PrintFunc = Function::Create(PrintFuncTy, Function::ExternalLinkage ,pimShowStatsWrapperName , M);
+
+        // Add an entry basic block to function and call PIM Init
+        BasicBlock *BB = BasicBlock::Create(ctx, "entry", PrintFunc);
+        // Create return void
+        ReturnInst::Create(ctx, BB);
+
+        InsertPimPrintStatsCall(BB->getFirstNonPHI());
+    }
+}
+
+
+void Legalizer::InsertPimPrintStatsCall(Instruction* InsertBefore){
+
+    LLVMContext& ctx = InsertBefore->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+
+    Module* M = InsertBefore->getModule();
+    Function* PrintFunc = M->getFunction(pimShowStatsName);
+
+    if(!PrintFunc){
+        std::vector<Type*>  PrintArgsTy = {};
+        FunctionType* PrintFuncTy = FunctionType::get(voidTy, PrintArgsTy, /* isVarArgs */ false);
+        PrintFunc = Function::Create(PrintFuncTy, Function::ExternalLinkage ,pimShowStatsName, M);
+    }
+
+    std::vector<Value*> Args = {};
+
+
+    CallInst* PrintCall = CallInst::Create(PrintFunc, Args, "", InsertBefore);
+
+
+}
 
 
 // PimStatus status = pimCreateDevice(PIM_FUNCTIONAL, numRanks, numBankPerRank, numSubarrayPerBank, numRows, numCols);
