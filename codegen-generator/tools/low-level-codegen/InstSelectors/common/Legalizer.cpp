@@ -447,7 +447,7 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
 
     Value* Bytes = ConstantInt::get(i32Ty, num_elements);
     Value* ObjectID = InstToObjectIDMap[Arg];
-    std::vector<Value*> Args = {ObjectID, MemoryRef};
+    std::vector<Value*> Args = {MemoryRef, ObjectID };
 
     CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimHostToDevice", InsertBefore);
 }
@@ -510,8 +510,6 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
 
 bool Legalizer::ReplaceReturn(CallInst* PimInst){
 
-
-
     // Insert call to copy host memory to device
 
     LLVMContext& ctx = PimInst->getContext();
@@ -523,7 +521,7 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
     Function* CopyFunc = M->getFunction(pimCopyDeviceToHostName);
 
     if(!CopyFunc){
-        std::vector<Type*>  CopyArgsTy = {i32Ty, i32Ty,i8PTy};
+        std::vector<Type*>  CopyArgsTy = {i32Ty,i8PTy};
         FunctionType* CopyFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
         CopyFunc = Function::Create(CopyFuncTy, Function::ExternalLinkage ,pimCopyDeviceToHostName , M);
     }
