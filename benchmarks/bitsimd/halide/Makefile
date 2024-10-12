@@ -73,7 +73,7 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@_x86_depth$(EXPR_DEPTH)_rafae HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) ./$@/bin/$@_generator \
+	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@_x86_depth$(EXPR_DEPTH)_rafae HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_ENABLE_HYDRIDE_PIM=1 HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \
@@ -90,11 +90,11 @@ $(benchmarks): %: %/bin
 		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
 		-lstdc++ -ldl -pthread \
 		-L ./libpimsim/ \
-		-lpimsim \
+		-lpimeval \
 		test/run.cpp \
 		test/stubs.cpp \
 		$@/bin/$@.a \
-		./libpimsim/libpimsim.a \
+		./libpimsim/libpimeval.a \
 		$@/bin/halide_runtime_x86.o \
 		-o $@/bin/$@_run.out
 	
@@ -118,7 +118,7 @@ fully_connected: %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@_x86_depth$(EXPR_DEPTH)_rafae HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) HYDRIDE_DECOMPOSE_LET=1 ./$@/bin/$@_generator \
+	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@_x86_depth$(EXPR_DEPTH)_rafae HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_ENABLE_HYDRIDE_PIM=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) HYDRIDE_DECOMPOSE_LET=1 ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \
@@ -136,11 +136,11 @@ fully_connected: %: %/bin
 		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
 		-lstdc++ -ldl -pthread \
 		-L ./libpimsim/ \
-		-lpimsim \
+		-lpimeval \
 		test/run.cpp \
 		test/stubs.cpp \
 		$@/bin/$@.a \
-		./libpimsim/libpimsim.a \
+		./libpimsim/libpimeval.a \
 		$@/bin/halide_runtime_x86.o \
 		-o $@/bin/$@_run.out
 	
