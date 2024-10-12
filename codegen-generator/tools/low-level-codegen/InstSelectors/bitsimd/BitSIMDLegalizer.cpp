@@ -81,8 +81,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -113,8 +112,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -145,8 +143,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -177,8 +174,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -209,8 +205,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -241,8 +236,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -273,8 +267,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -318,8 +311,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -349,8 +341,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -380,8 +371,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -411,8 +401,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -442,8 +431,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -473,8 +461,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -504,8 +491,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -549,8 +535,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -585,8 +570,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -632,8 +616,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 1)
@@ -665,8 +648,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 1)
@@ -698,8 +680,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 1)
@@ -731,8 +712,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 1)
@@ -764,8 +744,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 1)
@@ -797,8 +776,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 1)
@@ -830,8 +808,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -876,8 +853,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -908,8 +884,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -940,8 +915,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -972,8 +946,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1004,8 +977,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1036,8 +1008,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 131072)
@@ -1068,8 +1039,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -1114,8 +1084,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1150,8 +1119,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 131072)
@@ -1186,8 +1154,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -1231,8 +1198,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1262,8 +1228,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1293,8 +1258,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1324,8 +1288,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1355,8 +1318,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1386,8 +1348,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 131072)
@@ -1417,8 +1378,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -1463,8 +1423,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1495,8 +1454,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1527,8 +1485,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1559,8 +1516,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1591,8 +1547,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 131072)
@@ -1623,8 +1578,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1655,8 +1609,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -1703,8 +1656,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1737,8 +1689,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1771,8 +1722,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -1805,8 +1755,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1839,8 +1788,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1873,8 +1821,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 131072)
@@ -1907,8 +1854,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -1952,8 +1898,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -1988,8 +1933,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -2043,8 +1987,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2077,8 +2020,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2111,8 +2053,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2145,8 +2086,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2179,8 +2119,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2213,8 +2152,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2247,8 +2185,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2281,8 +2218,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2315,8 +2251,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2349,8 +2284,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2383,8 +2317,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2417,8 +2350,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2451,8 +2383,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 0, 0)
@@ -2485,8 +2416,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -2531,8 +2461,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -2563,8 +2492,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 131072)
@@ -2595,8 +2523,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -2627,8 +2554,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -2659,8 +2585,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -2691,8 +2616,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -2723,8 +2647,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -2769,8 +2692,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 1, 16)
@@ -2801,8 +2723,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 1, 32)
@@ -2833,8 +2754,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 1, 512)
@@ -2865,8 +2785,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 1, 512)
@@ -2897,8 +2816,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 1, 8)
@@ -2929,8 +2847,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 1, 8)
@@ -2961,8 +2878,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
@@ -3006,8 +2922,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -3037,8 +2952,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -3068,8 +2982,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -3099,8 +3012,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -3130,8 +3042,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 1024)
@@ -3161,8 +3072,7 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
           if(isAMatch(CI, 2, 512)
@@ -3192,13 +3102,14 @@
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }
         
       }
     }
     
+
+      return false;
     }
     
     };

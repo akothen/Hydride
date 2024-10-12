@@ -112,8 +112,7 @@ class RoseInstSelectorGenerator():
             ReplaceReturn(CI);
 
             ToBeRemoved.insert(CI);
-
-
+            return true;
           }}
         '''.format("\n".join(Checks), InstName.split("_")[0], ",".join(Permutation))
       else:
@@ -146,6 +145,8 @@ class RoseInstSelectorGenerator():
       if (InstToInstMap[CI] != nullptr)
         return false;
       {}
+
+      return false;
     }}
     '''.format(self.generateInstSelectorForAllInsts())
     return Content
