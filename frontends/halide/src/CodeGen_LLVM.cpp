@@ -577,7 +577,7 @@ void CodeGen_LLVM::insertPIMPrintStats(llvm::Function* EnclosingFunction){
     llvm::Type* voidTy = llvm::Type::getVoidTy(ctx);
     llvm::Type* i32Ty = llvm::Type::getInt32Ty(ctx);
 
-    std::string pimInitDeviceName = "pimInitDeviceWrapper";
+    std::string pimInitDeviceName = "pimShowStatsWrapper";
     llvm::Module* M = InsertBefore->getModule();
     llvm::Function* InitFunc = M->getFunction(pimInitDeviceName);
 
