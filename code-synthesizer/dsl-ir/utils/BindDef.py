@@ -17,6 +17,7 @@ class BindDef:
         defaults.append("[(idx-i id) (idx-i id)]")
         defaults.append("[(idx-j id) (idx-j id)]")
         defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
+        defaults.append("[(buffer-index id type size) (vector-ref {} id)]".format(env_name))
 
         defaults.append("[(lit v) (lit v)]")
 
