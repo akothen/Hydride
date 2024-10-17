@@ -84,14 +84,13 @@ class RoseFunction(RoseValue, RoseRegion):
             return False
         if not isinstance(Other, RoseFunction):
             return False
-        return self.RetVal == Other.RetVal and self.ArgList == Other.ArgList \
-            and RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
+        return RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
 
     def __ne__(self, Other):
         return not self.__eq__(Other)
 
     def __hash__(self):
-        return hash(self.getRegionID())
+        return RoseRegion.__hash__(self)
         # return hash((self.getName(), self.getType(), self.getRegionID()))
 
     def clone(self, Suffix: str = "", ValueToValueMap: dict = dict(), ChangeID: bool = False):
