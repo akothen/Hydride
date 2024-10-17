@@ -433,12 +433,13 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
     Type* i8PTy = Type::getInt8PtrTy(ctx);
     Type* voidTy = Type::getVoidTy(ctx);
     Type* i32Ty = Type::getInt32Ty(ctx);
+    Type* i64Ty = Type::getInt64Ty(ctx);
 
     Module* M = InsertBefore->getModule();
     Function* CopyFunc = M->getFunction(pimCopyHostToDeviceName);
     // pimCopyHostToDevice(void* src, PimObjId dest)
     if(!CopyFunc){
-        std::vector<Type*>  CopyArgsTy = {i8PTy, i32Ty};
+        std::vector<Type*>  CopyArgsTy = {i8PTy, i32Ty, i64Ty, i64Ty};
         FunctionType* CopyFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
         CopyFunc = Function::Create(CopyFuncTy, Function::ExternalLinkage ,pimCopyHostToDeviceName , M);
     }
@@ -446,8 +447,13 @@ void Legalizer::InsertBitSIMDCopyToDevice(Value* Arg, Instruction* InsertBefore)
     Value* MemoryRef = BitCastInst::CreatePointerCast(HostAlloc, i8PTy, "", InsertBefore);
 
     Value* Bytes = ConstantInt::get(i32Ty, num_elements);
+
     Value* ObjectID = InstToObjectIDMap[Arg];
-    std::vector<Value*> Args = {MemoryRef, ObjectID };
+
+    Value* IdxStart = ConstantInt::get(i64Ty, 0);
+    Value* IdxEnd = ConstantInt::get(i64Ty, 0);
+
+    std::vector<Value*> Args = {MemoryRef, ObjectID , IdxStart, IdxEnd};
 
     CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimHostToDevice", InsertBefore);
 }
@@ -516,15 +522,17 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
     Type* i8PTy = Type::getInt8PtrTy(ctx);
     Type* voidTy = Type::getVoidTy(ctx);
     Type* i32Ty = Type::getInt32Ty(ctx);
+    Type* i64Ty = Type::getInt64Ty(ctx);
 
     Module* M = PimInst->getModule();
     Function* CopyFunc = M->getFunction(pimCopyDeviceToHostName);
 
     if(!CopyFunc){
-        std::vector<Type*>  CopyArgsTy = {i32Ty,i8PTy};
+        std::vector<Type*>  CopyArgsTy = {i32Ty,i8PTy, i64Ty, i64Ty};
         FunctionType* CopyFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
         CopyFunc = Function::Create(CopyFuncTy, Function::ExternalLinkage ,pimCopyDeviceToHostName , M);
     }
+
 
 
     // If a user of this instruction is the return instruction then generate allocation and copy memory from device to host
@@ -541,7 +549,10 @@ bool Legalizer::ReplaceReturn(CallInst* PimInst){
         Value* MemoryRef = BitCastInst::CreatePointerCast(HostAlloc, i8PTy, "", PimInst);
 
         Value* ObjectID = InstToObjectIDMap[PimInst];
-        std::vector<Value*> Args = {ObjectID, MemoryRef };
+
+        Value* IdxStart = ConstantInt::get(i64Ty, 0);
+        Value* IdxEnd = ConstantInt::get(i64Ty, 0);
+        std::vector<Value*> Args = {ObjectID, MemoryRef, IdxStart, IdxEnd};
 
 
         CallInst* CopyCall = CallInst::Create(CopyFunc, Args, "pimDeviceToHost", PimInst);
@@ -618,6 +629,7 @@ void Legalizer::DeclarePIMInitWrapper(Module* M){
 
         InsertPimInitCall(/* numRanks */ 4, /*numBankPerRank */ 128, /* numSubarrayPerBank */ 32  , /* numRows*/ 1024, /* numCols */ 1024, BB->getFirstNonPHI());
     }
+    errs() << "Created PIM INIT fUNCTION: "<< *InitFunc <<"\n";
 }
 
 
@@ -639,6 +651,8 @@ void Legalizer::DeclarePIMPrintStatsWrapper(Module* M){
 
         InsertPimPrintStatsCall(BB->getFirstNonPHI());
     }
+
+    errs() << "Created PIM Stats fUNCTION: "<< *PrintFunc <<"\n";
 }
 
 

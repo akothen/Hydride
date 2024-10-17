@@ -29,19 +29,29 @@ using namespace boost::multiprecision;
 
 namespace llvm {
 
+#if 1
     const std::string pimAllocName = "pimAlloc";
     const std::string pimAllocAssocName = "pimAllocAssociated";
     const std::string pimCopyHostToDeviceName = "pimCopyHostToDevice";
     const std::string pimCopyDeviceToHostName = "pimCopyDeviceToHost";
     const std::string pimBroadCastName = "pimBroadCast";
     const std::string pimInitDeviceName = "pimCreateDevice";
+    const std::string pimShowStatsName = "pimShowStats";
+    const std::string pimFreeName = "pimFree";
+#else
+    const std::string pimAllocName = "_Z8pimAlloc12PimAllocEnumm11PimDataType";
+    const std::string pimAllocAssocName = "_Z18pimAllocAssociatedi11PimDataType";
+    const std::string pimCopyHostToDeviceName = "_Z19pimCopyHostToDevicePvimm";
+    const std::string pimCopyDeviceToHostName = "_Z19pimCopyDeviceToHostiPvmm";
+    const std::string pimBroadCastName = "pimBroadCast";
+    const std::string pimInitDeviceName = "_Z15pimCreateDevice13PimDeviceEnumjjjjj";
+    const std::string pimShowStatsName = "_Z12pimShowStatsv";
+    const std::string pimFreeName = "_Z7pimFreei";
+
+#endif
 
     const std::string pimInitDeviceWrapperName = "pimInitDeviceWrapper";
-
-    const std::string pimShowStatsName = "pimShowStats";
     const std::string pimShowStatsWrapperName = "pimShowStatsWrapper";
-
-    const std::string pimFreeName = "pimFree";
     
 class Legalizer {
 public:
