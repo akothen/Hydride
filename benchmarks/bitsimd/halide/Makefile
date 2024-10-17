@@ -73,7 +73,7 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@_x86_depth$(EXPR_DEPTH)_rafae HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_ENABLE_HYDRIDE_PIM=1 HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) ./$@/bin/$@_generator \
+	 HL_EXPR_DEPTH=$(EXPR_DEPTH) $(STARTING_HASH_FLAG) HYDRIDE_BENCHMARK=$@_bitserial_depth$(EXPR_DEPTH)_rafae HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_ENABLE_HYDRIDE_PIM=1 HL_SYNTH_BW=$(SYNTH_BITWIDTH) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) ./$@/bin/$@_generator \
 		-t 0 \
 		-o $@/bin \
 		-g $@ \
@@ -85,16 +85,15 @@ $(benchmarks): %: %/bin
 		-e object,c_header \
 		target=$(TARGET)
 
-	$(CC) -Dbenchmark_$@ --std=c++17 \
+	clang -g -Dbenchmark_$@ --std=c++17 \
 		-O0 -march=native -mavx512vl -mavx512ifma \
 		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
 		-lstdc++ -ldl -pthread \
-		-L ./libpimsim/ \
-		-lpimeval \
 		test/run.cpp \
 		test/stubs.cpp \
 		$@/bin/$@.a \
-		./libpimsim/libpimeval.a \
+		-L ./libpimsim/ \
+		-lpimeval \
 		$@/bin/halide_runtime_x86.o \
 		-o $@/bin/$@_run.out
 	

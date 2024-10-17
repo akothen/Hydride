@@ -96,8 +96,8 @@
 
 #define O_CREAT_WRONLY_TRUNC (O_CREAT | O_WRONLY | O_TRUNC)
 
-#define NUM_ITERATIONS 1000
-#define WARMUP 50
+#define NUM_ITERATIONS 1
+#define WARMUP 0
 
 extern "C" {
 ssize_t write(int, const void *, size_t);
@@ -123,33 +123,18 @@ int write_file(int fp, unsigned char *src, int height, int width,
 }
 
 template <typename F> float benchmark(F op) {
-  // long long start_time = q6sim_read_pcycles();
-
-  // clock_t start_cycle = clock();
 
   // Run for WARMUP iterations to warm up
   for (int i = 0; i < WARMUP; i++) {
     op();
   }
 
-  auto start_time = std::chrono::high_resolution_clock::now();
 
   for (int i = 0; i < NUM_ITERATIONS; i++) {
     op();
   }
 
-  auto end_time = std::chrono::high_resolution_clock::now();
-
-  // clock_t end_cycle = clock();
-
-  std::chrono::duration<double> duration = end_time - start_time;
-
-  printf("Execution took %0.4f s\n", duration.count());
-
-  // long long total_cycles =  (long long) (end_cycle - start_cycle);
-
-  // long long total_cycles = q6sim_read_pcycles() - start_time;
-  return duration.count(); /// total_cycles;
+  return 0.0;
 }
 
 // This is a basic implementation of the Halide runtime for Hexagon.
@@ -170,6 +155,8 @@ void halide_error(void *user_context, const char *str) {
 }
 
 int main(int argc, char **argv) {
+
+  
 
   printf("Invoked Benchmarking script!\n");
   int i, in_fp;
@@ -1752,7 +1739,7 @@ int main(int argc, char **argv) {
       (int32_t *)malloc(simple_width * simple_height * sizeof(int32_t));
 
   for (int i = 0; i < simple_width * simple_height; i++) {
-    simple_input_1[i] = i;
+    simple_input_1[i] = 2;
     simple_input_2[i] = 1;
   }
 
