@@ -49,9 +49,9 @@ def RunAddBVInsertOpInFunction(Function: RoseFunction, Context: RoseContext):
 
 def RunAddBVInsertOp(Function: RoseFunction, Context: RoseContext):
   RunAddBVInsertOpInFunction(Function, Context)
-  FuncList = Function.getRegionsOfType(RoseFunction)
-  for Func in FuncList:
-    RunAddBVInsertOp(Func, Context)
+  for Abstraction in Function:
+    if isinstance(Abstraction, RoseFunction):
+      RunAddBVInsertOp(Abstraction, Context.getContextOfChildFunction(Abstraction))
 
 
 # Runs a transformation
