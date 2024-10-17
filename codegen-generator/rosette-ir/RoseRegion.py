@@ -38,7 +38,7 @@ class RoseRegion:
         # This is a unique ID to identify this instance of rose region
         # If this is an instance of undef region, then the ID used is 0.
         if not isinstance(self, RoseAbstractions.RoseUndefRegion):
-            self.ID = uuid.uuid4()
+            self.ID = hash(uuid.uuid4())
         else:
             self.ID = 0
 
@@ -51,7 +51,7 @@ class RoseRegion:
         return not self.__eq__(Other)
 
     def __hash__(self):
-        return hash(self.getRegionID())
+        return self.getRegionID()
 
     def __iter__(self):
         # Undef region is not iterable
@@ -302,7 +302,7 @@ class RoseRegion:
         assert self.isChildValid(Region)
         Region.setParent(self)
         if Key == None:
-            assert Index <= len(self.Children) # VISA Hotfix
+            assert Index < len(self.Children)
             self.Children.insert(Index, Region)
         else:
             assert self.Keys != None
@@ -452,7 +452,7 @@ class RoseRegion:
                 continue
         return NumSubRegions
 
-    def getRegionsOfType(self, SubRegionType, Level: int = -1, Key=None):
+    def getRegionsOfType(self, SubRegionType, Level: int = -1, Key = None):
         # Some sanity checks
         assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
         assert not SubRegionType == RoseAbstractions.RoseUndefRegion
@@ -471,8 +471,7 @@ class RoseRegion:
         for SubRegion in self.getChildren(Key):
             if Level > 0:
                 if SubRegion.getKeys() == None:
-                    RegionList.extend(SubRegion.getRegionsOfType(
-                        SubRegionType, Level - 1))
+                    RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level - 1))
                 else:
                     for SubRegionKey in SubRegion.getKeys():
                         RegionList.extend(SubRegion.getRegionsOfType(
