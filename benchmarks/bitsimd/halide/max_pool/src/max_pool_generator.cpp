@@ -11,7 +11,7 @@ namespace hannk {
 
 class MaxPool : public Generator<MaxPool> {
 public:
-    // Unsigned 8-bit input tensor, indexed by c, x, y, b.
+    // 32-bit input tensor, indexed by c, x, y, b.
     Input<Buffer<int32_t>> input_{ "input", 4 };
 
     // The stride specifies how the input [x, y] are sub-subsampled. For every
