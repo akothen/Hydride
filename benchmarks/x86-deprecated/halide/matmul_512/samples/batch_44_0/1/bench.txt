@@ -1,2 +1,0 @@
-Benchmark for matmul_512_batch_0044_sample_0001 produces best case of 0.000434682 sec/iter (over 10 samples, 900 iterations, accuracy 4.7%).
-Best output throughput is 5.8e+02 mpix/sec.

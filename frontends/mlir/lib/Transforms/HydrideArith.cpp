@@ -31,6 +31,7 @@
 #include "llvm/Support/Format.h"
 #include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Support/raw_ostream.h"
+#include <cstddef>
 #include <queue>
 
 using namespace mlir;
@@ -1385,6 +1386,7 @@ void HydrideArithPass::EmitSynthesis(std::string benchmark_name,
   std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
 
   const char *expr_depth_var = getenv("HL_EXPR_DEPTH");
+  const char *target_var = getenv("HYDRIDE_TARGET");
 
   int expr_depth = 2;
 

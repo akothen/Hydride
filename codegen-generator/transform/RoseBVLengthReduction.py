@@ -30,7 +30,7 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
             # Just remove this extract op
             Block.eraseOperation(ReturnVal)
         elif not isinstance(ReturnVal.getInputBitVector(), RoseOperation) \
-                and not isinstance(ReturnVal.getInputBitVector(), RoseArgument):
+            and not isinstance(ReturnVal.getInputBitVector(), RoseArgument):
             # Get all the uses of the input vector of the return value
             Users = Function.getUsersOf(ReturnVal.getInputBitVector())
             NewReturnValue = RoseValue.create(
@@ -69,8 +69,7 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
                         if Op.getInputBitVector() not in TempRegToBlock:
                             TempRegToBlock[Op.getInputBitVector()] = Block
                         else:
-                            assert Block == TempRegToBlock[Op.getInputBitVector(
-                            )]
+                            assert Block == TempRegToBlock[Op.getInputBitVector()]
                         if Block not in BlockToInsertsToTempRegs:
                             BlockToInsertsToTempRegs[Block] = [Op]
                         else:
@@ -102,8 +101,7 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
             if TempReg.getType().getBitwidth() != InsertedSize:
                 assert TempReg.getType().getBitwidth() > InsertedSize
                 NewType = RoseBitVectorType.create(InsertedSize)
-                NewTempReg = RoseValue.create(
-                    Context.genName(TempReg.getName()), NewType)
+                NewTempReg = RoseValue.create(Context.genName(TempReg.getName()), NewType)
                 # Replace all the temp registers with the new one.
                 Users = Function.getUsersOf(TempReg)
                 for User in Users:
@@ -111,18 +109,18 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
                     assert isinstance(Index, int)
                     User.setOperand(Index, NewTempReg)
 
-    # Look for child function
-    for Abstraction in Function:
-        # Run the pass on the nested function
-        if isinstance(Abstraction, RoseFunction):
-            print("Abstraction:")
-            Abstraction.print()
-            RunBVLengthReductionOnFunction(
-                Abstraction, Context.getContextOfChildFunction(Abstraction))
+
+def RunBVLengthReduction(Function: RoseFunction, Context: RoseContext):
+  RunBVLengthReductionOnFunction(Function, Context)
+  for Abstraction in Function:
+    # Run the pass on the nested function
+    if isinstance(Abstraction, RoseFunction):
+        RunBVLengthReduction(
+            Abstraction, Context.getContextOfChildFunction(Abstraction))
 
 
 # Runs a transformation
 def Run(Function: RoseFunction, Context: RoseContext):
-    RunBVLengthReductionOnFunction(Function, Context)
+    RunBVLengthReduction(Function, Context)
     print("\n\n\n\n\n")
     Function.print()

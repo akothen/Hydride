@@ -293,8 +293,10 @@ class Match(ASTStmt):
     def __repr__(self):
         return f"Match({self.val.__repr__()}, {self.cases.__repr__()}, {self.id.__repr__()})"
 
+class VarDeclBase(ASTNode):
+    pass
 
-class VarDeclInit(ASTNode):
+class VarDeclInit(VarDeclBase):
     lhs: Var
     rhs: ASTExpr
     id: str
@@ -305,8 +307,7 @@ class VarDeclInit(ASTNode):
     def __repr__(self):
         return f"VarDeclInit({self.lhs.__repr__()}, {self.rhs.__repr__()}, {self.id.__repr__()})"
 
-
-class VarDeclUndef(ASTNode):
+class VarDeclUndef(VarDeclBase):
     lhs: Var
     id: str
 
@@ -319,11 +320,11 @@ class VarDeclUndef(ASTNode):
 from typing import Union
 
 class VarsDecl(ASTStmt):
-    init_list: List[Union[VarDeclInit, VarDeclUndef]]
+    init_list: List[VarDeclBase]
     basetype: Tuple[str, ASTExpr]
     id: str
 
-    def __init__(self, init_list: List[Union[VarDeclInit, VarDeclUndef]], basetype: Tuple[str, ASTNode], id: str):
+    def __init__(self, init_list: List[VarDeclBase], basetype: Tuple[str, ASTNode], id: str):
         self.init_list, self.basetype, self.id = init_list, basetype, id
 
     def __repr__(self):

@@ -38,7 +38,7 @@ class RoseRegion:
         # This is a unique ID to identify this instance of rose region
         # If this is an instance of undef region, then the ID used is 0.
         if not isinstance(self, RoseAbstractions.RoseUndefRegion):
-            self.ID = uuid.uuid4()
+            self.ID = hash(uuid.uuid4())
         else:
             self.ID = 0
 
@@ -48,12 +48,10 @@ class RoseRegion:
         return self.ID == Other.ID
 
     def __ne__(self, Other):
-        assert isinstance(Other, RoseRegion)
-        # self.Children != Other.Children or self.Parent != Other.Parent
-        return self.ID != Other.ID
+        return not self.__eq__(Other)
 
     def __hash__(self):
-        return hash(self.getRegionID())
+        return self.getRegionID()
 
     def __iter__(self):
         # Undef region is not iterable
@@ -454,7 +452,7 @@ class RoseRegion:
                 continue
         return NumSubRegions
 
-    def getRegionsOfType(self, SubRegionType, Level: int = -1, Key=None):
+    def getRegionsOfType(self, SubRegionType, Level: int = -1, Key = None):
         # Some sanity checks
         assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
         assert not SubRegionType == RoseAbstractions.RoseUndefRegion
@@ -465,8 +463,6 @@ class RoseRegion:
         if isinstance(self, RoseAbstractions.RoseBlock):
             assert SubRegionType != RoseAbstractions.RoseBlock
             return []
-        print("SubRegionType:")
-        print(SubRegionType)
         if self.getKeys() == None:
             assert Key == None
         else:
@@ -475,8 +471,7 @@ class RoseRegion:
         for SubRegion in self.getChildren(Key):
             if Level > 0:
                 if SubRegion.getKeys() == None:
-                    RegionList.extend(SubRegion.getRegionsOfType(
-                        SubRegionType, Level - 1))
+                    RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level - 1))
                 else:
                     for SubRegionKey in SubRegion.getKeys():
                         RegionList.extend(SubRegion.getRegionsOfType(
@@ -561,11 +556,15 @@ class RoseRegion:
             for Key in self.Keys:
                 for Child in self.Children[Key]:
                     assert self.isChildValid(Child)
+                    if Child == Abstraction:
+                        continue
                     if Child.hasUsesOf(Abstraction) == True:
                         return True
         else:
             for Child in self.Children:
                 assert self.isChildValid(Child)
+                if Child == Abstraction:
+                    continue
                 if isinstance(self, RoseAbstractions.RoseBlock):
                     if Child.usesValue(Abstraction) == True:
                         return True
@@ -583,7 +582,7 @@ class RoseRegion:
         assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
             and not isinstance(Abstraction, RoseAbstractions.RoseConstant)
         assert isinstance(Abstraction, RoseAbstractions.RoseValue)
-        Users = []
+        Users = list()
         Users.extend(self.getUsersInRegion(Abstraction))
         # Blocks are already handled separately
         if isinstance(self, RoseAbstractions.RoseBlock):
@@ -592,10 +591,14 @@ class RoseRegion:
             for Key in self.Keys:
                 for Child in self.Children[Key]:
                     assert self.isChildValid(Child)
+                    if Child == Abstraction:
+                        continue
                     Users.extend(Child.getUsersOf(Abstraction))
         else:
             for Child in self.Children:
                 assert self.isChildValid(Child)
+                if Child == Abstraction:
+                    continue
                 Users.extend(Child.getUsersOf(Abstraction))
         return Users
 
@@ -616,10 +619,14 @@ class RoseRegion:
             for Key in self.Keys:
                 for Child in self.Children[Key]:
                     assert self.isChildValid(Child)
+                    if Child == Abstraction:
+                        continue
                     NumUsers += Child.getNumUsersOf(Abstraction)
         else:
             for Child in self.Children:
                 assert self.isChildValid(Child)
+                if Child == Abstraction:
+                    continue
                 NumUsers += Child.getNumUsersOf(Abstraction)
         return NumUsers
 
@@ -708,15 +715,13 @@ class RoseRegion:
                 if Child.verify() == False:
                     return False
         return True
-
-    def print(self, NumSpace=0):
-        for Child in self.Children:
-            assert Child.getParent() == self
-            Child.print(NumSpace)
-
+    
     def __str__(self, NumSpace=0):
         String = ""
         for Child in self.Children:
             assert Child.getParent() == self
             String += Child.__str__(NumSpace)
         return String
+    
+    def print(self, NumSpace=0):
+        print(self.__str__(NumSpace))

@@ -1,0 +1,84 @@
+module name=l2norm, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func l2norm (input, input_zero, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t84 = input.min.1*input.stride.1
+ let t85 = output.min.1*output.stride.1
+ let t86 = max(output.extent.0/128, 0)
+ let t87 = max(input.extent.0/128, 0)
+ let t76 = max(((input.extent.0 + 127)/128) - t87, 0)
+ let t80 = ((output.extent.0 + 127)/128) - t86
+ let t78 = (output.min.0 - t84) - input.min.0
+ let t81 = output.extent.0 + output.min.0
+ for (output.s0.y.rebased, 0, output.extent.1) {
+  allocate sum_input_sq[int32 * 1] in Stack
+  produce sum_input_sq {
+   sum_input_sq[0] = 0
+   let t88 = ((output.min.1 + output.s0.y.rebased)*input.stride.1) - t84
+   for (sum_input_sq.s1.r8$x.r8$x, 0, t87) {
+    let t97 = input[ramp((sum_input_sq.s1.r8$x.r8$x*128) + t88, 1, 128)]
+    let t98 = (int16x128)widening_sub(t97, x128((uint8)input_zero))
+    sum_input_sq[0] = (int32)vector_reduce(Add, (int32x128)widening_mul((int16x128)t98, (int16x128)t98)) + sum_input_sq[0]
+   }
+   let t89 = ((output.min.1 + output.s0.y.rebased)*input.stride.1) - t84
+   for (sum_input_sq.s1.r8$x.r8$x.rebased, 0, t76) {
+    let sum_input_sq.s1.r8$x.r21.new_max.s = input.extent.0 - ((sum_input_sq.s1.r8$x.r8$x.rebased + t87)*128)
+    let t90 = min(sum_input_sq.s1.r8$x.r21.new_max.s, 128)
+    let t91 = ((sum_input_sq.s1.r8$x.r8$x.rebased + t87)*128) + t89
+    for (sum_input_sq.s1.r8$x.r21, 0, t90) {
+     let t15.s = int16(input[sum_input_sq.s1.r8$x.r21 + t91]) - int16((uint8)input_zero)
+     let t48 = int32(t15.s)*int32(t15.s)
+     sum_input_sq[0] = sum_input_sq[0] + t48
+    }
+   }
+  }
+  allocate inv_sqrt[int32 * 1] in Stack
+  produce inv_sqrt {
+   consume sum_input_sq {
+    let t61 = sum_input_sq[0]
+    let t62 = int16(count_leading_zeros(t61))
+    let t63 = (int16)bitwise_and(int16(shift_left(t61, int32((t62 + (int16)-16)))), (int16)32767)
+    let t64 = (int16)rounding_mul_shift_right(t63, t63, (uint16)15)
+    let t65 = saturating_add(int32(((int16)31 - t62))*16384, int32((((int16)rounding_mul_shift_right((int16)-9421, t64, (uint16)15) + ((int16)rounding_mul_shift_right((int16)23249, t63, (uint16)15) + (int16)rounding_mul_shift_right((int16)2555, (int16)rounding_mul_shift_right(t64, t63, (uint16)15), (uint16)15))) + (int16)5)))
+    let t66 = shift_left(1, ((0 - t65)/32768) + 15)
+    let t67 = int16(((0 - t65) % 32768))
+    let t68 = (int16)rounding_mul_shift_right(t67, t67, (uint16)15)
+    inv_sqrt[0] = saturating_add(t66, rounding_mul_shift_right(t66, int32(((int16)rounding_mul_shift_right((int16)7363, t68, (uint16)15) + ((int16)rounding_mul_shift_right((int16)22812, t67, (uint16)15) + (int16)rounding_mul_shift_right((int16)2592, (int16)rounding_mul_shift_right(t68, t67, (uint16)15), (uint16)15))))*65536, (uint32)31))
+   }
+  }
+  free sum_input_sq
+  consume inv_sqrt {
+   let t93 = 0 - t85
+   let t92 = output.min.1 + output.s0.y.rebased
+   for (output.s0.x.x, 0, t86) {
+    output[ramp((output.s0.x.x*128) + ((output.stride.1*t92) + t93), 1, 128)] = uint8x128(max(min((int16x128)saturating_add(int16x128(max(min((int32x128)rounding_shift_right(int32x128((int16x128)widening_sub(input[ramp((output.s0.x.x*128) + ((input.stride.1*t92) + t78), 1, 128)], x128((uint8)input_zero)))*x128(inv_sqrt[0]), x128((uint32)8)), x128(32767)), x128(-32768))), x128((int16)128)), x128((int16)255)), x128((int16)0)))
+   }
+   let t96 = (t81 - t85) - output.min.0
+   let t95 = (t81 - t84) - input.min.0
+   let t94 = output.min.1 + output.s0.y.rebased
+   for (output.s0.x.x, 0, t80) {
+    output[ramp(((output.stride.1*t94) + t96) + -128, 1, 128)] = uint8x128(max(min((int16x128)saturating_add(int16x128(max(min((int32x128)rounding_shift_right(int32x128((int16x128)widening_sub(input[ramp(((input.stride.1*t94) + t95) + -128, 1, 128)], x128((uint8)input_zero)))*x128(inv_sqrt[0]), x128((uint32)8)), x128(32767)), x128(-32768))), x128((int16)128)), x128((int16)255)), x128((int16)0)))
+   }
+   free inv_sqrt
+  }
+ }
+}
+}
+
+

@@ -1,0 +1,87 @@
+module name=batched_matmul_256_32bit, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func batched_matmul_256_32bit (A, B, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let A.min.2 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 2)
+let A.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 2)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let B.min.2 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 2)
+let B.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 2)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let output.min.2 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 2)
+let output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 2)
+let output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 2)
+assert(A.stride.0 == 1, 0)
+assert(B.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t77 = (output.extent.1 + 3)/4
+ let t78 = (output.extent.0 + 15)/16
+ let t79 = ((output.min.0 - (B.min.2*B.stride.2)) - (B.min.1*B.stride.1)) - B.min.0
+ let t81 = 0 - ((output.min.2*output.stride.2) + (output.min.1*output.stride.1))
+ let t80 = ((A.min.2*A.stride.2) + (A.min.1*A.stride.1)) + A.min.0
+ for (output.s0.b.rebased, 0, output.extent.2) {
+  let t84 = output.min.2 + output.s0.b.rebased
+  let t83 = (output.stride.2*t84) + t81
+  for (output.s0.y.y, 0, t77) {
+   let output.s0.y.yi.base.s = min(output.s0.y.y*4, output.extent.1 + -4)
+   let t94 = output.min.1 + output.s0.y.yi.base.s
+   let t95 = (A.stride.2*t84) - t80
+   let t96 = t94 + 1
+   let t97 = t94 + 2
+   let t98 = t94 + 3
+   let t93 = (output.stride.1*t98) + t83
+   let t89 = (A.stride.1*t98) + t95
+   let t92 = (output.stride.1*t97) + t83
+   let t88 = (A.stride.1*t97) + t95
+   let t91 = (output.stride.1*t96) + t83
+   let t87 = (A.stride.1*t96) + t95
+   let t90 = (output.stride.1*t94) + t83
+   let t86 = (A.stride.1*t94) + t95
+   let t85 = (B.stride.2*t84) + t79
+   for (output.s0.x.x, 0, t78) {
+    let output.s0.x.xi.base.s = min(output.s0.x.x*16, output.extent.0 + -16)
+    allocate matrix_mul[int32 * 64] in Stack
+    produce matrix_mul {
+     matrix_mul[ramp(0, 1, 16)] = x16(0)
+     matrix_mul[ramp(16, 1, 16)] = x16(0)
+     matrix_mul[ramp(32, 1, 16)] = x16(0)
+     matrix_mul[ramp(48, 1, 16)] = x16(0)
+     let t99 = output.s0.x.xi.base.s + t85
+     for (matrix_mul.s1.r10$x, 0, 256) {
+      matrix_mul[ramp(0, 1, 16)] = matrix_mul[ramp(0, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r10$x) + t99, 1, 16)], x16(A[matrix_mul.s1.r10$x + t86]))
+      matrix_mul[ramp(16, 1, 16)] = matrix_mul[ramp(16, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r10$x) + t99, 1, 16)], x16(A[matrix_mul.s1.r10$x + t87]))
+      matrix_mul[ramp(32, 1, 16)] = matrix_mul[ramp(32, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r10$x) + t99, 1, 16)], x16(A[matrix_mul.s1.r10$x + t88]))
+      matrix_mul[ramp(48, 1, 16)] = matrix_mul[ramp(48, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r10$x) + t99, 1, 16)], x16(A[matrix_mul.s1.r10$x + t89]))
+     }
+    }
+    consume matrix_mul {
+     output[ramp(output.s0.x.xi.base.s + t90, 1, 16)] = matrix_mul[ramp(0, 1, 16)]
+     output[ramp(output.s0.x.xi.base.s + t91, 1, 16)] = matrix_mul[ramp(16, 1, 16)]
+     output[ramp(output.s0.x.xi.base.s + t92, 1, 16)] = matrix_mul[ramp(32, 1, 16)]
+     output[ramp(output.s0.x.xi.base.s + t93, 1, 16)] = matrix_mul[ramp(48, 1, 16)]
+     free matrix_mul
+    }
+   }
+  }
+ }
+}
+}
+
+

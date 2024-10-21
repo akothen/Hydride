@@ -1,0 +1,117 @@
+module name=dilate5x5, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func dilate5x5 (input, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t192 = input.extent.0 + input.min.0
+ let t193 = min(output.extent.0, 128)
+ let t194 = max(input.extent.1, 0) + input.min.1
+ let t195 = max(output.extent.0, 128)
+ let t196 = (t195 + 67)/64
+ let t197 = min(max((((input.min.0 - t193) - output.min.0) + 193)/64, 0), t196)
+ let t188 = max((min(((t192 - t193) - output.min.0) + 63, t195) + 67)/64, t197)
+ let t179 = (output.extent.1 + 119)/120
+ let t190 = (output.extent.0 + 127)/128
+ let t180 = ((t195 + 3)/64)*64
+ let t184 = output.min.0 + t193
+ let t191 = (output.min.1*output.stride.1) + output.min.0
+ for (output.s0.y.y, 0, t179) {
+  let output.s0.y.yi.base.s = min(output.s0.y.y*120, output.extent.1 + -120)
+  allocate bounded_input[uint8 * (t180 + 64) * 32] in Stack
+  let t205 = min(output.s0.y.y*120, output.extent.1 + -120)
+  let t200 = (input.min.1 - output.min.1) - t205
+  let t204 = (output.min.1 - t194) + t205
+  let t201 = output.min.1 + t205
+  let t198 = output.min.1 + output.s0.y.yi.base.s
+  for (output.s0.y.yi.yi.$n, 0, 4) {
+   produce bounded_input {
+    let bounded_input.s0.y.prologue = let t233 = ((output.s0.y.yi.yi.$n*30) + t198) in min(max(t233, input.min.1), t233 + 30)
+    let bounded_input.s0.y.epilogue = let t234 = ((output.s0.y.yi.yi.$n*30) + t198) in min(max(max(t234, input.min.1), input.extent.1 + input.min.1), t234 + 30)
+    let t208 = output.s0.y.yi.yi.$n*30
+    let t206 = max(min(t200 - t208, 30), 0)
+    let t207 = t198 + t208
+    for (bounded_input.s0.y.rebased, 0, t206) {
+     let t209 = (max(min((t207 - input.min.1) + bounded_input.s0.y.rebased, input.extent.1 + -1), 0)*input.stride.1) - input.min.0
+     let t210 = (((bounded_input.s0.y.rebased + t207) % 32)*(t180 + 64)) - t184
+     for (bounded_input.s0.x.x, 0, t196) {
+      let bounded_input.s0.x.xi.base.s = (bounded_input.s0.x.x*64) + t184
+      bounded_input[ramp(bounded_input.s0.x.xi.base.s + t210, 1, 64)] = input[max(min(ramp(bounded_input.s0.x.xi.base.s + -130, 1, 64), x64(t192 + -1)), x64(input.min.0)) + x64(t209)]
+     }
+    }
+    let t215 = (output.s0.y.yi.yi.$n*30) + t201
+    let t216 = t215 + 30
+    let t211 = min(max(t194, t215), t216) - min(max(input.min.1, t215), t216)
+    let t214 = t196 - t188
+    let t212 = bounded_input.s0.y.prologue - input.min.1
+    for (bounded_input.s0.y.rebased, 0, t211) {
+     let t218 = (((bounded_input.s0.y.prologue + bounded_input.s0.y.rebased) % 32)*(t180 + 64)) - t184
+     let t217 = ((bounded_input.s0.y.rebased + t212)*input.stride.1) - input.min.0
+     for (bounded_input.s0.x.x, 0, t197) {
+      let bounded_input.s0.x.xi.base.s = (bounded_input.s0.x.x*64) + t184
+      bounded_input[ramp(bounded_input.s0.x.xi.base.s + t218, 1, 64)] = input[max(min(ramp(bounded_input.s0.x.xi.base.s + -130, 1, 64), x64(t192 + -1)), x64(input.min.0)) + x64(t217)]
+     }
+     let t221 = (((bounded_input.s0.y.prologue + bounded_input.s0.y.rebased) % 32)*(t180 + 64)) - t184
+     let t220 = ((bounded_input.s0.y.rebased + t212)*input.stride.1) - input.min.0
+     let t219 = t188 - t197
+     for (bounded_input.s0.x.x.rebased, 0, t219) {
+      let bounded_input.s0.x.xi.base.s = ((bounded_input.s0.x.x.rebased + t197)*64) + t184
+      bounded_input[ramp(bounded_input.s0.x.xi.base.s + t221, 1, 64)] = input[ramp((bounded_input.s0.x.xi.base.s + t220) + -130, 1, 64)]
+     }
+     let t223 = (((bounded_input.s0.y.prologue + bounded_input.s0.y.rebased) % 32)*(t180 + 64)) - t184
+     let t222 = ((bounded_input.s0.y.rebased + t212)*input.stride.1) - input.min.0
+     for (bounded_input.s0.x.x.rebased, 0, t214) {
+      let bounded_input.s0.x.xi.base.s = ((bounded_input.s0.x.x.rebased + t188)*64) + t184
+      bounded_input[ramp(bounded_input.s0.x.xi.base.s + t223, 1, 64)] = input[max(min(ramp(bounded_input.s0.x.xi.base.s + -130, 1, 64), x64(t192 + -1)), x64(input.min.0)) + x64(t222)]
+     }
+    }
+    let t224 = max(min((output.s0.y.yi.yi.$n*30) + t204, 0), -30)
+    let t225 = bounded_input.s0.y.epilogue - input.min.1
+    for (bounded_input.s0.y.rebased, 0, t224 + 30) {
+     let t226 = (max(min(bounded_input.s0.y.rebased + t225, input.extent.1 + -1), 0)*input.stride.1) - input.min.0
+     let t227 = (((bounded_input.s0.y.epilogue + bounded_input.s0.y.rebased) % 32)*(t180 + 64)) - t184
+     for (bounded_input.s0.x.x, 0, t196) {
+      let bounded_input.s0.x.xi.base.s = (bounded_input.s0.x.x*64) + t184
+      bounded_input[ramp(bounded_input.s0.x.xi.base.s + t227, 1, 64)] = input[max(min(ramp(bounded_input.s0.x.xi.base.s + -130, 1, 64), x64(t192 + -1)), x64(input.min.0)) + x64(t226)]
+     }
+    }
+   }
+   consume bounded_input {
+    let t228 = (output.s0.y.yi.yi.$n*30) + t198
+    for (output.s0.y.yi.yii, 0, 30) {
+     let t229 = output.s0.y.yi.yii + t228
+     for (output.s0.x.x, 0, t190) {
+      let output.s0.x.xi.base.s = min(output.s0.x.x*128, output.extent.0 + -128)
+      let t231 = ((t229 % 32)*(t180 + 64)) - t184
+      let t232 = (output.stride.1*t229) - t191
+      let t230 = output.min.0 + output.s0.x.xi.base.s
+      for (output.s0.x.xi.xi, 0, 2) {
+       let t152 = (output.s0.x.xi.xi*64) + t230
+       let t153 = t152 + t231
+       output[ramp(t152 + t232, 1, 64)] = max(bounded_input[ramp(t153 + 128, 1, 64)], max(bounded_input[ramp(t153 + 129, 1, 64)], max(bounded_input[ramp(t153 + 130, 1, 64)], max(bounded_input[ramp(t153 + 131, 1, 64)], bounded_input[ramp(t153 + 132, 1, 64)]))))
+      }
+     }
+    }
+   }
+  }
+  free bounded_input
+ }
+}
+}
+
+

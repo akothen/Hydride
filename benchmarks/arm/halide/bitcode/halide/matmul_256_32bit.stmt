@@ -1,0 +1,85 @@
+module name=matmul_256_32bit, target=arm-64-osx-no_asserts-no_bounds_query
+external_plus_metadata func matmul_256_32bit (A, B, res) {
+assert((uint64)reinterpret((halide_buffer_t *)res.buffer) != (uint64)0, halide_error_buffer_argument_is_null("res"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let res = (void *)_halide_buffer_get_host((halide_buffer_t *)res.buffer)
+let res.min.0 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 0)
+let res.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)res.buffer, 0)
+let res.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 0)
+let res.min.1 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 1)
+let res.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)res.buffer, 1)
+let res.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 1)
+assert(A.stride.0 == 1, 0)
+assert(B.stride.0 == 1, 0)
+assert(res.stride.0 == 1, 0)
+produce res {
+ let t126 = (res.extent.1 + 3)/4
+ let t127 = (res.extent.0 + 63)/64
+ let t128 = (res.min.0 - (B.min.1*B.stride.1)) - B.min.0
+ let t130 = 0 - (res.min.1*res.stride.1)
+ let t129 = (A.min.1*A.stride.1) + A.min.0
+ for (res.s0.y.y, 0, t126) {
+  let res.s0.y.yi.base.s = min(res.s0.y.y*4, res.extent.1 + -4)
+  let t136 = res.min.1 + res.s0.y.yi.base.s
+  let t134 = ((t136 + 3)*A.stride.1) - t129
+  let t133 = ((t136 + 2)*A.stride.1) - t129
+  let t132 = ((t136 + 1)*A.stride.1) - t129
+  let t131 = (A.stride.1*t136) - t129
+  for (res.s0.x.x, 0, t127) {
+   let res.s0.x.xi.base.s = min(res.s0.x.x*64, res.extent.0 + -64)
+   allocate matrix_mul[int32 * 256] in Stack
+   produce matrix_mul {
+    for (matrix_mul.s0.y.rebased, 0, 4) {
+     matrix_mul[ramp(matrix_mul.s0.y.rebased*64, 1, 16) aligned(64, 0)] = x16(0)
+     matrix_mul[ramp((matrix_mul.s0.y.rebased*64) + 16, 1, 16) aligned(64, 16)] = x16(0)
+     matrix_mul[ramp((matrix_mul.s0.y.rebased*64) + 32, 1, 16) aligned(64, 32)] = x16(0)
+     matrix_mul[ramp((matrix_mul.s0.y.rebased*64) + 48, 1, 16) aligned(64, 48)] = x16(0)
+    }
+    let t137 = res.s0.x.xi.base.s + t128
+    for (matrix_mul.s1.r8$x, 0, 256) {
+     matrix_mul[ramp(0, 1, 16)] = matrix_mul[ramp(0, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r8$x) + t137, 1, 16)], x16(A[matrix_mul.s1.r8$x + t131]))
+     matrix_mul[ramp(16, 1, 16)] = matrix_mul[ramp(16, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 16, 1, 16)], x16(A[matrix_mul.s1.r8$x + t131]))
+     matrix_mul[ramp(32, 1, 16)] = matrix_mul[ramp(32, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 32, 1, 16)], x16(A[matrix_mul.s1.r8$x + t131]))
+     matrix_mul[ramp(48, 1, 16)] = matrix_mul[ramp(48, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 48, 1, 16)], x16(A[matrix_mul.s1.r8$x + t131]))
+     matrix_mul[ramp(64, 1, 16)] = matrix_mul[ramp(64, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r8$x) + t137, 1, 16)], x16(A[matrix_mul.s1.r8$x + t132]))
+     matrix_mul[ramp(80, 1, 16)] = matrix_mul[ramp(80, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 16, 1, 16)], x16(A[matrix_mul.s1.r8$x + t132]))
+     matrix_mul[ramp(96, 1, 16)] = matrix_mul[ramp(96, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 32, 1, 16)], x16(A[matrix_mul.s1.r8$x + t132]))
+     matrix_mul[ramp(112, 1, 16)] = matrix_mul[ramp(112, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 48, 1, 16)], x16(A[matrix_mul.s1.r8$x + t132]))
+     matrix_mul[ramp(128, 1, 16)] = matrix_mul[ramp(128, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r8$x) + t137, 1, 16)], x16(A[matrix_mul.s1.r8$x + t133]))
+     matrix_mul[ramp(144, 1, 16)] = matrix_mul[ramp(144, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 16, 1, 16)], x16(A[matrix_mul.s1.r8$x + t133]))
+     matrix_mul[ramp(160, 1, 16)] = matrix_mul[ramp(160, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 32, 1, 16)], x16(A[matrix_mul.s1.r8$x + t133]))
+     matrix_mul[ramp(176, 1, 16)] = matrix_mul[ramp(176, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 48, 1, 16)], x16(A[matrix_mul.s1.r8$x + t133]))
+     matrix_mul[ramp(192, 1, 16)] = matrix_mul[ramp(192, 1, 16)] + (int32x16)widening_mul(B[ramp((B.stride.1*matrix_mul.s1.r8$x) + t137, 1, 16)], x16(A[matrix_mul.s1.r8$x + t134]))
+     matrix_mul[ramp(208, 1, 16)] = matrix_mul[ramp(208, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 16, 1, 16)], x16(A[matrix_mul.s1.r8$x + t134]))
+     matrix_mul[ramp(224, 1, 16)] = matrix_mul[ramp(224, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 32, 1, 16)], x16(A[matrix_mul.s1.r8$x + t134]))
+     matrix_mul[ramp(240, 1, 16)] = matrix_mul[ramp(240, 1, 16)] + (int32x16)widening_mul(B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t137) + 48, 1, 16)], x16(A[matrix_mul.s1.r8$x + t134]))
+    }
+   }
+   consume matrix_mul {
+    let t138 = res.s0.x.xi.base.s + t130
+    for (res.s0.y.yi, 0, 4) {
+     let t139 = res.s0.y.yi*4
+     let t140 = ((res.s0.y.yi + t136)*res.stride.1) + t138
+     for (res.s0.x.xi.xi, 0, 4) {
+      res[ramp((res.s0.x.xi.xi*16) + t140, 1, 16)] = matrix_mul[ramp((res.s0.x.xi.xi + t139)*16, 1, 16) aligned(16, 0)]
+     }
+    }
+   }
+   free matrix_mul
+  }
+ }
+}
+}
+
+

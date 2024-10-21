@@ -1668,6 +1668,45 @@ class RoseBVZeroOp(RoseBitVectorOp):
                                      "%" + "cond." + self.getName())
 
 
+class RoseBVPopCntOp(RoseBitVectorOp):
+    def __init__(self, Name: str, Operand: RoseValue, ParentBlock):
+        assert isinstance(Operand.getType(), RoseBitVectorType)
+        OperandList = [Operand]
+        super().__init__(RoseOpcode.bvpopcnt, Name, OperandList, ParentBlock)
+
+    @staticmethod
+    def create(Name: str, Operand: RoseValue, ParentBlock=RoseUndefRegion()):
+        return RoseBVPopCntOp(Name, Operand, ParentBlock)
+
+
+    def to_rosette(self, NumSpace=0, ReverseIndexing=False):
+        assert ReverseIndexing == False
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+
+        String = Spaces + "(define " + Name + " "
+        String += "(bvpopcnt " + self.getOperand(0).getName() + " " + str(self.getOperand(0).getOutputBitwidth()) + ")"
+        return String
+
+    def solve(self):
+        # First check if all the operand is constant
+        if not isinstance(self.getOperand(0), RoseConstant):
+            return None
+        return self.getOperand(0).getValue().bit_count()
+
+    def simplify(self):
+        # Try solving the operation first
+        SolvedResult = self.solve()
+        if SolvedResult != None:
+            return RoseConstant(SolvedResult, self.getType())
+        return RoseUndefValue()
+
+
+    def getInputBitVector(self):
+        return self.getOperand(0)
+
 class RoseBVAbsOp(RoseBitVectorOp):
     def __init__(self, Name: str, Operand: RoseValue, ParentBlock):
         assert isinstance(Operand.getType(), RoseBitVectorType)

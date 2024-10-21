@@ -1,5 +1,0 @@
-generate_schedule for target=x86-64-linux-avx-avx2-disable_llvm_loop_opt-f16c-fma-sse41
-Pass 0 of 1, cost: 37.0995, time (ms): 7
-Best cost: 37.0995
-Cache (block) hits: 0
-Cache (block) misses: 72

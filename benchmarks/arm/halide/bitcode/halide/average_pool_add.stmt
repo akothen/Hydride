@@ -1,0 +1,100 @@
+module name=average_pool_add, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func average_pool_add (input, tensor, stride_x, stride_y, filter_width, filter_height, output_min, output_max, output) {
+assert((uint64)reinterpret((halide_buffer_t *)tensor.buffer) != (uint64)0, halide_error_buffer_argument_is_null("tensor"))
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let input.min.2 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 2)
+let input.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 2)
+let input.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 2)
+let input.min.3 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 3)
+let input.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 3)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let output.min.2 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 2)
+let output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 2)
+let output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 2)
+let output.min.3 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 3)
+let output.extent.3 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 3)
+let output.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 3)
+let tensor = (void *)_halide_buffer_get_host((halide_buffer_t *)tensor.buffer)
+let tensor.min.0 = _halide_buffer_get_min((halide_buffer_t *)tensor.buffer, 0)
+let tensor.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)tensor.buffer, 0)
+let tensor.min.1 = _halide_buffer_get_min((halide_buffer_t *)tensor.buffer, 1)
+let tensor.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)tensor.buffer, 1)
+let tensor.min.2 = _halide_buffer_get_min((halide_buffer_t *)tensor.buffer, 2)
+let tensor.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)tensor.buffer, 2)
+let tensor.min.3 = _halide_buffer_get_min((halide_buffer_t *)tensor.buffer, 3)
+let tensor.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)tensor.buffer, 3)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+assert(tensor.stride.0 == 1, 0)
+produce output {
+ let t159 = (output.extent.0 + 127)/128
+ let t163 = (((output.min.0 - (tensor.min.3*tensor.stride.3)) - (tensor.min.2*tensor.stride.2)) - (tensor.min.1*tensor.stride.1)) - tensor.min.0
+ let t164 = (((output.min.0 - (output.min.3*output.stride.3)) - (output.min.2*output.stride.2)) - (output.min.1*output.stride.1)) - output.min.0
+ let t162 = (((output.min.0 - (input.min.3*input.stride.3)) - (input.min.2*input.stride.2)) - (input.min.1*input.stride.1)) - input.min.0
+ let t160 = input.extent.2 + input.min.2
+ let t161 = input.extent.1 + input.min.1
+ for (output.s0.y.rebased, 0, output.extent.2) {
+  let t169 = output.min.2 + output.s0.y.rebased
+  let t170 = stride_y*t169
+  let t166 = min(t160 - t170, filter_height)
+  let t165 = min(input.min.2 - t170, filter_height)
+  for (output.s0.x.rebased, 0, output.extent.1) {
+   let t181 = output.min.1 + output.s0.x.rebased
+   let t182 = max(t165, 0)
+   let t183 = stride_x*t181
+   let t171 = max(t165, t166)
+   let t174 = min(t161 - t183, filter_width)
+   let t173 = min(input.min.1 - t183, filter_width)
+   let t177 = (min(filter_width + t183, t161) - max(input.min.1, t183))*(min(filter_height + t170, t160) - max(input.min.2, t170))
+   let t175 = t170 + t182
+   let t179 = (max(min(t160 + -1, t169), input.min.2)*tensor.stride.2) + t163
+   let t180 = (output.stride.2*t169) + t164
+   for (output.s0.b.rebased, 0, output.extent.3) {
+    let t193 = output.min.3 + output.s0.b.rebased
+    let t194 = max(t173, 0)
+    let t185 = max(t173, t174)
+    let t184 = max(t171, 0) - t182
+    let t188 = t183 + t194
+    let t191 = (max(min(t161 + -1, t181), input.min.1)*tensor.stride.1) + t179
+    let t187 = (input.stride.3*t193) + t162
+    let t192 = (output.stride.1*t181) + t180
+    let t190 = uint16(max(min((t177 + 131072)/(t177*2), 65535), 0))
+    for (output.s0.c.c, 0, t159) {
+     let output.s0.c.v6.base.s = min(output.s0.c.c*128, output.extent.0 + -128)
+     allocate sum[uint16 * 128 * 1 * 1 * 1 * 1]
+     produce sum {
+      sum[ramp(0, 1, 128)] = x128((uint16)0)
+      let t195 = max(t185, 0) - t194
+      let t196 = output.s0.c.v6.base.s + t187
+      for (sum.s1.r20$y.rebased, 0, t184) {
+       let t197 = ((sum.s1.r20$y.rebased + t175)*input.stride.2) + t196
+       for (sum.s1.r20$x.rebased, 0, t195) {
+        sum[ramp(0, 1, 128)] = sum[ramp(0, 1, 128)] + uint16x128(input[ramp(((sum.s1.r20$x.rebased + t188)*input.stride.1) + t197, 1, 128)])
+       }
+      }
+     }
+     consume sum {
+      output[ramp(((output.stride.3*t193) + t192) + output.s0.c.v6.base.s, 1, 128)] = max(min(tensor[ramp(((t193*tensor.stride.3) + t191) + output.s0.c.v6.base.s, 1, 128)] + uint8x128(min((uint16x128)rounding_mul_shift_right(sum[ramp(0, 1, 128)], x128(t190), x128((uint16)16)), x128((uint16)255))), x128((uint8)output_max)), x128((uint8)output_min))
+     }
+     free sum
+    }
+   }
+  }
+ }
+}
+}
+
+

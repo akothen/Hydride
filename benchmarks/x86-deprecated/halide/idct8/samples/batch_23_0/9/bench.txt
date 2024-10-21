@@ -1,2 +1,0 @@
-Benchmark for idct8_batch_0023_sample_0009 produces best case of 5.31076e-06 sec/iter (over 10 samples, 17710 iterations, accuracy 3.1e+02%).
-Best output throughput is 11 mpix/sec.

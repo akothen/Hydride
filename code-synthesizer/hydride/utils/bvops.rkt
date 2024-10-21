@@ -23,6 +23,15 @@
 (define (no-op a)
   a)
 
+
+(define (bvpopcnt vect bitwidth)
+  (apply bvadd 
+         (for/list ([b (bitvector->bits  vect)])
+            (zero-extend b (bitvector bitwidth))
+           )
+         )
+  )
+
 (define (bvumaxval bitwidth)
   (apply concat
          (for/list ([idx (range 0 bitwidth)])

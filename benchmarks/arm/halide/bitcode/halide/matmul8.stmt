@@ -1,0 +1,73 @@
+module name=matmul8, target=arm-64-osx-no_asserts-no_bounds_query
+external_plus_metadata func matmul8 (A, B, res) {
+assert((uint64)reinterpret((halide_buffer_t *)res.buffer) != (uint64)0, halide_error_buffer_argument_is_null("res"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let res = (void *)_halide_buffer_get_host((halide_buffer_t *)res.buffer)
+let res.min.0 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 0)
+let res.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 0)
+let res.min.1 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 1)
+let res.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 1)
+assert(A.stride.0 == 1, 0)
+assert(B.stride.0 == 1, 0)
+assert(res.stride.0 == 1, 0)
+produce res {
+ let t10 = (res.min.1*res.stride.1) + res.min.0
+ let t8 = (B.min.1*B.stride.1) + B.min.0
+ let t9 = (A.min.1*A.stride.1) + A.min.0
+ for (res.s0.y.y, 0, 64) {
+  let t16 = res.s0.y.y*4
+  let t11 = A.stride.1*res.s0.y.y
+  let t14 = ((t16 + 3)*A.stride.1) - t9
+  let t13 = ((t16 + 2)*A.stride.1) - t9
+  let t12 = ((t16 + 1)*A.stride.1) - t9
+  for (res.s0.x.x, 0, 64) {
+   allocate matrix_mul[int32 * 16] in Stack
+   produce matrix_mul {
+    matrix_mul[ramp(0, 1, 4)] = x4(0)
+    matrix_mul[ramp(4, 1, 4)] = x4(0)
+    matrix_mul[ramp(8, 1, 4)] = x4(0)
+    matrix_mul[ramp(12, 1, 4)] = x4(0)
+    let t17 = (res.s0.x.x*4) - t8
+    for (matrix_mul.s1.r8$x.r8$x, 0, 64) {
+     matrix_mul[ramp(0, 1, 4)] = matrix_mul[ramp(0, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((B.stride.1*matrix_mul.s1.r8$x.r8$x) + res.s0.x.x)*4) - t8, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x + t11)*4) - t9])))
+     matrix_mul[ramp(4, 1, 4)] = matrix_mul[ramp(4, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((B.stride.1*matrix_mul.s1.r8$x.r8$x) + res.s0.x.x)*4) - t8, 1, 4)], x4(A[(matrix_mul.s1.r8$x.r8$x*4) + t12])))
+     matrix_mul[ramp(8, 1, 4)] = matrix_mul[ramp(8, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((B.stride.1*matrix_mul.s1.r8$x.r8$x) + res.s0.x.x)*4) - t8, 1, 4)], x4(A[(matrix_mul.s1.r8$x.r8$x*4) + t13])))
+     matrix_mul[ramp(12, 1, 4)] = matrix_mul[ramp(12, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((B.stride.1*matrix_mul.s1.r8$x.r8$x) + res.s0.x.x)*4) - t8, 1, 4)], x4(A[(matrix_mul.s1.r8$x.r8$x*4) + t14])))
+     matrix_mul[ramp(0, 1, 4)] = matrix_mul[ramp(0, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 1)*B.stride.1) + t17, 1, 4)], x4(A[(((matrix_mul.s1.r8$x.r8$x + t11)*4) - t9) + 1])))
+     matrix_mul[ramp(4, 1, 4)] = matrix_mul[ramp(4, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 1)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t12) + 1])))
+     matrix_mul[ramp(8, 1, 4)] = matrix_mul[ramp(8, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 1)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t13) + 1])))
+     matrix_mul[ramp(12, 1, 4)] = matrix_mul[ramp(12, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 1)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t14) + 1])))
+     matrix_mul[ramp(0, 1, 4)] = matrix_mul[ramp(0, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 2)*B.stride.1) + t17, 1, 4)], x4(A[(((matrix_mul.s1.r8$x.r8$x + t11)*4) - t9) + 2])))
+     matrix_mul[ramp(4, 1, 4)] = matrix_mul[ramp(4, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 2)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t12) + 2])))
+     matrix_mul[ramp(8, 1, 4)] = matrix_mul[ramp(8, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 2)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t13) + 2])))
+     matrix_mul[ramp(12, 1, 4)] = matrix_mul[ramp(12, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 2)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t14) + 2])))
+     matrix_mul[ramp(0, 1, 4)] = matrix_mul[ramp(0, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 3)*B.stride.1) + t17, 1, 4)], x4(A[(((matrix_mul.s1.r8$x.r8$x + t11)*4) - t9) + 3])))
+     matrix_mul[ramp(4, 1, 4)] = matrix_mul[ramp(4, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 3)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t12) + 3])))
+     matrix_mul[ramp(8, 1, 4)] = matrix_mul[ramp(8, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 3)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t13) + 3])))
+     matrix_mul[ramp(12, 1, 4)] = matrix_mul[ramp(12, 1, 4)] + int32x4((int16x4)widening_mul(B[ramp((((matrix_mul.s1.r8$x.r8$x*4) + 3)*B.stride.1) + t17, 1, 4)], x4(A[((matrix_mul.s1.r8$x.r8$x*4) + t14) + 3])))
+    }
+   }
+   consume matrix_mul {
+    let t18 = (res.s0.x.x*4) - t10
+    for (res.s0.y.yi, 0, 4) {
+     res[ramp(((res.s0.y.yi + t16)*res.stride.1) + t18, 1, 4)] = matrix_mul[ramp(res.s0.y.yi*4, 1, 4) aligned(4, 0)]
+    }
+   }
+   free matrix_mul
+  }
+ }
+}
+}
+
+

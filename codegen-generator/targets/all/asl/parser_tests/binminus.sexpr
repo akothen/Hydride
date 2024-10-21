@@ -1,0 +1,5 @@
+(ExprBinOp
+    "-"
+    (ExprVarRef
+    (QualifiedIdentifier Any elements))
+    (ExprLitNat 1))

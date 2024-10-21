@@ -28,7 +28,7 @@
 )
 
 (clear-vc!)
-(define synth-res (synthesize-mlir-expr mlir-expr id-map 2 8 'z3 #t #f  ""  ""  "hvx"))
+(define synth-res (synthesize-mlir-expr mlir-expr id-map 2 8 'z3 #t #f  ""  ""  "aie"))
 (dump-synth-res-with-typeinfo synth-res id-map)
 ; Translate synthesized hydride-expression into LLVM-IR
 (compile-to-llvm synth-res id-map "hydride.node.contraction_matmul.0" "contraction_matmul")

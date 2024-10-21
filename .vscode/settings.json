@@ -3,6 +3,7 @@
   "python.analysis.extraPaths": [
     "codegen-generator/targets/x86/",
     "codegen-generator/targets/arm/",
+    "codegen-generator/targets/visa/",
     "codegen-generator/targets/hexagon/",
     "codegen-generator/codegen/rosette/",
     "codegen-generator/codegen/llvm/",

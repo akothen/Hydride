@@ -1,0 +1,153 @@
+module name=median3x3, target=arm-64-osx-arm_dot_prod-arm_fp16-armv7s-armv81a-no_asserts-no_bounds_query-sve-sve2
+external_plus_metadata func median3x3 (input, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input.stride.0 == 1, 0)
+assert(input.min.0 == 0, 0)
+assert(input.min.1 == 0, 0)
+assert(output.stride.0 == 1, 0)
+assert(output.min.0 == 0, 0)
+assert(output.min.1 == 0, 0)
+produce output {
+ let t357 = (output.extent.0 + 15)/16
+ let t358 = (output.extent.0 + 31)/16
+ let t359 = min(t358, 1)
+ let t353 = -16 < output.extent.0
+ let t352 = max((min(output.extent.0 + 30, input.extent.0) + 1)/16, t359)
+ let t351 = max(t357*16, (((output.extent.0 + -1)/16)*16) + 2)
+ let t350 = (output.extent.1 + 3)/4
+ for (output.s0.y.y, 0, t350) {
+  let bounded_input.s0.y.min_1 = min(max(min(output.s0.y.y*4, input.extent.1 + -1), 0), max(min(output.s0.y.y*4, input.extent.1), 1) + -1)
+  let bounded_input.y.extent_realized = max(min((output.s0.y.y*4) + 5, input.extent.1), 1) - min(max(min(output.s0.y.y*4, input.extent.1 + -1), 0), max(min(output.s0.y.y*4, input.extent.1), 1) + -1)
+  allocate bounded_input[uint8 * (((t351 + 143)/128)*128) * bounded_input.y.extent_realized]
+  produce bounded_input {
+   let t364 = output.s0.y.y*4
+   let t361 = (t351 + 143)/128
+   let t360 = max(min(t364 + 5, input.extent.1), 1) - min(max(min(input.extent.1 + -1, t364), 0), max(min(input.extent.1, t364), 1) + -1)
+   let t363 = t358 - t352
+   for (bounded_input.s0.y.rebased, 0, t360) {
+    if (t353) {
+     bounded_input[ramp((bounded_input.s0.y.rebased*t361)*128, 1, 16) aligned(128, 0)] = input[max(min(ramp(-1, 1, 16), x16(input.extent.0 + -1)), x16(0)) + x16((bounded_input.s0.y.min_1 + bounded_input.s0.y.rebased)*input.stride.1)]
+    }
+    let t366 = (bounded_input.s0.y.min_1 + bounded_input.s0.y.rebased)*input.stride.1
+    let t365 = t352 - t359
+    let t367 = ((bounded_input.s0.y.rebased*t361)*8) + t359
+    for (bounded_input.s0.x.x.rebased, 0, t365) {
+     bounded_input[ramp((bounded_input.s0.x.x.rebased + t367)*16, 1, 16) aligned(16, 0)] = input[ramp((((bounded_input.s0.x.x.rebased + t359)*16) + t366) + -1, 1, 16)]
+    }
+    let t368 = (bounded_input.s0.y.min_1 + bounded_input.s0.y.rebased)*input.stride.1
+    let t369 = ((bounded_input.s0.y.rebased*t361)*8) + t352
+    for (bounded_input.s0.x.x.rebased, 0, t363) {
+     bounded_input[ramp((bounded_input.s0.x.x.rebased + t369)*16, 1, 16) aligned(16, 0)] = input[max(min(ramp(((bounded_input.s0.x.x.rebased + t352)*16) + -1, 1, 16), x16(input.extent.0 + -1)), x16(0)) + x16(t368)]
+    }
+   }
+  }
+  consume bounded_input {
+   let t384 = output.s0.y.y*4
+   let t385 = t384 + 1
+   let t386 = t384 + 2
+   let t387 = t384 + 3
+   let t388 = (t351 + 143)/128
+   let t389 = min(input.extent.1, t384)
+   let t390 = min(input.extent.1 + -1, t384)
+   let t382 = max(min(t384 + 5, input.extent.1), 1)
+   let t380 = max(min(t384 + 4, input.extent.1), 1)
+   let t377 = max(min(input.extent.1, t387), 1)
+   let t374 = max(min(input.extent.1, t386), 1)
+   let t378 = max(min(input.extent.1, t385), 1)
+   let t376 = min(max(t390, 0), max(t389, 1) + -1)
+   let t383 = output.stride.1*t387
+   let t381 = output.stride.1*t386
+   let t379 = output.stride.1*t385
+   let t375 = output.s0.y.y*output.stride.1
+   for (output.s0.x.x, 0, t357) {
+    let t273.s = (max(max(t390, 0) - max(t389, 1), -1) + 1)*t388
+    let t274 = bounded_input[ramp(((t273.s*8) + output.s0.x.x)*16, 1, 16) aligned(16, 0)]
+    let t275 = ((((min(max(t390, 0), max(t389, 1) + -1) - t374) + 1)*t388)*-8) + output.s0.x.x
+    let t276 = bounded_input[ramp(t275*16, 1, 16) aligned(16, 0)]
+    let t277 = (((min(max(t390, 0) - max(t389, 1), -1) + 1)*t388)*-8) + output.s0.x.x
+    let t278 = bounded_input[ramp(t277*16, 1, 16) aligned(16, 0)]
+    let t279 = bounded_input[ramp((((t273.s*8) + output.s0.x.x)*16) + 1, 1, 16) aligned(16, 1)]
+    let t280 = bounded_input[ramp((t275*16) + 1, 1, 16) aligned(16, 1)]
+    let t281 = bounded_input[ramp((t277*16) + 1, 1, 16) aligned(16, 1)]
+    let t282 = bounded_input[ramp((((t273.s*8) + output.s0.x.x)*16) + 2, 1, 16) aligned(16, 2)]
+    let t283 = bounded_input[ramp((t275*16) + 2, 1, 16) aligned(16, 2)]
+    let t284 = bounded_input[ramp((t277*16) + 2, 1, 16) aligned(16, 2)]
+    let t285 = min(max(max(t274, t276), t278), min(max(max(t279, t280), t281), max(max(t282, t283), t284)))
+    let t286 = max(max(min(min(t279, t280), t281), min(min(t282, t283), t284)), min(min(t274, t276), t278))
+    let t287 = max(min(max(t274, t278), t276), min(t274, t278))
+    let t288 = max(min(max(t279, t281), t280), min(t279, t281))
+    output[ramp(((output.s0.x.x*4) + t375)*4, 1, 16) aligned(4, 0)] = max(min(max(t285, t286), max(min(max(t287, t288), max(min(max(t282, t284), t283), min(t282, t284))), min(t287, t288))), min(t285, t286))
+    let t290.s = ((t374 - t376) + -1)*t388
+    let t291 = bounded_input[ramp(((t290.s*8) + output.s0.x.x)*16, 1, 16) aligned(16, 0)]
+    let t292 = ((((t376 - t377) + 1)*t388)*-8) + output.s0.x.x
+    let t293 = bounded_input[ramp(t292*16, 1, 16) aligned(16, 0)]
+    let t294 = ((((t376 - t378) + 1)*t388)*-8) + output.s0.x.x
+    let t295 = bounded_input[ramp(t294*16, 1, 16) aligned(16, 0)]
+    let t296 = bounded_input[ramp((((t290.s*8) + output.s0.x.x)*16) + 1, 1, 16) aligned(16, 1)]
+    let t297 = bounded_input[ramp((t292*16) + 1, 1, 16) aligned(16, 1)]
+    let t298 = bounded_input[ramp((t294*16) + 1, 1, 16) aligned(16, 1)]
+    let t299 = bounded_input[ramp((((t290.s*8) + output.s0.x.x)*16) + 2, 1, 16) aligned(16, 2)]
+    let t300 = bounded_input[ramp((t292*16) + 2, 1, 16) aligned(16, 2)]
+    let t301 = bounded_input[ramp((t294*16) + 2, 1, 16) aligned(16, 2)]
+    let t302 = min(max(max(t291, t293), t295), min(max(max(t296, t297), t298), max(max(t299, t300), t301)))
+    let t303 = max(max(min(min(t296, t297), t298), min(min(t299, t300), t301)), min(min(t291, t293), t295))
+    let t304 = max(min(max(t291, t295), t293), min(t291, t295))
+    let t305 = max(min(max(t296, t298), t297), min(t296, t298))
+    output[ramp((output.s0.x.x*16) + t379, 1, 16)] = max(min(max(t302, t303), max(min(max(t304, t305), max(min(max(t299, t301), t300), min(t299, t301))), min(t304, t305))), min(t302, t303))
+    let t307.s = ((t377 - t376) + -1)*t388
+    let t308 = bounded_input[ramp(((t307.s*8) + output.s0.x.x)*16, 1, 16) aligned(16, 0)]
+    let t309 = ((((t376 - t380) + 1)*t388)*-8) + output.s0.x.x
+    let t310 = bounded_input[ramp(t309*16, 1, 16) aligned(16, 0)]
+    let t311 = ((((t376 - t374) + 1)*t388)*-8) + output.s0.x.x
+    let t312 = bounded_input[ramp(t311*16, 1, 16) aligned(16, 0)]
+    let t313 = bounded_input[ramp((((t307.s*8) + output.s0.x.x)*16) + 1, 1, 16) aligned(16, 1)]
+    let t314 = bounded_input[ramp((t309*16) + 1, 1, 16) aligned(16, 1)]
+    let t315 = bounded_input[ramp((t311*16) + 1, 1, 16) aligned(16, 1)]
+    let t316 = bounded_input[ramp((((t307.s*8) + output.s0.x.x)*16) + 2, 1, 16) aligned(16, 2)]
+    let t317 = bounded_input[ramp((t309*16) + 2, 1, 16) aligned(16, 2)]
+    let t318 = bounded_input[ramp((t311*16) + 2, 1, 16) aligned(16, 2)]
+    let t319 = min(max(max(t308, t310), t312), min(max(max(t313, t314), t315), max(max(t316, t317), t318)))
+    let t320 = max(max(min(min(t313, t314), t315), min(min(t316, t317), t318)), min(min(t308, t310), t312))
+    let t321 = max(min(max(t308, t312), t310), min(t308, t312))
+    let t322 = max(min(max(t313, t315), t314), min(t313, t315))
+    output[ramp((output.s0.x.x*16) + t381, 1, 16) aligned(2, 0)] = max(min(max(t319, t320), max(min(max(t321, t322), max(min(max(t316, t318), t317), min(t316, t318))), min(t321, t322))), min(t319, t320))
+    let t324.s = ((t380 - t376) + -1)*t388
+    let t325 = bounded_input[ramp(((t324.s*8) + output.s0.x.x)*16, 1, 16) aligned(16, 0)]
+    let t326 = ((((t376 - t382) + 1)*t388)*-8) + output.s0.x.x
+    let t327 = bounded_input[ramp(t326*16, 1, 16) aligned(16, 0)]
+    let t328 = ((((t376 - t377) + 1)*t388)*-8) + output.s0.x.x
+    let t329 = bounded_input[ramp(t328*16, 1, 16) aligned(16, 0)]
+    let t330 = bounded_input[ramp((((t324.s*8) + output.s0.x.x)*16) + 1, 1, 16) aligned(16, 1)]
+    let t331 = bounded_input[ramp((t326*16) + 1, 1, 16) aligned(16, 1)]
+    let t332 = bounded_input[ramp((t328*16) + 1, 1, 16) aligned(16, 1)]
+    let t333 = bounded_input[ramp((((t324.s*8) + output.s0.x.x)*16) + 2, 1, 16) aligned(16, 2)]
+    let t334 = bounded_input[ramp((t326*16) + 2, 1, 16) aligned(16, 2)]
+    let t335 = bounded_input[ramp((t328*16) + 2, 1, 16) aligned(16, 2)]
+    let t336 = min(max(max(t325, t327), t329), min(max(max(t330, t331), t332), max(max(t333, t334), t335)))
+    let t337 = max(max(min(min(t330, t331), t332), min(min(t333, t334), t335)), min(min(t325, t327), t329))
+    let t338 = max(min(max(t325, t329), t327), min(t325, t329))
+    let t339 = max(min(max(t330, t332), t331), min(t330, t332))
+    output[ramp((output.s0.x.x*16) + t383, 1, 16)] = max(min(max(t336, t337), max(min(max(t338, t339), max(min(max(t333, t335), t334), min(t333, t335))), min(t338, t339))), min(t336, t337))
+   }
+  }
+  free bounded_input
+ }
+}
+}
+
+

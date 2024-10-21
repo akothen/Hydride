@@ -2,7 +2,7 @@
 MLIR_BIN=/home/baronia3/llvm-project/build/bin
 
 echo "$MLIR_BIN/mlir-opt -convert-linalg-to-affine-loops -split-input-file -canonicalize 1.mlir  > 2.mlir"
-# $MLIR_BIN/mlir-opt -convert-linalg-to-affine-loops -split-input-file -canonicalize 1.mlir  > 2.mlir
+$MLIR_BIN/mlir-opt -convert-linalg-to-affine-loops -split-input-file -canonicalize 1.mlir  > 2.mlir
 
 echo "$MLIR_BIN/mlir-opt --affine-super-vectorize="virtual-vector-size=8" 2.mlir > 3.mlir"
 $MLIR_BIN/mlir-opt --affine-super-vectorize="virtual-vector-size=8" 2.mlir > 3.mlir
@@ -12,7 +12,7 @@ echo "$MLIR_BIN/mlir-opt -affine-loop-unroll="unroll-factor=4" 3.mlir > 4.mlir"
 $MLIR_BIN/mlir-opt -affine-loop-unroll="unroll-factor=4" 3.mlir > 4.mlir
 
 # echo "$MLIR_BIN/mlir-opt  --hydride-arith 4.mlir > 5.mlir"
-# MLIR_BIN/mlir-opt  --hydride-arith 4.mlir > 5.mlir
+# $MLIR_BIN/mlir-opt  --hydride-arith 4.mlir > 5.mlir
 
 echo "$MLIR_BIN/mlir-opt --hydride-arith="synth_target=aie" 4.mlir > 5.mlir"
 $MLIR_BIN/mlir-opt  --hydride-arith="synth_target=aie" 4.mlir > 5.mlir

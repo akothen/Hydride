@@ -1,19 +1,24 @@
+################################################################
+#
+# This file contains matrix operations modeled as bitvector ops.
+#
+#################################################################
+
+
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
 from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
-from RoseBitVectorOperation import RoseBitVectorOp
+from RoseMatrixOperation import RoseMatrixOp
+
 
 # `mtxextractrow <tile> <idx>`
 # originally: `class RoseMatrixInsertRowOp(RoseBitVectorOp):`
 # however:    `assert len(Opcode.getBVOpInputs(Operands)) > 0`
-
-
-class RoseMatrixExtractRowOp(RoseOperation):
+class RoseMatrixExtractRowOp(RoseMatrixOp):
     def __init__(self, name: str, tile: RoseValue, idx: RoseValue, parentblock):
         inputs = [tile, idx]
-        assert RoseOpcode.mtxextractrow.inputsAreValid(inputs)
         super().__init__(RoseOpcode.mtxextractrow, name, inputs, parentblock)
 
     @staticmethod
@@ -26,21 +31,14 @@ class RoseMatrixExtractRowOp(RoseOperation):
     def getRowIndex(self):
         return self.getOperand(1)
 
-    def getOutputBitwidth(self):
-        return RoseOpcode.mtxextractrow.getOutputType(self.Operands).getBitwidth()
-
-    def isIndexingBVOp(self):
-        return True
-
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         NotImplemented
 
 
 # `mtxinsertrow <elements> <tile> <idx>`
-class RoseMatrixInsertRowOp(RoseBitVectorOp):
+class RoseMatrixInsertRowOp(RoseMatrixOp):
     def __init__(self, elements: RoseValue, tile: RoseValue, idx: RoseValue, parentblock):
         inputs = [elements, tile, idx]
-        assert RoseOpcode.mtxinsertrow.inputsAreValid(inputs)
         super().__init__(RoseOpcode.mtxinsertrow, "", inputs, parentblock)
 
     @staticmethod
@@ -64,10 +62,9 @@ class RoseMatrixInsertRowOp(RoseBitVectorOp):
 
 
 # `mtxinsertrow <elements> <tile> <idx>`
-class RoseMatrixInsertElementOp(RoseBitVectorOp):
+class RoseMatrixInsertElementOp(RoseMatrixOp):
     def __init__(self, element: RoseValue, tile: RoseValue, r1: RoseValue, c1: RoseValue, r2: RoseValue, c2: RoseValue, parentblock):
         inputs = [element, tile, r1, c1, r2, c2]
-        assert RoseOpcode.mtxinsertel.inputsAreValid(inputs)
         super().__init__(RoseOpcode.mtxinsertel, "", inputs, parentblock)
 
     @staticmethod

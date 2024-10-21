@@ -42,7 +42,11 @@
       [(equal? target 'x86) "x86"]
       [(equal? target 'hvx) "hvx"]
       [(equal? target 'arm) "arm"]
+
       [(equal? target 'aie) "aie"]
+
+      [(equal? target 'visa) "visa"]
+
       [(equal? target 'halide) "halide"]
       [else (error "Unsupported target string for grammar generation" target)]))
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
@@ -75,7 +79,11 @@
     (cond
       [(equal? target 'x86) "x86"]
       [(equal? target 'arm) "arm"]
+
       [(equal? target 'aie) "aie"]
+
+      [(equal? target 'visa) "visa"]
+
       [(equal? target 'hvx) "hvx"]))
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)

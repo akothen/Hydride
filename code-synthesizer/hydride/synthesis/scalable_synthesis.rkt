@@ -41,6 +41,7 @@
 (require hydride/ir/arm/scale)
 (require hydride/ir/arm/interpreter)
 
+
 (require hydride/ir/aie/definition)
 (require hydride/ir/aie/cost_model)
 (require hydride/ir/aie/const_fold)
@@ -48,6 +49,15 @@
 (require hydride/ir/aie/binder)
 (require hydride/ir/aie/scale)
 (require hydride/ir/aie/interpreter)
+
+(require hydride/ir/visa/definition)
+(require hydride/ir/visa/cost_model)
+(require hydride/ir/visa/const_fold)
+(require hydride/ir/visa/printer)
+(require hydride/ir/visa/binder)
+(require hydride/ir/visa/scale)
+(require hydride/ir/visa/interpreter)
+
 
 (require hydride/ir/arith/types)
 (require hydride/ir/arith/interpreter)
@@ -76,9 +86,9 @@
       [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
        (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n"
                           expr-depth
-                          1)) ;; ARM
-       1] ;;ARM
-      [(halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth)
+                          (max 1 (- expr-depth 1))))
+       (max 1 (- expr-depth 1))]
+      [(and (equal? target 'arm) (halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth))
        (debug-log
         (format
          "Contains shr in arm, at least 2 depth are needed, hence increase depth from ~a to ~a\n"
@@ -175,6 +185,25 @@
 
   (define dummy-args (create-buffers scaled-leaves scaled-bvs))
 
+  ;; Produce a vector from dummy-args such that, everytime we encounter a leaf id we
+  ;; have seen before, we use the previous dummy-arg, otherwise we preserve what 
+  ;; in the list
+  (define (update-arg-by-leaves leaves dummy-args) 
+    (let ([tmp (make-hash)])
+      (list->vector (for/list ([i (in-range (length leaves))])
+        (let ([a_id (destruct (list-ref leaves i)
+                              [(arith:tensor data shape layout elemT buffsize id)
+                               id]
+                              ;; TODO for halide reg
+                              [_ (- i (length leaves))] ;; for non-reg-like leaves
+                              ;; give it a unique id, i-n is collision free in this way
+                              )])
+          (if (hash-has-key? tmp a_id)
+              (vector-ref dummy-args (hash-ref tmp a_id))
+              (begin
+                (hash-set! tmp a_id i)
+                (vector-ref dummy-args i))))))))
+  (set! dummy-args (update-arg-by-leaves scaled-leaves dummy-args))
   (debug-log "created dummy args!")
 
   ;; Helper for verification of later up-scaled versions
@@ -198,7 +227,11 @@
       (cond
         [(equal? target 'hvx) (hvx:interpret hydride-expr conc-bvs)]
         [(equal? target 'arm) (arm:interpret hydride-expr conc-bvs)]
+
         [(equal? target 'aie) (aie:interpret hydride-expr conc-bvs)]
+
+        [(equal? target 'visa) (visa:interpret hydride-expr conc-bvs)]
+
         [(equal? target 'x86) (hydride:interpret hydride-expr conc-bvs)]))
 
     (define conc-equal? (equal? conc-halide-res conc-hydride-res))
@@ -223,7 +256,11 @@
          (cond
            [(equal? target 'hvx) (hvx:interpret hydride-expr sym-bvs)]
            [(equal? target 'arm) (arm:interpret hydride-expr sym-bvs)]
+
            [(equal? target 'aie) (aie:interpret hydride-expr sym-bvs)]
+
+           [(equal? target 'visa) (visa:interpret hydride-expr sym-bvs)]
+
            [(equal? target 'x86) (hydride:interpret hydride-expr sym-bvs)]))
 
        (define verification-timeout? #t)
@@ -287,6 +324,7 @@
         (debug-log (format "Vectorization factor for sub expression ~a\n" expr-VF))
 
         (define (invoke-spec env-full)
+          (set! env-full (update-arg-by-leaves scaled-leaves env-full))
           (debug-log (format "invoke-spec with env: ~a\n" env-full))
           (define synth-buffers-full (create-buffers scaled-leaves env-full))
           ;(debug-log scaled-leaves)
@@ -309,6 +347,7 @@
 
         ;; Calculate result for last most lane
         (define (invoke-spec-lane lane-idx env-lane)
+          (set! env-lane (update-arg-by-leaves scaled-leaves env-lane))
           (debug-log (format "invoke-spec-lane with env: ~a\n" env-lane))
           (define synth-buffers-lane (create-buffers scaled-leaves env-lane))
 
@@ -333,7 +372,11 @@
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
+
             [(equal? target 'aie) 5]
+
+            [(equal? target 'visa) 5]
+
             [(equal? target 'x86) 5]))
         (define optimize? opt?)
         (define symbolic? sym?)
@@ -471,7 +514,11 @@
           (cond
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
+
             [(equal? target 'aie) aie:cost]
+
+            [(equal? target 'visa) visa:cost]
+
             [(equal? target 'x86) hydride:cost]))
         (debug-log (cost-functor materialize))
 
@@ -494,7 +541,11 @@
           (cond
             [(equal? target 'hvx) hvx:bind-expr]
             [(equal? target 'arm) arm:bind-expr]
+
             [(equal? target 'aie) aie:bind-expr]
+
+            [(equal? target 'visa) visa:bind-expr]
+
             [(equal? target 'x86) bind-expr]))
 
         (define upscaled-mat
@@ -502,7 +553,11 @@
             [(equal? effective-scale-factor 1) materialize]
             [(equal? target 'hvx) (hvx:scale-expr materialize effective-scale-factor)]
             [(equal? target 'arm) (arm:scale-expr materialize effective-scale-factor)]
+
             [(equal? target 'aie) (aie:scale-expr materialize effective-scale-factor)]
+
+            [(equal? target 'visa) (visa:scale-expr materialize effective-scale-factor)]
+
             [(equal? target 'x86) (hydride:scale-expr materialize effective-scale-factor)]))
 
         (debug-log (format "Upscaled mat: ~a" upscaled-mat))

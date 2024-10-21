@@ -6,7 +6,6 @@ arm_
 **/*.pyc
 *.tmp
 a.out
-similarityenv/*
 # codegen-generator/targets/arm/rosette_test/*.c
 **/build/
 backends/*
@@ -19,3 +18,7 @@ tmp/
 *.bak
 venv/
 timing/
+*.pyc
+frontends/halide/llvm-build/
+frontends/halide/llvm-project/
+similarityenv/

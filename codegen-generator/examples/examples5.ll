@@ -119,5 +119,91 @@ function _mm256_mask_cvtsepi32_epi8 ( bv128 src, bv8 k, bv256 a ) {
 
 
 
+function _mm256_add_epi16 ( bv256 a, bv256 b ) {
+ for ([j0 (range 0 16 1)]) {
+  %0 = mul int32 j0, int32 16
+  %1 = add int32 %0, int32 15
+  %2 = bvextract bv256 a, int32 %0, int32 %1, int32 16
+  %3 = bvextract bv256 b, int32 %0, int32 %1, int32 16
+  %4 = bvadd bv16 %2, bv16 %3
+  bvinsert bv16 %4, bv256 dst, int32 %0, int32 %1, int32 16
+ }
+ ret bv256 dst
+}
+
+
+(define (_mm256_add_epi16  a b )
+(define  dst
+(apply
+concat
+ (for/list ([%j0.new (reverse (range 0 16 1))])
+  (define %0 (*  %j0  16))
+  (define %1 (+  %0  15))
+  (define %2 (extract  %1 %0 a))
+  (define %3 (extract  %1 %0 b))
+  (define %4 (bvadd  %2  %3))
+  %4
+ )
+ )
+)
+dst
+)
+
+function hexagon_V6_vaddb_128B ( bv1024 a, bv1024 b ) {
+ for ([j0 (range 0 128 1)]) {
+  %0 = mul int32 j0, int32 8
+  %1 = add int32 %0, int32 7
+  %2 = bvextract bv1024 a, int32 %0, int32 %1, int32 8
+  %3 = bvextract bv1024 b, int32 %0, int32 %1, int32 8
+  %4 = bvadd bv8 %2, bv8 %3
+  bvinsert bv8 %4, bv1024 dst, int32 %0, int32 %1, int32 8
+ }
+ ret bv1024 dst
+}
+
+
+function hexagon_V6_vaddb_128B ( bv Vu, bv Vv, int32 %elem_size, int32 %length) {
+ for ([j0 (range 0 %length 1)]) {
+  %0 = mul int32 j0, int32 %elem_size
+  %offset = sub int32 %elem_size, int32 1
+  %1 = add int32 %0, int32 %offset
+  %2 = bvextract bv Vu, int32 %0, int32 %1, int32 %elem_size
+  %3 = bvextract bv Vv, int32 %0, int32 %1, int32 %elem_size
+  %4 = bvadd bv %2, bv %3
+  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %elem_size
+ }
+ ret bv dst
+}
+
+
+function _mm256_add_epi16 ( bv a, bv b, int32 %elem_size, int32 %length) {
+ for ([j0 (range 0 %length 1)]) {
+  %0 = mul int32 j0, int32 %elem_size
+  %offset = sub int32 %elem_size, int32 1
+  %1 = add int32 %0, int32 %offset
+  %2 = bvextract bv a, int32 %0, int32 %1, int32 %elem_size
+  %3 = bvextract bv b, int32 %0, int32 %1, int32 %elem_size
+  %4 = bvadd bv %2, bv %3
+  bvinsert bv %4, bv dst, int32 %0, int32 %1, int32 %elem_size
+ }
+ ret bv dst
+}
+
+(define-symbolic a (bitvector 256))
+(define-symbolic b (bitvector 256))
+(define %elem_size_1 16)
+(define %length_1 16)
+
+(verify (assert (equal? (_mm256_adds_epi16 a b %elem_size_1 %length_1) (hexagon_V6_vaddb_128B a b %elem_size_1 %length_1))))
+
+(define-symbolic Vu (bitvector 1024))
+(define-symbolic Vv (bitvector 1024))
+(define %elem_size_2 128)
+(define %length_2 8)
+
+(verify (assert (equal? (_mm256_adds_epi16 Vu Vv %elem_size_2 %length_2) (hexagon_V6_vaddb_128B Vu Vv %elem_size_2 %length_2 ))))
+
+
+<length x elem_size> @autollvm.add (<length x elem_size> %operand1, <length x elem_size> %operand2)
 
 

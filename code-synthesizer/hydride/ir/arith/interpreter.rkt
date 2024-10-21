@@ -9,6 +9,7 @@
   rosette/lib/destruct
   hydride/cpp
   hydride/utils/bvops
+  hydride/utils/debug
   hydride/ir/arith/types)
 
 (provide (prefix-out arith: (all-defined-out)))
@@ -234,28 +235,26 @@
 
             ;; Type Casts
 
-            [(arith:cast-int vec olane oprec) (lambda (i) (cpp:cast ((interpret vec) i) 
-                                                                    (cond
-                                                                      [(eq? oprec 8)  'int8]
-                                                                      [(eq? oprec 16)  'int16]
-                                                                      [(eq? oprec 32)  'int32]
-                                                                      [(eq? oprec 64)  'int64]
-                                                                      [else (error "arith/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
-                                                                      )
-                                                                    ))]
+            [(arith:cast-int vec olane oprec) 
+              (cpp:cast
+                (interpret vec indices)
+                (cond
+                  [(eq? oprec 8)  'int8]
+                  [(eq? oprec 16)  'int16]
+                  [(eq? oprec 32)  'int32]
+                  [(eq? oprec 64)  'int64]
+                  [else (error "arith/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+                ))]
             [(arith:cast-uint vec olane oprec) 
-             (lambda (i) 
-               (cpp:cast ((interpret vec) i) 
-                         (cond
-                           [(eq? oprec 8)  'uint8]
-                           [(eq? oprec 16)  'uint16]
-                           [(eq? oprec 32)  'uint32]
-                           [(eq? oprec 64)  'uint64]
-                           [else (error "arith/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
-                           )
-                         )
-               )
-             ]
+              (cpp:cast
+                (interpret vec indices)
+                (cond
+                  [(eq? oprec 8)  'uint8]
+                  [(eq? oprec 16)  'uint16]
+                  [(eq? oprec 32)  'uint32]
+                  [(eq? oprec 64)  'uint64]
+                  [else (error "arith/interpreter.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+                ))]
 
             ;; Operations
 
@@ -323,15 +322,16 @@
             [(vector:extract_strided_slice v1 offsets sizes strides)
              (define input-shape (tensor-shape v1))
              (define (generate-strided-indices i)
-               (if 
-                 (< i (vector-length offsets))
+              ;;; Not sure what's going on here
+              ;;;  (if
+              ;;;    (< i (vector-length offsets))
 
-                 ;; Adjusted strided index
-                 (+ (vector-length offsets i) (* strides (vector-ref indices i)))
-                 
-                 ;; If index along non-strided dimension index regularly
-                 (vector-ref indices i)
-                 )
+              ;;;    ;; Adjusted strided index
+                 (+ (vector-ref offsets i) (* (vector-ref strides i) (vector-ref indices i)))
+
+              ;;;    ;; If index along non-strided dimension index regularly
+              ;;;    (vector-ref indices i)
+              ;;;    )
                )
 
              (define actual-indices (build-vector (vector-length indices) generate-strided-indices))
@@ -754,29 +754,26 @@
              ]
 
             ;; Type Casts
-
-            [(arith:cast-int vec olane oprec) (lambda (i) (cpp:cast ((interpret-env vec env) i)
-                                                                    (cond
-                                                                      [(eq? oprec 8)  'int8]
-                                                                      [(eq? oprec 16)  'int16]
-                                                                      [(eq? oprec 32)  'int32]
-                                                                      [(eq? oprec 64)  'int64]
-                                                                      [else (error "arith/interpret-enver.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
-                                                                      )
-                                                                    ))]
-            [(arith:cast-uint vec olane oprec)
-             (lambda (i)
-               (cpp:cast ((interpret-env vec env) i)
-                         (cond
-                           [(eq? oprec 8)  'uint8]
-                           [(eq? oprec 16)  'uint16]
-                           [(eq? oprec 32)  'uint32]
-                           [(eq? oprec 64)  'uint64]
-                           [else (error "arith/interpret-enver.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
-                           )
-                         )
-               )
-             ]
+            [(arith:cast-int vec olane oprec)
+              (cpp:cast
+                (interpret-env vec indices env)
+                (cond
+                  [(eq? oprec 8)  'int8]
+                  [(eq? oprec 16)  'int16]
+                  [(eq? oprec 32)  'int32]
+                  [(eq? oprec 64)  'int64]
+                  [else (error "arith/interpret-enver.rkt: Unexpected buffer type in size-to-elemT-signed" oprec)]
+                ))]
+            [(arith:cast-uint vec olane oprec) 
+              (cpp:cast
+                (interpret-env vec indices env)
+                (cond
+                  [(eq? oprec 8)  'uint8]
+                  [(eq? oprec 16)  'uint16]
+                  [(eq? oprec 32)  'uint32]
+                  [(eq? oprec 64)  'uint64]
+                  [else (error "arith/interpret-enver.rkt: Unexpected buffer type in size-to-elemT-signed" oprec )]
+                ))]
 
             ;; Operations
 
@@ -843,20 +840,30 @@
              ]
             [(vector:extract_strided_slice v1 offsets sizes strides)
              (define input-shape (tensor-shape v1))
+            ;;;  (debug-log "QWQ")
+            ;;;  (debug-log v1);arith:tensor
+            ;;;  (debug-log offsets);0
+            ;;;  (debug-log sizes);16
+            ;;;  (debug-log indices);0
+            ;;;  (debug-log strides);1
              (define (generate-strided-indices i)
-               (if
-                 (< i (vector-length offsets))
+              ;;; Not sure what's going on here
+              ;;;  (if
+              ;;;    (< i (vector-length offsets))
 
-                 ;; Adjusted strided index
-                 (+ (vector-length offsets i) (* strides (vector-ref indices i)))
+              ;;;    ;; Adjusted strided index
+                 (+ (vector-ref offsets i) (* (vector-ref strides i) (vector-ref indices i)))
 
-                 ;; If index along non-strided dimension index regularly
-                 (vector-ref indices i)
-                 )
+              ;;;    ;; If index along non-strided dimension index regularly
+              ;;;    (vector-ref indices i)
+              ;;;    )
                )
 
              (define actual-indices (build-vector (vector-length indices) generate-strided-indices))
-             (interpret-env v1 actual-indices env)
+             (define res(interpret-env v1 actual-indices env))
+            ;;;  (debug-log actual-indices)
+            ;;;  (debug-log res)
+             res
 
              ]
 
@@ -1430,6 +1437,7 @@
   )
 
 (define (evaluate-arith-expr prog)
+  ;; (debug-log "Entry for evaluation")
   (define result-shape (tensor-shape prog))
   (define combinations (get-index-combinations result-shape))
 
@@ -1439,6 +1447,22 @@
                    )
          )
   )
+
+(define (evaluate-arith-expr-env prog env)
+  ;; (debug-log "Entry for evaluation")
+  (define result-shape (tensor-shape prog))
+  (define combinations (get-index-combinations result-shape))
+  ;;; (debug-log "qwq")
+  ;;; (debug-log prog)
+  ;;; (debug-log env)
+  ;;; (debug-log result-shape)
+  ;;; (debug-log combinations)
+  (apply concat
+         (for/list ([index combinations])
+                   (cpp:eval (interpret-env prog (list->vector index) env))
+                   )
+  )
+)
 
 
 

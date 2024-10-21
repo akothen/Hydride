@@ -1,0 +1,28 @@
+(StmtIf
+    (ExprVarRef
+    (QualifiedIdentifier Any wb_unknown))
+    (StmtBlock
+    (list
+        (StmtAssign
+        (LValVarRef
+            (QualifiedIdentifier Any address))
+        (ExprUnknown
+            (TypeFun
+            bits
+            (ExprLitNat 64))))))
+    (list
+    (StmtElsIf
+        (ExprVarRef
+        (QualifiedIdentifier Any postindex))
+        (StmtBlock
+        (list
+            (StmtAssign
+            (LValVarRef
+                (QualifiedIdentifier Any address))
+            (ExprBinOp
+                "+"
+                (ExprVarRef
+                (QualifiedIdentifier Any address))
+                (ExprVarRef
+                (QualifiedIdentifier Any offset))))))))
+    Nothing)
