@@ -2,7 +2,7 @@
 
 using namespace Halide;
 
-class SimpleAdd : public Generator<SimpleAdd> {
+class TensorAdd : public Generator<TensorAdd> {
 public:
     Input<Buffer<int32_t>> A{ "A", 2 };
     Input<Buffer<int32_t>> B{ "B", 2 };
@@ -10,11 +10,11 @@ public:
 
     void generate() {
         output(x, y) = A(x,y) + B(x,y);
-        
-        // Schedules for x86
+        // Schedules for BitSIMD 
         output
-            .tile(x, y, xi, yi, 32, 8, TailStrategy::RoundUp)
-            .vectorize(xi, 32)
+            .compute_root()
+            .reorder({y,x})
+            .vectorize(x,32)
             ;
 
     }
@@ -26,4 +26,4 @@ private:
     Func max_y{ "max_y" }, bounded_input{ "bounded_input" };
 };
 
-HALIDE_REGISTER_GENERATOR(SimpleAdd, simple_add)
+HALIDE_REGISTER_GENERATOR(TensorAdd, tensor_add)

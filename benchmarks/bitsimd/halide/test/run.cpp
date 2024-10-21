@@ -12,8 +12,8 @@
 #include "gaussian3x3.h"
 #elif benchmark_simple
 #include "simple.h"
-#elif benchmark_simple_add
-#include "simple_add.h"
+#elif benchmark_tensor_add
+#include "tensor_add.h"
 #elif benchmark_relu
 #include "relu.h"
 #elif benchmark_gaussian5x5
@@ -1751,8 +1751,8 @@ int main(int argc, char **argv) {
 #endif
 
 
-#if benchmark_simple_add
-  printf("Testing With Simple Add!\n");
+#if benchmark_tensor_add
+  printf("Testing With Tensor Add!\n");
   int simple_width = 32;
   int simple_height = 32;
 
@@ -1778,13 +1778,13 @@ int main(int argc, char **argv) {
   Halide::Runtime::Buffer<int32_t> output_buf(simple_output, dims, shape);
 
   cycles = benchmark([&]() {
-    int error = simple_add(input_buf_1, input_buf_2, output_buf);
+    int error = tensor_add(input_buf_1, input_buf_2, output_buf);
     if (error != 0) {
-      printf("simple_add pipeline failed: %d\n", error);
+      printf("tensor_add pipeline failed: %d\n", error);
     }
   });
 
-  printf("Completed executing simple_add!\n");
+  printf("Completed executing tensor_add!\n");
   for (int x = 0; x < std::min(10, simple_width); x++)
     for (int y = 0; y < std::min(10, simple_height); y++)
       printf("(x: %d, y: %d) ==> input-vals: (%d,%d),   output-val: %d\n", x, y,
