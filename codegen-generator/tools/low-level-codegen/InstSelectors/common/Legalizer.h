@@ -105,6 +105,8 @@ public:
     // If they do not exist
     void InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* InsertBefore);
 
+    void InsertBitSIMDBroadcastAllocation(Instruction* InsertBefore);
+
 
     // Replace vectorized call to call PIM ISA Directly
     void InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Args, Instruction* PimInst,  Instruction* InsertBefore);

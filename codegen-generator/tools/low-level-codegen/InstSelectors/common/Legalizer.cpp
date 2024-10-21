@@ -333,6 +333,80 @@ bool Legalizer::isAMatch(CallInst *OriginalInst, unsigned Idx, const int512_t &O
     return false;
 }
 
+void Legalizer::InsertBitSIMDBroadcastAllocation(Instruction* InsertBefore){
+
+    if(InstToObjectIDMap.find(InsertBefore) != InstToObjectIDMap.end()){
+        errs() << "Pim Broadcast already allocated" << "\n";
+        return;
+    }
+
+    LLVMContext& ctx = InsertBefore->getContext();
+    Type* i8PTy = Type::getInt8PtrTy(ctx);
+    Type* voidTy = Type::getVoidTy(ctx);
+    Type* i32Ty = Type::getInt32Ty(ctx);
+    Type* i64Ty = Type::getInt64Ty(ctx);
+
+    Module* M = InsertBefore->getModule();
+    Function* ParentFn = InsertBefore->getParent()->getParent();
+    Function* AllocFunc = M->getFunction(pimAllocName);
+
+    Function* AlignedAllocFunc = M->getFunction(pimAllocAssocName);
+    // pimAlloc(PimAllocEnum allocType, uint64_t numElements, PimDataType dataType)
+    if(!AllocFunc){
+        std::vector<Type*>  AllocArgsTy = {i32Ty , i64Ty, i32Ty};
+        FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
+
+        AllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocName , M);
+    }
+
+    // pimAllocAssociated(PimObjId assocId, PimDataType dataType)
+    if(!AlignedAllocFunc){
+        std::vector<Type*>  AllocArgsTy = {i32Ty, i32Ty};
+        FunctionType* AllocFuncTy = FunctionType::get(i32Ty, AllocArgsTy, /* isVarArgs */ false);
+        AlignedAllocFunc = Function::Create(AllocFuncTy, Function::ExternalLinkage ,pimAllocAssocName , M);
+    }
+
+
+
+    Value* Arg = dyn_cast<CallInst>(InsertBefore)->getArgOperand(0);
+    errs () << "Argument: "<< *Arg << "\n";
+    Type* ArgTy = Arg->getType();
+    errs () << "Argument Type: "<< *ArgTy << "\n";
+    FixedVectorType* FVInputTy = dyn_cast<FixedVectorType>(ArgTy);
+    assert(FVInputTy && "Operand must be a fixed vector llvm type");
+    Type* ElementType = FVInputTy->getElementType();
+    unsigned num_input_elements = FVInputTy->getNumElements();
+
+    FixedVectorType* FVOutputTy = dyn_cast<FixedVectorType>(InsertBefore->getType());
+    assert(FVOutputTy && "broadcast output must be a fixed vector llvm type");
+    unsigned num_output_elements = FVOutputTy->getNumElements();
+
+
+    Value* AllocationTy = ConstantInt::get(i32Ty, PIM_ALLOC_AUTO);
+    Value* PimDataType = ConstantInt::get(i32Ty, convertLLVMTyToPIMTy(ElementType));
+    Value* Lanes = ConstantInt::get(i64Ty, num_output_elements);
+
+
+    CallInst* AllocationCall = nullptr;
+    if(AlignmentMap.find(ParentFn) != AlignmentMap.end()){
+        std::vector<Value*> AllocationParams = {AlignmentMap[ParentFn] , PimDataType};
+        AllocationCall = CallInst::Create(AlignedAllocFunc, AllocationParams, "pimAssocAlloc", InsertBefore);
+    } else {
+        std::vector<Value*> AllocationParams = {AllocationTy, Lanes, PimDataType};
+        AllocationCall = CallInst::Create(AllocFunc, AllocationParams, "pimAlloc", InsertBefore);
+        AlignmentMap[ParentFn] = AllocationCall;
+    }
+    InstToObjectIDMap[InsertBefore] = AllocationCall;
+    errs() << "PimAllocation for broadcast"<< *Arg << ", AllocationCall: "<< *AllocationCall<<"\n";
+
+    // For vectors coming in through arguments, we need to generate the appropriate copy to host function
+    //if(isa<Argument>(Arg)){
+    //    InsertBitSIMDCopyToDevice(Arg, InsertBefore);
+    //}
+
+
+}
+
 
 // Generate any bitserial Allocation for operands
 // If they do not exist
@@ -340,7 +414,8 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
 
     if(CallInst* CI = dyn_cast<CallInst>(InsertBefore)){
         Function* CF = CI->getCalledFunction();
-        if(CF && CF->getName().startswith(StringRef("pimBroadCast"))){
+        if(CF && CF->getName().startswith(StringRef("pimBroadCast")) ||  CF->getName().contains(StringRef("pimBroadCast"))){
+            InsertBitSIMDBroadcastAllocation(InsertBefore);
             return;
         }
 
@@ -467,15 +542,16 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
     Type* i8PTy = Type::getInt8PtrTy(ctx);
     Type* voidTy = Type::getVoidTy(ctx);
     Type* i32Ty = Type::getInt32Ty(ctx);
+    Type* i64Ty = Type::getInt64Ty(ctx);
     Value* CopyTy = ConstantInt::get(i32Ty, PIM_COPY_V);
     Value* Zero = ConstantInt::get(i32Ty, 0);
 
     std::vector<Value*> ObjIDs;
-    if(InstFunction->getName().startswith(StringRef("pimBroadCast"))){
+    errs() << InstFunction->getName() << "\n";
+    if(InstFunction->getName().contains(StringRef("pimBroadcast"))){
         errs () << "Processing broadcast instruction: "<< "\n";
-        ObjIDs.push_back(CopyTy);
-
         assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
+        errs() << "ObjID for broadcast: "<< *InstToObjectIDMap[PimInst] << "\n";
         ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
         Value* BroadcastedValue = Args[0];
         if(FixedVectorType* FVTy = dyn_cast<FixedVectorType>(BroadcastedValue->getType())){
@@ -485,6 +561,11 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
             BroadcastedValue = ExtractElementInst::Create(BroadcastedValue, Zero, "ext.0", InsertBefore);
             errs() << "New Broadcasted value: "<< * BroadcastedValue << "\n";
         } 
+
+        if(!BroadcastedValue->getType()->isIntegerTy(64)){
+            // Sign extend to 64
+            BroadcastedValue = new SExtInst(BroadcastedValue, i64Ty, "broad.sext", InsertBefore);
+        }
 
         ObjIDs.push_back(BroadcastedValue);
 
@@ -586,24 +667,28 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
     Type* i8PTy = Type::getInt8PtrTy(ctx);
     Type* voidTy = Type::getVoidTy(ctx);
     Type* i32Ty = Type::getInt32Ty(ctx);
+    Type* i64Ty = Type::getInt64Ty(ctx);
 
     Module* M = CI->getModule();
-    Function* PimFunc = M->getFunction(name);
+
+    std::string PimFuncName = name == "pimBroadCast" ? "pimBroadcastInt" : name;
+    Function* PimFunc = M->getFunction(PimFuncName);
+
 
     if(!PimFunc){
 
         std::vector<Type*>  CopyArgsTy;
         if(name == "pimBroadCast"){
             CopyArgsTy.push_back(i32Ty);
-            CopyArgsTy.push_back(i32Ty);
-            CopyArgsTy.push_back(i32Ty);
+            CopyArgsTy.push_back(i64Ty);
         } else {
             for(int i = 0; i < num_symbolic_args ; i++){
                 CopyArgsTy.push_back(i32Ty);
             }
         }
+
         FunctionType* PimFuncTy = FunctionType::get(i32Ty, CopyArgsTy, /* isVarArgs */ false);
-        PimFunc = Function::Create(PimFuncTy, Function::ExternalLinkage ,name , M);
+        PimFunc = Function::Create(PimFuncTy, Function::ExternalLinkage ,PimFuncName , M);
     }
 
     return PimFunc;
