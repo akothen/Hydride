@@ -68,6 +68,8 @@
 #include "softmax.h"
 #elif benchmark_matmul_256
 #include "matmul_256.h"
+#elif benchmark_bitsimd_matmul
+#include "bitsimd_matmul.h"
 #elif benchmark_matmul_256_32bit
 #include "matmul_256_32bit.h"
 #elif benchmark_matmul_256_32bit_bias_add
@@ -1003,6 +1005,29 @@ int main(int argc, char **argv) {
 #endif
 
   printf("AppReported (): Image %dx%d - sobel3x3(128B): %lld cycles (%0.4f "
+         "cycles/pixel)\n",
+         (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+#if benchmark_bitsimd_matmul
+
+  halide_dimension_t x_dim{0, 256, 1};
+  halide_dimension_t y_dim{0, 256, 256};
+  halide_dimension_t shape[2] = {x_dim, y_dim};
+
+  Halide::Runtime::Buffer<int32_t> matA((int32_t *)input, dims, shape);
+  Halide::Runtime::Buffer<int32_t> matB((int32_t *)input, dims, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t *)output, dims, shape);
+
+  cycles = benchmark([&]() {
+    printf("Launching bitsimd matmul!\n");
+    int error = bitsimd_matmul(matA, matB, output_buf);
+    if (error != 0) {
+      printf("bitsimd_matmul pipeline failed: %d\n", error);
+    }
+  });
+
+  printf("AppReported (): Image %dx%d - bitsimd_matmul(128B): %lld cycles (%0.4f "
          "cycles/pixel)\n",
          (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
