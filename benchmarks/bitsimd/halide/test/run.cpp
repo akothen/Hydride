@@ -14,6 +14,8 @@
 #include "simple.h"
 #elif benchmark_simple_add
 #include "simple_add.h"
+#elif benchmark_relu
+#include "relu.h"
 #elif benchmark_gaussian5x5
 #include "gaussian5x5.h"
 #elif benchmark_gaussian7x7
@@ -1769,6 +1771,49 @@ int main(int argc, char **argv) {
 
   free(simple_input_1);
   free(simple_input_2);
+  free(simple_output);
+#endif
+
+#if benchmark_relu
+  printf("Testing With Relu!\n");
+  int simple_width = 32;
+  int simple_height = 32;
+
+  halide_dimension_t x_dim{0, simple_width, 1};
+  halide_dimension_t y_dim{0, simple_height, simple_width};
+  halide_dimension_t shape[2] = {x_dim, y_dim};
+
+  int32_t *simple_input_1 =
+      (int32_t *)malloc(simple_width * simple_height * sizeof(int32_t));
+
+  for (int i = 0; i < simple_width * simple_height; i++) {
+    simple_input_1[i] = 2;
+  }
+
+  int32_t *simple_output =
+      (int32_t *)malloc(simple_width * simple_height * sizeof(int32_t));
+
+  Halide::Runtime::Buffer<int32_t> input_buf_1(simple_input_1, dims, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf(simple_output, dims, shape);
+
+  cycles = benchmark([&]() {
+    int error = relu(input_buf_1, output_buf);
+    if (error != 0) {
+      printf("relu pipeline failed: %d\n", error);
+    }
+  });
+
+  printf("Completed executing relu!\n");
+  for (int x = 0; x < std::min(10, simple_width); x++)
+    for (int y = 0; y < std::min(10, simple_height); y++)
+      printf("(x: %d, y: %d) ==> input-vals: (%d),   output-val: %d\n", x, y,
+             input_buf_1(x, y) ,output_buf(x, y));
+
+  printf("AppReported (HVX128B-mode): Image %dx%d - simple(128B): %lld cycles "
+         "(%0.4f cycles/pixel)\n",
+         (int)width, (int)height, cycles, (float)cycles / (width * height));
+
+  free(simple_input_1);
   free(simple_output);
 #endif
 

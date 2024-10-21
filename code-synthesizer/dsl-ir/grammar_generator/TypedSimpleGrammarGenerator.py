@@ -97,6 +97,13 @@ class TypedSimpleGrammarGenerator:
 
     def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
 
+        if not self.target is None and self.target == 'bitsimd':
+
+            # Bitserial requires large literals to be created using pim broadcasts
+
+            if bv_size // prec != 1:
+                return ""
+
         if self.use_buffer_id:
             imm = None
 
@@ -480,9 +487,11 @@ class TypedSimpleGrammarGenerator:
                      imms = [],
                      include_ramp_lit = False,
                      input_signedness = None,
-                     use_buffer_id = False
+                     use_buffer_id = False,
+                     target = None
                      ):
 
+        self.target = target
         print("Return type:", return_type)
         print("Input sizes:", input_sizes)
         print("Input precs:", input_precs)

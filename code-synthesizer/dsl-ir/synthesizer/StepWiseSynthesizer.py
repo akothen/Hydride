@@ -879,7 +879,8 @@ class StepWiseSynthesizer(SynthesizerBase):
             imms=imms,
             include_ramp_lit=include_ramp_lit,
             input_signedness =self.spec.input_signedness,
-            use_buffer_id = self.spec.use_buffer_id()
+            use_buffer_id = self.spec.use_buffer_id(),
+            target = self.target
         )
 
     def score_context(self, dsl_inst,  ctx):
@@ -895,5 +896,7 @@ class StepWiseSynthesizer(SynthesizerBase):
         if self.target == 'arm' and ctx.name == "vzip_u16":
             return 15
         if self.target == 'arm' and ctx.name == "vmov_n_u16":
+            return 15
+        if self.target == "halide" and ctx.name == "typed:signed_vector_reduce_add":
             return 15
         return super().score_context(dsl_inst, ctx)
