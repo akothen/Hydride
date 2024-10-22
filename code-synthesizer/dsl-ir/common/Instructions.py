@@ -635,19 +635,29 @@ class Context:
 
         print("{} )".format(prefix))
 
-    def emit_context_expr_string(self, prefix="", use_reg_only = False):
-        string = ("{} ({} ; {}".format(prefix, self.dsl_name, self.name))
+    def emit_context_expr_string(self, prefix="", use_reg_only = False, add_output_type_info = False, hydride_compatible = False):
+        if hydride_compatible:
+            string = ("{} ({}".format(prefix, self.dsl_name))
+        else:
+            string = ("{} ({} ; {}".format(prefix, self.dsl_name, self.name))
 
         for arg in self.context_args:
             if isinstance(arg, Context):
                 string += "\n" + \
-                    arg.emit_context_expr_string(prefix=prefix + "\t", use_reg_only = use_reg_only)
+                    arg.emit_context_expr_string(prefix=prefix + "\t", use_reg_only = use_reg_only, add_output_type_info = add_output_type_info, hydride_compatible = hydride_compatible)
             elif not use_reg_only and isinstance(arg, Reg) and self.extensions != None and 'halide' in self.extensions:
                 string += "\n" + (prefix + "\t" + arg.get_halide_dsl_value())
+            elif hydride_compatible and isinstance(arg,Reg):
+                string += "\n" + (prefix + "\t" + "(reg {})".format(arg.index))
             else:
                 string += "\n" + (prefix + "\t" + arg.get_dsl_value())
 
-        string += "\n" + ("{} )".format(prefix))
+        if add_output_type_info:
+            lanes = self.out_vectsize // self.out_precision
+            prec = self.out_precision
+            string += "\n" + ("{} ) ; <{} x i{}>\n".format(prefix, lanes, prec))
+        else:
+            string += "\n" + ("{} )".format(prefix))
         return string
 
     def emit_context_expr_string_compact(self, prefix=""):
