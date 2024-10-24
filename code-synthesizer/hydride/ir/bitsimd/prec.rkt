@@ -274,6 +274,7 @@
 		[(and  (equal? size_o 16) (equal? num_2 16) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 16]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
 		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
+		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 524288) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
 		[(and  (equal? size_o 512) (equal? num_2 512) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 16]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 131072) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
