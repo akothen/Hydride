@@ -81,82 +81,82 @@
 	[ (scalar_splat_dsl v0 size_i size_o)
 		(scalar_splat (bitsimd:interpret v0 env) size_i size_o)
 	]
-	[ (pimMax_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(pimMax_v16384_e8__v16384_e8__v16384_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+	[ (pimMax_v2048_e8__v2048_e8__v2048_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(pimMax_v2048_e8__v2048_e8__v2048_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
 		 prec_i_o num_7 num_8)
 	]
-	[ (pimXor_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(pimXor_v16384_e8__v16384_e8__v16384_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+	[ (pimOr_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(pimOr_v2048_e32__v2048_e32__v2048_e32 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
 		 prec_i_o num_7)
 	]
-	[ (pimDiv_v512_e16__v512_e16__v512_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(pimDiv_v512_e16__v512_e16__v512_e16 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+	[ (pimAnd_v32_e8__v32_e8__v32_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(pimAnd_v32_e8__v32_e8__v32_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8 
-		 num_9 num_10 num_11 
-		 num_12)
+		 prec_i_o num_7)
 	]
-	[ (pimEQ_v512_e8__v512_e8__v512_e8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
-		(pimEQ_v512_e8__v512_e8__v512_e8 (bitsimd:interpret vc_0 env) (bitsimd:interpret vc_1 env) (bitsimd:interpret v2 env) 
+	[ (pimGT_v512_e32__v512_e32__v512_e32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
+		(pimGT_v512_e32__v512_e32__v512_e32 (bitsimd:interpret vc_0 env) (bitsimd:interpret vc_1 env) (bitsimd:interpret v2 env) 
 		 (bitsimd:interpret v3 env) size_i_o num_5 
+		 num_6 num_7 prec_i_o 
+		 num_9 num_10)
+	]
+	[ (pimEQ_v512_e32__v512_e32__v512_e32_dsl v0 vc_1 v2 vc_3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
+		(pimEQ_v512_e32__v512_e32__v512_e32 (bitsimd:interpret v0 env) (bitsimd:interpret vc_1 env) (bitsimd:interpret v2 env) 
+		 (bitsimd:interpret vc_3 env) size_i_o num_5 
 		 num_6 num_7 prec_i_o 
 		 num_9)
 	]
-	[ (pimMin_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(pimMin_v512_e8__v512_e8__v512_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+	[ (pimMin_v8192_e8__v8192_e8__v8192_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(pimMin_v8192_e8__v8192_e8__v8192_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
 		 prec_i_o num_7 num_8)
 	]
-	[ (pimDiv_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(pimDiv_v512_e8__v512_e8__v512_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+	[ (pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(pimDiv_v2048_e16__v2048_e16__v2048_e16 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
 		 prec_i_o num_7 num_8 
 		 num_9 num_10 num_11 
 		 num_12)
 	]
-	[ (pimOr_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(pimOr_v1024_e32__v1024_e32__v1024_e32 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7)
-	]
-	[ (pimSub_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(pimSub_v512_e8__v512_e8__v512_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8)
-	]
-	[ (pimMul_v1024_e16__v1024_e16__v1024_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
-		(pimMul_v1024_e16__v1024_e16__v1024_e16 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8 
-		 num_9 num_10)
-	]
-	[ (pimDiv_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(pimDiv_v1024_e32__v1024_e32__v1024_e32 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8 
-		 num_9 num_10 num_11 
-		 num_12)
-	]
-	[ (pimGT_v1024_e8__v1024_e8__v1024_e8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
-		(pimGT_v1024_e8__v1024_e8__v1024_e8 (bitsimd:interpret vc_0 env) (bitsimd:interpret vc_1 env) (bitsimd:interpret v2 env) 
-		 (bitsimd:interpret v3 env) size_i_o num_5 
-		 num_6 num_7 prec_i_o 
-		 num_9 num_10)
-	]
-	[ (pimAdd_v1024_e16__v1024_e16__v1024_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(pimAdd_v1024_e16__v1024_e16__v1024_e16 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
-		 num_3 num_4 num_5 
-		 prec_i_o num_7 num_8)
-	]
-	[ (pimBroadCast_v512_e8__v8_e8_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
-		(pimBroadCast_v512_e8__v8_e8 (bitsimd:interpret v0 env) size_o num_2 
+	[ (pimBroadCast_v512_e32__v32_e32_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(pimBroadCast_v512_e32__v32_e32 (bitsimd:interpret v0 env) size_o num_2 
 		 num_3 num_4 prec_i_o 
 		 num_6 num_7)
 	]
-	[ (pimAnd_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(pimAnd_v16384_e8__v16384_e8__v16384_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+	[ (pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(pimDiv_v2048_e32__v2048_e32__v2048_e32 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+		 num_3 num_4 num_5 
+		 prec_i_o num_7 num_8 
+		 num_9 num_10 num_11 
+		 num_12)
+	]
+	[ (pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(pimDiv_v16384_e8__v16384_e8__v16384_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+		 num_3 num_4 num_5 
+		 prec_i_o num_7 num_8 
+		 num_9 num_10 num_11 
+		 num_12)
+	]
+	[ (pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(pimAdd_v16384_e8__v16384_e8__v16384_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+		 num_3 num_4 num_5 
+		 prec_i_o num_7 num_8)
+	]
+	[ (pimSub_v256_e16__v256_e16__v256_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(pimSub_v256_e16__v256_e16__v256_e16 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+		 num_3 num_4 num_5 
+		 prec_i_o num_7 num_8)
+	]
+	[ (pimMul_v16_e8__v16_e8__v16_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
+		(pimMul_v16_e8__v16_e8__v16_e8 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
+		 num_3 num_4 num_5 
+		 prec_i_o num_7 num_8 
+		 num_9 num_10)
+	]
+	[ (pimXor_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(pimXor_v8_e16__v8_e16__v8_e16 (bitsimd:interpret v0 env) (bitsimd:interpret v1 env) size_i_o 
 		 num_3 num_4 num_5 
 		 prec_i_o num_7)
 	]
