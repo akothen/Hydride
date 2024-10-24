@@ -3490,6 +3490,25 @@ bitsimd_sema = {
                   "Extensions" : "[]",
       },
 
+                "pimBroadCast_v16384_e32__v32_e32" : {
+                  "args" : ["SYMBOLIC_BV_32","32","32","0","524288","32","0","0"],
+                  "in_vectsize" : 32,
+                  "out_vectsize" : 524288,
+                  "lanesize" : 32,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 4,
+                  "out_vectsize_index" : 1,
+                  "lanesize_index" : 2,
+                  "in_precision_index" : 5,
+                  "out_precision_index" : 5,
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
                 "pimBroadCast_v512_e16__v16_e16" : {
                   "args" : ["SYMBOLIC_BV_512","512","512","0","512","16","0","0"],
                   "in_vectsize" : 512,

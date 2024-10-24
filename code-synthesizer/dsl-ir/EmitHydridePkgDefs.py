@@ -174,7 +174,6 @@ print("Number of Target Agnostic DSL Instructions:\t", len(dsl_list))
 print("Number of Target Specific Instructions:\t",
       sum([len(inst.contexts) for inst in dsl_list]))
 
-sys.exit(0)
 sd = StructDef()
 idd = InterpreterDef()
 cd = CostDef()

@@ -228,14 +228,11 @@
 		[else ( pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
 		)
 	]
+
 	[ (pimBroadCast_v512_e32__v32_e32_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+       ;  Do not optimize away broadcasts
 		(define v0-folded (bitsimd:const-fold v0))
-		(cond
-		[(and (lit? v0-folded))
-(lit (bitsimd:interpret ( pimBroadCast_v512_e32__v32_e32_dsl v0-folded size_o num_2 num_3 num_4 prec_i_o num_6 num_7 ) (vector)))
-]
-		[else ( pimBroadCast_v512_e32__v32_e32_dsl v0-folded size_o num_2 num_3 num_4 prec_i_o num_6 num_7 )]
-		)
+        ( pimBroadCast_v512_e32__v32_e32_dsl v0-folded size_o num_2 num_3 num_4 prec_i_o num_6 num_7 )
 	]
 	[ (pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
 		(define v0-folded (bitsimd:const-fold v0))

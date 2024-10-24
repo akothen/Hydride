@@ -186,6 +186,8 @@ class Context:
 
         if 'hexagon' in self.name:
             self.sample_scale_factor = 32
+        elif 'pim' in self.name:
+            self.sample_scale_factor = 32
         else:
             # TEMP
             self.sample_scale_factor = 2

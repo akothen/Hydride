@@ -125,7 +125,7 @@
       [(equal? arch "x86") 1]
       [(equal? arch "arm") 1]
       [(equal? arch "hvx") 1]
-      [(equal? arch "BitSerial") 1]
+      [(equal? arch "BitSerial") 32] 
       
       )) ; 32
 
