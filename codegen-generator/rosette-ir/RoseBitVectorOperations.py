@@ -660,6 +660,19 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
         assert ReverseIndexing == False
         assert "No direction convertion of BVInsert to Rosette!"
         NotImplemented
+        
+    def __str__(self, NumSpace=0):
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        String = Spaces
+        String += str(self.Opcode)
+        for Index, Operand in enumerate(self.getOperands()):
+            String += " " + str(Operand.getType()) + " " + Operand.getName()
+            if Index != len(self.getOperands()) - 1:
+                String += ","
+        String += "\n"
+        return String
 
 
 ######################################## BITWISE OPERATORS ###########################
