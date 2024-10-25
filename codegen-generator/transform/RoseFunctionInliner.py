@@ -63,6 +63,8 @@ def RunInlinerOnFunction(Function: RoseFunction, Context: RoseContext):
         ClonedFunction.print()
         print("ClonedFunction.getReturnValue():")
         ClonedFunction.getReturnValue().print()
+        # Find out whether the cloned function has any reduction pattern
+        IsReductionPattern = HasReductionPatternInFunction(ClonedFunction)
         # Clone all the regions of the function to be inlined
         # and add them to the parent region.
         ParentRegion = Block.getParent()
@@ -82,7 +84,7 @@ def RunInlinerOnFunction(Function: RoseFunction, Context: RoseContext):
             print("FunctionArgs[Index]:")
             FunctionArgs[Index].print()
             ParentRegion.replaceUsesWith(FunctionArgs[Index], CallArgs[Index])
-        print("ParentRegion:")
+        print("---ParentRegion:")
         ParentRegion.print()
 
         # Get uses of callsites
@@ -108,47 +110,46 @@ def RunInlinerOnFunction(Function: RoseFunction, Context: RoseContext):
                     Key = BlockParent.getKeyForChild(ParentBlock)
                     BlockParent.eraseChild(ParentBlock, Key)
                 break
-
-        if isinstance(CallSiteUser, RoseBVInsertSliceOp):
-            assert CallSiteUser.getInsertValue() == ClonedReturnValue
-            if not isinstance(ClonedReturnValue, RoseArgument) \
-                    and not isinstance(ClonedReturnValue, RoseOperation):
-                for TempDstUser in TempDstUsers:
-                    if isinstance(TempDstUser, RoseBVInsertSliceOp):
-                        print("TempDstUser:")
-                        TempDstUser.print()
-                        CurrentBlock = TempDstUser.getParent()
-                        assert ClonedReturnValue == TempDstUser.getInputBitVector()
-                        PrevLowIndex = TempDstUser.getOperand(
-                            TempDstUser.getLowIndexPos())
-                        if isinstance(PrevLowIndex, RoseOperation):
-                            LowIndex = RoseAddOp.create(Context.genName(),
-                                                        [TempDstUser.getLowIndex(), CallSiteUser.getLowIndex()])
-                            CurrentBlock.addOperationBefore(
-                                LowIndex, PrevLowIndex)
-                            TempDstUser.setOperand(
-                                TempDstUser.getLowIndexPos(), LowIndex)
-                        PrevHighIndex = TempDstUser.getOperand(
-                            TempDstUser.getHighIndexPos())
-                        if isinstance(PrevHighIndex, RoseOperation):
-                            Bitwidth = RoseConstant.create(TempDstUser.getOutputBitwidth() - 1,
-                                                           CallSiteUser.getOperand(CallSiteUser.getBitwidthPos()).getType())
-                            HighIndex = RoseAddOp.create(Context.genName(),
-                                                         [TempDstUser.getOperand(TempDstUser.getLowIndexPos()), Bitwidth])
-                            CurrentBlock.addOperationBefore(
-                                HighIndex, PrevHighIndex)
-                            TempDstUser.setOperand(
-                                TempDstUser.getHighIndexPos(), HighIndex)
-                        TempDstUser.setOperand(
-                            1, CallSiteUser.getInputBitVector())
-                # Erase the callsite user
-                ParentBlock = CallSiteUser.getParent()
-                ParentBlock.eraseOperation(CallSiteUser)
-                if ParentBlock.getNumOperations() == 0:
-                    BlockParent = ParentBlock.getParent()
-                    Key = BlockParent.getKeyForChild(ParentBlock)
-                    BlockParent.eraseChild(ParentBlock, Key)
-
+        print("ParentRegion:")
+        ParentRegion.print()
+        print("CallSiteUser:")
+        CallSiteUser.print()
+        print("IsReductionPattern:")
+        print(IsReductionPattern)
+        if IsReductionPattern == False:
+          if isinstance(CallSiteUser, RoseBVInsertSliceOp):
+              assert CallSiteUser.getInsertValue() == ClonedReturnValue
+              if not isinstance(ClonedReturnValue, RoseArgument) \
+                and not isinstance(ClonedReturnValue, RoseOperation):
+                  for TempDstUser in TempDstUsers:
+                      if isinstance(TempDstUser, RoseBVInsertSliceOp):
+                          print("TempDstUser:")
+                          TempDstUser.print()
+                          CurrentBlock = TempDstUser.getParent()
+                          assert ClonedReturnValue == TempDstUser.getInputBitVector()
+                          PrevLowIndex = TempDstUser.getOperand(TempDstUser.getLowIndexPos())
+                          if isinstance(PrevLowIndex, RoseOperation):
+                              LowIndex = RoseAddOp.create(Context.genName(),
+                                                          [TempDstUser.getLowIndex(), 
+                                                          CallSiteUser.getLowIndex()])
+                              CurrentBlock.addOperationBefore(LowIndex, PrevLowIndex)
+                              TempDstUser.setOperand(TempDstUser.getLowIndexPos(), LowIndex)
+                          PrevHighIndex = TempDstUser.getOperand(TempDstUser.getHighIndexPos())
+                          if isinstance(PrevHighIndex, RoseOperation):
+                              Bitwidth = RoseConstant.create(TempDstUser.getOutputBitwidth() - 1,
+                                      CallSiteUser.getOperand(CallSiteUser.getBitwidthPos()).getType())
+                              HighIndex = RoseAddOp.create(Context.genName(),
+                                      [TempDstUser.getOperand(TempDstUser.getLowIndexPos()), Bitwidth])
+                              CurrentBlock.addOperationBefore(HighIndex, PrevHighIndex)
+                              TempDstUser.setOperand(TempDstUser.getHighIndexPos(), HighIndex)
+                          TempDstUser.setOperand(1, CallSiteUser.getInputBitVector())
+                  # Erase the callsite user
+                  ParentBlock = CallSiteUser.getParent()
+                  ParentBlock.eraseOperation(CallSiteUser)
+                  if ParentBlock.getNumOperations() == 0:
+                      BlockParent = ParentBlock.getParent()
+                      Key = BlockParent.getKeyForChild(ParentBlock)
+                      BlockParent.eraseChild(ParentBlock, Key)
         # Erase the call site
         Block = User.getParent()
         Block.eraseOperation(User)
@@ -163,8 +164,7 @@ def RunInlinerOnFunction(Function: RoseFunction, Context: RoseContext):
         for CallArgOp in CallArgs:
             if isinstance(CallArgOp, RoseOperation):
                 NewOp = CallArgOp.clone(CallArgOp.getName() + "." + "copy")
-                ReplaceUsesWithUniqueCopiesOf(
-                    ParentRegion, CallArgOp, NewOp, Context)
+                ReplaceUsesWithUniqueCopiesOf(ParentRegion, CallArgOp, NewOp, Context)
 
         print("ParentRegion:")
         ParentRegion.print()
