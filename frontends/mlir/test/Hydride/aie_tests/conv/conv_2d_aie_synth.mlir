@@ -15,16 +15,16 @@
 #map14 = affine_map<() -> (7)>
 #map15 = affine_map<() -> (8)>
 module {
-  llvm.func @hydride.node.conv2d.8(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.7(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.6(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.5(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.4(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.3(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.2(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.1(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  llvm.func @hydride.node.conv2d.0(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
-  func.func @conv2d(%arg0: memref<2048x2048xi32>, %arg1: memref<9xi32>, %arg2: memref<2046x2046xi32>) {
+  func.func private @hydride.node.conv2d.8(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.7(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.6(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.5(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.4(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.3(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.2(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.1(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @hydride.node.conv2d.0(vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+  func.func private @conv2d(%arg0: memref<2048x2048xi32>, %arg1: memref<9xi32>, %arg2: memref<2046x2046xi32>) {
     affine.for %arg3 = 0 to 2046 {
       affine.for %arg4 = 0 to 2046 step 8 {
         %c0_i32 = arith.constant 0 : i32
@@ -36,7 +36,7 @@ module {
         %3 = vector.transfer_read %arg1[%2], %c0_i32_1 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %4 = arith.muli %1, %3 : vector<8xi32>
         %5 = arith.addi %0, %4 : vector<8xi32>
-        %6 = llvm.call @hydride.node.conv2d.0(%0, %1, %3) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %6 = func.call @hydride.node.conv2d.0(%0, %1, %3) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %6, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_2 = arith.constant 0 : i32
         %7 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_2 : memref<2046x2046xi32>, vector<8xi32>
@@ -49,7 +49,7 @@ module {
         %12 = vector.transfer_read %arg1[%11], %c0_i32_4 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %13 = arith.muli %10, %12 : vector<8xi32>
         %14 = arith.addi %7, %13 : vector<8xi32>
-        %15 = llvm.call @hydride.node.conv2d.1(%7, %10, %12) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %15 = func.call @hydride.node.conv2d.1(%7, %10, %12) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %15, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_5 = arith.constant 0 : i32
         %16 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_5 : memref<2046x2046xi32>, vector<8xi32>
@@ -62,7 +62,7 @@ module {
         %21 = vector.transfer_read %arg1[%20], %c0_i32_7 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %22 = arith.muli %19, %21 : vector<8xi32>
         %23 = arith.addi %16, %22 : vector<8xi32>
-        %24 = llvm.call @hydride.node.conv2d.2(%16, %19, %21) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %24 = func.call @hydride.node.conv2d.2(%16, %19, %21) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %24, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_8 = arith.constant 0 : i32
         %25 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_8 : memref<2046x2046xi32>, vector<8xi32>
@@ -75,7 +75,7 @@ module {
         %30 = vector.transfer_read %arg1[%29], %c0_i32_10 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %31 = arith.muli %28, %30 : vector<8xi32>
         %32 = arith.addi %25, %31 : vector<8xi32>
-        %33 = llvm.call @hydride.node.conv2d.3(%25, %28, %30) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %33 = func.call @hydride.node.conv2d.3(%25, %28, %30) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %33, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_11 = arith.constant 0 : i32
         %34 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_11 : memref<2046x2046xi32>, vector<8xi32>
@@ -88,7 +88,7 @@ module {
         %39 = vector.transfer_read %arg1[%38], %c0_i32_13 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %40 = arith.muli %37, %39 : vector<8xi32>
         %41 = arith.addi %34, %40 : vector<8xi32>
-        %42 = llvm.call @hydride.node.conv2d.4(%34, %37, %39) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %42 = func.call @hydride.node.conv2d.4(%34, %37, %39) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %42, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_14 = arith.constant 0 : i32
         %43 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_14 : memref<2046x2046xi32>, vector<8xi32>
@@ -101,7 +101,7 @@ module {
         %48 = vector.transfer_read %arg1[%47], %c0_i32_16 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %49 = arith.muli %46, %48 : vector<8xi32>
         %50 = arith.addi %43, %49 : vector<8xi32>
-        %51 = llvm.call @hydride.node.conv2d.5(%43, %46, %48) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %51 = func.call @hydride.node.conv2d.5(%43, %46, %48) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %51, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_17 = arith.constant 0 : i32
         %52 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_17 : memref<2046x2046xi32>, vector<8xi32>
@@ -114,7 +114,7 @@ module {
         %57 = vector.transfer_read %arg1[%56], %c0_i32_19 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %58 = arith.muli %55, %57 : vector<8xi32>
         %59 = arith.addi %52, %58 : vector<8xi32>
-        %60 = llvm.call @hydride.node.conv2d.6(%52, %55, %57) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %60 = func.call @hydride.node.conv2d.6(%52, %55, %57) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %60, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_20 = arith.constant 0 : i32
         %61 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_20 : memref<2046x2046xi32>, vector<8xi32>
@@ -127,7 +127,7 @@ module {
         %66 = vector.transfer_read %arg1[%65], %c0_i32_22 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %67 = arith.muli %64, %66 : vector<8xi32>
         %68 = arith.addi %61, %67 : vector<8xi32>
-        %69 = llvm.call @hydride.node.conv2d.7(%61, %64, %66) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %69 = func.call @hydride.node.conv2d.7(%61, %64, %66) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %69, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
         %c0_i32_23 = arith.constant 0 : i32
         %70 = vector.transfer_read %arg2[%arg3, %arg4], %c0_i32_23 : memref<2046x2046xi32>, vector<8xi32>
@@ -140,7 +140,7 @@ module {
         %75 = vector.transfer_read %arg1[%74], %c0_i32_25 {permutation_map = #map1} : memref<9xi32>, vector<8xi32>
         %76 = arith.muli %73, %75 : vector<8xi32>
         %77 = arith.addi %70, %76 : vector<8xi32>
-        %78 = llvm.call @hydride.node.conv2d.8(%70, %73, %75) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
+        %78 = func.call @hydride.node.conv2d.8(%70, %73, %75) : (vector<8xi32>, vector<8xi32>, vector<8xi32>) -> vector<8xi32>
         vector.transfer_write %78, %arg2[%arg3, %arg4] : vector<8xi32>, memref<2046x2046xi32>
       }
     }

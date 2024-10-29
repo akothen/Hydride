@@ -1,0 +1,1 @@
+aie-opt -affine-super-vectorize="virtual-vector-size=8 vectorize-reductions" polygeist_conv2d_i32.mlir > conv2d_i32_affine_vectorized.mlir

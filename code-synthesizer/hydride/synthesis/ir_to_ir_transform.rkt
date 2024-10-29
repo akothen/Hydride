@@ -242,10 +242,10 @@
 
       [(equal? target 'aie)
        aie:visitor
+      ]
 
       [(equal? target 'visa)
        visa:visitor
-
       ]
     )
   )
@@ -298,10 +298,10 @@
 
       [(equal? src-language 'aie)
        (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
+      ]
 
       [(equal? src-language 'visa)
        (values visa:interpret visa:cost visa:visitor visa:get-length visa:get-prec visa:get-bv-ops)
-
        ]
       [(equal? src-language 'halide)
        (define (halide-cost-fn e) 1)
@@ -338,6 +338,7 @@
       [(equal? target-language 'aie)
        (set-target-aie)
        (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
+      ]
 
       [(equal? target-language 'visa)
        (set-target-visa)
@@ -608,6 +609,7 @@
       [(equal? target-language 'aie)
        (set-target-aie)
        (values aie:interpret aie:cost aie:visitor aie:get-length aie:get-prec aie:get-bv-ops)
+      ]
 
       [(equal? target-language 'visa)
        (set-target-visa)

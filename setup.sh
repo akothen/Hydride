@@ -39,8 +39,12 @@ case $1 in
         export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/visa/visa_wrapper.ll
         export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/visa/build/libVISALegalizer.so
         ;;
+    "aievec")
+        export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/aievec/aievec_wrappers.ll
+        export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libAIEVecLegalizer.so
+        ;;
     *)
-        echo "Please provide a valid target: x86, arm, hexagon, visa"
+        echo "Please provide a valid target: x86, arm, hexagon, visa, aievec"
         return
         ;;
 esac
@@ -49,6 +53,7 @@ esac
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/x86/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/arm/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/visa/:$PYTHONPATH
+export PYTHONPATH=$CUR_DIR/codegen-generator/targets/aievec/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/targets/hexagon/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/codegen/rosette/:$PYTHONPATH
 export PYTHONPATH=$CUR_DIR/codegen-generator/codegen/llvm/:$PYTHONPATH

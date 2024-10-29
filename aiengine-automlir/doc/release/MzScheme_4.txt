@@ -1,0 +1,558 @@
+
+MzScheme version 4.0 is different from previous versions of MzScheme
+in several significant ways. For advice on how to upgrade, see
+"Porting Advice" below, but we start with an enumeration of major
+changes:
+
+ - The documentation has been re-organized and re-written. Instead of
+   just reference manuals that occasionally provide examples, our
+   documentation is now based on a "guide" that provides a friendly
+   overview and examples, and then separate "references" that provide
+   the details (typically in a more terse, precise style).
+
+ - Pairs created with `cons', `list', `map', etc. are immutable.  A
+   separate datatype, "mpair", implements mutable pairs, with the
+   operations `mcons', `mcar', `mcdr', `set-mcar!', and `set-mcdr!'.
+   The identifiers `set-car!' and `set-cdr!' are not bound.
+
+   See "Immutable and Mutable Pairs" below for more information.
+
+ - The `mzscheme' command-line syntax has changed. Most notably, if no
+   flags are provided:
+
+    * The first argument, if any, is prefixed with the `-u' flag.
+
+    * If there are no arguments, `-i' is added to start the
+      interactive REPL.
+
+   See "MzScheme Command Line and Initialization" below for more
+   information.
+
+ - A plain identifier as a module reference now refers to a library
+   collection, instead of an interactively declared module. For
+   example,
+
+      (require net/url)
+
+   is equivalent to the old form
+
+      (require (lib "url.ss" "net"))
+
+   See "Module Paths" below for more information.
+
+ - The `mzscheme' module is no longer the preferred base language for
+   PLT Scheme code. The following are the most common languages:
+
+     * `scheme/base' is the most like `mzscheme' in scale and scope,
+       but with some improved syntax and a more consistent set of
+       precedures. For example, the `lambda' of `scheme/base' supports
+       optional and keyword arguments, and `define-struct' is much
+       more flexible than before. See "scheme/base" below for more
+       information.
+
+     * `scheme' builds on `scheme/base', and it is analogous to the
+       old "Pretty Big" language. The `scheme' language is the default
+       language for using the `mzscheme' REPL.
+
+     * `scheme/gui' builds on `scheme', adding the MrEd GUI classes
+       and functions.
+
+   Library code should generally start with `scheme/base', which is a
+   `mzscheme'-like compromise in terms of size (i.e., code size and
+   likelihood of name collisions) and convenience (i.e., the most
+   commonly used bindings are available). The `scheme' choice is
+   appropriate for programs where the additional functionality of
+   `scheme' is likely to be needed or loaded, anyway.
+
+ - The `#lang' shorthand for `module' is now preferred for a module
+   declaration in a file. In "my-library.ss", instead of
+
+      (module my-library scheme/base
+        (define my-stuff ....)
+        ....)
+
+   write
+
+      #lang scheme/base
+      (define my-stuff ....)
+      ....
+
+   Note the absence of the parenthesis wrapping the module content (it
+   is terminated by the end-of-file) and the absence of the redundant
+   identifier `my-library'.
+
+ - Bindings introduced by a module's language (i.e., its initial
+   import) can be shadowed by definitions and imports in the module
+   body.
+
+ - Under Unix, "~" is no longer automatically expanded to a user's
+   home directory. The `expand-user-path' function from `scheme/base'
+   explicitly expands the abbreviation (but this function should be
+   used carefully; library functions should typically allow "~" to be
+   a relative path).
+
+ - Literal vectors and boxes are immutable, as are vectors and boxes
+   produced by `syntax->datum'. Unlike vectors and boxes, immutable
+   hash tables are never equal to mutable hash tables (which is
+   related to support for functional updating of hash tables in
+   `scheme/base').
+
+ - Hash table printing is enabled by default, and vector-length
+   printing is disabled by default. Opaque structure instances no
+   longer print with a leading "struct:" between angle brackets, and
+   built-in procedures print with "procedure:" instead of
+   "primitive:".
+
+ - Graph input syntax, such as `#0=(1 . #0#)' is no longer allowed in
+   program syntax parsed by `read-syntax', though it is still allowed
+   for `read'. The `datum->syntax' function now raises an exception
+   when given a cyclic value, and non-cyclic graph structure (though
+   pairs, vectors, and boxes) is not preserved.
+
+ - Complex numbers with inexact-zero imaginary parts are no longer
+   considered real (or rational), and +inf.0, -inf.0, and +nan.0 are
+   no longer considered rational (or integers).
+
+ - In fully expanded code, `#%datum' expands to `quote'. Even when
+   using the `mzscheme' language, beware that `if' in fully expanded
+   code is the `if' of `scheme/base'. When using the `scheme/base'
+   language, beware that `lambda' and `#%app' expand to
+   `#%plain-lambda' and `#%plain-app' (which are also `lambda' and
+   `#%app' of the `mzscheme' language). The `require' and `provide'
+   forms expand to `#%require' and `#%provide'. Finally, beware that
+   `#%datum' in `scheme/base' is different than in `mzscheme' (because
+   the former disallows unquoted keywords as expressions).
+
+ - The naming convention for compiled files has changed to preserve
+   the original file suffix. For example, the bytecode version of
+   "x.ss" is now named "x_ss.zo". The "_loader" protocol for
+   native-code extensions is no longer supported.
+
+ - Windows console binary names are converted like Unix binary names:
+   downcased and " " replaced by "-".
+
+ - The `equal?' and hashing functions work on cyclic data, and a new
+   `prop:equal+hash' property allows customization of `equal?' for a
+   structure type.
+
+ - The contract library (in `scheme/contract') does not export object
+   or mixin contracts. Instead they are exported from
+   `scheme/class'. The libraries in the "mzlib" collection remain as
+   before.
+
+ - In a syntax pattern of the form `(a ... . b)', `b' is now allowed
+   to match an empty list.
+
+ - UTF-8 decoding for ports uses #\uFFFD instead of #\? as the
+   replacement character for bad encodings.
+
+ - Inside PLT Scheme: the `mzscheme' module is no longer built into
+   the exectable. When embedding PLT Scheme in a larger application,
+   use `mzc --c-mods' to convert a set of modules into embeddable C
+   code (as a static byte array containing bytecode).
+
+======================================================================
+ Porting Advice
+======================================================================
+
+The best approach to moving to v4.0 depends on the kind of code that
+you're working with.
+
+Non-module Programs
+-------------------
+
+If the program is not in a module, then the best start is to put it
+into one. The module system's job is to manage code across multiple
+dialects of Scheme, so staying outside of the module system while
+upgrading means that you're ignoring the main upgrade tool.
+
+The module notation is much lighter than before, so putting old code
+into a module may be as easy as adding `#lang scheme' to the beginning
+of the file. If you want something closer to the old `mzscheme'
+language, try `#lang mzscheme' instead.  If you think of the program
+as R5RS code, then try starting with `#lang r5rs'. Finally, if it's a
+MrEd script, then `#lang scheme/gui' may be the best starting point.
+
+If you have R5RS code that won't fit (or that you don't want) in a
+module, then you still have the R5RS language in DrScheme, and you can
+also run via the new `plt-r5rs' command-line executable.
+
+Modules Using the `mzscheme' Language
+-------------------------------------
+
+If the program is (now) in a `mzscheme' module, then it might work
+fine as-is. The bindings of the `mzscheme' module in v372 and v4.0 are
+mostly the same, with two main caveats:
+
+ * Pairs are immutable in the new `mzscheme'.
+
+   Even though `cons' in `mzscheme' could be defined to produce
+   mutable pairs, many PLT libraries expect immutable pairs. Thus,
+   `cons' in `mzscheme' produces immutable pairs, because it seems to
+   be the best compromise between backward compatibility and
+   interoperability.
+
+   Indeed, our experience is that making the result of `cons'
+   immutable does not create many porting problems. Nevertheless, if
+   your code does use `set-car!' or `set-cdr!', and if converting to a
+   more functional style is difficult, then consider using `mcons' and
+   the `scheme/mpair' library.
+
+ * Keyword arguments via `mzlib/kw' are not compatible with the
+   keyword argument of `scheme/base'.
+
+   Most PLT libraries are now built on `scheme/base', which means that
+   keyword-consuming functions from those libraries are difficult to
+   use in `mzscheme' without explicitly importing and using `#%app'
+   from `scheme/base'. Fortunately, keyword arguments were
+   infrequently used in PLT libraries before v4.0.
+
+If these sorts of problems start to give you trouble, or if the
+relevant code is likely to be useful for a long time, then you're
+probably better off upgrading from a `mzscheme' module to a
+`scheme/base' or `scheme' module. Upgrading gives you the easiest
+access to the PLT libraries (especially as keyword arguments become
+more common).
+
+Otherwise, even if you stick to `mzscheme', you can use some new
+features, like the new syntax for module paths. That is, `(require
+mzlib/pretty)' works just as well as `(require (lib "pretty.ss"))' to
+access the pretty-printing library in a `mzscheme' module.
+
+The "mzlib" collection has become the home of legacy libraries and
+interfaces. For example, `mzlib/contract' mostly re-exports
+`scheme/contract', but it also re-exports the class contracts of
+`scheme/class' for compatibility with the old `(lib "contract.ss")'
+interface.
+
+Moving to `scheme' or `scheme/base'
+-----------------------------------
+
+If you decide to port to the native language of most PLT libraries,
+then you need to pick either `scheme' or `scheme/base' as a
+replacement for `mzscheme'. The `scheme' language is a lot bigger than
+`scheme/base'. Use `scheme' for scripts or other places where you want
+the convenience of many bindings. Use `scheme/base' when you're
+implementing a library that you will distribute to others, in which
+case a smaller footprint and less possibility for name collisions
+matters more than convenience.
+
+If you're moving code into a `scheme' or `scheme/base' module, you'll
+usually have the change the following parts of your code:
+
+ * The `require' and `provide' syntax has changed:
+
+    - Use `(require (for-syntax ....))' instead of
+      `(require-for-syntax ....)'.
+
+    - Use `(only-in ....)' instead of `(only ....)'. Also, use
+      `(only-in .... [<old-id> <new-id>] ...)' instead of `(rename
+      .... [<new-id> <old-id>] ...)'. That is, use `only-in' instead
+      of `rename' and reverse the order of the names.
+
+    - Use `(all-from-out ....)' instead of `(all-from ....)', and use
+      `(except-out (all-from-out ....))' instead of `(all-from-except
+      ....)'. That is, compose `except-out' and `all-from-out' to get
+      the old `all-from-except' combination.
+
+ * Beware that `scheme/base' and `scheme' automatically print non-void
+   results of top-level expressions. You may have to add an explicit
+   `(void ....)'  around a side-effecting expression that returns a
+   non-void result.
+
+ * If you use `open-output-file', `call-with-output-file', etc. with a
+   mode like 'exists or 'replace, you'll have to add the #:exists
+   keyword before the mode (since it's now a keyword argument).
+
+ * Use plain `lambda' instead of `opt-lambda' or `lambda/kw', since
+   `lambda' supports optional and keyword arguments.
+
+ * Use `when' instead of one-armed `if' (which is no longer allowed).
+
+ * If you require libraries from the "mzlib" collection, convert to
+   the `scheme/...' variant --- if the function or syntactic form you
+   need is not already provided by `scheme'/base or `scheme'.
+
+ * Pairs are immutable, and the advice for handling mutation of pairs
+   is the same as in `mzscheme': try to convert to a more functional
+   style, and as a last resort fall back to `mcons' and the
+   `scheme/mpair' library.
+
+ * Beware of libraries that still use `mzlib/kw' for keyword
+   arguments. It's relatively easy to call such functions from
+   `scheme' or `scheme/base', though: just quote the keyword in the
+   function call.
+
+======================================================================
+ Immutable and Mutable Pairs
+======================================================================
+
+Making pairs immutable helps prevent security and design holes that
+result form unexpected mutation of lists; Schemers do not usually
+think about lists as mutable, and they write code that fails in exotic
+ways if a list is mutated concurrently. For similar reasons, immutable
+lists work better with higher-order contracts.
+
+Although this change may sound drastic, our experience to date is that
+uses of mutable pairs are isolated and easy to convert to either
+mpairs or functional style. The new `scheme/mpair' library provides
+functions for processing mutable lists.
+
+For compatibility, the `cons' exported by the `r5rs' language module is
+an alias for `mcons', and the various list-consuming and -producing
+functions expetced by `r5rs' also use mutable pairs. Even the `lambda'
+form of `r5rs' converts rest arguments to mutable lists.
+
+By default, mutable pairs print using curly braces instead of round
+parentheses:
+
+ > (car (mcons 1 2))
+ car: expects argument of type <pair>; given {1 . 2}
+
+The `print-mpair-curly-braces' parameter can be set to #f to disable
+this convention. 
+
+The `r5rs/init' module sets `print-mpair-curly-braces' to #f, along
+with setting various other reader and printer parameters. Thus,
+
+  mzscheme -l r5rs/init -i
+
+starts an R5RS-friendly REPL.
+
+======================================================================
+ MzScheme Command Line and Initialization
+======================================================================
+
+Many of the old `mzscheme' command-line arguments have been removed.
+For example, the `-F' option to load multiple files is no longer
+available.
+
+Previous versions of `mzscheme' required the `-m' and/or `-v' flags to
+suppress the version banner and interactive REPL. Now, the REPL must
+be enabled explicitly using the `-i' flag --- except that `-i' is
+implicit in the case that no command-line arguments are provided.
+
+The placement of `-i' relative to other flags matters. For example,
+
+    mzscheme -l r5rs/init -i
+
+starts a REPL with just R5RS, whereas
+
+   mzscheme -i -l r5rs/init
+
+requires the R5RS bindings on top of all the bindings that are
+normally available in the REPL.
+
+More generally, starting with an `-l', `-t', or `-u' flag (which
+requires a module) causes `mzscheme' to load only the specified
+module, without first loading the default `scheme' module.  Using
+only a `-e', `-f', or `-r' flag (which evaluaes a top-level expression
+or loads a file containing top-level expression), in contrast, causes
+the `scheme' loadule to be loaded first to initialize the top-level
+environment. The ".mzschemerc" start-up file is loaded only just
+before starting a REPL, if any.
+
+The default for initializing the top-level environment is the `scheme'
+language module, instead of `mzscheme' or its close analogue
+`scheme/base'. The `scheme' module is analogous to the old "Pretty
+Big" language: in addition to the core forms, it supplies contracts,
+the class system, the unit system, and the pretty printer. More
+precisely, the default module is `scheme/init', which is like
+`scheme', but installs the pretty printer and `help' form.
+
+The initial top-level environment is completely empty. Command-line
+flags like `-l' introduce bindings into the environment. Such bindings
+are not yet introduced, however, during the evaluation of the module
+body (for the module named by `-l'), which means that `eval' using the
+default namespace will not work.
+
+======================================================================
+ Module Paths
+======================================================================
+
+The module identified as `mzscheme' is no longer specially built
+in. Instead, plain identifiers used as module paths are now converted
+to an equivalent `lib' form. For example, `mzscheme' as a module
+reference is the same as `(lib "mzscheme")', and `scheme/base' is the
+same as `(lib "scheme/base").
+
+New conventions on `lib' paths apply when the specified path
+has no file suffix:
+
+  * If `lib' contains a single path element with no file suffix, then
+    the element is treated as a collection name, and "main.ss" is the
+    library. Consequently, `mzscheme', `(lib "mzscheme")', and `(lib
+    "mzscheme/main.ss")' are all equivalent.
+
+  * If `lib' contains a single string with multiple path elements
+    within the string and no file suffix, then a ".ss" suffix is added
+    automatically. So, `scheme/pretty', `(lib "scheme/pretty")', and
+    `(lib "scheme/pretty.ss")' are all equivalent.
+
+  * For backward compatibility, if `lib' contains a single string that
+    is a single path element with a file suffix, then "mzlib" is used
+    as the collection. So, `(lib "a-unit.ss")' is equivalent (as in
+    previous version) to `(lib "mzlib/a-unit.ss")'.
+
+  * Also for backward compatibility, when a `lib' form contains
+    multiple strings, they are parsed the old way. So, `(lib "url.ss"
+    "net")' is equivalent to `(lib "net/url.ss")' or just `net/url'.
+
+Since a plain identifier is a `lib' shorthand, a special syntax is
+needed to access an interactively declared module. In that case, you
+must quote the name:
+
+   > (module m scheme/base ; = `(lib "scheme/base.ss")'
+       (provide x)
+       (define x 10))
+   > (module n scheme/base
+       (require 'm scheme/pretty)
+       (pretty-print x))
+   > (require 'n)
+
+======================================================================
+ scheme/base
+======================================================================
+
+The `scheme/base' module is intended as a replacement for the
+`mzscheme' module. It provides essentially the same functionality, but
+with some syntactic and name changes.
+
+ * The syntax of `require' and `provide' form is more composable, and
+   it is macro-extensible. For example, the `scheme' form
+
+     (provide (all-from-except scheme/base random))
+
+   is translated to `scheme/base' as
+
+     (provide (except-out (all-from-out scheme/base) random))
+
+   which composes the `except-out' and `all-form-out' sub-forms.
+
+   Since `require' and `provide' are macro-extensible, sub-forms like
+   `except-out' have transformer bindings. To help avoid conflicts,
+   sub-form bindings for `require' tend to end with `-in', and
+   sub-form bindings for `provide' tend to end with `-out'.
+
+   The `require-for-syntax', `require-for-template', etc. forms have
+   been replaced with `for-syntax', `for-template', and `for-label'
+   sub-forms that can be used within `require' or `provide'.
+
+ * The `lambda'/`define' and procedure-application forms support
+   keyword and optional procedure arguments. The declaration syntax is
+   an extension of `opt-lambda'. For example,
+
+    (define (f x [y 10] #:z z #:w [w 12]) ....)
+
+   defines a function that takes two required arguments: a normal
+   argument `x' and another argument with the keyword #:z. It also
+   accepts two optional argument: a normal argument `y' that defaults
+   to 10, and an argument with the #:w keyword that defaults to 12.
+
+   The following calls of `f' are all equivalent:
+
+      (f 1 #:z 11)
+      (f 1 10 #:z 11)
+      (f 1 10 #:z 11 #:w 12)
+      (f 1 #:w 12 #:z 11)
+      (f #:z 11 1)
+      (f #:z 11 1 10 #:w 12)
+
+   Note that keyword-based arguments can be provided in any order,
+   relative to each other and to non-keyword arguments. "Rest"
+   arguments, such as the `x' in `(lambda x 10)', do not capture
+   keyword-based arguments; keyword arguments are completely separate
+   from by-position arguments, and a separate "rest"-like facility is
+   provided for accepting all provided keyword arguments.
+
+ * Procedures such as `open-output-file' accept the file-mode
+   specification ('text or 'binary) and exists-handling option
+   ('replace, 'error, etc.) via #:mode and #:exists keyword arguments.
+
+ * Keywords are not allowed as expressions; that is, a keyword is not
+   self-quoting. Keywords are still first-class values, however, and a
+   keyword expression can be quoted in the usual way:
+
+    #:a    ; a syntax error
+    '#:a   ; produces the keyword #:a
+
+ * The `define-struct' form creates immutable structures by default:
+
+    (define-struct posn (x y)) ; does not declare `set-posn-x!'
+
+   Specify the #:mutable optional for either the entire structure type
+   or an individual field:
+
+    (define-struct posn (x y) 
+                   #:mutable) ; => `set-posn-x!' and  `set-posn-x!'
+    (define-struct posn ([x #:mutable] y)  ; => just `set-posn-x!'
+
+   Use the #:inspector option to specify an inspector, such as
+   specifying #f to make the structure type tranparent:
+
+    (define-struct posn (x y) #:inspector #f)
+
+   Other keyword options such as #:property and #:procedure enable
+   `define-struct' to reflect all of the funtionality of the
+   underlying `make-struct-type' function.
+
+ * One-armed `if' is prohibited; use `when', instead.
+
+ * Empty applications, (), are disallowed, instead of producing '().
+
+ * Some popular procedures formerly in libraries have been moved into
+   `scheme/base', including `filter', `remq', and `regexp-split'.
+
+ * The result of each expression at the module level is automatically
+   printed using `(current-print)'.
+
+ * Hash-table function names have changed:
+
+        make-hash-table              => make-hasheq  make-weak-hasheq
+                                        make-hash    make-weak-hash
+        hash-table?                  => hash?  hash-eq?  hash-weak?
+        hash-table-get               => hash-ref
+        hash-table-put!              => hash-set!
+        hash-table-remove!           => hash-remove!
+        hash-table-count             => hash-count
+        hash-table-map               => hash-map
+        ....                            ....
+
+   IMPORTANT: The correct translation of `(make-hash-table)' is
+   `(make-hasheq)', not `(make-hash)'. Instead, `(make-hash)'
+   is equivalent to `(make-hash-table 'equal)'.
+
+   The new functions `hash-set' and `hash-remove' support
+   constant-time functional update of immutable hash tables.
+
+ * The identifiers `else', `=>', `_', and `...' are bound (as syntax
+   that cannot be used as an expression). The `else' and `=>' bindings
+   are used by `cond' and `case', while `_' and `...' are for syntax
+   patterns and templates.
+
+ * For syntax patterns in `syntax-case', `syntax-rules', and
+   elsewhere, `_' is a wildcard pattern (matches anything) instead of
+   a pattern variable.
+
+ * The initial transformer environment includes only `syntax-rules',
+   `syntax-id-rules', `_', and `...'. Use
+  
+      (require (for-syntax scheme/base))
+
+   to get `syntax-case' into the transformer environment.
+
+ * A few syntax-related procedure names are different:
+
+      syntax-object->datum            -> syntax->datum
+      datum->syntax-object            -> datum->syntax
+      module-identifier=?             -> free-identifier=?
+      module-transformer-identifier=? -> free-transformer-identifier=?
+      module-template-identifier=?    -> free-template-identifier=?
+      module-label-identifier=?       -> free-label-identifier=?
+
+ * Instead of `make-namespace': `make-empty-namespace' always creates
+   an empty namespace; `make-empty-base-namespace' creates a namespace
+   to which `scheme/base' is attached, but not required into the
+   top-level environment; `make-base-namespace' function creates a
+   namespace where `scheme/base' is `require'd into the top-level
+   environment. See also `define-namespace-anchor'.

@@ -77,4 +77,25 @@
 (define xsquare (bitvector->integer (bv #x3120 16)))
 
 ;; (pretty-print (ra16_lane_sel 14 16 0 xoffset xoffset_hi xsquare))
-(pretty-print (v32int16_abs16 xbuff_32_16 0 xoffset_z xoffset_z xsquare))
+;; (pretty-print (v32int16_abs16 xbuff_32_16 0 xoffset_z xoffset_z xsquare))
+
+
+(define (v16int32_add16 xbuff ybuff)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 16 1))])
+        (define %low1 (* 32 %i))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %ext_xbuff (extract %high1 %low1 xbuff))
+        (define %low2 (* 32 %i))
+        (define %high2 (+ %low2 (- 32 1)))
+        (define %ext_ybuff (extract %high2 %low2 ybuff))
+        (define %o (bvadd %ext_xbuff %ext_ybuff))
+        %o
+      )
+    )
+  )
+  dst
+)
+
+

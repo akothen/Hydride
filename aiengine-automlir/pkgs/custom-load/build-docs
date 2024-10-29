@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# This script is used to build the docs hosted at
+#   http://rmculpepper.github.io/custom-load/
+
+raco scribble --html \
+  --dest doc-build \
+  --redirect-main http://docs.racket-lang.org \
+  +m \
+  custom-load.scrbl

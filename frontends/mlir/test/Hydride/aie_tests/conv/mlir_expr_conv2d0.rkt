@@ -9,17 +9,17 @@
  
 
 (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
-(define reg_1_tensor (bv 0 (bitvector 256)))
-(define reg_1 (arith:create-tensor reg_1_tensor (vector 8) (vector 0) 'int32 1))
 (define reg_0_tensor (bv 0 (bitvector 256)))
 (define reg_0 (arith:create-tensor reg_0_tensor (vector 8) (vector 0) 'int32 0))
+(define reg_1_tensor (bv 0 (bitvector 256)))
+(define reg_1 (arith:create-tensor reg_1_tensor (vector 8) (vector 0) 'int32 1))
 (define reg_2_tensor (bv 0 (bitvector 256)))
 (define reg_2 (arith:create-tensor reg_2_tensor (vector 8) (vector 0) 'int32 2))
 
 ; Creating a map between buffers and mlir call node arguments
 (define id-map (make-hash))
-(hash-set! id-map reg_1 (bv 1 (bitvector 8)))
 (hash-set! id-map reg_0 (bv 0 (bitvector 8)))
+(hash-set! id-map reg_1 (bv 1 (bitvector 8)))
 (hash-set! id-map reg_2 (bv 2 (bitvector 8)))
 
 

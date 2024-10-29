@@ -141,6 +141,7 @@ class SynthesizerBase:
             print("Setting aie target settings")
             self.FLEXIBLE_CASTING = True
             self.ENABLE_PRUNING = True
+            self.BASE_VECT_SIZE = None
             self.MAX_BW_SIZE = 1024
         elif self.target == "visa":
             print("Setting VISA target settings")

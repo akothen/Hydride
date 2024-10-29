@@ -5,7 +5,7 @@ set(CMAKE_BUILD_TYPE Release)
 
 set(LT_LLVM_INSTALL_DIR "${HYDRIDE_ROOT}/frontends/halide/llvm-build" PATH "LLVM installation directory")
 list(APPEND CMAKE_PREFIX_PATH "${LT_LLVM_INSTALL_DIR}/lib/cmake/llvm/")
-find_package(LLVM 12 REQUIRED CONFIG)
+find_package(LLVM 14 REQUIRED CONFIG)
 include_directories(SYSTEM ${LLVM_INCLUDE_DIRS} "InstSelectors/common")
 
 
