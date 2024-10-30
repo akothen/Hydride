@@ -70,10 +70,14 @@ class TypedSimpleGrammarGenerator:
 
     def emit_lit_1(self, bv_size, prec):
         splat_factor = bv_size // prec
+        if splat_factor == 0:
+            return ""
         return "(lit (create-splat-bv (bv 1 (bitvector {})) {}))".format(prec, splat_factor)
 
     def emit_lit_imm(self, imm, bv_size, prec):
         splat_factor = bv_size // prec
+        if splat_factor == 0:
+            return ""
         return "(lit (create-splat-bv (bv {} (bitvector {})) {}))".format(imm, prec, splat_factor)
 
     def emit_log2_imm(self, imm, bv_size, prec):
@@ -84,6 +88,8 @@ class TypedSimpleGrammarGenerator:
 
 
         splat_factor = bv_size // prec
+        if splat_factor == 0:
+            return ""
         return "(lit (create-splat-bv (bv {} (bitvector {})) {}))".format(int(math.log(imm,2)), prec, splat_factor)
 
     def emit_lit_ramp(self, bv_size, prec):
@@ -160,10 +166,12 @@ class TypedSimpleGrammarGenerator:
                 imm_j = self.imms[j]
 
                 if imm_i[1] == imm_j[1]:
+                    break
                     # if precs are the same
 
                     repeated_splat = self.interleave_splat(imm_i, imm_j, fill_size = bv_size)
-                    imm_clauses.append(repeated_splat)
+                    if repeated_splat not in imm_clauses:
+                        imm_clauses.append(repeated_splat)
 
 
 
