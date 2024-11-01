@@ -651,6 +651,12 @@ class Context:
                 string += "\n" + (prefix + "\t" + arg.get_halide_dsl_value())
             elif hydride_compatible and isinstance(arg,Reg):
                 string += "\n" + (prefix + "\t" + "(reg {})".format(arg.index))
+            elif hydride_compatible and isinstance(arg,ConstBitVector):
+                arg_prec = min(8, arg.size)
+                lanes = arg.size // arg_prec
+                type_info = "; <{} x i{}>\n".format(lanes, arg_prec)
+                lit_string = "(lit (bv {} {})) ".format(arg.value, arg.size)
+                string += "\n" + (prefix + "\t" + lit_string)  + type_info
             else:
                 string += "\n" + (prefix + "\t" + arg.get_dsl_value())
 
@@ -903,6 +909,8 @@ class DSLInstruction(InstructionType):
 
     def get_semantics_ops_list(self, exclude_concat=True, exclude_extract=True):
         operations = []
+        if "define" not in self.semantics[0]:
+            operations = self.semantics
         for line in self.semantics[1:]:
             for bvop in BV_OPS:
                 if bvop == "concat" and exclude_concat:
