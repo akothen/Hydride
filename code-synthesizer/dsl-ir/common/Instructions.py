@@ -652,7 +652,9 @@ class Context:
             elif hydride_compatible and isinstance(arg,Reg):
                 string += "\n" + (prefix + "\t" + "(reg {})".format(arg.index))
             elif hydride_compatible and isinstance(arg,ConstBitVector):
-                arg_prec = min(8, arg.size)
+                arg_prec = max(min(64, arg.size), 8) #min(8, arg.size)
+                if arg.size < 8:
+                    arg_prec = arg.size
                 lanes = arg.size // arg_prec
                 type_info = "; <{} x i{}>\n".format(lanes, arg_prec)
                 lit_string = "(lit (bv {} {})) ".format(arg.value, arg.size)
