@@ -262,6 +262,13 @@ class Bool(OperandType):
             return str(self.name)
 
 
+    def to_int(self):
+        if self.value == "#t":
+            return 1
+        elif self.value == "#f":
+            return 0
+        else:
+            assert False, "Unrecognized value!:\t"+self.value
     def get_rkt_comment(self):
         return ";; Boolean Operand "
 
