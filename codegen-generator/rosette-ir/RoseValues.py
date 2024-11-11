@@ -79,18 +79,7 @@ class RoseConstant(RoseValue):
         return self.Val == Other.Val and self.getType() == Other.getType()
 
     def __ne__(self, Other):
-        if not isinstance(Other, RoseValue):
-            return True
-        if isinstance(Other, RoseUndefValue) \
-                or isinstance(Other, RoseOperation) \
-                or isinstance(Other, RoseArgument):
-            return True
-        # Rule out the cases where we just compare agains plain ol' values
-        if not isinstance(Other, RoseConstant) \
-                and isinstance(Other, RoseValue):
-            return True
-        assert isinstance(Other, RoseConstant)
-        return self.Val != Other.Val or self.getType() != Other.getType()
+        return not self.__eq__(Other)
 
     def __hash__(self):
         return super().__hash__()
@@ -187,18 +176,7 @@ class RoseArgument(RoseValue):
         return self.Callee.getRegionID() == Other.Callee.getRegionID() and super().__eq__(Other)
 
     def __ne__(self, Other):
-        if not isinstance(Other, RoseValue):
-            return True
-        if isinstance(Other, RoseUndefValue) \
-                or isinstance(Other, RoseOperation) \
-                or isinstance(Other, RoseConstant):
-            return True
-        # Rule out the cases where we just compare agains plain ol' values
-        if not isinstance(Other, RoseArgument) \
-                and isinstance(Other, RoseValue):
-            return True
-        assert isinstance(Other, RoseArgument)
-        return self.Callee.getRegionID() != Other.Callee.getRegionID() or super().__ne__(Other)
+        return not self.__eq__(Other)
 
     # TODO: Should we also include callee in the hash?
     def __hash__(self):
@@ -285,21 +263,7 @@ class RoseOperation(RoseValue):
             and super().__eq__(Other)
 
     def __ne__(self, Other):
-        if not isinstance(Other, RoseValue):
-            return True
-        if isinstance(Other, RoseUndefValue) \
-                or isinstance(Other, RoseArgument) \
-                or isinstance(Other, RoseConstant):
-            return True
-        # Rule out the cases where we just compare agains plain ol' values
-        if not isinstance(Other, RoseOperation) \
-                and isinstance(Other, RoseValue):
-            return True
-        assert isinstance(Other, RoseOperation)
-        return self.Opcode != Other.Opcode or self.Operands != Other.Operands \
-            or self.getOpInfoBundle() != Other.getOpInfoBundle() \
-            or self.ParentBlock.getRegionID() != Other.ParentBlock.getRegionID() \
-            or super().__ne__(Other)
+        return not self.__eq__(Other)
 
     def __hash__(self):
         return super().__hash__()
