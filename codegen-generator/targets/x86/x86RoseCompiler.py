@@ -129,7 +129,6 @@ class x86RoseContext(RoseContext):
       super().destroyContext(ContextName)
     
 
-
 def CompileNumber(Num, Context : x86RoseContext):
   if Context.isCompileIndexFlagSet():
     ConstantVal = RoseConstant.create(Num.val, RoseIntegerType.create(32))
@@ -199,7 +198,6 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
     HighIndexValue = HighIndexValue.getOperand(0)
   # High index is expressed in terms of low index
   # TODO: Make this more general.
-
   # Just handle one _very_ common case where low = i
   assert isinstance(HighIndexValue, RoseOperation)
   assert isinstance(Low, RoseOperation)
@@ -308,7 +306,7 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
 
   if type(IndexExpr.obj) == TypeLookup:
     # Compile the low index first
-    ElemType =x86Types[IndexExpr.obj.key]
+    ElemType = x86Types[IndexExpr.obj.key]
     IndexVal = CompileIndex(IndexExpr.idx, Context)
     CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
                                   IndexVal.getType())
@@ -674,6 +672,10 @@ def CompileUpdate(Update, Context : x86RoseContext):
         Context.setMaxVectorLength(NewLength)
     # Compile the bitvector
     BitVector = CompileExpression(Update.lhs.bv, Context)
+    print("Update.lhs.bv:")
+    print(Update.lhs.bv)
+    print("BitVector:")
+    BitVector.print()
     # Do some sanity check if possible
     if isinstance(Low, RoseConstant):
       assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
@@ -689,21 +691,17 @@ def CompileUpdate(Update, Context : x86RoseContext):
       # Let's size-extend
       if Context.isValueSignKnown(RHSExprVal):
         if Context.isValueSigned(RHSExprVal) == True:
-           RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
-                                                RHSExprVal, Bitwidth)
+          RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), RHSExprVal, Bitwidth)
         else:
-           RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
-                                                RHSExprVal, Bitwidth)
+          RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), RHSExprVal, Bitwidth)
       else:
-        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
-                                              RHSExprVal, Bitwidth)
+        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), RHSExprVal, Bitwidth)
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     elif RHSExprVal.getType().getBitwidth() > Bitwidth:
       # Truncate the undesirable high bits
-      RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
-                          RHSExprVal, Bitwidth)
+      RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), RHSExprVal, Bitwidth)
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
@@ -717,16 +715,18 @@ def CompileUpdate(Update, Context : x86RoseContext):
     assert type(Update.lhs) == BitIndex
     if type(Update.lhs.obj) == TypeLookup:
       # Compile the low index
-      ElemType =x86Types[Update.lhs.obj.key]
+      ElemType = x86Types[Update.lhs.obj.key]
       IndexVal = CompileIndex(Update.lhs.idx, Context)
-      CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
-                                    IndexVal.getType())
-      LowIndex = RoseMulOp.create(Context.genName(), \
-                                [CoFactor, IndexVal])
+      CoFactor = RoseConstant.create(ElemType.getBitwidth(), IndexVal.getType())
+      LowIndex = RoseMulOp.create(Context.genName(), [CoFactor, IndexVal])
       Context.addAbstractionToIR(LowIndex)
       Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
       # Compile the vector object
       BitVector = CompileExpression(Update.lhs.obj, Context)
+      print("Update.lhs.obj:")
+      print(Update.lhs.obj)
+      print("BitVector:")
+      BitVector.print()
       # Get the high index
       assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
       if not Context.isValueSignKnown(BitVector):
@@ -747,6 +747,10 @@ def CompileUpdate(Update, Context : x86RoseContext):
       IndexVal = CompileExpression(Update.lhs.idx, Context)
       # Compile the vector
       BitVector = CompileExpression(Update.lhs.obj, Context)
+      print("Update.lhs.obj:")
+      print(Update.lhs.obj)
+      print("BitVector:")
+      BitVector.print()
       if not Context.isValueSignKnown(BitVector):
         if Context.isValueSignKnown(RHSExprVal):
           Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
@@ -764,8 +768,14 @@ def CompileUpdate(Update, Context : x86RoseContext):
   Context.addAbstractionToIR(LHSOp)
   
   # Add the operation to the context
-  #Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
-  Context.addCompiledAbstraction(Update.lhs.id, LHSOp)
+  print("LHSOp:")
+  LHSOp.print()
+  print("LHSOp.getInputBitVector():")
+  LHSOp.getInputBitVector().print()
+  print("LHSOp.getInputBitVector().getName():")
+  print(LHSOp.getInputBitVector().getName())
+  Context.addVariable(LHSOp.getInputBitVector().getName(), Update.lhs.id)
+  Context.addCompiledAbstraction(Update.lhs.id, LHSOp.getInputBitVector())
 
   return LHSOp
   
@@ -1512,7 +1522,8 @@ def CompileTypeLookup(LookupExpr, Context : x86RoseContext):
 
 def CompileMatrixDimLookup(expr, Context: x86RoseContext):
   assert type(expr.obj) == Var
-  obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
+  obj = CompileExpression(expr.obj, Context)
+  #RoseValue.create(expr.obj.name, x86Types['__tile'])
   # Check if the tile object is already defined and cached. If yes, just use that.
   if not Context.isVariableDefined(obj.getName()):
     Context.addVariable(obj.getName(), expr.obj.id)
@@ -1529,19 +1540,13 @@ def CompileMatrixDimLookup(expr, Context: x86RoseContext):
     return Context.getCompiledAbstractionForID(ID)
 
   assert not Context.isElemTypeOfVariableKnown(param_name)
-
   RootContext, root_function = Context.getFirsRootAbstractionsOfType(RoseFunction)
-
-  # From old x86Dims.py:
-  #   'rows': RoseConstant.create(10, RoseIntegerType.create(8)),  # for testing...
-  #   'colsb': RoseConstant.create(10, RoseIntegerType.create(16)),  # for testing...
-  # param_type = RoseIntegerType.create({'rows': 8, 'colsb': 16}[expr.key])
-  param_type = RoseIntegerType.create(32)  # todo: Kunal — yeah.. not to spec but whatever, makes everything easier..
+  param_type = RoseIntegerType.create(32) 
   param_value = RoseArgument.create(param_name, param_type, root_function)
 
   # Add the variable to the parent function definition
   assert isinstance(root_function.Type, RoseFunctionType)
-  root_function.ArgList.append(param_value)  # todo: Kunal — should the order of rows and colsb params be deterministic?
+  root_function.ArgList.append(param_value) 
   root_function.Type.SubClassData['arglist'].append(param_type)
 
   # Add the variables to all the parent contexts as if its been there the whole time
@@ -1557,8 +1562,14 @@ def CompileMatrixDimLookup(expr, Context: x86RoseContext):
 
 
 def CompileMatrixRowLookup(expr, Context: x86RoseContext):
+  print("CompileMatrixRowLookup")
   assert type(expr.obj) == Var
-  obj = RoseValue.create(expr.obj.name, x86Types['__tile'])
+  obj = CompileExpression(expr.obj, Context)
+  print("obj:")
+  obj.print()
+  print("type(obj):")
+  print(type(obj))
+  #RoseValue.create(expr.obj.name, x86Types['__tile'])
   # Check if the tile object is already defined and cached. If yes, just use that.
   if not Context.isVariableDefined(obj.getName()):
     Context.addVariable(obj.getName(), expr.obj.id)
@@ -1569,7 +1580,10 @@ def CompileMatrixRowLookup(expr, Context: x86RoseContext):
     Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
 
   idx = CompileIndex(expr.idx, Context)
+  print("CREATING MATRIX EXTRACT ROW OP")
   op = RoseMatrixExtractRowOp.create(Context.genName(), obj, idx)
+  print("matrix exract:")
+  op.print()
   Context.addElemTypeOfVariable(op.getName(), RoseBitVectorType.create(op.getOutputBitwidth()))
   Context.addSignednessInfoForValue(op, False)
   Context.addAbstractionToIR(op)
@@ -1946,7 +1960,6 @@ def HandleAmxWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
   #       ENDFOR
   #   }
   [treg, r, data, nbytes] = Args
-
   assert isinstance(treg.getType(), RoseMatrixType)
   assert isinstance(data.getType(), RoseBitVectorType)
   assert isinstance(nbytes, RoseArgument)
