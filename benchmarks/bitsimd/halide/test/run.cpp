@@ -70,6 +70,8 @@
 #include "matmul_256.h"
 #elif benchmark_bitsimd_matmul
 #include "bitsimd_matmul.h"
+#elif benchmark_bitsimd_gemv
+#include "bitsimd_gemv.h"
 #elif benchmark_matmul_256_32bit
 #include "matmul_256_32bit.h"
 #elif benchmark_matmul_256_32bit_bias_add
@@ -170,8 +172,8 @@ int main(int argc, char **argv) {
   /* -----------------------------------------------------*/
   /*  Get input parameters                                */
   /* -----------------------------------------------------*/
-  if (argc != 5) {
-    printf("usage: %s <width> <height> <input.bin> <output.bin>\n", argv[0]);
+  if (argc != 3) {
+    printf("usage: %s <width> <height> \n", argv[0]);
     return 1;
   }
 
@@ -197,23 +199,6 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  /* -----------------------------------------------------*/
-  /*  Read image input from file                          */
-  /* -----------------------------------------------------*/
-  if ((in_fp = open(argv[3], O_RDONLY)) < 0) {
-    printf("Error: Cannot open %s for input\n", argv[3]);
-    return 1;
-  }
-
-  for (i = 0; i < height; i++) {
-    if (read(in_fp, &input[i * width], sizeof(unsigned char) * width) !=
-        width) {
-      printf("Error, Unable to read from %s\n", argv[3]);
-      close(in_fp);
-      return 1;
-    }
-  }
-  close(in_fp);
 
   /* -----------------------------------------------------*/
   /*  Run benchmark on the Simulator                      */
@@ -365,17 +350,30 @@ int main(int argc, char **argv) {
 #endif
 
 #if benchmark_max_pool
-  halide_dimension_t c_dim{0, 1024, 1};
-  halide_dimension_t x_dim{0, width / 32, 128};
-  halide_dimension_t y_dim{0, height / 32, 128 * (width / 32)};
-  halide_dimension_t b_dim{0, 1, 128 * (width / 32) * (height / 32)};
+
+  int channel = width;
+  unsigned char *input_max_pool = (unsigned char *)aligned_malloc(
+      width * height * channel  *sizeof(unsigned int),
+      1 << LOG2VLEN); 
+                     
+  unsigned char *output_max_pool = (unsigned char *)aligned_malloc(
+      width * height * channel * sizeof(unsigned int),
+      1 << LOG2VLEN); 
+                      
+  //halide_dimension_t c_dim{0, 1024, 1};
+  halide_dimension_t c_dim{0, channel, 1};
+  halide_dimension_t x_dim{0, width , channel};
+  halide_dimension_t y_dim{0, height , channel * width };
+  halide_dimension_t b_dim{0, 1, channel * width * height}  ;
   halide_dimension_t shape[4] = {c_dim, x_dim, y_dim, b_dim};
 
-  Halide::Runtime::Buffer<int32_t> input_buf((int32_t*)input, 4, shape);
-  Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)output, 4, shape);
+  Halide::Runtime::Buffer<int32_t> input_buf((int32_t*)input_max_pool, 4, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)output_max_pool, 4, shape);
 
   benchmark([&]() {
-    int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
+    //int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
+
+    int error = max_pool(input_buf, 2, 2, 2, 2, 5, 225, output_buf);
     if (error != 0) {
       printf("max_pool pipeline failed: %d\n", error);
     }
@@ -1011,13 +1009,30 @@ int main(int argc, char **argv) {
 
 #if benchmark_bitsimd_matmul
 
-  halide_dimension_t x_dim{0, 256, 1};
-  halide_dimension_t y_dim{0, 256, 256};
-  halide_dimension_t shape[2] = {x_dim, y_dim};
+  int M = 1024;
+  int N = 1024;
+  int K = 1024;
 
-  Halide::Runtime::Buffer<int32_t> matA((int32_t *)input, dims, shape);
-  Halide::Runtime::Buffer<int32_t> matB((int32_t *)input, dims, shape);
-  Halide::Runtime::Buffer<int32_t> output_buf((int32_t *)output, dims, shape);
+  halide_dimension_t x_dim_A{0, M, 1};
+  halide_dimension_t y_dim_A{0, K, M};
+  halide_dimension_t shape_A[2] = {x_dim_A, y_dim_A};
+  int32_t* matAptr = (int32_t*) malloc(sizeof(int32_t) * M * K);
+  Halide::Runtime::Buffer<int32_t> matA((int32_t *)matAptr, dims, shape_A);
+
+
+  halide_dimension_t x_dim_B{0, K, 1};
+  halide_dimension_t y_dim_B{0, N, K};
+  halide_dimension_t shape_B[2] = {x_dim_B, y_dim_B};
+  int32_t* matBptr = (int32_t*) malloc(sizeof(int32_t) * N * K);
+  Halide::Runtime::Buffer<int32_t> matB((int32_t *)matBptr, dims, shape_B);
+
+
+
+  halide_dimension_t x_dim_O{0, M, 1};
+  halide_dimension_t y_dim_O{0, N, M};
+  halide_dimension_t shape_O[2] = {x_dim_O, y_dim_O};
+  int32_t* matOptr = (int32_t*) malloc(sizeof(int32_t) * N * M);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t *)matOptr, dims, shape_O);
 
   cycles = benchmark([&]() {
     printf("Launching bitsimd matmul!\n");
@@ -1030,7 +1045,55 @@ int main(int argc, char **argv) {
   printf("AppReported (): Image %dx%d - bitsimd_matmul(128B): %lld cycles (%0.4f "
          "cycles/pixel)\n",
          (int)width, (int)height, cycles, (float)cycles / (width * height));
+  free(matAptr);
+  free(matBptr);
+  free(matOptr);
 #endif
+
+
+#if benchmark_bitsimd_gemv
+
+  int M = 1024;
+  int N = 1;
+  int K = 1024;
+
+  halide_dimension_t x_dim_A{0, M, 1};
+  halide_dimension_t y_dim_A{0, K, M};
+  halide_dimension_t shape_A[2] = {x_dim_A, y_dim_A};
+  int32_t* matAptr = (int32_t*) malloc(sizeof(int32_t) * M * K);
+  Halide::Runtime::Buffer<int32_t> matA((int32_t *)matAptr, dims, shape_A);
+
+
+  halide_dimension_t x_dim_B{0, K, 1};
+  halide_dimension_t y_dim_B{0, N, K};
+  halide_dimension_t shape_B[2] = {x_dim_B, y_dim_B};
+  int32_t* matBptr = (int32_t*) malloc(sizeof(int32_t) * N * K);
+  Halide::Runtime::Buffer<int32_t> matB((int32_t *)matBptr, dims, shape_B);
+
+
+
+  halide_dimension_t x_dim_O{0, M, 1};
+  halide_dimension_t y_dim_O{0, N, M};
+  halide_dimension_t shape_O[2] = {x_dim_O, y_dim_O};
+  int32_t* matOptr = (int32_t*) malloc(sizeof(int32_t) * N * M);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t *)matOptr, dims, shape_O);
+
+  cycles = benchmark([&]() {
+    printf("Launching bitsimd gemv!\n");
+    int error = bitsimd_gemv(matA, matB, output_buf);
+    if (error != 0) {
+      printf("bitsimd_gemv pipeline failed: %d\n", error);
+    }
+  });
+
+  printf("AppReported (): Image %dx%d - bitsimd_gemv(128B): %lld cycles (%0.4f "
+         "cycles/pixel)\n",
+         (int)width, (int)height, cycles, (float)cycles / (width * height));
+  free(matAptr);
+  free(matBptr);
+  free(matOptr);
+#endif
+
 
 #if benchmark_matmul_256
 
@@ -1753,8 +1816,8 @@ int main(int argc, char **argv) {
 
 #if benchmark_tensor_add
   printf("Testing With Tensor Add!\n");
-  int simple_width = 32;
-  int simple_height = 32;
+  int simple_width = 1024;
+  int simple_height = 1;
 
   halide_dimension_t x_dim{0, simple_width, 1};
   halide_dimension_t y_dim{0, simple_height, simple_width};
@@ -1801,8 +1864,8 @@ int main(int argc, char **argv) {
 
 #if benchmark_relu
   printf("Testing With Relu!\n");
-  int simple_width = 32;
-  int simple_height = 32;
+  int simple_width = 64 * 64 * 4;
+  int simple_height = 1;
 
   halide_dimension_t x_dim{0, simple_width, 1};
   halide_dimension_t y_dim{0, simple_height, simple_width};
@@ -1822,7 +1885,7 @@ int main(int argc, char **argv) {
   Halide::Runtime::Buffer<int32_t> output_buf(simple_output, dims, shape);
 
   cycles = benchmark([&]() {
-    int error = relu(input_buf_1, output_buf);
+    int error = relu(input_buf_1,  output_buf);
     if (error != 0) {
       printf("relu pipeline failed: %d\n", error);
     }
