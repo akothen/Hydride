@@ -4,7 +4,7 @@ LLVM_ROOT ?= $(LLVM_DIS_ROOT)
 benchmarks = gaussian3x3 \
 			 gaussian5x5 \
 			 gaussian7x7 \
-			 simple_add \
+			 tensor_add \
 			 dilate3x3 \
 			 dilate5x5 \
 			 dilate7x7 \
@@ -102,7 +102,7 @@ $(benchmarks): %: %/bin
 ifeq ($(BENCHMARK),1) 
 
 # Benchmark the generated binary
-	$@/bin/$@_run.out 3840 2160 ../test_vectors/football3840x2160.bin $@/out/out.bin
+	$@/bin/$@_run.out 1920 1080
 
 endif
 
@@ -148,7 +148,7 @@ fully_connected: %: %/bin
 ifeq ($(BENCHMARK),1) 
 
 # Benchmark the generated binary
-	$@/bin/$@_run.out 1920 1080 ../test_vectors/football1920x1080.bin  $@/out/out.bin
+	$@/bin/$@_run.out 1920 1080 
 
 endif
 
@@ -164,3 +164,4 @@ clean:
 	rm -rf /tmp/base_*
 	rm -rf /tmp/hydride_hash*
 	rm -rf /tmp/hydride.node*
+	rm -rf /tmp/*bitserial*.rkt
