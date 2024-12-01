@@ -245,6 +245,7 @@
     [(vec-bwnot v1 ) (vec-len v1)]
 
     [(vector_reduce op width vec) (quotient (vec-len vec) width)]
+    [(vec-tile_matmul n m k v0 v1 v2) (vec-len v0)]
 
     ;; Shuffles
     [(slice_vectors vec base stride len) len]
@@ -382,6 +383,7 @@
     [(vec-sub v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-sat-sub v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-mul v1 v2) (prune-const-exprs (list v1 v2))]
+    ;;; [(vec-tile_matmul v1 v2) ()] ;; How to?
     ;[(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2 v3)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (prune-const-exprs (list v1 v2))]
     [(vec-mul_shift_right v1 v2 v3) (prune-const-exprs (list v1 v2))]
@@ -487,6 +489,9 @@
     [(vec-mul_shift_right v1 v2 v3) 
      (lambda (i) (do-mul-shift-right ((interpret-env v1 env) i) ((interpret-env v2 env) i) ((interpret-env v3 env) i) ))
      ]
+    ;;; [(vec-tile_matmul m n k v1 v2 v3)
+    ;;;  (lambda (i) )
+    ;;; ]
 
     [_ (error "Unrecognized expression in halide:interpret-env" p)]
     )
@@ -744,6 +749,7 @@
        [(eq? op 'add)
         (lambda (i) (do-reduce (interpret vec) bvadd (* i width) width))]
        [else (error "Unexpected vector_reduce op:" op)])]
+    [(vec-tile_matmul m n k v1 v2 v3) (lambda (i) (do-tile_matmul m n k (interpret v1) (interpret v2) (interpret v3) i))]
 
     ;; Shuffles
     [(vec-broadcast n vec) (define l (vec-len vec)) (lambda (i) ((interpret vec) (modulo i l)))]
@@ -1120,7 +1126,7 @@
 
         (define bv-result 
           (if use-euc-div
-             (cpp:euclidean-div lhs rhs outT)
+            (cpp:euclidean-div lhs rhs outT)
             (mk-cpp-expr 
               (widening-div (cpp:eval lhs) (cpp:eval rhs))
               outT)
@@ -1308,8 +1314,52 @@
      [(eq? width 3) (op (cpp:eval (vec base)) (cpp:eval (vec (+ base 1))) (cpp:eval (vec (+ base 2))))]
      [(eq? width 4) (op (cpp:eval (vec base)) (cpp:eval (vec (+ base 1))) (cpp:eval (vec (+ base 2))) (cpp:eval (vec (+ base 3))))]
      [else (error "NYI: Halide vector_reduce for reduction factor of:" width)])
-   outT))
+   outT)
+)
+(define (do-tile_matmul m n k acc lhs rhs i) ;;; TODO: support signed/unsigned
+  ;;; m=8, n=64, k=8
+  ;;; matrix view: LHS:int8*m*n, RHS:int8*n*k, OUTPUT,ACC:int32*m*k
+  ;;; memory view: lhs:int32*m*n//4, rhs:int32*n//4*k, output,acc:int32*m*k
+  ;;; acc in row-major format, int32x1 per byte
+  ;;; lhs in row-major format, int8x4 per byte
+  ;;; rhs in vnni-packing format, int8x4 per byte
 
+  ;;; computes the i-th element of the output matrix
+  ;;; i=row*k+col  ==>  row=i//k, col=i%k
+  ;;; OUTPUT[row][col]=ACC[row][col]+\sum_{j=0}^{n-1} LHS[row][j]*RHS[j][col]
+  ;;; However, matrix in Hydride are 1d arrays, all indices need to be carefully recomputed as follow
+  ;;; output[i]=acc[i]+\sum_{j=0}^{n//4-1} dot4(lhs[row*n//4+j],rhs[j*k+col])
+  ;;;          =acc[i]+\sum_{j=0}^{n//4-1} \sum_{jj=0}^{3} signext32(lhs[row*n+4j+jj])*signext32(rhs[j*4k+4col+jj])
+
+  ;;; m=8, n=64, k=64
+  ;;; matrix view: ACC:int32*m*n//4, LHS:int8*m*k, RHS:int8*k*n//4, 
+  ;;; memory view: acc:int32*m*n//4, lhs:int32*m*k//4, rhs:int32*k//4*n//4, 
+  ;;; acc in row-major format, int32x1 per byte
+  ;;; lhs in row-major format, int8x4 per byte
+  ;;; rhs in vnni-packing format, int8x4 per byte
+
+  ;;; computes the i-th element of the output matrix
+  ;;; i=row*(n//4)+col  ==>  row=i//(n//4)=4i//n, col=i%(n//4)=(4i%n)//4
+  ;;; OUTPUT[row][col]=ACC[row][col]+\sum_{j=0}^{k-1} LHS[row][j]*RHS[j][col]
+  ;;; However, matrix in Hydride are 1d arrays, all indices need to be carefully recomputed as follow
+  ;;; output[i]=acc[i]+\sum_{j=0}^{k//4-1} dot4(lhs[row*k//4+j],rhs[j*n//4+col])
+  ;;;          =acc[i]+\sum_{j=0}^{k//4-1} \sum_{jj=0}^{3} signext32(lhs[row*k+4j+jj])*signext32(rhs[j*n+4col+jj])
+  
+  ;; Display i
+  (define row (quotient (* 4 i) k))
+  (define 4col (remainder (* 4 i) k))
+  (define outT (cpp:type (acc 0)))
+  ;;; (printf "i ~a\n" i)
+  (mk-cpp-expr
+    (bvadd (cpp:eval (acc i))
+      (for/fold ([sum (bv 0 32)]) ([j (in-range 0 (/ k 4))])
+           (for/fold ([sum sum]) ([jj (in-range 0 4)])
+             (bvadd sum
+                (bvmul
+                  (sign-extend (cpp:eval (lhs (+ (* row k) (+ (* 4 j) jj)))) (bitvector 32))
+                  (sign-extend (cpp:eval (rhs (+ (* j n) (+ 4col jj)))) (bitvector 32)))))))
+    outT)
+)
 
 
 ;;;;;;
