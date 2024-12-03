@@ -412,11 +412,14 @@ void Legalizer::InsertBitSIMDBroadcastAllocation(Instruction* InsertBefore){
 // If they do not exist
 void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* InsertBefore){
 
+    bool isMixedScalarPimOp;
     if(CallInst* CI = dyn_cast<CallInst>(InsertBefore)){
         Function* CF = CI->getCalledFunction();
         if(CF && CF->getName().startswith(StringRef("pimBroadCast")) ||  CF->getName().contains(StringRef("pimBroadCast"))){
             InsertBitSIMDBroadcastAllocation(InsertBefore);
             return;
+        } else if(CF){
+            isMixedScalarPimOp = CF->getName().contains(StringRef("Scalar"))  || CF->getName().contains(StringRef("Scaled")); 
         }
 
     }
@@ -450,7 +453,16 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
     }
 
     
-    for(Value* Arg : Args){
+    for(int i =0; i < Args.size(); i++){
+
+        // Skip allocation for last value for mixed scalar pim ops 
+        // as we can directly use the scalar values
+        if(isMixedScalarPimOp && i == Args.size() - 1){
+            continue;
+        }
+
+        Value* Arg = Args[i];
+
         if(InstToObjectIDMap.find(Arg) == InstToObjectIDMap.end()){
 
             errs () << "Argument: "<< *Arg << "\n";
@@ -569,11 +581,35 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
 
         ObjIDs.push_back(BroadcastedValue);
 
+
     } else {
 
-        for(auto* Arg: Args){
-            assert(InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end() && "PimArg not in InstToObjectIDMap");
-            ObjIDs.push_back(InstToObjectIDMap[Arg]);
+        bool isMixedScalarPimOp = InstFunction->getName().contains(StringRef("Scalar"))  || InstFunction->getName().contains(StringRef("Scaled")); 
+        for(int i = 0; i < Args.size(); i++){
+            Value* Arg = Args[i];
+            
+            assert(isMixedScalarPimOp || InstToObjectIDMap.find(Arg) != InstToObjectIDMap.end() && "PimArg not in InstToObjectIDMap");
+
+            // Last value for mix scalar ops is the broadcast
+            if(isMixedScalarPimOp && (i == (Args.size() - 1))){
+                // If it is a value with broadcast semantics, sign-extend it to 64-bits to conform with PIM API type
+                Value* BroadcastedValue = Arg;
+                if(FixedVectorType* FVTy = dyn_cast<FixedVectorType>(BroadcastedValue->getType())){
+                    errs() << "Need to extract value from "<< *BroadcastedValue << "\n";
+                    unsigned num_elements = FVTy->getNumElements();
+                    assert(num_elements == 1 && "Expected to broadcast scalar values");
+                    BroadcastedValue = ExtractElementInst::Create(BroadcastedValue, Zero, "ext.0", InsertBefore);
+                    errs() << "New Broadcasted value: "<< * BroadcastedValue << "\n";
+                } 
+
+                if(!BroadcastedValue->getType()->isIntegerTy(64)){
+                    // Sign extend to 64
+                    BroadcastedValue = new SExtInst(BroadcastedValue, i64Ty, "broad.sext", InsertBefore);
+                }
+                ObjIDs.push_back(BroadcastedValue);
+            } else {
+                ObjIDs.push_back(InstToObjectIDMap[Arg]);
+            }
         }
 
         assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
@@ -674,6 +710,8 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
     std::string PimFuncName = name == "pimBroadCast" ? "pimBroadcastInt" : name;
     Function* PimFunc = M->getFunction(PimFuncName);
 
+    bool isMixedScalarPimOp = (name.find("Scalar") != std::string::npos) 
+        ||  (name.find("Scaled") != std::string::npos); 
 
     if(!PimFunc){
 
@@ -684,6 +722,11 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
         } else {
             for(int i = 0; i < num_symbolic_args ; i++){
                 CopyArgsTy.push_back(i32Ty);
+            }
+
+            // Add uint64_t parameter type to represent scalars
+            if (isMixedScalarPimOp){
+                CopyArgsTy.push_back(i64Ty);
             }
         }
 
