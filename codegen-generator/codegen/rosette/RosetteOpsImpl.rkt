@@ -36,6 +36,13 @@
       (begin
         (concat (bv 0 num_pad_bits) vect))))
 
+(define (bvpadlowbits vect num_pad_bits)
+  (if (equal? num_pad_bits 0)
+      (begin
+        vect)
+      (begin
+        (concat vect (bv 0 num_pad_bits)))))
+
 (define (bvmulnsw a b bitwidth)
   (define minusonebv (bv -1 (bitvector bitwidth)))
   (define result
