@@ -390,11 +390,25 @@ class RoseOperation(RoseValue):
             NewValue = args[1]
             assert isinstance(OldValue, RoseValue)
             assert isinstance(NewValue, RoseValue)
+            print("self:")
+            self.print()
+            print("OldValue:")
+            OldValue.print()
             for Index, Operand in enumerate(self.Operands):
+                print("Operand:")
+                Operand.print()
                 if type(OldValue) != type(Operand):
+                    print("SKIP")
                     continue
+                print("-")
                 if Operand == OldValue:
+                    # Get all all uses of this instruction,
+                    # and replace their uses.
+                    Users = self.getUsers()
+                    OldSelf = self.cloneOperation()
                     self.setOperand(Index, NewValue)
+                    for User in Users:
+                        User.replaceUsesWith(OldSelf, self)
             return
         assert False, "Illegal number of arguments to replaceUsesWith"
 
