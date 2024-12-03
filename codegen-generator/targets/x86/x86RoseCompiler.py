@@ -308,10 +308,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     # Compile the low index first
     ElemType = x86Types[IndexExpr.obj.key]
     IndexVal = CompileIndex(IndexExpr.idx, Context)
-    CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
-                                  IndexVal.getType())
-    LowIndex = RoseMulOp.create(Context.genName(), \
-                              [CoFactor, IndexVal])
+    CoFactor = RoseConstant.create(ElemType.getBitwidth(), IndexVal.getType())
+    LowIndex = RoseMulOp.create(Context.genName(), [CoFactor, IndexVal])
     Context.addAbstractionToIR(LowIndex)
     Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
 
@@ -1578,17 +1576,17 @@ def CompileMatrixRowLookup(expr, Context: x86RoseContext):
   if not Context.isElemTypeOfVariableKnown(obj.getName()):
     Context.addElemTypeOfVariable(obj.getName(), obj.getType())
     Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
-
-  idx = CompileIndex(expr.idx, Context)
+  Idx = CompileIndex(expr.idx, Context)
   print("CREATING MATRIX EXTRACT ROW OP")
-  op = RoseMatrixExtractRowOp.create(Context.genName(), obj, idx)
+  RowBitwidth = RoseConstant.create(x86Types['__tile'].getMaxCols() * 8, RoseIntegerType.create(32))
+  Op = RoseMatrixExtractRowOp.create(Context.genName(), obj, Idx, RowBitwidth)
   print("matrix exract:")
-  op.print()
-  Context.addElemTypeOfVariable(op.getName(), RoseBitVectorType.create(op.getOutputBitwidth()))
-  Context.addSignednessInfoForValue(op, False)
-  Context.addAbstractionToIR(op)
-  Context.addCompiledAbstraction(expr.id, op)
-  return op
+  Op.print()
+  Context.addElemTypeOfVariable(Op.getName(), RoseBitVectorType.create(Op.getOutputBitwidth()))
+  Context.addSignednessInfoForValue(Op, False)
+  Context.addAbstractionToIR(Op)
+  Context.addCompiledAbstraction(expr.id, Op)
+  return Op
 
 
 def CompileMatch(MatchExpr, Context: x86RoseContext):
