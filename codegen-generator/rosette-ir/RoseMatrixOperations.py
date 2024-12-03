@@ -13,17 +13,16 @@ from RoseValues import *
 from RoseMatrixOperation import RoseMatrixOp
 
 
-# `mtxextractrow <tile> <idx>`
-# originally: `class RoseMatrixInsertRowOp(RoseBitVectorOp):`
-# however:    `assert len(Opcode.getBVOpInputs(Operands)) > 0`
 class RoseMatrixExtractRowOp(RoseMatrixOp):
-    def __init__(self, name: str, tile: RoseValue, idx: RoseValue, parentblock):
-        inputs = [tile, idx]
-        super().__init__(RoseOpcode.mtxextractrow, name, inputs, parentblock)
+    def __init__(self, Name: str, Tile: RoseValue, Idx: RoseValue, \
+                    NumBits : RoseValue, ParentBlock : RoseBlock):
+        Operands = [Tile, Idx, NumBits]
+        super().__init__(RoseOpcode.mtxextractrow, Name, Operands, ParentBlock)
 
     @staticmethod
-    def create(name: str, tile: RoseValue, idx: RoseValue, parentblock=RoseUndefRegion()):
-        return RoseMatrixExtractRowOp(name, tile, idx, parentblock)
+    def create(name: str, Tile: RoseValue, Idx: RoseValue, NumBits : RoseValue, \
+                ParentBlock=RoseUndefRegion()):
+        return RoseMatrixExtractRowOp(name, Tile, Idx, NumBits, ParentBlock)
 
     def getTile(self):
         return self.getOperand(0)
@@ -35,15 +34,14 @@ class RoseMatrixExtractRowOp(RoseMatrixOp):
         NotImplemented
 
 
-# `mtxinsertrow <elements> <tile> <idx>`
 class RoseMatrixInsertRowOp(RoseMatrixOp):
-    def __init__(self, elements: RoseValue, tile: RoseValue, idx: RoseValue, parentblock):
-        inputs = [elements, tile, idx]
-        super().__init__(RoseOpcode.mtxinsertrow, "", inputs, parentblock)
+    def __init__(self, Elements: RoseValue, Tile: RoseValue, Idx: RoseValue, ParentBlock):
+        inputs = [Elements, Tile, Idx]
+        super().__init__(RoseOpcode.mtxinsertrow, "", inputs, ParentBlock)
 
     @staticmethod
-    def create(elements: RoseValue, tile: RoseValue, idx: RoseValue, parentblock=RoseUndefRegion()):
-        return RoseMatrixInsertRowOp(elements, tile, idx, parentblock)
+    def create(Elements: RoseValue, Tile: RoseValue, Idx: RoseValue, ParentBlock=RoseUndefRegion()):
+        return RoseMatrixInsertRowOp(Elements, Tile, Idx, ParentBlock)
 
     def getElements(self):
         return self.getOperand(0)
@@ -61,15 +59,14 @@ class RoseMatrixInsertRowOp(RoseMatrixOp):
         NotImplemented
 
 
-# `mtxinsertrow <elements> <tile> <idx>`
 class RoseMatrixInsertElementOp(RoseMatrixOp):
-    def __init__(self, element: RoseValue, tile: RoseValue, r1: RoseValue, c1: RoseValue, r2: RoseValue, c2: RoseValue, parentblock):
-        inputs = [element, tile, r1, c1, r2, c2]
-        super().__init__(RoseOpcode.mtxinsertel, "", inputs, parentblock)
+    def __init__(self, element: RoseValue, Tile: RoseValue, r1: RoseValue, c1: RoseValue, r2: RoseValue, c2: RoseValue, ParentBlock):
+        inputs = [element, Tile, r1, c1, r2, c2]
+        super().__init__(RoseOpcode.mtxinsertel, "", inputs, ParentBlock)
 
     @staticmethod
-    def create(element: RoseValue, tile: RoseValue, r1: RoseValue, c1: RoseValue, r2: RoseValue, c2: RoseValue, parentblock=RoseUndefRegion()):
-        return RoseMatrixInsertElementOp(element, tile, r1, c1, r2, c2, parentblock)
+    def create(element: RoseValue, Tile: RoseValue, r1: RoseValue, c1: RoseValue, r2: RoseValue, c2: RoseValue, ParentBlock=RoseUndefRegion()):
+        return RoseMatrixInsertElementOp(element, Tile, r1, c1, r2, c2, ParentBlock)
 
     def getElement(self):
         return self.getOperand(0)
