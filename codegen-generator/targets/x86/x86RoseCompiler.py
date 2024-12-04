@@ -1665,7 +1665,7 @@ def CompileUpdatePaddingHighBits(Stmt, Context : x86RoseContext):
   assert Stmt.rhs.val == 0
   NumPadBits = RoseConstant.create(Bitvector.getType().getBitwidth() - Stmt.lhs.lo.val, \
                                   RoseIntegerType.create(32))
-  Operation = RoseBVPadHighBitsOp.create(Bitvector, NumPadBits)
+  Operation = RoseBVPadHighBitsOp.create(Context.genName(), Bitvector, NumPadBits)
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   return Operation
@@ -1746,7 +1746,8 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   # Add padding handling call if not already added
   if PaddingHandled == False and not isinstance(RetType, RoseVoidType):
     NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
-    Operation = RoseBVPadHighBitsOp.create(RootFunction.getReturnValue(), NumPadBits)
+    Operation = RoseBVPadHighBitsOp.create(RootContext.genName(), \
+                    RootFunction.getReturnValue(), NumPadBits)
     RootContext.addAbstractionToIR(Operation)
 
   # Get the compiled function
@@ -1947,69 +1948,50 @@ def HandleToRemainder(_):
   return LamdaImplFunc
 
 
-def HandleAmxWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
-  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
-  #   DEFINE write_row_and_zero(treg, r, data, nbytes) {
-  #       FOR j := 0 TO nbytes - 1
-  #           treg.row[r].byte[j] := data.byte[j]
-  #       ENDFOR
-  #       FOR j := nbytes TO treg.colsb - 1
-  #           treg.row[r].byte[j] := 0
-  #       ENDFOR
-  #   }
-  [treg, r, data, nbytes] = Args
-  assert isinstance(treg.getType(), RoseMatrixType)
-  assert isinstance(data.getType(), RoseBitVectorType)
-  assert isinstance(nbytes, RoseArgument)
-
-  _name = Context.genName
-  _type = RoseIntegerType.create(32)
-  assert nbytes.getType() == _type
-  assert r.getType() == _type
-
-  mtx_insert_row = RoseMatrixInsertRowOp.create(data, treg, r)
-  mtx_insert_zeros = RoseMatrixInsertElementOp.create(
-    RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
-    treg,
-    r, nbytes,
-    r, RoseConstant.create(treg.getType().getMaxCols() - 1, _type)
-  )
-
-  return [mtx_insert_row, mtx_insert_zeros]
+def HandleAMXWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
+  [TileReg, Row, Data, NumBytes] = Args
+  assert isinstance(TileReg.getType(), RoseMatrixType)
+  assert isinstance(Data.getType(), RoseBitVectorType)
+  assert isinstance(NumBytes, RoseArgument)
+  assert isinstance(NumBytes.getType(), RoseIntegerType)
+  assert isinstance(Row.getType(), RoseIntegerType)
+  MaxRowSize = RoseConstant.create(x86Types['__tile'].getMaxCols() * 8, RoseIntegerType.create(32))
+  NumBits = RoseMulOp.create(Context.genName(), \
+          [NumBytes, RoseConstant.create(8, RoseIntegerType.create(32))])
+  NumPadBits = RoseSubOp.create(Context.genName(), [MaxRowSize, NumBits])
+  Operation = RoseBVPadLowBitsOp.create(Context.genName(), Data, NumPadBits)
+  MatrixOp = RoseMatrixInsertRowOp.create(Operation, TileReg, Row)
+  # mtx_insert_zeros = RoseMatrixInsertElementOp.create(
+  #   RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
+  #   treg,
+  #   r, nbytes,
+  #   r, RoseConstant.create(treg.getType().getMaxCols() - 1, RoseIntegerType.create(32))
+  # )
+  return [NumBits, NumPadBits, Operation, MatrixOp]
+  #return [mtx_insert_row, mtx_insert_zeros]
 
 
 def HandleAmxZeroUpperRows(Name: str, Args: list, Context: x86RoseContext):
-  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
-  #   DEFINE zero_upper_rows(treg, r) {
-  #       FOR i := r TO treg.max_rows - 1
-  #           FOR j := 0 TO treg.colsb - 1
-  #               treg.row[i].byte[j] := 0
-  #           ENDFOR
-  #       ENDFOR
-  #   }
-  [treg, r] = Args
-  assert isinstance(treg.getType(), RoseMatrixType)
-  assert isinstance(r, RoseArgument)
-
-  _name = Context.genName
-  _type = RoseIntegerType.create(32)
-  assert r.getType() == _type
-
-  mtx_insert_zeros = RoseMatrixInsertElementOp.create(
-    RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
-    treg,
-    r, RoseConstant.create(0, _type),
-    RoseConstant.create(treg.getType().getMaxRows()-1, _type), RoseConstant.create(treg.getType().getMaxCols()-1, _type)
-  )
-
-  return [mtx_insert_zeros]
+  [TileReg, Row] = Args
+  assert isinstance(TileReg.getType(), RoseMatrixType)
+  assert isinstance(Row, RoseArgument)
+  assert isinstance(Row.getType(), RoseIntegerType)
+  Zero = RoseConstant.create(0, RoseBitVectorType.create(x86Types['__tile'].getMaxCols() * 8))
+  LastRow = RoseConstant.create(x86Types['__tile'].getMaxRows() - 1, RoseIntegerType.create(32))
+  MatrixOp = RoseMatrixInsertRowsOp.create(Zero, TileReg, Row, LastRow)
+  # mtx_insert_zeros = RoseMatrixInsertElementOp.create(
+  #   RoseConstant.create(0, RoseBitVectorType.create(treg.getType().getElementBitwidth())),
+  #   treg,
+  #   r, RoseConstant.create(0, RoseIntegerType.create(32)),
+  #   RoseConstant.create(treg.getType().getMaxRows()-1, RoseIntegerType.create(32)), 
+  #   RoseConstant.create(treg.getType().getMaxCols()-1, RoseIntegerType.create(32))
+  # )
+  return [MatrixOp]
+  #return [mtx_insert_zeros]
 
 
 def HandleAmxZeroTileConfigStart(Name : str, Args : list, Context : x86RoseContext):
-  # AMX section 3.5 of Arch. Instr. Set Ext. Programming Ref.
-  #   DEFINE zero_tileconfig_start() {
-  #   // no-op
-  #   }
+  # This is a no-op
   return []  # return void
 
 
@@ -2047,7 +2029,7 @@ Builtins = {
 
   'REMAINDER': None,
 
-  'write_row_and_zero': HandleAmxWriteRowAndZero,
+  'write_row_and_zero': HandleAMXWriteRowAndZero,
   'zero_upper_rows': HandleAmxZeroUpperRows,
   'zero_tileconfig_start': HandleAmxZeroTileConfigStart
 }
