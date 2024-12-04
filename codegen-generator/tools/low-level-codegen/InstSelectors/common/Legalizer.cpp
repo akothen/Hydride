@@ -419,7 +419,8 @@ void Legalizer::InsertBitSIMDAllocations(std::vector<Value*> Args, Instruction* 
             InsertBitSIMDBroadcastAllocation(InsertBefore);
             return;
         } else if(CF){
-            isMixedScalarPimOp = CF->getName().contains(StringRef("Scalar"))  || CF->getName().contains(StringRef("Scaled")); 
+            // Args takes the values of the operands and the result. Args.size() == 1 when allocating row for output value
+            isMixedScalarPimOp = (CF->getName().contains(StringRef("Scalar"))  || CF->getName().contains(StringRef("Scaled")) ) && Args.size() != 1; 
         }
 
     }
@@ -613,7 +614,15 @@ void Legalizer::InsertBitSIMDCall(Function* InstFunction, std::vector<Value*> Ar
         }
 
         assert(InstToObjectIDMap.find(PimInst) != InstToObjectIDMap.end() && "PimResult not in InstToObjectIDMap" );
-        ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
+
+        if(isMixedScalarPimOp){
+            // For mix pim scalar ops, the destination pim object ID is the second last value
+            assert(ObjIDs.size() >= 1 && "Expected at least one value");
+            auto position = ObjIDs.end() - 1;
+            ObjIDs.insert(position, InstToObjectIDMap[PimInst]);
+        } else {
+            ObjIDs.push_back(InstToObjectIDMap[PimInst]) ;
+        }
 
     }
 
@@ -694,8 +703,10 @@ Function* Legalizer::CreateFunctionDecl(std::string name, CallInst* CI){
 
     for(int i =0; i < CI->getNumArgOperands(); i++){
         Value* arg = CI->getArgOperand(i);
-        if(isa<FixedVectorType>(arg->getType())){
-            num_symbolic_args++;
+        if(auto* FVTy = dyn_cast<FixedVectorType>(arg->getType())){
+            if (FVTy->getNumElements() != 1){
+                num_symbolic_args++;
+            }
         }
     }
 

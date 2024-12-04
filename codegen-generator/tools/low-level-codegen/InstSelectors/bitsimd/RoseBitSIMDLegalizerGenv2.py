@@ -89,32 +89,60 @@ class RoseInstSelectorGenerator():
       print("Content:")
       print(Checks)
       if len(Checks) != 0:
-        Pattern = '''
-          if({}) {{
-            std::string base_name = \"{}\";
-            std::vector<int> Permutation = {{{}}};
-            auto *InstFunction = CreateFunctionDecl(base_name, CI);
-            //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
-            std::vector<Value *> Args = {{CI->getArgOperand(0), CI->getArgOperand(1)}} ;
+        if "Scaled" in InstName:
+            Pattern = '''
+              if({}) {{
+                std::string base_name = \"{}\";
+                std::vector<int> Permutation = {{{}}};
+                auto *InstFunction = CreateFunctionDecl(base_name, CI);
+                //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+                std::vector<Value *> Args = {{CI->getArgOperand(0), CI->getArgOperand(1), CI->getArgOperand(2)}} ;
 
-            // Generate any bitserial Allocation for operands
-            // If they do not exist
-            InsertBitSIMDAllocations(Args, CI);
+                // Generate any bitserial Allocation for operands
+                // If they do not exist
+                InsertBitSIMDAllocations(Args, CI);
 
-            std::vector<Value*> Temp;
-            Temp.push_back(CI);
-            // Generate any bitserial Allocation for result
-            InsertBitSIMDAllocations(Temp, CI);
+                std::vector<Value*> Temp;
+                Temp.push_back(CI);
+                // Generate any bitserial Allocation for result
+                InsertBitSIMDAllocations(Temp, CI);
 
-            // Replace vectorized call to call PIM ISA Directly
-            InsertBitSIMDCall(InstFunction, Args,CI,  CI);
+                // Replace vectorized call to call PIM ISA Directly
+                InsertBitSIMDCall(InstFunction, Args,CI,  CI);
 
-            ReplaceReturn(CI);
+                ReplaceReturn(CI);
 
-            ToBeRemoved.insert(CI);
-            return true;
-          }}
-        '''.format("\n".join(Checks), InstName.split("_")[0], ",".join(Permutation))
+                ToBeRemoved.insert(CI);
+                return true;
+              }}
+            '''.format("\n".join(Checks), InstName.split("_")[0], ",".join(Permutation))
+        else:
+            Pattern = '''
+              if({}) {{
+                std::string base_name = \"{}\";
+                std::vector<int> Permutation = {{{}}};
+                auto *InstFunction = CreateFunctionDecl(base_name, CI);
+                //std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI);
+                std::vector<Value *> Args = {{CI->getArgOperand(0), CI->getArgOperand(1)}} ;
+
+                // Generate any bitserial Allocation for operands
+                // If they do not exist
+                InsertBitSIMDAllocations(Args, CI);
+
+                std::vector<Value*> Temp;
+                Temp.push_back(CI);
+                // Generate any bitserial Allocation for result
+                InsertBitSIMDAllocations(Temp, CI);
+
+                // Replace vectorized call to call PIM ISA Directly
+                InsertBitSIMDCall(InstFunction, Args,CI,  CI);
+
+                ReplaceReturn(CI);
+
+                ToBeRemoved.insert(CI);
+                return true;
+              }}
+            '''.format("\n".join(Checks), InstName.split("_")[0], ",".join(Permutation))
       else:
         assert False, "Unreachable"
       String += Pattern
