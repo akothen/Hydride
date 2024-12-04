@@ -102,7 +102,7 @@ def RunDCEOnBlock(Block: RoseBlock):
       or isinstance(Operation, RoseReturnOp) \
       or isinstance(Operation, RoseBVPadHighBitsOp) \
       or isinstance(Operation, RoseMatrixInsertRowOp) \
-      or isinstance(Operation, RoseMatrixInsertElementOp):
+      or isinstance(Operation, RoseMatrixInsertRowsOp):
         continue
       OpList.append(Operation)
   # Iterate the list of operations in reverse order
