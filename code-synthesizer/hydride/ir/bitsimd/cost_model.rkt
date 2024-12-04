@@ -28,20 +28,30 @@
 ;; ================================================================================
 ;;                                DSL Cost Model
 ;; ================================================================================
-(define cost_pimMax_v2048_e8__v2048_e8__v2048_e8_dsl 1)
-(define cost_pimOr_v2048_e32__v2048_e32__v2048_e32_dsl 1)
-(define cost_pimAnd_v32_e8__v32_e8__v32_e8_dsl 1)
-(define cost_pimGT_v512_e32__v512_e32__v512_e32_dsl 1)
-(define cost_pimEQ_v512_e32__v512_e32__v512_e32_dsl 1)
-(define cost_pimMin_v8192_e8__v8192_e8__v8192_e8_dsl 1)
-(define cost_pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl 1)
-(define cost_pimBroadCast_v512_e32__v32_e32_dsl 1)
-(define cost_pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl 1)
-(define cost_pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl 1)
-(define cost_pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl 1)
-(define cost_pimSub_v256_e16__v256_e16__v256_e16_dsl 1)
-(define cost_pimMul_v16_e8__v16_e8__v16_e8_dsl 1)
-(define cost_pimXor_v8_e16__v8_e16__v8_e16_dsl 1)
+(define cost_pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl 1)
+(define cost_pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl 1)
+(define cost_pimSub_v8192_e16__v8192_e16__v8192_e16_dsl 1)
+(define cost_pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl 1)
+(define cost_pimOr_v4096_e32__v4096_e32__v4096_e32_dsl 1)
+(define cost_pimAnd_v32_e32__v32_e32__v32_e32_dsl 1)
+(define cost_pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl 1)
+(define cost_pimMin_v64_e32__v64_e32__v64_e32_dsl 1)
+(define cost_pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl 1)
+(define cost_pimMulScalar_v256_e32__v256_e32__v256_e32_dsl 1)
+(define cost_pimMax_v8192_e16__v8192_e16__v8192_e16_dsl 1)
+(define cost_pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl 1)
+(define cost_pimAndScalar_v256_e32__v256_e32__v256_e32_dsl 1)
+(define cost_pimXor_v8192_e16__v8192_e16__v8192_e16_dsl 1)
+(define cost_pimBroadCast_v1024_e16__v16_e16_dsl 1)
+(define cost_pimEQ_v512_e16__v512_e16__v512_e16_dsl 1)
+(define cost_pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl 1)
+(define cost_pimGT_v16384_e8__v16384_e8__v16384_e8_dsl 1)
+(define cost_pimAddScalar_v8_e16__v8_e16__v8_e16_dsl 1)
+(define cost_pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl 1)
+(define cost_pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl 1)
+(define cost_pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl 1)
+(define cost_pimMul_v512_e8__v512_e8__v512_e8_dsl 1)
+(define cost_pimDivScalar_v32_e16__v32_e16__v32_e16_dsl 1)
 
 (define (bitsimd:cost prog)
  (destruct prog
@@ -92,82 +102,133 @@
 		[ (scalar_splat_dsl v0 size_i size_o)
 		(+ 1 (bitsimd:cost  v0) )
 	]
-	[ (pimMax_v2048_e8__v2048_e8__v2048_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(+ cost_pimMax_v2048_e8__v2048_e8__v2048_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		)
 	]
-	[ (pimOr_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(+ cost_pimOr_v2048_e32__v2048_e32__v2048_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		)
 	]
-	[ (pimAnd_v32_e8__v32_e8__v32_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(+ cost_pimAnd_v32_e8__v32_e8__v32_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimSub_v8192_e16__v8192_e16__v8192_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		)
 	]
-	[ (pimGT_v512_e32__v512_e32__v512_e32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
-		(+ cost_pimGT_v512_e32__v512_e32__v512_e32_dsl (bitsimd:cost  vc_0)  (bitsimd:cost  vc_1)  (bitsimd:cost  v2)  
+	[ (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimOr_v4096_e32__v4096_e32__v4096_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimAnd_v32_e32__v32_e32__v32_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimAnd_v32_e32__v32_e32__v32_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(+ cost_pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		 
+		 
+		)
+	]
+	[ (pimMin_v64_e32__v64_e32__v64_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimMin_v64_e32__v64_e32__v64_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimMax_v8192_e16__v8192_e16__v8192_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(+ cost_pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		 
+		 
+		)
+	]
+	[ (pimAndScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimAndScalar_v256_e32__v256_e32__v256_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(+ cost_pimXor_v8192_e16__v8192_e16__v8192_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(+ cost_pimBroadCast_v1024_e16__v16_e16_dsl (bitsimd:cost  v0)  
+		 
+		)
+	]
+	[ (pimEQ_v512_e16__v512_e16__v512_e16_dsl vc_0 v1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
+		(+ cost_pimEQ_v512_e16__v512_e16__v512_e16_dsl (bitsimd:cost  vc_0)  (bitsimd:cost  v1)  (bitsimd:cost  vc_2)  
 		 (bitsimd:cost  v3)  
 		 
 		)
 	]
-	[ (pimEQ_v512_e32__v512_e32__v512_e32_dsl v0 vc_1 v2 vc_3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
-		(+ cost_pimEQ_v512_e32__v512_e32__v512_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  vc_1)  (bitsimd:cost  v2)  
-		 (bitsimd:cost  vc_3)  
+	[ (pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		)
 	]
-	[ (pimMin_v8192_e8__v8192_e8__v8192_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(+ cost_pimMin_v8192_e8__v8192_e8__v8192_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimGT_v16384_e8__v16384_e8__v16384_e8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
+		(+ cost_pimGT_v16384_e8__v16384_e8__v16384_e8_dsl (bitsimd:cost  vc_0)  (bitsimd:cost  vc_1)  (bitsimd:cost  v2)  
+		 (bitsimd:cost  v3)  
 		 
 		)
 	]
-	[ (pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(+ cost_pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
-		 
-		 
+	[ (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimAddScalar_v8_e16__v8_e16__v8_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		)
 	]
-	[ (pimBroadCast_v512_e32__v32_e32_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
-		(+ cost_pimBroadCast_v512_e32__v32_e32_dsl (bitsimd:cost  v0)  
-		 
-		)
-	]
-	[ (pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(+ cost_pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(+ cost_pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		 
 		 
 		)
 	]
-	[ (pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(+ cost_pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
-		 
-		 
-		 
-		)
-	]
-	[ (pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(+ cost_pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
-		 
-		)
-	]
-	[ (pimSub_v256_e16__v256_e16__v256_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(+ cost_pimSub_v256_e16__v256_e16__v256_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
-		 
-		)
-	]
-	[ (pimMul_v16_e8__v16_e8__v16_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
-		(+ cost_pimMul_v16_e8__v16_e8__v16_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9)
+		(+ cost_pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  (bitsimd:cost  v2)  
 		 
 		 
 		)
 	]
-	[ (pimXor_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(+ cost_pimXor_v8_e16__v8_e16__v8_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+	[ (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		)
+	]
+	[ (pimMul_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
+		(+ cost_pimMul_v512_e8__v512_e8__v512_e8_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
+		 
+		 
+		)
+	]
+	[ (pimDivScalar_v32_e16__v32_e16__v32_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(+ cost_pimDivScalar_v32_e16__v32_e16__v32_e16_dsl (bitsimd:cost  v0)  (bitsimd:cost  v1)  
 		 
 		)
 	]

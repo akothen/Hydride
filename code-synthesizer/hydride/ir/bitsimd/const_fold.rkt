@@ -154,144 +154,248 @@
 		[else ( scalar_splat_dsl v0-folded size_i size_o )]
 		)
 	]
-	[ (pimMax_v2048_e8__v2048_e8__v2048_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+	[ (pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
 		(define v0-folded (bitsimd:const-fold v0))
 		(define v1-folded (bitsimd:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimMax_v2048_e8__v2048_e8__v2048_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+(lit (bitsimd:interpret ( pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
 ]
-		[else ( pimMax_v2048_e8__v2048_e8__v2048_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		[else ( pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
 		)
 	]
-	[ (pimOr_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+	[ (pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
 		(define v0-folded (bitsimd:const-fold v0))
 		(define v1-folded (bitsimd:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimOr_v2048_e32__v2048_e32__v2048_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+(lit (bitsimd:interpret ( pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
 ]
-		[else ( pimOr_v2048_e32__v2048_e32__v2048_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		[else ( pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
 		)
 	]
-	[ (pimAnd_v32_e8__v32_e8__v32_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+	[ (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(define v0-folded (bitsimd:const-fold v0))
 		(define v1-folded (bitsimd:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimAnd_v32_e8__v32_e8__v32_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+(lit (bitsimd:interpret ( pimSub_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
 ]
-		[else ( pimAnd_v32_e8__v32_e8__v32_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		[else ( pimSub_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
 		)
 	]
-	[ (pimGT_v512_e32__v512_e32__v512_e32_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
+	[ (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+]
+		[else ( pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		)
+	]
+	[ (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimOr_v4096_e32__v4096_e32__v4096_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+]
+		[else ( pimOr_v4096_e32__v4096_e32__v4096_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		)
+	]
+	[ (pimAnd_v32_e32__v32_e32__v32_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimAnd_v32_e32__v32_e32__v32_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+]
+		[else ( pimAnd_v32_e32__v32_e32__v32_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		)
+	]
+	[ (pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) (vector)))
+]
+		[else ( pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
+		)
+	]
+	[ (pimMin_v64_e32__v64_e32__v64_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimMin_v64_e32__v64_e32__v64_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+]
+		[else ( pimMin_v64_e32__v64_e32__v64_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		)
+	]
+	[ (pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+]
+		[else ( pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		)
+	]
+	[ (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimMulScalar_v256_e32__v256_e32__v256_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+]
+		[else ( pimMulScalar_v256_e32__v256_e32__v256_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		)
+	]
+	[ (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimMax_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+]
+		[else ( pimMax_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		)
+	]
+	[ (pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) (vector)))
+]
+		[else ( pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
+		)
+	]
+	[ (pimAndScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimAndScalar_v256_e32__v256_e32__v256_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+]
+		[else ( pimAndScalar_v256_e32__v256_e32__v256_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		)
+	]
+	[ (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimXor_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
+]
+		[else ( pimXor_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		)
+	]
+	[ (pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+		(define v0-folded (bitsimd:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (bitsimd:interpret ( pimBroadCast_v1024_e16__v16_e16_dsl v0-folded size_o num_2 num_3 num_4 prec_i_o num_6 num_7 ) (vector)))
+]
+		[else ( pimBroadCast_v1024_e16__v16_e16_dsl v0-folded size_o num_2 num_3 num_4 prec_i_o num_6 num_7 )]
+		)
+	]
+	[ (pimEQ_v512_e16__v512_e16__v512_e16_dsl vc_0 v1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
+		(define vc_0-folded (bitsimd:const-fold vc_0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(define vc_2-folded (bitsimd:const-fold vc_2))
+		(define v3-folded (bitsimd:const-fold v3))
+		(cond
+		[(and (lit? vc_0-folded) (lit? v1-folded) (lit? vc_2-folded) (lit? v3-folded))
+(lit (bitsimd:interpret ( pimEQ_v512_e16__v512_e16__v512_e16_dsl vc_0-folded v1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 ) (vector)))
+]
+		[else ( pimEQ_v512_e16__v512_e16__v512_e16_dsl vc_0-folded v1-folded vc_2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 )]
+		)
+	]
+	[ (pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+]
+		[else ( pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		)
+	]
+	[ (pimGT_v16384_e8__v16384_e8__v16384_e8_dsl vc_0 vc_1 v2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10)
 		(define vc_0-folded (bitsimd:const-fold vc_0))
 		(define vc_1-folded (bitsimd:const-fold vc_1))
 		(define v2-folded (bitsimd:const-fold v2))
 		(define v3-folded (bitsimd:const-fold v3))
 		(cond
 		[(and (lit? vc_0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? v3-folded))
-(lit (bitsimd:interpret ( pimGT_v512_e32__v512_e32__v512_e32_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 ) (vector)))
+(lit (bitsimd:interpret ( pimGT_v16384_e8__v16384_e8__v16384_e8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 ) (vector)))
 ]
-		[else ( pimGT_v512_e32__v512_e32__v512_e32_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 )]
+		[else ( pimGT_v16384_e8__v16384_e8__v16384_e8_dsl vc_0-folded vc_1-folded v2-folded v3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 num_10 )]
 		)
 	]
-	[ (pimEQ_v512_e32__v512_e32__v512_e32_dsl v0 vc_1 v2 vc_3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
+	[ (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(define v0-folded (bitsimd:const-fold v0))
-		(define vc_1-folded (bitsimd:const-fold vc_1))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+]
+		[else ( pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		)
+	]
+	[ (pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (bitsimd:interpret ( pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) (vector)))
+]
+		[else ( pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
+		)
+	]
+	[ (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9)
+		(define v0-folded (bitsimd:const-fold v0))
+		(define v1-folded (bitsimd:const-fold v1))
 		(define v2-folded (bitsimd:const-fold v2))
-		(define vc_3-folded (bitsimd:const-fold vc_3))
 		(cond
-		[(and (lit? v0-folded) (lit? vc_1-folded) (lit? v2-folded) (lit? vc_3-folded))
-(lit (bitsimd:interpret ( pimEQ_v512_e32__v512_e32__v512_e32_dsl v0-folded vc_1-folded v2-folded vc_3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 ) (vector)))
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (bitsimd:interpret ( pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 ) (vector)))
 ]
-		[else ( pimEQ_v512_e32__v512_e32__v512_e32_dsl v0-folded vc_1-folded v2-folded vc_3-folded size_i_o num_5 num_6 num_7 prec_i_o num_9 )]
+		[else ( pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl v0-folded v1-folded v2-folded size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 )]
 		)
 	]
-	[ (pimMin_v8192_e8__v8192_e8__v8192_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
+	[ (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(define v0-folded (bitsimd:const-fold v0))
 		(define v1-folded (bitsimd:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimMin_v8192_e8__v8192_e8__v8192_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
+(lit (bitsimd:interpret ( pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
 ]
-		[else ( pimMin_v8192_e8__v8192_e8__v8192_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
+		[else ( pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
 		)
 	]
-	[ (pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+	[ (pimMul_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(define v0-folded (bitsimd:const-fold v0))
 		(define v1-folded (bitsimd:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) (vector)))
+(lit (bitsimd:interpret ( pimMul_v512_e8__v512_e8__v512_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) (vector)))
 ]
-		[else ( pimDiv_v2048_e16__v2048_e16__v2048_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
+		[else ( pimMul_v512_e8__v512_e8__v512_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 )]
 		)
 	]
-
-	[ (pimBroadCast_v512_e32__v32_e32_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
-       ;  Do not optimize away broadcasts
-		(define v0-folded (bitsimd:const-fold v0))
-        ( pimBroadCast_v512_e32__v32_e32_dsl v0-folded size_o num_2 num_3 num_4 prec_i_o num_6 num_7 )
-	]
-	[ (pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
+	[ (pimDivScalar_v32_e16__v32_e16__v32_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(define v0-folded (bitsimd:const-fold v0))
 		(define v1-folded (bitsimd:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) (vector)))
+(lit (bitsimd:interpret ( pimDivScalar_v32_e16__v32_e16__v32_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
 ]
-		[else ( pimDiv_v2048_e32__v2048_e32__v2048_e32_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
-		)
-	]
-	[ (pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12)
-		(define v0-folded (bitsimd:const-fold v0))
-		(define v1-folded (bitsimd:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) (vector)))
-]
-		[else ( pimDiv_v16384_e8__v16384_e8__v16384_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 )]
-		)
-	]
-	[ (pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(define v0-folded (bitsimd:const-fold v0))
-		(define v1-folded (bitsimd:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
-]
-		[else ( pimAdd_v16384_e8__v16384_e8__v16384_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
-		)
-	]
-	[ (pimSub_v256_e16__v256_e16__v256_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
-		(define v0-folded (bitsimd:const-fold v0))
-		(define v1-folded (bitsimd:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimSub_v256_e16__v256_e16__v256_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) (vector)))
-]
-		[else ( pimSub_v256_e16__v256_e16__v256_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
-		)
-	]
-	[ (pimMul_v16_e8__v16_e8__v16_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
-		(define v0-folded (bitsimd:const-fold v0))
-		(define v1-folded (bitsimd:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimMul_v16_e8__v16_e8__v16_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) (vector)))
-]
-		[else ( pimMul_v16_e8__v16_e8__v16_e8_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 )]
-		)
-	]
-	[ (pimXor_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
-		(define v0-folded (bitsimd:const-fold v0))
-		(define v1-folded (bitsimd:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (bitsimd:interpret ( pimXor_v8_e16__v8_e16__v8_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 ) (vector)))
-]
-		[else ( pimXor_v8_e16__v8_e16__v8_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 )]
+		[else ( pimDivScalar_v32_e16__v32_e16__v32_e16_dsl v0-folded v1-folded size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 )]
 		)
 	]
 	[v (error "Unrecognized expression" v)]
