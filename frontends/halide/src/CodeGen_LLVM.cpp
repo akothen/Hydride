@@ -471,6 +471,13 @@ void CodeGen_LLVM::add_hydride_code() {
              << "\n";
 
     for (llvm::Function &Fn : *module) {
+        std::string argv_fn_name = Fn.getName().str() + "_argv";
+        if(module->getFunction(argv_fn_name)){
+            EnclosingFunction = &Fn;
+        }
+    }
+
+    for (llvm::Function &Fn : *module) {
         std::vector<llvm::CallInst *> ToInline;
         for (auto &BB : Fn) {
             for (llvm::Instruction &I : BB) {
@@ -525,6 +532,11 @@ void CodeGen_LLVM::add_hydride_code() {
         debug(0) << "Erasing:" << Fn->getName().str() << "\n";
 
         Fn->eraseFromParent();
+    }
+
+    if (enable_hydride_pim){
+        internal_assert(EnclosingFunction);
+
     }
 
     if(enable_hydride_pim && EnclosingFunction){
