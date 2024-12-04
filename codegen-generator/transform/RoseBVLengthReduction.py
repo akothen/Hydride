@@ -64,11 +64,24 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
           # mtxinsertrow operation
           if Op.getInputBitVector() != Function.getReturnValue():
             MatrixInsertFound = False
+            Checklist = [Op.getInputBitVector()]
+            Worklist = list()
             for User in Function.getUsersOf(Op.getInputBitVector()):
+              Worklist.append(User)
+            while len(Worklist) != 0:
+              User = Worklist.pop(0)
+              print("User:")
+              User.print()
               if isinstance(User, RoseMatrixInsertRowOp):
-                if Op.getInputBitVector() == User.getElements():
-                  MatrixInsertFound = True
-                  break
+                for CheckVal in Checklist:
+                  #if Op.getInputBitVector() == User.getElements():
+                  if CheckVal == User.getElements():
+                    MatrixInsertFound = True
+                    break
+              elif isinstance(User, (RoseBVPadLowBitsOp, RoseBVPadHighBitsOp)):
+                Checklist.append(User)
+                for User_ in Function.getUsersOf(User):
+                  Worklist.append(User_)
             if MatrixInsertFound == False:
               print("TempReg:")
               TempReg.print()
@@ -121,6 +134,8 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
           Index = User.getIndexForOperand(TempReg)
           assert isinstance(Index, int)
           User.setOperand(Index, NewTempReg)
+  print("++++FUNCTION:")
+  Function.print()
 
 
 def RunBVLengthReduction(Function: RoseFunction, Context: RoseContext):
