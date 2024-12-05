@@ -35,6 +35,9 @@ class RoseMatrixExtractRowOp(RoseMatrixOp):
     
     def getBitwidthPos(self):
         return 2
+    
+    def isIndexingMtxOp(self):
+        return True
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         NotImplemented
@@ -49,7 +52,7 @@ class RoseMatrixInsertRowOp(RoseMatrixOp):
     def create(InsertVal: RoseValue, Tile: RoseValue, Idx: RoseValue, ParentBlock=RoseUndefRegion()):
         return RoseMatrixInsertRowOp(InsertVal, Tile, Idx, ParentBlock)
 
-    def getElements(self):
+    def getInsertValue(self):
         return self.getOperand(0)
 
     def getTile(self):
@@ -57,8 +60,14 @@ class RoseMatrixInsertRowOp(RoseMatrixOp):
 
     def getRowIndex(self):
         return self.getOperand(2)
+    
+    def getRowIndexPos(self):
+        return 2
 
-    def isIndexingBVOp(self):
+    def getType(self):
+        return self.getTile().getType()
+
+    def isIndexingMtxOp(self):
         return True
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
@@ -66,26 +75,29 @@ class RoseMatrixInsertRowOp(RoseMatrixOp):
 
 
 class RoseMatrixInsertRowsOp(RoseMatrixOp):
-    def __init__(self, InsertVal: RoseValue, Tile: RoseValue, r1: RoseValue, \
-                    r2: RoseValue, ParentBlock):
-        inputs = [InsertVal, Tile, r1, r2]
+    def __init__(self, InsertVal: RoseValue, Tile: RoseValue, RowIdx1: RoseValue, \
+                    RowIdx2 : RoseValue, ParentBlock):
+        inputs = [InsertVal, Tile, RowIdx1, RowIdx2]
         super().__init__(RoseOpcode.mtxinsertrows, "", inputs, ParentBlock)
 
     @staticmethod
-    def create(InsertVal: RoseValue, Tile: RoseValue, r1: RoseValue, r2: RoseValue, \
+    def create(InsertVal: RoseValue, Tile: RoseValue, RowIdx1: RoseValue, RowIdx2: RoseValue, \
                ParentBlock=RoseUndefRegion()):
-        return RoseMatrixInsertRowsOp(InsertVal, Tile, r1, r2, ParentBlock)
+        return RoseMatrixInsertRowsOp(InsertVal, Tile, RowIdx1, RowIdx2, ParentBlock)
 
-    def getElement(self):
+    def getInsertValue(self):
         return self.getOperand(0)
 
     def getTile(self):
         return self.getOperand(1)
 
-    def getRowRange(self):
-        return self.getOperand(2), self.getOperand(4)
+    def getLowRowIndexPos(self):
+        return 2
 
-    def isIndexingBVOp(self):
+    def getHighRowIndexPos(self):
+        return 3
+
+    def isIndexingMtxOp(self):
         return True
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
