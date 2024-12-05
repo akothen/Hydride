@@ -75,7 +75,7 @@ def RunBVLengthReductionOnFunction(Function: RoseFunction, Context: RoseContext)
               if isinstance(User, RoseMatrixInsertRowOp):
                 for CheckVal in Checklist:
                   #if Op.getInputBitVector() == User.getElements():
-                  if CheckVal == User.getElements():
+                  if CheckVal == User.getInsertValue():
                     MatrixInsertFound = True
                     break
               elif isinstance(User, (RoseBVPadLowBitsOp, RoseBVPadHighBitsOp)):
