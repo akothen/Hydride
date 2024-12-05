@@ -301,8 +301,7 @@ class RoseOpcode(Enum):
             assert isinstance(InsertVal.getType(), RoseBitVectorType)
             assert isinstance(Tile.getType(), RoseMatrixType)
             assert isinstance(RowIdx.getType(), RoseIntegerType)
-            assert InsertVal.getType().getBitwidth() == \
-                Tile.getType().getElementBitwidth() * Tile.getType().getMaxCols()
+            assert InsertVal.getType().getBitwidth() == Tile.getType().getMaxCols()
             if isinstance(RowIdx, RoseValues.RoseConstant):
                 assert RowIdx.getValue() >= 0
                 assert RowIdx.getValue() < Tile.getType().getMaxRows()
@@ -314,8 +313,7 @@ class RoseOpcode(Enum):
             assert len(MtxInputs) == 1
             InsertVal, Tile, RowIdx1, RowIdx2 = Inputs
             assert isinstance(InsertVal.getType(), RoseBitVectorType)
-            assert InsertVal.getType().getBitwidth() == \
-                (Tile.getType().getMaxCols() * Tile.getType().getElementBitwidth())
+            assert InsertVal.getType().getBitwidth() == Tile.getType().getMaxCols()
             assert isinstance(Tile.getType(), RoseMatrixType)
             assert isinstance(RowIdx1.getType(), RoseIntegerType)
             assert isinstance(RowIdx2.getType(), RoseIntegerType)
@@ -340,10 +338,8 @@ class RoseOpcode(Enum):
                 assert RowIdx.getValue() >= 0
                 assert RowIdx.getValue() < Tile.getType().getMaxRows()
             if isinstance(Bitwidth, RoseValues.RoseConstant):
-                assert Bitwidth.getValue() \
-                    == Tile.getType().getElementBitwidth() * Tile.getType().getMaxCols()
-            return RoseBitVectorType.create(
-                Tile.getType().getElementBitwidth() * Tile.getType().getMaxCols())
+                assert Bitwidth.getValue() == Tile.getType().getMaxCols()
+            return RoseBitVectorType.create(Tile.getType().getMaxCols())
         if self.value == self.bvpadhighbits.value \
             or self.value == self.bvpadlowbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -870,8 +866,7 @@ class RoseOpcode(Enum):
                 return False
             if not isinstance(RowIdx.getType(), RoseIntegerType):
                 return False
-            if InsertVal.getType().getBitwidth() != \
-                Tile.getType().getElementBitwidth() * Tile.getType().getMaxCols():
+            if InsertVal.getType().getBitwidth() != Tile.getType().getMaxCols():
                 return False
             if isinstance(RowIdx, RoseValues.RoseConstant):
                 if RowIdx.getValue() < 0:
@@ -889,8 +884,7 @@ class RoseOpcode(Enum):
             InsertVal, Tile, RowIdx1, RowIdx2 = Inputs
             if not isinstance(InsertVal.getType(), RoseBitVectorType):
                 return False
-            if InsertVal.getType().getBitwidth() \
-                != (Tile.getType().getMaxCols() * Tile.getType().getElementBitwidth()):
+            if InsertVal.getType().getBitwidth() != Tile.getType().getMaxCols():
                 return False
             if not isinstance(Tile.getType(), RoseMatrixType):
                 return False
@@ -924,11 +918,9 @@ class RoseOpcode(Enum):
                 if RowIdx.getValue() < 0 or RowIdx.getValue() >= Tile.getType().getMaxRows():
                     return False
             if isinstance(Bitwidth, RoseValues.RoseConstant):
-                if Bitwidth.getValue() \
-                    != Tile.getType().getElementBitwidth() * Tile.getType().getMaxCols():
+                if Bitwidth.getValue() != Tile.getType().getMaxCols():
                     return False
-            return RoseBitVectorType.create(
-                Tile.getType().getElementBitwidth() * Tile.getType().getMaxCols())
+            return RoseBitVectorType.create(Tile.getType().getMaxCols())
         return None
 
     def typesOfInputsAndOutputEqual(self):
