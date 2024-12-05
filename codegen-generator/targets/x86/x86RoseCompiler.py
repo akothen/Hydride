@@ -1578,7 +1578,7 @@ def CompileMatrixRowLookup(expr, Context: x86RoseContext):
     Context.addElemTypeOfVariable(abstraction.getName(), obj.getType())
   Idx = CompileIndex(expr.idx, Context)
   print("CREATING MATRIX EXTRACT ROW OP")
-  RowBitwidth = RoseConstant.create(x86Types['__tile'].getMaxCols() * 8, RoseIntegerType.create(32))
+  RowBitwidth = RoseConstant.create(x86Types['__tile'].getMaxCols(), RoseIntegerType.create(32))
   Op = RoseMatrixExtractRowOp.create(Context.genName(), obj, Idx, RowBitwidth)
   print("matrix exract:")
   Op.print()
@@ -1955,7 +1955,7 @@ def HandleAMXWriteRowAndZero(Name: str, Args: list, Context: x86RoseContext):
   assert isinstance(NumBytes, RoseArgument)
   assert isinstance(NumBytes.getType(), RoseIntegerType)
   assert isinstance(Row.getType(), RoseIntegerType)
-  MaxRowSize = RoseConstant.create(x86Types['__tile'].getMaxCols() * 8, RoseIntegerType.create(32))
+  MaxRowSize = RoseConstant.create(x86Types['__tile'].getMaxCols(), RoseIntegerType.create(32))
   NumBits = RoseMulOp.create(Context.genName(), \
           [NumBytes, RoseConstant.create(8, RoseIntegerType.create(32))])
   NumPadBits = RoseSubOp.create(Context.genName(), [MaxRowSize, NumBits])
@@ -1976,7 +1976,7 @@ def HandleAmxZeroUpperRows(Name: str, Args: list, Context: x86RoseContext):
   assert isinstance(TileReg.getType(), RoseMatrixType)
   assert isinstance(Row, RoseArgument)
   assert isinstance(Row.getType(), RoseIntegerType)
-  Zero = RoseConstant.create(0, RoseBitVectorType.create(x86Types['__tile'].getMaxCols() * 8))
+  Zero = RoseConstant.create(0, RoseBitVectorType.create(x86Types['__tile'].getMaxCols()))
   LastRow = RoseConstant.create(x86Types['__tile'].getMaxRows() - 1, RoseIntegerType.create(32))
   MatrixOp = RoseMatrixInsertRowsOp.create(Zero, TileReg, Row, LastRow)
   # mtx_insert_zeros = RoseMatrixInsertElementOp.create(
