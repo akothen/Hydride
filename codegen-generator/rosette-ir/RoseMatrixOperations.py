@@ -90,6 +90,12 @@ class RoseMatrixInsertRowsOp(RoseMatrixOp):
 
     def getTile(self):
         return self.getOperand(1)
+    
+    def getLowRowIndex(self):
+        return self.getOperand(2)
+    
+    def getHighRowIndex(self):
+        return self.getOperand(3)
 
     def getLowRowIndexPos(self):
         return 2
