@@ -173,20 +173,15 @@ class RoseStringType(RoseType):
 
 
 class RoseMatrixType(RoseType):
-
-    # For AMX—
-    #   'rows': RoseBitVectorType.create(8),
-    #   'colsb': RoseBitVectorType.create(16),
-    def __init__(self, max_rows: int, max_cols: int, element_bitwidth: int):
+    def __init__(self, max_rows: int, max_cols: int):
         super().__init__(RoseType.RoseTypeEnum.Matrix, {
             'max_rows': max_rows,
             'max_cols': max_cols,
-            'element_bitwidth': element_bitwidth
         })
 
     @staticmethod
-    def create(max_rows: int, max_cols: int, element_bitwidth: int):
-        return RoseMatrixType(max_rows, max_cols, element_bitwidth)
+    def create(max_rows: int, max_cols: int):
+        return RoseMatrixType(max_rows, max_cols)
 
     def getMaxRows(self):
         return self.getSubClassData()["max_rows"]
@@ -194,11 +189,8 @@ class RoseMatrixType(RoseType):
     def getMaxCols(self):
         return self.getSubClassData()["max_cols"]
 
-    def getElementBitwidth(self):
-        return self.getSubClassData()["element_bitwidth"]
-
     def __str__(self):
-        return f"mtrx.r{self.getMaxRows()}.c{self.getMaxCols()}.el{self.getElementBitwidth()}"
+        return f"mtx.r{self.getMaxRows()}.c{self.getMaxCols()}"
 
     def print(self):
         print(self.__str__())
