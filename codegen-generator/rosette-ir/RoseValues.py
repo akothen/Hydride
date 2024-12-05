@@ -330,14 +330,26 @@ class RoseOperation(RoseValue):
     def isSizeChangingOp(self):
         return self.Opcode.isSizeChangingOp()
 
-    def setOperand(self, Index, Operand):
+    def setOperand(self, Index, NewOperand):
         assert Index < len(self.Operands)
-        self.Operands[Index] = Operand
+        # Get all all uses of this instruction,
+        # and replace their uses.
+        Users = self.getUsers()
+        OldSelf = self.cloneOperation()
+        self.Operands[Index] = NewOperand
+        for User in Users:
+            User.replaceUsesWith(OldSelf, self)
 
     def setParent(self, Block):
         assert isinstance(Block, RoseAbstractions.RoseBlock) \
             or isinstance(Block, RoseAbstractions.RoseUndefRegion)
+        # Get all all uses of this instruction,
+        # and replace their uses.
+        Users = self.getUsers()
+        OldSelf = self.cloneOperation()
         self.ParentBlock = Block
+        for User in Users:
+            User.replaceUsesWith(OldSelf, self)
 
     # This is used to query if this operation uses
     #  the given value as an operand.
@@ -354,14 +366,16 @@ class RoseOperation(RoseValue):
 
     def getUsers(self):
         Block = self.getParent()
-        assert not isinstance(Block, RoseAbstractions.RoseUndefRegion)
+        if isinstance(Block, RoseAbstractions.RoseUndefRegion):
+            return list()
         Function = Block.getFunction()
         assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
         return Function.getUsersOf(self)
 
     def getNumUsers(self):
         Block = self.getParent()
-        assert not isinstance(Block, RoseAbstractions.RoseUndefRegion)
+        if isinstance(Block, RoseAbstractions.RoseUndefRegion):
+            return list()
         Function = Block.getFunction()
         assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
         return Function.getNumUsersOf(self)
@@ -402,13 +416,14 @@ class RoseOperation(RoseValue):
                     continue
                 print("-")
                 if Operand == OldValue:
-                    # Get all all uses of this instruction,
-                    # and replace their uses.
-                    Users = self.getUsers()
-                    OldSelf = self.cloneOperation()
                     self.setOperand(Index, NewValue)
-                    for User in Users:
-                        User.replaceUsesWith(OldSelf, self)
+                    # # Get all all uses of this instruction,
+                    # # and replace their uses.
+                    # Users = self.getUsers()
+                    # OldSelf = self.cloneOperation()
+                    # self.setOperand(Index, NewValue)
+                    # for User in Users:
+                    #     User.replaceUsesWith(OldSelf, self)
             return
         assert False, "Illegal number of arguments to replaceUsesWith"
 
