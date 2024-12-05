@@ -17,7 +17,7 @@ DoubleTyBitwidth = DoubleTy.getBitwidth()
 
 # Define types used in x86 pseudocodes
 x86Types = {
-    '__tile': RoseMatrixType.create(16, 64, 8),
+    '__tile': RoseMatrixType.create(16, 512),
     # 'row': RoseBitVectorType.create(64 * 8),
 
     '_m512i': RoseBitVectorType.create(512),
@@ -87,5 +87,3 @@ x86Types = {
     "M256": RoseBitVectorType.create(256),
     "M512": RoseBitVectorType.create(512),
 }
-
-
