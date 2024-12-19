@@ -2,7 +2,7 @@ from common.Types import *
 from common.Instructions import *
 from common.PredefinedDSL import *
 import random
-from ARMLegalInst import arm_legal_inst, ARMExemption, ARMSelection
+#from ARMLegalInst import arm_legal_inst, ARMExemption, ARMSelection
 from ShuffleList import ShuffleList
 
 DEBUG = True

@@ -64,7 +64,7 @@
 (define (v16int32_add16 xbuff ybuff)
   (define dst
     (apply concat
-      (for/list ([%i (reverse (range 0 16 1))])
+      (for/list ([%i (range 0 16 1)])
         (define %low1 (* 32 %i))
         (define %high1 (+ %low1 (- 32 1)))
         (define %ext_xbuff (extract %high1 %low1 xbuff))

@@ -35,7 +35,6 @@ from utils.ConstFold import ConstFold
 dsl_list = []
 
 TARGET = 'aie'
-TARGET = 'visa'
 scd = None
 cost_name = ""
 interpret_name = ""
