@@ -439,10 +439,10 @@
 		(define relavent-indices (filter filter-fn (range 0 1)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog v8acc80_mul32_dsl)
-		(define input-precs-dsl (list  32  ))
-		(define input-size-dsl (list   (list 256 256 ) ) )
-		(define variants (list (v8acc80_mul32_dsl (reg (bv 0 8)) (reg (bv 1 8)) ) 
+	[(equal? prog mul_elem_32_dsl)
+		(define input-precs-dsl (list  16  ))
+		(define input-size-dsl (list   (list 512 512 ) ) )
+		(define variants (list (mul_elem_32_dsl (reg (bv 0 8)) (reg (bv 1 8)) ) 
 ))
 		
             (define (filter-fn i)
@@ -465,10 +465,10 @@
 		(define relavent-indices (filter filter-fn (range 0 1)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog srs_8_80_to_8_32_dsl)
-		(define input-precs-dsl (list  80  ))
-		(define input-size-dsl (list   (list 640 ) ) )
-		(define variants (list (srs_8_80_to_8_32_dsl (reg (bv 0 8)) ) 
+	[(equal? prog srs_to_v32int16_dsl)
+		(define input-precs-dsl (list  32  ))
+		(define input-size-dsl (list   (list 1024 ) ) )
+		(define variants (list (srs_to_v32int16_dsl (reg (bv 0 8)) ) 
 ))
 		
             (define (filter-fn i)

@@ -184,23 +184,23 @@
 		[else ( v16int32_sub16_dsl v0-folded v1-folded )]
 		)
 	]
-	[ (v8acc80_mul32_dsl v0 v1)
+	[ (mul_elem_32_dsl v0 v1)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( v8acc80_mul32_dsl v0-folded v1-folded ) (vector)))
+(lit (aie:interpret ( mul_elem_32_dsl v0-folded v1-folded ) (vector)))
 ]
-		[else ( v8acc80_mul32_dsl v0-folded v1-folded )]
+		[else ( mul_elem_32_dsl v0-folded v1-folded )]
 		)
 	]
-	[ (srs_8_80_to_8_32_dsl v0)
+	[ (srs_to_v32int16_dsl v0)
 		(define v0-folded (aie:const-fold v0))
 		(cond
 		[(and (lit? v0-folded))
-(lit (aie:interpret ( srs_8_80_to_8_32_dsl v0-folded ) (vector)))
+(lit (aie:interpret ( srs_to_v32int16_dsl v0-folded ) (vector)))
 ]
-		[else ( srs_8_80_to_8_32_dsl v0-folded )]
+		[else ( srs_to_v32int16_dsl v0-folded )]
 		)
 	]
 	[ (ups_8_32_to_8_80_dsl v0)

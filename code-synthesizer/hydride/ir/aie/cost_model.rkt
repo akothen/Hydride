@@ -31,8 +31,8 @@
 (define cost_v16int32_add16_dsl 1)
 (define cost_v8int32_add8_dsl 1)
 (define cost_v16int32_sub16_dsl 1)
-(define cost_v8acc80_mul32_dsl 1)
-(define cost_srs_8_80_to_8_32_dsl 1)
+(define cost_mul_elem_32_dsl 1)
+(define cost_srs_to_v32int16_dsl 1)
 (define cost_ups_8_32_to_8_80_dsl 1)
 
 (define (aie:cost prog)
@@ -93,11 +93,11 @@
 	[ (v16int32_sub16_dsl v0 v1)
 		(+ cost_v16int32_sub16_dsl (aie:cost  v0)  (aie:cost  v1) )
 	]
-	[ (v8acc80_mul32_dsl v0 v1)
-		(+ cost_v8acc80_mul32_dsl (aie:cost  v0)  (aie:cost  v1) )
+	[ (mul_elem_32_dsl v0 v1)
+		(+ cost_mul_elem_32_dsl (aie:cost  v0)  (aie:cost  v1) )
 	]
-	[ (srs_8_80_to_8_32_dsl v0)
-		(+ cost_srs_8_80_to_8_32_dsl (aie:cost  v0) )
+	[ (srs_to_v32int16_dsl v0)
+		(+ cost_srs_to_v32int16_dsl (aie:cost  v0) )
 	]
 	[ (ups_8_32_to_8_80_dsl v0)
 		(+ cost_ups_8_32_to_8_80_dsl (aie:cost  v0) )

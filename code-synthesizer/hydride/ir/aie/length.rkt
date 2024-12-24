@@ -69,17 +69,17 @@
 )
 
 	]
-	[(v8acc80_mul32_dsl v0 v1)
+	[(mul_elem_32_dsl v0 v1)
 		(cond 
-		[(and ) 640]
-		[else (error "Unable to infer length for v8acc80_mul32: "  prog)]
+		[(and ) 1024]
+		[else (error "Unable to infer length for mul_elem_32: "  prog)]
 )
 
 	]
-	[(srs_8_80_to_8_32_dsl v0)
+	[(srs_to_v32int16_dsl v0)
 		(cond 
-		[(and ) 256]
-		[else (error "Unable to infer length for srs_8_80_to_8_32: "  prog)]
+		[(and ) 512]
+		[else (error "Unable to infer length for srs_to_v32int16: "  prog)]
 )
 
 	]

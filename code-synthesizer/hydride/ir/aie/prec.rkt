@@ -70,17 +70,17 @@
 )
 
 	]
-	[(v8acc80_mul32_dsl v0 v1)
+	[(mul_elem_32_dsl v0 v1)
 		(cond 
-		[(and ) 80]
-		[else (error "Unable to infer prec for v8acc80_mul32")]
+		[(and ) 32]
+		[else (error "Unable to infer prec for mul_elem_32")]
 )
 
 	]
-	[(srs_8_80_to_8_32_dsl v0)
+	[(srs_to_v32int16_dsl v0)
 		(cond 
-		[(and ) 32]
-		[else (error "Unable to infer prec for srs_8_80_to_8_32")]
+		[(and ) 16]
+		[else (error "Unable to infer prec for srs_to_v32int16")]
 )
 
 	]

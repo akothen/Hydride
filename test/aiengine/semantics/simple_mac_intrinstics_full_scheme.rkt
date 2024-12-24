@@ -9,6 +9,30 @@
 
 ;;; Vector Multiply
 
+;; v32acc32 mul_elem_32 	( 	v32int16  	a,
+;; 		v32int16  	b 
+;; 	)	
+;; 
+;; Lane by lane 16-bit real multiply.
+
+(define (mul_elem_32 a b)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 32 1))])
+        (define %low1 (* 16 %i))
+        (define %high1 (+ %low1 (- 16 1)))
+        (define %ext_a (extract %high1 %low1 a))
+        (define %low2 (* 16 %i))
+        (define %high2 (+ %low2 (- 16 1)))
+        (define %ext_b (extract %high2 %low2 b))
+        (define %o (bvmul %ext_a %ext_b) (bitvector 32))
+        %o
+      )
+    )
+  )
+  dst
+)
+
 ;; v16acc48 mul 	( 	v16int16  	a,
 ;; 		v16int16  	b 
 ;; 	) 		

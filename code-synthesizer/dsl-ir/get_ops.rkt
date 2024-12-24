@@ -94,21 +94,21 @@
 )
 
 	]
-	[(v8acc80_mul32_dsl v0 v1)
+	[(mul_elem_32_dsl v0 v1)
 		(cond 
-		[(and ); v8acc80_mul32
+		[(and ); mul_elem_32
  
-  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[else (error "Unable to get ops  for v8acc80_mul32")]
+  (remove-duplicates (append (list  'bvmul) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for mul_elem_32")]
 )
 
 	]
-	[(srs_8_80_to_8_32_dsl v0)
+	[(srs_to_v32int16_dsl v0)
 		(cond 
-		[(and ); srs_8_80_to_8_32
+		[(and ); srs_to_v32int16
  
-  (remove-duplicates (append (list  ) (aie:get-bv-ops v0)))]
-		[else (error "Unable to get ops  for srs_8_80_to_8_32")]
+  (remove-duplicates (append (list  'bvand) (aie:get-bv-ops v0)))]
+		[else (error "Unable to get ops  for srs_to_v32int16")]
 )
 
 	]

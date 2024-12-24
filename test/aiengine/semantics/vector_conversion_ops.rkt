@@ -1,12 +1,19 @@
 ;; simple srs test for v8int80 to v8int32
 
-(define (srs_8_80_to_8_32 xbuff)
+;; TODO: Implement proper saturating and rounding algs
+
+;; v32int16 srs_to_v32int16 	( 	v32acc32  	acc,
+;; 		int  	shft,
+;; 		int  	sign 
+;; 	) 	
+
+(define (srs_to_v32in16 acc)
   (define dst
     (apply concat
-      (for/list ([%i (reverse (range 0 8 1))])
-        (define %low1 (* 80 %i))
+      (for/list ([%i (reverse (range 0 32 1))])
+        (define %low1 (* 32 %i))
         (define %high1 (+ %low1 (- 32 1)))
-        (define %o (extract %high1 %low1 xbuff))
+        (define %o (bvand (bv #xffff 16) (extract %high1 %low1 acc)))
         %o
       )
     )

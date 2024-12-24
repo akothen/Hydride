@@ -26,8 +26,8 @@
 (struct v16int32_add16_dsl (v0 v1) #:transparent #:mutable)
 (struct v8int32_add8_dsl (v0 v1) #:transparent #:mutable)
 (struct v16int32_sub16_dsl (v0 v1) #:transparent #:mutable)
-(struct v8acc80_mul32_dsl (v0 v1) #:transparent #:mutable)
-(struct srs_8_80_to_8_32_dsl (v0) #:transparent #:mutable)
+(struct mul_elem_32_dsl (v0 v1) #:transparent #:mutable)
+(struct srs_to_v32int16_dsl (v0) #:transparent #:mutable)
 (struct ups_8_32_to_8_80_dsl (v0) #:transparent #:mutable)
 ;; ================================================================================
 

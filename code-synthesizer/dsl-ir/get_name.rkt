@@ -91,19 +91,19 @@
 )
 
 	]
-	[(v8acc80_mul32_dsl v0 v1)
+	[(mul_elem_32_dsl v0 v1)
 		(cond 
 		[(and ) 
-   (append (list  "v8acc80_mul32") (aie:get-target-name v0) (aie:get-target-name v1))]
-		[else (error "Unable to get name  for v8acc80_mul32")]
+   (append (list  "mul_elem_32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for mul_elem_32")]
 )
 
 	]
-	[(srs_8_80_to_8_32_dsl v0)
+	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ) 
-   (append (list  "srs_8_80_to_8_32") (aie:get-target-name v0))]
-		[else (error "Unable to get name  for srs_8_80_to_8_32")]
+   (append (list  "srs_to_v32int16") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for srs_to_v32int16")]
 )
 
 	]
