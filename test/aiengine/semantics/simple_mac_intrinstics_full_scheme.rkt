@@ -21,11 +21,11 @@
       (for/list ([%i (reverse (range 0 32 1))])
         (define %low1 (* 16 %i))
         (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_a (extract %high1 %low1 a))
+        (define %ext_a (sign-extend (extract %high1 %low1 a) (bitvector 32)))
         (define %low2 (* 16 %i))
         (define %high2 (+ %low2 (- 16 1)))
-        (define %ext_b (extract %high2 %low2 b))
-        (define %o (bvmul %ext_a %ext_b) (bitvector 32))
+        (define %ext_b (sign-extend (extract %high2 %low2 b) (bitvector 32)))
+        (define %o (bvmul %ext_a %ext_b))
         %o
       )
     )
@@ -40,23 +40,6 @@
 ;; Lane by lane 16-bit real multiply.
 
 
-(define (v16acc48_mul xbuff ybuff)
-  (define dst
-    (apply concat
-      (for/list ([%i (reverse (range 0 16 1))])
-        (define %low1 (* 16 %i))
-        (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_xbuff1 (sign-extend (extract %high1 %low1 xbuff) (bitvector 32)))
-        (define %low2 (* 16 %i))
-        (define %high2 (+ %low2 (- 16 1)))
-        (define %ext_xbuff2 (sign-extend (extract %high2 %low2 ybuff) (bitvector 32)))
-        (define %o (zero-extend (bvmul %ext_xbuff1 %ext_xbuff2) (bitvector 48)))
-        %o
-      )
-    )
-  )
-  dst
-)
 
 ;; v8acc80_mul 	( 	v8int32  	a,
 ;; 		v8int32  	b 

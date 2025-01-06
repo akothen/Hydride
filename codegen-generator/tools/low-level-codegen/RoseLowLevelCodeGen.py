@@ -47,7 +47,7 @@ def HandleLowLevelCodegenAIEVec(RosetteFileName: str, PathToLegalizerLib: str,
     
     # Brutally link the wrapper functions back to the module by appending them
     Module.write(Declarations.read())
-  Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
+  Command = "/usr/bin/opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
       PathToLegalizerLib, LegalizationFlag,
       LinkedLLVMModuleName, LegalizeLLVMModuleName)
   print(Command)

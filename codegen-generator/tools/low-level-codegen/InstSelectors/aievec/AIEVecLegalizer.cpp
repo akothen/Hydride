@@ -115,11 +115,11 @@ virtual bool legalize(Instruction *I) {
     
 
     {
-      std::vector<std::string> InstNames = {"llvm.hydride.v8acc80_mul32_dsl"};
+      std::vector<std::string> InstNames = {"llvm.hydride.mul_elem_32_dsl"};
       if(isNameMatch(CI, InstNames)) { 
         
             { 
-              auto *InstFunction = I->getModule()->getFunction("v8acc80_mul32_wrapper"); 
+              auto *InstFunction = I->getModule()->getFunction("mul_elem_32_wrapper"); 
               std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
@@ -136,11 +136,11 @@ virtual bool legalize(Instruction *I) {
     
 
     {
-      std::vector<std::string> InstNames = {"llvm.hydride.srs_8_80_to_8_32_dsl"};
+      std::vector<std::string> InstNames = {"llvm.hydride.srs_to_v32int16_dsl"};
       if(isNameMatch(CI, InstNames)) { 
         
             { 
-              auto *InstFunction = I->getModule()->getFunction("srs_8_80_to_8_32_wrapper"); 
+              auto *InstFunction = I->getModule()->getFunction("srs_to_v32int16_wrapper"); 
               std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {

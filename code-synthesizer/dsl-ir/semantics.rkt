@@ -80,13 +80,13 @@ dst
 (define (mul_elem_32 a b)
 (define dst
 (apply concat
-(for/list ([%i (range 0 32 1)])
+(for/list ([%i (reverse (range 0 32 1))])
 (define %low1 (* 16 %i))
 (define %high1 (+ %low1 (- 16 1)))
-(define %ext_a (extract %high1 %low1 a))
+(define %ext_a (bvsizeext (extract %high1 %low1 a) 32 -1))
 (define %low2 (* 16 %i))
 (define %high2 (+ %low2 (- 16 1)))
-(define %ext_b (extract %high2 %low2 b))
+(define %ext_b (bvsizeext (extract %high2 %low2 b) 32 -1))
 (define %o (bvmul %ext_a %ext_b))
 %o
 )

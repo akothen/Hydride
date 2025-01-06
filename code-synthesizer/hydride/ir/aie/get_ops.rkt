@@ -98,7 +98,7 @@
 		(cond 
 		[(and ); mul_elem_32
  
-  (remove-duplicates (append (list  'bvmul) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+  (remove-duplicates (append (list  'bvmul 'zero-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for mul_elem_32")]
 )
 

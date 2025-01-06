@@ -1,7 +1,7 @@
 #lang rosette
 
 (require racket/pretty)
-
+(require hydride/utils/bvops)
 
 (define (ra16_aux lane_number total_num_lanes bvxoffsets)
   (define half_num_lanes (/ total_num_lanes 2))
@@ -111,19 +111,45 @@
 )
 
 
-(define xbuff_32_16 (bv #x6ac9ea5e1b63bf64ba082965c8ce260795ffea0fc8aa1b1a5c8a3d0ec666cc93738ecd92a2e77c6517c95e88e16645e858aac01e7e631729a5d9a9709e952eeb 512))
-(define ybuff_32_16 (bv #x6ac9ea5e1b63bf64ba082965c8ce260795ffea0fc8aa1b1a5c8a3d0ec666cc93738ecd92a2e77c6517c95e88e16645e858aac01e7e631729a5d9a9709e952eeb 512))
 
-(define xbuff_gold 
-  (apply concat
-    (for/list ([%outer.it (range 0 32 1)])
-      (fprintf (current-output-port) "curr value: ~a\n" %outer.it)
-      (fprintf (current-output-port) "curr value bv: ~a\n" (integer->bitvector %outer.it (bitvector 32)))
-      (integer->bitvector %outer.it (bitvector 32))  
+;; (define xbuff_gold 
+;;   (apply concat
+;;     (for/list ([%outer.it (range 0 32 1)])
+;;       (fprintf (current-output-port) "curr value: ~a\n" %outer.it)
+;;       (fprintf (current-output-port) "curr value bv: ~a\n" (integer->bitvector %outer.it (bitvector 32)))
+;;       (integer->bitvector %outer.it (bitvector 32))  
+;;     )
+;;   )
+;; )
+
+
+;; (pretty-print xbuff_gold)
+;; (pretty-print (v16acc64_mul xbuff_32_16 ybuff_32_16))
+
+;; unsigned for now
+(define (mul_elem_32 a b)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 32 1))])
+        (define %low1 (* 16 %i))
+        (define %high1 (+ %low1 (- 16 1)))
+        (define %ext_a (bvsizeext (extract %high1 %low1 a) 32 0))
+        (define %low2 (* 16 %i))
+        (define %high2 (+ %low2 (- 16 1)))
+        (define %ext_b (bvsizeext (extract %high2 %low2 b) 32 0))
+        (define %o (bvmul %ext_a %ext_b))
+        %o
+      )
     )
   )
+  dst
 )
 
 
-(pretty-print xbuff_gold)
-(pretty-print (v16acc64_mul xbuff_32_16 ybuff_32_16))
+(define xbuff_32_16 (bv #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025 512))
+(define ybuff_32_16 (bv #xabce3c7dcc7dc68bd8699467269f1d681ad0a9b0e7e24db6e1b77de3a563f2a4c4cdd40d1668b8d73b889f5c4f87d7ea6fad8e78d799eea817a16f9f6261de0b 512))
+(define out_32_16 (bv #x11c2bb1ecd27c282a509de2a7f6bfb506d503c809b5889b812a159689f22ca849548c2d75158f50134009420c74a471a405870a013dcf0b8a4f2ecb0ab5cd797 512))
+
+(define bv1024? (bitvector 1024))
+(mul_elem_32 xbuff_32_16 ybuff_32_16)
+(pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))

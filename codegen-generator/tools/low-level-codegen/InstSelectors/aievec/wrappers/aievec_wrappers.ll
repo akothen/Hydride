@@ -9,7 +9,7 @@ entry:
   ret <16 x i32> %add.i
 }
 
-define dso_local noundef <16 x i64> @mul_elem_32_wrapper() #0 {
+define dso_local noundef <16 x i64> @_Z16test_mul_elem_32v() #0 {
 entry:
   %a.addr.i = alloca <32 x i16>, align 32
   %b.addr.i = alloca <32 x i16>, align 32
