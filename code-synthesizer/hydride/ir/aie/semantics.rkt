@@ -83,10 +83,10 @@ dst
 (for/list ([%i (reverse (range 0 32 1))])
 (define %low1 (* 16 %i))
 (define %high1 (+ %low1 (- 16 1)))
-(define %ext_a (bvsizeext (extract %high1 %low1 a) 32 0))
+(define %ext_a (sign-extend (extract %high1 %low1 a) (bitvector 32)))
 (define %low2 (* 16 %i))
 (define %high2 (+ %low2 (- 16 1)))
-(define %ext_b (bvsizeext (extract %high2 %low2 b) 32 0))
+(define %ext_b (sign-extend (extract %high2 %low2 b) (bitvector 32)))
 (define %o (bvmul %ext_a %ext_b))
 %o
 )
@@ -100,12 +100,12 @@ dst
 (for/list ([%i (reverse (range 0 32 1))])
 (define %low1 (* 32 %i))
 (define %high1 (+ %low1 (- 32 1)))
-(define %o (bvand (bv #xffff 16) (extract %high1 %low1 acc)))
+(define %o (extract 15 0 (bvand (bv #x0000ffff 32) (extract %high1 %low1 acc))))
 %o
 )
 )
 )
-dst
+dst 
 )
 (define (ups_8_32_to_8_80 xbuff)
 (define dst
