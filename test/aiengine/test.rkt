@@ -133,10 +133,10 @@
       (for/list ([%i (reverse (range 0 32 1))])
         (define %low1 (* 16 %i))
         (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_a (bvsizeext (extract %high1 %low1 a) 32 0))
+        (define %ext_a (bvsizeext (extract %high1 %low1 a) 32 1))
         (define %low2 (* 16 %i))
         (define %high2 (+ %low2 (- 16 1)))
-        (define %ext_b (bvsizeext (extract %high2 %low2 b) 32 0))
+        (define %ext_b (bvsizeext (extract %high2 %low2 b) 32 1))
         (define %o (bvmul %ext_a %ext_b))
         %o
       )
@@ -144,6 +144,21 @@
   )
   dst
 )
+
+(define (srs_to_v32int16 acc)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 32 1))])
+        (define %low1 (* 32 %i))
+        (define %high1 (+ %low1 (- 32 1)))
+        (define %o (extract 15 0 (bvand (bv #x0000ffff 32) (extract %high1 %low1 acc))))
+        %o
+      )
+    )
+  )
+  dst 
+)
+
 
 
 (define xbuff_32_16 (bv #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025 512))
@@ -153,3 +168,4 @@
 (define bv1024? (bitvector 1024))
 (mul_elem_32 xbuff_32_16 ybuff_32_16)
 (pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))
+(srs_to_v32int16 (mul_elem_32 xbuff_32_16 ybuff_32_16))
