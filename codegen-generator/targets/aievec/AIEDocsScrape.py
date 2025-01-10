@@ -1,35 +1,47 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
-
+import urllib
+import os
+import glob
 # only 32 bit integer vector instructions for now
 
 # TODO: 
 # - 16 bit integer ops
 # - MAC intrinsics
 
-def download_html(url, filename=None):
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
-            if not filename:
-                parsed_url = urlparse(url)
-                path = parsed_url.path
-                filename = os.path.basename(path)
-                filename_without_extension, file_extension = os.path.splitext(filename)
-                filename = f"{filename_without_extension}_page.html"
-            with open(filename, 'w', encoding='utf-8') as file:
-                file.write(str(soup))
+root_url = "https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_ml_intrinsics/intrinsics/"
+r = requests.get(root_url + "group__intr__gpvectorop.html") 
+soup = BeautifulSoup(r.text, 'html.parser') 
+anchors = soup.find_all('a', {'class': 'el', 'href': True})
+f = open("links.txt", "w")
+if not os.path.exists("./intrinsics/"):
+    os.makedirs("./intrinsics/")
 
-            print(f"HTML content downloaded successfully and saved to '{filename}'")
-        else:
-            print(f"Failed to download HTML. Status code: {response.status_code}")
+for link in anchors: 
+    final_link = root_url + link.get('href')
+    #print(f"Writing {final_link} to links.txt")
+    file_path = "./intrinsics/" + link.get('href')
+    if not os.path.exists(file_path):    
+        urllib.request.urlretrieve(final_link, file_path)
+f.close()
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-with open('links.txt', 'r', encoding='utf-8') as links_file:
-    for link in links_file:
-        download_html(link)
+for filepath in glob.iglob('./intrinsics/*.html'):
+    f = open(filepath, "r")
+    soup = BeautifulSoup(f.read(), 'html.parser')
+    header_elements = soup.find_all('table', attrs={'class':'memname'})
+    for element in header_elements:
+        print(element)
+        type_and_name = element.find('td', attrs={'class':'memname'})
+        type_and_name_split = type_and_name.text.split()
+        param_types = element.find_all('td', attrs={'class':'paramtype'})
+        param_names = element.find_all('td', attrs={'class':'paramname'})
+        params = []
+        if len(param_names) != len(param_types):
+            continue
+        for ty, tn in zip(param_types, param_names):
+            params.append(f"{ty.text} {tn.text}".replace(u'\xa0', u' '))
+        print(f"Processed Inst: {type_and_name_split[0]} {type_and_name_split[1]}({''.join(params)})")
+        print("\n\n")
+        
+    f.close()

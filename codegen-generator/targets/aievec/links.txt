@@ -1,9 +1,0 @@
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__arit__adv__int.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__arit.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__simpl__self__mul.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__gen__self__mul__32x32.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__arit.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__bit__cmp.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__word__cmp.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__vec__sel__int.html
-https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_intrinsics/intrinsics/group__intr__gpvectorop__vec__sel__simple__int.html
