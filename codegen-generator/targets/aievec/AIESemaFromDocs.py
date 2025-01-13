@@ -37,10 +37,8 @@ def ParseAddSubHTML() -> list[AIESema]:
         rettype = type_and_name_split[0]
         raw_name = type_and_name_split[1]
         conf = "conf" in raw_name
-        # operators not needed/used
         if "operator" in raw_name:
             continue
-        # ignoring complex ints and floats for now
         if "cacc" in rettype or "cint" in rettype or "float" in rettype:
             continue
         instclass = ""
@@ -75,11 +73,9 @@ def ParseAddSubHTML() -> list[AIESema]:
             ty_str = ty.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
             tn_str = tn.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
             params.append(Parameter(tn_str, ty_str, "u" not in ty_str))
-        #print("Params: ", params)
+
         name = NameGen(type_and_name_split[0], type_and_name_split[1])
-        #print("Name: ", name)
-        #print("Rettype: ", rettype)
-        #print("Conf: ", conf)
+
         sema = AIESema(
             intrin=name,
             params=params,
@@ -87,9 +83,7 @@ def ParseAddSubHTML() -> list[AIESema]:
             conf=conf,
             rettype=rettype,
             )
-        #print("Sema: ", sema)
-        #print(f"Processed Inst: {type_and_name_split[0]} {type_and_name_split[1]}({''.join(params)})")
-        #print("\n\n")
+
         tmp.append(sema)
     f.close()
     return tmp
