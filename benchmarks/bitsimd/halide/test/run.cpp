@@ -84,7 +84,6 @@
 #include "matmul_256_32bit_bias_add_add.h"
 #elif benchmark_matmul_bias_relu_matmul
 #include "matmul_bias_relu_matmul.h"
-
 #elif benchmark_matmul_bias_gelu_matmul
 #include "matmul_bias_gelu_matmul.h"
 #elif benchmark_batched_matmul_256_32bit
@@ -95,6 +94,8 @@
 #include "handtune_matmul.h"
 #elif benchmark_depthwise_conv
 #include "depthwise_conv.h"
+#elif benchmark_histogram
+#include "histogram.h"
 #endif
 
 #define LOG2VLEN 7
@@ -1978,30 +1979,60 @@ int main(int argc, char **argv) {
          (int)width, (int)height, cycles, (float)cycles / width / height);
 #endif
 
-  /* -----------------------------------------------------*/
-  /*  Write output image to file                          */
-  /* -----------------------------------------------------*/
-  /*
-  char *filename = (char *) malloc(100 * sizeof(char));
-  strcpy(filename, argv[4]);
-  int out_fp;
+#if benchmark_histogram
+  printf("\t*** Histogram\n");
 
+  int32_t *input_image = (int32_t*) aligned_malloc(
+      width * height * sizeof(int32_t) * 3,
+      1 << LOG2VLEN); 
 
-  if((out_fp = open(filename, O_CREAT_WRONLY_TRUNC, 0777)) < 0)
-  {
-      printf("Error: Cannot open %s for output\n", filename);
-      return 1;
+  int32_t *red_bin = (int32_t*) aligned_malloc(
+      256 * sizeof(int32_t),
+      1 << LOG2VLEN); 
+
+  // Initialize image
+  for(int c = 0; c < 2; c++){
+      int32_t* channel_offset = input_image + (c * height * width);
+      int32_t value = 0;
+      for(int w = 0; w < width; w++){
+          for(int h = 0; h < height; h++){
+              value = (value + 2) % 256;
+              int32_t* pixel_offset = channel_offset + (h * width) + w;
+              *pixel_offset = value;
+          }
+      }
   }
-  if(write_file(out_fp, output, height, width, 2) != 0) {
-      printf("Error: Cannot write to file %s\n", filename);
+
+
+  halide_dimension_t x_dim{0, width, 1};
+  halide_dimension_t y_dim{0, height, width};
+  halide_dimension_t channel_dim{0, 2, height * width};
+  halide_dimension_t shape[3] = { x_dim, y_dim, channel_dim};
+
+  halide_dimension_t red_bin_dim{0, 256, 1};
+  halide_dimension_t red_bin_shape[1] = {red_bin_dim};
+
+
+  Halide::Runtime::Buffer<int32_t> IMG(input_image, 3, shape);
+  Halide::Runtime::Buffer<int32_t> RedBins(red_bin, 1, red_bin_shape);
+
+  benchmark([&]() {
+    int error = histogram(IMG, RedBins);
+    if (error != 0) {
+      printf("histogram pipeline failed: %d\n", error);
+    }
+  });
+
+  printf("Red Bins\n");
+  for(int i =0; i < 8; i ++){
+      printf("[%d]:\t%d\n", i, RedBins(i));
   }
 
-  close(out_fp);
+  free(input_image);
+  free(red_bin);
 
-  free(input);
-  free(output);
-  free(filename);
-*/
+#endif
+
   printf("Success!\n");
 
   return 0;
