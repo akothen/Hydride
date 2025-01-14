@@ -1986,14 +1986,26 @@ int main(int argc, char **argv) {
       width * height * sizeof(int32_t) * 3,
       1 << LOG2VLEN); 
 
-  int32_t *red_bin = (int32_t*) aligned_malloc(
-      256 * sizeof(int32_t),
+  int32_t *bins = (int32_t*) aligned_malloc(
+      256 * sizeof(int32_t) * 3,
       1 << LOG2VLEN); 
 
   // Initialize image
-  for(int c = 0; c < 2; c++){
+  for(int c = 0; c < 3; c++){
       int32_t* channel_offset = input_image + (c * height * width);
       int32_t value = 0;
+      switch(c){
+          case 0:
+              value = 0;
+              break;
+          case 1:
+              value = 1;
+              break;
+          case 3:
+              value = 2;
+              break;
+
+      };
       for(int w = 0; w < width; w++){
           for(int h = 0; h < height; h++){
               value = (value + 2) % 256;
@@ -2006,18 +2018,19 @@ int main(int argc, char **argv) {
 
   halide_dimension_t x_dim{0, width, 1};
   halide_dimension_t y_dim{0, height, width};
-  halide_dimension_t channel_dim{0, 2, height * width};
+  halide_dimension_t channel_dim{0, 3, height * width};
   halide_dimension_t shape[3] = { x_dim, y_dim, channel_dim};
 
-  halide_dimension_t red_bin_dim{0, 256, 1};
-  halide_dimension_t red_bin_shape[1] = {red_bin_dim};
+  halide_dimension_t x_bin_dim{0, 256, 1};
+  halide_dimension_t y_bin_dim{0, 3, 256};
+  halide_dimension_t bin_shape[2] = {x_bin_dim, y_bin_dim};
 
 
   Halide::Runtime::Buffer<int32_t> IMG(input_image, 3, shape);
-  Halide::Runtime::Buffer<int32_t> RedBins(red_bin, 1, red_bin_shape);
+  Halide::Runtime::Buffer<int32_t> Bins(bins, 2, bin_shape);
 
   benchmark([&]() {
-    int error = histogram(IMG, RedBins);
+    int error = histogram(IMG, Bins);
     if (error != 0) {
       printf("histogram pipeline failed: %d\n", error);
     }
@@ -2025,11 +2038,21 @@ int main(int argc, char **argv) {
 
   printf("Red Bins\n");
   for(int i =0; i < 8; i ++){
-      printf("[%d]:\t%d\n", i, RedBins(i));
+      printf("[%d]:\t%d\n", i, Bins(i, 0));
+  }
+
+  printf("Blue Bins\n");
+  for(int i =0; i < 8; i ++){
+      printf("[%d]:\t%d\n", i, Bins(i, 1));
+  }
+
+  printf("Green Bins\n");
+  for(int i =0; i < 8; i ++){
+      printf("[%d]:\t%d\n", i, Bins(i, 2));
   }
 
   free(input_image);
-  free(red_bin);
+  free(bins);
 
 #endif
 
