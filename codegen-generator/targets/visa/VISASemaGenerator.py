@@ -144,13 +144,13 @@ class SemaGenerator:
             self.deserialize()
 
     def deserialize(self):
-        from AllSema import AllSema
+        from VISAAllSema import AllSema
         self.result = AllSema
 
     def serialize(self):
         import pprint
         self.result = self.getResult()
-        with open(VISADIR+'AllSema.py', 'w') as f:
+        with open(VISADIR+'VISAAllSema.py', 'w') as f:
             f.write("""from VISAAST import *
 from VISAMeta import VISASema, Parameter
 """)

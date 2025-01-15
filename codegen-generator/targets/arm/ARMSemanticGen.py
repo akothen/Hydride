@@ -435,7 +435,7 @@ class SemaGenerator():
         self.result = self.getResult()
         with open(JSONDIR+'AllSema.pickle', 'wb') as f:
             pickle.dump(self.result, f)
-        with open(JSONDIR+'AllSema.py', 'w') as f:
+        with open(JSONDIR+'ARMAllSema.py', 'w') as f:
             f.write("""from ARMTypes import *
 from ARMAST import *
 """)
@@ -444,7 +444,7 @@ from ARMAST import *
     def deserialize(self):
         # with open(JSONDIR+'AllSema.pickle', 'rb') as f:
         #     self.result = pickle.load(f)
-        from AllSema import AllSema
+        from ARMAllSema import AllSema
 
         self.result = AllSema
 

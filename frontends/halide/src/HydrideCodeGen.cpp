@@ -79,13 +79,19 @@ void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::
               << "\n";
 
     // TEMP CMD
-    std::string temp_cmd = "cp /tmp/" + benchmark_name + ".ll.legalize.ll  " + output_file;
+    std::string temp_cmd;
+    if (getenv("GENERATE_UNLEGALIZED")) {
+        temp_cmd = "cp /tmp/" + benchmark_name + ".ll.linked.ll  " + output_file;
+    } else {
+
+        temp_cmd = "cp /tmp/" + benchmark_name + ".ll.legalize.ll  " + output_file;
+    }
     ret_code = system(temp_cmd.c_str());
 
     debug(0) << "Returned with return code: " << ret_code << "\n";
 
     internal_assert(ret_code == 0) << "Copying crashed, exiting ..."
-                                   << "\n";
+                                    << "\n";
 }
 
 }  // namespace Internal

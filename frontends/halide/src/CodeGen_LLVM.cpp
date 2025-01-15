@@ -427,6 +427,15 @@ void CodeGen_LLVM::add_hydride_code() {
     if (failed) {
         internal_error << "Failure linking in additional module: " << hydride_bitcode_name << "\n";
     }
+    // Dump the module to "/tmp/" + name + "_hydride_linked.ll
+    std::string linked_hydride_bitcode_name = "/tmp/" + name + "_hydride_linked.ll";
+    std::error_code EC;
+    llvm::raw_fd_ostream OS(linked_hydride_bitcode_name, EC, llvm::sys::fs::F_None);
+    if (!EC) {
+        module->print(OS, nullptr);
+    } else {
+        internal_error << "Could not open file: " << linked_hydride_bitcode_name << "\n";
+    }
 
     debug(0) << "Linked hydride module to halide module"
              << "\n";
@@ -461,6 +470,16 @@ void CodeGen_LLVM::add_hydride_code() {
         for (llvm::CallInst *CI : ToInline) {
             llvm::InlineFunction(*CI, ifi);
         }
+    }
+
+    // Dump the module to "/tmp/" + name + "_hydride_linked_inlined.ll
+    std::string linked_hydride_inlined_bitcode_name = "/tmp/" + name + "_hydride_linked_inlined.ll";
+    std::error_code EC2;
+    llvm::raw_fd_ostream OS2(linked_hydride_inlined_bitcode_name, EC2, llvm::sys::fs::F_None);
+    if (!EC2) {
+        module->print(OS2, nullptr);
+    } else {
+        internal_error << "Could not open file: " << linked_hydride_inlined_bitcode_name << "\n";
     }
 
     debug(0) << "Inlined hydride node calls ..."
@@ -521,6 +540,16 @@ void CodeGen_LLVM::add_hydride_code() {
         debug(0) << "Erasing:" << Fn->getName().str() << "\n";
 
         Fn->eraseFromParent();
+    }
+
+    // Dump the module to "/tmp/" + name + "_hydride_linked_inlined_erased.ll"
+    std::string linked_hydride_inlined_erased_bitcode_name = "/tmp/" + name + "_hydride_linked_inlined_erased.ll";
+    std::error_code EC3;
+    llvm::raw_fd_ostream OS3(linked_hydride_inlined_erased_bitcode_name, EC3, llvm::sys::fs::F_None);
+    if (!EC3) {
+        module->print(OS3, nullptr);
+    } else {
+        internal_error << "Could not open file: " << linked_hydride_inlined_erased_bitcode_name << "\n";
     }
 
     // llvm::errs()<<"Printing Module: <START>\n" << *module << "\n<END>"<<"\n";

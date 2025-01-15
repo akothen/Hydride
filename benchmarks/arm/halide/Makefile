@@ -1,5 +1,5 @@
 HALIDE_DISTRIB = $(HYDRIDE_ROOT)/frontends/halide/distrib
-ADDITIONAL = -rpath $(HALIDE_DISTRIB)/lib
+# ADDITIONAL = -rpath $(HALIDE_DISTRIB)/lib # necessary to run on macos
 
 include Makefile.common
 

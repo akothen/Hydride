@@ -72,7 +72,7 @@ $(benchmarks): %: %/bin %/out %/profile
 		-o $@/bin/$@_generator \
 		-L $(HALIDE_DIR)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
 
-	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=hvx   HL_SYNTH_BW=$(INT_BW) HYDRIDE_INITIAL_HASH=$(STARTING_HASH)  ./$@/bin/$@_generator  \
+	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib; export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=hvx   HL_SYNTH_BW=$(INT_BW) ./$@/bin/$@_generator  \
 	    -t 0 \
 		-o $@/bin \
 		-g $@ \
@@ -103,7 +103,7 @@ fully_connected: %: %/bin %/out %/profile
 		-o $@/bin/$@_generator \
 		-L $(HALIDE_DIR)/lib -lHalide $(shell $(LLVM_CONFIG) --system-libs --link-static)
 
-	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib;  export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=hvx   HL_SYNTH_BW=$(INT_BW) HYDRIDE_INITIAL_HASH=$(STARTING_HASH) ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DIR)/lib;  export HYDRIDE_BENCHMARK=$@_hvx_depth$(EXPR_DEPTH); HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) HL_EXPR_DEPTH=$(EXPR_DEPTH) HYDRIDE_TARGET=hvx   HL_SYNTH_BW=$(INT_BW) ./$@/bin/$@_generator \
 	    -t 0 \
 		-o $@/bin \
 		-g $@ output.type=uint8 \

@@ -444,7 +444,7 @@ from ARMAST import *
     def deserialize(self):
         # with open(JSONDIR+'AllSema.pickle', 'rb') as f:
         #     self.result = pickle.load(f)
-        from AllSema import AllSema
+        from ARMAllSema import AllSema
 
         self.result = AllSema
 
