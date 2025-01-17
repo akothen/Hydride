@@ -38,7 +38,9 @@ benchmarks = gaussian3x3 \
 			 matmul_256_32bit_bias_add_relu \
 			 bitsimd_matmul \
 			 bitsimd_gemv \
-			 relu
+			 relu \
+			 histogram \
+			 convolution
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 

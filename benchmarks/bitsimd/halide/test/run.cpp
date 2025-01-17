@@ -96,6 +96,8 @@
 #include "depthwise_conv.h"
 #elif benchmark_histogram
 #include "histogram.h"
+#elif benchmark_convolution
+#include "convolution.h"
 #endif
 
 #define LOG2VLEN 7
@@ -2056,6 +2058,110 @@ int main(int argc, char **argv) {
 
 #endif
 
+#if benchmark_convolution
+  printf("\t*** Convolution\n");
+
+  int image_row = 64;
+  int image_col = 64;
+  int image_depth = 3;
+
+
+  int filter_row = 4;
+  int filter_col = 4;
+  int filter_depth = 2;
+
+  int output_row = image_row;
+  int output_col = image_col;
+  int output_depth = filter_depth;
+
+
+  int32_t *input_image = (int32_t*) aligned_malloc(
+      image_row * image_col * sizeof(int32_t) ,
+      1 << LOG2VLEN); 
+
+  int32_t *filter = (int32_t*) aligned_malloc(
+      filter_row * filter_col * filter_depth * sizeof(int32_t),
+      1 << LOG2VLEN); 
+
+
+  int32_t *conv_output = (int32_t*) aligned_malloc(
+      output_row * output_col * output_depth * sizeof(int32_t),
+      1 << LOG2VLEN); 
+
+  
+  for(int i =0 ; i < image_row; i++){
+      for(int j =0; j < image_col; j++){
+          int offset = (i * image_col) + j;
+          *(input_image + offset) = offset;
+      }
+  }
+
+  for(int i =0 ; i < filter_row; i++){
+      for(int j =0; j < filter_col; j++){
+          int offset = (i * filter_col) + j;
+          *(filter + offset) = 1;
+      }
+  }
+
+
+  halide_dimension_t image_x_dim{0, image_row, 1};
+  halide_dimension_t image_y_dim{0, image_col, image_row};
+  halide_dimension_t image_channel_dim{0, image_depth, image_row * image_depth};
+  halide_dimension_t image_shape[3] = { image_x_dim, image_y_dim, image_channel_dim};
+
+  halide_dimension_t filter_x{0, filter_row, 1};
+  halide_dimension_t filter_y{0, filter_col, filter_row};
+  halide_dimension_t filter_channel_dim{0, filter_depth, filter_row * filter_col};
+  halide_dimension_t filter_shape[3] = {filter_x, filter_y, filter_channel_dim};
+
+
+  halide_dimension_t output_x{0, output_row, 1};
+  halide_dimension_t output_y{0, output_col, output_row};
+  halide_dimension_t output_channel_dim{0, filter_depth, output_row * output_col};
+  halide_dimension_t output_shape[3] = {output_x, output_y, output_channel_dim};
+
+  Halide::Runtime::Buffer<int32_t> IMG(input_image, 3, image_shape);
+  Halide::Runtime::Buffer<int32_t> Filter(filter, 3, filter_shape);
+  Halide::Runtime::Buffer<int32_t> Output(conv_output, 3, output_shape);
+
+  benchmark([&]() {
+    int error = convolution(IMG, Filter, Output);
+    if (error != 0) {
+      printf("Convolution pipeline failed: %d\n", error);
+    }
+  });
+
+#ifdef DEBUG
+
+  for(int c = 0; c < image_depth; c++){
+      printf("Input Channel %d\n", c);
+      for(int x = 0 ; x < image_row; x++){
+          for(int y = 0; y < image_col; y++){
+              printf("%d ", IMG(x,y,c));
+          }
+          printf("\n");
+      }
+  }
+
+  for(int c = 0; c < filter_depth; c++){
+      printf("Output Channel %d\n", c);
+      for(int x = 0 ; x < output_row; x++){
+          for(int y = 0; y < output_col; y++){
+              printf("%d ", Output(x,y,c));
+          }
+          printf("\n");
+      }
+  }
+
+#endif
+
+
+  free(input_image);
+  free(filter);
+  free(conv_output);
+
+
+#endif
   printf("Success!\n");
 
   return 0;
