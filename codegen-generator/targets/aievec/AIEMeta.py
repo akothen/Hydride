@@ -35,6 +35,10 @@ SupportedTypes = [
     "acc32"
 ]
 
+LaneSizes = {
+    ''
+}
+
 DataTypeBits = {
     "int8" : 8,
     "uint8" : 8,

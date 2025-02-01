@@ -42,6 +42,8 @@ def ParseAddSubHTML() -> list[AIESema]:
         if "cacc" in rettype or "cint" in rettype or "float" in rettype:
             continue
         instclass = ""
+        if raw_name == "add":
+            instclass = "ADD"
         if raw_name == "addsub":
             instclass = "ADDSUB"
         elif raw_name == "sub":

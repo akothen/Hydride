@@ -19,7 +19,7 @@ class SemaGenerator:
         import pprint
         self.result = self.getResult()
         with open(AIEDIR+'AIEAllSema.py', 'w') as f:
-            f.write("""from AIEMeta import AIESema, AIEParameter\n\n""")
+            f.write("""from AIEMeta import AIESema, Parameter\n\n""")
             f.write(f"AllSema = {pprint.pformat(self.result, indent=4)}")
 
     def getResult(self) -> List[AIESema]:

@@ -209,7 +209,7 @@ aie_sema = {
         '"(for/list ([%i (reverse (range 0 32 1))])"',
         '"(define %low1 (* 32 %i))"',
         '"(define %high1 (+ %low1 (- 32 1)))"',
-        '"(define %o (extract 15 0 (bvand (bv #x0000ffff 32) (extract %high1 %low1 acc))))"',
+        '"(define %o (extract 15 0 (extract %high1 %low1 acc)))"',
         '"%o"',
         '")"',
         '")"',
