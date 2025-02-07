@@ -29,7 +29,8 @@ public:
                                                                         y - r.y + filter_y / 2, 
                                                                         r.z)   ;
 
-        auto vector_size = 16384;
+
+        auto vector_size = 32;
 
 
 
@@ -38,7 +39,6 @@ public:
         Output
             .update()
             .fuse(x, y, x)
-            .fuse(x, c_out, x)
             .vectorize(x, vector_size)
             ;
 
