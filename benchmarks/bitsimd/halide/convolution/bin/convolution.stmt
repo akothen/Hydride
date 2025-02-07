@@ -1,0 +1,202 @@
+module name=convolution, target=x86-64-linux-avx-avx2-avx512-avx512_skylake-f16c-fma-sse41
+external_plus_metadata func convolution (IMG, Filter, Output) {
+assert((uint64)reinterpret((halide_buffer_t *)Output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("Output"))
+assert((uint64)reinterpret((halide_buffer_t *)IMG.buffer) != (uint64)0, halide_error_buffer_argument_is_null("IMG"))
+assert((uint64)reinterpret((halide_buffer_t *)Filter.buffer) != (uint64)0, halide_error_buffer_argument_is_null("Filter"))
+let Filter = (void *)_halide_buffer_get_host((halide_buffer_t *)Filter.buffer)
+let Filter.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)Filter.buffer)
+let Filter.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)Filter.buffer)
+let Filter.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)Filter.buffer)
+let Filter.min.0 = _halide_buffer_get_min((halide_buffer_t *)Filter.buffer, 0)
+let Filter.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)Filter.buffer, 0)
+let Filter.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)Filter.buffer, 0)
+let Filter.min.1 = _halide_buffer_get_min((halide_buffer_t *)Filter.buffer, 1)
+let Filter.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)Filter.buffer, 1)
+let Filter.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)Filter.buffer, 1)
+let Filter.min.2 = _halide_buffer_get_min((halide_buffer_t *)Filter.buffer, 2)
+let Filter.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)Filter.buffer, 2)
+let Filter.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)Filter.buffer, 2)
+let IMG = (void *)_halide_buffer_get_host((halide_buffer_t *)IMG.buffer)
+let IMG.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)IMG.buffer)
+let IMG.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)IMG.buffer)
+let IMG.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)IMG.buffer)
+let IMG.min.0 = _halide_buffer_get_min((halide_buffer_t *)IMG.buffer, 0)
+let IMG.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)IMG.buffer, 0)
+let IMG.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)IMG.buffer, 0)
+let IMG.min.1 = _halide_buffer_get_min((halide_buffer_t *)IMG.buffer, 1)
+let IMG.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)IMG.buffer, 1)
+let IMG.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)IMG.buffer, 1)
+let IMG.min.2 = _halide_buffer_get_min((halide_buffer_t *)IMG.buffer, 2)
+let IMG.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)IMG.buffer, 2)
+let IMG.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)IMG.buffer, 2)
+let Output = (void *)_halide_buffer_get_host((halide_buffer_t *)Output.buffer)
+let Output.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)Output.buffer)
+let Output.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)Output.buffer)
+let Output.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)Output.buffer)
+let Output.min.0 = _halide_buffer_get_min((halide_buffer_t *)Output.buffer, 0)
+let Output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)Output.buffer, 0)
+let Output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)Output.buffer, 0)
+let Output.min.1 = _halide_buffer_get_min((halide_buffer_t *)Output.buffer, 1)
+let Output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)Output.buffer, 1)
+let Output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)Output.buffer, 1)
+let Output.min.2 = _halide_buffer_get_min((halide_buffer_t *)Output.buffer, 2)
+let Output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)Output.buffer, 2)
+let Output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)Output.buffer, 2)
+let Filter.extent.2.required.s = let t254 = (Output.extent.0*Output.extent.1) in (let t255 = ((((((t254*Output.extent.2) + -1)/16384)*16384) + 16383)/t254) in select(0 < t254, t255, 0 - t255))
+let Filter.min.2.required.s = let t256 = (Output.extent.0*Output.extent.1) in select(0 < t256, 0, (((((t256*Output.extent.2) + -1)/16384)*16384) + 16383)/t256)
+let IMG.extent.0.required.s = let t257 = (IMG.extent.0 + IMG.min.0) in (max(min((max(-1 - Output.extent.0, max(Output.extent.0, 1) + -1) + (Filter.extent.0/2)) + Output.min.0, t257 + -1), IMG.min.0) - max(min((((Filter.extent.0/2) + Output.min.0) - Filter.extent.0) + 2, t257) + -1, IMG.min.0))
+let IMG.min.0.required = max(min((((Filter.extent.0/2) + Output.min.0) - Filter.extent.0) + 2, IMG.extent.0 + IMG.min.0) + -1, IMG.min.0)
+let IMG.extent.1.required.s = let t258 = (0 < Output.extent.0) in (let t259 = (Output.extent.0*Output.extent.1) in (let t260 = (max(-1 - t259, max(t259, 1) + -1)/Output.extent.0) in (let t261 = (IMG.extent.1 + IMG.min.1) in (max(min((select(t258, t260, 0) + (Filter.extent.1/2)) + Output.min.1, t261 + -1), IMG.min.1) - max(min((((select(t258, 0, t260) + (Filter.extent.1/2)) + Output.min.1) - Filter.extent.1) + 2, t261) + -1, IMG.min.1)))))
+let IMG.min.1.required = let t262 = (Output.extent.0*Output.extent.1) in max(min((((select(0 < Output.extent.0, 0, max(-1 - t262, max(t262, 1) + -1)/Output.extent.0) + (Filter.extent.1/2)) + Output.min.1) - Filter.extent.1) + 2, IMG.extent.1 + IMG.min.1) + -1, IMG.min.1)
+let IMG.extent.2.required = max(min(IMG.min.2, 0) + IMG.extent.2, IMG.min.2 + 1) - max(min(IMG.extent.2 + IMG.min.2, 1) + -1, IMG.min.2)
+let IMG.min.2.required = max(min(IMG.extent.2 + IMG.min.2, 1) + -1, IMG.min.2)
+let IMG.stride.2.required = (IMG.extent.0.required.s + 1)*(IMG.extent.1.required.s + 1)
+let Output.extent.0.required.s = max(0 - Output.extent.0, Output.extent.0)
+let Output.extent.1.required.s = let t263 = (0 < Output.extent.0) in (let t264 = (Output.extent.0*Output.extent.1) in (let t265 = (max(-1 - t264, max(t264, 1) + -1)/Output.extent.0) in (max(select(t263, t265, 0), Output.extent.1 + -1) - min(select(t263, 0, t265), 0))))
+let Output.min.1.required.s = let t266 = (Output.extent.0*Output.extent.1) in select(0 < Output.extent.0, 0, max(-1 - t266, max(t266, 1) + -1)/Output.extent.0)
+let Output.extent.2.required.s = let t267 = (Output.extent.0*Output.extent.1) in (max(select(0 < t267, (((((t267*Output.extent.2) + -1)/16384)*16384) + 16383)/t267, 0), Output.extent.2 + -1) - min(Filter.min.2.required.s, 0))
+let Output.stride.2.required = max(Output.extent.0.required.s, 1)*(Output.extent.1.required.s + 1)
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)Filter.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)Filter.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)Filter.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 3, (halide_dimension_t *)make_struct(0, Filter.extent.0, 1, 0, 0, Filter.extent.1, Filter.extent.0, 0, Filter.min.2.required.s + Output.min.2, Filter.extent.2.required.s + 1, Filter.extent.0*Filter.extent.1, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)IMG.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)IMG.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)IMG.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 3, (halide_dimension_t *)make_struct(IMG.min.0.required, IMG.extent.0.required.s + 1, 1, 0, IMG.min.1.required, IMG.extent.1.required.s + 1, IMG.extent.0.required.s + 1, 0, IMG.min.2.required, IMG.extent.2.required, IMG.stride.2.required, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)Output.buffer)) {
+ let t268 = max(Output.extent.0.required.s, 1) in (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)Output.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)Output.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 3, (halide_dimension_t *)make_struct(Output.min.0, t268, 1, 0, min(Output.min.1.required.s, 0) + Output.min.1, Output.extent.1.required.s + 1, t268, 0, min(Filter.min.2.required.s, 0) + Output.min.2, Output.extent.2.required.s + 1, Output.stride.2.required, 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)Output.buffer) || ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)Filter.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)IMG.buffer)))) {
+ assert(Filter.type == (uint32)73728, halide_error_bad_type("Input buffer Filter", Filter.type, (uint32)73728))
+ assert(Filter.dimensions == 3, halide_error_bad_dimensions("Input buffer Filter", Filter.dimensions, 3))
+ assert(IMG.type == (uint32)73728, halide_error_bad_type("Input buffer IMG", IMG.type, (uint32)73728))
+ assert(IMG.dimensions == 3, halide_error_bad_dimensions("Input buffer IMG", IMG.dimensions, 3))
+ assert(Output.type == (uint32)73728, halide_error_bad_type("Output buffer Output", Output.type, (uint32)73728))
+ assert(Output.dimensions == 3, halide_error_bad_dimensions("Output buffer Output", Output.dimensions, 3))
+ assert((Filter.min.0 <= 0) && (0 <= Filter.min.0), halide_error_access_out_of_bounds("Input buffer Filter", 0, 0, Filter.extent.0 + -1, Filter.min.0, (Filter.extent.0 + Filter.min.0) + -1))
+ assert(0 <= Filter.extent.0, halide_error_buffer_extents_negative("Input buffer Filter", 0, Filter.extent.0))
+ assert((Filter.min.1 <= 0) && (0 <= Filter.min.1), halide_error_access_out_of_bounds("Input buffer Filter", 1, 0, Filter.extent.1 + -1, Filter.min.1, (Filter.extent.1 + Filter.min.1) + -1))
+ assert(0 <= Filter.extent.1, halide_error_buffer_extents_negative("Input buffer Filter", 1, Filter.extent.1))
+ assert(let t269 = (Filter.min.2.required.s + Output.min.2) in ((Filter.min.2 <= t269) && (((t269 + Filter.extent.2.required.s) + 1) <= (Filter.extent.2 + Filter.min.2))), let t270 = (Filter.min.2.required.s + Output.min.2) in halide_error_access_out_of_bounds("Input buffer Filter", 2, t270, t270 + Filter.extent.2.required.s, Filter.min.2, (Filter.extent.2 + Filter.min.2) + -1))
+ assert(0 <= Filter.extent.2, halide_error_buffer_extents_negative("Input buffer Filter", 2, Filter.extent.2))
+ assert((IMG.min.0 <= IMG.min.0.required) && (((IMG.extent.0.required.s + IMG.min.0.required) + 1) <= (IMG.extent.0 + IMG.min.0)), halide_error_access_out_of_bounds("Input buffer IMG", 0, IMG.min.0.required, IMG.extent.0.required.s + IMG.min.0.required, IMG.min.0, (IMG.extent.0 + IMG.min.0) + -1))
+ assert(0 <= IMG.extent.0, halide_error_buffer_extents_negative("Input buffer IMG", 0, IMG.extent.0))
+ assert((IMG.min.1 <= IMG.min.1.required) && (((IMG.extent.1.required.s + IMG.min.1.required) + 1) <= (IMG.extent.1 + IMG.min.1)), halide_error_access_out_of_bounds("Input buffer IMG", 1, IMG.min.1.required, IMG.extent.1.required.s + IMG.min.1.required, IMG.min.1, (IMG.extent.1 + IMG.min.1) + -1))
+ assert(0 <= IMG.extent.1, halide_error_buffer_extents_negative("Input buffer IMG", 1, IMG.extent.1))
+ assert((IMG.min.2 <= IMG.min.2.required) && ((IMG.extent.2.required + IMG.min.2.required) <= (IMG.extent.2 + IMG.min.2)), halide_error_access_out_of_bounds("Input buffer IMG", 2, IMG.min.2.required, (IMG.extent.2.required + IMG.min.2.required) + -1, IMG.min.2, (IMG.extent.2 + IMG.min.2) + -1))
+ assert(0 <= IMG.extent.2, halide_error_buffer_extents_negative("Input buffer IMG", 2, IMG.extent.2))
+ assert(max(Output.extent.0.required.s, 1) <= Output.extent.0, halide_error_access_out_of_bounds("Output buffer Output", 0, Output.min.0, (max(Output.extent.0.required.s, 1) + Output.min.0) + -1, Output.min.0, (Output.extent.0 + Output.min.0) + -1))
+ assert((0 <= Output.min.1.required.s) && ((((min(Output.min.1.required.s, 0) + Output.min.1) + Output.extent.1.required.s) + 1) <= (Output.extent.1 + Output.min.1)), let t271 = (min(Output.min.1.required.s, 0) + Output.min.1) in halide_error_access_out_of_bounds("Output buffer Output", 1, t271, t271 + Output.extent.1.required.s, Output.min.1, (Output.extent.1 + Output.min.1) + -1))
+ assert(0 <= Output.extent.1, halide_error_buffer_extents_negative("Output buffer Output", 1, Output.extent.1))
+ assert((0 <= Filter.min.2.required.s) && ((((min(Filter.min.2.required.s, 0) + Output.min.2) + Output.extent.2.required.s) + 1) <= (Output.extent.2 + Output.min.2)), let t272 = (min(Filter.min.2.required.s, 0) + Output.min.2) in halide_error_access_out_of_bounds("Output buffer Output", 2, t272, t272 + Output.extent.2.required.s, Output.min.2, (Output.extent.2 + Output.min.2) + -1))
+ assert(0 <= Output.extent.2, halide_error_buffer_extents_negative("Output buffer Output", 2, Output.extent.2))
+ assert(Filter.stride.0 == 1, halide_error_constraint_violated("Filter.stride.0", Filter.stride.0, "1", 1))
+ assert(IMG.stride.0 == 1, halide_error_constraint_violated("IMG.stride.0", IMG.stride.0, "1", 1))
+ assert(Output.stride.0 == 1, halide_error_constraint_violated("Output.stride.0", Output.stride.0, "1", 1))
+ let Filter.total_extent.1 = int64(Filter.extent.1)*int64(Filter.extent.0)
+ let Filter.total_extent.2 = Filter.total_extent.1*int64(Filter.extent.2)
+ let IMG.total_extent.1 = int64(IMG.extent.1)*int64(IMG.extent.0)
+ let IMG.total_extent.2 = IMG.total_extent.1*int64(IMG.extent.2)
+ let Output.total_extent.1 = int64(Output.extent.1)*int64(Output.extent.0)
+ let Output.total_extent.2 = Output.total_extent.1*int64(Output.extent.2)
+ assert(uint64(Filter.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("Filter", uint64(Filter.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(Filter.extent.1)*int64(Filter.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("Filter", (uint64)abs(int64(Filter.extent.1)*int64(Filter.stride.1)), (uint64)2147483647))
+ assert(Filter.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("Filter", Filter.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(Filter.extent.2)*int64(Filter.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("Filter", (uint64)abs(int64(Filter.extent.2)*int64(Filter.stride.2)), (uint64)2147483647))
+ assert(Filter.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("Filter", Filter.total_extent.2, (int64)2147483647))
+ assert(uint64(IMG.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("IMG", uint64(IMG.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(IMG.extent.1)*int64(IMG.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("IMG", (uint64)abs(int64(IMG.extent.1)*int64(IMG.stride.1)), (uint64)2147483647))
+ assert(IMG.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("IMG", IMG.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(IMG.extent.2)*int64(IMG.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("IMG", (uint64)abs(int64(IMG.extent.2)*int64(IMG.stride.2)), (uint64)2147483647))
+ assert(IMG.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("IMG", IMG.total_extent.2, (int64)2147483647))
+ assert(uint64(Output.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("Output", uint64(Output.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(Output.extent.1)*int64(Output.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("Output", (uint64)abs(int64(Output.extent.1)*int64(Output.stride.1)), (uint64)2147483647))
+ assert(Output.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("Output", Output.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(Output.extent.2)*int64(Output.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("Output", (uint64)abs(int64(Output.extent.2)*int64(Output.stride.2)), (uint64)2147483647))
+ assert(Output.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("Output", Output.total_extent.2, (int64)2147483647))
+ assert(!Filter.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer Filter"))
+ assert(!IMG.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer IMG"))
+ assert(!Output.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer Output"))
+ assert(Filter != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer Filter"))
+ assert(IMG != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer IMG"))
+ assert(Output != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer Output"))
+ produce Output {
+  let t222 = 0 - ((Output.min.2*Output.stride.2) + (Output.min.1*Output.stride.1))
+  for (Output.s0.c_out.rebased, 0, Output.extent.2) {
+   let t223 = ((Output.min.2 + Output.s0.c_out.rebased)*Output.stride.2) + t222
+   for (Output.s0.y.rebased, 0, Output.extent.1) {
+    let t224 = ((Output.min.1 + Output.s0.y.rebased)*Output.stride.1) + t223
+    for (Output.s0.x.rebased, 0, Output.extent.0) {
+     Output[Output.s0.x.rebased + t224] = 0
+    }
+   }
+  }
+  let t236 = Output.extent.0*Output.extent.1
+  let t237 = min(max(IMG.min.2, 0), IMG.extent.2)
+  let t227 = max(min(IMG.min.2, 0) + IMG.extent.2, t237)
+  let t225 = ((Output.extent.2*t236) + 16383)/16384
+  let t230 = Output.min.2 - Filter.min.2
+  let t232 = (Filter.extent.1/2) + Output.min.1
+  let t234 = (Filter.extent.0/2) + Output.min.0
+  let t231 = (IMG.min.1*IMG.stride.1) + IMG.min.0
+  let t229 = ((Output.min.2*Output.stride.2) + (Output.min.1*Output.stride.1)) + Output.min.0
+  let t233 = IMG.extent.1 + IMG.min.1
+  let t235 = IMG.extent.0 + IMG.min.0
+  for (Output.s1.x.x.x.x, 0, t225) {
+   let t238 = Output.s1.x.x.x.x*16384
+   for (Output.s1.r10$z, 0, t237) {
+    let t239 = (max(min(Output.s1.r10$z - IMG.min.2, IMG.extent.2 + -1), 0)*IMG.stride.2) - t231
+    for (Output.s1.r10$y, 0, Filter.extent.1) {
+     let t240 = Filter.stride.1*Output.s1.r10$y
+     let t241 = t232 - Output.s1.r10$y
+     for (Output.s1.r10$x, 0, Filter.extent.0) {
+      let t177 = ramp(t238, 1, 16384)/x16384(t236)
+      let t178 = ramp(t238, 1, 16384) % x16384(t236)
+      let t179 = t178/x16384(Output.extent.0)
+      let t180 = t178 % x16384(Output.extent.0)
+      let t181 = (((t179 + x16384(Output.min.1))*x16384(Output.stride.1)) + (((t177 + x16384(Output.min.2))*x16384(Output.stride.2)) + x16384(Output.min.0 - t229))) + t180
+      Output[t181] = Output[t181] + (Filter[((t177 + x16384(t230))*x16384(Filter.stride.2)) + x16384(Output.s1.r10$x + t240)]*IMG[max(min(t180 + x16384(t234 - Output.s1.r10$x), x16384(t235 + -1)), x16384(IMG.min.0)) + ((max(min(t179 + x16384(t241), x16384(t233 + -1)), x16384(IMG.min.1))*x16384(IMG.stride.1)) + x16384(t239))])
+     }
+    }
+   }
+   let t243 = Output.s1.x.x.x.x*16384
+   let t244 = t237 - IMG.min.2
+   let t242 = t227 - t237
+   for (Output.s1.r10$z.rebased, 0, t242) {
+    let t245 = ((Output.s1.r10$z.rebased + t244)*IMG.stride.2) - t231
+    for (Output.s1.r10$y, 0, Filter.extent.1) {
+     let t246 = Filter.stride.1*Output.s1.r10$y
+     let t247 = t232 - Output.s1.r10$y
+     for (Output.s1.r10$x, 0, Filter.extent.0) {
+      let t183 = ramp(t243, 1, 16384)/x16384(t236)
+      let t184 = ramp(t243, 1, 16384) % x16384(t236)
+      let t185 = t184/x16384(Output.extent.0)
+      let t186 = t184 % x16384(Output.extent.0)
+      let t187 = (((t185 + x16384(Output.min.1))*x16384(Output.stride.1)) + (((t183 + x16384(Output.min.2))*x16384(Output.stride.2)) + x16384(Output.min.0 - t229))) + t186
+      Output[t187] = Output[t187] + (Filter[((t183 + x16384(t230))*x16384(Filter.stride.2)) + x16384(Output.s1.r10$x + t246)]*IMG[max(min(t186 + x16384(t234 - Output.s1.r10$x), x16384(t235 + -1)), x16384(IMG.min.0)) + ((max(min(t185 + x16384(t247), x16384(t233 + -1)), x16384(IMG.min.1))*x16384(IMG.stride.1)) + x16384(t245))])
+     }
+    }
+   }
+   let t249 = Output.s1.x.x.x.x*16384
+   let t250 = t227 - IMG.min.2
+   let t248 = IMG.extent.2 - t227
+   for (Output.s1.r10$z.rebased, 0, t248) {
+    let t251 = (max(min(Output.s1.r10$z.rebased + t250, IMG.extent.2 + -1), 0)*IMG.stride.2) - t231
+    for (Output.s1.r10$y, 0, Filter.extent.1) {
+     let t252 = Filter.stride.1*Output.s1.r10$y
+     let t253 = t232 - Output.s1.r10$y
+     for (Output.s1.r10$x, 0, Filter.extent.0) {
+      let t189 = ramp(t249, 1, 16384)/x16384(t236)
+      let t190 = ramp(t249, 1, 16384) % x16384(t236)
+      let t191 = t190/x16384(Output.extent.0)
+      let t192 = t190 % x16384(Output.extent.0)
+      let t193 = (((t191 + x16384(Output.min.1))*x16384(Output.stride.1)) + (((t189 + x16384(Output.min.2))*x16384(Output.stride.2)) + x16384(Output.min.0 - t229))) + t192
+      Output[t193] = Output[t193] + (Filter[((t189 + x16384(t230))*x16384(Filter.stride.2)) + x16384(Output.s1.r10$x + t252)]*IMG[max(min(t192 + x16384(t234 - Output.s1.r10$x), x16384(t235 + -1)), x16384(IMG.min.0)) + ((max(min(t191 + x16384(t253), x16384(t233 + -1)), x16384(IMG.min.1))*x16384(IMG.stride.1)) + x16384(t251))])
+     }
+    }
+   }
+  }
+ }
+}
+}
+
+

@@ -23,17 +23,24 @@ public:
 
         // Built-in Halide helper function for defining boundary conditions
         Func bounded_input = BoundaryConditions::repeat_edge(IMG);
-
         Output(x,y,c_out) = 0; 
         Output(x, y, c_out) += Filter(r.x , r.y, c_out)  *  bounded_input(
                                                                         x - r.x + filter_x / 2, 
                                                                         y - r.y + filter_y / 2, 
                                                                         r.z)   ;
 
+        auto vector_size = 16384;
+
+
+
+
         // Schedule
         Output
             .update()
-            .vectorize(x, 32);
+            .fuse(x, y, x)
+            .fuse(x, c_out, x)
+            .vectorize(x, vector_size)
+            ;
 
 
 

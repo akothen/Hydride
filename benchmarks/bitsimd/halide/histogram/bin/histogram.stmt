@@ -1,0 +1,135 @@
+module name=histogram, target=x86-64-linux-avx-avx2-avx512-avx512_skylake-f16c-fma-sse41
+external_plus_metadata func histogram (IMG, BINS) {
+assert((uint64)reinterpret((halide_buffer_t *)IMG.buffer) != (uint64)0, halide_error_buffer_argument_is_null("IMG"))
+assert((uint64)reinterpret((halide_buffer_t *)BINS.buffer) != (uint64)0, halide_error_buffer_argument_is_null("BINS"))
+let BINS = (void *)_halide_buffer_get_host((halide_buffer_t *)BINS.buffer)
+let BINS.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)BINS.buffer)
+let BINS.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)BINS.buffer)
+let BINS.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)BINS.buffer)
+let BINS.min.0 = _halide_buffer_get_min((halide_buffer_t *)BINS.buffer, 0)
+let BINS.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)BINS.buffer, 0)
+let BINS.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)BINS.buffer, 0)
+let BINS.min.1 = _halide_buffer_get_min((halide_buffer_t *)BINS.buffer, 1)
+let BINS.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)BINS.buffer, 1)
+let BINS.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)BINS.buffer, 1)
+let IMG = (void *)_halide_buffer_get_host((halide_buffer_t *)IMG.buffer)
+let IMG.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)IMG.buffer)
+let IMG.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)IMG.buffer)
+let IMG.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)IMG.buffer)
+let IMG.min.0 = _halide_buffer_get_min((halide_buffer_t *)IMG.buffer, 0)
+let IMG.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)IMG.buffer, 0)
+let IMG.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)IMG.buffer, 0)
+let IMG.min.1 = _halide_buffer_get_min((halide_buffer_t *)IMG.buffer, 1)
+let IMG.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)IMG.buffer, 1)
+let IMG.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)IMG.buffer, 1)
+let IMG.min.2 = _halide_buffer_get_min((halide_buffer_t *)IMG.buffer, 2)
+let IMG.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)IMG.buffer, 2)
+let IMG.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)IMG.buffer, 2)
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)BINS.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)BINS.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)BINS.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 2, (halide_dimension_t *)make_struct(BINS.min.0, BINS.extent.0, 1, 0, BINS.min.1, BINS.extent.1, BINS.extent.0, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)IMG.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)IMG.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)IMG.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 3, (halide_dimension_t *)make_struct(0, 1024, 1, 0, 0, 256, 1024, 0, BINS.min.1, BINS.extent.1, 262144, 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)BINS.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)IMG.buffer))) {
+ assert(BINS.type == (uint32)73728, halide_error_bad_type("Output buffer BINS", BINS.type, (uint32)73728))
+ assert(BINS.dimensions == 2, halide_error_bad_dimensions("Output buffer BINS", BINS.dimensions, 2))
+ assert(IMG.type == (uint32)73728, halide_error_bad_type("Input buffer IMG", IMG.type, (uint32)73728))
+ assert(IMG.dimensions == 3, halide_error_bad_dimensions("Input buffer IMG", IMG.dimensions, 3))
+ assert(0 <= BINS.extent.0, halide_error_buffer_extents_negative("Output buffer BINS", 0, BINS.extent.0))
+ assert(0 <= BINS.extent.1, halide_error_buffer_extents_negative("Output buffer BINS", 1, BINS.extent.1))
+ assert((IMG.min.0 <= 0) && (1024 <= (IMG.extent.0 + IMG.min.0)), halide_error_access_out_of_bounds("Input buffer IMG", 0, 0, 1023, IMG.min.0, (IMG.extent.0 + IMG.min.0) + -1))
+ assert(0 <= IMG.extent.0, halide_error_buffer_extents_negative("Input buffer IMG", 0, IMG.extent.0))
+ assert((IMG.min.1 <= 0) && (256 <= (IMG.extent.1 + IMG.min.1)), halide_error_access_out_of_bounds("Input buffer IMG", 1, 0, 255, IMG.min.1, (IMG.extent.1 + IMG.min.1) + -1))
+ assert(0 <= IMG.extent.1, halide_error_buffer_extents_negative("Input buffer IMG", 1, IMG.extent.1))
+ assert((IMG.min.2 <= BINS.min.1) && ((BINS.extent.1 + BINS.min.1) <= (IMG.extent.2 + IMG.min.2)), halide_error_access_out_of_bounds("Input buffer IMG", 2, BINS.min.1, (BINS.extent.1 + BINS.min.1) + -1, IMG.min.2, (IMG.extent.2 + IMG.min.2) + -1))
+ assert(0 <= IMG.extent.2, halide_error_buffer_extents_negative("Input buffer IMG", 2, IMG.extent.2))
+ assert(BINS.stride.0 == 1, halide_error_constraint_violated("BINS.stride.0", BINS.stride.0, "1", 1))
+ assert(IMG.stride.0 == 1, halide_error_constraint_violated("IMG.stride.0", IMG.stride.0, "1", 1))
+ let BINS.total_extent.1 = int64(BINS.extent.1)*int64(BINS.extent.0)
+ let IMG.total_extent.1 = int64(IMG.extent.1)*int64(IMG.extent.0)
+ let IMG.total_extent.2 = IMG.total_extent.1*int64(IMG.extent.2)
+ assert(uint64(BINS.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("BINS", uint64(BINS.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(BINS.extent.1)*int64(BINS.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("BINS", (uint64)abs(int64(BINS.extent.1)*int64(BINS.stride.1)), (uint64)2147483647))
+ assert(BINS.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("BINS", BINS.total_extent.1, (int64)2147483647))
+ assert(uint64(IMG.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("IMG", uint64(IMG.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(IMG.extent.1)*int64(IMG.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("IMG", (uint64)abs(int64(IMG.extent.1)*int64(IMG.stride.1)), (uint64)2147483647))
+ assert(IMG.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("IMG", IMG.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(IMG.extent.2)*int64(IMG.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("IMG", (uint64)abs(int64(IMG.extent.2)*int64(IMG.stride.2)), (uint64)2147483647))
+ assert(IMG.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("IMG", IMG.total_extent.2, (int64)2147483647))
+ assert(!BINS.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer BINS"))
+ assert(!IMG.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer IMG"))
+ assert(BINS != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer BINS"))
+ assert(IMG != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer IMG"))
+ let color_hist_intm.i.min_realized.s = min(max(BINS.extent.0 + BINS.min.0, 256) + -1024, BINS.min.0)
+ let color_hist_intm.i.extent_realized = let t64 = (BINS.extent.0 + BINS.min.0) in (let t65 = min(BINS.min.0, 0) in (let t66 = max(t64, 256) in (max(t64, max(min(t65 + ((((t66 - t65) + -1)/1024)*1024), t66 + -1024), -768) + 1024) - min(color_hist_intm.i.min_realized.s, 0))))
+ allocate color_hist_intm[int32 * color_hist_intm.i.extent_realized * BINS.extent.1 * 1024]
+ let color_hist_intm.s0.i.i.loop_extent.s = max(BINS.extent.0 + BINS.min.0, 256) - min(BINS.min.0, 0)
+ produce color_hist_intm {
+  let t39 = max(BINS.extent.0 + BINS.min.0, 256)
+  let t40 = min(color_hist_intm.i.min_realized.s, 0)
+  let t41 = color_hist_intm.s0.i.i.loop_extent.s + 1023
+  let t42 = min(BINS.min.0, 0)
+  let t33 = min(t39 - t42, t41)
+  let t37 = t41/1024
+  let t38 = t39 - t40
+  for (color_hist_intm.s0.u, 0, 1024) {
+   let t47 = (BINS.extent.1*color_hist_intm.i.extent_realized)*color_hist_intm.s0.u
+   let t48 = t33/1024
+   let t44 = t47 - t40
+   let t45 = t37 - t48
+   let t46 = t38 + t47
+   for (color_hist_intm.s0.c.rebased, 0, BINS.extent.1) {
+    let t49 = (color_hist_intm.i.extent_realized*color_hist_intm.s0.c.rebased) + t44
+    for (color_hist_intm.s0.i.i, 0, t48) {
+     let color_hist_intm.s0.i.v6.base = (color_hist_intm.s0.i.i*1024) + t42
+     color_hist_intm[ramp(color_hist_intm.s0.i.v6.base + t49, 1, 1024)] = x1024(0)
+    }
+    let t50 = (color_hist_intm.i.extent_realized*color_hist_intm.s0.c.rebased) + t46
+    for (color_hist_intm.s0.i.i, 0, t45) {
+     color_hist_intm[ramp(t50 + -1024, 1, 1024)] = x1024(0)
+    }
+   }
+  }
+  let t52 = min(color_hist_intm.i.min_realized.s, 0)
+  let t53 = ((IMG.min.2*IMG.stride.2) + (IMG.min.1*IMG.stride.1)) + IMG.min.0
+  for (color_hist_intm.s1.c.rebased, 0, BINS.extent.1) {
+   let t54 = BINS.extent.1*color_hist_intm.i.extent_realized
+   let t56 = ((BINS.min.1 + color_hist_intm.s1.c.rebased)*IMG.stride.2) - t53
+   let t55 = (color_hist_intm.i.extent_realized*color_hist_intm.s1.c.rebased) - t52
+   for (color_hist_intm.s1.r7$y, 0, 256) {
+    let t29 = ramp(t55, t54, 1024) + max(min(IMG[ramp((IMG.stride.1*color_hist_intm.s1.r7$y) + t56, 1, 1024)], x1024(255)), x1024(0))
+    color_hist_intm[t29] = color_hist_intm[t29] + x1024(1)
+   }
+  }
+ }
+ produce BINS {
+  consume color_hist_intm {
+   let t57 = BINS.min.0 - min(color_hist_intm.i.min_realized.s, 0)
+   let t59 = 0 - (BINS.min.1*BINS.stride.1)
+   for (BINS.s0.c.rebased, 0, BINS.extent.1) {
+    let t61 = BINS.extent.1*color_hist_intm.i.extent_realized
+    let t62 = ((BINS.min.1 + BINS.s0.c.rebased)*BINS.stride.1) + t59
+    let t60 = (BINS.s0.c.rebased*color_hist_intm.i.extent_realized) + t57
+    for (BINS.s0.x.rebased, 0, BINS.extent.0) {
+     allocate color_hist[int32 * 1024 * 1]
+     produce color_hist {
+      color_hist[ramp(0, 1, 1024)] = x1024(0)
+      let t63 = BINS.s0.x.rebased + t60
+      for (color_hist.s1.r7$x, 0, 1024) {
+       color_hist[1023] = color_hist[1023] + color_hist_intm[(color_hist.s1.r7$x*t61) + t63]
+      }
+     }
+     consume color_hist {
+      BINS[BINS.s0.x.rebased + t62] = color_hist[1023]
+     }
+     free color_hist
+    }
+   }
+  }
+ }
+ free color_hist_intm
+}
+}
+
+

@@ -14,16 +14,11 @@ public:
         output
             .compute_root()
             .reorder({y,x})
-            .vectorize(x,32)
+            .vectorize(x,1024)
             ;
 
     }
-
-    void schedule() {}
-
 private:
-    Var x{ "x" }, y{ "y" }, yi{"yi"}, xi{"xi"};
-    Func max_y{ "max_y" }, bounded_input{ "bounded_input" };
+    Var x{ "x" }, y{ "y" };
 };
-
 HALIDE_REGISTER_GENERATOR(TensorAdd, tensor_add)

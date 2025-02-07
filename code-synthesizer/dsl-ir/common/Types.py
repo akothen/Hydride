@@ -13,6 +13,7 @@ class OperandType:
         IndexExpr = auto()
         BoundedBitVector = auto()
         Reg = auto()
+        Variable = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
@@ -491,6 +492,38 @@ class Reg(OperandType):
     def print_operand(self, prefix = ""):
         print("{} Reg {} \t| <{} x i{}>".format(prefix, self.index, self.size // self.precision, self.precision))
 
+
+class Variable(OperandType):
+
+    def __init__(self, name):
+        self.name = name
+        super().__init__(OperandType.OperandTypeEnum.Variable)
+
+
+    def __eq__(self, Other):
+        if Other == None:
+            return False
+
+        if isinstance(Other, Variable):
+            return Other.name == self.name
+        else:
+            return False
+
+    def get_rkt_value(self):
+        return self.name
+
+    def get_halide_dsl_value(self):
+        return self.name
+
+    def get_dsl_value(self):
+        return self.name
+
+    def get_rkt_comment(self):
+        return ";; Variable"
+
+
+    def print_operand(self, prefix = ""):
+        print(self.name)
 
 
 class InstructionType:

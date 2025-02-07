@@ -7,18 +7,20 @@ using namespace Halide;
 
 class Histogram : public Generator<Histogram> {
 public:
-    GeneratorParam<int> matrix_size{"size", 1024};
+    GeneratorParam<int> matrix_size_x{"size_x", 1024};
+    GeneratorParam<int> matrix_size_y{"size_y", 256};
     Input<Buffer<int32_t>> IMG{ "IMG", 3 };
     Output<Buffer<int32_t>> BINS{ "BINS", 2 };
 
 
     void generate() {
-        RDom k(0, matrix_size, 0, matrix_size);
-        const int32_t vectorization_factor = 32;
+        RDom k(0, matrix_size_x, 0, matrix_size_y);
+        const int32_t vectorization_factor = 1024;
 
         // Histogram Algorithm
         Func color_hist("color_hist");
         color_hist(i,c) = 0;
+        //color_hist(IMG(k.x, k.y, c),c) += 1;
         color_hist(clamp(IMG(k.x, k.y, c), 0, 255), c) += 1;
 
         // Histogram Schedule
