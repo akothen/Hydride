@@ -1099,7 +1099,7 @@ FlatSymbolRefAttr HydrideArithPass::getOrInsertHydrideFunc(
     std::string curr_func_name, Type retType, std::vector<Type> argTypes) {
   // add logic for naming
   std::string func_name =
-      "hydride.node." + curr_func_name + "." + std::to_string(expr_id);
+      "hydride_node_" + curr_func_name + "_" + std::to_string(expr_id);
   auto *context = module.getContext();
 
   // Create a function declaration for printf, the signature is:
