@@ -76,10 +76,24 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ) 1024]
+		[else (error "Unable to infer length for mac_elem_32: "  prog)]
+)
+
+	]
 	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ) 512]
 		[else (error "Unable to infer length for srs_to_v32int16: "  prog)]
+)
+
+	]
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ) 1024]
+		[else (error "Unable to infer length for ups_to_v32acc32: "  prog)]
 )
 
 	]

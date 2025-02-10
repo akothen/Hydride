@@ -77,10 +77,24 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ) 32]
+		[else (error "Unable to infer prec for mac_elem_32")]
+)
+
+	]
 	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ) 16]
 		[else (error "Unable to infer prec for srs_to_v32int16")]
+)
+
+	]
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ) 32]
+		[else (error "Unable to infer prec for ups_to_v32acc32")]
 )
 
 	]

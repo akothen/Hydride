@@ -25,6 +25,7 @@ DEBUG_LIST = [
     #"v8acc80_mul32",
     "srs_to_v32int16",
     "mul_elem_32",
+    "mac_elem_32",
     #"v8int32_add8",
     # "vmovl_s8",
     # "vqmovn_u32",

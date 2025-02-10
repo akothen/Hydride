@@ -146,6 +146,19 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ); mac_elem_32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (mac_elem_32_dsl expr-0 expr-1 expr-2 ) num-consumed-2)]
+		[else (error "Unable to extract  for mac_elem_32")]
+)
+
+	]
 	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ); srs_to_v32int16
@@ -154,6 +167,17 @@
  
  (values (srs_to_v32int16_dsl expr-0 ) num-consumed-0)]
 		[else (error "Unable to extract  for srs_to_v32int16")]
+)
+
+	]
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ); ups_to_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (ups_to_v32acc32_dsl expr-0 ) num-consumed-0)]
+		[else (error "Unable to extract  for ups_to_v32acc32")]
 )
 
 	]

@@ -98,8 +98,14 @@
 	[ (mul_elem_32_dsl v0 v1)
 		(mul_elem_32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env))
 	]
+	[ (mac_elem_32_dsl v0 v1 v2)
+		(mac_elem_32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr v2 env))
+	]
 	[ (srs_to_v32int16_dsl v0)
 		(srs_to_v32int16_dsl (aie:bind-expr v0 env))
+	]
+	[ (ups_to_v32acc32_dsl v0)
+		(ups_to_v32acc32_dsl (aie:bind-expr v0 env))
 	]
 	[ (ups_8_32_to_8_80_dsl v0)
 		(ups_8_32_to_8_80_dsl (aie:bind-expr v0 env))

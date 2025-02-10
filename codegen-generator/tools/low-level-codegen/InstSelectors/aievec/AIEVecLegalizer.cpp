@@ -120,7 +120,7 @@ virtual bool legalize(Instruction *I) {
         
             { 
               auto *InstFunction = I->getModule()->getFunction("mul_elem_32_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<int> Permutation = {}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 

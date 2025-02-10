@@ -99,12 +99,30 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ); mac_elem_32
+ 
+  (list v0 v1 v2)]
+		[else (error "Unable to get ops  for mac_elem_32")]
+)
+
+	]
 	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ); srs_to_v32int16
  
   (list v0)]
 		[else (error "Unable to get ops  for srs_to_v32int16")]
+)
+
+	]
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ); ups_to_v32acc32
+ 
+  (list v0)]
+		[else (error "Unable to get ops  for ups_to_v32acc32")]
 )
 
 	]

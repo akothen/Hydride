@@ -9,6 +9,31 @@ entry:
   ret <16 x i32> %add.i
 }
 
+; Function Attrs: mustprogress noinline optnone
+define dso_local noundef <32 x i16> @srs_to_v32int16_wrapper(<16 x i64> noundef %acc, i32 noundef %shft, i32 noundef %sign) #0 {
+entry:
+  %acc.addr.i = alloca <16 x i64>, align 32
+  %shft.addr.i = alloca i32, align 4
+  %sign.addr.i = alloca i32, align 4
+  %acc.addr = alloca <16 x i64>, align 32
+  %shft.addr = alloca i32, align 4
+  %sign.addr = alloca i32, align 4
+  store <16 x i64> %acc, ptr %acc.addr, align 32
+  store i32 %shft, ptr %shft.addr, align 4
+  store i32 %sign, ptr %sign.addr, align 4
+  %0 = load <16 x i64>, ptr %acc.addr, align 32
+  %1 = load i32, ptr %shft.addr, align 4
+  %2 = load i32, ptr %sign.addr, align 4
+  store <16 x i64> %0, ptr %acc.addr.i, align 32
+  store i32 %1, ptr %shft.addr.i, align 4
+  store i32 %2, ptr %sign.addr.i, align 4
+  %3 = load <16 x i64>, ptr %acc.addr.i, align 32
+  %4 = load i32, ptr %shft.addr.i, align 4
+  %5 = load i32, ptr %sign.addr.i, align 4
+  %6 = call noundef <32 x i16> @llvm.aie2.I512.v32.acc32.srs(<16 x i64> %3, i32 %4, i32 %5)
+  ret <32 x i16> %6
+}
+
 define dso_local noundef <16 x i64> @mul_elem_32_wrapper() #0 {
 entry:
   %a.addr.i = alloca <32 x i16>, align 32
@@ -100,6 +125,9 @@ entry:
 
 ; Function Attrs: nounwind memory(none)
 declare <16 x i64> @llvm.aie2.I512.I512.acc32.mul.conf(<64 x i8>, <16 x i32>, i32) #1
+
+; Function Attrs: nounwind memory(inaccessiblemem: read)
+declare <32 x i16> @llvm.aie2.I512.v32.acc32.srs(<16 x i64>, i32, i32) #2
 
 attributes #0 = { mustprogress noinline optnone "no-trapping-math"="true" "stack-protector-buffer-size"="8" }
 attributes #1 = { nounwind memory(none) }

@@ -465,10 +465,62 @@
 		(define relavent-indices (filter filter-fn (range 0 1)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
+	[(equal? prog mac_elem_32_dsl)
+		(define input-precs-dsl (list  16  ))
+		(define input-size-dsl (list   (list 512 512 1024 ) ) )
+		(define variants (list (mac_elem_32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 1)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
 	[(equal? prog srs_to_v32int16_dsl)
 		(define input-precs-dsl (list  32  ))
 		(define input-size-dsl (list   (list 1024 ) ) )
 		(define variants (list (srs_to_v32int16_dsl (reg (bv 0 8)) ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 1)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog ups_to_v32acc32_dsl)
+		(define input-precs-dsl (list  16  ))
+		(define input-size-dsl (list   (list 512 ) ) )
+		(define variants (list (ups_to_v32acc32_dsl (reg (bv 0 8)) ) 
 ))
 		
             (define (filter-fn i)

@@ -94,18 +94,51 @@ dst
 )
 dst
 )
+(define (mac_elem_32 a b c)
+(define dst
+(apply concat
+(for/list ([%i (reverse (range 0 32 1))])
+(define %low1 (* 16 %i))
+(define %high1 (+ %low1 (- 16 1)))
+(define %ext_a (sign-extend (extract %high1 %low1 a) (bitvector 32)))
+(define %low2 (* 16 %i))
+(define %high2 (+ %low2 (- 16 1)))
+(define %ext_b (sign-extend (extract %high2 %low2 b) (bitvector 32)))
+(define %low3 (* 32 %i))
+(define %high3 (+ %low3 (- 32 1)))
+(define %ext_c (extract %high3 %low3 c))
+(define %o (bvadd %ext_c (bvmul %ext_a %ext_b)))
+%o
+)
+)
+)
+dst
+)
 (define (srs_to_v32int16 acc)
 (define dst
 (apply concat
 (for/list ([%i (reverse (range 0 32 1))])
 (define %low1 (* 32 %i))
 (define %high1 (+ %low1 (- 32 1)))
-(define %o (extract 15 0 (bvand (bv #x0000ffff 32) (extract %high1 %low1 acc))))
+(define %o (extract 15 0 (extract %high1 %low1 acc)))
 %o
 )
 )
 )
 dst 
+)
+(define (ups_to_v32acc32 vec)
+(define dst
+(apply concat
+(for/list ([%i (reverse (range 0 32 1))])
+(define %low1 (* 16 %i))
+(define %high1 (+ %low1 (- 16 1)))
+(define %o (sign-extend (extract %high1 %low1 vec) (bitvector 32)))
+%o
+)
+)
+)
+dst
 )
 (define (ups_8_32_to_8_80 xbuff)
 (define dst

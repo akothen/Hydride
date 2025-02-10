@@ -90,4 +90,47 @@ def ParseAddSubHTML() -> list[AIESema]:
     f.close()
     return tmp
 
+def ParseMulHTML() -> list[AIESema]:
+    f = open("./intrinsics/group__intr__gpvectorop__mul.html", "r")
+    soup = BeautifulSoup(f.read(), 'html.parser')
+    link_elements = soup.find_all('td', attrs={'class':'memItemRight'})
+    links = []
+    for entry in link_elements:
+        link = entry.find('a')['href']
+        root_url = "https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_ml_intrinsics/intrinsics/"
+        r = requests.get(root_url + link) 
+        inner_soup = BeautifulSoup(r.text, 'html.parser') 
+        header_elements = inner_soup.find_all('table', attrs={'class':'memname'})
+        tmp = []
+        for element in header_elements:
+            type_and_name = element.find('td', attrs={'class':'memname'})
+            type_and_name_split = type_and_name.text.split()
+            rettype = type_and_name_split[0]
+            raw_name = type_and_name_split[1]
+            conf = "conf" in raw_name
+            if "operator" in raw_name:
+                continue
+            if "cacc" in rettype or "cint" in rettype or "float" in rettype:
+                continue
+            param_types = element.find_all('td', attrs={'class':'paramtype'})
+            param_names = element.find_all('td', attrs={'class':'paramname'})
+            params = []
+            if len(param_names) != len(param_types):
+                continue
+            for ty, tn in zip(param_types, param_names):
+                #params.append(f"{ty.text} {tn.text}".replace(u'\xa0', u' '))
+                ty_str = ty.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
+                tn_str = tn.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
+                params.append(Parameter(tn_str, ty_str, "u" not in ty_str))
+
+            name = NameGen(type_and_name_split[0], type_and_name_split[1])
+            print(params)
+            print(name)
+            print("\n")
+    print("\n\n\n")
+            
+    f.close()
+    return
+
 print(len(ParseAddSubHTML()))
+ParseMulHTML()

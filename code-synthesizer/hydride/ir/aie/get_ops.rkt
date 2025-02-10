@@ -103,12 +103,30 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ); mac_elem_32
+ 
+  (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v2)))]
+		[else (error "Unable to get ops  for mac_elem_32")]
+)
+
+	]
 	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ); srs_to_v32int16
  
-  (remove-duplicates (append (list  'bvand) (aie:get-bv-ops v0)))]
+  (remove-duplicates (append (list  ) (aie:get-bv-ops v0)))]
 		[else (error "Unable to get ops  for srs_to_v32int16")]
+)
+
+	]
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ); ups_to_v32acc32
+ 
+  (remove-duplicates (append (list  'sign-extend) (aie:get-bv-ops v0)))]
+		[else (error "Unable to get ops  for ups_to_v32acc32")]
 )
 
 	]

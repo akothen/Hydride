@@ -99,11 +99,27 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ) 
+   (append (list  "mac_elem_32") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[else (error "Unable to get name  for mac_elem_32")]
+)
+
+	]
 	[(srs_to_v32int16_dsl v0)
 		(cond 
 		[(and ) 
    (append (list  "srs_to_v32int16") (aie:get-target-name v0))]
 		[else (error "Unable to get name  for srs_to_v32int16")]
+)
+
+	]
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "ups_to_v32acc32") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for ups_to_v32acc32")]
 )
 
 	]
