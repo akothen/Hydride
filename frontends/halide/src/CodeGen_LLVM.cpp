@@ -543,6 +543,8 @@ void CodeGen_LLVM::add_hydride_code() {
         debug(0) << "Creating PIM Init device and show stats function" << "\n";
         insertPIMInit(EnclosingFunction);
         insertPIMPrintStats(EnclosingFunction);
+
+        debug(0) << "Done adding PIM init device and cleanup calls!" << "\n";
     }
 
 
@@ -914,6 +916,8 @@ void CodeGen_LLVM::end_func(const std::vector<LoweredArgument> &args) {
             sym_pop(arg.name);
         }
     }
+
+
 
     internal_assert(!verifyFunction(*function, &llvm::errs()));
 
@@ -2355,12 +2359,68 @@ void CodeGen_LLVM::visit(const Load *op) {
             Value *ptr = codegen_buffer_pointer(op->name, op->type.element_of(), ramp->base);
             Value *stride = codegen(ramp->stride);
             value = UndefValue::get(llvm_type_of(op->type));
-            for (int i = 0; i < ramp->lanes; i++) {
-                Value *lane = ConstantInt::get(i32_t, i);
-                LoadInst *val = builder->CreateLoad(load_type, ptr);
+
+            const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
+            if(roll_insert_element && (ramp->lanes > 0)){
+
+                Value* vec = value;
+                BasicBlock *preheader_bb = builder->GetInsertBlock();
+
+                // Make a new basic block for the loop
+                BasicBlock *loop_bb = BasicBlock::Create(*context, std::string("for ") + op->name, function);
+                // Create the block that comes after the loop
+                BasicBlock *after_bb = BasicBlock::Create(*context, std::string("end for ") + op->name, function);
+
+
+                //builder->CreateCondBr(enter_condition, loop_bb, after_bb, very_likely_branch);
+                builder->CreateBr(loop_bb);
+                builder->SetInsertPoint(loop_bb);
+
+                // Make our phi node.
+                PHINode *loopIndexPHI = builder->CreatePHI(i32_t,  2);
+                loopIndexPHI->addIncoming(ConstantInt::get(i32_t, 0), preheader_bb);
+
+                PHINode *ptrPHI = builder->CreatePHI(ptr->getType(), 2);
+                ptrPHI->addIncoming(ptr, preheader_bb);
+
+                PHINode *phi = builder->CreatePHI(llvm_type_of(op->type), 2);
+                phi->addIncoming(vec, preheader_bb);
+
+                // Update the Insert Vector PHI
+                LoadInst *val = builder->CreateLoad(load_type, ptrPHI);
                 add_tbaa_metadata(val, op->name, op->index);
-                value = builder->CreateInsertElement(value, val, lane);
-                ptr = CreateInBoundsGEP(builder, load_type, ptr, stride);
+                vec = builder->CreateInsertElement(phi, val, loopIndexPHI);
+                phi->addIncoming(vec, builder->GetInsertBlock());
+
+                // Update pointer stride
+                Value* UpdatedPtr = CreateInBoundsGEP(builder, load_type, ptrPHI, stride);
+                ptrPHI->addIncoming(UpdatedPtr, builder->GetInsertBlock());
+                
+                // Update the counter
+                Value *next_index_var = builder->CreateNSWAdd(loopIndexPHI, ConstantInt::get(i32_t, 1));
+
+                // Add the back-edge to the phi node
+                loopIndexPHI->addIncoming(next_index_var, builder->GetInsertBlock());
+                
+
+                // Maybe exit the loop
+                Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, op->type.lanes()));
+                builder->CreateCondBr(end_condition, loop_bb, after_bb);
+
+                builder->SetInsertPoint(after_bb);
+
+                value = vec;
+
+            } else {
+
+                for (int i = 0; i < ramp->lanes; i++) {
+                    Value *lane = ConstantInt::get(i32_t, i);
+                    LoadInst *val = builder->CreateLoad(load_type, ptr);
+                    add_tbaa_metadata(val, op->name, op->index);
+                    value = builder->CreateInsertElement(value, val, lane);
+                    ptr = CreateInBoundsGEP(builder, load_type, ptr, stride);
+                }
+
             }
         } else if ((false)) { /* should_scalarize(op->index) */
             // TODO: put something sensible in for
@@ -2382,14 +2442,66 @@ void CodeGen_LLVM::visit(const Load *op) {
             //  General gathers
             Value *index = codegen(op->index);
             Value *vec = UndefValue::get(llvm_type_of(op->type));
-            for (int i = 0; i < op->type.lanes(); i++) {
-                Value *idx = builder->CreateExtractElement(index, ConstantInt::get(i32_t, i));
+            const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
+            if(roll_insert_element && (op->type.lanes() > 0)){
+
+                BasicBlock *preheader_bb = builder->GetInsertBlock();
+
+                // Make a new basic block for the loop
+                BasicBlock *loop_bb = BasicBlock::Create(*context, std::string("for ") + op->name, function);
+                // Create the block that comes after the loop
+                BasicBlock *after_bb = BasicBlock::Create(*context, std::string("end for ") + op->name, function);
+
+                Value *enter_condition = builder->CreateICmpSLT(ConstantInt::get(i32_t, 0), ConstantInt::get(i32_t, op->type.lanes()));
+
+                //builder->CreateCondBr(enter_condition, loop_bb, after_bb, very_likely_branch);
+                builder->CreateBr(loop_bb);
+                builder->SetInsertPoint(loop_bb);
+
+                // Make our phi node.
+                PHINode *loopIndexPHI = builder->CreatePHI(i32_t,  2);
+                loopIndexPHI->addIncoming(ConstantInt::get(i32_t, 0), preheader_bb);
+
+                PHINode *phi = builder->CreatePHI(llvm_type_of(op->type), 2);
+                phi->addIncoming(vec, preheader_bb);
+
+
+                // Update the Insert Vector PHI
+                Value *idx = builder->CreateExtractElement(index, loopIndexPHI);
                 Value *ptr = codegen_buffer_pointer(op->name, op->type.element_of(), idx);
                 LoadInst *val = builder->CreateLoad(load_type, ptr);
                 add_tbaa_metadata(val, op->name, op->index);
-                vec = builder->CreateInsertElement(vec, val, ConstantInt::get(i32_t, i));
+                vec = builder->CreateInsertElement(phi, val, loopIndexPHI);
+                phi->addIncoming(vec, builder->GetInsertBlock());
+                
+                // Update the counter
+                Value *next_index_var = builder->CreateNSWAdd(loopIndexPHI, ConstantInt::get(i32_t, 1));
+
+                // Add the back-edge to the phi node
+                loopIndexPHI->addIncoming(next_index_var, builder->GetInsertBlock());
+
+                // Maybe exit the loop
+                Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, op->type.lanes()));
+                builder->CreateCondBr(end_condition, loop_bb, after_bb);
+
+                builder->SetInsertPoint(after_bb);
+
+                value = vec;
+
+
+            } else {
+
+                for (int i = 0; i < op->type.lanes(); i++) {
+                    Value *idx = builder->CreateExtractElement(index, ConstantInt::get(i32_t, i));
+                    Value *ptr = codegen_buffer_pointer(op->name, op->type.element_of(), idx);
+                    LoadInst *val = builder->CreateLoad(load_type, ptr);
+                    add_tbaa_metadata(val, op->name, op->index);
+                    vec = builder->CreateInsertElement(vec, val, ConstantInt::get(i32_t, i));
+                }
+                value = vec;
+
             }
-            value = vec;
+            
         }
     }
 }
@@ -2417,18 +2529,79 @@ void CodeGen_LLVM::visit(const Ramp *op) {
         Value *stride = codegen(op->stride);
 
         value = UndefValue::get(llvm_type_of(op->type));
-        for (int i = 0; i < op->type.lanes(); i++) {
-            if (i > 0) {
-                if (op->type.is_float()) {
-                    base = builder->CreateFAdd(base, stride);
-                } else if (op->type.is_int() && op->type.bits() >= 32) {
-                    base = builder->CreateNSWAdd(base, stride);
-                } else {
-                    base = builder->CreateAdd(base, stride);
-                }
+
+        const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
+        if(roll_insert_element && (op->type.lanes() > 0)){
+
+            Value *vec = value;
+            BasicBlock *preheader_bb = builder->GetInsertBlock();
+
+            // Make a new basic block for the loop
+            BasicBlock *loop_bb = BasicBlock::Create(*context, std::string("for ramp roll")  , function);
+            // Create the block that comes after the loop
+            BasicBlock *after_bb = BasicBlock::Create(*context, std::string("end for ramp roll ") , function);
+
+            Value *enter_condition = builder->CreateICmpSLT(ConstantInt::get(i32_t, 0), ConstantInt::get(i32_t, op->type.lanes()));
+
+            builder->CreateBr(loop_bb);
+            builder->SetInsertPoint(loop_bb);
+
+            // Make our phi node.
+            PHINode *loopIndexPHI = builder->CreatePHI(i32_t,  2);
+            loopIndexPHI->addIncoming(ConstantInt::get(i32_t, 0), preheader_bb);
+
+            PHINode *basePHI = builder->CreatePHI(base->getType(),  2);
+            basePHI->addIncoming(base, preheader_bb);
+
+            PHINode *phi = builder->CreatePHI(llvm_type_of(op->type), 2);
+            phi->addIncoming(vec, preheader_bb);
+
+
+            // Update the Insert Vector PHI
+            vec = builder->CreateInsertElement(vec, basePHI, loopIndexPHI);
+            phi->addIncoming(vec, builder->GetInsertBlock());
+
+            // Update base by stride
+            Value *UpdatedBase = nullptr;
+            if (op->type.is_float()) {
+                UpdatedBase = builder->CreateFAdd(basePHI, stride);
+            } else if (op->type.is_int() && op->type.bits() >= 32) {
+                UpdatedBase = builder->CreateNSWAdd(basePHI, stride);
+            } else {
+                UpdatedBase = builder->CreateAdd(basePHI, stride);
             }
-            value = builder->CreateInsertElement(value, base, ConstantInt::get(i32_t, i));
+            basePHI->addIncoming(UpdatedBase, builder->GetInsertBlock());
+
+            // Update the counter
+            Value *next_index_var = builder->CreateNSWAdd(loopIndexPHI, ConstantInt::get(i32_t, 1));
+
+            // Add the back-edge to the phi node
+            loopIndexPHI->addIncoming(next_index_var, builder->GetInsertBlock());
+
+            // Maybe exit the loop
+            Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, op->type.lanes()));
+            builder->CreateCondBr(end_condition, loop_bb, after_bb);
+
+            builder->SetInsertPoint(after_bb);
+
+            value = vec;
+
+        } else {
+            for (int i = 0; i < op->type.lanes(); i++) {
+                if (i > 0) {
+                    if (op->type.is_float()) {
+                        base = builder->CreateFAdd(base, stride);
+                    } else if (op->type.is_int() && op->type.bits() >= 32) {
+                        base = builder->CreateNSWAdd(base, stride);
+                    } else {
+                        base = builder->CreateAdd(base, stride);
+                    }
+                }
+                value = builder->CreateInsertElement(value, base, ConstantInt::get(i32_t, i));
+            }
+
         }
+        
     }
 }
 
