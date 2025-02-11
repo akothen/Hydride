@@ -100,6 +100,12 @@
 	]
 	[(pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
 		(cond 
+		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 16) (equal? num_7 0)); pimXorScalar_v32768_e16__v32768_e16__v32768_e16
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 0)); pimXorScalar_v16384_e16__v16384_e16__v16384_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
@@ -160,7 +166,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimXorScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimXorScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -208,7 +214,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimXorScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimXorScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -298,7 +304,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimXorScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimXorScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -334,7 +340,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimOrScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimOrScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -364,7 +370,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimOrScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimOrScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -520,7 +526,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimOrScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimOrScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -580,7 +586,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimSub_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimSub_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -640,7 +646,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimSub_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimSub_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -730,7 +736,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimSub_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimSub_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -772,7 +778,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMinScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMinScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -898,7 +904,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMinScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMinScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -928,7 +934,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMinScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMinScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1006,7 +1012,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimOr_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimOr_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1072,7 +1078,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimOr_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimOr_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1168,7 +1174,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimOr_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimOr_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1216,7 +1222,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAnd_v32_e32__v32_e32__v32_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimAnd_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimAnd_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1240,7 +1246,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAnd_v32_e32__v32_e32__v32_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimAnd_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimAnd_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1312,7 +1318,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAnd_v32_e32__v32_e32__v32_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimAnd_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimAnd_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1492,7 +1498,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)); pimDiv_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)); pimDiv_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1540,7 +1546,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMin_v64_e32__v64_e32__v64_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMin_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMin_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1600,7 +1606,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMin_v64_e32__v64_e32__v64_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMin_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMin_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1630,7 +1636,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMin_v64_e32__v64_e32__v64_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMin_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMin_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1756,7 +1762,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimSubScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimSubScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1792,7 +1798,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimSubScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimSubScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1828,7 +1834,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimSubScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimSubScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -1972,7 +1978,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimMulScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimMulScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2038,7 +2044,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimMulScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimMulScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2074,13 +2080,19 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimMulScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimMulScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
 		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 32) (equal? num_7 0)); pimMulScalar_v16384_e32__v16384_e32__v16384_e32
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 0)); pimMulScalar_v32768_e32__v32768_e32__v32768_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2260,7 +2272,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMax_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMax_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2332,7 +2344,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMax_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMax_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2374,7 +2386,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMax_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMax_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2410,7 +2422,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)); pimDiv_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)); pimDiv_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2500,7 +2512,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAndScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimAndScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimAndScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2590,7 +2602,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAndScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimAndScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimAndScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2626,7 +2638,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAndScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimAndScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimAndScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2782,7 +2794,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimXor_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)); pimXor_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2812,7 +2824,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimXor_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)); pimXor_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2848,7 +2860,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimXor_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)); pimXor_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -2920,6 +2932,11 @@
 	]
 	[(pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(cond 
+		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 1048576) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)); pimBroadCast_v32768_e32__v32_e32
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (pimBroadCast_v1024_e16__v16_e16_dsl expr-0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7 ) num-consumed-0)]
 		[(and  (equal? size_o 16) (equal? num_2 16) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)); pimBroadCast_v1024_e16__v16_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
@@ -2931,6 +2948,11 @@
  
  (values (pimBroadCast_v1024_e16__v16_e16_dsl expr-0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7 ) num-consumed-0)]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 131072) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)); pimBroadCast_v16384_e8__v8_e8
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (pimBroadCast_v1024_e16__v16_e16_dsl expr-0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7 ) num-consumed-0)]
+		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 524288) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)); pimBroadCast_v16384_e32__v32_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
  
@@ -3033,7 +3055,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMaxScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimMaxScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3093,7 +3115,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMaxScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimMaxScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3219,7 +3241,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMaxScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimMaxScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3321,13 +3343,25 @@
 	]
 	[(pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v32768_e16__v32768_e16__v32768_e16
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v32768_e32__v32768_e32__v32768_e32
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v8_e16__v8_e16__v8_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3423,7 +3457,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3441,7 +3475,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimAddScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3549,7 +3583,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 num_11 num_12 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)); pimDiv_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)); pimDiv_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3650,6 +3684,13 @@
  
  (values (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 ) num-consumed-2)]
 		[(and  (equal? size_i_o 524288) (equal? num_4 524288) (equal? num_5 0) (equal? num_6 524288) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v16384_e32__v16384_e32__v16384_e32
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (bitsimd:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 ) num-consumed-2)]
+		[(and  (equal? size_i_o 1048576) (equal? num_4 1048576) (equal? num_5 0) (equal? num_6 1048576) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v32768_e32__v32768_e32__v32768_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3761,7 +3802,7 @@
 (define-values (expr-2 num-consumed-2) (bitsimd:extract-expr v2 num-consumed-1 (- depth 1)))
  
  (values (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 ) num-consumed-2)]
-		[(and  (equal? size_i_o 4098) (equal? num_4 4098) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3803,7 +3844,7 @@
 (define-values (expr-2 num-consumed-2) (bitsimd:extract-expr v2 num-consumed-1 (- depth 1)))
  
  (values (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 ) num-consumed-2)]
-		[(and  (equal? size_i_o 4098) (equal? num_4 4098) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3866,7 +3907,7 @@
 (define-values (expr-2 num-consumed-2) (bitsimd:extract-expr v2 num-consumed-1 (- depth 1)))
  
  (values (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl expr-0 expr-1 expr-2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9 ) num-consumed-2)]
-		[(and  (equal? size_i_o 4098) (equal? num_4 4098) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)); pimScaledAdd_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -3879,6 +3920,12 @@
 	]
 	[(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v32768_e32__v32768_e32__v32768_e32
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v1024_e32__v1024_e32__v1024_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
@@ -3975,7 +4022,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4041,7 +4088,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4089,7 +4136,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)); pimAdd_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4101,7 +4148,13 @@
 	]
 	[(pimMul_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(cond 
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)); pimMul_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)); pimMul_v32768_e32__v32768_e32__v32768_e32
+ 
+ (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (pimMul_v512_e8__v512_e8__v512_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)); pimMul_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4149,7 +4202,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMul_v512_e8__v512_e8__v512_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)); pimMul_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)); pimMul_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4263,7 +4316,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimMul_v512_e8__v512_e8__v512_e8_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0)); pimMul_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0)); pimMul_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4413,7 +4466,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimDivScalar_v32_e16__v32_e16__v32_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimDivScalar_v256_e16__v256_e16__v256_e16
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)); pimDivScalar_v256_e16__v256_e16__v256_e16
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4491,7 +4544,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimDivScalar_v32_e16__v32_e16__v32_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimDivScalar_v512_e8__v512_e8__v512_e8
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)); pimDivScalar_v512_e8__v512_e8__v512_e8
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -4509,7 +4562,7 @@
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (pimDivScalar_v32_e16__v32_e16__v32_e16_dsl expr-0 expr-1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 ) num-consumed-1)]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimDivScalar_v128_e32__v128_e32__v128_e32
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)); pimDivScalar_v128_e32__v128_e32__v128_e32
  
  (define-values (expr-0 num-consumed-0) (bitsimd:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (bitsimd:extract-expr v1 num-consumed-0 (- depth 1)))

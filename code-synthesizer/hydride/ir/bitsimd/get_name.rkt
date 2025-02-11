@@ -69,6 +69,8 @@
 	]
 	[(pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
 		(cond 
+		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 16) (equal? num_7 0)) 
+   (append (list  "pimXorScalar_v32768_e16__v32768_e16__v32768_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v16384_e16__v16384_e16__v16384_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 32) (equal? num_7 0)) 
@@ -89,7 +91,7 @@
    (append (list  "pimXorScalar_v1024_e8__v1024_e8__v1024_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v64_e16__v64_e16__v64_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -105,7 +107,7 @@
    (append (list  "pimXorScalar_v32_e8__v32_e8__v32_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v16_e16__v16_e16__v16_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -135,7 +137,7 @@
    (append (list  "pimXorScalar_v512_e32__v512_e32__v512_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXorScalar_v2048_e16__v2048_e16__v2048_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -151,7 +153,7 @@
    (append (list  "pimOrScalar_v8192_e8__v8192_e8__v8192_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v8_e32__v8_e32__v8_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v64_e16__v64_e16__v64_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -161,7 +163,7 @@
    (append (list  "pimOrScalar_v2048_e8__v2048_e8__v2048_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v8_e16__v8_e16__v8_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v128_e8__v128_e8__v128_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -213,7 +215,7 @@
    (append (list  "pimOrScalar_v16_e16__v16_e16__v16_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOrScalar_v512_e32__v512_e32__v512_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -237,7 +239,7 @@
    (append (list  "pimSub_v16384_e8__v16384_e8__v16384_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v256_e8__v256_e8__v256_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v8192_e8__v8192_e8__v8192_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -257,7 +259,7 @@
    (append (list  "pimSub_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v128_e8__v128_e8__v128_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -287,7 +289,7 @@
    (append (list  "pimSub_v32_e16__v32_e16__v32_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v8192_e32__v8192_e32__v8192_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSub_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -305,7 +307,7 @@
 		(cond 
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v16384_e8__v16384_e8__v16384_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -347,7 +349,7 @@
    (append (list  "pimMinScalar_v64_e32__v64_e32__v64_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v64_e16__v64_e16__v64_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -357,7 +359,7 @@
    (append (list  "pimMinScalar_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v32_e8__v32_e8__v32_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMinScalar_v16_e8__v16_e8__v16_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -387,7 +389,7 @@
    (append (list  "pimOr_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOr_v512_e16__v512_e16__v512_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOr_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOr_v8_e16__v8_e16__v8_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -409,7 +411,7 @@
    (append (list  "pimOr_v128_e8__v128_e8__v128_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimOr_v8192_e16__v8192_e16__v8192_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOr_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOr_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -441,7 +443,7 @@
    (append (list  "pimOr_v16_e8__v16_e8__v16_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOr_v16384_e32__v16384_e32__v16384_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimOr_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimOr_v1024_e32__v1024_e32__v1024_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -461,7 +463,7 @@
 		(cond 
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAnd_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimAnd_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAnd_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -469,7 +471,7 @@
    (append (list  "pimAnd_v16_e8__v16_e8__v16_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAnd_v1024_e32__v1024_e32__v1024_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimAnd_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimAnd_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -493,7 +495,7 @@
    (append (list  "pimAnd_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimAnd_v8192_e8__v8192_e8__v8192_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAnd_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimAnd_v1024_e16__v1024_e16__v1024_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -557,7 +559,7 @@
    (append (list  "pimDiv_v256_e8__v256_e8__v256_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 
    (append (list  "pimDiv_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 
    (append (list  "pimDiv_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 
    (append (list  "pimDiv_v8192_e8__v8192_e8__v8192_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -577,7 +579,7 @@
    (append (list  "pimMin_v1024_e16__v1024_e16__v1024_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v512_e16__v512_e16__v512_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -597,7 +599,7 @@
    (append (list  "pimMin_v2048_e8__v2048_e8__v2048_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -607,7 +609,7 @@
    (append (list  "pimMin_v1024_e32__v1024_e32__v1024_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v16384_e8__v16384_e8__v16384_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMin_v512_e32__v512_e32__v512_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -653,7 +655,7 @@
    (append (list  "pimSubScalar_v16384_e32__v16384_e32__v16384_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v16_e32__v16_e32__v16_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -665,7 +667,7 @@
    (append (list  "pimSubScalar_v32_e8__v32_e8__v32_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v16384_e8__v16384_e8__v16384_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v512_e16__v512_e16__v512_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -677,7 +679,7 @@
    (append (list  "pimSubScalar_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v512_e32__v512_e32__v512_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimSubScalar_v64_e32__v64_e32__v64_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -729,7 +731,7 @@
    (append (list  "pimMulScalar_v32_e8__v32_e8__v32_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v8192_e16__v8192_e16__v8192_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -751,7 +753,7 @@
    (append (list  "pimMulScalar_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v16_e8__v16_e8__v16_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -763,10 +765,12 @@
    (append (list  "pimMulScalar_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v1024_e8__v1024_e8__v1024_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v16384_e32__v16384_e32__v16384_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 0)) 
+   (append (list  "pimMulScalar_v32768_e32__v32768_e32__v32768_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimMulScalar_v4096_e8__v4096_e8__v4096_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 0)) 
@@ -829,7 +833,7 @@
    (append (list  "pimMax_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v2048_e8__v2048_e8__v2048_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -853,7 +857,7 @@
    (append (list  "pimMax_v1024_e16__v1024_e16__v1024_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v64_e32__v64_e32__v64_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -867,7 +871,7 @@
    (append (list  "pimMax_v8_e16__v8_e16__v8_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v16384_e16__v16384_e16__v16384_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMax_v16_e16__v16_e16__v16_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -883,7 +887,7 @@
    (append (list  "pimDiv_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 
    (append (list  "pimDiv_v16_e32__v16_e32__v16_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 
    (append (list  "pimDiv_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 
    (append (list  "pimDiv_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -917,7 +921,7 @@
    (append (list  "pimAndScalar_v32_e16__v32_e16__v32_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v1024_e8__v1024_e8__v1024_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -947,7 +951,7 @@
    (append (list  "pimAndScalar_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v16_e32__v16_e32__v16_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -959,7 +963,7 @@
    (append (list  "pimAndScalar_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimAndScalar_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1015,7 +1019,7 @@
    (append (list  "pimXor_v1024_e8__v1024_e8__v1024_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXor_v8_e16__v8_e16__v8_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimXor_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXor_v2048_e16__v2048_e16__v2048_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1025,7 +1029,7 @@
    (append (list  "pimXor_v2048_e8__v2048_e8__v2048_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimXor_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimXor_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 0)) 
    (append (list  "pimXor_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1037,7 +1041,7 @@
    (append (list  "pimXor_v1024_e32__v1024_e32__v1024_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimXor_v256_e32__v256_e32__v256_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0)) 
    (append (list  "pimXor_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 0)) 
    (append (list  "pimXor_v64_e32__v64_e32__v64_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1065,12 +1069,16 @@
 	]
 	[(pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
 		(cond 
+		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 1048576) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 
+   (append (list  "pimBroadCast_v32768_e32__v32_e32") (bitsimd:get-target-name v0))]
 		[(and  (equal? size_o 16) (equal? num_2 16) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 
    (append (list  "pimBroadCast_v1024_e16__v16_e16") (bitsimd:get-target-name v0))]
 		[(and  (equal? size_o 512) (equal? num_2 512) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 
    (append (list  "pimBroadCast_v512_e32__v32_e32") (bitsimd:get-target-name v0))]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 131072) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 
    (append (list  "pimBroadCast_v16384_e8__v8_e8") (bitsimd:get-target-name v0))]
+		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 524288) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 
+   (append (list  "pimBroadCast_v16384_e32__v32_e32") (bitsimd:get-target-name v0))]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 
    (append (list  "pimBroadCast_v1024_e8__v8_e8") (bitsimd:get-target-name v0))]
 		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 
@@ -1113,7 +1121,7 @@
    (append (list  "pimMaxScalar_v16384_e8__v16384_e8__v16384_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v16_e32__v16_e32__v16_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1133,7 +1141,7 @@
    (append (list  "pimMaxScalar_v128_e8__v128_e8__v128_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v16384_e16__v16384_e16__v16384_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v8_e16__v8_e16__v8_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1175,7 +1183,7 @@
    (append (list  "pimMaxScalar_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimMaxScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[else (error "Unable to get name  for pimMaxScalar_v256_e32__v256_e32__v256_e32")]
 )
@@ -1217,9 +1225,13 @@
 	]
 	[(pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
+   (append (list  "pimAddScalar_v32768_e16__v32768_e16__v32768_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
+   (append (list  "pimAddScalar_v32768_e32__v32768_e32__v32768_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v8_e16__v8_e16__v8_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v8_e32__v8_e32__v8_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1251,13 +1263,13 @@
    (append (list  "pimAddScalar_v1024_e16__v1024_e16__v1024_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v256_e8__v256_e8__v256_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v8192_e32__v8192_e32__v8192_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAddScalar_v128_e8__v128_e8__v128_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1297,7 +1309,7 @@
 		(cond 
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 
    (append (list  "pimDiv_v8192_e16__v8192_e16__v8192_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 
    (append (list  "pimDiv_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 
    (append (list  "pimDiv_v4096_e16__v4096_e16__v4096_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1335,6 +1347,8 @@
    (append (list  "pimScaledAdd_v128_e8__v128_e8__v128_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 524288) (equal? num_4 524288) (equal? num_5 0) (equal? num_6 524288) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v16384_e32__v16384_e32__v16384_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
+		[(and  (equal? size_i_o 1048576) (equal? num_4 1048576) (equal? num_5 0) (equal? num_6 1048576) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
+   (append (list  "pimScaledAdd_v32768_e32__v32768_e32__v32768_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 65536) (equal? num_4 65536) (equal? num_5 0) (equal? num_6 65536) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 32768) (equal? num_4 32768) (equal? num_5 0) (equal? num_6 32768) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
@@ -1365,7 +1379,7 @@
    (append (list  "pimScaledAdd_v8_e32__v8_e32__v8_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 131072) (equal? num_4 131072) (equal? num_5 0) (equal? num_6 131072) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
-		[(and  (equal? size_i_o 4098) (equal? num_4 4098) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 1024) (equal? num_4 1024) (equal? num_5 0) (equal? num_6 1024) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v32_e32__v32_e32__v32_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
@@ -1377,7 +1391,7 @@
    (append (list  "pimScaledAdd_v16_e8__v16_e8__v16_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 16384) (equal? num_4 16384) (equal? num_5 0) (equal? num_6 16384) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v512_e32__v512_e32__v512_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
-		[(and  (equal? size_i_o 4098) (equal? num_4 4098) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 512) (equal? num_4 512) (equal? num_5 0) (equal? num_6 512) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v64_e8__v64_e8__v64_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
@@ -1395,7 +1409,7 @@
    (append (list  "pimScaledAdd_v2048_e16__v2048_e16__v2048_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[(and  (equal? size_i_o 16384) (equal? num_4 16384) (equal? num_5 0) (equal? num_6 16384) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v2048_e8__v2048_e8__v2048_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
-		[(and  (equal? size_i_o 4098) (equal? num_4 4098) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 
    (append (list  "pimScaledAdd_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1) (bitsimd:get-target-name v2))]
 		[else (error "Unable to get name  for pimScaledAdd_v256_e8__v256_e8__v256_e8")]
 )
@@ -1403,6 +1417,8 @@
 	]
 	[(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
+   (append (list  "pimAdd_v32768_e32__v32768_e32__v32768_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v1024_e32__v1024_e32__v1024_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
@@ -1435,7 +1451,7 @@
    (append (list  "pimAdd_v4096_e32__v4096_e32__v4096_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v16_e32__v16_e32__v16_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v512_e16__v512_e16__v512_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1457,7 +1473,7 @@
    (append (list  "pimAdd_v2048_e8__v2048_e8__v2048_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v128_e16__v128_e16__v128_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v16384_e16__v16384_e16__v16384_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1473,7 +1489,7 @@
    (append (list  "pimAdd_v8_e8__v8_e8__v8_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v16_e16__v16_e16__v16_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 
    (append (list  "pimAdd_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[else (error "Unable to get name  for pimAdd_v1024_e32__v1024_e32__v1024_e32")]
 )
@@ -1481,7 +1497,9 @@
 	]
 	[(pimMul_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(cond 
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)) 
+		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 
+   (append (list  "pimMul_v32768_e32__v32768_e32__v32768_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v4096_e8__v4096_e8__v4096_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1497,7 +1515,7 @@
    (append (list  "pimMul_v64_e32__v64_e32__v64_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v64_e16__v64_e16__v64_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v32_e8__v32_e8__v32_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1535,7 +1553,7 @@
    (append (list  "pimMul_v16_e16__v16_e16__v16_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v16384_e32__v16384_e32__v16384_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 
    (append (list  "pimMul_v2048_e32__v2048_e32__v2048_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1589,7 +1607,7 @@
    (append (list  "pimDivScalar_v32_e8__v32_e8__v32_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v512_e32__v512_e32__v512_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v256_e16__v256_e16__v256_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v16384_e16__v16384_e16__v16384_e16") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
@@ -1615,13 +1633,13 @@
    (append (list  "pimDivScalar_v64_e32__v64_e32__v64_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v1024_e32__v1024_e32__v1024_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v512_e8__v512_e8__v512_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v4096_e8__v4096_e8__v4096_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v16_e8__v16_e8__v16_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
-		[(and  (equal? size_i_o 4098) (equal? num_3 4098) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
+		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v128_e32__v128_e32__v128_e32") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 
    (append (list  "pimDivScalar_v16384_e8__v16384_e8__v16384_e8") (bitsimd:get-target-name v0) (bitsimd:get-target-name v1))]

@@ -528,7 +528,7 @@ concat
  (for/list ([i0 (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])
   (define %lastidx0 (-  %elemsize0  1))
   (define %1 (+  i0  %lastidx0))
-  (define %2 (extract  %1 i0 a))
+(define %2 (extract  %1 i0 a))
   (define %4 (extract  %1 i0 b))
   (define %5.ab0 (bvsizeext  %2 %arg1 %arg2))
   (define %6.ab0 (bvsizeext  %4 %arg1 %arg0))

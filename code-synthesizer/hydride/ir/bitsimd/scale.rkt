@@ -240,6 +240,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimXorScalar_v128_e32__v128_e32__v128_e32")
+(pimXorScalar_v16384_e16__v16384_e16__v16384_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
@@ -351,6 +364,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimOrScalar_v16384_e32__v16384_e32__v16384_e32")
+(pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimOrScalar_v128_e32__v128_e32__v128_e32")
 (pimOrScalar_v8192_e8__v8192_e8__v8192_e8_dsl
 (bitsimd:scale-expr v0 scale-factor)
 v1
@@ -477,6 +503,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimSub_v128_e32__v128_e32__v128_e32")
+(pimSub_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimSub_v8192_e8__v8192_e8__v8192_e8")
 (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl
@@ -591,6 +631,20 @@ num_8
 ]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimSub_v4096_e32__v4096_e32__v4096_e32")
+(pimSub_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimSub_v256_e16__v256_e16__v256_e16")
 (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -799,6 +853,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimSub_v512_e8__v512_e8__v512_e8")
+(pimSub_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 2) (equal? num_3 2) (equal? num_4 0) (equal? num_5 2) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimSub_v8_e8__v8_e8__v8_e8")
 (pimSub_v8192_e16__v8192_e16__v8192_e16_dsl
@@ -860,6 +928,20 @@ num_8
 	]
 	[ (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMinScalar_v128_e32__v128_e32__v128_e32")
+(pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMinScalar_v1024_e32__v1024_e32__v1024_e32")
 (pimMinScalar_v16384_e8__v16384_e8__v16384_e8_dsl
@@ -1058,6 +1140,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0))
+(displayln "Scaling case for pimOr_v256_e16__v256_e16__v256_e16")
+(pimOr_v4096_e32__v4096_e32__v4096_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[(and  (equal? size_i_o 4) (equal? num_3 4) (equal? num_4 0) (equal? num_5 4) (equal? prec_i_o 16) (equal? num_7 0))
 (displayln "Scaling case for pimOr_v8_e16__v8_e16__v8_e16")
 (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl
@@ -1177,6 +1272,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 0))
 (displayln "Scaling case for pimOr_v8192_e16__v8192_e16__v8192_e16")
+(pimOr_v4096_e32__v4096_e32__v4096_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimOr_v128_e32__v128_e32__v128_e32")
 (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -1383,6 +1491,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0))
+(displayln "Scaling case for pimOr_v512_e8__v512_e8__v512_e8")
+(pimOr_v4096_e32__v4096_e32__v4096_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimOr_v1024_e32__v1024_e32__v1024_e32")
 (pimOr_v4096_e32__v4096_e32__v4096_e32_dsl
@@ -1466,6 +1587,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0))
+(displayln "Scaling case for pimAnd_v512_e8__v512_e8__v512_e8")
+(pimAnd_v32_e32__v32_e32__v32_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimAnd_v4096_e32__v4096_e32__v4096_e32")
 (pimAnd_v32_e32__v32_e32__v32_e32_dsl
@@ -1494,6 +1628,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimAnd_v1024_e32__v1024_e32__v1024_e32")
+(pimAnd_v32_e32__v32_e32__v32_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0))
+(displayln "Scaling case for pimAnd_v256_e16__v256_e16__v256_e16")
 (pimAnd_v32_e32__v32_e32__v32_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -1637,6 +1784,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 0))
 (displayln "Scaling case for pimAnd_v8192_e8__v8192_e8__v8192_e8")
+(pimAnd_v32_e32__v32_e32__v32_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimAnd_v128_e32__v128_e32__v128_e32")
 (pimAnd_v32_e32__v32_e32__v32_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -2067,6 +2227,24 @@ num_11
 num_12
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0))
+(displayln "Scaling case for pimDiv_v512_e8__v512_e8__v512_e8")
+(pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0))
 (displayln "Scaling case for pimDiv_v8192_e8__v8192_e8__v8192_e8")
 (pimDiv_v4096_e8__v4096_e8__v4096_e8_dsl
@@ -2148,6 +2326,20 @@ num_8
 ]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMin_v512_e16__v512_e16__v512_e16")
+(pimMin_v64_e32__v64_e32__v64_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMin_v256_e16__v256_e16__v256_e16")
 (pimMin_v64_e32__v64_e32__v64_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -2286,6 +2478,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMin_v128_e32__v128_e32__v128_e32")
+(pimMin_v64_e32__v64_e32__v64_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMin_v4096_e32__v4096_e32__v4096_e32")
 (pimMin_v64_e32__v64_e32__v64_e32_dsl
@@ -2330,6 +2536,20 @@ num_8
 ]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMin_v16384_e8__v16384_e8__v16384_e8")
+(pimMin_v64_e32__v64_e32__v64_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMin_v512_e8__v512_e8__v512_e8")
 (pimMin_v64_e32__v64_e32__v64_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -2641,6 +2861,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimSubScalar_v128_e32__v128_e32__v128_e32")
+(pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimSubScalar_v64_e32__v64_e32__v64_e32")
 (pimSubScalar_v2048_e8__v2048_e8__v2048_e8_dsl
@@ -2781,6 +3015,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimMulScalar_v128_e32__v128_e32__v128_e32")
+(pimMulScalar_v256_e32__v256_e32__v256_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimMulScalar_v4096_e32__v4096_e32__v4096_e32")
 (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl
@@ -2796,6 +3043,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimMulScalar_v16384_e32__v16384_e32__v16384_e32")
+(pimMulScalar_v256_e32__v256_e32__v256_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimMulScalar_v32768_e32__v32768_e32__v32768_e32")
 (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 v1
@@ -3060,6 +3320,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMax_v512_e8__v512_e8__v512_e8")
+(pimMax_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMax_v2048_e8__v2048_e8__v2048_e8")
 (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl
@@ -3214,6 +3488,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMax_v128_e32__v128_e32__v128_e32")
+(pimMax_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMax_v64_e8__v64_e8__v64_e8")
 (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl
@@ -3298,6 +3586,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMax_v256_e16__v256_e16__v256_e16")
+(pimMax_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimMax_v16_e16__v16_e16__v16_e16")
 (pimMax_v8192_e16__v8192_e16__v8192_e16_dsl
@@ -3351,6 +3653,24 @@ num_12
 ]
 		[(and  (equal? size_i_o 16) (equal? num_3 16) (equal? num_4 0) (equal? num_5 16) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0))
 (displayln "Scaling case for pimDiv_v16_e32__v16_e32__v16_e32")
+(pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0))
+(displayln "Scaling case for pimDiv_v128_e32__v128_e32__v128_e32")
 (pimDiv_v4096_e32__v4096_e32__v4096_e32_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -3625,6 +3945,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimAndScalar_v128_e32__v128_e32__v128_e32")
+(pimAndScalar_v256_e32__v256_e32__v256_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimAndScalar_v32_e32__v32_e32__v32_e32")
 (pimAndScalar_v256_e32__v256_e32__v256_e32_dsl
@@ -3864,6 +4197,19 @@ prec_i_o
 num_7
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 0))
+(displayln "Scaling case for pimXor_v128_e32__v128_e32__v128_e32")
+(pimXor_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 16) (equal? num_7 0))
 (displayln "Scaling case for pimXor_v2048_e16__v2048_e16__v2048_e16")
 (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl
@@ -3905,6 +4251,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimXor_v2048_e32__v2048_e32__v2048_e32")
+(pimXor_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 0))
+(displayln "Scaling case for pimXor_v512_e8__v512_e8__v512_e8")
 (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -3970,6 +4329,19 @@ num_7
 ]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 32) (equal? num_7 0))
 (displayln "Scaling case for pimXor_v256_e32__v256_e32__v256_e32")
+(pimXor_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 0))
+(displayln "Scaling case for pimXor_v256_e16__v256_e16__v256_e16")
 (pimXor_v8192_e16__v8192_e16__v8192_e16_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -4380,6 +4752,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimMaxScalar_v128_e32__v128_e32__v128_e32")
+(pimMaxScalar_v256_e32__v256_e32__v256_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
@@ -4614,6 +5000,20 @@ num_10
 	]
 	[ (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimAddScalar_v32768_e32__v32768_e32__v32768_e32")
+(pimAddScalar_v8_e16__v8_e16__v8_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 8) (equal? num_3 8) (equal? num_4 0) (equal? num_5 8) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimAddScalar_v8_e32__v8_e32__v8_e32")
 (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl
@@ -4658,6 +5058,20 @@ num_8
 ]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimAddScalar_v16384_e32__v16384_e32__v16384_e32")
+(pimAddScalar_v8_e16__v8_e16__v8_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimAddScalar_v128_e32__v128_e32__v128_e32")
 (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl
 (bitsimd:scale-expr v0 scale-factor)
 v1
@@ -4775,6 +5189,24 @@ num_8
 		(cond 
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0))
 (displayln "Scaling case for pimDiv_v8192_e16__v8192_e16__v8192_e16")
+(pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+num_11
+num_12
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0))
+(displayln "Scaling case for pimDiv_v256_e16__v256_e16__v256_e16")
 (pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -5006,6 +5438,21 @@ num_8
 num_9
 )
 ]
+		[(and  (equal? size_i_o 32768) (equal? num_4 32768) (equal? num_5 0) (equal? num_6 32768) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0))
+(displayln "Scaling case for pimScaledAdd_v32768_e32__v32768_e32__v32768_e32")
+(pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+v2
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+)
+]
 		[(and  (equal? size_i_o 2048) (equal? num_4 2048) (equal? num_5 0) (equal? num_6 2048) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0))
 (displayln "Scaling case for pimScaledAdd_v2048_e32__v2048_e32__v2048_e32")
 (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl
@@ -5126,6 +5573,21 @@ num_8
 num_9
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_4 128) (equal? num_5 0) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0))
+(displayln "Scaling case for pimScaledAdd_v128_e32__v128_e32__v128_e32")
+(pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+v2
+(* scale-factor size_i_o)
+(* scale-factor num_4)
+num_5
+(* scale-factor num_6)
+prec_i_o
+num_8
+num_9
+)
+]
 		[(and  (equal? size_i_o 8192) (equal? num_4 8192) (equal? num_5 0) (equal? num_6 8192) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0))
 (displayln "Scaling case for pimScaledAdd_v8192_e32__v8192_e32__v8192_e32")
 (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl
@@ -5146,6 +5608,20 @@ num_9
 	]
 	[ (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimAdd_v32768_e32__v32768_e32__v32768_e32")
+(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimAdd_v1024_e32__v1024_e32__v1024_e32")
 (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
@@ -5370,6 +5846,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimAdd_v512_e8__v512_e8__v512_e8")
+(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimAdd_v512_e16__v512_e16__v512_e16")
 (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
@@ -5510,6 +6000,20 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimAdd_v256_e16__v256_e16__v256_e16")
+(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0))
 (displayln "Scaling case for pimAdd_v16384_e16__v16384_e16__v16384_e16")
 (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
@@ -5608,11 +6112,57 @@ num_7
 num_8
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0))
+(displayln "Scaling case for pimAdd_v128_e32__v128_e32__v128_e32")
+(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
 		[else (error "Unable to identify how to scale up " prog)]
 		)
 	]
 	[ (pimMul_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(cond 
+		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0))
+(displayln "Scaling case for pimMul_v32768_e32__v32768_e32__v32768_e32")
+(pimMul_v512_e8__v512_e8__v512_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0))
+(displayln "Scaling case for pimMul_v512_e8__v512_e8__v512_e8")
+(pimMul_v512_e8__v512_e8__v512_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0))
 (displayln "Scaling case for pimMul_v4096_e8__v4096_e8__v4096_e8")
 (pimMul_v512_e8__v512_e8__v512_e8_dsl
@@ -5711,6 +6261,22 @@ num_10
 ]
 		[(and  (equal? size_i_o 32) (equal? num_3 32) (equal? num_4 0) (equal? num_5 32) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0))
 (displayln "Scaling case for pimMul_v64_e16__v64_e16__v64_e16")
+(pimMul_v512_e8__v512_e8__v512_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0))
+(displayln "Scaling case for pimMul_v128_e32__v128_e32__v128_e32")
 (pimMul_v512_e8__v512_e8__v512_e8_dsl
 (bitsimd:scale-expr v0 scale-factor)
 (bitsimd:scale-expr v1 scale-factor)
@@ -6013,6 +6579,22 @@ num_9
 num_10
 )
 ]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0))
+(displayln "Scaling case for pimMul_v256_e16__v256_e16__v256_e16")
+(pimMul_v512_e8__v512_e8__v512_e8_dsl
+(bitsimd:scale-expr v0 scale-factor)
+(bitsimd:scale-expr v1 scale-factor)
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+num_9
+num_10
+)
+]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0))
 (displayln "Scaling case for pimMul_v2048_e32__v2048_e32__v2048_e32")
 (pimMul_v512_e8__v512_e8__v512_e8_dsl
@@ -6288,6 +6870,20 @@ num_8
 ]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
 (displayln "Scaling case for pimDivScalar_v1024_e32__v1024_e32__v1024_e32")
+(pimDivScalar_v32_e16__v32_e16__v32_e16_dsl
+(bitsimd:scale-expr v0 scale-factor)
+v1
+(* scale-factor size_i_o)
+(* scale-factor num_3)
+num_4
+(* scale-factor num_5)
+prec_i_o
+num_7
+num_8
+)
+]
+		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0))
+(displayln "Scaling case for pimDivScalar_v128_e32__v128_e32__v128_e32")
 (pimDivScalar_v32_e16__v32_e16__v32_e16_dsl
 (bitsimd:scale-expr v0 scale-factor)
 v1

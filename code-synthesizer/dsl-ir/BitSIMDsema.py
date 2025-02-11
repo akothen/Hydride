@@ -16,6 +16,26 @@ bitsimd_sema = {
 
             "pimXorScalar_v16384_e16__v16384_e16__v16384_e16" : {
               "target_instructions" : {
+
+                "pimXorScalar_v32768_e16__v32768_e16__v32768_e16" : {
+                  "args" : ["SYMBOLIC_BV_524288","SYMBOLIC_BV_16","524288","524288","0","524288","16","0"],
+                  "in_vectsize" : 524288,
+                  "out_vectsize" : 524288,
+                  "lanesize" : 524288,
+                  "in_precision" : 16,
+                  "out_precision" : 16,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
                 "pimXorScalar_v16384_e16__v16384_e16__v16384_e16" : {
                   "args" : ["SYMBOLIC_BV_262144","SYMBOLIC_BV_16","262144","262144","0","262144","16","0"],
                   "in_vectsize" : 262144,
@@ -207,10 +227,10 @@ bitsimd_sema = {
       },
 
                 "pimXorScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -359,10 +379,10 @@ bitsimd_sema = {
       },
 
                 "pimXorScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -644,10 +664,10 @@ bitsimd_sema = {
       },
 
                 "pimXorScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -744,10 +764,10 @@ bitsimd_sema = {
       },
 
                 "pimOrScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -839,10 +859,10 @@ bitsimd_sema = {
       },
 
                 "pimOrScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -1333,10 +1353,10 @@ bitsimd_sema = {
       },
 
                 "pimOrScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -1509,10 +1529,10 @@ bitsimd_sema = {
       },
 
                 "pimSub_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -1699,10 +1719,10 @@ bitsimd_sema = {
       },
 
                 "pimSub_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -1984,10 +2004,10 @@ bitsimd_sema = {
       },
 
                 "pimSub_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -2103,10 +2123,10 @@ bitsimd_sema = {
       },
 
                 "pimMinScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -2502,10 +2522,10 @@ bitsimd_sema = {
       },
 
                 "pimMinScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -2597,10 +2617,10 @@ bitsimd_sema = {
       },
 
                 "pimMinScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -2830,10 +2850,10 @@ bitsimd_sema = {
       },
 
                 "pimOr_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -3039,10 +3059,10 @@ bitsimd_sema = {
       },
 
                 "pimOr_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -3343,10 +3363,10 @@ bitsimd_sema = {
       },
 
                 "pimOr_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -3481,10 +3501,10 @@ bitsimd_sema = {
       },
 
                 "pimAnd_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -3557,10 +3577,10 @@ bitsimd_sema = {
       },
 
                 "pimAnd_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -3785,10 +3805,10 @@ bitsimd_sema = {
       },
 
                 "pimAnd_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -4341,10 +4361,10 @@ bitsimd_sema = {
       },
 
                 "pimDiv_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","1","1","16","1","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","1","1","16","1","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -4479,10 +4499,10 @@ bitsimd_sema = {
       },
 
                 "pimMin_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -4669,10 +4689,10 @@ bitsimd_sema = {
       },
 
                 "pimMin_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -4764,10 +4784,10 @@ bitsimd_sema = {
       },
 
                 "pimMin_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -5149,10 +5169,10 @@ bitsimd_sema = {
       },
 
                 "pimSubScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -5263,10 +5283,10 @@ bitsimd_sema = {
       },
 
                 "pimSubScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -5377,10 +5397,10 @@ bitsimd_sema = {
       },
 
                 "pimSubScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -5819,10 +5839,10 @@ bitsimd_sema = {
       },
 
                 "pimMulScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -6028,10 +6048,10 @@ bitsimd_sema = {
       },
 
                 "pimMulScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -6142,10 +6162,10 @@ bitsimd_sema = {
       },
 
                 "pimMulScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -6165,6 +6185,25 @@ bitsimd_sema = {
                   "in_vectsize" : 524288,
                   "out_vectsize" : 524288,
                   "lanesize" : 524288,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
+                "pimMulScalar_v32768_e32__v32768_e32__v32768_e32" : {
+                  "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_32","1048576","1048576","0","1048576","32","0"],
+                  "in_vectsize" : 1048576,
+                  "out_vectsize" : 1048576,
+                  "lanesize" : 1048576,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -6717,10 +6756,10 @@ bitsimd_sema = {
       },
 
                 "pimMax_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -6945,10 +6984,10 @@ bitsimd_sema = {
       },
 
                 "pimMax_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -7078,10 +7117,10 @@ bitsimd_sema = {
       },
 
                 "pimMax_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -7178,10 +7217,10 @@ bitsimd_sema = {
       },
 
                 "pimDiv_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","1","1","64","1","64","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","1","1","64","1","64","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -7449,10 +7488,10 @@ bitsimd_sema = {
       },
 
                 "pimAndScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -7734,10 +7773,10 @@ bitsimd_sema = {
       },
 
                 "pimAndScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -7848,10 +7887,10 @@ bitsimd_sema = {
       },
 
                 "pimAndScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -8328,10 +8367,10 @@ bitsimd_sema = {
       },
 
                 "pimXor_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -8423,10 +8462,10 @@ bitsimd_sema = {
       },
 
                 "pimXor_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -8537,10 +8576,10 @@ bitsimd_sema = {
       },
 
                 "pimXor_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -8750,6 +8789,24 @@ bitsimd_sema = {
 
             "pimBroadCast_v1024_e16__v16_e16" : {
               "target_instructions" : {
+                "pimBroadCast_v32768_e32__v32_e32" : {
+                  "args" : ["SYMBOLIC_BV_32","32","32","0","1048576","32","0","0"],
+                  "in_vectsize" : 32,
+                  "out_vectsize" : 1048576,
+                  "lanesize" : 32,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : None,
+                  "out_vectsize_index" : 1,
+                  "lanesize_index" : 2,
+                  "in_precision_index" : 5,
+                  "out_precision_index" : 5,
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimBroadCast_v1024_e16__v16_e16" : {
                   "args" : ["SYMBOLIC_BV_16","16","16","0","1024","16","0","0"],
                   "in_vectsize" : 16,
@@ -8795,6 +8852,25 @@ bitsimd_sema = {
                   "lanesize" : 8,
                   "in_precision" : 8,
                   "out_precision" : 8,
+                  "in_vectsize_index" : None,
+                  "out_vectsize_index" : 1,
+                  "lanesize_index" : 2,
+                  "in_precision_index" : 5,
+                  "out_precision_index" : 5,
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
+                "pimBroadCast_v16384_e32__v32_e32" : {
+                  "args" : ["SYMBOLIC_BV_32","32","32","0","524288","32","0","0"],
+                  "in_vectsize" : 32,
+                  "out_vectsize" : 524288,
+                  "lanesize" : 32,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
                   "in_vectsize_index" : None,
                   "out_vectsize_index" : 1,
                   "lanesize_index" : 2,
@@ -9103,10 +9179,10 @@ bitsimd_sema = {
       },
 
                 "pimMaxScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -9293,10 +9369,10 @@ bitsimd_sema = {
       },
 
                 "pimMaxScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -9692,10 +9768,10 @@ bitsimd_sema = {
       },
 
                 "pimMaxScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -9986,6 +10062,43 @@ bitsimd_sema = {
 
             "pimAddScalar_v8_e16__v8_e16__v8_e16" : {
               "target_instructions" : {
+                "pimAddScalar_v32768_e16__v32768_e16__v32768_e16" : {
+                  "args" : ["SYMBOLIC_BV_524288","SYMBOLIC_BV_16","524288","524288","0","524288","16","-1","0"],
+                  "in_vectsize" : 524288,
+                  "out_vectsize" : 524288,
+                  "lanesize" : 524288,
+                  "in_precision" : 16,
+                  "out_precision" : 16,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
+                "pimAddScalar_v32768_e32__v32768_e32__v32768_e32" : {
+                  "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_32","1048576","1048576","0","1048576","32","-1","0"],
+                  "in_vectsize" : 1048576,
+                  "out_vectsize" : 1048576,
+                  "lanesize" : 1048576,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimAddScalar_v8_e16__v8_e16__v8_e16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","128","128","0","128","16","-1","0"],
                   "in_vectsize" : 128,
@@ -10006,10 +10119,10 @@ bitsimd_sema = {
       },
 
                 "pimAddScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -10310,10 +10423,10 @@ bitsimd_sema = {
       },
 
                 "pimAddScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -10367,10 +10480,10 @@ bitsimd_sema = {
       },
 
                 "pimAddScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -10695,10 +10808,10 @@ bitsimd_sema = {
       },
 
                 "pimDiv_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","1","1","32","1","32","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","1","1","32","1","32","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -11003,6 +11116,25 @@ bitsimd_sema = {
                   "Extensions" : "[]",
       },
 
+                "pimScaledAdd_v32768_e32__v32768_e32__v32768_e32" : {
+                  "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_1048576","SYMBOLIC_BV_32","1048576","1048576","0","1048576","32","-1","0"],
+                  "in_vectsize" : 1048576,
+                  "out_vectsize" : 1048576,
+                  "lanesize" : 1048576,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 3,
+                  "out_vectsize_index" : 3,
+                  "lanesize_index" : 4,
+                  "in_precision_index" : 7,
+                  "out_precision_index" : 7,
+                  "arg_permute_map" : [0,1,2,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
                 "pimScaledAdd_v2048_e32__v2048_e32__v2048_e32" : {
                   "args" : ["SYMBOLIC_BV_65536","SYMBOLIC_BV_65536","SYMBOLIC_BV_32","65536","65536","0","65536","32","-1","0"],
                   "in_vectsize" : 65536,
@@ -11289,10 +11421,10 @@ bitsimd_sema = {
       },
 
                 "pimScaledAdd_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 3,
@@ -11403,10 +11535,10 @@ bitsimd_sema = {
       },
 
                 "pimScaledAdd_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 3,
@@ -11574,10 +11706,10 @@ bitsimd_sema = {
       },
 
                 "pimScaledAdd_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 3,
@@ -11597,6 +11729,24 @@ bitsimd_sema = {
 
             "pimAdd_v1024_e32__v1024_e32__v1024_e32" : {
               "target_instructions" : {
+                "pimAdd_v32768_e32__v32768_e32__v32768_e32" : {
+                  "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_1048576","1048576","1048576","0","1048576","32","-1","0"],
+                  "in_vectsize" : 1048576,
+                  "out_vectsize" : 1048576,
+                  "lanesize" : 1048576,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimAdd_v1024_e32__v1024_e32__v1024_e32" : {
                   "args" : ["SYMBOLIC_BV_32768","SYMBOLIC_BV_32768","32768","32768","0","32768","32","-1","0"],
                   "in_vectsize" : 32768,
@@ -11902,10 +12052,10 @@ bitsimd_sema = {
       },
 
                 "pimAdd_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -12111,10 +12261,10 @@ bitsimd_sema = {
       },
 
                 "pimAdd_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -12263,10 +12413,10 @@ bitsimd_sema = {
       },
 
                 "pimAdd_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","-1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","-1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -12286,11 +12436,29 @@ bitsimd_sema = {
 
             "pimMul_v512_e8__v512_e8__v512_e8" : {
               "target_instructions" : {
+                "pimMul_v32768_e32__v32768_e32__v32768_e32" : {
+                  "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_1048576","1048576","1048576","0","1048576","32","1","64","1","0"],
+                  "in_vectsize" : 1048576,
+                  "out_vectsize" : 1048576,
+                  "lanesize" : 1048576,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : 1,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimMul_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","8","1","16","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","8","1","16","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -12439,10 +12607,10 @@ bitsimd_sema = {
       },
 
                 "pimMul_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","32","1","64","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","32","1","64","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
@@ -12800,10 +12968,10 @@ bitsimd_sema = {
       },
 
                 "pimMul_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_4098","4098","4098","0","4096","16","1","32","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_4096","4096","4096","0","4096","16","1","32","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -12970,7 +13138,7 @@ bitsimd_sema = {
                   "Extensions" : "[]",
       },
           },
-              "semantics" : ['"(define (pimMul_v512_e8__v512_e8__v512_e8  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 )"', '"(define dst"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i0 (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %lastidx0 (-  %elemsize0  1))"', '"  (define %1 (+  i0  %lastidx0))"', '"  (define %2 (extract  %1 i0 a))"', '"  (define %4 (extract  %1 i0 b))"', '"  (define %5.ab0 (bvsizeext  %2 %arg1 %arg2))"', '"  (define %6.ab0 (bvsizeext  %4 %arg1 %arg0))"', '"  (define %7 (bvmul  %5.ab0  %6.ab0))"', '"  (define %9.high.idx (- %arg1 1))"', '"  (define %9.low.idx (+ (- %9.high.idx %elemsize0) 1) )"', '"  (define %9 (extract  %9.high.idx %9.low.idx %7))"', '"  %9"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  dst %arg3)"', '")"', '""'],
+              "semantics" : ['"(define (pimMul_v512_e8__v512_e8__v512_e8  a b %vectsize0 %outerlanesize0 %innerlaneoffset0 %innerlanesize0 %elemsize0 %arg0 %arg1 %arg2 %arg3 )"', '"(define dst"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize0 %outerlanesize0))])"', '" (apply"', '" concat"', '" (for/list ([i0 (reverse (range %innerlaneoffset0 %innerlanesize0 %elemsize0))])"', '"  (define %lastidx0 (-  %elemsize0  1))"', '"  (define %1 (+  i0  %lastidx0))"', '"(define %2 (extract  %1 i0 a))"', '"  (define %4 (extract  %1 i0 b))"', '"  (define %5.ab0 (bvsizeext  %2 %arg1 %arg2))"', '"  (define %6.ab0 (bvsizeext  %4 %arg1 %arg0))"', '"  (define %7 (bvmul  %5.ab0  %6.ab0))"', '"  (define %9.high.idx (- %elemsize0 1))"', '"  (define %9.low.idx 0 )"', '"  (define %9 (extract  %9.high.idx %9.low.idx %7))"', '"  %9"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  dst %arg3)"', '")"', '""'],
         },
 
             "pimDivScalar_v32_e16__v32_e16__v32_e16" : {
@@ -13261,10 +13429,10 @@ bitsimd_sema = {
       },
 
                 "pimDivScalar_v256_e16__v256_e16__v256_e16" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_16","4098","4098","0","4096","16","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_16","4096","4096","0","4096","16","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : 2,
@@ -13508,10 +13676,10 @@ bitsimd_sema = {
       },
 
                 "pimDivScalar_v512_e8__v512_e8__v512_e8" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_8","4098","4098","0","4096","8","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_8","4096","4096","0","4096","8","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : 2,
@@ -13565,10 +13733,10 @@ bitsimd_sema = {
       },
 
                 "pimDivScalar_v128_e32__v128_e32__v128_e32" : {
-                  "args" : ["SYMBOLIC_BV_4098","SYMBOLIC_BV_32","4098","4098","0","4096","32","1","0"],
-                  "in_vectsize" : 4098,
-                  "out_vectsize" : 4098,
-                  "lanesize" : 4098,
+                  "args" : ["SYMBOLIC_BV_4096","SYMBOLIC_BV_32","4096","4096","0","4096","32","1","0"],
+                  "in_vectsize" : 4096,
+                  "out_vectsize" : 4096,
+                  "lanesize" : 4096,
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : 2,
