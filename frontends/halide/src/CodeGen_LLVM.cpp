@@ -2239,6 +2239,8 @@ void CodeGen_LLVM::visit(const Load *op) {
         return;
     }
 
+    const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
+
     // Predicated load
     if (!is_const_one(op->predicate)) {
         // std::cout << "[Hydride]: " << "Predicated Load" << "\n";
@@ -2261,8 +2263,8 @@ void CodeGen_LLVM::visit(const Load *op) {
         llvm::Type *load_type = llvm_type_of(op->type.element_of());
         if (ramp && stride && stride->value == 1) {
             value = codegen_dense_vector_load(op);
-        } else if (ramp && stride && 2 <= stride->value && stride->value <= 4) {
-            // std::cout << "[Hydride]: " << "load with 2 <= stride < 4" << "\n";
+        } else if (!roll_insert_element &&  ramp && stride && 2 <= stride->value && stride->value <= 4) {
+            std::cout << "[Hydride]: " << "load with 2 <= stride < 4" << "\n";
             //  Try to rewrite strided loads as shuffles of dense loads,
             //  aligned to the stride. This makes adjacent strided loads
             //  share the same underlying dense loads.
@@ -2360,7 +2362,6 @@ void CodeGen_LLVM::visit(const Load *op) {
             Value *stride = codegen(ramp->stride);
             value = UndefValue::get(llvm_type_of(op->type));
 
-            const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
             if(roll_insert_element && (ramp->lanes > 0)){
 
                 Value* vec = value;
@@ -2558,7 +2559,7 @@ void CodeGen_LLVM::visit(const Ramp *op) {
 
 
             // Update the Insert Vector PHI
-            vec = builder->CreateInsertElement(vec, basePHI, loopIndexPHI);
+            vec = builder->CreateInsertElement(phi, basePHI, loopIndexPHI);
             phi->addIncoming(vec, builder->GetInsertBlock());
 
             // Update base by stride
