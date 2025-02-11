@@ -2404,7 +2404,7 @@ void CodeGen_LLVM::visit(const Load *op) {
                 
 
                 // Maybe exit the loop
-                Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, op->type.lanes()));
+                Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, ramp->lanes ));
                 builder->CreateCondBr(end_condition, loop_bb, after_bb);
 
                 builder->SetInsertPoint(after_bb);
@@ -4280,35 +4280,134 @@ void CodeGen_LLVM::visit(const Store *op) {
             const IntImm *const_stride = ramp->stride.as<IntImm>();
             Value *stride = codegen(ramp->stride);
             llvm::Type *load_type = llvm_type_of(ptr_type);
-            // Scatter without generating the indices as a vector
-            for (int i = 0; i < ramp->lanes; i++) {
-                Constant *lane = ConstantInt::get(i32_t, i);
-                Value *v = builder->CreateExtractElement(val, lane);
-                if (const_stride) {
-                    // Use a constant offset from the base pointer
-                    Value *p =
-                        builder->CreateConstInBoundsGEP1_32(
-                            load_type, ptr,
-                            const_stride->value * i);
-                    StoreInst *store = builder->CreateStore(v, p);
-                    annotate_store(store, op->index);
-                } else {
-                    // Increment the pointer by the stride for each element
-                    StoreInst *store = builder->CreateStore(v, ptr);
-                    annotate_store(store, op->index);
-                    ptr = CreateInBoundsGEP(builder, load_type, ptr, stride);
+
+            const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
+
+            if(roll_insert_element && (ramp->lanes > 0)){
+                BasicBlock *preheader_bb = builder->GetInsertBlock();
+
+                // Make a new basic block for the loop
+                BasicBlock *loop_bb = BasicBlock::Create(*context, std::string("for store ") + op->name, function);
+                // Create the block that comes after the loop
+                BasicBlock *after_bb = BasicBlock::Create(*context, std::string("end for store ") + op->name, function);
+
+
+                //builder->CreateCondBr(enter_condition, loop_bb, after_bb, very_likely_branch);
+                builder->CreateBr(loop_bb);
+                builder->SetInsertPoint(loop_bb);
+
+                // Make our phi node.
+                PHINode *loopIndexPHI = builder->CreatePHI(i32_t,  2);
+                loopIndexPHI->addIncoming(ConstantInt::get(i32_t, 0), preheader_bb);
+
+                PHINode *ptrPHI = builder->CreatePHI(ptr->getType(), 2);
+                ptrPHI->addIncoming(ptr, preheader_bb);
+
+                Value *v = builder->CreateExtractElement(val, loopIndexPHI);
+
+                // Increment the pointer by the stride for each element
+                StoreInst *store = builder->CreateStore(v, ptrPHI);
+                annotate_store(store, op->index);
+
+                // Update pointer stride
+                Value* UpdatedPtr = CreateInBoundsGEP(builder, load_type, ptrPHI, stride);
+                ptrPHI->addIncoming(UpdatedPtr, builder->GetInsertBlock());
+
+                // Update the counter
+                Value *next_index_var = builder->CreateNSWAdd(loopIndexPHI, ConstantInt::get(i32_t, 1));
+
+                // Add the back-edge to the phi node
+                loopIndexPHI->addIncoming(next_index_var, builder->GetInsertBlock());
+
+
+                // Maybe exit the loop
+                Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, ramp->lanes));
+                builder->CreateCondBr(end_condition, loop_bb, after_bb);
+
+                builder->SetInsertPoint(after_bb);
+
+
+            } else {
+
+
+                // Scatter without generating the indices as a vector
+                for (int i = 0; i < ramp->lanes; i++) {
+                    Constant *lane = ConstantInt::get(i32_t, i);
+                    Value *v = builder->CreateExtractElement(val, lane);
+                    if (const_stride) {
+                        // Use a constant offset from the base pointer
+                        Value *p =
+                            builder->CreateConstInBoundsGEP1_32(
+                                    load_type, ptr,
+                                    const_stride->value * i);
+                        StoreInst *store = builder->CreateStore(v, p);
+                        annotate_store(store, op->index);
+                    } else {
+                        // Increment the pointer by the stride for each element
+                        StoreInst *store = builder->CreateStore(v, ptr);
+                        annotate_store(store, op->index);
+                        ptr = CreateInBoundsGEP(builder, load_type, ptr, stride);
+                    }
                 }
+
+
             }
+
         } else {
             // Scatter
             Value *index = codegen(op->index);
-            for (int i = 0; i < value_type.lanes(); i++) {
-                Value *lane = ConstantInt::get(i32_t, i);
-                Value *idx = builder->CreateExtractElement(index, lane);
-                Value *v = builder->CreateExtractElement(val, lane);
-                Value *ptr = codegen_buffer_pointer(op->name, value_type.element_of(), idx);
+
+            const char *roll_insert_element = getenv("HYDRIDE_ROLL_INSERT_ELEMENT");
+            if(roll_insert_element && (value_type.lanes() > 0)){
+
+                BasicBlock *preheader_bb = builder->GetInsertBlock();
+
+                // Make a new basic block for the loop
+                BasicBlock *loop_bb = BasicBlock::Create(*context, std::string("for store ") + op->name, function);
+                // Create the block that comes after the loop
+                BasicBlock *after_bb = BasicBlock::Create(*context, std::string("end for store ") + op->name, function);
+
+
+                //builder->CreateCondBr(enter_condition, loop_bb, after_bb, very_likely_branch);
+                builder->CreateBr(loop_bb);
+                builder->SetInsertPoint(loop_bb);
+
+                // Make our phi node.
+                PHINode *loopIndexPHI = builder->CreatePHI(i32_t,  2);
+                loopIndexPHI->addIncoming(ConstantInt::get(i32_t, 0), preheader_bb);
+
+
+                Value *idx = builder->CreateExtractElement(index, loopIndexPHI);
+                Value *v = builder->CreateExtractElement(val, loopIndexPHI);
+
+                // Increment the pointer by the stride for each element
+                Value* ptr = codegen_buffer_pointer(op->name, value_type.element_of(), idx);
                 StoreInst *store = builder->CreateStore(v, ptr);
                 annotate_store(store, op->index);
+
+
+                // Update the counter
+                Value *next_index_var = builder->CreateNSWAdd(loopIndexPHI, ConstantInt::get(i32_t, 1));
+
+                // Add the back-edge to the phi node
+                loopIndexPHI->addIncoming(next_index_var, builder->GetInsertBlock());
+
+
+                // Maybe exit the loop
+                Value *end_condition = builder->CreateICmpNE(next_index_var, ConstantInt::get(i32_t, value_type.lanes()));
+                builder->CreateCondBr(end_condition, loop_bb, after_bb);
+
+                builder->SetInsertPoint(after_bb);
+            } else {
+                for (int i = 0; i < value_type.lanes(); i++) {
+                    Value *lane = ConstantInt::get(i32_t, i);
+                    Value *idx = builder->CreateExtractElement(index, lane);
+                    Value *v = builder->CreateExtractElement(val, lane);
+                    Value *ptr = codegen_buffer_pointer(op->name, value_type.element_of(), idx);
+                    StoreInst *store = builder->CreateStore(v, ptr);
+                    annotate_store(store, op->index);
+                }
+
             }
         }
     }
