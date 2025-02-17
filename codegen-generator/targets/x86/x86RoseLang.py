@@ -39,8 +39,8 @@ def Compile(InstName: str = None):
         print("CompiledFunction:")
         CompiledFunction.print()
         FunctionInfoList.append(FunctionInfo)
-        from RosetteGen import GenerateRosetteForFunction
-        print(GenerateRosetteForFunction(CompiledFunction, ""))
+        #from RosetteGen import GenerateRosetteForFunction
+        #print(GenerateRosetteForFunction(CompiledFunction, ""))
 
     return FunctionInfoList
 

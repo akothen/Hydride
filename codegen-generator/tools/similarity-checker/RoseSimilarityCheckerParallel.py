@@ -2965,3 +2965,4 @@ if __name__ == '__main__':
     sys.stdout = sys.__stderr__
     SimilarityChecker.performSimilarityChecking()
     # SimilarityChecker.parallelizeSimilarityChecking()
+

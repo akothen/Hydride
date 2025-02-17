@@ -8,7 +8,7 @@
 import x86RoseLang
 import HexRoseLang
 import ARMRoseLang
-import VISARoseLang
+#import VISARoseLang
 
 import RoseCSE
 import RoseDCE
@@ -25,6 +25,8 @@ import RoseReg2Reg
 import RoseAssignDestination
 import RoseAbstractSignedness
 import RoseSinkBVInsertOps
+import RoseAddBVInsertAtFuncEnd
+import RoseLICM
 
 import multiprocessing
 
@@ -35,7 +37,7 @@ class RoseCodeGenerator:
         "x86": x86RoseLang,
         "Hexagon": HexRoseLang,
         "ARM": ARMRoseLang,
-        "VISA": VISARoseLang,
+        #"VISA": VISARoseLang,
     }
 
     def __init__(self, Target: str):
@@ -71,11 +73,15 @@ class RoseCodeGenerator:
             FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
             Context.print()
+            RoseAddBVInsertAtFuncEnd.Run(Function, Context)
+            FunctionInfo.addFunctionAtNewStage(Function)
+            Function = Function.clone()
+            Context.print()
             RoseLoopReroller.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
-            # Function = Function.clone()
-            # RoseOpSimplify.Run(Function, Context)
-            # FunctionInfo.addFunctionAtNewStage(Function)
+            #Function = Function.clone()
+            #RoseLICM.Run(Function, Context)
+            #FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
             Context.print()
             RoseOpCombine.Run(Function, Context)
@@ -123,8 +129,26 @@ class RoseCodeGenerator:
             RoseDCE.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
+            RoseLICM.Run(Function, Context)
+            FunctionInfo.addFunctionAtNewStage(Function)
+            Function = Function.clone()
+            Context.print()
+            RoseOpCombine.Run(Function, Context)
+            FunctionInfo.addFunctionAtNewStage(Function)
+            Function = Function.clone()
+            Context.print()
+            RoseCSE.Run(Function, Context)
+            FunctionInfo.addFunctionAtNewStage(Function)
+            Function = Function.clone()
+            Context.print()
+            RoseDCE.Run(Function, Context)
+            FunctionInfo.addFunctionAtNewStage(Function)
+            Function = Function.clone()
             Context.print()
             RoseCanonicalize.Run(Function, Context)
+            FunctionInfo.addFunctionAtNewStage(Function)
+            Function = Function.clone()
+            RoseLICM.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
             Context.print()
@@ -151,8 +175,7 @@ class RoseCodeGenerator:
                 FunctionInfo.addFunctionAtNewStage(Function)
                 Function = Function.clone()
                 ArgToConstantValsMap = dict()
-                RoseExtractConstants.Run(
-                    Function, Context, ArgToConstantValsMap)
+                RoseExtractConstants.Run(Function, Context, ArgToConstantValsMap)
                 FunctionInfo.addFunctionAtNewStage(Function)
                 FunctionInfo.addArgsToConcreteMap(ArgToConstantValsMap)
                 FunctionInfo.addTargetAgnosticFunction(Function)
@@ -161,10 +184,10 @@ class RoseCodeGenerator:
                 # File.write(str(Function))
                 # File.write("#---------------------------------------------------------------------\n\n\n\n")
                 # ile.close()
-        RosetteCode = RosetteGen.CodeGen(Function)
-        FunctionInfo.addContext(Context)
-        print("END CODEGEN")
-        print(RosetteCode)
+        #RosetteCode = RosetteGen.CodeGen(Function)
+        #FunctionInfo.addContext(Context)
+        #print("END CODEGEN")
+        #print(RosetteCode)
         return FunctionInfo
 
     def codeGen(self, FunctionInfo=None, JustGenRosette: bool = False,

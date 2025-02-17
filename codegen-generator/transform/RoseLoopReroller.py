@@ -2441,13 +2441,13 @@ def FixReductionPattern1ToMakeBlockRerollable(Block: RoseBlock,
             Block.addOperationBefore(InsertValue, InsertBefore)
         Block.addOperationBefore(InsertOp, InsertBefore)
 
-    def EraseIndexingBVOperand(BVOp: RoseBitVectorOp):
+    def EraseIndexingBVOp(BVOp: RoseBitVectorOp):
         print("BVOp:")
         BVOp.print()
         if not isinstance(BVOp, RoseBVExtractSliceOp) \
-          and not isinstance(BVOp, RoseBVInsertSliceOp):
+            and not isinstance(BVOp, RoseBVInsertSliceOp):
           return
-        print("EraseIndexingBVOperand")
+        print("EraseIndexingBVOp")
         BVOp.print()
         ParentBlock = BVOp.getParent()
         assert not isinstance(ParentBlock, RoseUndefRegion)
@@ -2487,7 +2487,7 @@ def FixReductionPattern1ToMakeBlockRerollable(Block: RoseBlock,
 
     # Erase the bvinsert op
     print("ERASE INSERT OP")
-    EraseIndexingBVOperand(BVInsertOp)
+    EraseIndexingBVOp(BVInsertOp)
     if not isinstance(IntermediateOp, RoseUndefValue):
         Block.eraseOperation(IntermediateOp)
 
@@ -2501,8 +2501,8 @@ def FixReductionPattern1ToMakeBlockRerollable(Block: RoseBlock,
                 ToBeRemoved.remove(Op)
 
     # Now erase the external operands
-    for Operand in ExternalOperands:
-        EraseIndexingBVOperand(Operand)
+    for Op in ExternalOperands:
+        EraseIndexingBVOp(Op)
 
     print("++++++FIXED BLOCK:")
     Block.print()

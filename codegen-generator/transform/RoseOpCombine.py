@@ -520,6 +520,9 @@ def OpCombinePatterns(FirstOp: RoseOperation, SecondOp: RoseOperation, Context: 
             # See cases 2 below.
             # result: z = x when c2 == c1
             # Just replace the uses of the second op
+            print("REPLACING USES WITH:")
+            print("FirstOp.getOperand(NonConstantIndex1):")
+            FirstOp.getOperand(NonConstantIndex1).print()
             SecondOp.replaceUsesWith(FirstOp.getOperand(NonConstantIndex1))
             # IMPORTANT: the second op must be removed before the first op.
             Block.eraseOperation(SecondOp)
@@ -872,7 +875,9 @@ def RemoveRedundantBVExtractOps(Block: RoseBlock):
     ExtractOps = set()
     OpList = list()
     OpList.extend(Block.getOperations())
-    for Index, Op in enumerate(OpList):
+    print("REMOVE REDUNDANT BV EXTRACT OPS:")
+    Block.print()
+    for Op in OpList:
         if not isinstance(Op, RoseBVExtractSliceOp):
             continue
         OpFoundAndErased = False
@@ -881,8 +886,18 @@ def RemoveRedundantBVExtractOps(Block: RoseBlock):
                     and ExtractOp.getLowIndex() == Op.getLowIndex() \
                     and ExtractOp.getHighIndex() == Op.getHighIndex():
                 # Replace the uses of the new found extract op
+                print("before Block:")
+                Block.print()
+                print("Op:")
+                Op.print()
+                print("ExtractOp:")
+                ExtractOp.print()
                 Op.replaceUsesWith(ExtractOp)
                 # Erase the extract op
+                print("after Block:")
+                Block.print()
+                print("erase:")
+                Op.print()
                 Block.eraseOperation(Op)
                 OpFoundAndErased = True
                 break
@@ -1397,9 +1412,9 @@ def RunOpCombineOnRegion(Region, Context: RoseContext):
             continue
         # Op simplification only happens on blocks
         if not isinstance(Abstraction, RoseBlock):
-            print("REGION:")
-            print(Abstraction)
-            Abstraction.print()
+            #print("REGION:")
+            #print(Abstraction)
+            #Abstraction.print()
             RunOpCombineOnRegion(Abstraction, Context)
             continue
         RunOpCombineOnBlock(Abstraction, Context)

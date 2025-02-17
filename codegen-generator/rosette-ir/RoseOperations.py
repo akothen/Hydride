@@ -116,6 +116,25 @@ class RoseCallOp(RoseOperation):
         String += " )))\n"
         return String
 
+    def print(self, NumSpace=0):
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = ""
+        if Name != "":
+            String = Spaces + Name + " = "
+        else:
+            String = Spaces
+        String += str(self.Opcode)
+        String += " " + self.getCallee().getName() + "("
+        for Index, Operand in enumerate(self.getCallOperands()):
+            String += " " + str(Operand.getType()) + " " + Operand.getName()
+            if Index != len(self.getCallOperands()) - 1:
+                String += ","
+        String += " )"
+        print(String)
+
     def __str__(self, NumSpace=0):
         Spaces = ""
         for _ in range(NumSpace):
@@ -134,9 +153,6 @@ class RoseCallOp(RoseOperation):
                 String += ","
         String += " )\n"
         return String
-    
-    def print(self, NumSpace=0):
-        print(self.__str__(NumSpace))
 
     def solve(self):
         # Cannot solve calls
@@ -193,6 +209,27 @@ class RoseOpaqueCallOp(RoseOperation):
         String += " )))\n"
         return String
 
+    def print(self, NumSpace=0):
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = ""
+        if Name != "":
+            String = Spaces + Name + " = "
+        else:
+            String = Spaces
+        String += str(self.Opcode)
+        String += " " + self.getCallee().getName() + "("
+        for Index, Operand in enumerate(self.getCallOperands()):
+            String += " " + str(Operand.getType()) + " " + Operand.getName()
+            if Index != len(self.getCallOperands()) - 1:
+                String += ","
+        if self.getMacro() != None:
+            String += self.getMacro()
+        String += " )"
+        print(String)
+
     def __str__(self, NumSpace=0):
         Spaces = ""
         for _ in range(NumSpace):
@@ -213,9 +250,6 @@ class RoseOpaqueCallOp(RoseOperation):
             String += self.getMacro()
         String += " )\n"
         return String
-    
-    def print(self, NumSpace=0):
-        print(self.__str__(NumSpace))
 
     def solve(self):
         # Cannot solve calls
@@ -281,7 +315,8 @@ class RoseSelectOp(RoseOperation):
             ConditionString = "(equal? " + \
                 self.getCondition().getName() + " (bv #b1 1))\n"
         else:
-            ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
+            ConditionString = "(equal? " + \
+                self.getCondition().getName() + " #t)"
         if isinstance(self.getType(), RoseBitVectorType):
             if isinstance(self.getThenValue(), RoseConstant):
                 ThenString = "(bv " + self.getThenValue().getName() + " " \
@@ -394,6 +429,18 @@ class RoseCastOp(RoseOperation):
                 "(bitvector " + str(self.getType().getBitwidth()) + ")))\n"
         return String
 
+    def print(self, NumSpace=0):
+        Spaces = ""
+        for _ in range(NumSpace):
+            Spaces += " "
+        Name = super().getName()
+        String = Spaces + Name + " = "
+        String += str(self.Opcode)
+        Operand = self.getOperand(0)
+        String += " " + str(Operand.getType()) + " " + Operand.getName() \
+                  + ", " + str(self.getType())
+        print(String)
+
     def __str__(self, NumSpace=0):
         Spaces = ""
         for _ in range(NumSpace):
@@ -406,9 +453,6 @@ class RoseCastOp(RoseOperation):
                   + ", " + str(self.getType())
         String += "\n"
         return String
-
-    def print(self, NumSpace=0):
-        print(self.__str__(NumSpace))
 
 
 class RoseAbsOp(RoseOperation):
@@ -479,6 +523,8 @@ class RoseAddOp(RoseOperation):
         # See if there is only one non-constant operand that we can return
         Result = RoseUndefValue()
         for Operand in self.getOperands():
+            print("ADD Operand:")
+            Operand.print()
             if isinstance(Operand, RoseConstant):
                 if Operand.getValue() != 0:
                     return RoseUndefValue()

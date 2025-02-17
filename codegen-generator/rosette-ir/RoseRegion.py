@@ -725,3 +725,4 @@ class RoseRegion:
     
     def print(self, NumSpace=0):
         print(self.__str__(NumSpace))
+

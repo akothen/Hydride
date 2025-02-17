@@ -485,7 +485,7 @@ def CloneAndInsertOperation(Operation: RoseOperation, InsertBefore: RoseOperatio
 
 
 # Replaces the uses of an operation in the given region with a new clone of the
-# operation with each block. This is optimization friendly.
+# operation in each block. This is optimization-friendly.
 # The new abstraction must be an operation.
 def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction: RoseValue, NewAbstraction: RoseOperation,
                                   Context: RoseContext):
@@ -495,7 +495,6 @@ def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction: RoseValue, NewAbstraction
     assert isinstance(Abstraction, RoseValue)
     assert isinstance(NewAbstraction, RoseOperation)
     assert Abstraction.getType() == NewAbstraction.getType()
-
     NewOpToInsertBeforeMap = dict()
     if Region.getKeys() != None:
         for Key in Region.getKeys():
@@ -504,33 +503,29 @@ def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction: RoseValue, NewAbstraction
                 if isinstance(Child, RoseOperation):
                     assert isinstance(Region, RoseBlock)
                     if Child.usesValue(Abstraction):
-                        NewName = Context.genName(
-                            NewAbstraction.getName() + ".copy.")
+                        NewName = Context.genName(NewAbstraction.getName() + ".copy.")
                         ClonedNewAbstraction = NewAbstraction.clone(NewName)
-                        Child.replaceUsesWith(
-                            Abstraction, ClonedNewAbstraction)
+                        Child.replaceUsesWith(Abstraction, ClonedNewAbstraction)
                         # Region.addOperationBefore(ClonedNewAbstraction, Child)
                         NewOpToInsertBeforeMap[ClonedNewAbstraction] = Child
                 else:
-                    ReplaceUsesWithUniqueCopiesOf(
-                        Child, Abstraction, NewAbstraction, Context)
+                    ReplaceUsesWithUniqueCopiesOf(Child, Abstraction, NewAbstraction, Context)
     else:
         for Child in Region.getChildren():
             assert Region.isChildValid(Child)
             if isinstance(Child, RoseOperation):
                 assert isinstance(Region, RoseBlock)
                 if Child.usesValue(Abstraction):
-                    NewName = Context.genName(
-                        NewAbstraction.getName() + ".copy.")
+                    NewName = Context.genName(NewAbstraction.getName() + ".copy.")
                     ClonedNewAbstraction = NewAbstraction.clone(NewName)
                     Child.replaceUsesWith(Abstraction, ClonedNewAbstraction)
                     # Region.addOperationBefore(ClonedNewAbstraction, Child)
                     NewOpToInsertBeforeMap[ClonedNewAbstraction] = Child
             else:
-                ReplaceUsesWithUniqueCopiesOf(
-                    Child, Abstraction, NewAbstraction, Context)
-
+                ReplaceUsesWithUniqueCopiesOf(Child, Abstraction, NewAbstraction, Context)
     # Now add the new operations
+    print("NewOpToInsertBeforeMap:")
+    print(NewOpToInsertBeforeMap)
     for NewOp, InsertBefore in NewOpToInsertBeforeMap.items():
         Region.addOperationBefore(NewOp, InsertBefore)
 
@@ -1186,3 +1181,4 @@ def RoseConstantFolder(Query: RoseBitVectorOp):
         return None
     except:
         return None
+

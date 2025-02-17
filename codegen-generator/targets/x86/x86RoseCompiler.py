@@ -2359,3 +2359,4 @@ def NeedToExtendOperandSize(Op):
 # These are binary ops whose output type is not the same
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
+

@@ -17,6 +17,8 @@ def RunBVInsertOpSinkInFunction(Function: RoseFunction, Context: RoseContext):
   print("RUN BV INSERT OP SINK ON FUNCTION")
   print("FUNCTION:")
   Function.print()
+  print(Function.getRegionID())
+  Context.print()
   assert isinstance(Function, RoseFunction)
   # Get pre-cond-region headers for all cond region
   CondRegions = Function.getRegionsOfType(RoseCond)
@@ -146,6 +148,10 @@ def RunBVInsertOpSink(Function: RoseFunction, Context: RoseContext):
   RunBVInsertOpSinkInFunction(Function, Context)
   for Abstraction in Function:
     if isinstance(Abstraction, RoseFunction):
+      print("Abstraction:")
+      Abstraction.print()
+      print(Abstraction.getRegionID())
+      Context.print()
       RunBVInsertOpSink(Abstraction, Context.getContextOfChildFunction(Abstraction))
 
 

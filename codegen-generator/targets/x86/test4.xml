@@ -1,0 +1,25 @@
+<intrinsics_list>
+<intrinsic tech="AVX2" name="_mm256_unpackhi_epi32">
+        <type>Integer</type>
+        <CPUID>AVX2</CPUID>
+        <category>Swizzle</category>
+        <return type="__m256i" varname="dst" etype="UI32" />
+        <parameter type="__m256i" varname="a" etype="UI32" />
+        <parameter type="__m256i" varname="b" etype="UI32" />
+        <description>Unpack and interleave 32-bit integers from the high half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
+        <operation>
+DEFINE INTERLEAVE_HIGH_DWORDS(src1[127:0], src2[127:0]) {
+        dst[31:0] := src1[95:64]
+        dst[63:32] := src2[95:64]
+        dst[95:64] := src1[127:96]
+        dst[127:96] := src2[127:96]
+        RETURN dst[127:0]
+}
+dst[127:0] := INTERLEAVE_HIGH_DWORDS(a[127:0], b[127:0])
+dst[255:128] := INTERLEAVE_HIGH_DWORDS(a[255:128], b[255:128])
+dst[MAX:256] := 0
+        </operation>
+        <instruction name="VPUNPCKHDQ" form="ymm, ymm, ymm" xed="VPUNPCKHDQ_YMMqq_YMMqq_YMMqq" />
+        <header>immintrin.h</header>
+</intrinsic>
+</intrinsics_list>

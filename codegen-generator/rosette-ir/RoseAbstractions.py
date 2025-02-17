@@ -962,3 +962,4 @@ class RoseCond(RoseRegion):
                     String += Region.__str__(NumSpace + 1)
         String += Spaces + "}\n"
         return String
+

@@ -1828,3 +1828,4 @@ class RoseBVConcatOp(RoseBitVectorOp):
         String += " " + self.getOperand(1).getName()
         String += "))\n"
         return String
+

@@ -109,3 +109,4 @@ class RoseMatrixInsertRowsOp(RoseMatrixOp):
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
         NotImplemented
 
+

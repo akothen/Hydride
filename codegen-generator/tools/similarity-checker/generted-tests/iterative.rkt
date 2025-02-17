@@ -3,11 +3,11 @@
 (require rosette/lib/angelic)
 (require racket/pretty)
 (require racket/serialize)
-(require hydride)
+;;(require hydride)
+(require "utils.rkt")
 
 
-
-(enable-debug)
+;;(enable-debug)
 (current-bitwidth 16)
 (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
 
@@ -338,8 +338,8 @@
     )
   )
 
-(define test-depth 2)
-(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative (invoke_f1 2) invoke_f2 bitwidth-list generate-params '() solver))
+(define test-depth 1)
+(define-values (satisfiable? sol? _) (general-synthesize-sol-iterative (invoke_f1 test-depth) invoke_f2 bitwidth-list generate-params generate-params '() solver))
 
 (displayln "is Satisfiable?")
 (println satisfiable?)

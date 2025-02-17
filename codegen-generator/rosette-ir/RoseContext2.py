@@ -10,6 +10,8 @@ from RoseValue import RoseValue
 from RoseValues import *
 from RoseAbstractions import *
 
+from copy import deepcopy
+
 
 # This is a generic context that could be used across
 # different architectures.
@@ -88,10 +90,8 @@ class RoseContext:
 
     def addSignednessInfoForValue(self, Value: RoseValue, IsSigned: bool):
         assert not isinstance(Value, RoseUndefValue)
-        print("addSignednessInfoForValue:")
-        print(IsSigned)
-        print("VALUE:")
-        Value.print()
+        print("Set", "SIGNED" if IsSigned else "UNSIGNED",
+              "for Value:", hex(id(Value)), Value)
         self.CompiledValToSignedness[Value] = IsSigned
 
     def isValueSigned(self, Value: RoseValue):
@@ -122,11 +122,7 @@ class RoseContext:
             return True
         return False
 
-    def addElemTypeOfVariable(self, Name: str, ElemType : RoseType):
-        self.VariablesToElemTypes[Name] = ElemType
-    
-    def updateElemTypeOfVariable(self, Name : str, ElemType : RoseType):
-        assert Name in self.VariablesToElemTypes
+    def addElemTypeOfVariable(self, Name: str, ElemType: RoseType):
         self.VariablesToElemTypes[Name] = ElemType
 
     def isElemTypeOfVariableKnown(self, Name: str):
@@ -238,10 +234,3 @@ class RoseContext:
     def print(self):
         print("PRINTING CONTEXT:")
         self.NameGenerator.print()
-        print("self.FunctionToContexts:")
-        print(self.FunctionToContexts)
-        for ID, Ctx in self.Contexts.items():
-            if Ctx is not None:
-                print("ID: ", ID)
-                print(type(Ctx))
-                Ctx.print()

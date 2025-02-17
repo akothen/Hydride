@@ -1,10 +1,3 @@
-################################################################
-#
-# This file contains the base class for matrix operations.
-#
-#################################################################
-
-
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
 from RoseValues import *
@@ -19,7 +12,7 @@ class RoseMatrixOp(RoseOperation):
         super().__init__(Opcode, Name, Operands, ParentBlock)
 
     def getOutputBitwidth(self):
-        return self.getOpcode().getOutputType(self.Operands).getBitwidth()
+        return RoseOpcode.mtxextractrow.getOutputType(self.Operands).getBitwidth()
 
     def isIndexingBVOp(self):
         return True

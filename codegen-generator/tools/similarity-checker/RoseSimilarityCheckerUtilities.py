@@ -188,13 +188,22 @@ def GetOpDeterminingLoopBoundsInBlockList(Function: RoseFunction, BlockList: lis
                     if isinstance(Op.getOutputBitwidth(), RoseArgument):
                         Result.append(Op)
                         continue
+                    print("RELEVANT BV EXTRACT OP:")
+                    Op.print()
                     BVExtractOps.append(Op)
                 elif isinstance(Op.getInputBitVector(), RoseMatrixExtractRowOp):
                   MatrixOp = Op.getInputBitVector()
+                  print("MatrixOp:")
+                  MatrixOp.print()
+                  print("MatrixOp.getTile():")
+                  MatrixOp.getTile().print()
                   if MatrixOp.getTile() in Params:
-                      if isinstance(Op.getOutputBitwidth(), RoseArgument):
+                      print("TILE IN PARAMS")
+                      if isinstance(MatrixOp.getOutputBitwidth(), RoseArgument):
                           Result.append(Op)
                           continue
+                      print("RELEVANT BV EXTRACT OP:")
+                      Op.print()
                       BVExtractOps.append(Op)
     print("len(BVExtractOps):")
     print(len(BVExtractOps))

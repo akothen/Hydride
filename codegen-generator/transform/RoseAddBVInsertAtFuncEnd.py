@@ -16,6 +16,8 @@ def RunAddBVInsertOpInFunction(Function: RoseFunction, Context: RoseContext):
     print("RUN BV INSERT AT END OF FUNCTION")
     print("FUNCTION:")
     Function.print()
+    print(Function.getRegionID())
+    Context.print()
     RetValue = Function.getReturnValue()
     if not isinstance(RetValue.getType(), RoseBitVectorType):
       return
@@ -59,3 +61,4 @@ def Run(Function: RoseFunction, Context: RoseContext):
     RunAddBVInsertOp(Function, Context)
     print("\n\n\n\n\n")
     Function.print()
+
