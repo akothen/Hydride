@@ -99,32 +99,6 @@ def NegInstClass(InstName, Sema: AIESema):
     """
     return ret_str
 
-  def SubInstClass(InstName, Sema: AIESema):
-    params = Sema.params
-    ret_ty_info = extract_info(Sema.rettype)
-    lanesize = ret_ty_info['NumLanes']
-    datasize = ret_ty_info['SizeOfElement']
-
-    ret_str = f"""
-    (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name})
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 {lanesize} 1)])
-        (define %low1 (* {datasize} %i))
-        (define %high1 (+ %low1 (- {datasize} 1)))
-        (define %ext_xbuff (extract %high1 %low1 {params[0].type}_{params[0].name}))
-        (define %low2 (* {datasize} %i))
-        (define %high2 (+ %low2 (- {datasize} 1)))
-        (define %ext_ybuff (extract %high2 %low2 {params[1].type}_{params[1].name}))
-        (define %o (bvsub %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    """
-    return ret_str
 
 def EltwiseMulInstClass(InstName, Sema: AIESema):
     params = Sema.params

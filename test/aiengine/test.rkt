@@ -159,7 +159,40 @@
   dst 
 )
 
+(define (ups_to_v32acc32 vec)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 32 1))])
+        (define %low1 (* 16 %i))
+        (define %high1 (+ %low1 (- 16 1)))
+        (define %o (sign-extend (extract %high1 %low1 vec) (bitvector 32)))
+        %o
+      )
+    )
+  )
+  dst 
+)
 
+(define (mac_elem_32 a b c)
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 32 1))])
+        (define %low1 (* 16 %i))
+        (define %high1 (+ %low1 (- 16 1)))
+        (define %ext_a (sign-extend (extract %high1 %low1 a) (bitvector 32)))
+        (define %low2 (* 16 %i))
+        (define %high2 (+ %low2 (- 16 1)))
+        (define %ext_b (sign-extend (extract %high2 %low2 b) (bitvector 32)))
+        (define %low3 (* 32 %i))
+        (define %high3 (+ %low3 (- 32 1)))
+        (define %ext_c (extract %high3 %low3 c))
+        (define %o (bvadd %ext_c (bvmul %ext_a %ext_b)))
+        %o
+      )
+    )
+  )
+  dst
+)
 
 (define xbuff_32_16 (bv #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025 512))
 (define ybuff_32_16 (bv #xabce3c7dcc7dc68bd8699467269f1d681ad0a9b0e7e24db6e1b77de3a563f2a4c4cdd40d1668b8d73b889f5c4f87d7ea6fad8e78d799eea817a16f9f6261de0b 512))
