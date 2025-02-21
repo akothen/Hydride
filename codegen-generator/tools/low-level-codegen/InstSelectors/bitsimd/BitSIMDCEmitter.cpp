@@ -16,7 +16,6 @@ bool BitSIMDCEmitter::runOnFunction(Function &F) {
     variableCounter = 0;
 
     // Implementation of the pass
-    errs() << "Running BitSIMDCEmitter on function: " << F.getName() << "\n";
 
     if(!F.getName().contains("hydride")) return false;
 
@@ -31,18 +30,19 @@ bool BitSIMDCEmitter::runOnFunction(Function &F) {
 
     // Iterate over each basic block in reverse post-order
     for (BasicBlock *BB : RPOT) {
-        errs() << "BasicBlock: " << BB->getName() << "\n";
 
         // Iterate over each instruction in the basic block
         for (Instruction &I : *BB) {
             if(isPimInst(&I)){
-
+                std::string statement = handlePimInst(&I);
+                statements.push_back(statement);
             } else if(ReturnInst* RI = dyn_cast<ReturnInst>(&I)){
-
+                std::string statement = handleRetInst(&I);
+                statements.push_back(statement);
             } else if(StoreInst* SI = dyn_cast<StoreInst>(&I)){
-
+                handleStoreInst(&I);
             } else if(LoadInst* LI = dyn_cast<LoadInst>(&I)){
-
+                handleLoadInst(&I);
             }
         }
     }
@@ -105,10 +105,10 @@ std::string BitSIMDCEmitter::getCppType(Type *type) {
     if(FixedVectorType* FVTy = dyn_cast<FixedVectorType>(type)){
         Type* ElemTy = FVTy->getElementType();
         unsigned numElements = FVTy->getNumElements();
-        std::string scalarTy = getCppScalarType(ElemTy, numElements == 1);
+        std::string scalarTy = getCppScalarType(ElemTy, /* add_t */ false);
         std::string suffix = numElements == 1 ? "" : "x" + std::to_string(numElements);
 
-        return scalarTy + suffix;
+        return scalarTy + suffix + "_t";
 
     } else {
         return  getCppScalarType(type, /* add_t */ true);
@@ -182,6 +182,31 @@ bool BitSIMDCEmitter::isPimCopy(Value *val) {
     return false;
 }
 
+
+std::string BitSIMDCEmitter::handleStoreInst(Value* val){
+    StoreInst* SI = dyn_cast<StoreInst>(val);
+    Value* Ptr = SI->getPointerOperand()->stripPointerCasts(); 
+    Value* Vector = SI->getValueOperand();
+    assert(Vector->getType()->isVectorTy() && "Expected stores of vector type for PIM Kernel function");
+    PointerToArgMap[Ptr] = Vector;
+    return "";
+}
+
+
+std::string BitSIMDCEmitter::handleRetInst(Value* val){
+    ReturnInst* RI = dyn_cast<ReturnInst>(val);
+    Value* data = RI->getReturnValue();
+
+    return "return " + varMap[data] + ";";
+}
+
+std::string BitSIMDCEmitter::handleLoadInst(Value* val){
+    LoadInst* LI = dyn_cast<LoadInst>(val);
+    Value* Ptr = LI->getPointerOperand()->stripPointerCasts(); 
+    varMap[val] = varMap[Ptr];
+    return "";
+}
+
 std::string BitSIMDCEmitter::handlePimInst(Value* val){
 
     if(isPimCopy(val)){
@@ -192,6 +217,8 @@ std::string BitSIMDCEmitter::handlePimInst(Value* val){
         return handlePimComputeScalarOp(val);
     } else if(isPimComputeVectorOp(val)){
         return handlePimComputeVectorOp(val);
+    } else if(isPimFree(val)){
+        return handlePimFree(val);
     } else{
         assert(false && "Unreachable pimInst");
         return "";
@@ -221,21 +248,31 @@ std::string BitSIMDCEmitter::handlePimCopy(Value* val){
         Value* DstID = CI->getArgOperand(1);
         tokens.push_back(varMap[DstID]);
 
+        tokens.push_back(");");
+
+        return stringJoin(tokens, " ");
+
     } else {
 
         Value* SrcID = CI->getArgOperand(0);
         tokens.push_back(varMap[SrcID]);
         tokens.push_back(",");
 
+        // Add a new allocation for the host memory;
         Value* HostPtr = CI->getArgOperand(1)->stripPointerCasts();
-        Value* HostArg = PointerToArgMap[HostPtr];
-        std::string host_vector_data = varMap[HostArg] + ".data()";
+        AllocaInst* AI = dyn_cast<AllocaInst>(HostPtr);
+        assert(AI && "Expected Alloca for allocation for copy data back from PIM memory");
+        std::string cppType = getCppType(AI->getAllocatedType());
+        std::string varName = getFreshVariableName();
+        std::string host_allocation = cppType + " " + varName + ";";
+        varMap[HostPtr] = varName;
+        std::string host_vector_data = varMap[HostPtr] + ".data()";
         tokens.push_back(host_vector_data);
+        tokens.push_back(");");
+
+        return host_allocation + "\n" + stringJoin(tokens, " ");
     }
 
-    tokens.push_back(");");
-
-    return stringJoin(tokens, " ");
 }
 
 std::string BitSIMDCEmitter::getCalledFunctionName(Value* V){
@@ -353,7 +390,7 @@ std::string BitSIMDCEmitter::handlePimFree(Value* val){
     Value* ObjID = CI->getArgOperand(0);
     std::string cpp_label = varMap[ObjID];
 
-    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", cpp_label, ")"};
+    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", cpp_label, ");"};
 
     return stringJoin(tokens, " ");
 }
@@ -410,7 +447,7 @@ std::string BitSIMDCEmitter::handlePimComputeScalarOp(Value* val){
 
 
 
-    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", param_use, ")"};
+    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", param_use, ");"};
 
     return stringJoin(tokens, " ");
 }
@@ -452,7 +489,7 @@ std::string BitSIMDCEmitter::handlePimComputeVectorOp(Value* val){
 
 
 
-    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", param_use, ")"};
+    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", param_use, ");"};
 
     return stringJoin(tokens, " ");
 }
@@ -477,7 +514,6 @@ std::string BitSIMDCEmitter::getFunctionPrototype(Function* F){
     for(auto &Arg : F->args()){
         
         std::string cpp_param_ty = getCppType(Arg.getType());
-        param_tokens.push_back(cpp_param_ty);
         varMap[&Arg] = getFreshVariableName();
         std::string param_def = cpp_param_ty + " " + varMap[&Arg]; 
         param_tokens.push_back(param_def);
@@ -493,5 +529,5 @@ std::string BitSIMDCEmitter::getFunctionPrototype(Function* F){
 
 
 // Register the pass with LLVM
-static RegisterPass<BitSIMDCEmitter> X("bitsimdce", "BitSIMD C Emitter Pass", false, false);
+static RegisterPass<BitSIMDCEmitter> X("bitsimd-ce", "BitSIMD C Emitter Pass", false, false);
 

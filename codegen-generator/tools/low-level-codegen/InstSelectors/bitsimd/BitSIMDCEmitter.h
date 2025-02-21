@@ -63,6 +63,11 @@ namespace llvm {
             bool isPimInst(Value *val);
             std::string handlePimInst(Value *val);
 
+
+            std::string handleRetInst(Value *val);
+            std::string handleStoreInst(Value *val);
+            std::string handleLoadInst(Value *val);
+
         private:
             unsigned variableCounter; // Counter to generate fresh variable names
             std::string stringJoin(const std::vector<std::string> &strings, const std::string &separator) ;
