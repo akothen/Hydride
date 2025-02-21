@@ -20,6 +20,8 @@ benchmarks = gaussian3x3 \
 			 mul \
 			 l2norm \
 			 max_pool \
+			 max_pool_alt \
+			 max_pool_predecomposed \
 			 max_pool_i32 \
 			 max_pool_add \
 			 average_pool \
@@ -54,7 +56,7 @@ BENCHMARK ?=1
 
 CC=clang
 #TARGET=host-x86-64 #host-noos-no_bounds_query-no_asserts
-TARGET=host-x86-64-no_bounds_query-no_asserts #host-noos-no_bounds_query-no_asserts
+TARGET=host#host-x86-64-no_bounds_query-no_asserts #host-noos-no_bounds_query-no_asserts
 STARTING_HASH_FLAG= #HYDRIDE_INITIAL_HASH=x86_hash
 
 #STARTING_HASH ?= "hash_v3" #"empty_hash" 
@@ -81,7 +83,7 @@ $(benchmarks): %: %/bin
 		-t 0 \
 		-o $@/bin \
 		-g $@ \
-		-e static_library,stmt,h,llvm_assembly,assembly \
+		-e cpp,h,stmt \
 		-f $@ target=$(TARGET)
 	HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=0 HL_DEBUG_CODEGEN=1  HL_SYNTH_BW=$(SYNTH_BITWIDTH) ./$@/bin/$@_generator \
 		-r halide_runtime_x86 \
@@ -89,14 +91,15 @@ $(benchmarks): %: %/bin
 		-e object,c_header \
 		target=$(TARGET)
 
-	clang -g -Dbenchmark_$@ --std=c++17 \
-		-O0 -march=native -mavx512vl -mavx512ifma \
-		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
+	g++ -g  -DHALIDE_CPP_ALWAYS_USE_CPP_VECTORS -Dbenchmark_$@ --std=c++17 \
+		-O3 -march=native -mavx512vl -mavx512ifma \
+		-I $(HALIDE_DISTRIB)/include -I ./$@/bin -I ./libpimeval/ \
 		-lstdc++ -ldl -pthread \
 		test/run.cpp \
 		test/stubs.cpp \
-		$@/bin/$@.a \
+		$@/bin/$@.halide_generated.cpp \
 		-L ./libpimsim/ \
+		-lm \
 		-lpimeval \
 		$@/bin/halide_runtime_x86.o \
 		-o $@/bin/$@_run.out
@@ -136,10 +139,11 @@ fully_connected: %: %/bin
 
 	$(CC) -Dbenchmark_$@ --std=c++17 \
 		-O0 -march=native -mavx512vl -mavx512ifma \
-		-I $(HALIDE_DISTRIB)/include -I ./$@/bin \
+		-I $(HALIDE_DISTRIB)/include -I ./$@/bin -I ./libpimeval/\
 		-lstdc++ -ldl -pthread \
 		-L ./libpimsim/ \
 		-lpimeval \
+		-lm \
 		test/run.cpp \
 		test/stubs.cpp \
 		$@/bin/$@.a \

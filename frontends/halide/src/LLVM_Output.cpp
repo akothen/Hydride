@@ -373,6 +373,7 @@ void emit_file(const llvm::Module &module_in, Internal::LLVMOStream &out,
     // https://groups.google.com/g/llvm-dev/c/HoS07gXx0p8
     llvm::legacy::PassManager pass_manager;
 
+
     pass_manager.add(new llvm::TargetLibraryInfoWrapperPass(llvm::Triple(module->getTargetTriple())));
 
     // Make sure things marked as always-inline get inlined
@@ -393,7 +394,10 @@ void emit_file(const llvm::Module &module_in, Internal::LLVMOStream &out,
     // Ask the target to add backend passes as necessary.
     target_machine->addPassesToEmitFile(pass_manager, out, nullptr, file_type);
 
+    std::cout << "Pre running pass manager\n"; 
     pass_manager.run(*module);
+    std::cout << "Post running pass manager\n"; 
+
 
     auto *logger = Internal::get_compiler_logger();
     if (logger) {

@@ -1,4 +1,5 @@
 #include "Module.h"
+#include "Rosette.h"
 
 #include <array>
 #include <fstream>
@@ -646,7 +647,7 @@ void Module::compile(const std::map<OutputFileType, std::string> &output_files) 
         }
     }
     if (contains(output_files, OutputFileType::c_header)) {
-        debug(1) << "Module.compile(): c_header " << output_files.at(OutputFileType::c_header) << "\n";
+        debug(0) << "Module.compile(): c_header " << output_files.at(OutputFileType::c_header) << "\n";
         std::ofstream file(output_files.at(OutputFileType::c_header));
         Internal::CodeGen_C cg(file,
                                target(),
@@ -655,11 +656,24 @@ void Module::compile(const std::map<OutputFileType, std::string> &output_files) 
         cg.compile(*this);
     }
     if (contains(output_files, OutputFileType::c_source)) {
-        debug(1) << "Module.compile(): c_source " << output_files.at(OutputFileType::c_source) << "\n";
+        debug(0) << "Module.compile(): c_source " << output_files.at(OutputFileType::c_source) << "\n";
         std::ofstream file(output_files.at(OutputFileType::c_source));
         Internal::CodeGen_C cg(file,
                                target(),
                                target().has_feature(Target::CPlusPlusMangling) ? Internal::CodeGen_C::CPlusPlusImplementation : Internal::CodeGen_C::CImplementation);
+        for(auto &test_f: contents->functions){
+
+            const char *enable_hydride = getenv("HL_ENABLE_HYDRIDE");
+
+            if (enable_hydride && strcmp(enable_hydride, "0") != 0) {
+                auto body = optimize_bitserial_instructions_synthesis(test_f.body, target(), get_func_value_bounds());
+                test_f.body = body;
+            }
+
+
+
+        }
+        debug(0) <<"Generating c output!" << "\n";
         cg.compile(*this);
     }
     if (contains(output_files, OutputFileType::python_extension)) {

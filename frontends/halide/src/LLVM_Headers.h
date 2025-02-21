@@ -73,6 +73,7 @@
 #include <llvm/Support/ErrorHandling.h>
 #include <llvm/Support/FileSystem.h>
 #include <llvm/Support/FormattedStream.h>
+#include "llvm/MC/MCInstrDesc.h"
 #if LLVM_VERSION >= 140
 #include <llvm/MC/TargetRegistry.h>
 #else

@@ -10,6 +10,9 @@ Expr Simplify::visit(const EQ *op, ExprInfo *bounds) {
         return const_false(op->type.lanes());
     }
 
+
+
+
     if (!may_simplify(op->a.type())) {
         Expr a = mutate(op->a, nullptr);
         Expr b = mutate(op->b, nullptr);
@@ -44,6 +47,7 @@ Expr Simplify::visit(const EQ *op, ExprInfo *bounds) {
     ExprInfo delta_bounds;
     Expr delta = mutate(op->a - op->b, &delta_bounds);
     const int lanes = op->type.lanes();
+
 
     // If the delta is 0, then it's just x == x
     if (is_const_zero(delta)) {

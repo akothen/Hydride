@@ -454,7 +454,8 @@ class TrimNoOps : public IRMutator {
 }  // namespace
 
 Stmt trim_no_ops(Stmt s) {
-    s = TrimNoOps().mutate(s);
+    // TEMP
+    //s = TrimNoOps().mutate(s);
     return s;
 }
 

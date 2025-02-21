@@ -504,7 +504,13 @@ class VectorSubs : public IRMutator {
 
     // Widen an expression to the given number of lanes.
     Expr widen(Expr e, int lanes) {
+        debug(1) << e << ", lanes: "<< lanes <<"\n";
+
+        bool is_ramp = e.node_type() == IRNodeType::Ramp;
+
         if (e.type().lanes() == lanes) {
+            return e;
+        } else if (is_ramp && e.as<Ramp>()->lanes == lanes) {
             return e;
         } else if (lanes % e.type().lanes() == 0) {
             return Broadcast::make(e, lanes / e.type().lanes());
@@ -545,10 +551,19 @@ class VectorSubs : public IRMutator {
     template<typename T>
     Expr mutate_binary_operator(const T *op) {
         Expr a = mutate(op->a), b = mutate(op->b);
+        debug(1) << "OP A " << op->a << ", op b: " << op->b << "\n";
+        debug(1)<< op->a.type().lanes() << ", " << op->b.type().lanes() << ", " << std::max(op->a.type().lanes(), op->b.type().lanes()) << "\n";
+        debug(1) << "OP A new " << a << ", op b new: " << b << "\n";
+        debug(1)<< a.type().lanes() << ", " << b.type().lanes() << ", " << std::max(a.type().lanes(), b.type().lanes()) << "\n";
+        debug(1) << op->b.type() << " " <<  b.type() << "\n";
         if (a.same_as(op->a) && b.same_as(op->b)) {
             return op;
         } else {
             int w = std::max(a.type().lanes(), b.type().lanes());
+            if(b.node_type() == IRNodeType::Ramp){
+                w = std::max(w, b.as<Ramp>()->lanes);
+            }
+            debug(1) << "Widening to "<< w << "\n";
             return T::make(widen(a, w), widen(b, w));
         }
     }

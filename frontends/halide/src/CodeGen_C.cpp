@@ -2118,6 +2118,7 @@ void CodeGen_C::visit(const Mod *op) {
 void CodeGen_C::visit(const Max *op) {
     // clang doesn't support the ternary operator on OpenCL style vectors.
     // See: https://bugs.llvm.org/show_bug.cgi?id=33103
+    internal_assert(op) << "Passed nullptr!\n";
     if (op->type.is_scalar()) {
         print_expr(Call::make(op->type, "::halide_cpp_max", {op->a, op->b}, Call::Extern));
     } else {
@@ -2618,7 +2619,10 @@ string CodeGen_C::print_scalarized_expr(const Expr &e) {
 }
 
 string CodeGen_C::print_extern_call(const Call *op) {
-    if (op->type.is_vector()) {
+    internal_assert(op);
+    debug(0) << op << "\n";
+    debug(0) << op->name << "\n";
+    if (op->type.is_vector() && op->name.find("hydride") == std::string::npos) {
         // Need to split into multiple scalar calls.
         return print_scalarized_expr(op);
     }

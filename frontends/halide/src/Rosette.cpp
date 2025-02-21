@@ -1644,6 +1644,9 @@ public:
     // We don't currently perform any optimizations at the Stmt level
     Stmt mutate(const Stmt &stmt) override {
 
+        if(stmt.node_type() ==  IRNodeType::Store){
+
+        } 
         return IRMutator::mutate(stmt);
     }
 
@@ -1915,7 +1918,7 @@ public:
 
         if (!skipped_synthesis) {
 
-            std::string fn_name = "hydride.node." + benchmark_name + "." + std::to_string(expr_id);
+            std::string fn_name = "hydride_node_" + benchmark_name + "_" + std::to_string(expr_id);
             Expr call_expr = ExtractIntoCall(arch).generate_call(fn_name, final_expr, abstractions);
 
             std::cout << "Ending synthesis for expr: " << expr_id << "\n";
@@ -2617,7 +2620,7 @@ private:
 
         Expr visit(const Mod *op) override {
 
-            if ((_arch == HydrideSupportedArchitecture::HVX)) {
+            if ((_arch == HydrideSupportedArchitecture::HVX) || (_arch == HydrideSupportedArchitecture::BitSerial)) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
                 return Variable::make(op->type, uname);
@@ -3928,7 +3931,7 @@ Stmt optimize_arm_instructions_synthesis(Stmt s, const Target &t, FuncValueBound
              << s << "\n";
     s = hydride_optimize_arm(fvb, s, mutated_exprs);
 
-    debug(0) << "Module with hydride calls:"
+    debug(0) << "Module with hydride calls: "
              << "\n";
     debug(0) << s << "\n";
 

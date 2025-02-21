@@ -107,7 +107,7 @@ Expr Max::make(Expr a, Expr b) {
 Expr EQ::make(Expr a, Expr b) {
     internal_assert(a.defined()) << "EQ of undefined\n";
     internal_assert(b.defined()) << "EQ of undefined\n";
-    internal_assert(a.type() == b.type()) << "EQ of mismatched types\n";
+    internal_assert(a.type() == b.type()) << "EQ of mismatched types " << a.type() <<" , " <<b.type() << "\n" << a << "\n" << b<< "\n";
 
     EQ *node = new EQ;
     node->type = Bool(a.type().lanes());

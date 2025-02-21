@@ -307,6 +307,7 @@ void Pipeline::compile_to_c(const string &filename,
                             const vector<Argument> &args,
                             const string &fn_name,
                             const Target &target) {
+    std::cout << "Compile to C invoked!\n";
     Module m = compile_to_module(args, fn_name, target);
     m.compile(single_output(filename, m, OutputFileType::c_source));
 }
