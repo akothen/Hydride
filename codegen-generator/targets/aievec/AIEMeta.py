@@ -21,6 +21,7 @@ AIEDoc = namedtuple('AIEDoc', [
 Parameter = namedtuple("Parameter", ["name", "type", "is_signed"])
 
 AIEDIR = os.environ.get("HYDRIDE_ROOT") + "/codegen-generator/targets/aievec/"
+AIEROSETTEDIR = os.environ.get("HYDRIDE_ROOT") + "/codegen-generator/targets/aievec/rosette/"
 
 SupportedTypes = [
     "int8",

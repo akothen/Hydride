@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from AIEMeta import *
 from typing import List
-from AIESemaFromDocs import ParseAddSubHTML
+from AIESemaFromDocs import ParseAddSubHTML, ParseMulHTML
 
 class SemaGenerator:
     def __init__(self, deserialize=True) -> None:
@@ -28,6 +28,7 @@ class SemaGenerator:
         AllSemantics = []
 
         AllSemantics += ParseAddSubHTML()
+        AllSemantics += ParseMulHTML()
         for i in AllSemantics:
             self.result[i.intrin] = i
         return self.result

@@ -2,30 +2,36 @@ from AIEMeta import *
 from AIEAllSema import AllSema
 
 import re
+import pprint
+
 
 def extract_info(s):
     pattern = r"v(?P<NumLanes>\d+)(?P<signed>u?)(?P<Type>int|acc)(?P<SizeOfElement>\d+)"
     match = re.match(pattern, s)
-    
+
     if match:
         dtype = match.group("Type")
-        is_signed = dtype == "acc" or match.group("signed") != "u"  # Always True if "acc"
+        is_signed = (
+            dtype == "acc" or match.group("signed") != "u"
+        )  # Always True if "acc"
 
         return {
             "NumLanes": int(match.group("NumLanes")),
             "signed": is_signed,
             "Type": dtype,
-            "SizeOfElement": int(match.group("SizeOfElement"))
+            "SizeOfElement": int(match.group("SizeOfElement")),
         }
     return None
 
+
 # TODO: Add results to first accumulator result when arguments are acc
+
 
 def AddInstClass(InstName, Sema: AIESema):
     params = Sema.params
     ret_ty_info = extract_info(Sema.rettype)
-    lanesize = ret_ty_info['NumLanes']
-    datasize = ret_ty_info['SizeOfElement']
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
 
     ret_str = f"""
     (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name})
@@ -48,11 +54,12 @@ def AddInstClass(InstName, Sema: AIESema):
     """
     return ret_str
 
+
 def SubInstClass(InstName, Sema: AIESema):
     params = Sema.params
     ret_ty_info = extract_info(Sema.rettype)
-    lanesize = ret_ty_info['NumLanes']
-    datasize = ret_ty_info['SizeOfElement']
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
 
     ret_str = f"""
     (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name})
@@ -75,11 +82,12 @@ def SubInstClass(InstName, Sema: AIESema):
     """
     return ret_str
 
+
 def NegInstClass(InstName, Sema: AIESema):
     params = Sema.params
     ret_ty_info = extract_info(Sema.rettype)
-    lanesize = ret_ty_info['NumLanes']
-    datasize = ret_ty_info['SizeOfElement']
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
 
     ret_str = f"""
     (define ({InstName} {params[0].type}_{params[0].name})
@@ -103,13 +111,13 @@ def NegInstClass(InstName, Sema: AIESema):
 def EltwiseMulInstClass(InstName, Sema: AIESema):
     params = Sema.params
     ret_ty_info = extract_info(Sema.rettype)
-    lanesize = ret_ty_info['NumLanes']
-    datasize = ret_ty_info['SizeOfElement']
-    
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
+
     param_ty_info = extract_info(params[0].type)
 
-    param_lanesize = param_ty_info['NumLanes']
-    param_datasize = param_ty_info['SizeOfElement']
+    param_lanesize = param_ty_info["NumLanes"]
+    param_datasize = param_ty_info["SizeOfElement"]
 
     ret_str = f"""
     (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name})
@@ -132,16 +140,30 @@ def EltwiseMulInstClass(InstName, Sema: AIESema):
     """
     return ret_str
 
-def SemaToRosette(SemaList):
-    for inst, sema in SemaList.items():
-        if sema.instclass == "ADD":
-            print(AddInstClass(inst, sema))
-        
-        if sema.instclass == "SUB":
-            print(SubInstClass(inst, sema))
 
-        if sema.instclass == "NEG":
-            print(NegInstClass(inst, sema))
+def SemaToRosette(SemaList):
+    with open(AIEROSETTEDIR + "aie_sema.rkt", "w") as f:
+        f.write("""#lang rosette\n""")
+        f.write("""(require \"bvops.rkt\")\n""")
+        for inst, sema in SemaList.items():
+            if sema.instclass == "ADD":
+                f.write(f"{AddInstClass(inst, sema)}")
+                # print(AddInstClass(inst, sema))
+
+            if sema.instclass == "SUB":
+                f.write(f"{SubInstClass(inst, sema)}")
+                # print(SubInstClass(inst, sema))
+
+            if sema.instclass == "NEG":
+                f.write(f"{NegInstClass(inst, sema)}")
+                # print(NegInstClass(inst, sema))
+
+            if sema.instclass == "ELTMUL":
+                f.write(f"{EltwiseMulInstClass(inst, sema)}")
+                # print(EltwiseMulInstClass(inst, sema))
+
+    f.close()
+
 
 if __name__ == "__main__":
-    print(SemaToRosette(AllSema))
+    SemaToRosette(AllSema)

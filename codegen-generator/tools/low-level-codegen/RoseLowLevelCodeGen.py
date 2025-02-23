@@ -34,22 +34,37 @@ def HandleLowLevelCodegenAIEVec(RosetteFileName: str, PathToLegalizerLib: str,
   LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
   print("LLVM MODULE")
   print(LLVMIRModule)
-  LegalizeLLVMModuleName= LLVMIRModule.name + ".legalize.ll"
+  Module = open(LLVMIRModule.name + ".ll", "w")
+  Module.write(LLVMIRModule.__repr__())
+  Module.close()
+  
+  # Legalize code
+  print("EXECUTING:")
+  OriginalLLVMModuleName = LLVMIRModule.name + ".ll"
+  LinkedLLVMBCModuleName = LLVMIRModule.name + ".linked.bc"
+  Command = "llvm-link  {} {} -o {}".format(OriginalLLVMModuleName, PathToWrapperFile, LinkedLLVMBCModuleName)
+  print(Command)
+  os.system(Command)
+  print("EXECUTING:")
   LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
+  Command = "llvm-dis  {} -o {}".format(LinkedLLVMBCModuleName, LinkedLLVMModuleName)
+  print(Command)
+  os.system(Command)
   with open(LinkedLLVMModuleName, "w") as Module, open(PathToWrapperFile, "r") as Declarations:
     # Also a quick hack: turn @hydride.node.forward_kernel.0 to @hydride_node_forward_kernel_0 (replace . with _)
-    # Module.write(LLVMIRModule.__repr__())
+    Module.write(LLVMIRModule.__repr__())
     tmpLLVMIR = LLVMIRModule.__repr__()
     import re
     for g in re.finditer(r"(@hydride[\w.]*)", tmpLLVMIR):
       tmpLLVMIR= tmpLLVMIR[:g.start()] + g.group(0).replace(".", "_") + tmpLLVMIR[g.end():]
     Module.write(tmpLLVMIR)
-    
     # Brutally link the wrapper functions back to the module by appending them
     Module.write(Declarations.read())
-  Command = "/usr/bin/opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
-      PathToLegalizerLib, LegalizationFlag,
-      LinkedLLVMModuleName, LegalizeLLVMModuleName)
+  print("EXECUTING:")
+  LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
+  # LLVM 14
+  Command = "/usr/bin/opt -load {} -enable-new-pm=0 {} -adce -opaque-pointers -globaldce {} -S -o {}".format(PathToLegalizerLib, LegalizationFlag, \
+                                                          LinkedLLVMModuleName, LegalizeLLVMModuleName)
   print(Command)
   os.system(Command)
 
@@ -145,7 +160,7 @@ if __name__ == '__main__':
   PathToLegalizerLib = sys.argv[2]
   PathToWrapperFile = sys.argv[3]
   LegalizationFlag = sys.argv[4]
-  if len(sys.argv[1:]) == 4:
+  if len(sys.argv) == 5:
     HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, LegalizationFlag, PathToWrapperFile)
   else:
     LLVMModuleName = sys.argv[5]
@@ -153,7 +168,7 @@ if __name__ == '__main__':
       # Different handling for AIEVec
       HandleLowLevelCodegenAIEVec(RosetteFileName, PathToLegalizerLib,
                                   PathToWrapperFile, LegalizationFlag, LLVMModuleName)
-    if "visa" in LegalizationFlag.lower():
+    elif "visa" in LegalizationFlag.lower():
       # Different handling for VISA
       HandleLowLevelCodegenVISA(RosetteFileName, PathToLegalizerLib,
                 PathToWrapperFile, LegalizationFlag, LLVMModuleName)

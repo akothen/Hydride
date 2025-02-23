@@ -122,34 +122,26 @@ entry:
   ret i32 %or19
 }
 
-define dso_local noundef <16 x i64> @mac_elem_32_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b, <16 x i64> noundef %c) #0 {
+; Function Attrs: mustprogress noinline optnone
+define dso_local noundef <16 x i64> @mac_elem_32_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b, <16 x i64> noundef %acc1) #0 {
 entry:
-  %a.addr.i = alloca <32 x i16>, align 32
-  %b.addr.i = alloca <32 x i16>, align 32
-  %acc1.addr.i = alloca <16 x i64>, align 32
-  %conf.i = alloca i32, align 4
   %a.addr = alloca <32 x i16>, align 32
   %b.addr = alloca <32 x i16>, align 32
-  %c.addr = alloca <16 x i64>, align 32
+  %acc1.addr = alloca <16 x i64>, align 32
+  %conf = alloca i32, align 4
   store <32 x i16> %a, ptr %a.addr, align 32
   store <32 x i16> %b, ptr %b.addr, align 32
-  store <16 x i64> %c, ptr %c.addr, align 32
+  store <16 x i64> %acc1, ptr %acc1.addr, align 32
+  %call = call noundef i32 @_ZL21aiev2_compute_controliiiiiiiiiii(i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 3, i32 noundef 1, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0)
+  store i32 %call, ptr %conf, align 4
   %0 = load <32 x i16>, ptr %a.addr, align 32
-  %1 = load <32 x i16>, ptr %b.addr, align 32
-  %2 = load <16 x i64>, ptr %c.addr, align 32
-  store <32 x i16> %0, ptr %a.addr.i, align 32
-  store <32 x i16> %1, ptr %b.addr.i, align 32
-  store <16 x i64> %2, ptr %acc1.addr.i, align 32
-  %call.i = call noundef i32 @_ZL21aiev2_compute_controliiiiiiiiiii(i32 noundef 1, i32 noundef 1, i32 noundef 0, i32 noundef 3, i32 noundef 1, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0)
-  store i32 %call.i, ptr %conf.i, align 4
-  %3 = load <32 x i16>, ptr %a.addr.i, align 32
-  %4 = bitcast <32 x i16> %3 to <64 x i8>
-  %5 = load <32 x i16>, ptr %b.addr.i, align 32
-  %6 = bitcast <32 x i16> %5 to <16 x i32>
-  %7 = load <16 x i64>, ptr %acc1.addr.i, align 32
-  %8 = load i32, ptr %conf.i, align 4
-  %9 = call noundef <16 x i64> @llvm.aie2.I512.I512.ACC1024.acc32.mac.conf(<64 x i8> %4, <16 x i32> %6, <16 x i64> %7, i32 %8)
-  ret <16 x i64> %9
+  %1 = bitcast <32 x i16> %0 to <64 x i8>
+  %2 = load <32 x i16>, ptr %b.addr, align 32
+  %3 = bitcast <32 x i16> %2 to <16 x i32>
+  %4 = load <16 x i64>, ptr %acc1.addr, align 32
+  %5 = load i32, ptr %conf, align 4
+  %6 = call <16 x i64> @llvm.aie2.I512.I512.ACC1024.acc32.mac.conf(<64 x i8> %1, <16 x i32> %3, <16 x i64> %4, i32 %5)
+  ret <16 x i64> %6
 }
 
 ; Function Attrs: mustprogress noinline optnone
@@ -186,12 +178,10 @@ entry:
 
 declare <16 x i64> @llvm.aie2.I512.I512.acc32.mul.conf(<64 x i8>, <16 x i32>, i32) #1
 
-; Function Attrs: nounwind memory(inaccessiblemem: read)
 declare <32 x i16> @llvm.aie2.I512.v32.acc32.srs(<16 x i64>, i32, i32) #2
 
 declare <16 x i64> @llvm.aie2.I512.I512.ACC1024.acc32.mac.conf(<64 x i8>, <16 x i32>, <16 x i64>, i32) #2
 
-; Function Attrs: nounwind memory(inaccessiblemem: read)
 declare <16 x i64> @llvm.aie2.acc32.v32.I512.ups(<32 x i16>, i32, i32) #3
 
 attributes #0 = { mustprogress noinline optnone "no-trapping-math"="true" "stack-protector-buffer-size"="8" }

@@ -95,13 +95,14 @@ def ParseMulHTML() -> list[AIESema]:
     soup = BeautifulSoup(f.read(), 'html.parser')
     link_elements = soup.find_all('td', attrs={'class':'memItemRight'})
     links = []
+    tmp = []
+    print(f"Links: {link_elements}")
     for entry in link_elements:
         link = entry.find('a')['href']
         root_url = "https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_ml_intrinsics/intrinsics/"
         r = requests.get(root_url + link) 
         inner_soup = BeautifulSoup(r.text, 'html.parser') 
         header_elements = inner_soup.find_all('table', attrs={'class':'memname'})
-        tmp = []
         for element in header_elements:
             type_and_name = element.find('td', attrs={'class':'memname'})
             type_and_name_split = type_and_name.text.split()
@@ -112,6 +113,20 @@ def ParseMulHTML() -> list[AIESema]:
                 continue
             if "cacc" in rettype or "cint" in rettype or "float" in rettype:
                 continue
+            if "mul_elem_" in raw_name:
+                instclass = "ELTMUL"
+            elif "mac_elem_" in raw_name:
+                instclass = "ELTMAC"
+            elif "addmac" in raw_name:
+                instclass = "ADDMAC"
+            elif "submsc" in raw_name:
+                instclass = "SUBMSC"
+            elif "negmac" in raw_name:
+                instclass = "NEGMAC"
+            elif "submac" in raw_name:
+                instclass = "SUBMAC"
+            else:
+                instclass = "NONE"
             param_types = element.find_all('td', attrs={'class':'paramtype'})
             param_names = element.find_all('td', attrs={'class':'paramname'})
             params = []
@@ -124,13 +139,20 @@ def ParseMulHTML() -> list[AIESema]:
                 params.append(Parameter(tn_str, ty_str, "u" not in ty_str))
 
             name = NameGen(type_and_name_split[0], type_and_name_split[1])
-            print(params)
-            print(name)
-            print("\n")
-    print("\n\n\n")
-            
-    f.close()
-    return
+            sema = AIESema(
+            intrin=name,
+            params=params,
+            instclass=instclass,
+            conf=conf,
+            rettype=rettype,
+            )
 
-print(len(ParseAddSubHTML()))
-ParseMulHTML()
+            tmp.append(sema)
+            #print(sema)
+            #print("\n")
+    print("\n\n\n")
+    f.close()
+    return tmp
+
+#print(len(ParseAddSubHTML()))
+#ParseMulHTML()
