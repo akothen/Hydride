@@ -63,6 +63,9 @@ namespace llvm {
             bool isPimInst(Value *val);
             std::string handlePimInst(Value *val);
 
+            bool isPimBroadcast(Value *val);
+            std::string handlePimBroadcast(Value *val);
+
 
             std::string handleRetInst(Value *val);
             std::string handleStoreInst(Value *val);

@@ -59,7 +59,9 @@ class RoseInstSelectorGenerator():
   def generateAPattern(self, TargetAgnosticInst : str, InstDict : dict):
     InstNames = list()
     String = ""
+    pimBaseName = None
     for InstName, InstInfo in InstDict.items():
+      pimBaseName = InstName.split("_")[0] + "_" # Adding underscore to break cases such as pimAdd and pimAddScalar
       InstNames.append("\"llvm.hydride." + InstName + "_dsl\"")
       Checks = list()
       for Idx, ArgVal in enumerate(InstInfo["args"]):
@@ -88,6 +90,7 @@ class RoseInstSelectorGenerator():
         Permutation.append(str(Val))
       print("Content:")
       print(Checks)
+      Checks = ['true']
       if len(Checks) != 0:
         if "Scaled" in InstName:
             Pattern = '''
@@ -146,14 +149,16 @@ class RoseInstSelectorGenerator():
       else:
         assert False, "Unreachable"
       String += Pattern
+      break
+    InstNames.append("\"{}\"".format(pimBaseName))
     FinalPattern = '''
     {{
       std::vector<std::string> InstNames = {{{}}};
-      if(isNameMatch(CI, InstNames)) {{
+      if(isNameMatch(CI, InstNames) ) {{
         {}
       }}
     }}
-    '''.format(",\n".join(InstNames), String)
+    '''.format(",\n".join(InstNames),  String)
     print("FinalPattern:")
     print(FinalPattern)
     return FinalPattern

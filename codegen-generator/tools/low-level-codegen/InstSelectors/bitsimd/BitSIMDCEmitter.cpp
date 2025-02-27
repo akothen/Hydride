@@ -4,6 +4,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/CFG.h"
 #include "llvm/ADT/PostOrderIterator.h"
+#include <fstream>
 
 
 using namespace llvm;
@@ -50,7 +51,19 @@ bool BitSIMDCEmitter::runOnFunction(Function &F) {
     statements.push_back("}"); // Closing brace of function defintion
 
     std::string functionDef = stringJoin(statements, "\n");
+
     errs() << functionDef << "\n";
+
+     // Open the file in append mode
+    std::ofstream file;
+    file.open("bitsimd_kernel.cpp", std::ios::app);
+    if (file.is_open()) {
+        // Write the string to the file
+        file << functionDef << std::endl;  // Write string and add a newline
+    }
+    file.close();
+
+
     return false; // No modifications done to the function.
 }
 
@@ -166,6 +179,19 @@ bool BitSIMDCEmitter::isPimAllocation(Value *val) {
     return false;
 }
 
+bool BitSIMDCEmitter::isPimBroadcast(Value *val) {
+    // Check if the value is a CallInst
+    if (auto *callInst = dyn_cast<CallInst>(val)) {
+        // Get the called function
+        if (Function *calledFunction = callInst->getCalledFunction()) {
+            StringRef funcName = calledFunction->getName();
+            if (funcName == "pimBroadcastInt" || funcName == "pimBroadcastUInt") {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 // Function to check if the given Value is a PIM allocation call
 bool BitSIMDCEmitter::isPimCopy(Value *val) {
@@ -211,6 +237,8 @@ std::string BitSIMDCEmitter::handlePimInst(Value* val){
 
     if(isPimCopy(val)){
         return handlePimCopy(val);
+    } else if(isPimBroadcast(val)){
+        return handlePimBroadcast(val);
     } else if(isPimAllocation(val)){
         return handlePimAllocation(val);
     } else if(isPimComputeScalarOp(val)){
@@ -440,6 +468,49 @@ std::string BitSIMDCEmitter::handlePimComputeScalarOp(Value* val){
         ScalarArg = EE->getVectorOperand(); 
     }
 
+    std::string scalarArgName = varMap[ScalarArg];
+    param_tokens.push_back(scalarArgName);
+
+    std::string param_use = stringJoin(param_tokens, ",");
+
+
+
+    std::vector<std::string> tokens = {return_type, return_name, "=", funcName, "(", param_use, ");"};
+
+    return stringJoin(tokens, " ");
+}
+
+std::string BitSIMDCEmitter::handlePimBroadcast(Value* val){
+
+    CallInst* CI = dyn_cast<CallInst>(val);
+    std::string funcName = getCalledFunctionName(CI);
+    std::string return_type = "auto";
+    std::string return_name = getFreshVariableName();
+    varMap[val] = return_name;
+
+    
+    std::vector<std::string> param_tokens;
+    
+    // Currently it looks like the mixed vector scalar ops contain the scalar value only 
+    // at the end
+    unsigned num_args = CI->getNumArgOperands();
+    for(unsigned i = 0; i < num_args - 1; i++){
+        Value* Opnd = CI->getArgOperand(i);
+        param_tokens.push_back(varMap[Opnd]);
+    }
+    Value* ScalarArg = CI->getArgOperand(num_args - 1);
+
+    if (auto *SExt = dyn_cast<SExtInst>(ScalarArg)) {
+        ScalarArg = SExt->getOperand(0); // Return the original operand before sign extension
+    } else if (auto *ZExt = dyn_cast<ZExtInst>(ScalarArg)) {
+        ScalarArg =  ZExt->getOperand(0); // Return the original operand before zero extension
+    }
+
+    if(auto* EE = dyn_cast<ExtractElementInst>(ScalarArg)){
+        ScalarArg = EE->getVectorOperand(); 
+    }
+
+    assert(varMap.find(ScalarArg) != varMap.end() && "Unable to find broadcasted value in varMap");
     std::string scalarArgName = varMap[ScalarArg];
     param_tokens.push_back(scalarArgName);
 
