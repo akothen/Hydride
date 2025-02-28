@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "HalideBuffer.h"
+#include "libpimeval.h"
 #include <vector>
 
 #if benchmark_gaussian3x3
@@ -54,6 +55,10 @@
 #include "sbc.h"
 #elif benchmark_max_pool
 #include "max_pool.h"
+#elif benchmark_max_pool_alt
+#include "max_pool_alt.h"
+#elif benchmark_max_pool_i32
+#include "max_pool_i32.h"
 #elif benchmark_max_pool_add
 #include "max_pool_add.h"
 #elif benchmark_l2norm
@@ -208,6 +213,9 @@ int main(int argc, char **argv) {
   /* -----------------------------------------------------*/
   long long cycles;
 
+
+  pimCreateDevice(PIM_FUNCTIONAL, 4 ,128 ,32 ,1024 ,8192);
+
 #if benchmark_add
   halide_dimension_t x_dim{0, width, 1};
   halide_dimension_t y_dim{0, height, width};
@@ -352,6 +360,49 @@ int main(int argc, char **argv) {
          (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+#if benchmark_max_pool_i32
+
+  int channel = width;
+  unsigned char *input_max_pool = (unsigned char *)aligned_malloc(
+      width * height * channel  *sizeof(unsigned int),
+      1 << LOG2VLEN); 
+                     
+  unsigned char *output_max_pool = (unsigned char *)aligned_malloc(
+      width * height * channel * sizeof(unsigned int),
+      1 << LOG2VLEN); 
+                      
+  halide_dimension_t c_dim{0, channel, 1}; 
+  halide_dimension_t x_dim{0, width , channel};
+  halide_dimension_t y_dim{0, height , channel * width };
+  halide_dimension_t b_dim{0, 1, channel * width * height}  ;
+  halide_dimension_t shape[4] = {c_dim, x_dim, y_dim, b_dim};
+
+  printf("Max pool, channel %d, width %d, height %d, batch %d\n", channel, width, height, 1);
+
+  Halide::Runtime::Buffer<int32_t> input_buf((int32_t*)input_max_pool, 4, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)output_max_pool, 4, shape);
+
+  benchmark([&]() {
+    //int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
+
+    int error = max_pool_i32(input_buf, 2, 2, 2, 2, 5, 225, output_buf);
+    if (error != 0) {
+      printf("max_pool_i32 pipeline failed: %d\n", error);
+    }
+  });
+
+#if DEBUG
+  for (int x = 0; x < 10; x++)
+    for (int y = 0; y < 10; y++)
+      printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y,
+             input_buf(x, y), output_buf(x, y));
+#endif
+
+  printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f "
+         "cycles/pixel)\n",
+         (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
 #if benchmark_max_pool
 
   int channel = width;
@@ -370,13 +421,59 @@ int main(int argc, char **argv) {
   halide_dimension_t b_dim{0, 1, channel * width * height}  ;
   halide_dimension_t shape[4] = {c_dim, x_dim, y_dim, b_dim};
 
+  printf("Max pool, channel %d, width %d, height %d, batch %d\n", channel, width, height, 1);
+
   Halide::Runtime::Buffer<int32_t> input_buf((int32_t*)input_max_pool, 4, shape);
   Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)output_max_pool, 4, shape);
 
   benchmark([&]() {
     //int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
 
-    int error = max_pool(input_buf, 2, 2, 2, 2, 5, 225, output_buf);
+    int error = max_pool(input_buf, 1, 1, 2, 2, 5, 225, output_buf);
+    if (error != 0) {
+      printf("max_pool pipeline failed: %d\n", error);
+    }
+  });
+
+#if DEBUG
+  for (int x = 0; x < 10; x++)
+    for (int y = 0; y < 10; y++)
+      printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y,
+             input_buf(x, y), output_buf(x, y));
+#endif
+
+  printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f "
+         "cycles/pixel)\n",
+         (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+#if benchmark_max_pool_alt
+
+  int channel = width;
+  unsigned char *input_max_pool = (unsigned char *)aligned_malloc(
+      width * height * channel  *sizeof(unsigned int),
+      1 << LOG2VLEN); 
+                     
+  unsigned char *output_max_pool = (unsigned char *)aligned_malloc(
+      width * height * channel * sizeof(unsigned int),
+      1 << LOG2VLEN); 
+                      
+  //halide_dimension_t c_dim{0, 1024, 1};
+  halide_dimension_t c_dim{0, channel, 1};
+  halide_dimension_t x_dim{0, width , channel};
+  halide_dimension_t y_dim{0, height , channel * width };
+  halide_dimension_t b_dim{0, 1, channel * width * height}  ;
+  halide_dimension_t shape[4] = {c_dim, x_dim, y_dim, b_dim};
+
+  printf("Max pool, channel %d, width %d, height %d, batch %d\n", channel, width, height, 1);
+
+  Halide::Runtime::Buffer<int32_t> input_buf((int32_t*)input_max_pool, 4, shape);
+  Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)output_max_pool, 4, shape);
+
+  benchmark([&]() {
+    //int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
+
+    int error = max_pool_alt(input_buf, 1, 1, 2, 2, 5, 225, output_buf);
     if (error != 0) {
       printf("max_pool pipeline failed: %d\n", error);
     }
@@ -2061,14 +2158,16 @@ int main(int argc, char **argv) {
 #if benchmark_convolution
   printf("\t*** Convolution\n");
 
-  int image_row = 64;
-  int image_col = 64;
+  //int image_row = 224;
+  // int image_col = 224;
+  int image_row = 256;
+  int image_col = 256;
   int image_depth = 3;
 
 
-  int filter_row = 4;
-  int filter_col = 4;
-  int filter_depth = 2;
+  int filter_row = 3;
+  int filter_col = 3;
+  int filter_depth = 64;
 
   int output_row = image_row;
   int output_col = image_col;
@@ -2076,7 +2175,7 @@ int main(int argc, char **argv) {
 
 
   int32_t *input_image = (int32_t*) aligned_malloc(
-      image_row * image_col * sizeof(int32_t) ,
+      image_depth * image_row * image_col * sizeof(int32_t) ,
       1 << LOG2VLEN); 
 
   int32_t *filter = (int32_t*) aligned_malloc(
@@ -2133,20 +2232,12 @@ int main(int argc, char **argv) {
 
 #ifdef DEBUG
 
-  for(int c = 0; c < image_depth; c++){
-      printf("Input Channel %d\n", c);
-      for(int x = 0 ; x < image_row; x++){
-          for(int y = 0; y < image_col; y++){
-              printf("%d ", IMG(x,y,c));
-          }
-          printf("\n");
-      }
-  }
 
-  for(int c = 0; c < filter_depth; c++){
+
+  for(int c = 0; c < std::min(filter_depth, 5); c++){
       printf("Output Channel %d\n", c);
-      for(int x = 0 ; x < output_row; x++){
-          for(int y = 0; y < output_col; y++){
+      for(int x = 0 ; x < std::min(output_row,5); x++){
+          for(int y = 0; y < std::min(output_col, 5); y++){
               printf("%d ", Output(x,y,c));
           }
           printf("\n");
@@ -2163,6 +2254,7 @@ int main(int argc, char **argv) {
 
 #endif
   printf("Success!\n");
+  pimShowStats();
 
   return 0;
 }

@@ -91,6 +91,8 @@ $(benchmarks): %: %/bin
 		-e object,c_header \
 		target=$(TARGET)
 
+	opt -load /shared/hydride/LLVMBitSIMDCEmitter.so -enable-new-pm=0 -bitsimd-ce -adce -globaldce  -S  /tmp/$@_bitserial_depth$(EXPR_DEPTH)_rafae.ll.legalize.ll  -o temp.ll 
+	python3 inline.py $@
 	g++ -g  -DHALIDE_CPP_ALWAYS_USE_CPP_VECTORS -Dbenchmark_$@ --std=c++17 \
 		-O3 -march=native -mavx512vl -mavx512ifma \
 		-I $(HALIDE_DISTRIB)/include -I ./$@/bin -I ./libpimeval/ \
@@ -99,8 +101,8 @@ $(benchmarks): %: %/bin
 		test/stubs.cpp \
 		$@/bin/$@.halide_generated.cpp \
 		-L ./libpimsim/ \
-		-lm \
 		-lpimeval \
+		-lm \
 		$@/bin/halide_runtime_x86.o \
 		-o $@/bin/$@_run.out
 	
@@ -171,3 +173,4 @@ clean:
 	rm -rf /tmp/hydride_hash*
 	rm -rf /tmp/hydride.node*
 	rm -rf /tmp/*bitserial*.rkt
+	rm -rf bitsimd_kernel.cpp

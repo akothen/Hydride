@@ -88,7 +88,7 @@
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 16) (equal? num_7 0)) 16]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 0)) 16]
-		[else (error "Unable to infer prec for pimXorScalar_v16384_e16__v16384_e16__v16384_e16")]
+		[else prec_i_o]
 )
 
 	]
@@ -130,7 +130,7 @@
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 32) (equal? num_7 0)) 32]
-		[else (error "Unable to infer prec for pimOrScalar_v8192_e8__v8192_e8__v8192_e8")]
+		[else prec_i_o]
 )
 
 	]
@@ -172,7 +172,7 @@
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
-		[else (error "Unable to infer prec for pimSub_v8192_e16__v8192_e16__v8192_e16")]
+		[else prec_i_o]
 )
 
 	]
@@ -214,7 +214,7 @@
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 8]
-		[else (error "Unable to infer prec for pimMinScalar_v16384_e8__v16384_e8__v16384_e8")]
+		[else prec_i_o]
 )
 
 	]
@@ -256,7 +256,7 @@
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 8) (equal? num_7 0)) 8]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 0)) 8]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 0)) 8]
-		[else (error "Unable to infer prec for pimOr_v4096_e32__v4096_e32__v4096_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -298,7 +298,7 @@
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 8) (equal? num_7 0)) 8]
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 0)) 16]
-		[else (error "Unable to infer prec for pimAnd_v32_e32__v32_e32__v32_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -316,7 +316,7 @@
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 8]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 8]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 1) (equal? num_9 16) (equal? num_10 1) (equal? num_11 16) (equal? num_12 0)) 8]
-		[else (error "Unable to infer prec for pimDiv_v4096_e8__v4096_e8__v4096_e8")]
+		[else prec_i_o]
 )
 
 	]
@@ -358,7 +358,7 @@
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 8]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 8]
-		[else (error "Unable to infer prec for pimMin_v64_e32__v64_e32__v64_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -400,12 +400,13 @@
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 8]
 		[(and  (equal? size_i_o 262144) (equal? num_3 262144) (equal? num_4 0) (equal? num_5 262144) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
-		[else (error "Unable to infer prec for pimSubScalar_v2048_e8__v2048_e8__v2048_e8")]
+		[else prec_i_o]
 )
 
 	]
 	[(pimMulScalar_v256_e32__v256_e32__v256_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7)
 		(cond 
+		[(and  (equal? size_i_o 2097152) (equal? num_3 2097152) (equal? num_4 0) (equal? num_5 2097152) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 8) (equal? num_7 0)) 8]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 32) (equal? num_7 0)) 32]
@@ -443,7 +444,7 @@
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 8) (equal? num_7 0)) 8]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 0)) 16]
 		[(and  (equal? size_i_o 1024) (equal? num_3 1024) (equal? num_4 0) (equal? num_5 1024) (equal? prec_i_o 16) (equal? num_7 0)) 16]
-		[else (error "Unable to infer prec for pimMulScalar_v256_e32__v256_e32__v256_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -485,7 +486,7 @@
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 32]
-		[else (error "Unable to infer prec for pimMax_v8192_e16__v8192_e16__v8192_e16")]
+		[else prec_i_o]
 )
 
 	]
@@ -503,7 +504,7 @@
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 32]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 32]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 1) (equal? num_9 64) (equal? num_10 1) (equal? num_11 64) (equal? num_12 0)) 32]
-		[else (error "Unable to infer prec for pimDiv_v4096_e32__v4096_e32__v4096_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -545,7 +546,7 @@
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 0)) 16]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 0)) 32]
-		[else (error "Unable to infer prec for pimAndScalar_v256_e32__v256_e32__v256_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -587,22 +588,23 @@
 		[(and  (equal? size_i_o 512) (equal? num_3 512) (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 16) (equal? num_7 0)) 16]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 32) (equal? num_7 0)) 32]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 0)) 8]
-		[else (error "Unable to infer prec for pimXor_v8192_e16__v8192_e16__v8192_e16")]
+		[else prec_i_o]
 )
 
 	]
-	[(pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+	[(pimBroadCast_v1024_e16__v16_e16_dsl v0 num_1 num_2 num_3 size_o prec_i_o num_6 num_7)
 		(cond 
-		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 1048576) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
-		[(and  (equal? size_o 16) (equal? num_2 16) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 16]
-		[(and  (equal? size_o 512) (equal? num_2 512) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
-		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 131072) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
-		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 524288) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
-		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
-		[(and  (equal? size_o 8) (equal? num_2 8) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
-		[(and  (equal? size_o 512) (equal? num_2 512) (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 16]
-		[(and  (equal? size_o 32) (equal? num_2 32) (equal? num_3 0) (equal? num_4 1024) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
-		[else (error "Unable to infer prec for pimBroadCast_v1024_e16__v16_e16")]
+		[(and  (equal? num_1 32) (equal? num_2 32) (equal? num_3 0) (equal? size_o 2097152) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
+		[(and  (equal? num_1 32) (equal? num_2 32) (equal? num_3 0) (equal? size_o 1048576) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
+		[(and  (equal? num_1 16) (equal? num_2 16) (equal? num_3 0) (equal? size_o 1024) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 16]
+		[(and  (equal? num_1 512) (equal? num_2 512) (equal? num_3 0) (equal? size_o 512) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
+		[(and  (equal? num_1 8) (equal? num_2 8) (equal? num_3 0) (equal? size_o 131072) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
+		[(and  (equal? num_1 32) (equal? num_2 32) (equal? num_3 0) (equal? size_o 524288) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
+		[(and  (equal? num_1 8) (equal? num_2 8) (equal? num_3 0) (equal? size_o 1024) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
+		[(and  (equal? num_1 8) (equal? num_2 8) (equal? num_3 0) (equal? size_o 512) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_7 0)) 8]
+		[(and  (equal? num_1 512) (equal? num_2 512) (equal? num_3 0) (equal? size_o 512) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 0)) 16]
+		[(and  (equal? num_1 32) (equal? num_2 32) (equal? num_3 0) (equal? size_o 1024) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_7 0)) 32]
+		[else prec_i_o]
 )
 
 	]
@@ -615,7 +617,7 @@
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 32) (equal? num_9 0)) 32]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 8) (equal? num_9 0)) 8]
 		[(and  (equal? size_i_o 1024) (equal? num_5 1024) (equal? num_6 0) (equal? num_7 1024) (equal? prec_i_o 16) (equal? num_9 0)) 16]
-		[else (error "Unable to infer prec for pimEQ_v512_e16__v512_e16__v512_e16")]
+		[else prec_i_o]
 )
 
 	]
@@ -657,7 +659,7 @@
 		[(and  (equal? size_i_o 2048) (equal? num_3 2048) (equal? num_4 0) (equal? num_5 2048) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 0)) 32]
-		[else (error "Unable to infer prec for pimMaxScalar_v256_e32__v256_e32__v256_e32")]
+		[else prec_i_o]
 )
 
 	]
@@ -677,13 +679,14 @@
 		[(and  (equal? size_i_o 131072) (equal? num_5 131072) (equal? num_6 0) (equal? num_7 131072) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0)) 8]
 		[(and  (equal? size_i_o 1024) (equal? num_5 1024) (equal? num_6 0) (equal? num_7 1024) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0)) 8]
 		[(and  (equal? size_i_o 512) (equal? num_5 512) (equal? num_6 0) (equal? num_7 512) (equal? prec_i_o 8) (equal? num_9 1) (equal? num_10 0)) 8]
-		[else (error "Unable to infer prec for pimGT_v16384_e8__v16384_e8__v16384_e8")]
+		[else prec_i_o]
 )
 
 	]
 	[(pimAddScalar_v8_e16__v8_e16__v8_e16_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
 		[(and  (equal? size_i_o 524288) (equal? num_3 524288) (equal? num_4 0) (equal? num_5 524288) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
+		[(and  (equal? size_i_o 2097152) (equal? num_3 2097152) (equal? num_4 0) (equal? num_5 2097152) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 128) (equal? num_3 128) (equal? num_4 0) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 8]
@@ -721,7 +724,7 @@
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 8]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 131072) (equal? num_3 131072) (equal? num_4 0) (equal? num_5 131072) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
-		[else (error "Unable to infer prec for pimAddScalar_v8_e16__v8_e16__v8_e16")]
+		[else prec_i_o]
 )
 
 	]
@@ -739,12 +742,13 @@
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 16]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 16]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 1) (equal? num_9 32) (equal? num_10 1) (equal? num_11 32) (equal? num_12 0)) 16]
-		[else (error "Unable to infer prec for pimDiv_v8192_e16__v8192_e16__v8192_e16")]
+		[else prec_i_o]
 )
 
 	]
 	[(pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl v0 v1 v2 size_i_o num_4 num_5 num_6 prec_i_o num_8 num_9)
 		(cond 
+		[(and  (equal? size_i_o 2097152) (equal? num_4 2097152) (equal? num_5 0) (equal? num_6 2097152) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 32]
 		[(and  (equal? size_i_o 2048) (equal? num_4 2048) (equal? num_5 0) (equal? num_6 2048) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 8]
 		[(and  (equal? size_i_o 262144) (equal? num_4 262144) (equal? num_5 0) (equal? num_6 262144) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0)) 16]
 		[(and  (equal? size_i_o 8192) (equal? num_4 8192) (equal? num_5 0) (equal? num_6 8192) (equal? prec_i_o 32) (equal? num_8 -1) (equal? num_9 0)) 32]
@@ -782,12 +786,13 @@
 		[(and  (equal? size_i_o 32768) (equal? num_4 32768) (equal? num_5 0) (equal? num_6 32768) (equal? prec_i_o 16) (equal? num_8 -1) (equal? num_9 0)) 16]
 		[(and  (equal? size_i_o 16384) (equal? num_4 16384) (equal? num_5 0) (equal? num_6 16384) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 8]
 		[(and  (equal? size_i_o 4096) (equal? num_4 4096) (equal? num_5 0) (equal? num_6 4096) (equal? prec_i_o 8) (equal? num_8 -1) (equal? num_9 0)) 8]
-		[else (error "Unable to infer prec for pimScaledAdd_v256_e8__v256_e8__v256_e8")]
+		[else prec_i_o]
 )
 
 	]
 	[(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8)
 		(cond 
+		[(and  (equal? size_i_o 2097152) (equal? num_3 2097152) (equal? num_4 0) (equal? num_5 2097152) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
@@ -825,12 +830,13 @@
 		[(and  (equal? size_i_o 64) (equal? num_3 64) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 -1) (equal? num_8 0)) 8]
 		[(and  (equal? size_i_o 256) (equal? num_3 256) (equal? num_4 0) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 -1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 32) (equal? num_7 -1) (equal? num_8 0)) 32]
-		[else (error "Unable to infer prec for pimAdd_v1024_e32__v1024_e32__v1024_e32")]
+		[else prec_i_o]
 )
 
 	]
 	[(pimMul_v512_e8__v512_e8__v512_e8_dsl v0 v1 size_i_o num_3 num_4 num_5 prec_i_o num_7 num_8 num_9 num_10)
 		(cond 
+		[(and  (equal? size_i_o 2097152) (equal? num_3 2097152) (equal? num_4 0) (equal? num_5 2097152) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 32]
 		[(and  (equal? size_i_o 1048576) (equal? num_3 1048576) (equal? num_4 0) (equal? num_5 1048576) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 32]
 		[(and  (equal? size_i_o 4096) (equal? num_3 4096) (equal? num_4 0) (equal? num_5 4096) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)) 8]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 16) (equal? num_9 1) (equal? num_10 0)) 8]
@@ -868,7 +874,7 @@
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 32]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 32) (equal? num_9 1) (equal? num_10 0)) 16]
 		[(and  (equal? size_i_o 32768) (equal? num_3 32768) (equal? num_4 0) (equal? num_5 32768) (equal? prec_i_o 32) (equal? num_7 1) (equal? num_8 64) (equal? num_9 1) (equal? num_10 0)) 32]
-		[else (error "Unable to infer prec for pimMul_v512_e8__v512_e8__v512_e8")]
+		[else prec_i_o]
 )
 
 	]
@@ -910,7 +916,7 @@
 		[(and  (equal? size_i_o 16384) (equal? num_3 16384) (equal? num_4 0) (equal? num_5 16384) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
 		[(and  (equal? size_i_o 8192) (equal? num_3 8192) (equal? num_4 0) (equal? num_5 8192) (equal? prec_i_o 8) (equal? num_7 1) (equal? num_8 0)) 8]
 		[(and  (equal? size_i_o 65536) (equal? num_3 65536) (equal? num_4 0) (equal? num_5 65536) (equal? prec_i_o 16) (equal? num_7 1) (equal? num_8 0)) 16]
-		[else (error "Unable to infer prec for pimDivScalar_v32_e16__v32_e16__v32_e16")]
+		[else prec_i_o]
 )
 
 	]

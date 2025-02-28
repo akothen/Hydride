@@ -30,15 +30,19 @@ public:
                                                                         r.z)   ;
 
 
-        auto vector_size = 32;
+
+        auto vector_size = 16384;
 
 
 
 
         // Schedule
         Output
+            .compute_root()
+            .reorder({x, y, c_out})
             .update()
             .fuse(x, y, x)
+            .fuse(x, c_out, x)
             .vectorize(x, vector_size)
             ;
 

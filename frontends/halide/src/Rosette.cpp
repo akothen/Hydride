@@ -1933,7 +1933,7 @@ public:
             debug(0) << "\nOptimized expression: " << call_expr << "\n";
 
             if(arch == HydrideSupportedArchitecture::BitSerial){
-                return return_expr;
+                return IRMutator::mutate(return_expr);
             }
         }
 
@@ -2521,9 +2521,9 @@ private:
             Call::shift_left,
             Call::absd,
             Call::abs,
-            Call::bitwise_and,
-            Call::bitwise_not,
-            Call::bitwise_xor,
+            //Call::bitwise_and,
+            //Call::bitwise_not,
+            //Call::bitwise_xor,
             Call::if_then_else,
             Call::widening_mul,
             Call::rounding_shift_right,

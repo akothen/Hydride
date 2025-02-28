@@ -176,7 +176,7 @@
 		 
 		)
 	]
-	[ (pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+	[ (pimBroadCast_v1024_e16__v16_e16_dsl v0 num_1 num_2 num_3 size_o prec_i_o num_6 num_7)
 		(+ cost_pimBroadCast_v1024_e16__v16_e16_dsl (bitsimd:cost  v0)  
 		 
 		)

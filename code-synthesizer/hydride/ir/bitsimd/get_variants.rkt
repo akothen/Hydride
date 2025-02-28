@@ -888,9 +888,10 @@
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimMulScalar_v256_e32__v256_e32__v256_e32_dsl)
-		(define input-precs-dsl (list  32 8 32 16 16 8 16 8 32 32 16 32 16 16 32 8 16 32 8 8 8 32 32 8 8 8 16 8 32 32 16 32 32 16 8 16 16  ))
-		(define input-size-dsl (list   (list 8192 32 ) (list 256 8 ) (list 1024 32 ) (list 4096 16 ) (list 131072 16 ) (list 131072 8 ) (list 256 16 ) (list 64 8 ) (list 256 32 ) (list 262144 32 ) (list 16384 16 ) (list 65536 32 ) (list 65536 16 ) (list 2048 16 ) (list 4096 32 ) (list 128 8 ) (list 128 16 ) (list 131072 32 ) (list 512 8 ) (list 8192 8 ) (list 4096 8 ) (list 524288 32 ) (list 1048576 32 ) (list 32768 8 ) (list 65536 8 ) (list 2048 8 ) (list 262144 16 ) (list 16384 8 ) (list 2048 32 ) (list 16384 32 ) (list 512 16 ) (list 512 32 ) (list 32768 32 ) (list 32768 16 ) (list 1024 8 ) (list 8192 16 ) (list 1024 16 ) ) )
-		(define variants (list (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 8192 8192 0 8192 32 0 ) 
+		(define input-precs-dsl (list  32 32 8 32 16 16 8 16 8 32 32 16 32 16 16 32 8 16 32 8 8 8 32 32 8 8 8 16 8 32 32 16 32 32 16 8 16 16  ))
+		(define input-size-dsl (list   (list 2097152 32 ) (list 8192 32 ) (list 256 8 ) (list 1024 32 ) (list 4096 16 ) (list 131072 16 ) (list 131072 8 ) (list 256 16 ) (list 64 8 ) (list 256 32 ) (list 262144 32 ) (list 16384 16 ) (list 65536 32 ) (list 65536 16 ) (list 2048 16 ) (list 4096 32 ) (list 128 8 ) (list 128 16 ) (list 131072 32 ) (list 512 8 ) (list 8192 8 ) (list 4096 8 ) (list 524288 32 ) (list 1048576 32 ) (list 32768 8 ) (list 65536 8 ) (list 2048 8 ) (list 262144 16 ) (list 16384 8 ) (list 2048 32 ) (list 16384 32 ) (list 512 16 ) (list 512 32 ) (list 32768 32 ) (list 32768 16 ) (list 1024 8 ) (list 8192 16 ) (list 1024 16 ) ) )
+		(define variants (list (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 2097152 2097152 0 2097152 32 0 ) 
+(pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 8192 8192 0 8192 32 0 ) 
 (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 256 256 0 256 8 0 ) 
 (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1024 1024 0 1024 32 0 ) 
 (pimMulScalar_v256_e32__v256_e32__v256_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 4096 4096 0 4096 16 0 ) 
@@ -946,7 +947,7 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 37)))
+		(define relavent-indices (filter filter-fn (range 0 38)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimMax_v8192_e16__v8192_e16__v8192_e16_dsl)
@@ -1170,9 +1171,10 @@
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimBroadCast_v1024_e16__v16_e16_dsl)
-		(define input-precs-dsl (list  32 16 32 8 32 8 8 16 32  ))
-		(define input-size-dsl (list   (list 32 ) (list 16 ) (list 512 ) (list 8 ) (list 32 ) (list 8 ) (list 8 ) (list 512 ) (list 32 ) ) )
-		(define variants (list (pimBroadCast_v1024_e16__v16_e16_dsl (reg (bv 0 8)) 32 32 0 1048576 32 0 0 ) 
+		(define input-precs-dsl (list  32 32 16 32 8 32 8 8 16 32  ))
+		(define input-size-dsl (list   (list 32 ) (list 32 ) (list 16 ) (list 512 ) (list 8 ) (list 32 ) (list 8 ) (list 8 ) (list 512 ) (list 32 ) ) )
+		(define variants (list (pimBroadCast_v1024_e16__v16_e16_dsl (reg (bv 0 8)) 32 32 0 2097152 32 0 0 ) 
+(pimBroadCast_v1024_e16__v16_e16_dsl (reg (bv 0 8)) 32 32 0 1048576 32 0 0 ) 
 (pimBroadCast_v1024_e16__v16_e16_dsl (reg (bv 0 8)) 16 16 0 1024 16 0 0 ) 
 (pimBroadCast_v1024_e16__v16_e16_dsl (reg (bv 0 8)) 512 512 0 512 32 0 0 ) 
 (pimBroadCast_v1024_e16__v16_e16_dsl (reg (bv 0 8)) 8 8 0 131072 8 0 0 ) 
@@ -1200,7 +1202,7 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 9)))
+		(define relavent-indices (filter filter-fn (range 0 10)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimEQ_v512_e16__v512_e16__v512_e16_dsl)
@@ -1336,9 +1338,10 @@
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimAddScalar_v8_e16__v8_e16__v8_e16_dsl)
-		(define input-precs-dsl (list  16 32 16 8 32 16 32 16 8 8 16 16 16 32 8 32 16 16 8 32 32 8 16 8 32 8 8 32 8 32 8 32 16 16 16 8 32 32  ))
-		(define input-size-dsl (list   (list 524288 16 ) (list 1048576 32 ) (list 128 16 ) (list 4096 8 ) (list 256 32 ) (list 32768 16 ) (list 2048 32 ) (list 65536 16 ) (list 131072 8 ) (list 16384 8 ) (list 512 16 ) (list 131072 16 ) (list 256 16 ) (list 1024 32 ) (list 128 8 ) (list 524288 32 ) (list 8192 16 ) (list 16384 16 ) (list 2048 8 ) (list 4096 32 ) (list 262144 32 ) (list 64 8 ) (list 4096 16 ) (list 1024 8 ) (list 512 32 ) (list 8192 8 ) (list 256 8 ) (list 65536 32 ) (list 32768 8 ) (list 8192 32 ) (list 512 8 ) (list 16384 32 ) (list 1024 16 ) (list 262144 16 ) (list 2048 16 ) (list 65536 8 ) (list 32768 32 ) (list 131072 32 ) ) )
+		(define input-precs-dsl (list  16 32 32 16 8 32 16 32 16 8 8 16 16 16 32 8 32 16 16 8 32 32 8 16 8 32 8 8 32 8 32 8 32 16 16 16 8 32 32  ))
+		(define input-size-dsl (list   (list 524288 16 ) (list 2097152 32 ) (list 1048576 32 ) (list 128 16 ) (list 4096 8 ) (list 256 32 ) (list 32768 16 ) (list 2048 32 ) (list 65536 16 ) (list 131072 8 ) (list 16384 8 ) (list 512 16 ) (list 131072 16 ) (list 256 16 ) (list 1024 32 ) (list 128 8 ) (list 524288 32 ) (list 8192 16 ) (list 16384 16 ) (list 2048 8 ) (list 4096 32 ) (list 262144 32 ) (list 64 8 ) (list 4096 16 ) (list 1024 8 ) (list 512 32 ) (list 8192 8 ) (list 256 8 ) (list 65536 32 ) (list 32768 8 ) (list 8192 32 ) (list 512 8 ) (list 16384 32 ) (list 1024 16 ) (list 262144 16 ) (list 2048 16 ) (list 65536 8 ) (list 32768 32 ) (list 131072 32 ) ) )
 		(define variants (list (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 524288 524288 0 524288 16 -1 0 ) 
+(pimAddScalar_v8_e16__v8_e16__v8_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 2097152 2097152 0 2097152 32 -1 0 ) 
 (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1048576 1048576 0 1048576 32 -1 0 ) 
 (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 128 128 0 128 16 -1 0 ) 
 (pimAddScalar_v8_e16__v8_e16__v8_e16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 4096 4096 0 4096 8 -1 0 ) 
@@ -1395,7 +1398,7 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 38)))
+		(define relavent-indices (filter filter-fn (range 0 39)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimDiv_v8192_e16__v8192_e16__v8192_e16_dsl)
@@ -1436,9 +1439,10 @@
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl)
-		(define input-precs-dsl (list  8 16 32 8 32 32 32 32 32 8 8 8 16 16 8 32 16 16 16 32 32 16 32 8 16 8 32 32 8 16 16 16 32 8 16 8 8  ))
-		(define input-size-dsl (list   (list 2048 2048 8 ) (list 262144 262144 16 ) (list 8192 8192 32 ) (list 1024 1024 8 ) (list 524288 524288 32 ) (list 1048576 1048576 32 ) (list 65536 65536 32 ) (list 32768 32768 32 ) (list 512 512 32 ) (list 131072 131072 8 ) (list 8192 8192 8 ) (list 256 256 8 ) (list 1024 1024 16 ) (list 512 512 16 ) (list 64 64 8 ) (list 2048 2048 32 ) (list 256 256 16 ) (list 131072 131072 16 ) (list 8192 8192 16 ) (list 256 256 32 ) (list 131072 131072 32 ) (list 4096 4096 16 ) (list 1024 1024 32 ) (list 65536 65536 8 ) (list 2048 2048 16 ) (list 128 128 8 ) (list 16384 16384 32 ) (list 4096 4096 32 ) (list 512 512 8 ) (list 128 128 16 ) (list 16384 16384 16 ) (list 65536 65536 16 ) (list 262144 262144 32 ) (list 32768 32768 8 ) (list 32768 32768 16 ) (list 16384 16384 8 ) (list 4096 4096 8 ) ) )
-		(define variants (list (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 2048 2048 0 2048 8 -1 0 ) 
+		(define input-precs-dsl (list  32 8 16 32 8 32 32 32 32 32 8 8 8 16 16 8 32 16 16 16 32 32 16 32 8 16 8 32 32 8 16 16 16 32 8 16 8 8  ))
+		(define input-size-dsl (list   (list 2097152 2097152 32 ) (list 2048 2048 8 ) (list 262144 262144 16 ) (list 8192 8192 32 ) (list 1024 1024 8 ) (list 524288 524288 32 ) (list 1048576 1048576 32 ) (list 65536 65536 32 ) (list 32768 32768 32 ) (list 512 512 32 ) (list 131072 131072 8 ) (list 8192 8192 8 ) (list 256 256 8 ) (list 1024 1024 16 ) (list 512 512 16 ) (list 64 64 8 ) (list 2048 2048 32 ) (list 256 256 16 ) (list 131072 131072 16 ) (list 8192 8192 16 ) (list 256 256 32 ) (list 131072 131072 32 ) (list 4096 4096 16 ) (list 1024 1024 32 ) (list 65536 65536 8 ) (list 2048 2048 16 ) (list 128 128 8 ) (list 16384 16384 32 ) (list 4096 4096 32 ) (list 512 512 8 ) (list 128 128 16 ) (list 16384 16384 16 ) (list 65536 65536 16 ) (list 262144 262144 32 ) (list 32768 32768 8 ) (list 32768 32768 16 ) (list 16384 16384 8 ) (list 4096 4096 8 ) ) )
+		(define variants (list (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 2097152 2097152 0 2097152 32 -1 0 ) 
+(pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 2048 2048 0 2048 8 -1 0 ) 
 (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 262144 262144 0 262144 16 -1 0 ) 
 (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 8192 8192 0 8192 32 -1 0 ) 
 (pimScaledAdd_v256_e8__v256_e8__v256_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 1024 1024 0 1024 8 -1 0 ) 
@@ -1494,13 +1498,14 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 37)))
+		(define relavent-indices (filter filter-fn (range 0 38)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl)
-		(define input-precs-dsl (list  32 32 16 8 16 32 32 32 32 8 32 8 8 32 16 32 32 8 16 8 16 16 8 8 16 8 8 16 16 16 32 16 32 8 8 16 32  ))
-		(define input-size-dsl (list   (list 1048576 1048576 ) (list 32768 32768 ) (list 32768 32768 ) (list 256 256 ) (list 16384 16384 ) (list 2048 2048 ) (list 65536 65536 ) (list 524288 524288 ) (list 262144 262144 ) (list 65536 65536 ) (list 1024 1024 ) (list 128 128 ) (list 2048 2048 ) (list 256 256 ) (list 131072 131072 ) (list 131072 131072 ) (list 512 512 ) (list 4096 4096 ) (list 8192 8192 ) (list 512 512 ) (list 65536 65536 ) (list 128 128 ) (list 131072 131072 ) (list 1024 1024 ) (list 1024 1024 ) (list 8192 8192 ) (list 16384 16384 ) (list 2048 2048 ) (list 4096 4096 ) (list 262144 262144 ) (list 8192 8192 ) (list 512 512 ) (list 16384 16384 ) (list 32768 32768 ) (list 64 64 ) (list 256 256 ) (list 4096 4096 ) ) )
-		(define variants (list (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1048576 1048576 0 1048576 32 -1 0 ) 
+		(define input-precs-dsl (list  32 32 32 16 8 16 32 32 32 32 8 32 8 8 32 16 32 32 8 16 8 16 16 8 8 16 8 8 16 16 16 32 16 32 8 8 16 32  ))
+		(define input-size-dsl (list   (list 2097152 2097152 ) (list 1048576 1048576 ) (list 32768 32768 ) (list 32768 32768 ) (list 256 256 ) (list 16384 16384 ) (list 2048 2048 ) (list 65536 65536 ) (list 524288 524288 ) (list 262144 262144 ) (list 65536 65536 ) (list 1024 1024 ) (list 128 128 ) (list 2048 2048 ) (list 256 256 ) (list 131072 131072 ) (list 131072 131072 ) (list 512 512 ) (list 4096 4096 ) (list 8192 8192 ) (list 512 512 ) (list 65536 65536 ) (list 128 128 ) (list 131072 131072 ) (list 1024 1024 ) (list 1024 1024 ) (list 8192 8192 ) (list 16384 16384 ) (list 2048 2048 ) (list 4096 4096 ) (list 262144 262144 ) (list 8192 8192 ) (list 512 512 ) (list 16384 16384 ) (list 32768 32768 ) (list 64 64 ) (list 256 256 ) (list 4096 4096 ) ) )
+		(define variants (list (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 2097152 2097152 0 2097152 32 -1 0 ) 
+(pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1048576 1048576 0 1048576 32 -1 0 ) 
 (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 32768 32768 0 32768 32 -1 0 ) 
 (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 32768 32768 0 32768 16 -1 0 ) 
 (pimAdd_v1024_e32__v1024_e32__v1024_e32_dsl (reg (bv 0 8)) (reg (bv 1 8)) 256 256 0 256 8 -1 0 ) 
@@ -1556,13 +1561,14 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 37)))
+		(define relavent-indices (filter filter-fn (range 0 38)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimMul_v512_e8__v512_e8__v512_e8_dsl)
-		(define input-precs-dsl (list  32 8 8 16 8 32 32 32 16 32 8 8 8 8 32 32 16 8 16 32 8 16 16 16 8 8 16 32 16 32 8 32 16 16 32 16 32  ))
-		(define input-size-dsl (list   (list 1048576 1048576 ) (list 4096 4096 ) (list 32768 32768 ) (list 8192 8192 ) (list 65536 65536 ) (list 131072 131072 ) (list 262144 262144 ) (list 2048 2048 ) (list 1024 1024 ) (list 4096 4096 ) (list 256 256 ) (list 131072 131072 ) (list 128 128 ) (list 1024 1024 ) (list 256 256 ) (list 16384 16384 ) (list 2048 2048 ) (list 8192 8192 ) (list 128 128 ) (list 512 512 ) (list 2048 2048 ) (list 131072 131072 ) (list 262144 262144 ) (list 32768 32768 ) (list 16384 16384 ) (list 512 512 ) (list 256 256 ) (list 524288 524288 ) (list 4096 4096 ) (list 65536 65536 ) (list 64 64 ) (list 1024 1024 ) (list 16384 16384 ) (list 512 512 ) (list 8192 8192 ) (list 65536 65536 ) (list 32768 32768 ) ) )
-		(define variants (list (pimMul_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1048576 1048576 0 1048576 32 1 64 1 0 ) 
+		(define input-precs-dsl (list  32 32 8 8 16 8 32 32 32 16 32 8 8 8 8 32 32 16 8 16 32 8 16 16 16 8 8 16 32 16 32 8 32 16 16 32 16 32  ))
+		(define input-size-dsl (list   (list 2097152 2097152 ) (list 1048576 1048576 ) (list 4096 4096 ) (list 32768 32768 ) (list 8192 8192 ) (list 65536 65536 ) (list 131072 131072 ) (list 262144 262144 ) (list 2048 2048 ) (list 1024 1024 ) (list 4096 4096 ) (list 256 256 ) (list 131072 131072 ) (list 128 128 ) (list 1024 1024 ) (list 256 256 ) (list 16384 16384 ) (list 2048 2048 ) (list 8192 8192 ) (list 128 128 ) (list 512 512 ) (list 2048 2048 ) (list 131072 131072 ) (list 262144 262144 ) (list 32768 32768 ) (list 16384 16384 ) (list 512 512 ) (list 256 256 ) (list 524288 524288 ) (list 4096 4096 ) (list 65536 65536 ) (list 64 64 ) (list 1024 1024 ) (list 16384 16384 ) (list 512 512 ) (list 8192 8192 ) (list 65536 65536 ) (list 32768 32768 ) ) )
+		(define variants (list (pimMul_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 2097152 2097152 0 2097152 32 1 64 1 0 ) 
+(pimMul_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 1048576 1048576 0 1048576 32 1 64 1 0 ) 
 (pimMul_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 4096 4096 0 4096 8 1 16 1 0 ) 
 (pimMul_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 32768 32768 0 32768 8 1 16 1 0 ) 
 (pimMul_v512_e8__v512_e8__v512_e8_dsl (reg (bv 0 8)) (reg (bv 1 8)) 8192 8192 0 8192 16 1 32 1 0 ) 
@@ -1618,7 +1624,7 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 37)))
+		(define relavent-indices (filter filter-fn (range 0 38)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog pimDivScalar_v32_e16__v32_e16__v32_e16_dsl)

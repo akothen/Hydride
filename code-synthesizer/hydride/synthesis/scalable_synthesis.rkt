@@ -73,29 +73,9 @@
   (define actual-expr-depth
     (cond
       [(equal? input-lang 'mlir) expr-depth]
-      ;; Immediate expression is ramp, we can use the provided depth
-      [(ramp? halide-expr) expr-depth]
-      [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
-       (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n"
-                          expr-depth
-                          1)) ;; ARM
-       1] ;;ARM
-      [(halide:contains-complex-op-in-subexpr-arm halide-expr expr-depth)
-       (debug-log
-        (format
-         "Contains shr in arm, at least 2 depth are needed, hence increase depth from ~a to ~a\n"
-         expr-depth
-         (max expr-depth 2)))
-       (max expr-depth 2)]
-      [(not (halide:contains-mul-op-in-subexpr halide-expr expr-depth))
-       (define max-no-mul-depth 4)
-       (debug-log
-        (format
-         "Does not contain mul op, reduce depth to maximum of 5, hence decrement depth from ~a to ~a\n"
-         expr-depth
-         (min max-no-mul-depth expr-depth)))
-       (min max-no-mul-depth expr-depth)]
-      [else expr-depth]))
+      [else expr-depth]
+      )
+    )
 
   (define-values (get-expr-depth get-sub-exprs
                                  get-expr-bv-sizes
@@ -600,7 +580,7 @@
   ;(set! depth-limit (max depth-limit (+ 2 starting-depth) ))
 
   (set! starting-depth 1)
-  (set! depth-limit 4)
+  (set! depth-limit 5)
 
   (define start-time (current-seconds))
 

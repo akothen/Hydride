@@ -293,7 +293,7 @@ public:
      * bits: The bit size of one element.
      * lanes: The number of vector elements in the type. */
     Type(halide_type_code_t code, int bits, int lanes, const halide_handle_cplusplus_type *handle_type = nullptr)
-        : type(code, (uint8_t)bits, (uint16_t)lanes), handle_type(handle_type) {
+        : type(code, (uint8_t)bits, (uint32_t)lanes), handle_type(handle_type) {
     }
 
     /** Trivial copy constructor. */

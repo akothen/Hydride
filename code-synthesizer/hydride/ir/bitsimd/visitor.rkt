@@ -163,9 +163,9 @@
 		(define v1-visited (bitsimd:visitor v1 fn))
 		(fn ( pimXor_v8192_e16__v8192_e16__v8192_e16_dsl v0-visited v1-visited size_i_o num_3 num_4 num_5 prec_i_o num_7 ))
 	]
-	[ (pimBroadCast_v1024_e16__v16_e16_dsl v0 size_o num_2 num_3 num_4 prec_i_o num_6 num_7)
+	[ (pimBroadCast_v1024_e16__v16_e16_dsl v0 num_1 num_2 num_3 size_o prec_i_o num_6 num_7)
 		(define v0-visited (bitsimd:visitor v0 fn))
-		(fn ( pimBroadCast_v1024_e16__v16_e16_dsl v0-visited size_o num_2 num_3 num_4 prec_i_o num_6 num_7 ))
+		(fn ( pimBroadCast_v1024_e16__v16_e16_dsl v0-visited num_1 num_2 num_3 size_o prec_i_o num_6 num_7 ))
 	]
 	[ (pimEQ_v512_e16__v512_e16__v512_e16_dsl vc_0 v1 vc_2 v3 size_i_o num_5 num_6 num_7 prec_i_o num_9)
 		(define vc_0-visited (bitsimd:visitor vc_0 fn))

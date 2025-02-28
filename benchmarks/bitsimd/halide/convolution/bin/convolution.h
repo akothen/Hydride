@@ -1,3 +1,75 @@
+#ifndef HALIDE__convolution___bin___convolution_h
+#define HALIDE__convolution___bin___convolution_h
+#include <stdint.h>
+
+// Forward declarations of the types used in the interface
+// to the Halide pipeline.
+//
+// Definitions for these structs are below.
+
+// Halide's representation of a multi-dimensional array.
+// Halide::Runtime::Buffer is a more user-friendly wrapper
+// around this. Its declaration is in HalideBuffer.h
+struct halide_buffer_t;
+
+// Metadata describing the arguments to the generated function.
+// Used to construct calls to the _argv version of the function.
+struct halide_filter_metadata_t;
+
+#ifndef HALIDE_MUST_USE_RESULT
+#ifdef __has_attribute
+#if __has_attribute(nodiscard)
+#define HALIDE_MUST_USE_RESULT [[nodiscard]]
+#elif __has_attribute(warn_unused_result)
+#define HALIDE_MUST_USE_RESULT __attribute__((warn_unused_result))
+#else
+#define HALIDE_MUST_USE_RESULT
+#endif
+#else
+#define HALIDE_MUST_USE_RESULT
+#endif
+#endif
+
+#ifndef HALIDE_FUNCTION_ATTRS
+#define HALIDE_FUNCTION_ATTRS
+#endif
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+HALIDE_FUNCTION_ATTRS
+int convolution(struct halide_buffer_t *_IMG_buffer, struct halide_buffer_t *_Filter_buffer, struct halide_buffer_t *_Output_buffer);
+
+HALIDE_FUNCTION_ATTRS
+int convolution_argv(void **args);
+
+HALIDE_FUNCTION_ATTRS
+const struct halide_filter_metadata_t *convolution_metadata();
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+
+// The generated object file that goes with this header
+// includes a full copy of the Halide runtime so that it
+// can be used standalone. Declarations for the functions
+// in the Halide runtime are below.
+//
+// The runtime is defined using weak linkage, so it is legal
+// to link multiple Halide-generated object files together,
+// or to clobber any of these functions with your own
+// definition.
+//
+// To generate an object file without a full copy of the
+// runtime, use the -no_runtime target flag. To generate a
+// standalone Halide runtime to use with such object files
+// use the -r flag with any Halide generator binary, e.g.:
+// $ ./my_generator -r halide_runtime -o . target=host
+
 #ifndef HALIDE_HALIDERUNTIME_H
 #define HALIDE_HALIDERUNTIME_H
 
@@ -2033,3 +2105,5 @@ HALIDE_ALWAYS_INLINE constexpr halide_type_t halide_type_of<int64_t>() {
 #endif  // (__cplusplus >= 201103L || _MSVC_LANG >= 201103L)
 
 #endif  // HALIDE_HALIDERUNTIME_H
+
+#endif

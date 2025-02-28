@@ -5781,6 +5781,25 @@ bitsimd_sema = {
 
             "pimMulScalar_v256_e32__v256_e32__v256_e32" : {
               "target_instructions" : {
+
+                "pimMulScalar_v65536_e32__v65536_e32__v65536_e32" : {
+                  "args" : ["SYMBOLIC_BV_2097152","SYMBOLIC_BV_32","2097152","2097152","0","2097152","32","0"],
+                  "in_vectsize" : 2097152,
+                  "out_vectsize" : 2097152,
+                  "lanesize" : 2097152,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimMulScalar_v256_e32__v256_e32__v256_e32" : {
                   "args" : ["SYMBOLIC_BV_8192","SYMBOLIC_BV_32","8192","8192","0","8192","32","0"],
                   "in_vectsize" : 8192,
@@ -8789,6 +8808,24 @@ bitsimd_sema = {
 
             "pimBroadCast_v1024_e16__v16_e16" : {
               "target_instructions" : {
+                "pimBroadCast_v65536_e32__v32_e32" : {
+                  "args" : ["SYMBOLIC_BV_32","32","32","0","2097152","32","0","0"],
+                  "in_vectsize" : 32,
+                  "out_vectsize" : 2097152,
+                  "lanesize" : 32,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : None,
+                  "out_vectsize_index" : 4,
+                  "lanesize_index" : 2,
+                  "in_precision_index" : 5,
+                  "out_precision_index" : 5,
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimBroadCast_v32768_e32__v32_e32" : {
                   "args" : ["SYMBOLIC_BV_32","32","32","0","1048576","32","0","0"],
                   "in_vectsize" : 32,
@@ -8797,7 +8834,7 @@ bitsimd_sema = {
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8815,7 +8852,7 @@ bitsimd_sema = {
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8834,7 +8871,7 @@ bitsimd_sema = {
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8853,7 +8890,7 @@ bitsimd_sema = {
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8872,7 +8909,7 @@ bitsimd_sema = {
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8891,7 +8928,7 @@ bitsimd_sema = {
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8910,7 +8947,7 @@ bitsimd_sema = {
                   "in_precision" : 8,
                   "out_precision" : 8,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8929,7 +8966,7 @@ bitsimd_sema = {
                   "in_precision" : 16,
                   "out_precision" : 16,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -8948,7 +8985,7 @@ bitsimd_sema = {
                   "in_precision" : 32,
                   "out_precision" : 32,
                   "in_vectsize_index" : None,
-                  "out_vectsize_index" : 1,
+                  "out_vectsize_index" : 4,
                   "lanesize_index" : 2,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
@@ -10081,6 +10118,25 @@ bitsimd_sema = {
                   "Extensions" : "[]",
       },
 
+                "pimAddScalar_v65536_e32__v65536_e32__v65536_e32" : {
+                  "args" : ["SYMBOLIC_BV_2097152","SYMBOLIC_BV_32","2097152","2097152","0","2097152","32","-1","0"],
+                  "in_vectsize" : 2097152,
+                  "out_vectsize" : 2097152,
+                  "lanesize" : 2097152,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
+
                 "pimAddScalar_v32768_e32__v32768_e32__v32768_e32" : {
                   "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_32","1048576","1048576","0","1048576","32","-1","0"],
                   "in_vectsize" : 1048576,
@@ -11021,6 +11077,25 @@ bitsimd_sema = {
 
             "pimScaledAdd_v256_e8__v256_e8__v256_e8" : {
               "target_instructions" : {
+
+                "pimScaledAdd_v65536_e32__v65536_e32__v65536_e32" : {
+                  "args" : ["SYMBOLIC_BV_2097152","SYMBOLIC_BV_2097152","SYMBOLIC_BV_32","2097152","2097152","0","2097152","32","-1","0"],
+                  "in_vectsize" : 2097152,
+                  "out_vectsize" : 2097152,
+                  "lanesize" : 32 ,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 3,
+                  "out_vectsize_index" : 3,
+                  "lanesize_index" : 4,
+                  "in_precision_index" : 7,
+                  "out_precision_index" : 7,
+                  "arg_permute_map" : [0,1,2,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimScaledAdd_v256_e8__v256_e8__v256_e8" : {
                   "args" : ["SYMBOLIC_BV_2048","SYMBOLIC_BV_2048","SYMBOLIC_BV_8","2048","2048","0","2048","8","-1","0"],
                   "in_vectsize" : 2048,
@@ -11729,6 +11804,24 @@ bitsimd_sema = {
 
             "pimAdd_v1024_e32__v1024_e32__v1024_e32" : {
               "target_instructions" : {
+                "pimAdd_v65536_e32__v65536_e32__v65536_e32" : {
+                  "args" : ["SYMBOLIC_BV_2097152","SYMBOLIC_BV_2097152","2097152","2097152","0","2097152","32","-1","0"],
+                  "in_vectsize" : 2097152,
+                  "out_vectsize" : 2097152,
+                  "lanesize" : 2097152,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : None,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimAdd_v32768_e32__v32768_e32__v32768_e32" : {
                   "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_1048576","1048576","1048576","0","1048576","32","-1","0"],
                   "in_vectsize" : 1048576,
@@ -12436,6 +12529,25 @@ bitsimd_sema = {
 
             "pimMul_v512_e8__v512_e8__v512_e8" : {
               "target_instructions" : {
+
+                "pimMul_v65536_e32__v65536_e32__v65536_e32" : {
+                  "args" : ["SYMBOLIC_BV_2097152","SYMBOLIC_BV_2097152","2097152","2097152","0","2097152","32","1","64","1","0"],
+                  "in_vectsize" : 2097152,
+                  "out_vectsize" : 2097152,
+                  "lanesize" : 2097152,
+                  "in_precision" : 32,
+                  "out_precision" : 32,
+                  "in_vectsize_index" : 2,
+                  "out_vectsize_index" : 2,
+                  "lanesize_index" : 3,
+                  "in_precision_index" : 6,
+                  "out_precision_index" : 6,
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                  "Signedness" : 1,
+                  "Cost" : "None",
+                  "SIMD" : "True",
+                  "Extensions" : "[]",
+      },
                 "pimMul_v32768_e32__v32768_e32__v32768_e32" : {
                   "args" : ["SYMBOLIC_BV_1048576","SYMBOLIC_BV_1048576","1048576","1048576","0","1048576","32","1","64","1","0"],
                   "in_vectsize" : 1048576,

@@ -2592,7 +2592,7 @@ HALIDE_NEVER_INLINE void fuzz_test_rule(Before &&before, After &&after, Predicat
             continue;
         }
         before.make_folded_const(val_before, type, state);
-        uint16_t lanes = type.lanes;
+        uint32_t lanes = type.lanes;
         after.make_folded_const(val_after, type, state);
         lanes |= type.lanes;
 
