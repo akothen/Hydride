@@ -1,8 +1,3 @@
-; ModuleID = 'mul_wrapper.cpp'
-source_filename = "mul_wrapper.cpp"
-target datalayout = "e-m:e-p:20:32-i1:8:32-i8:8:32-i16:16:32-i32:32:32-f32:32:32-i64:32-f64:32-a:0:32-n32"
-target triple = "aie2"
-
 define dso_local noundef <16 x i32> @v16int32_add16_wrapper(<16 x i32> noundef %a, <16 x i32> noundef %b) local_unnamed_addr #0 {
 entry:
   %add.i = add <16 x i32> %b, %a

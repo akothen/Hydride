@@ -16,137 +16,164 @@ import os
 # x86_wrappers.c.ll
 # -x86-hydride-legalize
 
-def HandleLowLevelCodegenAIEVec(RosetteFileName: str, PathToLegalizerLib: str,
-             PathToWrapperFile: str, LegalizationFlag: str,
-             LLVMModuleName: str = None):
-  RosetteFile = open(RosetteFileName, "r")
-  RosetteCode = list()
-  Line = RosetteFile.readline()
-  while Line != "":
-    RosetteCode.append(Line)
-    Line = RosetteFile.readline()
-  RosetteFile.close()
-  Lifter = RosetteLifter()
-  RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
-  assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
 
-  # Now generate LLVM module with the functions in it
-  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
-  print("LLVM MODULE")
-  print(LLVMIRModule)
-  Module = open(LLVMIRModule.name + ".ll", "w")
-  Module.write(LLVMIRModule.__repr__())
-  Module.close()
-  
-  # Legalize code
-  print("EXECUTING:")
-  OriginalLLVMModuleName = LLVMIRModule.name + ".ll"
-  LinkedLLVMBCModuleName = LLVMIRModule.name + ".linked.bc"
-  Command = "llvm-link  {} {} -o {}".format(OriginalLLVMModuleName, PathToWrapperFile, LinkedLLVMBCModuleName)
-  print(Command)
-  os.system(Command)
-  print("EXECUTING:")
-  LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
-  Command = "llvm-dis  {} -o {}".format(LinkedLLVMBCModuleName, LinkedLLVMModuleName)
-  print(Command)
-  os.system(Command)
-  with open(LinkedLLVMModuleName, "w") as Module, open(PathToWrapperFile, "r") as Declarations:
-    # Also a quick hack: turn @hydride.node.forward_kernel.0 to @hydride_node_forward_kernel_0 (replace . with _)
+def HandleLowLevelCodegenAIEVec(
+    RosetteFileName: str,
+    PathToLegalizerLib: str,
+    PathToWrapperFile: str,
+    LegalizationFlag: str,
+    LLVMModuleName: str = None,
+):
+    RosetteFile = open(RosetteFileName, "r")
+    RosetteCode = list()
+    Line = RosetteFile.readline()
+    while Line != "":
+        RosetteCode.append(Line)
+        Line = RosetteFile.readline()
+    RosetteFile.close()
+    Lifter = RosetteLifter()
+    print(f"Rosette Code from Low-Level CodeGen: {RosetteCode}")
+    RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
+    assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
+
+    # Now generate LLVM module with the functions in it
+    LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
+    print("LLVM MODULE")
+    print(LLVMIRModule)
+    LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
+    LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
+    with open(LinkedLLVMModuleName, "w") as Module, open(
+        PathToWrapperFile, "r"
+    ) as Declarations:
+        # Also a quick hack: turn @hydride.node.forward_kernel.0 to @hydride_node_forward_kernel_0 (replace . with _)
+        # Module.write(LLVMIRModule.__repr__())
+        tmpLLVMIR = LLVMIRModule.__repr__()
+        import re
+
+        for g in re.finditer(r"(@hydride[\w.]*)", tmpLLVMIR):
+            tmpLLVMIR = (
+                tmpLLVMIR[: g.start()]
+                + g.group(0).replace(".", "_")
+                + tmpLLVMIR[g.end() :]
+            )
+        Module.write(tmpLLVMIR)
+
+        # Brutally link the wrapper functions back to the module by appending them
+        Module.write(Declarations.read())
+    Command = "/usr/bin/opt -load {} -enable-new-pm=0 {} -opaque-pointers -globaldce {} -S -o {}".format(
+        PathToLegalizerLib,
+        LegalizationFlag,
+        LinkedLLVMModuleName,
+        LegalizeLLVMModuleName,
+    )
+    print(Command)
+    os.system(Command)
+
+
+def HandleLowLevelCodegenVISA(
+    RosetteFileName: str,
+    PathToLegalizerLib: str,
+    PathToWrapperFile: str,
+    LegalizationFlag: str,
+    LLVMModuleName: str = None,
+):
+    RosetteFile = open(RosetteFileName, "r")
+    RosetteCode = list()
+    Line = RosetteFile.readline()
+    while Line != "":
+        RosetteCode.append(Line)
+        Line = RosetteFile.readline()
+    RosetteFile.close()
+    Lifter = RosetteLifter()
+    RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
+    assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
+
+    # Now generate LLVM module with the functions in it
+    LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
+    print("LLVM MODULE")
+    print(LLVMIRModule)
+    LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
+    LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
+    with open(LinkedLLVMModuleName, "w") as Module, open(
+        PathToWrapperFile, "r"
+    ) as Declarations:
+        # Also a quick hack: turn @hydride.node.forward_kernel.0 to @hydride_node_forward_kernel_0 (replace . with _)
+        # Module.write(LLVMIRModule.__repr__())
+        tmpLLVMIR = LLVMIRModule.__repr__()
+        import re
+
+        for g in re.finditer(r"(@hydride[\w.]*)", tmpLLVMIR):
+            tmpLLVMIR = (
+                tmpLLVMIR[: g.start()]
+                + g.group(0).replace(".", "_")
+                + tmpLLVMIR[g.end() :]
+            )
+        Module.write(tmpLLVMIR)
+
+        # Brutally link the wrapper functions back to the module by appending them
+        Module.write(Declarations.read())
+    Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
+        PathToLegalizerLib,
+        LegalizationFlag,
+        LinkedLLVMModuleName,
+        LegalizeLLVMModuleName,
+    )
+    print(Command)
+    os.system(Command)
+
+
+def HandleLowLevelCodeGen(
+    RosetteFileName: str,
+    PathToLegalizerLib: str,
+    PathToWrapperFile: str,
+    LegalizationFlag: str,
+    LLVMModuleName: str = None,
+):
+    # Build the Rose IR function and Rose LLVM context from Rosette code
+    print("In regular llc")
+    RosetteFile = open(RosetteFileName, "r")
+    RosetteCode = list()
+    Line = RosetteFile.readline()
+    while Line != "":
+        RosetteCode.append(Line)
+        Line = RosetteFile.readline()
+    RosetteFile.close()
+    Lifter = RosetteLifter()
+    RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
+    assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
+
+    # Now generate LLVM module with the functions in it
+    LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
+    print("LLVM MODULE")
+    print(LLVMIRModule)
+    Module = open(LLVMIRModule.name + ".ll", "w")
     Module.write(LLVMIRModule.__repr__())
-    tmpLLVMIR = LLVMIRModule.__repr__()
-    import re
-    for g in re.finditer(r"(@hydride[\w.]*)", tmpLLVMIR):
-      tmpLLVMIR= tmpLLVMIR[:g.start()] + g.group(0).replace(".", "_") + tmpLLVMIR[g.end():]
-    Module.write(tmpLLVMIR)
-    # Brutally link the wrapper functions back to the module by appending them
-    Module.write(Declarations.read())
-  print("EXECUTING:")
-  LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
-  # LLVM 14
-  Command = "/usr/bin/opt -load {} -enable-new-pm=0 {} -adce -opaque-pointers -globaldce {} -S -o {}".format(PathToLegalizerLib, LegalizationFlag, \
-                                                          LinkedLLVMModuleName, LegalizeLLVMModuleName)
-  print(Command)
-  os.system(Command)
+    Module.close()
 
-def HandleLowLevelCodegenVISA(RosetteFileName: str, PathToLegalizerLib: str,
-             PathToWrapperFile: str, LegalizationFlag: str,
-             LLVMModuleName: str = None):
-  RosetteFile = open(RosetteFileName, "r")
-  RosetteCode = list()
-  Line = RosetteFile.readline()
-  while Line != "":
-    RosetteCode.append(Line)
-    Line = RosetteFile.readline()
-  RosetteFile.close()
-  Lifter = RosetteLifter()
-  RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
-  assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
-
-  # Now generate LLVM module with the functions in it
-  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
-  print("LLVM MODULE")
-  print(LLVMIRModule)
-  LegalizeLLVMModuleName= LLVMIRModule.name + ".legalize.ll"
-  LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
-  with open(LinkedLLVMModuleName, "w") as Module, open(PathToWrapperFile, "r") as Declarations:
-    # Also a quick hack: turn @hydride.node.forward_kernel.0 to @hydride_node_forward_kernel_0 (replace . with _)
-    # Module.write(LLVMIRModule.__repr__())
-    tmpLLVMIR = LLVMIRModule.__repr__()
-    import re
-    for g in re.finditer(r"(@hydride[\w.]*)", tmpLLVMIR):
-      tmpLLVMIR= tmpLLVMIR[:g.start()] + g.group(0).replace(".", "_") + tmpLLVMIR[g.end():]
-    Module.write(tmpLLVMIR)
-    
-    # Brutally link the wrapper functions back to the module by appending them
-    Module.write(Declarations.read())
-  Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(
-      PathToLegalizerLib, LegalizationFlag,
-      LinkedLLVMModuleName, LegalizeLLVMModuleName)
-  print(Command)
-  os.system(Command)
-
-def HandleLowLevelCodeGen(RosetteFileName : str, PathToLegalizerLib : str, \
-                          PathToWrapperFile : str, LegalizationFlag : str, \
-                          LLVMModuleName : str = None):
-  # Build the Rose IR function and Rose LLVM context from Rosette code
-  RosetteFile = open(RosetteFileName, "r")
-  RosetteCode = list()
-  Line = RosetteFile.readline()
-  while Line != "":
-    RosetteCode.append(Line)
-    Line = RosetteFile.readline()
-  RosetteFile.close()
-  Lifter = RosetteLifter()
-  RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
-  assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
-
-  # Now generate LLVM module with the functions in it
-  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
-  print("LLVM MODULE")
-  print(LLVMIRModule)
-  Module = open(LLVMIRModule.name + ".ll", "w")
-  Module.write(LLVMIRModule.__repr__())
-  Module.close()
-  
-  # Legalize code
-  print("EXECUTING:")
-  OriginalLLVMModuleName = LLVMIRModule.name + ".ll"
-  LinkedLLVMBCModuleName = LLVMIRModule.name + ".linked.bc"
-  Command = "llvm-link  {} {} -o {}".format(OriginalLLVMModuleName, PathToWrapperFile, LinkedLLVMBCModuleName)
-  print(Command)
-  os.system(Command)
-  print("EXECUTING:")
-  LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
-  Command = "llvm-dis  {} -o {}".format(LinkedLLVMBCModuleName, LinkedLLVMModuleName)
-  print(Command)
-  os.system(Command)
-  print("EXECUTING:")
-  LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
-  Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(PathToLegalizerLib, LegalizationFlag, \
-                                                          LinkedLLVMModuleName, LegalizeLLVMModuleName)
-  print(Command)
-  os.system(Command)
-
+    # Legalize code
+    print("EXECUTING:")
+    OriginalLLVMModuleName = LLVMIRModule.name + ".ll"
+    LinkedLLVMBCModuleName = LLVMIRModule.name + ".linked.bc"
+    Command = "llvm-link  {} {} -o {}".format(
+        OriginalLLVMModuleName, PathToWrapperFile, LinkedLLVMBCModuleName
+    )
+    print(Command)
+    os.system(Command)
+    print("EXECUTING:")
+    LinkedLLVMModuleName = LLVMIRModule.name + ".linked.ll"
+    Command = "llvm-dis  {} -o {}".format(LinkedLLVMBCModuleName, LinkedLLVMModuleName)
+    print(Command)
+    os.system(Command)
+    print("EXECUTING:")
+    LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
+    Command = "/usr/bin/opt -load {} -enable-new-pm=0 {} -adce -opaque-pointers -globaldce {} -S -o {}".format(
+        PathToLegalizerLib,
+        LegalizationFlag,
+        LinkedLLVMModuleName,
+        LegalizeLLVMModuleName,
+    )
+    print(Command)
+    os.system(Command)
 
 
 # ARG 1: Rosette code to be lifted
@@ -154,25 +181,42 @@ def HandleLowLevelCodeGen(RosetteFileName : str, PathToLegalizerLib : str, \
 # ARG 3: Path to LLVM wrapper file for a target (x86_wrappers.c.ll)
 # ARG 4: Legalization flag (example: -x86-hydride-legalize)
 # ARG 4 (optional): Name of LLVM module to be generated
-if __name__ == '__main__':
-  assert len(sys.argv[1:]) > 0
-  RosetteFileName = sys.argv[1]
-  PathToLegalizerLib = sys.argv[2]
-  PathToWrapperFile = sys.argv[3]
-  LegalizationFlag = sys.argv[4]
-  if len(sys.argv) == 5:
-    HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, LegalizationFlag, PathToWrapperFile)
-  else:
-    LLVMModuleName = sys.argv[5]
-    if "aievec" in LegalizationFlag:
-      # Different handling for AIEVec
-      HandleLowLevelCodegenAIEVec(RosetteFileName, PathToLegalizerLib,
-                                  PathToWrapperFile, LegalizationFlag, LLVMModuleName)
-    elif "visa" in LegalizationFlag.lower():
-      # Different handling for VISA
-      HandleLowLevelCodegenVISA(RosetteFileName, PathToLegalizerLib,
-                PathToWrapperFile, LegalizationFlag, LLVMModuleName)
+if __name__ == "__main__":
+    assert len(sys.argv[1:]) > 0
+    RosetteFileName = sys.argv[1]
+    PathToLegalizerLib = sys.argv[2]
+    PathToWrapperFile = sys.argv[3]
+    LegalizationFlag = sys.argv[4]
+    if len(sys.argv) == 5:
+        HandleLowLevelCodeGen(
+            RosetteFileName, PathToLegalizerLib, LegalizationFlag, PathToWrapperFile
+        )
     else:
-      HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, PathToWrapperFile,
-                            LegalizationFlag, LLVMModuleName)
-
+        LLVMModuleName = sys.argv[5]
+        if "aievec" in LegalizationFlag:
+            # Different handling for AIEVec
+            HandleLowLevelCodegenAIEVec(
+            #HandleLowLevelCodeGen(
+                RosetteFileName,
+                PathToLegalizerLib,
+                PathToWrapperFile,
+                LegalizationFlag,
+                LLVMModuleName,
+            )
+        elif "visa" in LegalizationFlag.lower():
+            # Different handling for VISA
+            HandleLowLevelCodegenVISA(
+                RosetteFileName,
+                PathToLegalizerLib,
+                PathToWrapperFile,
+                LegalizationFlag,
+                LLVMModuleName,
+            )
+        else:
+            HandleLowLevelCodeGen(
+                RosetteFileName,
+                PathToLegalizerLib,
+                PathToWrapperFile,
+                LegalizationFlag,
+                LLVMModuleName,
+            )
