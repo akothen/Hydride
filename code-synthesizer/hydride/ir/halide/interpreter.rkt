@@ -383,7 +383,6 @@
     [(vec-sub v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-sat-sub v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-mul v1 v2) (prune-const-exprs (list v1 v2))]
-    ;;; [(vec-tile_matmul v1 v2) ()] ;; How to?
     ;[(vec-rounding_mul_shift_right v1 v2 v3) (list v1 v2 v3)]
     [(vec-rounding_mul_shift_right v1 v2 v3) (prune-const-exprs (list v1 v2))]
     [(vec-mul_shift_right v1 v2 v3) (prune-const-exprs (list v1 v2))]
@@ -410,6 +409,7 @@
     [(vec-bwand v1 v2) (prune-const-exprs (list v1 v2))]
     [(vec-bwnot v1 ) (prune-const-exprs (list v1 ))]
 
+    [(vec-tile_matmul m n k v1 v2 v3) (list v1 v2 v3)] ;; How to?
     [(vector_reduce op width vec) (list vec)]
 
     ;; Shuffles

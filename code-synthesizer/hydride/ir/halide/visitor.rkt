@@ -157,7 +157,8 @@
     [(vec-bwnot v1) (handler (vec-bwnot (visit v1 handler) ))]
 
     [(vector_reduce op width vec) (handler (vector_reduce op width (visit vec handler)))]
-
+    [(vec-tile_matmul m n k v0 v1 v2) (handler (vec-tile_matmul m n k (visit v0 handler) (visit v1 handler) (visit v2 handler)))]
+    
     ;; Shuffles
     [(vec-broadcast n vec) (handler (vec-broadcast n (visit vec handler)))]
     [(slice_vectors vec base stride len) (handler (slice_vectors (visit vec handler) (visit base handler) (visit stride handler) (visit len handler)))]
