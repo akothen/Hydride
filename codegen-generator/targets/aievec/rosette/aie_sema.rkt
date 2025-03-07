@@ -145,24 +145,24 @@
     dst
     )
     
-    (define (mul_elem_16_2_conf_v16acc64 v32uint16_a v32uint16_b)
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 16 1)])
-        (define %low1 (* 16 %i))
-        (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
-        (define %low2 (* 16 %i))
-        (define %high2 (+ %low2 (- 64 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
-        (define %o (bvmul %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    
+        (define (mul_elem_16_2_conf_v16acc64 v32uint16_a v32uint16_b int_sub_mul)
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 16 1)])
+            (define %low1 (* 16 %i))
+            (define %high1 (+ %low1 (- 16 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
+            (define %low2 (* 16 %i))
+            (define %high2 (+ %low2 (- 64 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if (int_sub_mul) (bvneg dst) dst)
+        )
+        
     (define (mul_elem_16_2_v16acc64 v32uint16_a v32uint16_b)
     (define dst
     (apply concat
@@ -172,7 +172,7 @@
         (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
         (define %low2 (* 16 %i))
         (define %high2 (+ %low2 (- 64 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )
@@ -181,24 +181,24 @@
     dst
     )
     
-    (define (mul_elem_32_2_conf_v32acc32 v64uint8_a v64uint8_b)
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 32 1)])
-        (define %low1 (* 8 %i))
-        (define %high1 (+ %low1 (- 8 1)))
-        (define %ext_xbuff (sign-extend (extract %high1 %low1 v64uint8_a) (bitvector 32)))
-        (define %low2 (* 8 %i))
-        (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v64uint8_b) (bitvector 32)))
-        (define %o (bvmul %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    
+        (define (mul_elem_32_2_conf_v32acc32 v64uint8_a v64uint8_b int_sub_mul)
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 32 1)])
+            (define %low1 (* 8 %i))
+            (define %high1 (+ %low1 (- 8 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 v64uint8_a) (bitvector 32)))
+            (define %low2 (* 8 %i))
+            (define %high2 (+ %low2 (- 32 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 v64uint8_b) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if (int_sub_mul) (bvneg dst) dst)
+        )
+        
     (define (mul_elem_32_2_v32acc32 v64uint8_a v64uint8_b)
     (define dst
     (apply concat
@@ -208,7 +208,7 @@
         (define %ext_xbuff (sign-extend (extract %high1 %low1 v64uint8_a) (bitvector 32)))
         (define %low2 (* 8 %i))
         (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v64uint8_b) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 v64uint8_b) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )
@@ -217,24 +217,24 @@
     dst
     )
     
-    (define (mul_elem_32_conf_v32acc32 v32uint16_a v32uint16_b)
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 32 1)])
-        (define %low1 (* 16 %i))
-        (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
-        (define %low2 (* 16 %i))
-        (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
-        (define %o (bvmul %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    
+        (define (mul_elem_32_conf_v32acc32 v32uint16_a v32uint16_b int_sub_mul)
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 32 1)])
+            (define %low1 (* 16 %i))
+            (define %high1 (+ %low1 (- 16 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
+            (define %low2 (* 16 %i))
+            (define %high2 (+ %low2 (- 32 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if (int_sub_mul) (bvneg dst) dst)
+        )
+        
     (define (mul_elem_32_v32acc32 v32uint16_a v32uint16_b)
     (define dst
     (apply concat
@@ -244,7 +244,7 @@
         (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
         (define %low2 (* 16 %i))
         (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )
@@ -373,24 +373,24 @@
     dst
     )
     
-    (define (negmul_elem_16_2_conf_v16acc64 v32uint16_a v32uint16_b)
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 16 1)])
-        (define %low1 (* 16 %i))
-        (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
-        (define %low2 (* 16 %i))
-        (define %high2 (+ %low2 (- 64 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
-        (define %o (bvmul %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    
+        (define (negmul_elem_16_2_conf_v16acc64 v32uint16_a v32uint16_b int_sub_mul)
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 16 1)])
+            (define %low1 (* 16 %i))
+            (define %high1 (+ %low1 (- 16 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
+            (define %low2 (* 16 %i))
+            (define %high2 (+ %low2 (- 64 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if (int_sub_mul) (bvneg dst) dst)
+        )
+        
     (define (negmul_elem_16_2_v16acc64 v32uint16_a v32uint16_b)
     (define dst
     (apply concat
@@ -400,7 +400,7 @@
         (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
         (define %low2 (* 16 %i))
         (define %high2 (+ %low2 (- 64 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )
@@ -409,24 +409,24 @@
     dst
     )
     
-    (define (negmul_elem_32_2_conf_v32acc32 v64uint8_a v64uint8_b)
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 32 1)])
-        (define %low1 (* 8 %i))
-        (define %high1 (+ %low1 (- 8 1)))
-        (define %ext_xbuff (sign-extend (extract %high1 %low1 v64uint8_a) (bitvector 32)))
-        (define %low2 (* 8 %i))
-        (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v64uint8_b) (bitvector 32)))
-        (define %o (bvmul %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    
+        (define (negmul_elem_32_2_conf_v32acc32 v64uint8_a v64uint8_b int_sub_mul)
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 32 1)])
+            (define %low1 (* 8 %i))
+            (define %high1 (+ %low1 (- 8 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 v64uint8_a) (bitvector 32)))
+            (define %low2 (* 8 %i))
+            (define %high2 (+ %low2 (- 32 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 v64uint8_b) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if (int_sub_mul) (bvneg dst) dst)
+        )
+        
     (define (negmul_elem_32_2_v32acc32 v64uint8_a v64uint8_b)
     (define dst
     (apply concat
@@ -436,7 +436,7 @@
         (define %ext_xbuff (sign-extend (extract %high1 %low1 v64uint8_a) (bitvector 32)))
         (define %low2 (* 8 %i))
         (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v64uint8_b) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 v64uint8_b) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )
@@ -445,24 +445,24 @@
     dst
     )
     
-    (define (negmul_elem_32_conf_v32acc32 v32uint16_a v32uint16_b)
-    (define dst
-    (apply concat
-      (for/list ([%i (range 0 32 1)])
-        (define %low1 (* 16 %i))
-        (define %high1 (+ %low1 (- 16 1)))
-        (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
-        (define %low2 (* 16 %i))
-        (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
-        (define %o (bvmul %ext_xbuff %ext_ybuff))
-        %o
-      )
-    )
-    )
-    dst
-    )
-    
+        (define (negmul_elem_32_conf_v32acc32 v32uint16_a v32uint16_b int_sub_mul)
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 32 1)])
+            (define %low1 (* 16 %i))
+            (define %high1 (+ %low1 (- 16 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
+            (define %low2 (* 16 %i))
+            (define %high2 (+ %low2 (- 32 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if (int_sub_mul) (bvneg dst) dst)
+        )
+        
     (define (negmul_elem_32_v32acc32 v32uint16_a v32uint16_b)
     (define dst
     (apply concat
@@ -472,7 +472,7 @@
         (define %ext_xbuff (sign-extend (extract %high1 %low1 v32uint16_a) (bitvector 32)))
         (define %low2 (* 16 %i))
         (define %high2 (+ %low2 (- 32 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 v32uint16_b) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 v32uint16_b) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )

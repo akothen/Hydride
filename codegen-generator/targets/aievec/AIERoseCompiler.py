@@ -118,8 +118,61 @@ def EltwiseMulInstClass(InstName, Sema: AIESema):
 
     param_lanesize = param_ty_info["NumLanes"]
     param_datasize = param_ty_info["SizeOfElement"]
+    if Sema.conf:
+        if len(params) == 3:
+            ret_str = f"""
+        (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name} {params[2].type}_{params[2].name})
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 {lanesize} 1)])
+            (define %low1 (* {param_datasize} %i))
+            (define %high1 (+ %low1 (- {param_datasize} 1)))
+            (define %ext_xbuff (sign-extend (extract %high1 %low1 {params[0].type}_{params[0].name}) (bitvector 32)))
+            (define %low2 (* {param_datasize} %i))
+            (define %high2 (+ %low2 (- {datasize} 1)))
+            (define %ext_ybuff (sign-extend (extract %high2 %low2 {params[1].type}_{params[1].name}) (bitvector 32)))
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        (if ({params[2].type}_{params[2].name}) (bvneg dst) dst)
+        )
+        """
 
-    ret_str = f"""
+    elif len(params) == 4:
+        ret_str = f"""
+        (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name} {params[2].type}_{params[2].name} {params[3].type}_{params[3].name})
+        (define dst
+        (apply concat
+          (for/list ([%i (range 0 {lanesize} 1)])
+            (define %low1 (* {param_datasize} %i))
+            (define %high1 (+ %low1 (- {param_datasize} 1)))
+            (define %ext_xbuff 
+            (if ({params[1].type}_{params[1].name})
+              (sign-extend (extract %high1 %low1 {params[0].type}_{params[0].name}) (bitvector 32))
+              (zero-extend (extract %high1 %low1 {params[0].type}_{params[0].name}) (bitvector 32))
+              )
+            )
+            (define %low2 (* {param_datasize} %i))
+            (define %high2 (+ %low2 (- {datasize} 1)))
+            (define %ext_ybuff
+              (if ({params[3].type}_{params[3].name})
+              (sign-extend (extract %high2 %low2 {params[2].type}_{params[2].name}) (bitvector 32))
+              (zero-extend (extract %high2 %low2 {params[2].type}_{params[2].name}) (bitvector 32))
+              )
+            )
+            (define %o (bvmul %ext_xbuff %ext_ybuff))
+            %o
+          )
+        )
+        )
+        dst
+        )
+        """
+
+    else:
+        ret_str = f"""
     (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name})
     (define dst
     (apply concat
@@ -129,7 +182,7 @@ def EltwiseMulInstClass(InstName, Sema: AIESema):
         (define %ext_xbuff (sign-extend (extract %high1 %low1 {params[0].type}_{params[0].name}) (bitvector 32)))
         (define %low2 (* {param_datasize} %i))
         (define %high2 (+ %low2 (- {datasize} 1)))
-        (define %ext_ybuff (sign-extend (extract %high1 %low1 {params[1].type}_{params[1].name}) (bitvector 32)))
+        (define %ext_ybuff (sign-extend (extract %high2 %low2 {params[1].type}_{params[1].name}) (bitvector 32)))
         (define %o (bvmul %ext_xbuff %ext_ybuff))
         %o
       )
