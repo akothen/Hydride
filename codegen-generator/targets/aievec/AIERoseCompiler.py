@@ -157,7 +157,7 @@ def AddMacInstClass(InstName, Sema: AIESema):
 
     param1_lanesize = param1_ty_info["NumLanes"]
     param1_datasize = param1_ty_info["SizeOfElement"]
-    
+
     ret_str = f"""
     (define ({InstName} {params[0].type}_{params[0].name} {params[1].type}_{params[1].name} {params[2].type}_{params[2].name} {params[3].type}_{params[3].name})
     (define dst
@@ -272,6 +272,82 @@ def EltwiseMulInstClass(InstName, Sema: AIESema):
     return ret_str
 
 
+def SemaToDict(SemaList):
+    with open("AIEngineSema.py", "w") as f:
+        f.write(
+            """# ============================== Hydride File =================================\n"""
+        )
+        f.write("""# Part of the Hydride Compiler Infrastructure.\n""")
+        f.write(
+            """# ============================== Hydride File =================================\n"""
+        )
+        ADD_entries = []
+        ADD_sema_str = f"""
+        '"(define aieml-eltwiseadd ( arg0 arg1 %lanesize %datasize)"',
+        '"(define dst"',
+        '"(apply concat"',
+        '"(for/list ([%i (range 0 %lanesize 1)])"',
+        '"(define %low1 (* %datasize %i))"',
+        '"(define %high1 (+ %low1 (- %datasize 1)))"',
+        '"(define %ext_xbuff (extract %high1 %low1 arg0))"',
+        '"(define %low2 (* %datasize %i))"',
+        '"(define %high2 (+ %low2 (- %datasize 1)))"',
+        '"(define %ext_ybuff (extract %high2 %low2 arg1))"',
+        '"(define %o (bvadd %ext_xbuff %ext_ybuff))"',
+        '"%o"',
+        '")"',
+        '")"',
+        '")"',
+        '"dst"',
+        '")"',
+    """
+        for inst, sema in SemaList.items():
+            if sema.instclass == "ADD":
+                ADD_entries.append(ADDInstEntry(inst, sema))
+
+        f.write("""aie_sema = {\n""")
+        f.write(
+            f"""\t"aieml-eltwiseadd"  : {{ 
+    "target_instructions" : {{"""
+        )
+        for i in ADD_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{ADD_sema_str}]""")
+        f.write("""\n}""")
+        f.write("""\n}""")
+
+
+def ADDInstEntry(InstName, Sema: AIESema):
+    params = Sema.params
+    ret_ty_info = extract_info(Sema.rettype)
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
+    vectsize = lanesize * datasize
+
+    ret_str = f"""
+  \t"{InstName}" : {{
+   \t "args": ["SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_{vectsize}", "{lanesize}", "{datasize}"],
+                "in_vectsize": {vectsize},
+                "out_vectsize": {vectsize},
+                "lanesize": {lanesize},
+                "in_precision": {datasize},
+                "out_precision": {datasize},
+                "in_vectsize_index": None,
+                "out_vectsize_index": None,
+                "in_lanesize_index": None,
+                "out_lanesize_index": None,
+                "in_precision_index": None,
+                "out_precision_index": None,
+                "arg_permute_map": [0, 1, -1, -1],
+                "Signedness": {int(all(param.is_signed for param in params))},
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+  }},"""
+    return ret_str
+
+
 def SemaToRosette(SemaList):
     with open(AIEROSETTEDIR + "aie_sema.rkt", "w") as f:
         f.write("""#lang rosette\n""")
@@ -303,4 +379,5 @@ def SemaToRosette(SemaList):
 
 
 if __name__ == "__main__":
-    SemaToRosette(AllSema)
+    # SemaToRosette(AllSema)
+    SemaToDict(AllSema)
