@@ -30,6 +30,7 @@ BV_OPS = [
     "bvsubnw", "bvdiv", "bvrem", "bvmax", "bvmin",
     "bvlt", "bvle", "bvgt", "bvge", "bvmulnw",
     "bitvector->integer", "integer->bitvector",
+    "bvshr"
 ]
 
 BV_OP_VARIANTS = [
@@ -108,6 +109,7 @@ SIGN_VARIANTS = {
     'bvmin': {'signed': 'bvsmin', "unsigned": 'bvumin'},
     'bvmax': {'signed': 'bvsmax', "unsigned": 'bvumax'},
     'bvaddnw': {'signed': 'bvaddnsw', 'unsigned': 'bvaddnuw'},
+    'bvshr': {'signed': 'bvashr', 'unsigned': 'bvlshr'},
     'bvsubnw': {'signed': 'bvsubnsw', 'unsigned': 'bvsubnuw'},
     'bvlt': {'signed': 'bvslt', 'unsigned': 'bvult'},
     'bvle': {'signed': 'bvsle', 'unsigned': 'bvule'},

@@ -256,6 +256,15 @@
           (bvumax a b))))
   result)
 
+(define (bvshr a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+        (begin
+          (bvashr a b))
+        (begin
+          (bvlshr a b))))
+  result)
+
 (define (bvmin a b is_signed)
   (define result
     (if (equal? is_signed 1)
